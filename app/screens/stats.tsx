@@ -1,11 +1,11 @@
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../src/constants/colors';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
 
 export default function StatsScreen() {
@@ -17,22 +17,24 @@ export default function StatsScreen() {
   const loadStats = async (forceRefresh = false) => {
     try {
       if (!forceRefresh) {
-        const cached = await AsyncStorage.getItem('statsCache');
-        if (cached) {
-          setStats(JSON.parse(cached));
+        // Fast path: use the cache written by InspectionRepository
+        const { statsCache } = await SettingsRepository.get();
+        if (statsCache) {
+          setStats(statsCache);
           setLoading(false);
         }
       }
 
       if (forceRefresh) setRefreshing(true);
 
+      // Always recompute from source — InspectionRepository.writeAll()
+      // keeps the cache consistent; we never write it here.
       const completed = await InspectionRepository.getCompleted();
       if (completed.length > 0) {
         const freshStats = computeStats(completed);
-        await AsyncStorage.setItem('statsCache', JSON.stringify(freshStats));
         setStats(freshStats);
 
-        // Compute top 5 most frequent non‑compliant criteria
+        // Top 5 most frequent non-compliant criteria
         const violationCount: { [key: string]: number } = {};
         completed.forEach(ins => {
           ins.items.forEach(item => {
@@ -145,7 +147,6 @@ export default function StatsScreen() {
           </View>
         )}
 
-        {/* Most frequent violations */}
         {topViolations.length > 0 && (
           <View style={styles.violationsCard}>
             <Text style={styles.subtitle}>أكثر المخالفات شيوعاً</Text>

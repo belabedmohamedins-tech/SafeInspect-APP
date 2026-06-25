@@ -3,7 +3,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors.ts';
+import { Colors } from '../../src/constants/colors';
 
 const secondaryItems = [
   { name: 'المنشآت', icon: 'building', route: '/screens/facilities' },
@@ -11,7 +11,7 @@ const secondaryItems = [
   { name: 'إحصائيات', icon: 'bar-chart', route: '/screens/stats' },
   { name: 'المراجع', icon: 'book', route: '/screens/legal' },
   { name: 'قوائم التفتيش', icon: 'print', route: '/screens/checklists' },
-  { name: 'الخريطة', icon: 'map-marker', route: '/screens/map' }, // new map entry
+  { name: 'الخريطة', icon: 'map-marker', route: '/screens/map' },
 ];
 
 export default function PlusScreen() {
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     fontWeight: '500',
+    marginLeft: 12,
     color: '#2c3e50',
-    marginLeft: 16,
   },
 });
