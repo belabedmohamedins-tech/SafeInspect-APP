@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors.ts';
+import { Colors } from '../../constants';
 import { facilities } from '../../src/facilitiesData';
 import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 import { AgendaItem } from '../../src/types';

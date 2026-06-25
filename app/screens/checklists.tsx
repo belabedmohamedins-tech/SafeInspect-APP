@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 import { criteriaByActivity } from '../../src/criteriaData';
 import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
 import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
@@ -49,7 +49,6 @@ export default function ChecklistsScreen() {
     } as SavedInspection;
   };
 
-  // Navigate to preview using the in-memory store — no JSON in URL params
   const handlePreview = () => {
     if (!selectedActivity) {
       Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
@@ -134,7 +133,6 @@ export default function ChecklistsScreen() {
         </Text>
       </View>
 
-      {/* مودال اختيار النشاط */}
       <Modal
         animationType="slide"
         transparent={true}

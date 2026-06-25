@@ -3,7 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 import { criteriaByActivity } from '../../src/criteriaData';
 import { InspectionItem } from '../../src/types';
 

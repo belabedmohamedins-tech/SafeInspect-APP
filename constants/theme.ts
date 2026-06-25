@@ -2,14 +2,16 @@
 
 import { Platform } from 'react-native';
 
-// ─── Brand Colors ──────────────────────────────────────────────────────────
+// ─── Brand Colors ──────────────────────────────────────────────
+
 export const BLUE    = '#1986df';   // primary brand — replaces 21 local constants
 export const GREEN   = '#27ae60';   // compliant / success / finish button
 export const RED     = '#e74c3c';   // non-compliant / danger / cancel button
 export const ORANGE  = '#f39c12';   // partial / warning / signature button
 export const YELLOW  = '#f1c40f';   // accent / highlight
 
-// ─── Neutral Palette ───────────────────────────────────────────────────────
+// ─── Neutral Palette ───────────────────────────────────────────
+
 export const DARK    = '#2c3e50';   // primary text, section titles
 export const MUTED   = '#7f8c8d';   // secondary text, dates, labels
 export const FAINT   = '#95a5a6';   // tertiary text, addresses
@@ -50,9 +52,20 @@ export const Colors = {
   gradeC: ORANGE,
   gradeD: RED,
   gradeF: '#c0392b',
+
+  // ─── Legacy aliases ───────────────────────────────────────────────
+  // These short names were used in the old src/constants/colors.ts.
+  // They map 1-to-1 to the semantic tokens above so no value changes.
+  blue:   BLUE,        // = primary
+  dark:   DARK,        // = textPrimary
+  mid:    MUTED,       // = textSecondary
+  light:  LIGHT,       // = surfaceOffset
+  red:    RED,         // = danger
+  green:  GREEN,       // = success
+  white:  WHITE,       // = textInverse
 } as const;
 
-// ─── Spacing (4px base unit) ───────────────────────────────────────────────
+// ─── Spacing (4px base unit) ───────────────────────────────────────────
 export const Spacing = {
   xs:  4,
   sm:  8,
@@ -63,7 +76,7 @@ export const Spacing = {
   xxl: 32,
 } as const;
 
-// ─── Typography ────────────────────────────────────────────────────────────
+// ─── Typography ──────────────────────────────────────────────
 export const FontSize = {
   xs:   11,
   sm:   12,
@@ -88,7 +101,7 @@ export const Fonts = Platform.select({
   web:     { sans: "system-ui, -apple-system, sans-serif", mono: "Menlo, monospace" },
 });
 
-// ─── Border Radius ─────────────────────────────────────────────────────────
+// ─── Border Radius ──────────────────────────────────────────────
 export const Radius = {
   sm:   4,
   md:   8,
@@ -97,7 +110,7 @@ export const Radius = {
   full: 9999,
 } as const;
 
-// ─── Shadows ───────────────────────────────────────────────────────────────
+// ─── Shadows ──────────────────────────────────────────────────
 export const Shadow = {
   sm: {
     shadowColor: '#000',

@@ -10,7 +10,7 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors.ts';
+import { Colors } from '../../constants';
 import { facilities } from '../../src/facilitiesData';
 import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 import { AgendaItem } from '../../src/types';
@@ -54,10 +54,6 @@ export default function AgendaListScreen() {
     );
   };
 
-  /**
-   * Toggle between 'pending' and 'completed'.
-   * Uses item.status as the single source of truth — no boolean field.
-   */
   const toggleStatus = async (id: string) => {
     const updated = items.map(item =>
       item.id === id

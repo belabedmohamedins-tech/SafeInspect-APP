@@ -2,7 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Colors } from '../../src/constants/colors.ts';
+import { Colors } from '../../constants';
 
 export default function TabLayout() {
   return (
