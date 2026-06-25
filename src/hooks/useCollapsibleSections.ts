@@ -1,15 +1,20 @@
 // src/hooks/useCollapsibleSections.ts
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
-  // Add new sections as collapsed, preserve existing state
+  // Stabilise the dependency: JSON.stringify only changes when the actual
+  // titles change, not every render due to a new array reference.
+  const titlesKey = sectionTitles.join('||');
+  const titlesRef = useRef(sectionTitles);
+  titlesRef.current = sectionTitles;
+
   useEffect(() => {
     setCollapsedSections(prev => {
       const next = { ...prev };
       let changed = false;
-      for (const title of sectionTitles) {
+      for (const title of titlesRef.current) {
         if (!(title in next)) {
           next[title] = true;
           changed = true;
@@ -17,7 +22,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       }
       return changed ? next : prev;
     });
-  }, [sectionTitles]);
+  }, [titlesKey]); // stable string dep — only re-runs when titles actually change
 
   const toggleSection = useCallback((title: string) => {
     setCollapsedSections(prev => ({ ...prev, [title]: !prev[title] }));

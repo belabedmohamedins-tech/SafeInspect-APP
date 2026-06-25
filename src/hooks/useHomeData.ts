@@ -1,11 +1,8 @@
 // src/hooks/useHomeData.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
-import { getUserFacilities } from '../facilitiesService';
 import { facilities } from '../facilitiesData';
-import { AgendaRepository } from '../repositories/AgendaRepository';
-import { InspectionRepository } from '../repositories/InspectionRepository';
-import { SettingsRepository } from '../repositories/SettingsRepository';
 import { AgendaItem, Facility, SavedInspection } from '../types';
 import { getComplianceSummary } from '../utils/statusUtils';
 
@@ -22,19 +19,16 @@ export function useHomeData() {
 
       const run = async () => {
         try {
-          // Settings
-          const { officeName: name } = await SettingsRepository.get();
-          if (isActive) setOfficeName(name);
+          const name = await AsyncStorage.getItem('officeName');
+          if (name && isActive) setOfficeName(name);
 
-          // Agenda — upcoming, non-completed, max 3
-          const allAgenda = await AgendaRepository.getAll();
-          if (isActive) {
+          const agendaRaw = await AsyncStorage.getItem('agenda');
+          if (agendaRaw && isActive) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const upcoming = allAgenda
+            const upcoming = (JSON.parse(agendaRaw) as AgendaItem[])
               .filter(item => {
-                // Use status field as the single source of truth
-                if (item.status !== 'pending') return false;
+                if (item.completed) return false;
                 const d = new Date(item.date);
                 d.setHours(0, 0, 0, 0);
                 return d >= today;
@@ -42,20 +36,25 @@ export function useHomeData() {
               .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
               .slice(0, 3);
             setAgendaItems(upcoming);
+          } else if (isActive) {
+            setAgendaItems([]);
           }
 
-          // Inspections
-          const completed = await InspectionRepository.getCompleted();
-          const drafts    = await InspectionRepository.getDrafts();
-          if (isActive) {
-            setCompletedInspections(completed.slice(-3).reverse());
-            setInProgress(drafts.slice(-3).reverse());
+          const inspRaw = await AsyncStorage.getItem('inspections');
+          if (inspRaw && isActive) {
+            const all = JSON.parse(inspRaw) as SavedInspection[];
+            setCompletedInspections(all.filter(i => i.status === 'completed').slice(-3).reverse());
+            setInProgress(all.filter(i => i.status === 'in-progress').slice(-3).reverse());
+          } else if (isActive) {
+            setCompletedInspections([]);
+            setInProgress([]);
           }
 
-          // User-added facilities (most recent 3)
-          const userFacilities = await getUserFacilities();
-          if (isActive) {
-            setRecentFacilities(userFacilities.slice(-3).reverse());
+          const facRaw = await AsyncStorage.getItem('userFacilities');
+          if (facRaw && isActive) {
+            setRecentFacilities((JSON.parse(facRaw) as Facility[]).slice(-3).reverse());
+          } else if (isActive) {
+            setRecentFacilities([]);
           }
         } catch (e) {
           console.error('useHomeData load error:', e);
@@ -63,14 +62,10 @@ export function useHomeData() {
       };
 
       run();
-
-      return () => {
-        isActive = false;
-      };
+      return () => { isActive = false; };
     }, [])
   );
 
-  // Derived stats
   const stats = useMemo(() => {
     let nonCompliant = 0;
     completedInspections.forEach(ins => {
@@ -83,7 +78,6 @@ export function useHomeData() {
     };
   }, [completedInspections, inProgressInspections]);
 
-  // Facility lookup helper used by handleAgendaPress in screen
   const getFacilityForAgenda = useCallback(
     (item: AgendaItem) => facilities.find(f => f.id === item.facilityId),
     []
