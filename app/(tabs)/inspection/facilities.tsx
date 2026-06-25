@@ -1,18 +1,33 @@
 // app/(tabs)/inspection/facilities.tsx
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants';
-import { facilities } from '../../../src/facilitiesData';
+import { Facility } from '../../../src/types';
+import { filterByActivity } from '../../../src/facilitiesService';
 
 export default function FacilitiesByCategoryScreen() {
   const params = useLocalSearchParams();
   const router = useRouter();
   const decodedCategory = decodeURIComponent(params.category as string);
-  const filtered = facilities.filter(f => f.activity === decodedCategory);
 
-  const handleFacilityPress = (facility: typeof facilities[0]) => {
+  const [facilities, setFacilities] = useState<Facility[]>([]);
+
+  const loadFacilities = useCallback(async () => {
+    try {
+      const result = await filterByActivity(decodedCategory);
+      setFacilities(result);
+    } catch (e) {
+      console.error('Failed to load facilities', e);
+    }
+  }, [decodedCategory]);
+
+  // Reload on first render and every time the screen comes into focus
+  // (e.g. after the user adds a new facility and navigates back).
+  useFocusEffect(loadFacilities);
+
+  const handleFacilityPress = (facility: Facility) => {
     Alert.alert(
       'بدء تفتيش',
       `هل تريد بدء تفتيش للمنشأة "${facility.projectName}"؟`,
@@ -24,7 +39,7 @@ export default function FacilitiesByCategoryScreen() {
             router.push({
               pathname: '/(tabs)/inspection/checklist',
               params: {
-                ...params, // cause, reference, committeeMembers, writer, lat, lng, category
+                ...params,
                 facilityId: facility.id,
                 facilityName: facility.projectName,
                 facilityAddress: facility.address,
@@ -37,7 +52,7 @@ export default function FacilitiesByCategoryScreen() {
     );
   };
 
-  const renderFacility = ({ item }: { item: typeof facilities[0] }) => (
+  const renderFacility = ({ item }: { item: Facility }) => (
     <TouchableOpacity
       style={styles.card}
       onPress={() => handleFacilityPress(item)}
@@ -53,12 +68,12 @@ export default function FacilitiesByCategoryScreen() {
       <Stack.Screen
         options={{
           title: decodedCategory,
-          headerStyle: { backgroundColor: Colors.primary },
-          headerTintColor: Colors.textInverse,
+          headerStyle: { backgroundColor: Colors.blue },
+          headerTintColor: '#fff',
         }}
       />
       <FlatList
-        data={filtered}
+        data={facilities}
         keyExtractor={(item) => item.id}
         renderItem={renderFacility}
         contentContainerStyle={styles.list}
@@ -73,10 +88,10 @@ export default function FacilitiesByCategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:    { flex: 1, backgroundColor: 'transparent' },
-  list:        { padding: 10 },
+  safeArea: { flex: 1, backgroundColor: 'transparent' },
+  list: { padding: 10 },
   card: {
-    backgroundColor: Colors.textInverse,
+    backgroundColor: '#fff',
     padding: 16,
     borderRadius: 8,
     marginBottom: 8,
@@ -86,9 +101,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  projectName: { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary },
-  owner:       { fontSize: 14, color: Colors.textSecondary, marginTop: 4 },
-  address:     { fontSize: 13, color: Colors.textTertiary, marginTop: 2 },
-  empty:       { alignItems: 'center', padding: 20 },
-  emptyText:   { color: Colors.textTertiary, fontSize: 16 },
+  projectName: { fontSize: 16, fontWeight: 'bold', color: '#34495e' },
+  owner: { fontSize: 14, color: '#7f8c8d', marginTop: 4 },
+  address: { fontSize: 13, color: '#95a5a6', marginTop: 2 },
+  empty: { alignItems: 'center', padding: 20 },
+  emptyText: { color: '#95a5a6', fontSize: 16 },
 });
