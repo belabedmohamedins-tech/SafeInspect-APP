@@ -3,6 +3,7 @@ import { Picker } from '@react-native-picker/picker';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { Colors } from '../../../constants';
 import {
     Alert,
     ScrollView,
@@ -13,7 +14,6 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../../constants';
 
 export default function InspectionStartScreen() {
   const router = useRouter();
@@ -93,7 +93,7 @@ export default function InspectionStartScreen() {
           value={reference}
           onChangeText={setReference}
           placeholder="رقم الشكوى / الإنذار / ..."
-          placeholderTextColor={Colors.textTertiary}
+          placeholderTextColor="#95a5a6"
           textAlign="right"
         />
 
@@ -103,7 +103,7 @@ export default function InspectionStartScreen() {
           value={writer}
           onChangeText={setWriter}
           placeholder="الاسم الكامل"
-          placeholderTextColor={Colors.textTertiary}
+          placeholderTextColor="#95a5a6"
           textAlign="right"
         />
 
@@ -114,7 +114,7 @@ export default function InspectionStartScreen() {
             value={newMember}
             onChangeText={setNewMember}
             placeholder="اسم العضو"
-            placeholderTextColor={Colors.textTertiary}
+            placeholderTextColor="#95a5a6"
             textAlign="right"
           />
           <TouchableOpacity style={styles.addButton} onPress={addMember}>
@@ -125,7 +125,7 @@ export default function InspectionStartScreen() {
           <View key={idx} style={styles.memberItem}>
             <Text style={styles.memberText}>{member}</Text>
             <TouchableOpacity onPress={() => removeMember(idx)}>
-              <FontAwesome name="trash" size={18} color={Colors.danger} />
+              <FontAwesome name="trash" size={18} color="#e74c3c" />
             </TouchableOpacity>
           </View>
         ))}
@@ -150,34 +150,55 @@ export default function InspectionStartScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:      { flex: 1, backgroundColor: Colors.background },
-  content:        { padding: 20 },
-  title:          { fontSize: 22, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 20, textAlign: 'center' },
-  label:          { fontSize: 14, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4, marginTop: 15 },
+  container: { flex: 1, backgroundColor: '#f8fcff' },
+  content: { padding: 20 },
+  title: { fontSize: 22, fontWeight: 'bold', color: '#2c3e50', marginBottom: 20, textAlign: 'center' },
+  label: { fontSize: 14, fontWeight: 'bold', color: '#34495e', marginBottom: 4, marginTop: 15 },
   input: {
-    backgroundColor: Colors.textInverse,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: '#bdc3c7',
     borderRadius: 6,
     padding: 12,
     fontSize: 16,
-    color: Colors.textPrimary,
+    color: '#2c3e50',
     textAlign: 'right',
     marginBottom: 10,
   },
   pickerContainer: {
-    backgroundColor: Colors.textInverse,
+    backgroundColor: '#fff',
     borderWidth: 1,
-    borderColor: Colors.border,
+    borderColor: '#bdc3c7',
     borderRadius: 6,
     marginBottom: 10,
   },
-  picker:         { height: 50, width: '100%', color: Colors.textPrimary },
+  picker: { height: 50, width: '100%', color: '#2c3e50' },
   memberInputRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  addButton:      { backgroundColor: Colors.primary, padding: 12, borderRadius: 6 },
-  memberItem:     { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', backgroundColor: Colors.textInverse, padding: 10, borderRadius: 6, marginBottom: 6, borderWidth: 1, borderColor: Colors.border },
-  memberText:     { fontSize: 15, color: Colors.textPrimary, flex: 1, marginRight: 10, textAlign: 'right' },
-  locationText:   { fontSize: 14, color: Colors.textSecondary, marginBottom: 10 },
-  nextButton:     { backgroundColor: Colors.primary, padding: 15, borderRadius: 8, alignItems: 'center', marginTop: 30 },
-  nextButtonText: { color: Colors.textInverse, fontSize: 18, fontWeight: 'bold' },
+  addButton: {
+    backgroundColor: Colors.blue,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: '#f9f9f9',
+    padding: 10,
+    borderRadius: 6,
+    marginBottom: 6,
+  },
+  memberText: { fontSize: 14, color: '#2c3e50', textAlign: 'right', flex: 1 },
+  locationText: { fontSize: 14, color: '#7f8c8d', marginBottom: 10 },
+  nextButton: {
+    backgroundColor: Colors.blue,
+    padding: 15,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginTop: 20,
+  },
+  nextButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
 });

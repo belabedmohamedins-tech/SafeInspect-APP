@@ -1,7 +1,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { Colors } from '../../../src/constants/colors.ts';
+import { Colors } from '../../../constants';
 import {
     Alert,
     FlatList,
@@ -32,8 +32,7 @@ export default function AddFacilityScreen() {
   const [category, setCategory] = useState('');
   const [notes, setNotes] = useState('');
 
-  // تصفية الأنشطة حسب البحث
-  const filteredCategories = facilityCategories.filter((item, index) => {
+  const filteredCategories = facilityCategories.filter((item) => {
     const fullLabel = `${item.rubrique} - ${item.label} (${item.regime})`;
     return fullLabel.toLowerCase().includes(searchQuery.toLowerCase());
   });
@@ -129,14 +128,12 @@ export default function AddFacilityScreen() {
         <Text style={styles.label}>ملاحظات</Text>
         <TextInput style={[styles.input, styles.textArea]} value={notes} onChangeText={setNotes} multiline numberOfLines={4} />
 
-        {/* زر الحفظ باللون الأزرق */}
         <TouchableOpacity style={[styles.saveButton, { backgroundColor: Colors.blue }]} onPress={handleSave}>
           <Text style={styles.saveButtonText}>حفظ المنشأة</Text>
         </TouchableOpacity>
         <View style={styles.bottomSpace} />
       </ScrollView>
 
-      {/* مودال اختيار النشاط مع البحث */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -166,7 +163,7 @@ export default function AddFacilityScreen() {
             <FlatList
               data={filteredCategories}
               keyExtractor={(item, index) => index.toString()}
-              renderItem={({ item, index }) => (
+              renderItem={({ item }) => (
                 <TouchableOpacity
                   style={styles.modalItem}
                   onPress={() => handleSelectCategory(facilityCategories.indexOf(item))}
@@ -209,12 +206,7 @@ const styles = StyleSheet.create({
   pickerButtonText: { fontSize: 14, color: '#2c3e50' },
   placeholderText: { fontSize: 14, color: '#95a5a6' },
   textArea: { minHeight: 80, textAlignVertical: 'top' },
-  saveButton: {
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginTop: 30,
-  },
+  saveButton: { padding: 15, borderRadius: 8, alignItems: 'center', marginTop: 30 },
   saveButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
   bottomSpace: { height: 20 },
   modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
