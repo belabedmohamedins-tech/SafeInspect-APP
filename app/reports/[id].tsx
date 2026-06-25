@@ -12,7 +12,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
 import { InspectionItem, SavedInspection } from '../../src/types';
@@ -34,7 +34,6 @@ export default function ReportDetailScreen() {
         setLoading(false);
         return;
       }
-
       try {
         const found = await InspectionRepository.getById(inspectionId);
         setInspection(found);
@@ -110,15 +109,11 @@ export default function ReportDetailScreen() {
   }, [inspection]);
 
   const handleExportPDF = async () => {
-    if (inspection) {
-      await exportInspectionPDF(inspection);
-    }
+    if (inspection) await exportInspectionPDF(inspection);
   };
 
   const handleExportExcel = async () => {
-    if (inspection) {
-      await exportInspectionCSV(inspection);
-    }
+    if (inspection) await exportInspectionCSV(inspection);
   };
 
   if (loading) {
