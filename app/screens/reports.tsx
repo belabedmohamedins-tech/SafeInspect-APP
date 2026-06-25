@@ -10,7 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { GestureHandlerRootView, Swipeable } from 'react-native-gesture-handler';
+import { Swipeable } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../src/constants/colors';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
@@ -73,7 +73,6 @@ export default function ReportsScreen() {
     });
   };
 
-
   const filteredInspections = useMemo(() => {
     return inspections.filter(inspection => {
       const matchesSearch = inspection.facilityName
@@ -99,41 +98,43 @@ export default function ReportsScreen() {
     const summary = getComplianceSummary(item.items);
     const isCompliant = summary.nonCompliant === 0;
     return (
-      <GestureHandlerRootView>
-        <Swipeable renderRightActions={() => renderRightActions(item.id)}>
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => router.push({ pathname: '/reports/[id]', params: { id: item.id } })}>
-            <View style={styles.cardHeader}>
-              <Text style={styles.facilityName}>{item.facilityName}</Text>
-              <View style={[styles.statusBadge, { backgroundColor: isCompliant ? '#27ae60' : '#e74c3c' }]}>
-                <Text style={styles.statusBadgeText}>{isCompliant ? 'مطابق' : 'غير مطابق'}</Text>
-              </View>
+      <Swipeable renderRightActions={() => renderRightActions(item.id)}>
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => router.push({ pathname: '/reports/[id]', params: { id: item.id } })}>
+          <View style={styles.cardHeader}>
+            <Text style={styles.facilityName}>{item.facilityName}</Text>
+            <View
+              style={[
+                styles.statusBadge,
+                { backgroundColor: isCompliant ? Colors.green : Colors.red },
+              ]}>
+              <Text style={styles.statusBadgeText}>{isCompliant ? 'مطابق' : 'غير مطابق'}</Text>
             </View>
-            <Text style={styles.date}>{formatDateForCard(item.date)}</Text>
-            <Text style={styles.inspector}>{item.inspectorName}</Text>
-            <View style={styles.statsRow}>
-              <Text style={styles.statItem}>✅ {summary.compliant}</Text>
-              <Text style={styles.statItem}>❌ {summary.nonCompliant}</Text>
-              <Text style={styles.statItem}>➖ {summary.na}</Text>
-            </View>
-            <View style={styles.actionsRow}>
-              <TouchableOpacity style={styles.actionBtn} onPress={() => handlePreview(item)}>
-                <FontAwesome name="eye" size={16} color={Colors.blue} />
-                <Text style={[styles.actionBtnText, { color: Colors.blue }]}>معاينة</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionPDF(item)}>
-                <FontAwesome name="file-pdf-o" size={16} color="#e74c3c" />
-                <Text style={[styles.actionBtnText, { color: '#e74c3c' }]}>PDF</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionCSV(item)}>
-                <FontAwesome name="file-excel-o" size={16} color="#27ae60" />
-                <Text style={[styles.actionBtnText, { color: '#27ae60' }]}>Excel</Text>
-              </TouchableOpacity>
-            </View>
-          </TouchableOpacity>
-        </Swipeable>
-      </GestureHandlerRootView>
+          </View>
+          <Text style={styles.date}>{formatDateForCard(item.date)}</Text>
+          <Text style={styles.inspector}>{item.inspectorName}</Text>
+          <View style={styles.statsRow}>
+            <Text style={styles.statItem}>✅ {summary.compliant}</Text>
+            <Text style={styles.statItem}>❌ {summary.nonCompliant}</Text>
+            <Text style={styles.statItem}>➖ {summary.na}</Text>
+          </View>
+          <View style={styles.actionsRow}>
+            <TouchableOpacity style={styles.actionBtn} onPress={() => handlePreview(item)}>
+              <FontAwesome name="eye" size={16} color={Colors.blue} />
+              <Text style={[styles.actionBtnText, { color: Colors.blue }]}>معاينة</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionPDF(item)}>
+              <FontAwesome name="file-pdf-o" size={16} color={Colors.red} />
+              <Text style={[styles.actionBtnText, { color: Colors.red }]}>PDF</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionCSV(item)}>
+              <FontAwesome name="file-excel-o" size={16} color={Colors.green} />
+              <Text style={[styles.actionBtnText, { color: Colors.green }]}>Excel</Text>
+            </TouchableOpacity>
+          </View>
+        </TouchableOpacity>
+      </Swipeable>
     );
   };
 
@@ -164,7 +165,7 @@ export default function ReportsScreen() {
         contentContainerStyle={styles.list}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <FontAwesome name="file-text-o" size={50} color="#bdc3c7" />
+            <FontAwesome name="file-text-o" size={50} color={Colors.light} />
             <Text style={styles.emptyText}>لا توجد تقارير</Text>
           </View>
         }
@@ -175,27 +176,61 @@ export default function ReportsScreen() {
 
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: 'transparent' },
-  searchInput: { margin: 10, padding: 10, backgroundColor: '#fff', borderRadius: 8, borderWidth: 1, borderColor: '#e0e0e0' },
+  searchInput: {
+    margin: 10,
+    padding: 10,
+    backgroundColor: Colors.white,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
   filterRow: { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8 },
-  filterBtn: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: '#ecf0f1' },
+  filterBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: Colors.background,
+  },
   filterBtnActive: { backgroundColor: Colors.blue },
-  filterBtnText: { fontSize: 13, color: '#7f8c8d' },
-  filterBtnTextActive: { color: '#fff' },
+  filterBtnText: { fontSize: 13, color: Colors.mid },
+  filterBtnTextActive: { color: Colors.white },
   list: { padding: 10 },
-  card: { backgroundColor: '#fff', borderRadius: 10, padding: 14, marginBottom: 10, elevation: 2, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.08, shadowRadius: 2 },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-  facilityName: { fontSize: 16, fontWeight: 'bold', color: '#2c3e50', flex: 1, marginRight: 8 },
+  card: {
+    backgroundColor: Colors.white,
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: 10,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+  },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  facilityName: { fontSize: 16, fontWeight: 'bold', color: Colors.dark, flex: 1, marginRight: 8 },
   statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
-  statusBadgeText: { color: '#fff', fontSize: 11, fontWeight: 'bold' },
-  date: { fontSize: 13, color: '#95a5a6', marginBottom: 2 },
-  inspector: { fontSize: 13, color: '#3498db', marginBottom: 8 },
+  statusBadgeText: { color: Colors.white, fontSize: 11, fontWeight: 'bold' },
+  date: { fontSize: 13, color: Colors.mid, marginBottom: 2 },
+  inspector: { fontSize: 13, color: Colors.blue, marginBottom: 8 },
   statsRow: { flexDirection: 'row', gap: 12, marginBottom: 10 },
-  statItem: { fontSize: 13, color: '#555' },
+  statItem: { fontSize: 13, color: Colors.dark },
   actionsRow: { flexDirection: 'row', gap: 12 },
   actionBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
   actionBtnText: { fontSize: 13 },
-  deleteButton: { backgroundColor: '#e74c3c', justifyContent: 'center', alignItems: 'center', width: 72, borderRadius: 10, marginBottom: 10 },
-  deleteText: { color: '#fff', fontSize: 12, marginTop: 4 },
+  deleteButton: {
+    backgroundColor: Colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 72,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  deleteText: { color: Colors.white, fontSize: 12, marginTop: 4 },
   emptyContainer: { alignItems: 'center', padding: 40 },
-  emptyText: { fontSize: 16, color: '#7f8c8d', marginTop: 10 },
+  emptyText: { fontSize: 16, color: Colors.mid, marginTop: 10 },
 });
