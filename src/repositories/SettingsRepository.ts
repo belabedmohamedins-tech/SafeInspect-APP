@@ -1,14 +1,17 @@
 // src/repositories/SettingsRepository.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StatsCache } from '../utils/statsUtils';
 import { StorageKeys } from './keys';
 
 export interface AppSettings {
   officeName: string;
   inspectorName: string;
   inspectionCause: string;
+  /** Cached stats written by InspectionRepository.writeAll(). May be undefined on first run. */
+  statsCache?: StatsCache;
 }
 
-const DEFAULTS: AppSettings = {
+const DEFAULTS: Omit<AppSettings, 'statsCache'> = {
   officeName: '',
   inspectorName: '',
   inspectionCause: '',
@@ -18,26 +21,29 @@ export const SettingsRepository = {
 
   async get(): Promise<AppSettings> {
     try {
-      const [officeName, inspectorName, inspectionCause] = await AsyncStorage.multiGet([
-        StorageKeys.OFFICE_NAME,
-        StorageKeys.INSPECTOR_NAME,
-        StorageKeys.INSPECTION_CAUSE,
-      ]);
+      const [[, officeName], [, inspectorName], [, inspectionCause], [, statsCacheRaw]] =
+        await AsyncStorage.multiGet([
+          StorageKeys.OFFICE_NAME,
+          StorageKeys.INSPECTOR_NAME,
+          StorageKeys.INSPECTION_CAUSE,
+          StorageKeys.STATS_CACHE,
+        ]);
       return {
-        officeName:       officeName[1]       ?? DEFAULTS.officeName,
-        inspectorName:    inspectorName[1]    ?? DEFAULTS.inspectorName,
-        inspectionCause:  inspectionCause[1]  ?? DEFAULTS.inspectionCause,
+        officeName:      officeName      ?? DEFAULTS.officeName,
+        inspectorName:   inspectorName   ?? DEFAULTS.inspectorName,
+        inspectionCause: inspectionCause ?? DEFAULTS.inspectionCause,
+        statsCache:      statsCacheRaw ? (JSON.parse(statsCacheRaw) as StatsCache) : undefined,
       };
     } catch {
       return DEFAULTS;
     }
   },
 
-  async set(settings: Partial<AppSettings>): Promise<void> {
+  async set(settings: Partial<Omit<AppSettings, 'statsCache'>>): Promise<void> {
     const pairs: [string, string][] = [];
-    if (settings.officeName      !== undefined) pairs.push([StorageKeys.OFFICE_NAME,       settings.officeName]);
-    if (settings.inspectorName   !== undefined) pairs.push([StorageKeys.INSPECTOR_NAME,    settings.inspectorName]);
-    if (settings.inspectionCause !== undefined) pairs.push([StorageKeys.INSPECTION_CAUSE,  settings.inspectionCause]);
+    if (settings.officeName      !== undefined) pairs.push([StorageKeys.OFFICE_NAME,      settings.officeName]);
+    if (settings.inspectorName   !== undefined) pairs.push([StorageKeys.INSPECTOR_NAME,   settings.inspectorName]);
+    if (settings.inspectionCause !== undefined) pairs.push([StorageKeys.INSPECTION_CAUSE, settings.inspectionCause]);
     if (pairs.length > 0) await AsyncStorage.multiSet(pairs);
   },
 };
