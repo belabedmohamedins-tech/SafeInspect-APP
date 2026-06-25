@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../src/constants/colors';
 import { criteriaByActivity } from '../../src/criteriaData';
 import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
+import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
 import { SavedInspection } from '../../src/types';
 
 export default function ChecklistsScreen() {
@@ -30,7 +31,6 @@ export default function ChecklistsScreen() {
 
   const buildInspectionPayload = (): SavedInspection | null => {
     if (!selectedActivity) return null;
-
     const criteria = criteriaByActivity[selectedActivity] || [];
     return {
       id: selectedActivity,
@@ -40,28 +40,33 @@ export default function ChecklistsScreen() {
       date: new Date().toISOString(),
       inspectorName: '',
       inspectionCause: '',
-      items: criteria.map((item: any, index: number) => ({
+      items: criteria.map((item, index) => ({
         ...item,
         id: `${selectedActivity}-${index}`,
-        complianceStatus: 'not-evaluated',
+        complianceStatus: 'not-evaluated' as const,
         comment: '',
       })),
     } as SavedInspection;
   };
 
-  // معاينة القائمة
+  // Navigate to preview using the in-memory store — no JSON in URL params
   const handlePreview = () => {
     if (!selectedActivity) {
       Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
       return;
     }
     const criteria = criteriaByActivity[selectedActivity] || [];
+    CriteriaPreviewStore.set(
+      criteria.map((item, index) => ({
+        ...item,
+        id: `${selectedActivity}-${index}`,
+        complianceStatus: 'not-evaluated' as const,
+        comment: '',
+      }))
+    );
     router.push({
       pathname: '/preview',
-      params: {
-        items: JSON.stringify(criteria),
-        title: selectedActivity,
-      },
+      params: { title: selectedActivity },
     });
   };
 
@@ -98,24 +103,28 @@ export default function ChecklistsScreen() {
           <Text style={selectedActivity ? styles.pickerButtonText : styles.placeholderText}>
             {selectedActivity || 'انقر لاختيار نوع المنشأة...'}
           </Text>
-          <FontAwesome name="chevron-down" size={16} color="#7f8c8d" />
+          <FontAwesome name="chevron-down" size={16} color={Colors.mid} />
         </TouchableOpacity>
 
         {selectedActivity && (
-          <TouchableOpacity style={[styles.previewButton, { backgroundColor: Colors.blue }]} onPress={handlePreview}>
-            <FontAwesome name="eye" size={20} color="#fff" />
+          <TouchableOpacity
+            style={[styles.previewButton, { backgroundColor: Colors.blue }]}
+            onPress={handlePreview}>
+            <FontAwesome name="eye" size={20} color={Colors.white} />
             <Text style={styles.previewButtonText}>معاينة القائمة</Text>
           </TouchableOpacity>
         )}
 
         <View style={styles.buttonsRow}>
           <TouchableOpacity style={[styles.actionButton, styles.pdfButton]} onPress={handlePDF}>
-            <FontAwesome name="file-pdf-o" size={20} color="#fff" />
+            <FontAwesome name="file-pdf-o" size={20} color={Colors.white} />
             <Text style={styles.actionButtonText}>PDF</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.actionButton, styles.excelButton]} onPress={handleExcel}>
-            <FontAwesome name="file-excel-o" size={20} color="#fff" />
+          <TouchableOpacity
+            style={[styles.actionButton, styles.excelButton]}
+            onPress={handleExcel}>
+            <FontAwesome name="file-excel-o" size={20} color={Colors.white} />
             <Text style={styles.actionButtonText}>Excel</Text>
           </TouchableOpacity>
         </View>
@@ -130,31 +139,30 @@ export default function ChecklistsScreen() {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
+        onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
               <Text style={styles.modalTitle}>اختر نوع المنشأة</Text>
               <TouchableOpacity onPress={() => setModalVisible(false)}>
-                <FontAwesome name="close" size={24} color="#2c3e50" />
+                <FontAwesome name="close" size={24} color={Colors.dark} />
               </TouchableOpacity>
             </View>
 
             <View style={styles.modalSearchContainer}>
-              <FontAwesome name="search" size={16} color="#7f8c8d" style={styles.modalSearchIcon} />
+              <FontAwesome name="search" size={16} color={Colors.mid} style={styles.modalSearchIcon} />
               <TextInput
                 style={styles.modalSearchInput}
                 placeholder="بحث..."
                 value={searchQuery}
                 onChangeText={setSearchQuery}
-                placeholderTextColor="#95a5a6"
+                placeholderTextColor={Colors.mid}
               />
             </View>
 
             <FlatList
               data={filteredActivities}
-              keyExtractor={(item) => item}
+              keyExtractor={item => item}
               renderItem={({ item }) => (
                 <TouchableOpacity style={styles.modalItem} onPress={() => selectActivity(item)}>
                   <Text style={styles.modalItemText}>{item}</Text>
@@ -177,11 +185,11 @@ export default function ChecklistsScreen() {
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: 'transparent' },
   container: { padding: 20 },
-  label: { fontSize: 16, fontWeight: 'bold', color: '#34495e', marginBottom: 8 },
+  label: { fontSize: 16, fontWeight: 'bold', color: Colors.dark, marginBottom: 8 },
   pickerButton: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: Colors.light,
     borderRadius: 6,
     padding: 12,
     flexDirection: 'row',
@@ -189,8 +197,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  pickerButtonText: { fontSize: 14, color: '#2c3e50' },
-  placeholderText: { fontSize: 14, color: '#95a5a6' },
+  pickerButtonText: { fontSize: 14, color: Colors.dark },
+  placeholderText: { fontSize: 14, color: Colors.mid },
   previewButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -199,12 +207,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     marginBottom: 15,
   },
-  previewButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
-  buttonsRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 20,
-  },
+  previewButtonText: { color: Colors.white, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
+  buttonsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
   actionButton: {
     flex: 1,
     flexDirection: 'row',
@@ -214,10 +218,10 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 5,
   },
-  pdfButton: { backgroundColor: '#e74c3c' },
-  excelButton: { backgroundColor: '#27ae60' },
-  actionButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
-  note: { fontSize: 12, color: '#7f8c8d', textAlign: 'center' },
+  pdfButton: { backgroundColor: Colors.red },
+  excelButton: { backgroundColor: Colors.green },
+  actionButtonText: { color: Colors.white, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
+  note: { fontSize: 12, color: Colors.mid, textAlign: 'center' },
   modalOverlay: {
     flex: 1,
     justifyContent: 'center',
@@ -225,7 +229,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContent: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.white,
     borderRadius: 8,
     width: '90%',
     maxHeight: '80%',
@@ -237,42 +241,20 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 12,
   },
-  modalTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
+  modalTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.dark },
   modalSearchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.background,
     borderRadius: 6,
     paddingHorizontal: 8,
     marginBottom: 12,
   },
   modalSearchIcon: { marginRight: 6 },
-  modalSearchInput: {
-    flex: 1,
-    height: 40,
-    fontSize: 14,
-    color: '#2c3e50',
-  },
+  modalSearchInput: { flex: 1, height: 40, fontSize: 14, color: Colors.dark },
   modalList: { paddingBottom: 16 },
-  modalItem: {
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
-  },
-  modalItemText: {
-    fontSize: 14,
-    color: '#2c3e50',
-  },
-  modalEmpty: {
-    alignItems: 'center',
-    padding: 20,
-  },
-  modalEmptyText: {
-    color: '#95a5a6',
-    fontSize: 14,
-  },
+  modalItem: { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: Colors.background },
+  modalItemText: { fontSize: 14, color: Colors.dark },
+  modalEmpty: { alignItems: 'center', padding: 20 },
+  modalEmptyText: { color: Colors.mid, fontSize: 14 },
 });
