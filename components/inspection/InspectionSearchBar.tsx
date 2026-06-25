@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 
 interface Props {
   value: string;
@@ -14,7 +14,7 @@ export default function InspectionSearchBar({ value, onChange }: Props) {
         value={value}
         onChangeText={onChange}
         placeholder="بحث عن منشأة أو عنوان"
-        placeholderTextColor={Colors.mid}
+        placeholderTextColor={Colors.textSecondary}
         style={styles.input}
       />
     </View>
@@ -28,12 +28,12 @@ const styles = StyleSheet.create({
     paddingBottom: 6,
   },
   input: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.textInverse,
     borderColor: Colors.border,
     borderWidth: 1,
     borderRadius: 10,
     paddingHorizontal: 12,
     paddingVertical: 10,
-    color: Colors.dark,
+    color: Colors.textPrimary,
   },
 });

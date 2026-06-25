@@ -3,7 +3,7 @@ import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
@@ -17,277 +17,129 @@ export default function StatsScreen() {
   const loadStats = async (forceRefresh = false) => {
     try {
       if (!forceRefresh) {
-        // Fast path: use the cache written by InspectionRepository
         const { statsCache } = await SettingsRepository.get();
         if (statsCache) {
           setStats(statsCache);
           setLoading(false);
+          return;
         }
       }
-
-      if (forceRefresh) setRefreshing(true);
-
-      // Always recompute from source — InspectionRepository.writeAll()
-      // keeps the cache consistent; we never write it here.
-      const completed = await InspectionRepository.getCompleted();
-      if (completed.length > 0) {
-        const freshStats = computeStats(completed);
-        setStats(freshStats);
-
-        // Top 5 most frequent non-compliant criteria
-        const violationCount: { [key: string]: number } = {};
-        completed.forEach(ins => {
-          ins.items.forEach(item => {
-            if (item.complianceStatus === 'non-compliant') {
-              violationCount[item.criteria] = (violationCount[item.criteria] || 0) + 1;
-            }
-          });
-        });
-        const sorted = Object.entries(violationCount)
-          .sort((a, b) => b[1] - a[1])
+      const all = await InspectionRepository.getCompleted();
+      const computed = computeStats(all);
+      setStats(computed);
+      const violations = all
+        .flatMap(i => i.items.filter(it => it.complianceStatus === 'non-compliant'))
+        .reduce((acc: Record<string, number>, item) => {
+          acc[item.criteria] = (acc[item.criteria] || 0) + 1;
+          return acc;
+        }, {});
+      setTopViolations(
+        Object.entries(violations)
+          .map(([criteria, count]) => ({ criteria, count }))
+          .sort((a, b) => b.count - a.count)
           .slice(0, 5)
-          .map(([criteria, count]) => ({ criteria, count }));
-        setTopViolations(sorted);
-      } else {
-        setStats({
-          total: 0,
-          gradeCounts: { A: 0, B: 0, C: 0, D: 0 },
-          averageScore: 'N/A',
-          lastUpdated: Date.now(),
-        });
-        setTopViolations([]);
-      }
+      );
     } catch (error) {
-      console.error('Failed to load stats', error);
+      console.error('Error loading stats', error);
     } finally {
       setLoading(false);
       setRefreshing(false);
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      loadStats();
-    }, [])
-  );
+  useFocusEffect(useCallback(() => { loadStats(); }, []));
 
-  const handleRefresh = () => loadStats(true);
-
-  const getGradeColor = (grade: string): string => {
-    switch (grade) {
-      case 'A': return '#27ae60';
-      case 'B': return '#3498db';
-      case 'C': return '#f39c12';
-      case 'D': return '#e74c3c';
-      default: return '#95a5a6';
-    }
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await loadStats(true);
   };
 
-  if (loading && !stats) {
+  if (loading) {
     return (
-      <SafeAreaView style={styles.container}>
-        <View style={styles.center}>
-          <ActivityIndicator size="large" color={Colors.blue} />
-        </View>
+      <SafeAreaView style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
       </SafeAreaView>
     );
   }
 
-  if (!stats) return null;
-
   return (
-    <SafeAreaView style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.headerRow}>
-          <Text style={styles.title}>لوحة التحكم</Text>
-          <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
-            <FontAwesome name="refresh" size={20} color={Colors.blue} />
+          <Text style={styles.pageTitle}>الإحصائيات العامة</Text>
+          <TouchableOpacity onPress={handleRefresh} disabled={refreshing}>
+            <FontAwesome
+              name="refresh"
+              size={20}
+              color={refreshing ? Colors.border : Colors.primary}
+            />
           </TouchableOpacity>
         </View>
-        {refreshing && <Text style={styles.refreshText}>جاري التحديث...</Text>}
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>إجمالي التفتيشات المكتملة</Text>
-          <Text style={styles.cardValue}>{stats.total}</Text>
-        </View>
-
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>متوسط النتيجة</Text>
-          <Text style={styles.cardValue}>{stats.averageScore}%</Text>
-        </View>
-
-        <Text style={styles.subtitle}>التوزيع حسب الفئة</Text>
-        <View style={styles.gradesContainer}>
-          {(['A', 'B', 'C', 'D'] as const).map(grade => (
-            <View key={grade} style={styles.gradeItem}>
-              <View style={[styles.gradeBadge, { backgroundColor: getGradeColor(grade) }]}>
-                <Text style={styles.gradeBadgeText}>{grade}</Text>
-              </View>
-              <Text style={styles.gradeCount}>{stats.gradeCounts[grade]}</Text>
+        {stats && (
+          <>
+            <View style={styles.row}>
+              <StatCard label="إجمالي التفتيشات" value={stats.totalInspections} />
+              <StatCard label="المطابقة" value={stats.compliantCount} color={Colors.success} />
+              <StatCard label="غير المطابقة" value={stats.nonCompliantCount} color={Colors.danger} />
             </View>
-          ))}
-        </View>
+            <View style={styles.row}>
+              <StatCard label="متوسط الدرجات" value={`${stats.averageScore?.toFixed(1) ?? 'N/A'}%`} />
+              <StatCard label="بنود تم تقييمها" value={stats.totalItemsEvaluated} />
+              <StatCard label="مخالفات" value={stats.totalNonCompliantItems} color={Colors.warning} />
+            </View>
 
-        {stats.total > 0 && (
-          <View style={styles.distribution}>
-            <Text style={styles.subtitle}>نسبة التوزيع</Text>
-            {(['A', 'B', 'C', 'D'] as const).map(grade => {
-              const count = stats.gradeCounts[grade];
-              const percentage = (count / stats.total * 100).toFixed(1);
-              return (
-                <View key={grade} style={styles.barContainer}>
-                  <Text style={styles.barLabel}>{grade}</Text>
-                  <View style={styles.barBackground}>
-                    <View style={[styles.barFill, { width: `${percentage}%` as any, backgroundColor: getGradeColor(grade) }]} />
+            {topViolations.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>أكثر المخالفات تكراراً</Text>
+                {topViolations.map((v, i) => (
+                  <View key={i} style={styles.violationRow}>
+                    <Text style={styles.violationCount}>{v.count}×</Text>
+                    <Text style={styles.violationText}>{v.criteria}</Text>
                   </View>
-                  <Text style={styles.barPercent}>{percentage}%</Text>
-                </View>
-              );
-            })}
-          </View>
-        )}
-
-        {topViolations.length > 0 && (
-          <View style={styles.violationsCard}>
-            <Text style={styles.subtitle}>أكثر المخالفات شيوعاً</Text>
-            {topViolations.map((item, idx) => (
-              <View key={idx} style={styles.violationItem}>
-                <Text style={styles.violationRank}>{idx + 1}</Text>
-                <Text style={styles.violationCriteria}>{item.criteria}</Text>
-                <Text style={styles.violationCount}>{item.count}</Text>
+                ))}
               </View>
-            ))}
-          </View>
-        )}
-
-        {stats.total === 0 && (
-          <View style={styles.emptyContainer}>
-            <FontAwesome name="file-text" size={50} color="#bdc3c7" />
-            <Text style={styles.emptyText}>لا توجد تفتيشات مكتملة بعد</Text>
-          </View>
+            )}
+          </>
         )}
       </ScrollView>
     </SafeAreaView>
   );
 }
 
+function StatCard({ label, value, color }: { label: string; value: any; color?: string }) {
+  return (
+    <View style={styles.card}>
+      <Text style={[styles.cardValue, color ? { color } : { color: Colors.primary }]}>{value}</Text>
+      <Text style={styles.cardLabel}>{label}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  scrollContent: { padding: 20, alignItems: 'center' },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
-  },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#2c3e50', textAlign: 'center', flex: 1 },
-  refreshButton: { padding: 8 },
-  refreshText: { fontSize: 12, color: '#7f8c8d', marginBottom: 10 },
+  safeArea:       { flex: 1 },
+  centered:       { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  content:        { padding: 16 },
+  headerRow:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
+  pageTitle:      { fontSize: 20, fontWeight: 'bold', color: Colors.textPrimary },
+  row:            { flexDirection: 'row', gap: 10, marginBottom: 10 },
   card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  cardTitle: { fontSize: 16, color: '#7f8c8d', marginBottom: 8 },
-  cardValue: { fontSize: 32, fontWeight: 'bold', color: Colors.blue },
-  subtitle: { fontSize: 18, fontWeight: '600', color: '#2c3e50', marginTop: 10, marginBottom: 15, alignSelf: 'flex-start' },
-  gradesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 20,
-  },
-  gradeItem: { alignItems: 'center' },
-  gradeBadge: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  gradeBadgeText: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  gradeCount: { fontSize: 18, fontWeight: 'bold', color: '#2c3e50' },
-  distribution: { width: '100%', marginTop: 10 },
-  barContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  barLabel: {
-    width: 30,
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-  },
-  barBackground: {
     flex: 1,
-    height: 20,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: Colors.textInverse,
     borderRadius: 10,
-    overflow: 'hidden',
-    marginHorizontal: 8,
-  },
-  barFill: {
-    height: '100%',
-    borderRadius: 10,
-  },
-  barPercent: {
-    width: 50,
-    fontSize: 14,
-    color: '#7f8c8d',
-  },
-  violationsCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: '100%',
-    marginTop: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  violationItem: {
-    flexDirection: 'row',
+    padding: 14,
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
   },
-  violationRank: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: Colors.blue,
-    width: 40,
-  },
-  violationCriteria: {
-    fontSize: 14,
-    color: '#2c3e50',
-    flex: 1,
-    marginHorizontal: 8,
-    textAlign: 'right',
-  },
-  violationCount: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#e74c3c',
-    width: 40,
-    textAlign: 'center',
-  },
-  emptyContainer: { alignItems: 'center', marginTop: 40 },
-  emptyText: { fontSize: 16, color: '#95a5a6', marginTop: 10 },
+  cardValue:      { fontSize: 32, fontWeight: 'bold', marginBottom: 4 },
+  cardLabel:      { fontSize: 12, color: Colors.textSecondary, textAlign: 'center' },
+  section:        { backgroundColor: Colors.textInverse, borderRadius: 10, padding: 14, marginTop: 10, elevation: 1 },
+  sectionTitle:   { fontSize: 16, fontWeight: '600', color: Colors.textPrimary, marginBottom: 10 },
+  violationRow:   { flexDirection: 'row', alignItems: 'flex-start', marginBottom: 8 },
+  violationCount: { fontSize: 14, fontWeight: 'bold', color: Colors.danger, marginRight: 8, minWidth: 32 },
+  violationText:  { fontSize: 14, color: Colors.textSecondary, flex: 1 },
 });

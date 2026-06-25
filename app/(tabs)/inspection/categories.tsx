@@ -4,12 +4,11 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../../constants';
 import { facilities } from '../../../src/facilitiesData';
-import { Colors } from '../../../src/constants/colors.ts';
 
 export default function CategoriesScreen() {
   const router = useRouter();
-  // Retrieve preliminary data passed from start.tsx
   const params = useLocalSearchParams();
 
   const uniqueActivities = Array.from(new Set(facilities.map(f => f.activity))).sort();
@@ -18,7 +17,6 @@ export default function CategoriesScreen() {
     <TouchableOpacity
       style={styles.categoryCard}
       onPress={() => {
-        // Pass all preliminary data along to facilities screen
         router.push({
           pathname: '/(tabs)/inspection/facilities',
           params: {
@@ -28,7 +26,7 @@ export default function CategoriesScreen() {
         });
       }}
     >
-      <FontAwesome name="folder" size={24} color={Colors.blue} />
+      <FontAwesome name="folder" size={24} color={Colors.primary} />
       <Text style={styles.categoryText}>{item}</Text>
     </TouchableOpacity>
   );
@@ -38,8 +36,8 @@ export default function CategoriesScreen() {
       <Stack.Screen
         options={{
           title: 'اختر نوع المنشأة',
-          headerStyle: { backgroundColor: Colors.blue },
-          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: Colors.primary },
+          headerTintColor: Colors.textInverse,
         }}
       />
       <FlatList
@@ -58,12 +56,12 @@ export default function CategoriesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  list: { padding: 10 },
+  safeArea:     { flex: 1, backgroundColor: 'transparent' },
+  list:         { padding: 10 },
   categoryCard: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.textInverse,
     padding: 16,
     borderRadius: 8,
     marginBottom: 8,
@@ -73,7 +71,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  categoryText: { fontSize: 16, color: '#34495e', marginLeft: 12 },
-  empty: { alignItems: 'center', padding: 20 },
-  emptyText: { color: '#95a5a6', fontSize: 16 },
+  categoryText: { fontSize: 16, color: Colors.textPrimary, marginLeft: 12 },
+  empty:        { alignItems: 'center', padding: 20 },
+  emptyText:    { color: Colors.textTertiary, fontSize: 16 },
 });

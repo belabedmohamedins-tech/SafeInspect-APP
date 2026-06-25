@@ -3,16 +3,12 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../src/constants/colors';
+import { Colors } from '../constants';
 import { InspectionRepository } from '../src/repositories/InspectionRepository';
 import { CriteriaPreviewStore } from '../src/stores/CriteriaPreviewStore';
 import { InspectionItem } from '../src/types';
 
 export default function PreviewScreen() {
-  // `inspectionId` is set when coming from a saved inspection (reports screen).
-  // `title` is always set — used for the header title.
-  // When `inspectionId` is absent we are previewing a template checklist;
-  // in that case the items come from CriteriaPreviewStore (set by checklists.tsx).
   const { inspectionId, title } = useLocalSearchParams();
   const router = useRouter();
   const [criteriaItems, setCriteriaItems] = useState<InspectionItem[]>([]);
@@ -20,15 +16,11 @@ export default function PreviewScreen() {
   useEffect(() => {
     const loadItems = async () => {
       if (inspectionId) {
-        // Path 1: real saved inspection — load from repository by ID
         const inspection = await InspectionRepository.getById(inspectionId as string);
         if (inspection) setCriteriaItems(inspection.items);
       } else {
-        // Path 2: template checklist preview — read from in-memory store
         const storeItems = CriteriaPreviewStore.get();
         setCriteriaItems(storeItems);
-        // Clear the store so it doesn't linger if the user navigates back
-        // and opens a different checklist before the component unmounts
         CriteriaPreviewStore.clear();
       }
     };
@@ -62,11 +54,11 @@ export default function PreviewScreen() {
       <Stack.Screen
         options={{
           title: `معاينة: ${title || 'قائمة'}`,
-          headerStyle: { backgroundColor: Colors.white },
-          headerTintColor: Colors.blue,
+          headerStyle: { backgroundColor: Colors.textInverse },
+          headerTintColor: Colors.primary,
           headerLeft: () => (
             <TouchableOpacity onPress={() => router.back()} style={{ marginLeft: 15 }}>
-              <FontAwesome name="arrow-right" size={22} color={Colors.blue} />
+              <FontAwesome name="arrow-right" size={22} color={Colors.primary} />
             </TouchableOpacity>
           ),
         }}
@@ -87,18 +79,18 @@ export default function PreviewScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: Colors.background },
-  list: { padding: 10 },
+  safeArea:  { flex: 1, backgroundColor: Colors.background },
+  list:      { padding: 10 },
   axisGroup: { marginBottom: 20 },
   axisTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: Colors.dark,
+    color: Colors.textPrimary,
     marginBottom: 8,
     paddingHorizontal: 4,
   },
   card: {
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.textInverse,
     padding: 12,
     borderRadius: 6,
     marginBottom: 6,
@@ -108,18 +100,8 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 1,
   },
-  criteria: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: Colors.dark,
-    marginBottom: 4,
-    textAlign: 'right',
-  },
-  reference: {
-    fontSize: 12,
-    color: Colors.mid,
-    textAlign: 'right',
-  },
-  empty: { alignItems: 'center', padding: 40 },
-  emptyText: { fontSize: 16, color: Colors.mid },
+  criteria:  { fontSize: 14, fontWeight: '500', color: Colors.textPrimary, marginBottom: 4, textAlign: 'right' },
+  reference: { fontSize: 12, color: Colors.textSecondary, textAlign: 'right' },
+  empty:     { alignItems: 'center', padding: 40 },
+  emptyText: { fontSize: 16, color: Colors.textSecondary },
 });

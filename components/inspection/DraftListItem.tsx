@@ -1,6 +1,6 @@
 import React from 'react';
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 import { SavedInspection } from '../../src/types';
 
 interface Props {
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.textInverse,
     padding: 14,
     marginHorizontal: 12,
     marginVertical: 6,
@@ -47,15 +47,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: Colors.border,
   },
-  content: { flex: 1, marginRight: 8 },
-  title: { fontSize: 16, fontWeight: '700', color: Colors.dark, marginBottom: 4 },
-  subtitle: { fontSize: 13, color: Colors.mid, marginBottom: 4 },
-  meta: { fontSize: 12, color: Colors.blue },
-  deleteButton: {
-    backgroundColor: '#f7e6e6',
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 8,
-  },
-  deleteText: { color: Colors.red, fontWeight: '700' },
+  content:      { flex: 1, marginRight: 8 },
+  title:        { fontSize: 16, fontWeight: '700', color: Colors.textPrimary, marginBottom: 4 },
+  subtitle:     { fontSize: 13, color: Colors.textSecondary, marginBottom: 4 },
+  meta:         { fontSize: 12, color: Colors.primary },
+  deleteButton: { backgroundColor: '#f7e6e6', paddingHorizontal: 10, paddingVertical: 8, borderRadius: 8 },
+  deleteText:   { color: Colors.danger, fontWeight: '700' },
 });

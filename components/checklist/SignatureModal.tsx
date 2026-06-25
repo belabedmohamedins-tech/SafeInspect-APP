@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Signature from 'react-native-signature-canvas';
+import { Colors } from '../../constants';
 
 interface Props {
   visible: boolean;
@@ -21,7 +22,7 @@ export default function SignatureModal({ visible, onConfirm, onClose }: Props) {
             clearText="مسح"
             confirmText="حفظ"
             webStyle={`
-              .m-signature-pad { box-shadow: none; border: 1px solid #bdc3c7; border-radius: 8px; }
+              .m-signature-pad { box-shadow: none; border: 1px solid ${Colors.border}; border-radius: 8px; }
               .m-signature-pad--body { border: none; }
               .m-signature-pad--footer { display: none; }
               .m-signature-pad--body canvas { width: 100%; height: 100%; }
@@ -37,32 +38,9 @@ export default function SignatureModal({ visible, onConfirm, onClose }: Props) {
 }
 
 const styles = StyleSheet.create({
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modal: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    width: '90%',
-    maxHeight: '80%',
-    padding: 16,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    marginBottom: 12,
-    color: '#2c3e50',
-  },
-  closeBtn: {
-    backgroundColor: '#95a5a6',
-    padding: 12,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginTop: 8,
-  },
-  closeText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  overlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
+  modal:   { backgroundColor: Colors.textInverse, borderRadius: 12, width: '90%', maxHeight: '80%', padding: 16 },
+  title:   { fontSize: 18, fontWeight: 'bold', textAlign: 'center', marginBottom: 12, color: Colors.textPrimary },
+  closeBtn:  { backgroundColor: Colors.textSecondary, padding: 12, borderRadius: 6, alignItems: 'center', marginTop: 8 },
+  closeText: { color: Colors.textInverse, fontSize: 16, fontWeight: 'bold' },
 });

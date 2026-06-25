@@ -3,15 +3,15 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../src/constants/colors';
+import { Colors } from '../../constants';
 
 const secondaryItems = [
-  { name: 'المنشآت', icon: 'building', route: '/screens/facilities' },
-  { name: 'التقارير', icon: 'file-text', route: '/screens/reports' },
-  { name: 'إحصائيات', icon: 'bar-chart', route: '/screens/stats' },
-  { name: 'المراجع', icon: 'book', route: '/screens/legal' },
-  { name: 'قوائم التفتيش', icon: 'print', route: '/screens/checklists' },
-  { name: 'الخريطة', icon: 'map-marker', route: '/screens/map' },
+  { name: 'المنشآت',       icon: 'building',     route: '/screens/facilities' },
+  { name: 'التقارير',      icon: 'file-text',    route: '/screens/reports' },
+  { name: 'إحصائيات',     icon: 'bar-chart',    route: '/screens/stats' },
+  { name: 'المراجع',       icon: 'book',         route: '/screens/legal' },
+  { name: 'قوائم التفتيش', icon: 'print',        route: '/screens/checklists' },
+  { name: 'الخريطة',      icon: 'map-marker',   route: '/screens/map' },
 ];
 
 export default function PlusScreen() {
@@ -22,7 +22,7 @@ export default function PlusScreen() {
       style={styles.item}
       onPress={() => router.push(item.route as any)}
     >
-      <FontAwesome name={item.icon as any} size={24} color={Colors.blue} />
+      <FontAwesome name={item.icon as any} size={24} color={Colors.primary} />
       <Text style={styles.itemText}>{item.name}</Text>
     </TouchableOpacity>
   );
@@ -41,11 +41,11 @@ export default function PlusScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: 'transparent' },
-  list: { padding: 20 },
+  list:      { padding: 20 },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: Colors.textInverse,
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
@@ -55,10 +55,5 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 1,
   },
-  itemText: {
-    fontSize: 16,
-    fontWeight: '500',
-    marginLeft: 12,
-    color: '#2c3e50',
-  },
+  itemText: { fontSize: 16, fontWeight: '500', marginLeft: 12, color: Colors.textPrimary },
 });

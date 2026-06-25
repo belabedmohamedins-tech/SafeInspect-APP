@@ -3,8 +3,8 @@ import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../../constants';
 import { facilities } from '../../../src/facilitiesData';
-import { Colors } from '../../../src/constants/colors.ts';
 
 export default function FacilitiesByCategoryScreen() {
   const params = useLocalSearchParams();
@@ -21,7 +21,6 @@ export default function FacilitiesByCategoryScreen() {
         {
           text: 'نعم',
           onPress: () => {
-            // Pass all preliminary data + facility details to checklist
             router.push({
               pathname: '/(tabs)/inspection/checklist',
               params: {
@@ -54,8 +53,8 @@ export default function FacilitiesByCategoryScreen() {
       <Stack.Screen
         options={{
           title: decodedCategory,
-          headerStyle: { backgroundColor: Colors.blue },
-          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: Colors.primary },
+          headerTintColor: Colors.textInverse,
         }}
       />
       <FlatList
@@ -74,10 +73,10 @@ export default function FacilitiesByCategoryScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  list: { padding: 10 },
+  safeArea:    { flex: 1, backgroundColor: 'transparent' },
+  list:        { padding: 10 },
   card: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.textInverse,
     padding: 16,
     borderRadius: 8,
     marginBottom: 8,
@@ -87,9 +86,9 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  projectName: { fontSize: 16, fontWeight: 'bold', color: '#34495e' },
-  owner: { fontSize: 14, color: '#7f8c8d', marginTop: 4 },
-  address: { fontSize: 13, color: '#95a5a6', marginTop: 2 },
-  empty: { alignItems: 'center', padding: 20 },
-  emptyText: { color: '#95a5a6', fontSize: 16 },
+  projectName: { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary },
+  owner:       { fontSize: 14, color: Colors.textSecondary, marginTop: 4 },
+  address:     { fontSize: 13, color: Colors.textTertiary, marginTop: 2 },
+  empty:       { alignItems: 'center', padding: 20 },
+  emptyText:   { color: Colors.textTertiary, fontSize: 16 },
 });

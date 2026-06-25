@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../src/constants/colors.ts';
+import { Colors } from '../constants';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
 
 export default function OnboardingScreen() {
@@ -16,7 +16,6 @@ export default function OnboardingScreen() {
     }
     try {
       await SettingsRepository.set({ officeName: officeName.trim() });
-      console.log('Office name saved, navigating to home');
       router.replace('/(tabs)/home');
     } catch (error) {
       console.error('Failed to save office name', error);
@@ -34,7 +33,7 @@ export default function OnboardingScreen() {
           value={officeName}
           onChangeText={setOfficeName}
           placeholder="مثال: الهيكل البلدي لحفظ الصحة لبلدية سيدي إبراهيم"
-          placeholderTextColor="#95a5a6"
+          placeholderTextColor={Colors.textTertiary}
           textAlign="right"
         />
         <TouchableOpacity style={styles.button} onPress={handleSave}>
@@ -46,21 +45,21 @@ export default function OnboardingScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fcff' },
-  content: { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#2c3e50', marginBottom: 8, textAlign: 'center' },
-  subtitle: { fontSize: 16, color: '#7f8c8d', marginBottom: 20, textAlign: 'center' },
+  container: { flex: 1, backgroundColor: Colors.background },
+  content:   { flex: 1, justifyContent: 'center', paddingHorizontal: 20 },
+  title:     { fontSize: 24, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 8, textAlign: 'center' },
+  subtitle:  { fontSize: 16, color: Colors.textSecondary, marginBottom: 20, textAlign: 'center' },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.textInverse,
     borderWidth: 1,
-    borderColor: '#bdc3c7',
+    borderColor: Colors.border,
     borderRadius: 6,
     padding: 12,
     fontSize: 16,
-    color: '#2c3e50',
+    color: Colors.textPrimary,
     textAlign: 'right',
     marginBottom: 20,
   },
-  button: { backgroundColor: Colors.blue, padding: 15, borderRadius: 8, alignItems: 'center' },
-  buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
+  button:     { backgroundColor: Colors.primary, padding: 15, borderRadius: 8, alignItems: 'center' },
+  buttonText: { color: Colors.textInverse, fontSize: 18, fontWeight: 'bold' },
 });
