@@ -3,7 +3,6 @@ import { Picker } from '@react-native-picker/picker';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
-import { Colors } from '../../../constants';
 import {
     Alert,
     ScrollView,
@@ -14,6 +13,7 @@ import {
     View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../../constants';
 
 export default function InspectionStartScreen() {
   const router = useRouter();
