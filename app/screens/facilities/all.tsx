@@ -46,7 +46,7 @@ export default function AllFacilitiesScreen() {
         contentContainerStyle={styles.list}
         ListEmptyComponent={
           <View style={styles.empty}>
-            <Text style={styles.emptyText}>لا توجد منشآت</Text>
+            <Text style={styles.emptyText}>لا تجد منشآت</Text>
           </View>
         }
       />
