@@ -26,7 +26,7 @@ export default function InspectionSection({
 }: Props) {
   return (
     <View style={styles.container}>
-      {/* Header */}
+      {/* Section header */}
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
         {onViewAll && items.length > 0 && (
@@ -35,6 +35,9 @@ export default function InspectionSection({
           </TouchableOpacity>
         )}
       </View>
+
+      {/* Divider under header */}
+      <View style={styles.divider} />
 
       {/* Empty state */}
       {items.length === 0 ? (
@@ -65,10 +68,23 @@ export default function InspectionSection({
 }
 
 const styles = StyleSheet.create({
-  container:       { marginTop: 8, backgroundColor: Colors.textInverse, borderTopWidth: 1, borderBottomWidth: 1, borderColor: Colors.surfaceOffset },
+  // Single card with shadow — no double borders between stacked sections
+  container: {
+    backgroundColor: Colors.textInverse,
+    marginHorizontal: 12,
+    marginBottom: 10,
+    borderRadius: 12,
+    elevation: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.06,
+    shadowRadius: 2,
+    overflow: 'hidden',
+  },
   header:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
   title:           { fontSize: 16, fontWeight: '600', color: Colors.textPrimary },
   viewAll:         { color: Colors.primary, fontSize: 14, fontWeight: '500' },
+  divider:         { height: 1, backgroundColor: Colors.surfaceOffset },
   empty:           { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 16 },
   emptyText:       { fontSize: 14, color: Colors.textSecondary, textAlign: 'center' },
   emptyAction:     { marginTop: 12, paddingHorizontal: 16, paddingVertical: 8, backgroundColor: Colors.primary, borderRadius: 8 },
