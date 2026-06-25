@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { Colors, Radius } from '../../constants';
+import { Colors } from '../../constants';
 
 interface Props {
   evaluated: number;
@@ -12,26 +12,18 @@ export default function ChecklistProgressBar({ evaluated, total, percent }: Prop
   return (
     <View style={styles.container}>
       <View style={styles.track}>
-        <View style={[styles.fill, { width: `${percent}%` as any }]} />
+        <View style={[styles.fill, { width: `${percent}%` }]} />
       </View>
       <Text style={styles.label}>
-        {evaluated}/{total} ({percent.toFixed(1)}%)
+        {evaluated} / {total} — {percent.toFixed(0)}%
       </Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: Colors.textInverse,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  track: { flex: 1, height: 8, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.sm, marginRight: 10 },
-  fill: { height: 8, backgroundColor: Colors.success, borderRadius: Radius.sm },
-  label: { fontSize: 12, color: Colors.textSecondary },
+  container: { paddingHorizontal: 16, paddingVertical: 8, backgroundColor: Colors.background },
+  track:     { height: 6, backgroundColor: Colors.border, borderRadius: 3, overflow: 'hidden' },
+  fill:      { height: '100%', backgroundColor: Colors.primary, borderRadius: 3 },
+  label:     { fontSize: 12, color: Colors.textSecondary, marginTop: 4, textAlign: 'right' },
 });

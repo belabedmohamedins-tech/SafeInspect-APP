@@ -1,37 +1,38 @@
-import { FontAwesome } from '@expo/vector-icons';
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { BLUE, Colors } from '../../constants';
+import { Colors } from '../../constants';
 
 interface Props {
-  totalCompleted: number;
-  totalDrafts: number;
-  nonCompliantFacilities: number;
+  totalInspections: number;
+  completedThisMonth: number;
+  pendingCount: number;
 }
 
-export default function StatsBar({ totalCompleted, totalDrafts, nonCompliantFacilities }: Props) {
+export default function StatsBar({ totalInspections, completedThisMonth, pendingCount }: Props) {
   return (
     <View style={styles.container}>
-      <StatCard icon="clipboard"           value={totalCompleted}          label="تفتيش مكتمل" />
-      <StatCard icon="pencil-square-o"     value={totalDrafts}             label="مسودة" />
-      <StatCard icon="exclamation-triangle" value={nonCompliantFacilities} label="منشأة غير مطابقة" />
+      <StatItem label="إجمالي" value={totalInspections} color={Colors.primary} />
+      <View style={styles.separator} />
+      <StatItem label="هذا الشهر" value={completedThisMonth} color={Colors.success} />
+      <View style={styles.separator} />
+      <StatItem label="مسودات" value={pendingCount} color={Colors.warning} />
     </View>
   );
 }
 
-function StatCard({ icon, value, label }: { icon: any; value: number; label: string }) {
+function StatItem({ label, value, color }: { label: string; value: number; color: string }) {
   return (
-    <View style={styles.card}>
-      <FontAwesome name={icon} size={24} color={BLUE} />
-      <Text style={styles.number}>{value}</Text>
+    <View style={styles.item}>
+      <Text style={[styles.value, { color }]}>{value}</Text>
       <Text style={styles.label}>{label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flexDirection: 'row', justifyContent: 'space-around', padding: 16, backgroundColor: Colors.textInverse, marginBottom: 8, borderBottomWidth: 1, borderBottomColor: Colors.surfaceOffset },
-  card:   { alignItems: 'center', flex: 1 },
-  number: { fontSize: 24, fontWeight: 'bold', color: Colors.textPrimary, marginTop: 4 },
-  label:  { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  container:  { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Colors.textInverse, marginHorizontal: 12, marginTop: 6, marginBottom: 10, padding: 14, borderRadius: 12, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 2 },
+  item:       { alignItems: 'center', flex: 1 },
+  value:      { fontSize: 24, fontWeight: 'bold' },
+  label:      { fontSize: 12, color: Colors.textSecondary, marginTop: 2 },
+  separator:  { width: 1, height: 32, backgroundColor: Colors.border },
 });

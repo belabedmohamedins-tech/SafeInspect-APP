@@ -1,8 +1,7 @@
-// app/(tabs)/facilities/index.tsx
+// app/screens/facilities/index.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
-import React, { useCallback, useState } from 'react';
-import { Colors } from '../../../src/constants/colors.ts';
+import React, { useCallback, useMemo, useState } from 'react';
 import {
     FlatList,
     Modal,
@@ -13,13 +12,13 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { Colors } from '../../../constants';
 import { getAllFacilities } from '../../../src/facilitiesService';
 import { Facility } from '../../../src/types';
 
 export default function FacilitiesScreen() {
   const router = useRouter();
   const [facilitiesList, setFacilitiesList] = useState<Facility[]>([]);
-  const [filteredFacilities, setFilteredFacilities] = useState<Facility[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -27,7 +26,6 @@ export default function FacilitiesScreen() {
   const loadFacilities = async () => {
     const all = await getAllFacilities();
     setFacilitiesList(all);
-    setFilteredFacilities([]);
   };
 
   useFocusEffect(
@@ -36,17 +34,17 @@ export default function FacilitiesScreen() {
     }, [])
   );
 
-  const handleSearch = (text: string) => {
-    setSearchQuery(text);
-    if (text.trim() === '') {
-      setFilteredFacilities([]);
-    } else {
-      const filtered = facilitiesList.filter((f) =>
-        f.projectName.toLowerCase().includes(text.toLowerCase())
-      );
-      setFilteredFacilities(filtered);
-    }
-  };
+  // derive filtered list reactively — no separate state needed
+  const filteredFacilities = useMemo(() => {
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return [];
+    return facilitiesList.filter(
+      f =>
+        f.projectName.toLowerCase().includes(q) ||
+        (f.ownerName ?? '').toLowerCase().includes(q) ||
+        (f.address  ?? '').toLowerCase().includes(q)
+    );
+  }, [facilitiesList, searchQuery]);
 
   const handleFacilityPress = (facility: Facility) => {
     setSelectedFacility(facility);
@@ -63,28 +61,28 @@ export default function FacilitiesScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      {/* زر إضافة منشأة جديد */}
+      {/* زر إضافة منشأة */}
       <TouchableOpacity
-        style={[styles.addButton, { backgroundColor: Colors.blue }]}
-        onPress={() => router.push('/facilities/add')}
+        style={styles.addButton}
+        onPress={() => router.push('/facilities/add' as any)}
       >
-        <FontAwesome name="plus-circle" size={24} color="#fff" />
+        <FontAwesome name="plus-circle" size={24} color={Colors.textInverse} />
         <Text style={styles.addButtonText}>إضافة منشأة جديدة</Text>
       </TouchableOpacity>
 
       {/* شريط البحث */}
       <View style={styles.searchContainer}>
-        <FontAwesome name="search" size={18} color="#7f8c8d" style={styles.searchIcon} />
+        <FontAwesome name="search" size={18} color={Colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="ابحث عن منشأة..."
           value={searchQuery}
-          onChangeText={handleSearch}
-          placeholderTextColor="#95a5a6"
+          onChangeText={setSearchQuery}
+          placeholderTextColor={Colors.textTertiary}
         />
         {searchQuery !== '' && (
-          <TouchableOpacity onPress={() => handleSearch('')}>
-            <FontAwesome name="times-circle" size={18} color="#7f8c8d" />
+          <TouchableOpacity onPress={() => setSearchQuery('')}>
+            <FontAwesome name="times-circle" size={18} color={Colors.textSecondary} />
           </TouchableOpacity>
         )}
       </View>
@@ -107,7 +105,7 @@ export default function FacilitiesScreen() {
       {/* مودال البطاقة التقنية */}
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
@@ -116,37 +114,18 @@ export default function FacilitiesScreen() {
             {selectedFacility && (
               <>
                 <Text style={styles.modalTitle}>{selectedFacility.projectName}</Text>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.ownerName}</Text>
-                  <Text style={styles.modalLabel}>صاحب المشروع</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.activity}</Text>
-                  <Text style={styles.modalLabel}>النشاط</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.address || 'غير محدد'}</Text>
-                  <Text style={styles.modalLabel}>العنوان</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.licenseType || 'غير محدد'}</Text>
-                  <Text style={styles.modalLabel}>نوع الرخصة</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.licenseDetails || 'لا يوجد'}</Text>
-                  <Text style={styles.modalLabel}>تفاصيل الرخصة</Text>
-                </View>
-                {selectedFacility.notes && (
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalValue}>{selectedFacility.notes}</Text>
-                    <Text style={styles.modalLabel}>ملاحظات</Text>
-                  </View>
-                )}
+                <DetailRow label="صاحب المشروع" value={selectedFacility.ownerName} />
+                <DetailRow label="النشاط"          value={selectedFacility.activity} />
+                <DetailRow label="العنوان"          value={selectedFacility.address || 'غير محدد'} />
+                <DetailRow label="نوع الترخيص"     value={selectedFacility.licenseType || 'غير محدد'} />
+                <DetailRow label="رقم الترخيص"     value={selectedFacility.licenseNumber || 'غير محدد'} />
+                <DetailRow label="انتهاء الترخيص"   value={selectedFacility.licenseExpiry || 'غير محدد'} />
+
                 <TouchableOpacity
-                  style={[styles.modalCloseButton, { backgroundColor: Colors.blue }]}
+                  style={styles.modalCloseBtn}
                   onPress={() => setModalVisible(false)}
                 >
-                  <Text style={styles.modalCloseText}>إغلاق</Text>
+                  <Text style={styles.modalCloseBtnText}>إغلاق</Text>
                 </TouchableOpacity>
               </>
             )}
@@ -157,112 +136,52 @@ export default function FacilitiesScreen() {
   );
 }
 
+function DetailRow({ label, value }: { label: string; value: string }) {
+  return (
+    <View style={styles.modalRow}>
+      <Text style={styles.modalValue}>{value}</Text>
+      <Text style={styles.modalLabel}>{label}</Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  addButton: {
+  safeArea:         { flex: 1, backgroundColor: Colors.background },
+  addButton:        {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 15,
+    backgroundColor: Colors.primary,
     margin: 10,
-    marginBottom: 5,
+    padding: 12,
     borderRadius: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
   },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-    margin: 10,
-    marginTop: 5,
-    paddingHorizontal: 10,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#e0e0e0',
-  },
-  searchIcon: { marginRight: 8 },
-  searchInput: {
-    flex: 1,
-    height: 45,
-    fontSize: 16,
-    textAlign: 'right',
-    color: '#2c3e50',
-  },
-  list: { padding: 10 },
+  addButtonText:    { color: Colors.textInverse, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
+  searchContainer:  { flexDirection: 'row', alignItems: 'center', margin: 10, backgroundColor: Colors.textInverse, borderRadius: 8, borderWidth: 1, borderColor: Colors.border, paddingHorizontal: 10 },
+  searchIcon:       { marginRight: 6 },
+  searchInput:      { flex: 1, paddingVertical: 10, fontSize: 15, color: Colors.textPrimary, textAlign: 'right' },
+  list:             { paddingHorizontal: 10 },
   card: {
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: Colors.textInverse,
+    padding: 14,
     borderRadius: 8,
     marginBottom: 8,
+    elevation: 1,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.07,
     shadowRadius: 2,
-    elevation: 2,
   },
-  projectName: { fontSize: 16, fontWeight: 'bold', color: '#34495e', textAlign: 'right' },
-  owner: { fontSize: 14, color: '#7f8c8d', marginTop: 4, textAlign: 'right' },
-  address: { fontSize: 13, color: '#95a5a6', marginTop: 2, textAlign: 'right' },
-  empty: { alignItems: 'center', padding: 20 },
-  emptyText: { color: '#95a5a6', fontSize: 16 },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-  },
-  modalContent: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    padding: 20,
-    width: '80%',
-    maxHeight: '80%',
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#2c3e50',
-    marginBottom: 15,
-    textAlign: 'center',
-  },
-  modalRow: {
-    flexDirection: 'row',
-    marginBottom: 10,
-    justifyContent: 'space-between',
-  },
-  modalLabel: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#34495e',
-    textAlign: 'left',
-    flex: 1,
-    marginLeft: 10,
-  },
-  modalValue: {
-    fontSize: 14,
-    color: '#7f8c8d',
-    textAlign: 'right',
-    flex: 2,
-  },
-  modalCloseButton: {
-    padding: 10,
-    borderRadius: 6,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  modalCloseText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
+  projectName:      { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary },
+  owner:            { fontSize: 14, color: Colors.textSecondary, marginTop: 2 },
+  address:          { fontSize: 13, color: Colors.textTertiary, marginTop: 2 },
+  empty:            { alignItems: 'center', padding: 30 },
+  emptyText:        { color: Colors.textSecondary, fontSize: 15 },
+  modalOverlay:     { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.45)' },
+  modalContent:     { backgroundColor: Colors.textInverse, borderRadius: 14, width: '90%', padding: 20 },
+  modalTitle:       { fontSize: 18, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 14, textAlign: 'right' },
+  modalRow:         { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: Colors.border },
+  modalLabel:       { fontSize: 14, color: Colors.textSecondary, fontWeight: '600' },
+  modalValue:       { fontSize: 14, color: Colors.textPrimary, flex: 1, textAlign: 'right', marginLeft: 8 },
+  modalCloseBtn:    { backgroundColor: Colors.primary, padding: 12, borderRadius: 8, alignItems: 'center', marginTop: 14 },
+  modalCloseBtnText:{ color: Colors.textInverse, fontWeight: 'bold', fontSize: 16 },
 });

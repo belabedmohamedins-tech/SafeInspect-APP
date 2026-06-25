@@ -9,17 +9,26 @@ interface Props {
 
 export default function ChecklistHeader({ facilityName, facilityAddress }: Props) {
   return (
-    <View style={[styles.header, { backgroundColor: Colors.primary }]}>
-      <Text style={styles.title}>
-        {facilityName ? `تفتيش: ${facilityName}` : 'التفتيش البيئي'}
-      </Text>
-      {facilityAddress ? <Text style={styles.subtitle}>{facilityAddress}</Text> : null}
+    <View style={styles.header}>
+      <Text style={styles.facilityName} numberOfLines={1}>{facilityName}</Text>
+      <Text style={styles.facilityAddress} numberOfLines={1}>{facilityAddress}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  header: { padding: 20, alignItems: 'center' },
-  title: { fontSize: 20, fontWeight: 'bold', color: Colors.textInverse, marginBottom: 4 },
-  subtitle: { fontSize: 14, color: Colors.border },
+  header: {
+    backgroundColor: Colors.textInverse,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
+  },
+  facilityName:    { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary, textAlign: 'right' },
+  facilityAddress: { fontSize: 13, color: Colors.textSecondary, textAlign: 'right', marginTop: 2 },
 });
