@@ -2,15 +2,14 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-
-const BLUE = '#1986df';
+import { Colors } from '../../src/constants/colors.ts';
 
 export default function TabLayout() {
   return (
     <View style={styles.background}>
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: BLUE,
+          tabBarActiveTintColor: Colors.blue,
           tabBarInactiveTintColor: '#95a5a6',
           tabBarStyle: {
             backgroundColor: '#fff',
@@ -25,7 +24,7 @@ export default function TabLayout() {
             fontWeight: '500',
           },
           headerStyle: {
-            backgroundColor: BLUE,
+            backgroundColor: Colors.blue,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {

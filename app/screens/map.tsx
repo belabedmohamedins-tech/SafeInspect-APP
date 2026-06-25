@@ -1,11 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { getAllFacilities } from '../../src/facilitiesService';
-import { Facility, SavedInspection } from '../../src/types';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { Facility } from '../../src/types';
 
 export default function MapScreen() {
   const [html, setHtml] = useState<string | null>(null);
@@ -14,13 +14,7 @@ export default function MapScreen() {
   const loadData = async () => {
     try {
       const facilities = await getAllFacilities();
-      const inspectionsData = await AsyncStorage.getItem('inspections');
-      let inspections: SavedInspection[] = [];
-      if (inspectionsData) {
-        inspections = JSON.parse(inspectionsData).filter(
-          (ins: SavedInspection) => ins.status === 'completed'
-        );
-      }
+      const inspections = await InspectionRepository.getCompleted();
 
       const points: { lat: number; lng: number; weight: number }[] = [];
 

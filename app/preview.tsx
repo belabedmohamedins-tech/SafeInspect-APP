@@ -1,25 +1,31 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const BLUE = '#1986df';
+import { InspectionRepository } from '../src/repositories/InspectionRepository';
+import { InspectionItem } from '../src/types';
 
 export default function PreviewScreen() {
-  const { items, title } = useLocalSearchParams();
+  const { inspectionId, title } = useLocalSearchParams();
   const router = useRouter();
+  const [criteriaItems, setCriteriaItems] = useState<InspectionItem[]>([]);
 
-  let criteriaItems: any[] = [];
-  try {
-    criteriaItems = items ? JSON.parse(items as string) : [];
-  } catch (e) {
-    console.error('Failed to parse items', e);
-  }
+  useEffect(() => {
+    const loadItems = async () => {
+      if (!inspectionId) return;
+      const inspection = await InspectionRepository.getById(inspectionId as string);
+      if (inspection) {
+        setCriteriaItems(inspection.items);
+      }
+    };
+
+    loadItems();
+  }, [inspectionId]);
 
   const groupedData = useMemo(() => {
-    const groups: { [key: string]: any[] } = {};
-    criteriaItems.forEach((item: any) => {
+    const groups: { [key: string]: InspectionItem[] } = {};
+    criteriaItems.forEach((item: InspectionItem) => {
       const axis = item.axis || 'أخرى';
       if (!groups[axis]) groups[axis] = [];
       groups[axis].push(item);

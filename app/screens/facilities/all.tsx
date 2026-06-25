@@ -4,8 +4,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { facilities } from '../../../src/facilitiesData';
-
-const BLUE = '#1986df'; // اللون الأزرق الموحد
+import { Colors } from '../../../src/constants/colors.ts';
 
 export default function AllFacilitiesScreen() {
   const router = useRouter();
@@ -36,7 +35,7 @@ export default function AllFacilitiesScreen() {
       <Stack.Screen
         options={{
           title: 'جميع المنشآت',
-          headerStyle: { backgroundColor: BLUE }, // تم تغيير اللون هنا
+          headerStyle: { backgroundColor: Colors.blue }, // تم تغيير اللون هنا
           headerTintColor: '#fff',
         }}
       />

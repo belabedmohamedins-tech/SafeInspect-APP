@@ -5,8 +5,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { facilities } from '../../../src/facilitiesData';
-
-const BLUE = '#1986df';
+import { Colors } from '../../../src/constants/colors.ts';
 
 export default function CategoriesScreen() {
   const router = useRouter();
@@ -29,7 +28,7 @@ export default function CategoriesScreen() {
         });
       }}
     >
-      <FontAwesome name="folder" size={24} color={BLUE} />
+      <FontAwesome name="folder" size={24} color={Colors.blue} />
       <Text style={styles.categoryText}>{item}</Text>
     </TouchableOpacity>
   );
@@ -39,7 +38,7 @@ export default function CategoriesScreen() {
       <Stack.Screen
         options={{
           title: 'اختر نوع المنشأة',
-          headerStyle: { backgroundColor: BLUE },
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />

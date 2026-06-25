@@ -3,8 +3,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const BLUE = '#1986df';
+import { Colors } from '../../src/constants/colors.ts';
 
 const secondaryItems = [
   { name: 'المنشآت', icon: 'building', route: '/screens/facilities' },
@@ -23,7 +22,7 @@ export default function PlusScreen() {
       style={styles.item}
       onPress={() => router.push(item.route as any)}
     >
-      <FontAwesome name={item.icon as any} size={24} color={BLUE} />
+      <FontAwesome name={item.icon as any} size={24} color={Colors.blue} />
       <Text style={styles.itemText}>{item.name}</Text>
     </TouchableOpacity>
   );

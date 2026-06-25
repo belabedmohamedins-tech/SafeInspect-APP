@@ -10,19 +10,7 @@ import { slaughterhouseSmallCriteria } from './criteria/slaughterhouseSmallCrite
 import { uabSpecificCriteria } from './criteria/uabCriteria';
 import { updSpecificCriteria } from './criteria/updCriteria';
 import { InspectionItem } from './types';
-// بعد الاستيرادات مباشرة
-console.log('Checking imported criteria arrays:');
-console.log('baseGeneralCriteria:', baseGeneralCriteria);
-console.log('baseFoodCriteria:', baseFoodCriteria);
-console.log('uabSpecificCriteria:', uabSpecificCriteria);
-console.log('abattoirSpecificCriteria:', abattoirSpecificCriteria);
-console.log('couvoirSpecificCriteria:', couvoirSpecificCriteria);
-console.log('updSpecificCriteria:', updSpecificCriteria);
-console.log('slaughterhouseSmallCriteria:', slaughterhouseSmallCriteria);
-console.log('bakerySpecificCriteria:', bakerySpecificCriteria);
-console.log('coldRoomSpecificCriteria:', coldRoomSpecificCriteria);
-console.log('mechanicWorkshopCriteria:', mechanicWorkshopCriteria);
-// تعريف المصفوفات المجمعة لكل نشاط
+
 const uabChecklist: InspectionItem[] = [
   ...baseGeneralCriteria,
   ...baseFoodCriteria,
@@ -72,8 +60,6 @@ const mechanicChecklist: InspectionItem[] = [
 
 export const criteriaByActivity: Record<string, InspectionItem[]> = {
   default: baseGeneralCriteria,
-
-  // المفاتيح القديمة
   'الديوان الوطني لأغذية الأنعام': uabChecklist,
   'وحدة مذابح الغرب': abattoirChecklist,
   'وحدة تفريخ الدواجن': couvoirChecklist,
@@ -82,8 +68,6 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'مخبزة صناعية': bakeryChecklist,
   'غرفة تبريد': coldRoomChecklist,
   'ميكانيك سيارات': mechanicChecklist,
-
-  // مفاتيح إضافية للتوافق مع البيانات الجديدة من facilitiesData.ts
   'مذبحة دواجن ≤500 كغ/ي': slaughterhouseSmallChecklist,
   'منشأة صناعة تغذية حيوانية': uabChecklist,
   'إنتاج أغذية الأنعام (مؤسسة عمومية اقتصادية)': uabChecklist,
@@ -95,7 +79,4 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'تربية الدواجن (03 حظائر)': updChecklist,
   'تربية الدواجن (حظيرتين)': updChecklist,
   'تربية الدواجن (حظيرة)': updChecklist,
-  // 'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)' لم نضفها بعد، ستأخذ default
-  // يمكن إضافتها لاحقاً عند وجود معايير خاصة
 };
-console.log('criteriaByActivity keys:', Object.keys(criteriaByActivity));

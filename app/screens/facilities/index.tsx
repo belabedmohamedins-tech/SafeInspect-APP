@@ -2,20 +2,19 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
+import { Colors } from '../../../src/constants/colors.ts';
 import {
-  FlatList,
-  Modal,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    FlatList,
+    Modal,
+    SafeAreaView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { getAllFacilities } from '../../../src/facilitiesService';
 import { Facility } from '../../../src/types';
-
-const BLUE = '#1986df';
 
 export default function FacilitiesScreen() {
   const router = useRouter();
@@ -66,7 +65,7 @@ export default function FacilitiesScreen() {
     <SafeAreaView style={styles.safeArea}>
       {/* زر إضافة منشأة جديد */}
       <TouchableOpacity
-        style={[styles.addButton, { backgroundColor: BLUE }]}
+        style={[styles.addButton, { backgroundColor: Colors.blue }]}
         onPress={() => router.push('/facilities/add')}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" />
@@ -144,7 +143,7 @@ export default function FacilitiesScreen() {
                   </View>
                 )}
                 <TouchableOpacity
-                  style={[styles.modalCloseButton, { backgroundColor: BLUE }]}
+                  style={[styles.modalCloseButton, { backgroundColor: Colors.blue }]}
                   onPress={() => setModalVisible(false)}
                 >
                   <Text style={styles.modalCloseText}>إغلاق</Text>

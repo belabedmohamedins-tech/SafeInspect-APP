@@ -1,21 +1,20 @@
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Stack, useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import {
-  Alert,
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    Alert,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../src/constants/colors.ts';
 import { facilities } from '../../src/facilitiesData';
+import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 import { AgendaItem } from '../../src/types';
 import { formatDateForAgenda } from '../../src/utils/dateUtils';
-
-const BLUE = '#1986df'; // اللون الأزرق الموحد
 
 export default function AgendaListScreen() {
   const [items, setItems] = useState<AgendaItem[]>([]);
@@ -23,12 +22,8 @@ export default function AgendaListScreen() {
 
   const loadAgenda = async () => {
     try {
-      const data = await AsyncStorage.getItem('agenda');
-      if (data) {
-        setItems(JSON.parse(data));
-      } else {
-        setItems([]);
-      }
+      const agendaItems = await AgendaRepository.getAll();
+      setItems(agendaItems);
     } catch (error) {
       console.error('Failed to load agenda', error);
     }
@@ -51,7 +46,7 @@ export default function AgendaListScreen() {
           style: 'destructive',
           onPress: async () => {
             const updated = items.filter(item => item.id !== id);
-            await AsyncStorage.setItem('agenda', JSON.stringify(updated));
+            await AgendaRepository.delete(id);
             setItems(updated);
           },
         },
@@ -63,7 +58,10 @@ export default function AgendaListScreen() {
     const updated = items.map(item =>
       item.id === id ? { ...item, completed: !item.completed } : item
     );
-    await AsyncStorage.setItem('agenda', JSON.stringify(updated));
+    const target = updated.find(item => item.id === id);
+    if (target) {
+      await AgendaRepository.save(target);
+    }
     setItems(updated);
   };
 
@@ -111,7 +109,7 @@ export default function AgendaListScreen() {
       <Stack.Screen
         options={{
           title: 'المهام المجدولة',
-          headerStyle: { backgroundColor: BLUE }, // تم التغيير من '#2c3e50' إلى BLUE
+          headerStyle: { backgroundColor: Colors.blue }, // تم التغيير من '#2c3e50' إلى Colors.blue
           headerTintColor: '#fff',
           headerRight: () => (
             <TouchableOpacity onPress={() => router.push('/agenda/add')} style={{ marginRight: 15 }}>
@@ -155,7 +153,7 @@ const styles = StyleSheet.create({
   date: { fontSize: 13, color: '#7f8c8d', marginBottom: 5 },
   notes: { fontSize: 14, color: '#34495e', marginBottom: 10 },
   checkButton: { 
-    backgroundColor: BLUE, // تم التغيير من '#3E729B' إلى BLUE
+    backgroundColor: Colors.blue, // تم التغيير من '#3E729B' إلى Colors.blue
     padding: 8, 
     borderRadius: 6, 
     alignItems: 'center' 

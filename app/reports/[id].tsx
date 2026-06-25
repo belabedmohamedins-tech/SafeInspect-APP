@@ -1,6 +1,4 @@
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as FileSystem from 'expo-file-system';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useMemo, useState } from 'react';
 import {
@@ -14,31 +12,32 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../src/constants/colors';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
 import { InspectionItem, SavedInspection } from '../../src/types';
 import { formatDateLong } from '../../src/utils/dateUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
 import { getStatusColor, getStatusText } from '../../src/utils/statusUtils';
-
-const fs = FileSystem as any;
-const BLUE = '#1986df';
 
 export default function ReportDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const [inspection, setInspection] = useState<SavedInspection | null>(null);
   const [loading, setLoading] = useState(true);
-
-  const getWritableDir = (): string | null => fs.cacheDirectory || null;
+  const inspectionId = Array.isArray(id) ? id[0] : id;
 
   useEffect(() => {
     const loadInspection = async () => {
+      if (!inspectionId) {
+        setInspection(null);
+        setLoading(false);
+        return;
+      }
+
       try {
-        const data = await AsyncStorage.getItem('inspections');
-        if (data) {
-          const inspections: SavedInspection[] = JSON.parse(data);
-          const found = inspections.find(ins => ins.id === id);
-          setInspection(found || null);
-        }
+        const found = await InspectionRepository.getById(inspectionId);
+        setInspection(found);
       } catch (error) {
         console.error('Failed to load inspection', error);
       } finally {
@@ -46,7 +45,7 @@ export default function ReportDetailScreen() {
       }
     };
     loadInspection();
-  }, [id]);
+  }, [inspectionId]);
 
   const deleteInspection = async () => {
     Alert.alert(
@@ -59,11 +58,8 @@ export default function ReportDetailScreen() {
           style: 'destructive',
           onPress: async () => {
             try {
-              const data = await AsyncStorage.getItem('inspections');
-              if (data) {
-                const inspections: SavedInspection[] = JSON.parse(data);
-                const updated = inspections.filter(ins => ins.id !== id);
-                await AsyncStorage.setItem('inspections', JSON.stringify(updated));
+              if (inspectionId) {
+                await InspectionRepository.delete(inspectionId);
                 router.back();
               }
             } catch (error) {
@@ -85,7 +81,6 @@ export default function ReportDetailScreen() {
           facilityId: inspection.facilityId,
           facilityName: inspection.facilityName,
           facilityAddress: inspection.facilityAddress,
-          items: JSON.stringify(inspection.items),
         },
       });
     }
@@ -96,7 +91,7 @@ export default function ReportDetailScreen() {
       router.push({
         pathname: '/preview',
         params: {
-          items: JSON.stringify(inspection.items),
+          inspectionId: inspection.id,
           title: inspection.facilityName,
         },
       });
@@ -114,14 +109,17 @@ export default function ReportDetailScreen() {
     return Object.entries(groups).map(([title, data]) => ({ title, data }));
   }, [inspection]);
 
-  const generatePDF = async () => {
-    // ... (same as before, but use the new header data)
-    // (I'll keep it as is, assuming it's correct)
+  const handleExportPDF = async () => {
+    if (inspection) {
+      await exportInspectionPDF(inspection);
+    }
   };
 
-  const generateCSV = async () => { /* ... */ };
-  const handleExportPDF = async () => { /* ... */ };
-  const handleExportExcel = async () => { /* ... */ };
+  const handleExportExcel = async () => {
+    if (inspection) {
+      await exportInspectionCSV(inspection);
+    }
+  };
 
   if (loading) {
     return (
@@ -273,7 +271,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#e0e0e0',
   },
-  officeName: { fontSize: 14, fontWeight: 'bold', color: BLUE, marginBottom: 4 },
+  officeName: { fontSize: 14, fontWeight: 'bold', color: Colors.blue, marginBottom: 4 },
   facilityName: { fontSize: 20, fontWeight: 'bold', color: '#2c3e50', marginBottom: 4 },
   address: { fontSize: 14, color: '#7f8c8d', marginBottom: 4 },
   date: { fontSize: 13, color: '#95a5a6', marginBottom: 2 },

@@ -3,18 +3,17 @@ import { Picker } from '@react-native-picker/picker';
 import * as Location from 'expo-location';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
+import { Colors } from '../../../src/constants/colors.ts';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const BLUE = '#1986df';
 
 export default function InspectionStartScreen() {
   const router = useRouter();
@@ -176,7 +175,7 @@ const styles = StyleSheet.create({
   picker: { height: 50, width: '100%', color: '#2c3e50' },
   memberInputRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
   addButton: {
-    backgroundColor: BLUE,
+    backgroundColor: Colors.blue,
     width: 40,
     height: 40,
     borderRadius: 20,
@@ -195,7 +194,7 @@ const styles = StyleSheet.create({
   memberText: { fontSize: 14, color: '#2c3e50', textAlign: 'right', flex: 1 },
   locationText: { fontSize: 14, color: '#7f8c8d', marginBottom: 10 },
   nextButton: {
-    backgroundColor: BLUE,
+    backgroundColor: Colors.blue,
     padding: 15,
     borderRadius: 8,
     alignItems: 'center',

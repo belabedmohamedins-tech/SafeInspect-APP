@@ -4,8 +4,7 @@ import React from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { facilities } from '../../../src/facilitiesData';
-
-const BLUE = '#1986df';
+import { Colors } from '../../../src/constants/colors.ts';
 
 export default function FacilitiesByCategoryScreen() {
   const params = useLocalSearchParams();
@@ -55,7 +54,7 @@ export default function FacilitiesByCategoryScreen() {
       <Stack.Screen
         options={{
           title: decodedCategory,
-          headerStyle: { backgroundColor: BLUE },
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />

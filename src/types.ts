@@ -26,7 +26,7 @@ export interface SavedInspection {
   date: string;
   inspectorName: string; // now will be the "writer" name
   items: InspectionItem[];
-  status: 'completed' | 'in-progress';
+  status: 'completed' | 'in-progress' | 'draft';
   score?: number;
   grade?: string;
   signature?: string;
@@ -61,4 +61,6 @@ export interface AgendaItem {
   date: string;
   notes: string;
   completed: boolean;
+  inspectionId?: string;
+  status?: 'pending' | 'completed' | 'cancelled';
 }

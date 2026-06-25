@@ -1,22 +1,21 @@
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Stack, useRouter } from 'expo-router';
 import React, { useEffect, useRef, useState } from 'react';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../src/constants/colors.ts';
 import { facilities } from '../../src/facilitiesData';
+import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 import { AgendaItem } from '../../src/types';
-
-const BLUE = '#1986df'; // اللون الأزرق الموحد
 
 export default function AddAgendaScreen() {
   const router = useRouter();
@@ -81,10 +80,7 @@ export default function AddAgendaScreen() {
         notes,
         completed: false,
       };
-      const existing = await AsyncStorage.getItem('agenda');
-      const agenda = existing ? JSON.parse(existing) : [];
-      agenda.push(newItem);
-      await AsyncStorage.setItem('agenda', JSON.stringify(agenda));
+      await AgendaRepository.save(newItem);
       router.back();
     } catch (error) {
       console.error('Error saving agenda item', error);
@@ -97,7 +93,7 @@ export default function AddAgendaScreen() {
       <Stack.Screen
         options={{
           title: 'إضافة مهمة جديدة',
-          headerStyle: { backgroundColor: BLUE }, // تم التغيير إلى الأزرق الموحد
+          headerStyle: { backgroundColor: Colors.blue }, // تم التغيير إلى الأزرق الموحد
           headerTintColor: '#fff',
         }}
       />
@@ -170,7 +166,7 @@ export default function AddAgendaScreen() {
           placeholderTextColor="#95a5a6"
         />
 
-        <TouchableOpacity style={[styles.saveButton, { backgroundColor: BLUE }]} onPress={saveAgendaItem}>
+        <TouchableOpacity style={[styles.saveButton, { backgroundColor: Colors.blue }]} onPress={saveAgendaItem}>
           <Text style={styles.saveButtonText}>حفظ المهمة</Text>
         </TouchableOpacity>
       </ScrollView>

@@ -4,10 +4,9 @@ import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { SavedInspection } from '../../src/types';
+import { Colors } from '../../src/constants/colors';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
-
-const BLUE = '#1986df';
 
 export default function StatsScreen() {
   const [stats, setStats] = useState<StatsCache | null>(null);
@@ -27,10 +26,8 @@ export default function StatsScreen() {
 
       if (forceRefresh) setRefreshing(true);
 
-      const data = await AsyncStorage.getItem('inspections');
-      if (data) {
-        const all: SavedInspection[] = JSON.parse(data);
-        const completed = all.filter(ins => ins.status === 'completed');
+      const completed = await InspectionRepository.getCompleted();
+      if (completed.length > 0) {
         const freshStats = computeStats(completed);
         await AsyncStorage.setItem('statsCache', JSON.stringify(freshStats));
         setStats(freshStats);
@@ -88,7 +85,7 @@ export default function StatsScreen() {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.center}>
-          <ActivityIndicator size="large" color={BLUE} />
+          <ActivityIndicator size="large" color={Colors.blue} />
         </View>
       </SafeAreaView>
     );
@@ -102,7 +99,7 @@ export default function StatsScreen() {
         <View style={styles.headerRow}>
           <Text style={styles.title}>لوحة التحكم</Text>
           <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
-            <FontAwesome name="refresh" size={20} color={BLUE} />
+            <FontAwesome name="refresh" size={20} color={Colors.blue} />
           </TouchableOpacity>
         </View>
         {refreshing && <Text style={styles.refreshText}>جاري التحديث...</Text>}
@@ -201,7 +198,7 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   cardTitle: { fontSize: 16, color: '#7f8c8d', marginBottom: 8 },
-  cardValue: { fontSize: 32, fontWeight: 'bold', color: BLUE },
+  cardValue: { fontSize: 32, fontWeight: 'bold', color: Colors.blue },
   subtitle: { fontSize: 18, fontWeight: '600', color: '#2c3e50', marginTop: 10, marginBottom: 15, alignSelf: 'flex-start' },
   gradesContainer: {
     flexDirection: 'row',
@@ -273,7 +270,7 @@ const styles = StyleSheet.create({
   violationRank: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: BLUE,
+    color: Colors.blue,
     width: 40,
   },
   violationCriteria: {

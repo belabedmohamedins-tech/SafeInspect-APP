@@ -1,22 +1,21 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useRouter } from 'expo-router';
 import React, { useState } from 'react';
+import { Colors } from '../../../src/constants/colors.ts';
 import {
-  Alert,
-  FlatList,
-  Modal,
-  ScrollView,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
+    Alert,
+    FlatList,
+    Modal,
+    ScrollView,
+    StyleSheet,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { addUserFacility } from '../../../src/facilitiesService';
 import { facilityCategories, getCategoryLabels } from '../../../src/facilityCategories';
-
-const BLUE = '#1986df'; // اللون الأزرق الموحد
 
 export default function AddFacilityScreen() {
   const router = useRouter();
@@ -86,7 +85,7 @@ export default function AddFacilityScreen() {
       <Stack.Screen
         options={{
           title: 'إضافة منشأة مصنفة',
-          headerStyle: { backgroundColor: BLUE },
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />
@@ -131,7 +130,7 @@ export default function AddFacilityScreen() {
         <TextInput style={[styles.input, styles.textArea]} value={notes} onChangeText={setNotes} multiline numberOfLines={4} />
 
         {/* زر الحفظ باللون الأزرق */}
-        <TouchableOpacity style={[styles.saveButton, { backgroundColor: BLUE }]} onPress={handleSave}>
+        <TouchableOpacity style={[styles.saveButton, { backgroundColor: Colors.blue }]} onPress={handleSave}>
           <Text style={styles.saveButtonText}>حفظ المنشأة</Text>
         </TouchableOpacity>
         <View style={styles.bottomSpace} />
@@ -172,7 +171,7 @@ export default function AddFacilityScreen() {
                   style={styles.modalItem}
                   onPress={() => handleSelectCategory(facilityCategories.indexOf(item))}
                 >
-                  <Text style={[styles.modalItemRubrique, { color: BLUE }]}>{item.rubrique}</Text>
+                  <Text style={[styles.modalItemRubrique, { color: Colors.blue }]}>{item.rubrique}</Text>
                   <Text style={styles.modalItemLabel}>{item.label}</Text>
                   <Text style={styles.modalItemRegime}>({item.regime})</Text>
                 </TouchableOpacity>

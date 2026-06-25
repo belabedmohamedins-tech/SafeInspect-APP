@@ -1,10 +1,9 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const BLUE = '#1986df';
+import { Colors } from '../src/constants/colors.ts';
+import { SettingsRepository } from '../src/repositories/SettingsRepository';
 
 export default function OnboardingScreen() {
   const router = useRouter();
@@ -16,7 +15,7 @@ export default function OnboardingScreen() {
       return;
     }
     try {
-      await AsyncStorage.setItem('officeName', officeName.trim());
+      await SettingsRepository.set({ officeName: officeName.trim() });
       console.log('Office name saved, navigating to home');
       router.replace('/(tabs)/home');
     } catch (error) {
@@ -62,6 +61,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     marginBottom: 20,
   },
-  button: { backgroundColor: BLUE, padding: 15, borderRadius: 8, alignItems: 'center' },
+  button: { backgroundColor: Colors.blue, padding: 15, borderRadius: 8, alignItems: 'center' },
   buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
 });

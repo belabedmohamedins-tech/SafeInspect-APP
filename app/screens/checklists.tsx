@@ -1,8 +1,5 @@
 import { FontAwesome } from '@expo/vector-icons';
-import * as FileSystem from 'expo-file-system';
-import * as Print from 'expo-print';
 import { useRouter } from 'expo-router';
-import * as Sharing from 'expo-sharing';
 import React, { useState } from 'react';
 import {
   Alert,
@@ -15,11 +12,10 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '../../src/constants/colors';
 import { criteriaByActivity } from '../../src/criteriaData';
-import { generateFileName } from '../../src/utils/fileUtils';
-
-const fs = FileSystem as any;
-const BLUE = '#1986df';
+import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
+import { SavedInspection } from '../../src/types';
 
 export default function ChecklistsScreen() {
   const router = useRouter();
@@ -32,146 +28,25 @@ export default function ChecklistsScreen() {
     activity.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // الحصول على مسار قابل للكتابة (cacheDirectory فقط)
-  const getWritableDir = (): string | null => {
-    return fs.cacheDirectory || null;
-  };
+  const buildInspectionPayload = (): SavedInspection | null => {
+    if (!selectedActivity) return null;
 
-  // إنشاء ملف PDF
-  const generatePDF = async () => {
-    if (!selectedActivity) {
-      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
-      return null;
-    }
     const criteria = criteriaByActivity[selectedActivity] || [];
-    
-    const groups: { [key: string]: any[] } = {};
-    criteria.forEach((item: any) => {
-      const axis = item.axis || 'أخرى';
-      if (!groups[axis]) groups[axis] = [];
-      groups[axis].push(item);
-    });
-
-    const today = new Date().toLocaleDateString('ar-DZ');
-    let groupsHTML = '';
-    Object.entries(groups).forEach(([axis, items]) => {
-      const itemsHTML = items
-        .map(
-          item => `
-        <tr>
-          <td>${item.criteria}</td>
-          <td>${item.legalReference}</td>
-          <td style="text-align:center;">□</td>
-          <td style="text-align:center;">□</td>
-          <td style="text-align:center;">□</td>
-          <td style="text-align:center;">__________</td>
-        </tr>
-      `
-        )
-        .join('');
-      groupsHTML += `
-        <tr style="background-color: #ecf0f1;"><th colspan="6" style="text-align:right; padding:8px;">${axis}</th></tr>
-        ${itemsHTML}
-      `;
-    });
-
-    const html = `
-      <!DOCTYPE html>
-      <html dir="rtl">
-      <head>
-        <meta charset="utf-8">
-        <style>
-          body { font-family: 'Arial', sans-serif; margin: 20px; }
-          h1 { text-align: center; color: #2c3e50; }
-          .header-info { text-align: center; margin-bottom: 20px; }
-          table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-          th { background-color: #bdc3c7; color: #2c3e50; padding: 8px; border: 1px solid #7f8c8d; }
-          td { border: 1px solid #bdc3c7; padding: 6px; vertical-align: top; }
-        </style>
-      </head>
-      <body>
-        <h1>قائمة تفتيش - ${selectedActivity}</h1>
-        <div class="header-info">
-          <p>تاريخ الطباعة: ${today}</p>
-          <p>اسم المفتش: ___________________</p>
-          <p>اسم المنشأة: ___________________</p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>المعيار</th>
-              <th>المرجع القانوني</th>
-              <th>مطابق</th>
-              <th>غير مطابق</th>
-              <th>غير معني</th>
-              <th>ملاحظات</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${groupsHTML}
-          </tbody>
-        </table>
-      </body>
-      </html>
-    `;
-
-    try {
-      const { uri } = await Print.printToFileAsync({ html });
-      return uri;
-    } catch (error) {
-      console.error('Error generating PDF:', error);
-      Alert.alert('خطأ', 'حدث خطأ أثناء إنشاء ملف PDF');
-      return null;
-    }
-  };
-
-  // إنشاء ملف CSV (Excel)
-  const generateCSV = async (): Promise<{ uri: string; content: string } | null> => {
-    if (!selectedActivity) {
-      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
-      return null;
-    }
-    const criteria = criteriaByActivity[selectedActivity] || [];
-    
-    const groups: { [key: string]: any[] } = {};
-    criteria.forEach((item: any) => {
-      const axis = item.axis || 'أخرى';
-      if (!groups[axis]) groups[axis] = [];
-      groups[axis].push(item);
-    });
-
-    const headers = ['المعيار', 'المرجع القانوني', 'مطابق', 'غير مطابق', 'غير معني', 'ملاحظات'];
-    let csvContent = headers.join(',') + '\n';
-    
-    Object.entries(groups).forEach(([axis, items]) => {
-      csvContent += `# ${axis}\n`;
-      items.forEach(item => {
-        const row = [
-          item.criteria,
-          item.legalReference,
-          '', '', '', ''
-        ];
-        const escapedRow = row.map(cell => `"${cell.replace(/"/g, '""')}"`).join(',');
-        csvContent += escapedRow + '\n';
-      });
-    });
-
-    const writableDir = getWritableDir();
-    if (!writableDir) {
-      Alert.alert('خطأ', 'لا يمكن الوصول إلى مسار التخزين المؤقت. يرجى استخدام خيار "عرض" بدلاً من التصدير.');
-      return null;
-    }
-
-    try {
-      const fileName = generateFileName(selectedActivity, 'csv');
-      const fileUri = writableDir + fileName;
-      await FileSystem.writeAsStringAsync(fileUri, csvContent, { encoding: fs.EncodingType.UTF8 });
-      return { uri: fileUri, content: csvContent };
-    } catch (error) {
-      console.error('Error saving CSV:', error);
-      Alert.alert('خطأ', 'حدث خطأ أثناء إنشاء ملف Excel');
-      return null;
-    }
+    return {
+      id: selectedActivity,
+      facilityId: selectedActivity,
+      facilityName: selectedActivity,
+      facilityAddress: '',
+      date: new Date().toISOString(),
+      inspectorName: '',
+      inspectionCause: '',
+      items: criteria.map((item: any, index: number) => ({
+        ...item,
+        id: `${selectedActivity}-${index}`,
+        complianceStatus: 'not-evaluated',
+        comment: '',
+      })),
+    } as SavedInspection;
   };
 
   // معاينة القائمة
@@ -190,70 +65,22 @@ export default function ChecklistsScreen() {
     });
   };
 
-  // معالج PDF
   const handlePDF = async () => {
-    const uri = await generatePDF();
-    if (!uri) return;
-
-    const writableDir = getWritableDir();
-    if (!writableDir) {
-      Alert.alert(
-        'تصدير PDF',
-        'اختر الإجراء',
-        [
-          { text: 'مشاركة', onPress: () => Sharing.shareAsync(uri, { mimeType: 'application/pdf' }) },
-          { text: 'عرض', onPress: handlePreview },
-          { text: 'إلغاء', style: 'cancel' }
-        ]
-      );
+    const inspection = buildInspectionPayload();
+    if (!inspection) {
+      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
       return;
     }
-
-    try {
-      const fileName = generateFileName(selectedActivity || 'checklist', 'pdf');
-      const newUri = writableDir + fileName;
-      await FileSystem.copyAsync({ from: uri, to: newUri });
-
-      Alert.alert(
-        'تصدير PDF',
-        'اختر الإجراء',
-        [
-          { text: 'مشاركة', onPress: () => Sharing.shareAsync(newUri, { mimeType: 'application/pdf' }) },
-          { text: 'حفظ في الجهاز', onPress: () => Sharing.shareAsync(newUri, { mimeType: 'application/pdf' }) },
-          { text: 'عرض', onPress: handlePreview },
-          { text: 'إلغاء', style: 'cancel' }
-        ]
-      );
-    } catch (error) {
-      console.error('Error copying PDF:', error);
-      Alert.alert(
-        'تصدير PDF',
-        'اختر الإجراء',
-        [
-          { text: 'مشاركة', onPress: () => Sharing.shareAsync(uri, { mimeType: 'application/pdf' }) },
-          { text: 'حفظ في الجهاز', onPress: () => Sharing.shareAsync(uri, { mimeType: 'application/pdf' }) },
-          { text: 'عرض', onPress: handlePreview },
-          { text: 'إلغاء', style: 'cancel' }
-        ]
-      );
-    }
+    await exportInspectionPDF(inspection);
   };
 
-  // معالج Excel
   const handleExcel = async () => {
-    const result = await generateCSV();
-    if (!result) return;
-
-    Alert.alert(
-      'تصدير Excel',
-      'اختر الإجراء',
-      [
-        { text: 'مشاركة', onPress: () => Sharing.shareAsync(result.uri, { mimeType: 'text/csv' }) },
-        { text: 'حفظ في الجهاز', onPress: () => Sharing.shareAsync(result.uri, { mimeType: 'text/csv' }) },
-        { text: 'عرض', onPress: handlePreview },
-        { text: 'إلغاء', style: 'cancel' }
-      ]
-    );
+    const inspection = buildInspectionPayload();
+    if (!inspection) {
+      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
+      return;
+    }
+    await exportInspectionCSV(inspection);
   };
 
   const selectActivity = (activity: string) => {
@@ -275,7 +102,7 @@ export default function ChecklistsScreen() {
         </TouchableOpacity>
 
         {selectedActivity && (
-          <TouchableOpacity style={[styles.previewButton, { backgroundColor: BLUE }]} onPress={handlePreview}>
+          <TouchableOpacity style={[styles.previewButton, { backgroundColor: Colors.blue }]} onPress={handlePreview}>
             <FontAwesome name="eye" size={20} color="#fff" />
             <Text style={styles.previewButtonText}>معاينة القائمة</Text>
           </TouchableOpacity>

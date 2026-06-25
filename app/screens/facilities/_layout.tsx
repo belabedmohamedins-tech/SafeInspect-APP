@@ -1,8 +1,7 @@
 // app/(tabs)/facilities/_layout.tsx
 import { Stack } from 'expo-router';
 import React from 'react';
-
-const BLUE = '#1986df';
+import { Colors } from '../../../src/constants/colors.ts';
 
 export default function FacilitiesLayout() {
   return (
@@ -11,7 +10,7 @@ export default function FacilitiesLayout() {
         name="index"
         options={{
           title: 'المنشآت',
-          headerStyle: { backgroundColor: BLUE },
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />

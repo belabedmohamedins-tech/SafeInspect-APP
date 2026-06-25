@@ -1,10 +1,11 @@
 // src/utils/statusUtils.ts
+import { Colors } from '../../constants';
 import { ComplianceStatus } from '../types';
 
 /**
  * الحصول على النص العربي لحالة الامتثال
  */
-export const getStatusText = (status: ComplianceStatus): string => {
+export const getStatusText = (status: ComplianceStatus | 'partial'): string => {
   switch (status) {
     case 'compliant':
       return 'مطابق';
@@ -12,6 +13,8 @@ export const getStatusText = (status: ComplianceStatus): string => {
       return 'غير مطابق';
     case 'na':
       return 'غير معني';
+    case 'partial':
+      return 'جزئي';
     default:
       return 'لم يقيم';
   }
@@ -20,16 +23,16 @@ export const getStatusText = (status: ComplianceStatus): string => {
 /**
  * الحصول على اللون المناسب لحالة الامتثال
  */
-export const getStatusColor = (status: ComplianceStatus): string => {
+export const getStatusColor = (status: ComplianceStatus | 'partial'): string => {
   switch (status) {
     case 'compliant':
-      return '#27ae60';
+      return Colors.compliant;
     case 'non-compliant':
-      return '#e74c3c';
+      return Colors.nonCompliant;
     case 'na':
       return '#9e9e9e';
     default:
-      return '#f39c12';
+      return Colors.warning;
   }
 };
 

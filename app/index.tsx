@@ -1,8 +1,8 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SettingsRepository } from '../src/repositories/SettingsRepository';
 
 export default function SplashScreen() {
   const router = useRouter();
@@ -11,8 +11,8 @@ export default function SplashScreen() {
   useEffect(() => {
     const checkOnboarding = async () => {
       try {
-        const office = await AsyncStorage.getItem('officeName');
-        if (office) {
+        const { officeName } = await SettingsRepository.get();
+        if (officeName) {
           router.replace('/(tabs)/home');
         } else {
           router.replace('/onboarding');
