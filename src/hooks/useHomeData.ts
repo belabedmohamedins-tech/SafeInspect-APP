@@ -33,7 +33,8 @@ export function useHomeData() {
             today.setHours(0, 0, 0, 0);
             const upcoming = allAgenda
               .filter(item => {
-                if (item.completed) return false;
+                // Use status field as the single source of truth
+                if (item.status !== 'pending') return false;
                 const d = new Date(item.date);
                 d.setHours(0, 0, 0, 0);
                 return d >= today;

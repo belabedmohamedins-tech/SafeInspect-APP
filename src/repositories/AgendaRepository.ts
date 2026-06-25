@@ -43,6 +43,10 @@ export const AgendaRepository = {
     await writeAll(all.filter(i => i.id !== id));
   },
 
+  /**
+   * Links a completed inspection to an agenda item and marks it as completed.
+   * Uses the single `status` field — no redundant `completed` boolean.
+   */
   async updateInspectionLink(agendaId: string, inspectionId: string): Promise<void> {
     const all = await readAll();
     const index = all.findIndex(i => i.id === agendaId);
@@ -50,7 +54,6 @@ export const AgendaRepository = {
       all[index] = {
         ...all[index],
         inspectionId,
-        completed: true,
         status: 'completed',
       };
       await writeAll(all);

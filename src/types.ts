@@ -18,24 +18,29 @@ export interface InspectionItem {
 }
 
 export interface SavedInspection {
-  // existing fields
   id: string;
   facilityId: string;
   facilityName: string;
   facilityAddress: string;
   date: string;
-  inspectorName: string; // now will be the "writer" name
+  /** The name of the inspector / writer who conducted the inspection. */
+  inspectorName: string;
   items: InspectionItem[];
+  /**
+   * - 'completed'  — fully submitted inspection
+   * - 'in-progress' — active checklist session
+   * - 'draft'       — saved mid-session via back-navigation
+   * getDrafts() returns both 'in-progress' and 'draft'.
+   */
   status: 'completed' | 'in-progress' | 'draft';
   score?: number;
   grade?: string;
   signature?: string;
 
-  // new fields
-  officeName?: string;          // name of the health office
-  inspectionCause?: string;     // routine, complaint, follow-up, etc.
-  referenceDocument?: string;   // optional reference number
-  committeeMembers?: string[];  // list of names present
+  officeName?: string;
+  inspectionCause?: string;
+  referenceDocument?: string;
+  committeeMembers?: string[];
   coordinates?: { latitude: number; longitude: number };
 }
 
@@ -45,11 +50,13 @@ export interface Facility {
   ownerName: string;
   activity: string;
   address: string;
-  licenseType: string;
-  licenseDetails: string;
-  year: string;
-  category: string;
-  notes: string;
+  // Fields below are metadata from the source data set.
+  // They are rarely populated by app-created facilities — treat as optional.
+  licenseType?: string;
+  licenseDetails?: string;
+  year?: string;
+  category?: string;
+  notes?: string;
 }
 
 export interface AgendaItem {
@@ -60,7 +67,15 @@ export interface AgendaItem {
   activity?: string;
   date: string;
   notes: string;
-  completed: boolean;
+  /**
+   * Single source of truth for agenda item lifecycle:
+   * - 'pending'   — scheduled, not yet acted on
+   * - 'completed' — linked to a finished inspection or manually marked done
+   * - 'cancelled' — explicitly cancelled by the user
+   *
+   * Previously this was modelled as both `completed: boolean` AND
+   * `status?: string` — those two fields have been collapsed here.
+   */
+  status: 'pending' | 'completed' | 'cancelled';
   inspectionId?: string;
-  status?: 'pending' | 'completed' | 'cancelled';
 }

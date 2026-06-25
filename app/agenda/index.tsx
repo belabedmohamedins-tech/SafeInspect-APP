@@ -54,9 +54,15 @@ export default function AgendaListScreen() {
     );
   };
 
-  const toggleCompleted = async (id: string) => {
+  /**
+   * Toggle between 'pending' and 'completed'.
+   * Uses item.status as the single source of truth — no boolean field.
+   */
+  const toggleStatus = async (id: string) => {
     const updated = items.map(item =>
-      item.id === id ? { ...item, completed: !item.completed } : item
+      item.id === id
+        ? { ...item, status: item.status === 'pending' ? 'completed' : 'pending' as AgendaItem['status'] }
+        : item
     );
     const target = updated.find(item => item.id === id);
     if (target) {
@@ -94,11 +100,11 @@ export default function AgendaListScreen() {
       <Text style={styles.date}>{formatDateForAgenda(item.date)}</Text>
       {item.notes ? <Text style={styles.notes}>{item.notes}</Text> : null}
       <TouchableOpacity
-        style={[styles.checkButton, item.completed && styles.checkButtonCompleted]}
-        onPress={() => toggleCompleted(item.id)}
+        style={[styles.checkButton, item.status === 'completed' && styles.checkButtonCompleted]}
+        onPress={() => toggleStatus(item.id)}
       >
         <Text style={styles.checkButtonText}>
-          {item.completed ? 'تم الإنجاز ✓' : 'تحديد كمكتمل'}
+          {item.status === 'completed' ? 'تم الإنجاز ✓' : 'تحديد كمكتمل'}
         </Text>
       </TouchableOpacity>
     </TouchableOpacity>
@@ -109,7 +115,7 @@ export default function AgendaListScreen() {
       <Stack.Screen
         options={{
           title: 'المهام المجدولة',
-          headerStyle: { backgroundColor: Colors.blue }, // تم التغيير من '#2c3e50' إلى Colors.blue
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
           headerRight: () => (
             <TouchableOpacity onPress={() => router.push('/agenda/add')} style={{ marginRight: 15 }}>
@@ -152,14 +158,14 @@ const styles = StyleSheet.create({
   facilityName: { fontSize: 16, fontWeight: 'bold', color: '#2c3e50' },
   date: { fontSize: 13, color: '#7f8c8d', marginBottom: 5 },
   notes: { fontSize: 14, color: '#34495e', marginBottom: 10 },
-  checkButton: { 
-    backgroundColor: Colors.blue, // تم التغيير من '#3E729B' إلى Colors.blue
-    padding: 8, 
-    borderRadius: 6, 
-    alignItems: 'center' 
+  checkButton: {
+    backgroundColor: Colors.blue,
+    padding: 8,
+    borderRadius: 6,
+    alignItems: 'center'
   },
-  checkButtonCompleted: { 
-    backgroundColor: '#27ae60' // يبقى أخضر للإشارة إلى الإنجاز
+  checkButtonCompleted: {
+    backgroundColor: '#27ae60'
   },
   checkButtonText: { color: '#fff', fontSize: 14, fontWeight: 'bold' },
   empty: { alignItems: 'center', padding: 40 },

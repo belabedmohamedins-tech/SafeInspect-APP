@@ -30,7 +30,6 @@ export default function AddAgendaScreen() {
   const [notes, setNotes] = useState('');
   const inputRef = useRef<TextInput>(null);
 
-  // Filter facilities whenever facilityName changes
   useEffect(() => {
     if (facilityName.trim() === '') {
       setFilteredFacilities(facilities);
@@ -42,13 +41,8 @@ export default function AddAgendaScreen() {
     }
   }, [facilityName]);
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+  const showDatePicker = () => setDatePickerVisibility(true);
+  const hideDatePicker = () => setDatePickerVisibility(false);
 
   const handleConfirm = (selectedDate: Date) => {
     setDate(selectedDate);
@@ -78,7 +72,7 @@ export default function AddAgendaScreen() {
         activity,
         date: date.toISOString(),
         notes,
-        completed: false,
+        status: 'pending',
       };
       await AgendaRepository.save(newItem);
       router.back();
@@ -93,7 +87,7 @@ export default function AddAgendaScreen() {
       <Stack.Screen
         options={{
           title: 'إضافة مهمة جديدة',
-          headerStyle: { backgroundColor: Colors.blue }, // تم التغيير إلى الأزرق الموحد
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />
@@ -177,7 +171,7 @@ export default function AddAgendaScreen() {
 const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
-    backgroundColor: 'transparent', // لتتناسب مع الخلفية العامة
+    backgroundColor: 'transparent',
   },
   container: {
     padding: 20,
@@ -216,8 +210,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#bdc3c7',
     borderRadius: 6,
-    marginTop: 5,
-    maxHeight: 300,
+    maxHeight: 200,
+    overflow: 'hidden',
   },
   pickerItem: {
     padding: 12,
@@ -234,8 +228,8 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   textArea: {
-    minHeight: 100,
-    textAlignVertical: 'top',
+    height: 100,
+    flex: undefined,
   },
   saveButton: {
     padding: 15,
