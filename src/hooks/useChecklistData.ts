@@ -1,19 +1,19 @@
 // src/hooks/useChecklistData.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { criteriaByActivity } from '../criteriaData';
+import { AgendaRepository } from '../repositories/AgendaRepository';
+import { InspectionRepository } from '../repositories/InspectionRepository';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 import {
-  AgendaItem,
   ComplianceStatus,
   InspectionItem,
   SavedInspection,
 } from '../types';
 import { getEvaluatedCount, groupByAxis } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
-import { computeStats } from '../utils/statsUtils';
 
 
 interface ChecklistParams {
@@ -42,13 +42,11 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const [isFinishing, setIsFinishing] = useState(false);
 
 
-  // ─── Load ────────────────────────────────────────────────────────────────
+  // ─── Load ────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       if (params.draftId) {
-        const raw = await AsyncStorage.getItem('inspections');
-        const all: SavedInspection[] = raw ? JSON.parse(raw) : [];
-        const draft = all.find(i => i.id === params.draftId);
+        const draft = await InspectionRepository.getById(params.draftId);
         if (draft) {
           setData(draft.items);
           setInspectionId(draft.id);
@@ -73,11 +71,11 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   }, []); // intentionally empty — runs once on mount
 
 
-  // ─── Save ────────────────────────────────────────────────────────────────
+  // ─── Save ───────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       try {
-        const officeName = (await AsyncStorage.getItem('officeName')) || '';
+        const { officeName } = await SettingsRepository.get();
         const inspection: SavedInspection = {
           id: inspectionId,
           facilityId: params.facilityId,
@@ -108,11 +106,8 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           }
         }
 
-        const existing = await AsyncStorage.getItem('inspections');
-        let inspections: SavedInspection[] = existing ? JSON.parse(existing) : [];
-        inspections = inspections.filter(i => i.id !== inspectionId);
-        inspections.push(inspection);
-        await AsyncStorage.setItem('inspections', JSON.stringify(inspections));
+        // InspectionRepository.save() automatically invalidates statsCache
+        await InspectionRepository.save(inspection);
         return true;
       } catch (error) {
         console.error('Error saving inspection:', error);
@@ -124,19 +119,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   );
 
 
-  // ─── Stats cache ─────────────────────────────────────────────────────────
-  const updateStatsCache = useCallback(async () => {
-    const raw = await AsyncStorage.getItem('inspections');
-    if (raw) {
-      const all: SavedInspection[] = JSON.parse(raw);
-      const completed = all.filter(i => i.status === 'completed');
-      const stats = computeStats(completed);
-      await AsyncStorage.setItem('statsCache', JSON.stringify(stats));
-    }
-  }, []);
-
-
-  // ─── Auto-save on back ───────────────────────────────────────────────────
+  // ─── Auto-save on back ───────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -148,7 +131,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   }, [navigation, isFinishing, saveInspection]);
 
 
-  // ─── Item handlers ───────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -168,7 +151,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   }, []);
 
 
-  // ─── Finish ──────────────────────────────────────────────────────────────
+  // ─── Finish ───────────────────────────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
     setIsFinishing(true);
     const saved = await saveInspection('completed');
@@ -176,28 +159,21 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
 
     if (params.agendaId) {
       try {
-        const agendaData = await AsyncStorage.getItem('agenda');
-        if (agendaData) {
-          const agenda: AgendaItem[] = JSON.parse(agendaData);
-          const updated = agenda.map(item =>
-            item.id === params.agendaId ? { ...item, completed: true } : item
-          );
-          await AsyncStorage.setItem('agenda', JSON.stringify(updated));
-        }
+        // updateInspectionLink sets completed:true + status:'completed' atomically
+        await AgendaRepository.updateInspectionLink(params.agendaId, inspectionId);
+        Alert.alert('نجاح', 'تم حفظ التفتيش وتحديث المهمة كمكتملة');
       } catch (e) {
         console.error('Error updating agenda:', e);
       }
-      Alert.alert('نجاح', 'تم حفظ التفتيش وتحديث المهمة كمكتملة');
     } else {
       Alert.alert('نجاح', 'تم حفظ التفتيش بنجاح');
     }
 
-    await updateStatsCache();
     router.replace('/(tabs)/inspection');
-  }, [saveInspection, params.agendaId, router, updateStatsCache]);
+  }, [saveInspection, params.agendaId, inspectionId, router]);
 
 
-  // ─── Derived values ──────────────────────────────────────────────────────
+  // ─── Derived values ──────────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);
   const totalItems = useMemo(() => data.length, [data]);
   const evaluatedItems = useMemo(() => getEvaluatedCount(data), [data]);
