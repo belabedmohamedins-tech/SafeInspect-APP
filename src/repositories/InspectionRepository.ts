@@ -31,7 +31,7 @@ export const InspectionRepository = {
 
   async getDrafts(): Promise<SavedInspection[]> {
     const all = await readAll();
-    return all.filter(i => i.status === 'in-progress' || i.status === 'draft' || i.status === 'completed');
+    return all.filter(i => i.status === 'in-progress' || i.status === 'draft');
   },
 
   async getById(id: string): Promise<SavedInspection | null> {
