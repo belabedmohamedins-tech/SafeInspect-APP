@@ -89,7 +89,7 @@ export default function ReportsScreen() {
 
   const renderRightActions = (id: string) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteInspection(id)}>
-      <FontAwesome name="trash" size={24} color={Colors.textInverse} />
+      <FontAwesome name="trash" size={24} color="#fff" />
       <Text style={styles.deleteText}>حذف</Text>
     </TouchableOpacity>
   );
@@ -107,7 +107,7 @@ export default function ReportsScreen() {
             <View
               style={[
                 styles.statusBadge,
-                { backgroundColor: isCompliant ? Colors.success : Colors.danger },
+                { backgroundColor: isCompliant ? Colors.green : Colors.red },
               ]}>
               <Text style={styles.statusBadgeText}>{isCompliant ? 'مطابق' : 'غير مطابق'}</Text>
             </View>
@@ -121,16 +121,16 @@ export default function ReportsScreen() {
           </View>
           <View style={styles.actionsRow}>
             <TouchableOpacity style={styles.actionBtn} onPress={() => handlePreview(item)}>
-              <FontAwesome name="eye" size={16} color={Colors.primary} />
-              <Text style={[styles.actionBtnText, { color: Colors.primary }]}>معاينة</Text>
+              <FontAwesome name="eye" size={16} color={Colors.blue} />
+              <Text style={[styles.actionBtnText, { color: Colors.blue }]}>معاينة</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionPDF(item)}>
-              <FontAwesome name="file-pdf-o" size={16} color={Colors.danger} />
-              <Text style={[styles.actionBtnText, { color: Colors.danger }]}>PDF</Text>
+              <FontAwesome name="file-pdf-o" size={16} color={Colors.red} />
+              <Text style={[styles.actionBtnText, { color: Colors.red }]}>PDF</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.actionBtn} onPress={() => exportInspectionCSV(item)}>
-              <FontAwesome name="file-excel-o" size={16} color={Colors.success} />
-              <Text style={[styles.actionBtnText, { color: Colors.success }]}>Excel</Text>
+              <FontAwesome name="file-excel-o" size={16} color={Colors.green} />
+              <Text style={[styles.actionBtnText, { color: Colors.green }]}>Excel</Text>
             </TouchableOpacity>
           </View>
         </TouchableOpacity>
@@ -145,7 +145,6 @@ export default function ReportsScreen() {
         placeholder="بحث..."
         value={searchQuery}
         onChangeText={setSearchQuery}
-        placeholderTextColor={Colors.textTertiary}
       />
       <View style={styles.filterRow}>
         {(['all', 'compliant', 'non-compliant'] as const).map(f => (
@@ -166,7 +165,7 @@ export default function ReportsScreen() {
         contentContainerStyle={styles.list}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <FontAwesome name="file-text-o" size={50} color={Colors.border} />
+            <FontAwesome name="file-text-o" size={50} color={Colors.light} />
             <Text style={styles.emptyText}>لا توجد تقارير</Text>
           </View>
         }
@@ -176,24 +175,28 @@ export default function ReportsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:    { flex: 1, backgroundColor: 'transparent' },
+  safeArea: { flex: 1, backgroundColor: 'transparent' },
   searchInput: {
     margin: 10,
     padding: 10,
-    backgroundColor: Colors.textInverse,
+    backgroundColor: Colors.white,
     borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.border,
-    color: Colors.textPrimary,
   },
-  filterRow:           { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8 },
-  filterBtn:           { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: Colors.background },
-  filterBtnActive:     { backgroundColor: Colors.primary },
-  filterBtnText:       { fontSize: 13, color: Colors.textSecondary },
-  filterBtnTextActive: { color: Colors.textInverse },
+  filterRow: { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8 },
+  filterBtn: {
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    backgroundColor: Colors.background,
+  },
+  filterBtnActive: { backgroundColor: Colors.blue },
+  filterBtnText: { fontSize: 13, color: Colors.mid },
+  filterBtnTextActive: { color: Colors.white },
   list: { padding: 10 },
   card: {
-    backgroundColor: Colors.textInverse,
+    backgroundColor: Colors.white,
     borderRadius: 10,
     padding: 14,
     marginBottom: 10,
@@ -203,19 +206,31 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.08,
     shadowRadius: 2,
   },
-  cardHeader:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 6 },
-  facilityName:     { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary, flex: 1, marginRight: 8 },
-  statusBadge:      { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
-  statusBadgeText:  { color: Colors.textInverse, fontSize: 11, fontWeight: 'bold' },
-  date:             { fontSize: 13, color: Colors.textSecondary, marginBottom: 2 },
-  inspector:        { fontSize: 13, color: Colors.primary, marginBottom: 8 },
-  statsRow:         { flexDirection: 'row', gap: 12, marginBottom: 10 },
-  statItem:         { fontSize: 13, color: Colors.textPrimary },
-  actionsRow:       { flexDirection: 'row', gap: 12 },
-  actionBtn:        { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  actionBtnText:    { fontSize: 13 },
-  deleteButton:     { backgroundColor: Colors.danger, justifyContent: 'center', alignItems: 'center', width: 72, borderRadius: 10, marginBottom: 10 },
-  deleteText:       { color: Colors.textInverse, fontSize: 12, marginTop: 4 },
-  emptyContainer:   { alignItems: 'center', padding: 40 },
-  emptyText:        { fontSize: 16, color: Colors.textSecondary, marginTop: 10 },
+  cardHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  facilityName: { fontSize: 16, fontWeight: 'bold', color: Colors.dark, flex: 1, marginRight: 8 },
+  statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
+  statusBadgeText: { color: Colors.white, fontSize: 11, fontWeight: 'bold' },
+  date: { fontSize: 13, color: Colors.mid, marginBottom: 2 },
+  inspector: { fontSize: 13, color: Colors.blue, marginBottom: 8 },
+  statsRow: { flexDirection: 'row', gap: 12, marginBottom: 10 },
+  statItem: { fontSize: 13, color: Colors.dark },
+  actionsRow: { flexDirection: 'row', gap: 12 },
+  actionBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  actionBtnText: { fontSize: 13 },
+  deleteButton: {
+    backgroundColor: Colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 72,
+    borderRadius: 10,
+    marginBottom: 10,
+  },
+  deleteText: { color: Colors.white, fontSize: 12, marginTop: 4 },
+  emptyContainer: { alignItems: 'center', padding: 40 },
+  emptyText: { fontSize: 16, color: Colors.mid, marginTop: 10 },
 });
