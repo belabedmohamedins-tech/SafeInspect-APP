@@ -4,7 +4,7 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { facilities } from '../../../src/facilitiesData';
-import { Colors } from '../../../src/constants/colors.ts';
+import { Colors } from '../../../constants';
 
 export default function AllFacilitiesScreen() {
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function AllFacilitiesScreen() {
       <Stack.Screen
         options={{
           title: 'جميع المنشآت',
-          headerStyle: { backgroundColor: Colors.blue }, // تم تغيير اللون هنا
+          headerStyle: { backgroundColor: Colors.blue },
           headerTintColor: '#fff',
         }}
       />
@@ -55,7 +55,7 @@ export default function AllFacilitiesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' }, // الخلفية ستأخذ لون التبويبات
+  safeArea: { flex: 1, backgroundColor: 'transparent' },
   list: { padding: 10 },
   card: {
     backgroundColor: '#fff',

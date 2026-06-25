@@ -1,7 +1,7 @@
 // app/(tabs)/facilities/_layout.tsx
 import { Stack } from 'expo-router';
 import React from 'react';
-import { Colors } from '../../../src/constants/colors.ts';
+import { Colors } from '../../../constants';
 
 export default function FacilitiesLayout() {
   return (
