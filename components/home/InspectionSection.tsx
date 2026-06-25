@@ -1,59 +1,76 @@
 import React from 'react';
-import { SectionList, StyleSheet, Text, View } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../../constants';
 import DraftListItem from '../inspection/DraftListItem';
 import { SavedInspection } from '../../src/types';
 
 interface Props {
-  drafts: SavedInspection[];
-  recent: SavedInspection[];
-  onInspectionPress: (inspection: SavedInspection) => void;
-  onDeleteInspection: (id: string) => void;
+  title: string;
+  items: SavedInspection[];
+  emptyIcon?: string;
+  emptyText?: string;
+  emptyActionLabel?: string;
+  onItemPress: (item: SavedInspection) => void;
+  onViewAll?: () => void;
+  onEmptyAction?: () => void;
 }
 
 export default function InspectionSection({
-  drafts,
-  recent,
-  onInspectionPress,
-  onDeleteInspection,
+  title,
+  items = [],
+  emptyText = 'لا توجد عناصر',
+  emptyActionLabel,
+  onItemPress,
+  onViewAll,
+  onEmptyAction,
 }: Props) {
-  const sections = [
-    ...(drafts.length > 0 ? [{ title: 'المسودات', data: drafts }] : []),
-    ...(recent.length > 0 ? [{ title: 'آخر التفتيشات', data: recent }] : []),
-  ];
-
-  if (sections.length === 0) {
-    return (
-      <View style={styles.empty}>
-        <Text style={styles.emptyText}>لا توجد تفتيشات بعد. اضغط ➕ لبدء تفتيش جديد.</Text>
-      </View>
-    );
-  }
-
   return (
-    <SectionList
-      sections={sections}
-      keyExtractor={(item) => item.id}
-      renderItem={({ item }) => (
-        <DraftListItem
-          inspection={item}
-          onPress={() => onInspectionPress(item)}
-          onDelete={() => onDeleteInspection(item.id)}
+    <View style={styles.container}>
+      {/* Header */}
+      <View style={styles.header}>
+        <Text style={styles.title}>{title}</Text>
+        {onViewAll && items.length > 0 && (
+          <TouchableOpacity onPress={onViewAll}>
+            <Text style={styles.viewAll}>عرض الكل</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      {/* Empty state */}
+      {items.length === 0 ? (
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>{emptyText}</Text>
+          {emptyActionLabel && onEmptyAction && (
+            <TouchableOpacity style={styles.emptyAction} onPress={onEmptyAction}>
+              <Text style={styles.emptyActionText}>{emptyActionLabel}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ) : (
+        <FlatList
+          data={items.slice(0, 5)}
+          keyExtractor={(item) => item.id}
+          scrollEnabled={false}
+          renderItem={({ item }) => (
+            <DraftListItem
+              inspection={item}
+              onPress={() => onItemPress(item)}
+              onDelete={() => {}}
+            />
+          )}
         />
       )}
-      renderSectionHeader={({ section: { title } }) => (
-        <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>{title}</Text>
-        </View>
-      )}
-      contentContainerStyle={{ paddingBottom: 100 }}
-    />
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionHeader: { paddingHorizontal: 14, paddingTop: 14, paddingBottom: 4, backgroundColor: Colors.background },
-  sectionTitle:  { fontSize: 14, fontWeight: '700', color: Colors.textTertiary, textTransform: 'uppercase', letterSpacing: 0.5 },
-  empty:         { flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 },
-  emptyText:     { fontSize: 16, color: Colors.textSecondary, textAlign: 'center', lineHeight: 24 },
+  container:       { marginTop: 8, backgroundColor: Colors.textInverse, borderTopWidth: 1, borderBottomWidth: 1, borderColor: Colors.surfaceOffset },
+  header:          { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 16, paddingVertical: 12 },
+  title:           { fontSize: 16, fontWeight: '600', color: Colors.textPrimary },
+  viewAll:         { color: Colors.primary, fontSize: 14, fontWeight: '500' },
+  empty:           { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 16 },
+  emptyText:       { fontSize: 14, color: Colors.textSecondary, textAlign: 'center' },
+  emptyAction:     { marginTop: 12, paddingHorizontal: 16, paddingVertical: 8, backgroundColor: Colors.primary, borderRadius: 8 },
+  emptyActionText: { color: Colors.textInverse, fontWeight: '600', fontSize: 14 },
 });
