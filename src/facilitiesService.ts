@@ -2,81 +2,134 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { facilities as hardcodedFacilities } from './facilitiesData';
 import { Facility } from './types';
+import { StorageKeys } from './repositories/keys';
 
-const USER_FACILITIES_KEY = 'userFacilities';
+// ─── Private helper ──────────────────────────────────────────────────────────
 
-// الحصول على جميع المنشآت (الثابتة + المضافة من المستخدم)
+/** Read user-added facilities from storage. Returns [] on any error. */
+async function readUserFacilities(): Promise<Facility[]> {
+  try {
+    const raw = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
+    return raw ? (JSON.parse(raw) as Facility[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+/** Persist user-added facilities to storage. */
+async function writeUserFacilities(facilities: Facility[]): Promise<void> {
+  await AsyncStorage.setItem(StorageKeys.USER_FACILITIES, JSON.stringify(facilities));
+}
+
+// ─── Read ────────────────────────────────────────────────────────────────────
+
+/** Returns all facilities: hardcoded first, then user-added. */
 export const getAllFacilities = async (): Promise<Facility[]> => {
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  const userFacilities: Facility[] = userFacilitiesJson ? JSON.parse(userFacilitiesJson) : [];
+  const userFacilities = await readUserFacilities();
   return [...hardcodedFacilities, ...userFacilities];
 };
 
-// الحصول على منشأة معينة بواسطة id (تبحث في الثابتة ثم المضافة)
+/** Returns only the user-added facilities. */
+export const getUserFacilities = async (): Promise<Facility[]> => {
+  return readUserFacilities();
+};
+
+/** Finds a facility by id, searching hardcoded list first then user-added. */
 export const getFacilityById = async (id: string): Promise<Facility | null> => {
-  // ابحث أولاً في المنشآت الثابتة
   const hardcoded = hardcodedFacilities.find(f => f.id === id);
   if (hardcoded) return hardcoded;
 
-  // ثم ابحث في المنشآت المضافة من المستخدم
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  if (userFacilitiesJson) {
-    const userFacilities: Facility[] = JSON.parse(userFacilitiesJson);
-    const userFacility = userFacilities.find(f => f.id === id);
-    if (userFacility) return userFacility;
-  }
-
-  return null;
+  const userFacilities = await readUserFacilities();
+  return userFacilities.find(f => f.id === id) ?? null;
 };
 
-// الحصول فقط على المنشآت المضافة من المستخدم
-export const getUserFacilities = async (): Promise<Facility[]> => {
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  return userFacilitiesJson ? JSON.parse(userFacilitiesJson) : [];
+// ─── Search & Filter ─────────────────────────────────────────────────────────
+
+/**
+ * Case-insensitive, diacritic-aware full-text search across all facilities.
+ * Matches against: projectName, ownerName, activity, address, category.
+ * Returns [] for blank/whitespace-only queries.
+ */
+export const searchFacilities = async (query: string): Promise<Facility[]> => {
+  const trimmed = query.trim();
+  if (!trimmed) return [];
+
+  const all = await getAllFacilities();
+  const normalized = trimmed
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
+  return all.filter(f => {
+    const haystack = [
+      f.projectName,
+      f.ownerName,
+      f.activity,
+      f.address,
+      f.category,
+    ]
+      .join(' ')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase();
+    return haystack.includes(normalized);
+  });
 };
 
-// إضافة منشأة جديدة (يتم إنشاء id فريد)
-export const addUserFacility = async (facility: Facility): Promise<void> => {
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  const userFacilities: Facility[] = userFacilitiesJson ? JSON.parse(userFacilitiesJson) : [];
-  
-  // إنشاء رقم فريد للمنشأة (بادئة U + وقت + راندوم)
-  const newId = 'U' + Date.now().toString() + '-' + Math.random().toString(36).substr(2, 5);
-  facility.id = newId;
-  
-  userFacilities.push(facility);
-  await AsyncStorage.setItem(USER_FACILITIES_KEY, JSON.stringify(userFacilities));
+/**
+ * Filters all facilities by category field.
+ * Passing an empty string returns the full list.
+ */
+export const filterFacilitiesByCategory = async (category: string): Promise<Facility[]> => {
+  const all = await getAllFacilities();
+  if (!category) return all;
+  return all.filter(f => f.category === category);
 };
 
-// تحديث منشأة موجودة (يجب أن تكون مضافة من المستخدم، لأن الثابتة لا يمكن تعديلها)
+// ─── Write ───────────────────────────────────────────────────────────────────
+
+/**
+ * Adds a new user facility.
+ * Generates a unique id and returns the saved facility (does NOT mutate
+ * the caller's object).
+ */
+export const addUserFacility = async (facility: Omit<Facility, 'id'> & Partial<Pick<Facility, 'id'>>): Promise<Facility> => {
+  const newId = 'U' + Date.now().toString() + '-' + Math.random().toString(36).substring(2, 7);
+  const saved: Facility = { ...facility, id: newId } as Facility;
+
+  const existing = await readUserFacilities();
+  await writeUserFacilities([...existing, saved]);
+  return saved;
+};
+
+/**
+ * Updates fields on a user-added facility. Returns true on success,
+ * false if the id is not found in the user list (hardcoded cannot be edited).
+ */
 export const updateUserFacility = async (id: string, updatedData: Partial<Facility>): Promise<boolean> => {
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  if (!userFacilitiesJson) return false;
-
-  const userFacilities: Facility[] = JSON.parse(userFacilitiesJson);
+  const userFacilities = await readUserFacilities();
   const index = userFacilities.findIndex(f => f.id === id);
-  if (index === -1) return false; // غير موجود أو منشأة ثابتة
+  if (index === -1) return false;
 
-  // تحديث الحقول المطلوبة فقط (دمج البيانات القديمة مع الجديدة)
   userFacilities[index] = { ...userFacilities[index], ...updatedData };
-  await AsyncStorage.setItem(USER_FACILITIES_KEY, JSON.stringify(userFacilities));
+  await writeUserFacilities(userFacilities);
   return true;
 };
 
-// حذف منشأة (فقط المضافة من المستخدم)
+/**
+ * Deletes a user-added facility by id.
+ * Returns true on success, false if not found.
+ */
 export const deleteUserFacility = async (id: string): Promise<boolean> => {
-  const userFacilitiesJson = await AsyncStorage.getItem(USER_FACILITIES_KEY);
-  if (!userFacilitiesJson) return false;
-
-  const userFacilities: Facility[] = JSON.parse(userFacilitiesJson);
+  const userFacilities = await readUserFacilities();
   const updated = userFacilities.filter(f => f.id !== id);
-  if (updated.length === userFacilities.length) return false; // لم يتم حذف أي شيء
+  if (updated.length === userFacilities.length) return false;
 
-  await AsyncStorage.setItem(USER_FACILITIES_KEY, JSON.stringify(updated));
+  await writeUserFacilities(updated);
   return true;
 };
 
-// (اختياري) حذف جميع المنشآت المضافة من المستخدم
+/** Removes all user-added facilities. */
 export const clearAllUserFacilities = async (): Promise<void> => {
-  await AsyncStorage.removeItem(USER_FACILITIES_KEY);
+  await AsyncStorage.removeItem(StorageKeys.USER_FACILITIES);
 };
