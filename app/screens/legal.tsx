@@ -13,7 +13,6 @@ export default function LegalReferencesScreen() {
   const activities = Object.keys(criteriaByActivity).filter(key => key !== 'default');
   const currentCriteria = criteriaByActivity[selectedActivity] || criteriaByActivity.default;
 
-  // groupByAxis inlined with useMemo — no standalone function needed
   const groupedData = useMemo(() => {
     const groups: { [key: string]: InspectionItem[] } = {};
     currentCriteria.forEach(item => {

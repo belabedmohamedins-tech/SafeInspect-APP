@@ -25,7 +25,6 @@ export default function MapScreen() {
         const lat = parseFloat(match[2]);
         if (isNaN(lat) || isNaN(lng)) return;
 
-        // Find latest inspection for this facility
         const facilityInspections = inspections.filter(
           (ins) => ins.facilityId === facility.id
         );
@@ -33,21 +32,18 @@ export default function MapScreen() {
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         )[0];
 
-        // Enhanced weight mapping for better visibility
-        let weight = 1; // default
+        let weight = 1;
         if (latest?.grade === 'A') weight = 0.5;
         else if (latest?.grade === 'B') weight = 1.5;
         else if (latest?.grade === 'C') weight = 3;
         else if (latest?.grade === 'D') weight = 5;
         else if (latest?.score !== undefined) {
-          // Use score: lower score = higher risk
           weight = ((100 - latest.score) / 100) * 5;
         }
 
         points.push({ lat, lng, weight });
       });
-console.log('Points for heatmap:', points);
-      // If no points, still show a map
+
       const mapHtml = generateMapHtml(points);
       setHtml(mapHtml);
     } catch (error) {
@@ -91,7 +87,7 @@ function generateMapHtml(points: { lat: number; lng: number; weight: number }[])
   const center = points.length > 0 ? [points[0].lat, points[0].lng] : [35.25, -0.55];
   const zoom = points.length > 0 ? 13 : 8;
 
-  const htmlContent = `
+  return `
     <!DOCTYPE html>
     <html>
     <head>
@@ -104,10 +100,7 @@ function generateMapHtml(points: { lat: number; lng: number; weight: number }[])
       <style>
         body { margin: 0; padding: 0; }
         #map { height: 100vh; width: 100vw; }
-        .custom-marker {
-          background: transparent;
-          border: none;
-        }
+        .custom-marker { background: transparent; border: none; }
       </style>
     </head>
     <body>
@@ -120,7 +113,6 @@ function generateMapHtml(points: { lat: number; lng: number; weight: number }[])
           maxZoom: 19
         }).addTo(map);
 
-        // Add heat layer with strong parameters
         var heat = L.heatLayer(${JSON.stringify(heatData)}, {
           radius: 35,
           blur: 20,
@@ -129,7 +121,6 @@ function generateMapHtml(points: { lat: number; lng: number; weight: number }[])
           gradient: { 0.4: 'blue', 0.6: 'lime', 0.8: 'yellow', 1.0: 'red' }
         }).addTo(map);
 
-        // Optionally add small markers (comment out if not needed)
         ${points.map(p => `
           L.marker([${p.lat}, ${p.lng}], {
             icon: L.divIcon({
@@ -143,8 +134,6 @@ function generateMapHtml(points: { lat: number; lng: number; weight: number }[])
     </body>
     </html>
   `;
-
-  return htmlContent;
 }
 
 const styles = StyleSheet.create({
