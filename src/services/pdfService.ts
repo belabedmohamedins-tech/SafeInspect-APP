@@ -3,6 +3,7 @@ import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
 import { Alert, Platform } from 'react-native';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 import { InspectionItem, SavedInspection } from '../types';
 import { formatDateLong } from '../utils/dateUtils';
 import { generateFileName } from '../utils/fileUtils';
@@ -19,8 +20,12 @@ function groupItemsByAxis(items: InspectionItem[]): Record<string, InspectionIte
 }
 
 
-function buildReportHTML(inspection: SavedInspection): string {
+function buildReportHTML(inspection: SavedInspection, fallbackInspector: string): string {
   const groups = groupItemsByAxis(inspection.items);
+
+  // Use the name stored on the inspection; fall back to the app-level setting
+  // (covers template exports from checklists.tsx where inspectorName is '').
+  const inspectorLabel = inspection.inspectorName.trim() || fallbackInspector || 'غير محدد';
 
   const groupsHTML = Object.entries(groups)
     .map(([axis, items]) => {
@@ -64,7 +69,7 @@ function buildReportHTML(inspection: SavedInspection): string {
         <p><strong>المنشأة:</strong> ${inspection.facilityName}</p>
         <p><strong>العنوان:</strong> ${inspection.facilityAddress || 'غير محدد'}</p>
         <p><strong>تاريخ التفتيش:</strong> ${formatDateLong(inspection.date)}</p>
-        <p><strong>المفتش:</strong> ${inspection.inspectorName}</p>
+        <p><strong>المفتش:</strong> ${inspectorLabel}</p>
       </div>
       <table>
         <thead>
@@ -84,7 +89,9 @@ function buildReportHTML(inspection: SavedInspection): string {
 
 // ─── PDF ─────────────────────────────────────────────────────────────────────
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
-  const html = buildReportHTML(inspection);
+  // Fetch settings once so buildReportHTML can use inspectorName as a fallback
+  const { inspectorName: settingsInspector } = await SettingsRepository.get();
+  const html = buildReportHTML(inspection, settingsInspector);
 
   try {
     if (Platform.OS === 'ios') {
