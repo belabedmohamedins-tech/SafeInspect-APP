@@ -14,7 +14,6 @@ export function useInspectionList() {
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-
       const run = async () => {
         try {
           const raw = await AsyncStorage.getItem('inspections');
@@ -23,7 +22,6 @@ export function useInspectionList() {
           console.error('useInspectionList load error:', e);
         }
       };
-
       run();
       return () => { isActive = false; };
     }, [])
@@ -66,12 +64,8 @@ export function useInspectionList() {
   }, [inspections, activeFilter, searchQuery]);
 
   return {
-    filtered,
-    searchQuery,
-    setSearchQuery,
-    activeFilter,
-    setActiveFilter,
-    deleteInspection,
+    filtered, searchQuery, setSearchQuery,
+    activeFilter, setActiveFilter, deleteInspection,
     totalCount: inspections.length,
   };
 }

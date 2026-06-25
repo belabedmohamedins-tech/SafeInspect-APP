@@ -4,8 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 export function useCollapsibleSections(sectionTitles: string[]) {
   const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
-  // Stabilise the dependency: JSON.stringify only changes when the actual
-  // titles change, not every render due to a new array reference.
+  // Stable string dep — only changes when titles actually change,
+  // not every render due to a new array reference.
   const titlesKey = sectionTitles.join('||');
   const titlesRef = useRef(sectionTitles);
   titlesRef.current = sectionTitles;
@@ -22,7 +22,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       }
       return changed ? next : prev;
     });
-  }, [titlesKey]); // stable string dep — only re-runs when titles actually change
+  }, [titlesKey]);
 
   const toggleSection = useCallback((title: string) => {
     setCollapsedSections(prev => ({ ...prev, [title]: !prev[title] }));

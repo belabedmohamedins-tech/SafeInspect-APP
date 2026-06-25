@@ -16,7 +16,6 @@ export function useHomeData() {
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
-
       const run = async () => {
         try {
           const name = await AsyncStorage.getItem('officeName');
@@ -60,7 +59,6 @@ export function useHomeData() {
           console.error('useHomeData load error:', e);
         }
       };
-
       run();
       return () => { isActive = false; };
     }, [])
@@ -73,7 +71,7 @@ export function useHomeData() {
     });
     return {
       totalCompleted: completedInspections.length,
-      totalDrafts:    inProgressInspections.length,
+      totalDrafts: inProgressInspections.length,
       nonCompliantFacilities: nonCompliant,
     };
   }, [completedInspections, inProgressInspections]);
@@ -84,12 +82,7 @@ export function useHomeData() {
   );
 
   return {
-    officeName,
-    agendaItems,
-    completedInspections,
-    inProgressInspections,
-    recentFacilities,
-    stats,
-    getFacilityForAgenda,
+    officeName, agendaItems, completedInspections,
+    inProgressInspections, recentFacilities, stats, getFacilityForAgenda,
   };
 }

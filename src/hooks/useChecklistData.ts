@@ -39,15 +39,13 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const [inspectionId, setInspectionId] = useState(params.draftId || '');
   const [isFinishing, setIsFinishing] = useState(false);
 
-  // Stable refs for params that change every render — prevents saveInspection
-  // from being recreated on every render and the beforeRemove listener from
-  // re-subscribing on every render.
+  // Stable refs — prevents saveInspection recreating every render
   const paramsRef = useRef(params);
   paramsRef.current = params;
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ─────────────────────────────────────────────────────────────────────────
+  // ─── Load ────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -78,7 +76,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ─────────────────────────────────────────────────────────────────────────
+  // ─── Save ────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
@@ -110,9 +108,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
             inspection.score = result.score;
             inspection.grade = result.grade;
           }
-          if (sig) {
-            inspection.signature = sig;
-          }
+          if (sig) inspection.signature = sig;
         }
 
         const existing = await AsyncStorage.getItem('inspections');
@@ -127,21 +123,20 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
         return false;
       }
     },
-    [inspectionId, data] // params and signature read via refs — stable deps
+    [inspectionId, data] // params & signature via refs — stable
   );
 
-  // ─── Stats cache ────────────────────────────────────────────────────────────────
+  // ─── Stats cache ─────────────────────────────────────────────────────────
   const updateStatsCache = useCallback(async () => {
     const raw = await AsyncStorage.getItem('inspections');
     if (raw) {
       const all: SavedInspection[] = JSON.parse(raw);
       const completed = all.filter(i => i.status === 'completed');
-      const stats = computeStats(completed);
-      await AsyncStorage.setItem('statsCache', JSON.stringify(stats));
+      await AsyncStorage.setItem('statsCache', JSON.stringify(computeStats(completed)));
     }
   }, []);
 
-  // ─── Auto-save on back ───────────────────────────────────────────────────────────
+  // ─── Auto-save on back ───────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -152,26 +147,20 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ───────────────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
-    setData(prev =>
-      prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
-    );
+    setData(prev => prev.map(item => item.id === id ? { ...item, complianceStatus: status } : item));
   }, []);
 
   const handleCommentChange = useCallback((id: string, comment: string) => {
-    setData(prev =>
-      prev.map(item => (item.id === id ? { ...item, comment } : item))
-    );
+    setData(prev => prev.map(item => item.id === id ? { ...item, comment } : item));
   }, []);
 
   const handlePhotoTake = useCallback((id: string, uri: string) => {
-    setData(prev =>
-      prev.map(item => (item.id === id ? { ...item, photoUri: uri } : item))
-    );
+    setData(prev => prev.map(item => item.id === id ? { ...item, photoUri: uri } : item));
   }, []);
 
-  // ─── Finish ──────────────────────────────────────────────────────────────────────
+  // ─── Finish ──────────────────────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
     setIsFinishing(true);
     const saved = await saveInspection('completed');
@@ -200,7 +189,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [saveInspection, router, updateStatsCache]);
 
-  // ─── Derived values ──────────────────────────────────────────────────────────────
+  // ─── Derived values ──────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);
   const totalItems = useMemo(() => data.length, [data]);
   const evaluatedItems = useMemo(() => getEvaluatedCount(data), [data]);
@@ -210,15 +199,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   );
 
   return {
-    data,
-    isLoading,
-    sections,
-    totalItems,
-    evaluatedItems,
-    progressPercent,
-    handleStatusChange,
-    handleCommentChange,
-    handlePhotoTake,
-    handleFinish,
+    data, isLoading, sections, totalItems, evaluatedItems, progressPercent,
+    handleStatusChange, handleCommentChange, handlePhotoTake, handleFinish,
   };
 }
