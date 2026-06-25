@@ -1,18 +1,20 @@
 // src/hooks/useChecklistData.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
 import { criteriaByActivity } from '../criteriaData';
 import {
-    AgendaItem,
-    ComplianceStatus,
-    InspectionItem,
-    SavedInspection,
+  AgendaItem,
+  ComplianceStatus,
+  InspectionItem,
+  SavedInspection,
 } from '../types';
 import { getEvaluatedCount, groupByAxis } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
 import { computeStats } from '../utils/statsUtils';
+
 
 interface ChecklistParams {
   draftId?: string;
@@ -29,6 +31,7 @@ interface ChecklistParams {
   lng?: number;
 }
 
+
 export function useChecklistData(params: ChecklistParams, signature?: string) {
   const router = useRouter();
   const navigation = useNavigation();
@@ -38,11 +41,11 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const [inspectionId, setInspectionId] = useState(params.draftId || '');
   const [isFinishing, setIsFinishing] = useState(false);
 
+
   // ─── Load ────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       if (params.draftId) {
-        // Phase 4 fix: load from storage by ID, not from URL params
         const raw = await AsyncStorage.getItem('inspections');
         const all: SavedInspection[] = raw ? JSON.parse(raw) : [];
         const draft = all.find(i => i.id === params.draftId);
@@ -62,19 +65,19 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           photoUri: undefined,
         }));
         setData(initial);
-        // Phase 1 fix: use crypto.randomUUID()
-        setInspectionId(crypto.randomUUID());
+        setInspectionId(Crypto.randomUUID());
       }
       setIsLoading(false);
     };
     load();
-  }, []);  // intentionally empty — runs once on mount
+  }, []); // intentionally empty — runs once on mount
+
 
   // ─── Save ────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       try {
-        const officeName = await AsyncStorage.getItem('officeName') || '';
+        const officeName = (await AsyncStorage.getItem('officeName')) || '';
         const inspection: SavedInspection = {
           id: inspectionId,
           facilityId: params.facilityId,
@@ -120,6 +123,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     [inspectionId, data, signature, params]
   );
 
+
   // ─── Stats cache ─────────────────────────────────────────────────────────
   const updateStatsCache = useCallback(async () => {
     const raw = await AsyncStorage.getItem('inspections');
@@ -130,6 +134,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       await AsyncStorage.setItem('statsCache', JSON.stringify(stats));
     }
   }, []);
+
 
   // ─── Auto-save on back ───────────────────────────────────────────────────
   useEffect(() => {
@@ -142,18 +147,26 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
+
   // ─── Item handlers ───────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, complianceStatus: status } : item));
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
+    );
   }, []);
 
   const handleCommentChange = useCallback((id: string, comment: string) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, comment } : item));
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, comment } : item))
+    );
   }, []);
 
   const handlePhotoTake = useCallback((id: string, uri: string) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, photoUri: uri } : item));
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, photoUri: uri } : item))
+    );
   }, []);
+
 
   // ─── Finish ──────────────────────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
@@ -182,6 +195,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     await updateStatsCache();
     router.replace('/(tabs)/inspection');
   }, [saveInspection, params.agendaId, router, updateStatsCache]);
+
 
   // ─── Derived values ──────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);

@@ -2,11 +2,12 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 import { InspectionItem, SavedInspection } from '../types';
 import { formatDateLong } from '../utils/dateUtils';
 import { generateFileName } from '../utils/fileUtils';
 import { getStatusText } from '../utils/statusUtils';
+
 
 function groupItemsByAxis(items: InspectionItem[]): Record<string, InspectionItem[]> {
   return items.reduce<Record<string, InspectionItem[]>>((acc, item) => {
@@ -16,6 +17,7 @@ function groupItemsByAxis(items: InspectionItem[]): Record<string, InspectionIte
     return acc;
   }, {});
 }
+
 
 function buildReportHTML(inspection: SavedInspection): string {
   const groups = groupItemsByAxis(inspection.items);
@@ -46,6 +48,7 @@ function buildReportHTML(inspection: SavedInspection): string {
     <html dir="rtl">
     <head>
       <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
       <style>
         body { font-family: Arial, sans-serif; margin: 20px; }
         h1 { text-align: center; color: #2c3e50; }
@@ -78,18 +81,39 @@ function buildReportHTML(inspection: SavedInspection): string {
     </html>`;
 }
 
+
+// ─── PDF ─────────────────────────────────────────────────────────────────────
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
+  const html = buildReportHTML(inspection);
+
   try {
-    const { uri } = await Print.printToFileAsync({ html: buildReportHTML(inspection) });
-    const dest = (FileSystem.cacheDirectory ?? '') + generateFileName(inspection.facilityName, 'pdf');
-    await FileSystem.copyAsync({ from: uri, to: dest });
-    await Sharing.shareAsync(dest, { mimeType: 'application/pdf', dialogTitle: 'مشاركة تقرير PDF' });
+    if (Platform.OS === 'ios') {
+      // iOS: printToFileAsync → documentDirectory → share (works reliably)
+      const { uri } = await Print.printToFileAsync({ html });
+      const dest =
+        (FileSystem.documentDirectory ?? '') +
+        generateFileName(inspection.facilityName, 'pdf');
+      await FileSystem.copyAsync({ from: uri, to: dest });
+      await FileSystem.deleteAsync(uri, { idempotent: true });
+      await Sharing.shareAsync(dest, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'مشاركة تقرير PDF',
+        UTI: 'com.adobe.pdf',
+      });
+    } else {
+      // Android: printToFileAsync cache is sandboxed in Expo Go and cannot be
+      // read by any file API. Use the system print dialog instead — the user
+      // can choose "Save as PDF" from the Android print sheet.
+      await Print.printAsync({ html });
+    }
   } catch (error) {
     console.error('exportInspectionPDF error:', error);
     Alert.alert('خطأ', 'حدث خطأ أثناء تصدير PDF');
   }
 }
 
+
+// ─── CSV ─────────────────────────────────────────────────────────────────────
 export async function exportInspectionCSV(inspection: SavedInspection): Promise<void> {
   const dir = FileSystem.cacheDirectory;
   if (!dir) {
@@ -112,7 +136,10 @@ export async function exportInspectionCSV(inspection: SavedInspection): Promise<
     await FileSystem.writeAsStringAsync(fileUri, csv, {
       encoding: FileSystem.EncodingType.UTF8,
     });
-    await Sharing.shareAsync(fileUri, { mimeType: 'text/csv', dialogTitle: 'مشاركة تقرير Excel' });
+    await Sharing.shareAsync(fileUri, {
+      mimeType: 'text/csv',
+      dialogTitle: 'مشاركة تقرير Excel',
+    });
   } catch (error) {
     console.error('exportInspectionCSV error:', error);
     Alert.alert('خطأ', 'حدث خطأ أثناء تصدير Excel');
