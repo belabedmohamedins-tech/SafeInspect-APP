@@ -1,29 +1,4 @@
 // constants/colors.ts
-export const Colors = {
-  blue: '#2980b9',
-  darkBlue: '#1a5276',
-  lightBlue: '#aed6f1',
-  green: '#27ae60',
-  darkGreen: '#1e8449',
-  lightGreen: '#a9dfbf',
-  red: '#e74c3c',
-  darkRed: '#922b21',
-  orange: '#e67e22',
-  yellow: '#f1c40f',
-  white: '#ffffff',
-  black: '#000000',
-  gray: '#95a5a6',
-  lightGray: '#ecf0f1',
-  darkGray: '#7f8c8d',
-  background: '#f8fcff',
-  cardBackground: '#ffffff',
-  text: '#2c3e50',
-  textMuted: '#7f8c8d',
-  border: '#bdc3c7',
-  primary: '#2980b9',
-  secondary: '#27ae60',
-  danger: '#e74c3c',
-  warning: '#e67e22',
-  success: '#27ae60',
-  info: '#2980b9',
-};
+// ⚠️  DEPRECATED — kept only for backward compatibility with any direct import.
+// Import from 'constants' (barrel) or 'constants/theme' instead.
+export { Colors } from './theme';

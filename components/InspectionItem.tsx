@@ -11,6 +11,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { Colors, Radius, Spacing } from '../constants';
 import { ComplianceStatus, InspectionItem } from '../src/types';
 import { getStatusColor, getStatusText } from '../src/utils/statusUtils';
 
@@ -64,8 +65,8 @@ const InspectionItemComponent: React.FC<Props> = ({
               style={[
                 styles.controlBadge,
                 item.controlType === 'visual' && styles.controlVisual,
-                item.controlType === 'doc' && styles.controlDoc,
-                item.controlType === 'test' && styles.controlTest,
+                item.controlType === 'doc'    && styles.controlDoc,
+                item.controlType === 'test'   && styles.controlTest,
               ]}>
               <Text style={styles.controlText}>
                 {item.controlType === 'visual'
@@ -78,7 +79,7 @@ const InspectionItemComponent: React.FC<Props> = ({
           )}
         </View>
         <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.infoButton}>
-          <FontAwesome name="info-circle" size={20} color="#3E729B" />
+          <FontAwesome name="info-circle" size={20} color={Colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -95,7 +96,7 @@ const InspectionItemComponent: React.FC<Props> = ({
                 backgroundColor:
                   item.complianceStatus === status
                     ? getStatusColor(status)
-                    : '#f0f0f0',
+                    : Colors.surfaceOffset,
               },
             ]}
             onPress={() => onStatusChange(item.id, status)}>
@@ -110,7 +111,7 @@ const InspectionItemComponent: React.FC<Props> = ({
         ))}
 
         <TouchableOpacity style={styles.cameraButton} onPress={takePhoto}>
-          <FontAwesome name="camera" size={18} color="#2196f3" />
+          <FontAwesome name="camera" size={18} color={Colors.primary} />
         </TouchableOpacity>
       </View>
 
@@ -138,7 +139,7 @@ const InspectionItemComponent: React.FC<Props> = ({
 
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}>
         <View style={styles.modalOverlay}>
@@ -158,35 +159,131 @@ const InspectionItemComponent: React.FC<Props> = ({
 };
 
 const styles = StyleSheet.create({
-  container: { padding: 16, borderBottomWidth: 1, borderBottomColor: '#e0e0e0', backgroundColor: '#fff' },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  container: {
+    padding: Spacing.base,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+    backgroundColor: Colors.surface,
+  },
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
   badgeContainer: { flexDirection: 'row', flexWrap: 'wrap', flex: 1 },
-  axisBadge: { backgroundColor: '#3498db20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginRight: 4, marginBottom: 4 },
-  axisText: { fontSize: 11, color: '#3E729B' },
-  categoryBadge: { backgroundColor: '#9b59b620', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginRight: 4, marginBottom: 4 },
-  categoryText: { fontSize: 11, color: '#9b59b6' },
-  controlBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginRight: 4, marginBottom: 4 },
-  controlVisual: { backgroundColor: '#2ecc7120' },
-  controlDoc: { backgroundColor: '#f39c1220' },
-  controlTest: { backgroundColor: '#e67e2220' },
-  controlText: { fontSize: 11, fontWeight: '500', color: '#2c3e50' },
-  infoButton: { padding: 4 },
-  criteria: { fontSize: 15, fontWeight: '600', color: '#333', marginBottom: 4 },
-  reference: { fontSize: 12, color: '#666', marginBottom: 12 },
-  buttonsRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  statusButton: { flex: 1, paddingVertical: 8, marginHorizontal: 2, borderRadius: 6, alignItems: 'center', justifyContent: 'center' },
-  statusButtonText: { fontSize: 12, fontWeight: '500', color: '#333' },
-  statusButtonTextActive: { color: '#fff' },
-  cameraButton: { padding: 8, backgroundColor: '#e3f2fd', borderRadius: 6, marginHorizontal: 2, width: 40, alignItems: 'center' },
-  addComment: { color: '#2196f3', marginVertical: 8, textAlign: 'right' },
-  commentInput: { borderWidth: 1, borderColor: '#ccc', borderRadius: 4, padding: 8, marginTop: 8, textAlignVertical: 'top', minHeight: 60 },
-  thumbnail: { width: 100, height: 100, marginTop: 8, borderRadius: 4 },
-  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'center', alignItems: 'center' },
-  modalContent: { backgroundColor: '#fff', borderRadius: 8, padding: 20, width: '80%', maxHeight: '80%' },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', color: '#2c3e50', marginBottom: 12, textAlign: 'center' },
-  modalReference: { fontSize: 14, color: '#34495e', lineHeight: 22, marginBottom: 20 },
-  modalCloseButton: { backgroundColor: '#3E729B', padding: 10, borderRadius: 6, alignItems: 'center' },
-  modalCloseText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+
+  axisBadge: {
+    backgroundColor: Colors.primary + '20',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+    marginRight: Spacing.xs,
+    marginBottom: Spacing.xs,
+  },
+  axisText: { fontSize: 11, color: Colors.primary },
+
+  categoryBadge: {
+    backgroundColor: Colors.warning + '20',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+    marginRight: Spacing.xs,
+    marginBottom: Spacing.xs,
+  },
+  categoryText: { fontSize: 11, color: Colors.warning },
+
+  controlBadge: {
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+    marginRight: Spacing.xs,
+    marginBottom: Spacing.xs,
+  },
+  controlVisual: { backgroundColor: Colors.success + '20' },
+  controlDoc:    { backgroundColor: Colors.warning + '20' },
+  controlTest:   { backgroundColor: Colors.danger  + '20' },
+  controlText:   { fontSize: 11, fontWeight: '500', color: Colors.textPrimary },
+
+  infoButton: { padding: Spacing.xs },
+
+  criteria:  { fontSize: 15, fontWeight: '600', color: Colors.textPrimary, marginBottom: Spacing.xs },
+  reference: { fontSize: 12, color: Colors.textSecondary, marginBottom: Spacing.md },
+
+  buttonsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: Spacing.sm,
+  },
+  statusButton: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    marginHorizontal: 2,
+    borderRadius: Radius.md - 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  statusButtonText:       { fontSize: 12, fontWeight: '500', color: Colors.textPrimary },
+  statusButtonTextActive: { color: Colors.textInverse },
+
+  cameraButton: {
+    padding: Spacing.sm,
+    backgroundColor: Colors.primary + '18',
+    borderRadius: Radius.md - 2,
+    marginHorizontal: 2,
+    width: 40,
+    alignItems: 'center',
+  },
+
+  addComment: { color: Colors.primary, marginVertical: Spacing.sm, textAlign: 'right' },
+
+  commentInput: {
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.sm,
+    padding: Spacing.sm,
+    marginTop: Spacing.sm,
+    textAlignVertical: 'top',
+    minHeight: 60,
+    color: Colors.textPrimary,
+  },
+
+  thumbnail: { width: 100, height: 100, marginTop: Spacing.sm, borderRadius: Radius.sm },
+
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radius.md,
+    padding: Spacing.xl,
+    width: '80%',
+    maxHeight: '80%',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.textPrimary,
+    marginBottom: Spacing.md,
+    textAlign: 'center',
+  },
+  modalReference: {
+    fontSize: 14,
+    color: Colors.textPrimary,
+    lineHeight: 22,
+    marginBottom: Spacing.xl,
+  },
+  modalCloseButton: {
+    backgroundColor: Colors.primary,
+    padding: Spacing.base - 6,
+    borderRadius: Radius.md - 2,
+    alignItems: 'center',
+  },
+  modalCloseText: { color: Colors.textInverse, fontSize: 16, fontWeight: 'bold' },
 });
 
 export default InspectionItemComponent;
