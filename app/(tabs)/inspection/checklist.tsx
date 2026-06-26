@@ -2,7 +2,7 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import React from 'react';
-import { Alert, SectionList, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { ActivityIndicator, Alert, SectionList, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import ChecklistFooter from '../../../components/checklist/ChecklistFooter';
@@ -10,7 +10,7 @@ import ChecklistHeader from '../../../components/checklist/ChecklistHeader';
 import ChecklistProgressBar from '../../../components/checklist/ChecklistProgressBar';
 import SignatureModal from '../../../components/checklist/SignatureModal';
 import InspectionItem from '../../../components/InspectionItem';
-import { Colors } from '../../../constants';
+import { Colors, Spacing } from '../../../constants';
 import { useChecklistData } from '../../../src/hooks/useChecklistData';
 import { useCollapsibleSections } from '../../../src/hooks/useCollapsibleSections';
 import { useSignature } from '../../../src/hooks/useSignature';
@@ -30,7 +30,7 @@ export default function ChecklistScreen() {
     agendaId:         params.agendaId as string | undefined,
     cause:            params.cause as string,
     reference:        params.reference as string,
-    committeeMembers: [],     // Phase 4: no longer from URL params — loaded by hook
+    committeeMembers: [],
     writer:           params.writer as string,
     lat:              params.lat ? parseFloat(params.lat as string) : undefined,
     lng:              params.lng ? parseFloat(params.lng as string) : undefined,
@@ -56,7 +56,7 @@ export default function ChecklistScreen() {
   const handleCancel = () => {
     Alert.alert(
       'تأكيد الإلغاء',
-      'هل أنت متأكد من إلغاء التفتيش؟ سيتم فقدان أي تغييرات غير محفوظة.',
+      'هل أنت متأكد من إلغاء التفتيش؟ سيتم حفظ التقدم كمسودة.',
       [
         { text: 'استمرار التفتيش', style: 'cancel' },
         { text: 'إلغاء التفتيش', style: 'destructive', onPress: () => router.replace('/(tabs)/inspection') },
@@ -67,7 +67,8 @@ export default function ChecklistScreen() {
   if (isLoading) {
     return (
       <SafeAreaView style={styles.centered}>
-        <Text>جاري التحميل...</Text>
+        <ActivityIndicator size="large" color={Colors.primary} />
+        <Text style={styles.loadingText}>جاري تحميل قائمة التفتيش...</Text>
       </SafeAreaView>
     );
   }
@@ -101,16 +102,16 @@ export default function ChecklistScreen() {
         renderSectionHeader={({ section: { title, data: sectionData } }) => (
           <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(title)}>
             <FontAwesome
-              name={isCollapsed(title) ? 'chevron-left' : 'chevron-down'}
-              size={16}
-              color="#2c3e50"
-              style={{ marginRight: 8 }}
+              name={isCollapsed(title) ? 'chevron-right' : 'chevron-down'}
+              size={14}
+              color={Colors.textPrimary}
+              style={{ marginLeft: Spacing.sm }}
             />
             <Text style={styles.sectionTitle}>{title}</Text>
             <Text style={styles.sectionProgress}>{getSectionProgress(sectionData)}</Text>
           </TouchableOpacity>
         )}
-        contentContainerStyle={{ paddingBottom: 20 }}
+        contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
           <ChecklistFooter
             onCancel={handleCancel}
@@ -130,13 +131,20 @@ export default function ChecklistScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:        { flex: 1 },
-  centered:        { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  sectionHeader:   {
-    flexDirection: 'row', alignItems: 'center',
-    backgroundColor: Colors.surfaceOffset, paddingHorizontal: 16, paddingVertical: 12,
-    marginTop: 4, borderTopWidth: 1, borderBottomWidth: 1, borderColor: Colors.border,
+  safeArea:      { flex: 1 },
+  centered:      { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md },
+  loadingText:   { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceOffset,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    marginTop: 4,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
   },
-  sectionTitle:    { flex: 1, fontSize: 16, fontWeight: '600', color: Colors.textPrimary },
-  sectionProgress: { fontSize: 14, color: Colors.textPrimary, fontWeight: '500' },
+  sectionTitle:    { flex: 1, fontSize: 15, fontWeight: '600', color: Colors.textPrimary },
+  sectionProgress: { fontSize: 13, color: Colors.textSecondary, fontWeight: '500' },
 });
