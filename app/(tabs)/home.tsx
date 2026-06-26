@@ -38,7 +38,6 @@ export default function HomeScreen() {
   };
 
   const handleDraftPress = (draft: SavedInspection) => {
-    // Phase 4: pass draftId only — checklist loads full data from storage
     router.push({
       pathname: '/(tabs)/inspection/checklist',
       params: {
@@ -80,7 +79,7 @@ export default function HomeScreen() {
         <InspectionSection
           title="مسودات جارية"
           items={inProgressInspections}
-          emptyIcon="pencil"
+          emptyIcon="edit-2"
           emptyText="لا توجد مسودات"
           onItemPress={handleDraftPress}
           onViewAll={() => router.push('/(tabs)/inspection')}
@@ -92,7 +91,7 @@ export default function HomeScreen() {
             items={recentFacilities.map(f => ({
               id: f.id, facilityName: f.projectName, facilityAddress: f.ownerName,
             } as any))}
-            emptyIcon="building"
+            emptyIcon="map-pin"
             emptyText=""
             onItemPress={() => router.push('/screens/facilities')}
             onViewAll={() => router.push('/screens/facilities')}
