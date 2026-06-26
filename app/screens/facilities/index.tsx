@@ -42,7 +42,6 @@ export default function FacilitiesScreen() {
     if (text.trim() === '') {
       setSearchResults([]);
     } else {
-      // Use service-layer search: multi-field, diacritic-insensitive
       const results = await searchFacilities(text);
       setSearchResults(results);
     }
@@ -65,7 +64,7 @@ export default function FacilitiesScreen() {
     <SafeAreaView style={styles.safeArea}>
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: Colors.blue }]}
-        onPress={() => router.push('/facilities/add')}
+        onPress={() => router.push('/screens/facilities/add')}
       >
         <FontAwesome name="plus-circle" size={24} color="#fff" />
         <Text style={styles.addButtonText}>إضافة منشأة جديدة</Text>
