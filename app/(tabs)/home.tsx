@@ -8,7 +8,7 @@ import HomeFAB from '../../components/home/HomeFAB';
 import HomeHeader from '../../components/home/HomeHeader';
 import InspectionSection from '../../components/home/InspectionSection';
 import StatsBar from '../../components/home/StatsBar';
-import { BLUE, Colors } from '../../constants';
+import { Colors } from '../../constants';
 import { useHomeData } from '../../src/hooks/useHomeData';
 import { AgendaItem, SavedInspection } from '../../src/types';
 
@@ -51,7 +51,7 @@ export default function HomeScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="dark-content" backgroundColor={BLUE} />
+      <StatusBar barStyle="dark-content" backgroundColor={Colors.background} />
 
       <HomeHeader officeName={officeName} />
 
@@ -79,7 +79,7 @@ export default function HomeScreen() {
         <InspectionSection
           title="مسودات جارية"
           items={inProgressInspections}
-          emptyIcon="edit-2"
+          emptyIcon="pencil"
           emptyText="لا توجد مسودات"
           onItemPress={handleDraftPress}
           onViewAll={() => router.push('/(tabs)/inspection')}
@@ -91,7 +91,7 @@ export default function HomeScreen() {
             items={recentFacilities.map(f => ({
               id: f.id, facilityName: f.projectName, facilityAddress: f.ownerName,
             } as any))}
-            emptyIcon="map-pin"
+            emptyIcon="building"
             emptyText=""
             onItemPress={() => router.push('/screens/facilities')}
             onViewAll={() => router.push('/screens/facilities')}

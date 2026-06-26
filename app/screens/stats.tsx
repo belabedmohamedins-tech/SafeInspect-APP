@@ -1,17 +1,27 @@
+// app/screens/stats.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../constants';
+import { Colors, FontSize, Radius, Shadow, Spacing } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
 
+// Maps grade letter to design-token color
+const GRADE_COLORS: Record<string, string> = {
+  A: Colors.gradeA,
+  B: Colors.gradeB,
+  C: Colors.gradeC,
+  D: Colors.gradeD,
+};
+const getGradeColor = (grade: string) => GRADE_COLORS[grade] ?? Colors.textTertiary;
+
 export default function StatsScreen() {
-  const [stats, setStats] = useState<StatsCache | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const [stats,         setStats]         = useState<StatsCache | null>(null);
+  const [loading,       setLoading]       = useState(true);
+  const [refreshing,    setRefreshing]    = useState(false);
   const [topViolations, setTopViolations] = useState<{ criteria: string; count: number }[]>([]);
 
   const loadStats = async (forceRefresh = false) => {
@@ -24,7 +34,6 @@ export default function StatsScreen() {
           setLoading(false);
         }
       }
-
       if (forceRefresh) setRefreshing(true);
 
       const completed = await InspectionRepository.getCompleted();
@@ -33,26 +42,22 @@ export default function StatsScreen() {
         await SettingsRepository.set({ statsCache: freshStats as any });
         setStats(freshStats);
 
-        const violationCount: { [key: string]: number } = {};
-        completed.forEach(ins => {
+        const violationCount: Record<string, number> = {};
+        completed.forEach(ins =>
           ins.items.forEach(item => {
             if (item.complianceStatus === 'non-compliant') {
-              violationCount[item.criteria] = (violationCount[item.criteria] || 0) + 1;
+              violationCount[item.criteria] = (violationCount[item.criteria] ?? 0) + 1;
             }
-          });
-        });
-        const sorted = Object.entries(violationCount)
-          .sort((a, b) => b[1] - a[1])
-          .slice(0, 5)
-          .map(([criteria, count]) => ({ criteria, count }));
-        setTopViolations(sorted);
+          })
+        );
+        setTopViolations(
+          Object.entries(violationCount)
+            .sort((a, b) => b[1] - a[1])
+            .slice(0, 5)
+            .map(([criteria, count]) => ({ criteria, count }))
+        );
       } else {
-        setStats({
-          total: 0,
-          gradeCounts: { A: 0, B: 0, C: 0, D: 0 },
-          averageScore: 'N/A',
-          lastUpdated: Date.now(),
-        });
+        setStats({ total: 0, gradeCounts: { A: 0, B: 0, C: 0, D: 0 }, averageScore: 'N/A', lastUpdated: Date.now() });
         setTopViolations([]);
       }
     } catch (error) {
@@ -63,29 +68,13 @@ export default function StatsScreen() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      loadStats();
-    }, [])
-  );
-
-  const handleRefresh = () => loadStats(true);
-
-  const getGradeColor = (grade: string): string => {
-    switch (grade) {
-      case 'A': return '#27ae60';
-      case 'B': return '#3498db';
-      case 'C': return '#f39c12';
-      case 'D': return '#e74c3c';
-      default: return '#95a5a6';
-    }
-  };
+  useFocusEffect(useCallback(() => { loadStats(); }, []));
 
   if (loading && !stats) {
     return (
       <SafeAreaView style={styles.container}>
         <View style={styles.center}>
-          <ActivityIndicator size="large" color={Colors.blue} />
+          <ActivityIndicator size="large" color={Colors.primary} />
         </View>
       </SafeAreaView>
     );
@@ -96,24 +85,29 @@ export default function StatsScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+
+        {/* Header */}
         <View style={styles.headerRow}>
           <Text style={styles.title}>لوحة التحكم</Text>
-          <TouchableOpacity onPress={handleRefresh} style={styles.refreshButton}>
-            <FontAwesome name="refresh" size={20} color={Colors.blue} />
+          <TouchableOpacity onPress={() => loadStats(true)} style={styles.refreshButton}>
+            <FontAwesome name="refresh" size={20} color={Colors.primary} />
           </TouchableOpacity>
         </View>
         {refreshing && <Text style={styles.refreshText}>جاري التحديث...</Text>}
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>إجمالي التفتيشات المكتملة</Text>
-          <Text style={styles.cardValue}>{stats.total}</Text>
+        {/* KPI cards */}
+        <View style={styles.kpiRow}>
+          <View style={[styles.kpiCard, { flex: 1 }]}>
+            <Text style={styles.kpiLabel}>إجمالي التفتيشات</Text>
+            <Text style={styles.kpiValue}>{stats.total}</Text>
+          </View>
+          <View style={[styles.kpiCard, { flex: 1 }]}>
+            <Text style={styles.kpiLabel}>متوسط النتيجة</Text>
+            <Text style={styles.kpiValue}>{stats.averageScore}%</Text>
+          </View>
         </View>
 
-        <View style={styles.card}>
-          <Text style={styles.cardTitle}>متوسط النتيجة</Text>
-          <Text style={styles.cardValue}>{stats.averageScore}%</Text>
-        </View>
-
+        {/* Grade bubbles */}
         <Text style={styles.subtitle}>التوزيع حسب الفئة</Text>
         <View style={styles.gradesContainer}>
           {(['A', 'B', 'C', 'D'] as const).map(grade => (
@@ -126,30 +120,34 @@ export default function StatsScreen() {
           ))}
         </View>
 
+        {/* Distribution bars */}
         {stats.total > 0 && (
           <View style={styles.distribution}>
             <Text style={styles.subtitle}>نسبة التوزيع</Text>
             {(['A', 'B', 'C', 'D'] as const).map(grade => {
-              const count = stats.gradeCounts[grade];
-              const percentage = (count / stats.total * 100).toFixed(1);
+              const pct = (stats.gradeCounts[grade] / stats.total * 100).toFixed(1);
               return (
                 <View key={grade} style={styles.barContainer}>
-                  <Text style={styles.barLabel}>{grade}</Text>
+                  <Text style={[styles.barLabel, { color: getGradeColor(grade) }]}>{grade}</Text>
                   <View style={styles.barBackground}>
-                    <View style={[styles.barFill, { width: `${percentage}%` as any, backgroundColor: getGradeColor(grade) }]} />
+                    <View style={[styles.barFill, { width: `${pct}%` as any, backgroundColor: getGradeColor(grade) }]} />
                   </View>
-                  <Text style={styles.barPercent}>{percentage}%</Text>
+                  <Text style={styles.barPercent}>{pct}%</Text>
                 </View>
               );
             })}
           </View>
         )}
 
+        {/* Top violations */}
         {topViolations.length > 0 && (
           <View style={styles.violationsCard}>
             <Text style={styles.subtitle}>أكثر المخالفات شيوعاً</Text>
             {topViolations.map((item, idx) => (
-              <View key={idx} style={styles.violationItem}>
+              <View key={idx} style={[
+                styles.violationItem,
+                idx === topViolations.length - 1 && { borderBottomWidth: 0 },
+              ]}>
                 <Text style={styles.violationRank}>{idx + 1}</Text>
                 <Text style={styles.violationCriteria}>{item.criteria}</Text>
                 <Text style={styles.violationCount}>{item.count}</Text>
@@ -158,9 +156,10 @@ export default function StatsScreen() {
           </View>
         )}
 
+        {/* Empty state */}
         {stats.total === 0 && (
           <View style={styles.emptyContainer}>
-            <FontAwesome name="file-text" size={50} color="#bdc3c7" />
+            <FontAwesome name="bar-chart" size={48} color={Colors.border} />
             <Text style={styles.emptyText}>لا توجد تفتيشات مكتملة بعد</Text>
           </View>
         )}
@@ -170,89 +169,34 @@ export default function StatsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: 'transparent' },
-  center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  scrollContent: { padding: 20, alignItems: 'center' },
-  headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginBottom: 20,
-  },
-  title: { fontSize: 24, fontWeight: 'bold', color: '#2c3e50', textAlign: 'center', flex: 1 },
-  refreshButton: { padding: 8 },
-  refreshText: { fontSize: 12, color: '#7f8c8d', marginBottom: 10 },
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: '100%',
-    alignItems: 'center',
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  cardTitle: { fontSize: 16, color: '#7f8c8d', marginBottom: 8 },
-  cardValue: { fontSize: 32, fontWeight: 'bold', color: Colors.blue },
-  subtitle: { fontSize: 18, fontWeight: '600', color: '#2c3e50', marginTop: 10, marginBottom: 15, alignSelf: 'flex-start' },
-  gradesContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-    marginBottom: 20,
-  },
-  gradeItem: { alignItems: 'center' },
-  gradeBadge: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  gradeBadgeText: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
-  gradeCount: { fontSize: 18, fontWeight: 'bold', color: '#2c3e50' },
-  distribution: { width: '100%', marginTop: 10 },
-  barContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: 12 },
-  barLabel: { width: 30, fontSize: 16, fontWeight: 'bold', color: '#2c3e50' },
-  barBackground: {
-    flex: 1,
-    height: 20,
-    backgroundColor: '#ecf0f1',
-    borderRadius: 10,
-    overflow: 'hidden',
-    marginHorizontal: 8,
-  },
-  barFill: { height: '100%', borderRadius: 10 },
-  barPercent: { width: 50, fontSize: 14, color: '#7f8c8d' },
-  violationsCard: {
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 20,
-    width: '100%',
-    marginTop: 20,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  violationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ecf0f1',
-  },
-  violationRank: { fontSize: 16, fontWeight: 'bold', color: Colors.blue, width: 40 },
-  violationCriteria: { fontSize: 14, color: '#2c3e50', flex: 1, marginHorizontal: 8, textAlign: 'right' },
-  violationCount: { fontSize: 14, fontWeight: 'bold', color: '#e74c3c', width: 40, textAlign: 'center' },
-  emptyContainer: { alignItems: 'center', marginTop: 40 },
-  emptyText: { fontSize: 16, color: '#95a5a6', marginTop: 10 },
+  container:    { flex: 1, backgroundColor: Colors.background },
+  center:       { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  scrollContent:{ padding: Spacing.lg, alignItems: 'center' },
+  headerRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: Spacing.lg },
+  title:        { fontSize: FontSize.hero, fontWeight: 'bold', color: Colors.textPrimary, flex: 1, textAlign: 'center' },
+  refreshButton:{ padding: Spacing.sm },
+  refreshText:  { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: Spacing.sm },
+  kpiRow:       { flexDirection: 'row', gap: Spacing.md, width: '100%', marginBottom: Spacing.lg },
+  kpiCard:      { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, alignItems: 'center', ...Shadow.sm },
+  kpiLabel:     { fontSize: FontSize.base, color: Colors.textSecondary, marginBottom: Spacing.sm, textAlign: 'center' },
+  kpiValue:     { fontSize: 32, fontWeight: 'bold', color: Colors.primary },
+  subtitle:     { fontSize: FontSize.xl, fontWeight: '600', color: Colors.textPrimary, marginTop: Spacing.sm, marginBottom: Spacing.md, alignSelf: 'flex-start' },
+  gradesContainer: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginBottom: Spacing.lg },
+  gradeItem:    { alignItems: 'center' },
+  gradeBadge:   { width: 50, height: 50, borderRadius: Radius.full, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.sm },
+  gradeBadgeText:{ color: Colors.textInverse, fontSize: FontSize.xl, fontWeight: 'bold' },
+  gradeCount:   { fontSize: FontSize.xl, fontWeight: 'bold', color: Colors.textPrimary },
+  distribution: { width: '100%', marginTop: Spacing.sm },
+  barContainer: { flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md },
+  barLabel:     { width: 28, fontSize: FontSize.lg, fontWeight: 'bold' },
+  barBackground:{ flex: 1, height: 18, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.full, overflow: 'hidden', marginHorizontal: Spacing.sm },
+  barFill:      { height: '100%', borderRadius: Radius.full },
+  barPercent:   { width: 48, fontSize: FontSize.base, color: Colors.textSecondary, textAlign: 'right' },
+  violationsCard:{ backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, width: '100%', marginTop: Spacing.lg, marginBottom: Spacing.lg, ...Shadow.sm },
+  violationItem: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
+  violationRank: { fontSize: FontSize.lg, fontWeight: 'bold', color: Colors.primary, width: 32 },
+  violationCriteria: { fontSize: FontSize.base, color: Colors.textPrimary, flex: 1, marginHorizontal: Spacing.sm, textAlign: 'right' },
+  violationCount:    { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.danger, width: 36, textAlign: 'center' },
+  emptyContainer:    { alignItems: 'center', marginTop: Spacing.xxl },
+  emptyText:         { fontSize: FontSize.lg, color: Colors.textTertiary, marginTop: Spacing.md },
 });
