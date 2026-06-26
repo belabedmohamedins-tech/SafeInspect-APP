@@ -6,11 +6,19 @@ import { SavedInspection } from '../../src/types';
 interface Props {
   inspection: SavedInspection;
   onPress: () => void;
-  onDelete: () => void;
+  onDelete?: () => void;  // optional — when omitted the delete button is hidden
 }
 
 export default function DraftListItem({ inspection, onPress, onDelete }: Props) {
   const isDraft = inspection.status === 'in-progress';
+
+  const handleDelete = () => {
+    if (!onDelete) return;
+    Alert.alert('تأكيد الحذف', 'هل تريد حذف هذا العنصر؟', [
+      { text: 'إلغاء', style: 'cancel' },
+      { text: 'حذف', style: 'destructive', onPress: onDelete },
+    ]);
+  };
 
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
@@ -19,17 +27,13 @@ export default function DraftListItem({ inspection, onPress, onDelete }: Props) 
         <Text style={styles.subtitle}>{inspection.facilityAddress || 'بدون عنوان'}</Text>
         <Text style={styles.meta}>{isDraft ? 'مسودة' : 'مكتمل'} • {inspection.date ? new Date(inspection.date).toLocaleDateString('ar-SA') : ''}</Text>
       </View>
-      <TouchableOpacity
-        style={styles.deleteButton}
-        onPress={() => {
-          Alert.alert('تأكيد الحذف', 'هل تريد حذف هذا العنصر؟', [
-            { text: 'إلغاء', style: 'cancel' },
-            { text: 'حذف', style: 'destructive', onPress: onDelete },
-          ]);
-        }}
-      >
-        <Text style={styles.deleteText}>حذف</Text>
-      </TouchableOpacity>
+
+      {/* Delete button — only shown when onDelete prop is provided */}
+      {onDelete && (
+        <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
+          <Text style={styles.deleteText}>حذف</Text>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }

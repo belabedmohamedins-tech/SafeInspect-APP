@@ -1,3 +1,4 @@
+import { Feather } from '@expo/vector-icons';
 import React from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Colors } from '../../constants';
@@ -7,7 +8,7 @@ import { SavedInspection } from '../../src/types';
 interface Props {
   title: string;
   items: SavedInspection[];
-  emptyIcon?: string;
+  emptyIcon?: string;           // Feather icon name
   emptyText?: string;
   emptyActionLabel?: string;
   onItemPress: (item: SavedInspection) => void;
@@ -18,6 +19,7 @@ interface Props {
 export default function InspectionSection({
   title,
   items = [],
+  emptyIcon,
   emptyText = 'لا توجد عناصر',
   emptyActionLabel,
   onItemPress,
@@ -36,12 +38,19 @@ export default function InspectionSection({
         )}
       </View>
 
-      {/* Divider under header */}
       <View style={styles.divider} />
 
-      {/* Empty state */}
       {items.length === 0 ? (
+        // Empty state with optional icon
         <View style={styles.empty}>
+          {emptyIcon && (
+            <Feather
+              name={emptyIcon as any}
+              size={36}
+              color={Colors.border}
+              style={styles.emptyIcon}
+            />
+          )}
           <Text style={styles.emptyText}>{emptyText}</Text>
           {emptyActionLabel && onEmptyAction && (
             <TouchableOpacity style={styles.emptyAction} onPress={onEmptyAction}>
@@ -50,6 +59,7 @@ export default function InspectionSection({
           )}
         </View>
       ) : (
+        // List — no delete button on home screen (onDelete not passed)
         <FlatList
           data={items.slice(0, 5)}
           keyExtractor={(item) => item.id}
@@ -58,7 +68,7 @@ export default function InspectionSection({
             <DraftListItem
               inspection={item}
               onPress={() => onItemPress(item)}
-              onDelete={() => {}}
+              // onDelete intentionally omitted — no delete on home screen
             />
           )}
         />
@@ -68,7 +78,6 @@ export default function InspectionSection({
 }
 
 const styles = StyleSheet.create({
-  // Single card with shadow — no double borders between stacked sections
   container: {
     backgroundColor: Colors.textInverse,
     marginHorizontal: 12,
@@ -85,7 +94,8 @@ const styles = StyleSheet.create({
   title:           { fontSize: 16, fontWeight: '600', color: Colors.textPrimary },
   viewAll:         { color: Colors.primary, fontSize: 14, fontWeight: '500' },
   divider:         { height: 1, backgroundColor: Colors.surfaceOffset },
-  empty:           { alignItems: 'center', paddingVertical: 24, paddingHorizontal: 16 },
+  empty:           { alignItems: 'center', paddingVertical: 28, paddingHorizontal: 16 },
+  emptyIcon:       { marginBottom: 10 },
   emptyText:       { fontSize: 14, color: Colors.textSecondary, textAlign: 'center' },
   emptyAction:     { marginTop: 12, paddingHorizontal: 16, paddingVertical: 8, backgroundColor: Colors.primary, borderRadius: 8 },
   emptyActionText: { color: Colors.textInverse, fontWeight: '600', fontSize: 14 },
