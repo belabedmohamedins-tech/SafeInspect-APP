@@ -17,6 +17,7 @@ import { InspectionRepository } from '../../src/repositories/InspectionRepositor
 import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
 import { InspectionItem, SavedInspection } from '../../src/types';
 import { formatDateLong } from '../../src/utils/dateUtils';
+import { groupByAxis } from '../../src/utils/inspectionUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
 import { getStatusColor, getStatusText } from '../../src/utils/statusUtils';
 
@@ -97,16 +98,10 @@ export default function ReportDetailScreen() {
     }
   };
 
-  const sections = useMemo(() => {
-    if (!inspection) return [];
-    const groups: { [key: string]: InspectionItem[] } = {};
-    inspection.items.forEach(item => {
-      const axis = item.axis || 'أخرى';
-      if (!groups[axis]) groups[axis] = [];
-      groups[axis].push(item);
-    });
-    return Object.entries(groups).map(([title, data]) => ({ title, data }));
-  }, [inspection]);
+  const sections = useMemo(
+    () => (inspection ? groupByAxis(inspection.items) : []),
+    [inspection]
+  );
 
   const handleExportPDF = async () => {
     if (inspection) await exportInspectionPDF(inspection);
@@ -144,11 +139,11 @@ export default function ReportDetailScreen() {
 
   const getGradeColor = (grade?: string): string => {
     switch (grade) {
-      case 'A': return '#27ae60';
-      case 'B': return '#3498db';
-      case 'C': return '#f39c12';
-      case 'D': return '#e74c3c';
-      default: return '#95a5a6';
+      case 'A': return Colors.gradeA;
+      case 'B': return Colors.gradeB;
+      case 'C': return Colors.gradeC;
+      case 'D': return Colors.gradeD;
+      default:  return Colors.notEvaluated;
     }
   };
 
@@ -184,21 +179,24 @@ export default function ReportDetailScreen() {
       <Stack.Screen
         options={{
           title: 'تفاصيل التفتيش',
-          headerStyle: { backgroundColor: '#2c3e50' },
-          headerTintColor: '#fff',
+          headerStyle: { backgroundColor: Colors.textPrimary },
+          headerTintColor: Colors.textInverse,
           headerRight: () => (
             <View style={{ flexDirection: 'row' }}>
               <TouchableOpacity onPress={handleExportPDF} style={{ marginRight: 15 }}>
-                <FontAwesome name="file-pdf-o" size={22} color="#fff" />
+                <FontAwesome name="file-pdf-o" size={22} color={Colors.textInverse} />
               </TouchableOpacity>
               <TouchableOpacity onPress={handleExportExcel} style={{ marginRight: 15 }}>
-                <FontAwesome name="file-excel-o" size={22} color="#fff" />
+                <FontAwesome name="file-excel-o" size={22} color={Colors.textInverse} />
               </TouchableOpacity>
               <TouchableOpacity onPress={reopenInspection} style={{ marginRight: 15 }}>
-                <FontAwesome name="pencil" size={22} color="#fff" />
+                <FontAwesome name="pencil" size={22} color={Colors.textInverse} />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handlePreview} style={{ marginRight: 15 }}>
+                <FontAwesome name="eye" size={22} color={Colors.textInverse} />
               </TouchableOpacity>
               <TouchableOpacity onPress={deleteInspection} style={{ marginRight: 15 }}>
-                <FontAwesome name="trash" size={22} color="#fff" />
+                <FontAwesome name="trash" size={22} color={Colors.textInverse} />
               </TouchableOpacity>
             </View>
           ),
@@ -256,54 +254,54 @@ export default function ReportDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  errorText: { fontSize: 16, color: '#e74c3c' },
+  safeArea:  { flex: 1, backgroundColor: 'transparent' },
+  centered:  { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText: { fontSize: 16, color: Colors.danger },
   header: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.surface,
     padding: 16,
     marginBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: Colors.border,
   },
-  officeName: { fontSize: 14, fontWeight: 'bold', color: Colors.blue, marginBottom: 4 },
-  facilityName: { fontSize: 20, fontWeight: 'bold', color: '#2c3e50', marginBottom: 4 },
-  address: { fontSize: 14, color: '#7f8c8d', marginBottom: 4 },
-  date: { fontSize: 13, color: '#95a5a6', marginBottom: 2 },
-  inspector: { fontSize: 13, color: '#3498db', marginBottom: 2 },
-  cause: { fontSize: 13, color: '#2c3e50', marginBottom: 2 },
-  reference: { fontSize: 13, color: '#2c3e50', marginBottom: 2 },
+  officeName:      { fontSize: 14, fontWeight: 'bold', color: Colors.primary, marginBottom: 4 },
+  facilityName:    { fontSize: 20, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
+  address:         { fontSize: 14, color: Colors.textSecondary, marginBottom: 4 },
+  date:            { fontSize: 13, color: Colors.textTertiary, marginBottom: 2 },
+  inspector:       { fontSize: 13, color: Colors.primary, marginBottom: 2 },
+  cause:           { fontSize: 13, color: Colors.textPrimary, marginBottom: 2 },
+  reference:       { fontSize: 13, color: Colors.textPrimary, marginBottom: 2 },
   committeeContainer: { marginVertical: 4 },
-  committeeLabel: { fontSize: 13, fontWeight: 'bold', color: '#2c3e50', marginBottom: 2 },
-  committeeMember: { fontSize: 13, color: '#34495e', marginLeft: 8 },
-  coordinates: { fontSize: 12, color: '#7f8c8d', marginTop: 4 },
-  scoreRow: { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-  scoreLabel: { fontSize: 14, fontWeight: 'bold', color: '#2c3e50', marginRight: 8 },
-  scoreValue: { fontSize: 14, color: '#2c3e50', marginRight: 8 },
+  committeeLabel:  { fontSize: 13, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 2 },
+  committeeMember: { fontSize: 13, color: Colors.textPrimary, marginLeft: 8 },
+  coordinates:     { fontSize: 12, color: Colors.textSecondary, marginTop: 4 },
+  scoreRow:   { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  scoreLabel: { fontSize: 14, fontWeight: 'bold', color: Colors.textPrimary, marginRight: 8 },
+  scoreValue: { fontSize: 14, color: Colors.textPrimary, marginRight: 8 },
   gradeBadge: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4 },
-  gradeText: { color: '#fff', fontSize: 12, fontWeight: 'bold' },
+  gradeText:  { color: Colors.textInverse, fontSize: 12, fontWeight: 'bold' },
   signatureContainer: { marginTop: 8, alignItems: 'center' },
-  signatureLabel: { fontSize: 14, fontWeight: 'bold', color: '#2c3e50', marginBottom: 4 },
+  signatureLabel: { fontSize: 14, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
   signatureImage: {
     width: 200,
     height: 100,
     resizeMode: 'contain',
     borderWidth: 1,
-    borderColor: '#ecf0f1',
+    borderColor: Colors.border,
     borderRadius: 4,
-    backgroundColor: '#fff',
+    backgroundColor: Colors.surface,
   },
-  list: { padding: 10 },
+  list:          { padding: 10 },
   sectionHeader: {
-    backgroundColor: '#ecf0f1',
+    backgroundColor: Colors.surfaceOffset,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginTop: 8,
     borderRadius: 4,
   },
-  sectionTitle: { fontSize: 16, fontWeight: 'bold', color: '#2c3e50', textAlign: 'right' },
+  sectionTitle: { fontSize: 16, fontWeight: 'bold', color: Colors.textPrimary, textAlign: 'right' },
   itemCard: {
-    backgroundColor: '#fff',
+    backgroundColor: Colors.surface,
     borderRadius: 8,
     padding: 12,
     marginBottom: 8,
@@ -313,21 +311,21 @@ const styles = StyleSheet.create({
     shadowRadius: 1,
     elevation: 1,
   },
-  headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  headerRow:      { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   badgeContainer: { flexDirection: 'row', flexWrap: 'wrap', flex: 1 },
-  categoryBadge: {
-    backgroundColor: '#3498db20',
+  categoryBadge:  {
+    backgroundColor: Colors.primary + '20',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
     marginRight: 4,
     marginBottom: 4,
   },
-  categoryText: { fontSize: 11, color: '#3498db' },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
-  statusText: { color: '#fff', fontSize: 11, fontWeight: 'bold' },
-  criteria: { fontSize: 15, fontWeight: '500', color: '#34495e', marginBottom: 4 },
-  referenceText: { fontSize: 12, color: '#7f8c8d', marginBottom: 4 },
-  comment: { fontSize: 13, color: '#e67e22', marginTop: 4 },
-  thumbnail: { width: 80, height: 80, marginTop: 8, borderRadius: 4 },
+  categoryText: { fontSize: 11, color: Colors.primary },
+  statusBadge:  { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
+  statusText:   { color: Colors.textInverse, fontSize: 11, fontWeight: 'bold' },
+  criteria:      { fontSize: 15, fontWeight: '500', color: Colors.textPrimary, marginBottom: 4 },
+  referenceText: { fontSize: 12, color: Colors.textSecondary, marginBottom: 4 },
+  comment:       { fontSize: 13, color: Colors.warning, marginTop: 4 },
+  thumbnail:     { width: 80, height: 80, marginTop: 8, borderRadius: 4 },
 });

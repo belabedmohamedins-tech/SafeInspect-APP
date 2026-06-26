@@ -1,10 +1,9 @@
 // src/hooks/useInspectionList.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { Alert } from 'react-native';
+import { InspectionRepository } from '../repositories/InspectionRepository';
 import { SavedInspection } from '../types';
-import { computeStats } from '../utils/statsUtils';
 
 export function useInspectionList() {
   const [inspections, setInspections] = useState<SavedInspection[]>([]);
@@ -16,8 +15,8 @@ export function useInspectionList() {
       let isActive = true;
       const run = async () => {
         try {
-          const raw = await AsyncStorage.getItem('inspections');
-          if (isActive) setInspections(raw ? JSON.parse(raw) : []);
+          const all = await InspectionRepository.getAll();
+          if (isActive) setInspections(all);
         } catch (e) {
           console.error('useInspectionList load error:', e);
         }
@@ -34,13 +33,8 @@ export function useInspectionList() {
         text: 'حذف', style: 'destructive',
         onPress: async () => {
           try {
-            const raw = await AsyncStorage.getItem('inspections');
-            const all: SavedInspection[] = raw ? JSON.parse(raw) : [];
-            const updated = all.filter(i => i.id !== id);
-            await AsyncStorage.setItem('inspections', JSON.stringify(updated));
-            const completed = updated.filter(i => i.status === 'completed');
-            await AsyncStorage.setItem('statsCache', JSON.stringify(computeStats(completed)));
-            setInspections(updated);
+            await InspectionRepository.delete(id);
+            setInspections(prev => prev.filter(i => i.id !== id));
           } catch (e) {
             console.error('Delete error:', e);
           }

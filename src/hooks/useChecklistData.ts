@@ -1,10 +1,12 @@
 // src/hooks/useChecklistData.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 import { criteriaByActivity } from '../criteriaData';
+import { AgendaRepository } from '../repositories/AgendaRepository';
+import { InspectionRepository } from '../repositories/InspectionRepository';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 import {
   AgendaItem,
   ComplianceStatus,
@@ -13,7 +15,6 @@ import {
 } from '../types';
 import { getEvaluatedCount, groupByAxis } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
-import { computeStats } from '../utils/statsUtils';
 
 interface ChecklistParams {
   draftId?: string;
@@ -39,7 +40,6 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const [inspectionId, setInspectionId] = useState(params.draftId || '');
   const [isFinishing, setIsFinishing] = useState(false);
 
-  // Stable refs — prevents saveInspection recreating every render
   const paramsRef = useRef(params);
   paramsRef.current = params;
   const signatureRef = useRef(signature);
@@ -50,9 +50,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     const load = async () => {
       const p = paramsRef.current;
       if (p.draftId) {
-        const raw = await AsyncStorage.getItem('inspections');
-        const all: SavedInspection[] = raw ? JSON.parse(raw) : [];
-        const draft = all.find(i => i.id === p.draftId);
+        const draft = await InspectionRepository.getById(p.draftId);
         if (draft) {
           setData(draft.items);
           setInspectionId(draft.id);
@@ -82,7 +80,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       const p = paramsRef.current;
       const sig = signatureRef.current;
       try {
-        const officeName = (await AsyncStorage.getItem('officeName')) || '';
+        const settings = await SettingsRepository.get();
         const inspection: SavedInspection = {
           id: inspectionId,
           facilityId: p.facilityId,
@@ -92,7 +90,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           inspectorName: p.writer || 'المفتش (اسم افتراضي)',
           items: data,
           status,
-          officeName,
+          officeName: settings.officeName || '',
           inspectionCause: p.cause,
           referenceDocument: p.reference,
           committeeMembers: p.committeeMembers,
@@ -111,11 +109,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           if (sig) inspection.signature = sig;
         }
 
-        const existing = await AsyncStorage.getItem('inspections');
-        let inspections: SavedInspection[] = existing ? JSON.parse(existing) : [];
-        inspections = inspections.filter(i => i.id !== inspectionId);
-        inspections.push(inspection);
-        await AsyncStorage.setItem('inspections', JSON.stringify(inspections));
+        await InspectionRepository.save(inspection);
         return true;
       } catch (error) {
         console.error('Error saving inspection:', error);
@@ -123,18 +117,8 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
         return false;
       }
     },
-    [inspectionId, data] // params & signature via refs — stable
+    [inspectionId, data]
   );
-
-  // ─── Stats cache ─────────────────────────────────────────────────────────
-  const updateStatsCache = useCallback(async () => {
-    const raw = await AsyncStorage.getItem('inspections');
-    if (raw) {
-      const all: SavedInspection[] = JSON.parse(raw);
-      const completed = all.filter(i => i.status === 'completed');
-      await AsyncStorage.setItem('statsCache', JSON.stringify(computeStats(completed)));
-    }
-  }, []);
 
   // ─── Auto-save on back ───────────────────────────────────────────────────
   useEffect(() => {
@@ -169,14 +153,11 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     const agendaId = paramsRef.current.agendaId;
     if (agendaId) {
       try {
-        const agendaData = await AsyncStorage.getItem('agenda');
-        if (agendaData) {
-          const agenda: AgendaItem[] = JSON.parse(agendaData);
-          const updated = agenda.map(item =>
-            item.id === agendaId ? { ...item, completed: true } : item
-          );
-          await AsyncStorage.setItem('agenda', JSON.stringify(updated));
-        }
+        const agenda: AgendaItem[] = await AgendaRepository.getAll();
+        const updated = agenda.map(item =>
+          item.id === agendaId ? { ...item, completed: true } : item
+        );
+        await AgendaRepository.saveAll(updated);
       } catch (e) {
         console.error('Error updating agenda:', e);
       }
@@ -185,9 +166,8 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       Alert.alert('نجاح', 'تم حفظ التفتيش بنجاح');
     }
 
-    await updateStatsCache();
     router.replace('/(tabs)/inspection');
-  }, [saveInspection, router, updateStatsCache]);
+  }, [saveInspection, router]);
 
   // ─── Derived values ──────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);

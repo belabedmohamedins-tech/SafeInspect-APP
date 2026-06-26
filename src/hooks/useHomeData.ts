@@ -1,8 +1,9 @@
 // src/hooks/useHomeData.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
-import { facilities } from '../facilitiesData';
+import { AgendaRepository } from '../repositories/AgendaRepository';
+import { InspectionRepository } from '../repositories/InspectionRepository';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 import { AgendaItem, Facility, SavedInspection } from '../types';
 import { getComplianceSummary } from '../utils/statusUtils';
 
@@ -18,14 +19,14 @@ export function useHomeData() {
       let isActive = true;
       const run = async () => {
         try {
-          const name = await AsyncStorage.getItem('officeName');
-          if (name && isActive) setOfficeName(name);
+          const settings = await SettingsRepository.get();
+          if (isActive) setOfficeName(settings.officeName || '');
 
-          const agendaRaw = await AsyncStorage.getItem('agenda');
-          if (agendaRaw && isActive) {
+          const allAgenda = await AgendaRepository.getAll();
+          if (isActive) {
             const today = new Date();
             today.setHours(0, 0, 0, 0);
-            const upcoming = (JSON.parse(agendaRaw) as AgendaItem[])
+            const upcoming = allAgenda
               .filter(item => {
                 if (item.completed) return false;
                 const d = new Date(item.date);
@@ -35,28 +36,26 @@ export function useHomeData() {
               .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
               .slice(0, 3);
             setAgendaItems(upcoming);
-          } else if (isActive) {
-            setAgendaItems([]);
           }
 
-          const inspRaw = await AsyncStorage.getItem('inspections');
-          if (inspRaw && isActive) {
-            const all = JSON.parse(inspRaw) as SavedInspection[];
+          const all = await InspectionRepository.getAll();
+          if (isActive) {
             setCompletedInspections(all.filter(i => i.status === 'completed').slice(-3).reverse());
             setInProgress(all.filter(i => i.status === 'in-progress').slice(-3).reverse());
-          } else if (isActive) {
-            setCompletedInspections([]);
-            setInProgress([]);
           }
 
-          const facRaw = await AsyncStorage.getItem('userFacilities');
-          if (facRaw && isActive) {
-            setRecentFacilities((JSON.parse(facRaw) as Facility[]).slice(-3).reverse());
-          } else if (isActive) {
-            setRecentFacilities([]);
+          const facilities = await SettingsRepository.getUserFacilities();
+          if (isActive) {
+            setRecentFacilities((facilities as Facility[]).slice(-3).reverse());
           }
         } catch (e) {
           console.error('useHomeData load error:', e);
+          if (isActive) {
+            setAgendaItems([]);
+            setCompletedInspections([]);
+            setInProgress([]);
+            setRecentFacilities([]);
+          }
         }
       };
       run();
@@ -77,8 +76,9 @@ export function useHomeData() {
   }, [completedInspections, inProgressInspections]);
 
   const getFacilityForAgenda = useCallback(
-    (item: AgendaItem) => facilities.find(f => f.id === item.facilityId),
-    []
+    (item: AgendaItem) =>
+      recentFacilities.find((f: Facility) => f.id === item.facilityId),
+    [recentFacilities]
   );
 
   return {
