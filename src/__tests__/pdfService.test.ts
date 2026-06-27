@@ -62,6 +62,7 @@ const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspecti
       id: 'item-1',
       criteria:         'توفر سجل صحي',
       legalReference:   'المادة 12',
+      severity:         'low',
       axis:             'النظافة',
       complianceStatus: 'compliant',
       comment:          'جيد',
@@ -70,6 +71,7 @@ const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspecti
       id: 'item-2',
       criteria:         'سلامة التخزين',
       legalReference:   '',
+      severity:         'medium',
       axis:             'السلامة',
       complianceStatus: 'non-compliant',
       comment:          '',
@@ -154,7 +156,7 @@ describe('buildReportHTML — items rendering', () => {
 
   it('items without an axis fall into the "أخرى" group', async () => {
     const inspection = makeInspection({
-      items: [{ id: 'x', criteria: 'بند غير مصنف', legalReference: '', axis: undefined as any, complianceStatus: 'n/a', comment: '' }],
+      items: [{ id: 'x', criteria: 'بند غير مصنف', legalReference: '', severity: 'low', axis: undefined as any, complianceStatus: 'na', comment: '' }],
     });
     const html = await captureHTML(inspection);
     expect(html).toContain('أخرى');
@@ -163,20 +165,20 @@ describe('buildReportHTML — items rendering', () => {
   it('renders all four complianceStatus Arabic labels', async () => {
     const inspection = makeInspection({
       items: [
-        { id: 'a', criteria: 'A', legalReference: '', axis: 'محور', complianceStatus: 'compliant',     comment: '' },
-        { id: 'b', criteria: 'B', legalReference: '', axis: 'محور', complianceStatus: 'non-compliant', comment: '' },
-        { id: 'c', criteria: 'C', legalReference: '', axis: 'محور', complianceStatus: 'n/a',           comment: '' },
-        { id: 'd', criteria: 'D', legalReference: '', axis: 'محور', complianceStatus: 'not-evaluated', comment: '' },
+        { id: 'a', criteria: 'A', legalReference: '', severity: 'low',    axis: 'محور', complianceStatus: 'compliant',     comment: '' },
+        { id: 'b', criteria: 'B', legalReference: '', severity: 'medium', axis: 'محور', complianceStatus: 'non-compliant', comment: '' },
+        { id: 'c', criteria: 'C', legalReference: '', severity: 'high',   axis: 'محور', complianceStatus: 'na',            comment: '' },
+        { id: 'd', criteria: 'D', legalReference: '', severity: 'low',    axis: 'محور', complianceStatus: 'not-evaluated', comment: '' },
       ],
     });
     const html = await captureHTML(inspection);
     expect(html).toContain('مطابق');
     expect(html).toContain('غير مطابق');
-    // 'n/a' and 'not-evaluated' map to Arabic too — just verify no raw English leaks
+    // 'na' and 'not-evaluated' map to Arabic too — just verify no raw English leaks
     expect(html).not.toContain('>compliant<');
     expect(html).not.toContain('>non-compliant<');
     expect(html).not.toContain('>not-evaluated<');
-    expect(html).not.toContain('>n/a<');
+    expect(html).not.toContain('>na<');
   });
 
   it('HTML has dir="rtl" and charset utf-8', async () => {
@@ -274,16 +276,14 @@ describe('exportInspectionCSV', () => {
     await exportInspectionCSV(makeInspection());
     expect(mockWriteAsync).toHaveBeenCalledWith(
       expect.stringContaining('file:///cache/'),
-      expect.any(String),
-      expect.objectContaining({ encoding: 'utf8' })
+      expect.any(String)
     );
   });
 
   it('CSV starts with Arabic header row', async () => {
     await exportInspectionCSV(makeInspection());
     const csv: string = mockWriteAsync.mock.calls[0][1];
-    const firstLine = csv.split('
-')[0];
+    const firstLine = csv.split('\n')[0];
     expect(firstLine).toContain('المعيار');
     expect(firstLine).toContain('النتيجة');
     expect(firstLine).toContain('ملاحظات');
@@ -292,8 +292,7 @@ describe('exportInspectionCSV', () => {
   it('each data row has 4 quoted fields', async () => {
     await exportInspectionCSV(makeInspection());
     const csv: string = mockWriteAsync.mock.calls[0][1];
-    const dataLines = csv.split('
-').slice(1); // skip header
+    const dataLines = csv.split('\n').slice(1); // skip header
     dataLines.forEach(line => {
       const fields = line.match(/"[^"]*"/g);
       expect(fields).toHaveLength(4);
@@ -306,6 +305,7 @@ describe('exportInspectionCSV', () => {
         id: 'q',
         criteria:         'He said "test"',
         legalReference:   '',
+        severity:         'low',
         axis:             'محور',
         complianceStatus: 'compliant',
         comment:          '',
@@ -334,8 +334,7 @@ describe('exportInspectionCSV', () => {
   it('writes only the header line when items array is empty', async () => {
     await exportInspectionCSV(makeInspection({ items: [] }));
     const csv: string = mockWriteAsync.mock.calls[0][1];
-    expect(csv.split('
-')).toHaveLength(1);
+    expect(csv.split('\n')).toHaveLength(1);
   });
 
   it('catches write errors and shows an Arabic Alert', async () => {
