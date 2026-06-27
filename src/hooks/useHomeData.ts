@@ -7,6 +7,33 @@ import { SettingsRepository } from '../repositories/SettingsRepository';
 import { AgendaItem, Facility, SavedInspection } from '../types';
 import { getComplianceSummary } from '../utils/statusUtils';
 
+/**
+ * Derives a deduplicated list of recently-inspected facilities from
+ * SavedInspection records (no separate FacilityRepository needed).
+ * Returns up to `limit` entries, most-recent first.
+ */
+function recentFacilitiesFromInspections(
+  inspections: SavedInspection[],
+  limit = 3,
+): Facility[] {
+  const seen = new Set<string>();
+  const result: Facility[] = [];
+  // inspections are already sorted newest-first after the .reverse() below
+  for (const ins of inspections) {
+    if (seen.has(ins.facilityId)) continue;
+    seen.add(ins.facilityId);
+    result.push({
+      id:          ins.facilityId,
+      projectName: ins.facilityName,
+      ownerName:   '',
+      activity:    '',
+      address:     ins.facilityAddress ?? '',
+    });
+    if (result.length >= limit) break;
+  }
+  return result;
+}
+
 export function useHomeData() {
   const [agendaItems, setAgendaItems]                   = useState<AgendaItem[]>([]);
   const [completedInspections, setCompletedInspections] = useState<SavedInspection[]>([]);
@@ -17,11 +44,14 @@ export function useHomeData() {
   useFocusEffect(
     useCallback(() => {
       let isActive = true;
+
       const run = async () => {
         try {
+          // ── Settings ─────────────────────────────────────────────
           const settings = await SettingsRepository.get();
           if (isActive) setOfficeName(settings.officeName || '');
 
+          // ── Agenda ──────────────────────────────────────────────
           const allAgenda = await AgendaRepository.getAll();
           if (isActive) {
             const today = new Date();
@@ -38,15 +68,19 @@ export function useHomeData() {
             setAgendaItems(upcoming);
           }
 
+          // ── Inspections ──────────────────────────────────────────
           const all = await InspectionRepository.getAll();
           if (isActive) {
-            setCompletedInspections(all.filter(i => i.status === 'completed').slice(-3).reverse());
-            setInProgress(all.filter(i => i.status === 'in-progress').slice(-3).reverse());
-          }
+            const completed    = all.filter(i => i.status === 'completed').slice(-5).reverse();
+            const inProgress   = all.filter(i => i.status === 'in-progress' || i.status === 'draft').slice(-5).reverse();
+            const allCompleted = all.filter(i => i.status === 'completed').slice().reverse();
 
-          const facilities = await SettingsRepository.getUserFacilities();
-          if (isActive) {
-            setRecentFacilities((facilities as Facility[]).slice(-3).reverse());
+            setCompletedInspections(completed);
+            setInProgress(inProgress);
+
+            // Derive recent facilities from completed inspections —
+            // no separate repository needed.
+            setRecentFacilities(recentFacilitiesFromInspections(allCompleted, 3));
           }
         } catch (e) {
           console.error('useHomeData load error:', e);
@@ -58,6 +92,7 @@ export function useHomeData() {
           }
         }
       };
+
       run();
       return () => { isActive = false; };
     }, [])
@@ -69,9 +104,9 @@ export function useHomeData() {
       if (getComplianceSummary(ins.items).nonCompliant > 0) nonCompliant++;
     });
     return {
-      totalCompleted: completedInspections.length,
-      totalDrafts: inProgressInspections.length,
-      nonCompliantFacilities: nonCompliant,
+      totalCompleted:          completedInspections.length,
+      totalDrafts:             inProgressInspections.length,
+      nonCompliantFacilities:  nonCompliant,
     };
   }, [completedInspections, inProgressInspections]);
 

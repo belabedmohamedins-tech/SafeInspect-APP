@@ -79,7 +79,7 @@ export default function HomeScreen() {
         <InspectionSection
           title="مسودات جارية"
           items={inProgressInspections}
-          emptyIcon="pencil"
+          emptyIcon="edit-2"
           emptyText="لا توجد مسودات"
           onItemPress={handleDraftPress}
           onViewAll={() => router.push('/(tabs)/inspection')}
@@ -87,11 +87,13 @@ export default function HomeScreen() {
 
         {recentFacilities.length > 0 && (
           <InspectionSection
-            title="آخر المنشآت المضافة"
+            title="آخر المنشآت المفتشة"
             items={recentFacilities.map(f => ({
-              id: f.id, facilityName: f.projectName, facilityAddress: f.ownerName,
+              id:              f.id,
+              facilityName:    f.projectName,
+              facilityAddress: f.address,
             } as any))}
-            emptyIcon="building"
+            emptyIcon="home"
             emptyText=""
             onItemPress={() => router.push('/screens/facilities')}
             onViewAll={() => router.push('/screens/facilities')}
