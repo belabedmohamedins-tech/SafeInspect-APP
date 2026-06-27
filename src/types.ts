@@ -27,7 +27,7 @@ export interface SavedInspection {
   inspectorName: string;
   items: InspectionItem[];
   /**
-   * - 'completed'  — fully submitted inspection
+   * - 'completed'   — fully submitted inspection
    * - 'in-progress' — active checklist session
    * - 'draft'       — saved mid-session via back-navigation
    * getDrafts() returns both 'in-progress' and 'draft'.
@@ -42,6 +42,13 @@ export interface SavedInspection {
   referenceDocument?: string;
   committeeMembers?: string[];
   coordinates?: { latitude: number; longitude: number };
+
+  /**
+   * djb2 hex digest of the inspection's canonical JSON at the moment it
+   * was marked 'completed'. Set automatically by InspectionRepository.save().
+   * Use IntegrityService.verifyInspection() to check for tampering.
+   */
+  integrityHash?: string;
 }
 
 export interface Facility {
@@ -78,10 +85,33 @@ export interface AgendaItem {
    * - 'pending'   — scheduled, not yet acted on
    * - 'completed' — linked to a finished inspection or manually marked done
    * - 'cancelled' — explicitly cancelled by the user
-   *
-   * Previously this was modelled as both `completed: boolean` AND
-   * `status?: string` — those two fields have been collapsed here.
    */
   status: 'pending' | 'completed' | 'cancelled';
   inspectionId?: string;
+}
+
+/**
+ * A single corrective action item generated from a non-compliant
+ * inspection finding. Part of the Corrective Action Plan (CAP) module.
+ */
+export interface CorrectiveAction {
+  id: string;
+  /** The inspection that generated this CAP item. */
+  inspectionId: string;
+  /** The specific InspectionItem id this CAP item addresses. */
+  inspectionItemId: string;
+  facilityId: string;
+  facilityName: string;
+  /** Copied from InspectionItem.criteria at creation time. */
+  criteria: string;
+  severity: Severity;
+  /** ISO date string (YYYY-MM-DD) by which the violation must be remediated. */
+  deadline: string;
+  /** Name of the person / department responsible for fixing the violation. */
+  assignedTo: string;
+  status: 'open' | 'in-progress' | 'resolved' | 'overdue';
+  notes?: string;
+  createdAt: string;  // ISO datetime
+  updatedAt: string;  // ISO datetime
+  closedAt?: string;  // ISO datetime — set when status becomes 'resolved'
 }

@@ -4,13 +4,16 @@
 // Ownership rules:
 //   INSPECTIONS          → InspectionRepository (sole writer)
 //   AGENDA               → AgendaRepository (sole writer)
-//   STATS_CACHE          → InspectionRepository.writeAll() (sole writer); read by SettingsRepository & StatsScreen
+//   STATS_CACHE          → InspectionRepository.writeAll(); read by SettingsRepository & StatsScreen
 //   OFFICE_NAME          → SettingsRepository
 //   INSPECTOR_NAME       → SettingsRepository
 //   INSPECTION_CAUSE     → SettingsRepository
-//   USER_FACILITIES      → facilitiesService
+//   USER_FACILITIES      → FacilityRepository
 //   BIOMETRIC_ENABLED    → AuthRepository
 //   NOTIFICATIONS_ENABLED → NotificationService
+//   AUDIT_LOG            → AuditLogRepository (append-only)
+//   INSPECTION_HASHES    → IntegrityService (tamperproof hashes)
+//   CORRECTIVE_ACTIONS   → CorrectiveActionRepository
 
 export const StorageKeys = {
   INSPECTIONS:           'inspections',
@@ -22,4 +25,7 @@ export const StorageKeys = {
   USER_FACILITIES:       'userFacilities',
   BIOMETRIC_ENABLED:     'biometricEnabled',
   NOTIFICATIONS_ENABLED: 'notificationsEnabled',
+  AUDIT_LOG:             'auditLog',
+  INSPECTION_HASHES:     'inspectionHashes',
+  CORRECTIVE_ACTIONS:    'correctiveActions',
 } as const;
