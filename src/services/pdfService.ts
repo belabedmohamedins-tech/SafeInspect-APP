@@ -249,7 +249,9 @@ function buildReportHTML(
 // ─── PDF export ───────────────────────────────────────────────────────────────
 
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
-  const settingsInspector = await SettingsRepository.get<string>('inspectorName', '') ?? '';
+  // Get full settings object then extract the inspectorName string
+  const settings = await SettingsRepository.get();
+  const settingsInspector = settings.inspectorName ?? '';
   const html = buildReportHTML(inspection, settingsInspector);
 
   try {

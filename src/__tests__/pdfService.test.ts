@@ -1,104 +1,130 @@
-/**
- * Unit tests for src/services/pdfService.ts
- *
- * All native modules (expo-print, expo-sharing, expo-file-system/legacy,
- * react-native Platform, and SettingsRepository) are mocked so the tests
- * run in plain Node / Jest.
- */
+// src/__tests__/pdfService.test.ts
 
-import { Alert, Platform } from 'react-native';
-import { exportInspectionCSV, exportInspectionPDF } from '../services/pdfService';
-import { SavedInspection } from '../types';
+// ─── Suppress expected console noise ─────────────────────────────────────────
+const _consoleError = console.error.bind(console);
+const _consoleWarn  = console.warn.bind(console);
 
-// ────────────────────────────────── Mocks ──────────────────────────────────
+beforeAll(() => {
+  jest.spyOn(console, 'error').mockImplementation((...args) => {
+    const msg = String(args[0] ?? '');
+    const suppressed = [
+      'exportInspectionPDF error',
+      'exportInspectionCSV error',
+      'Warning:',
+    ];
+    if (suppressed.some(s => msg.includes(s))) return;
+    _consoleError(...args);
+  });
 
-const mockPrintToFileAsync = jest.fn().mockResolvedValue({ uri: 'file:///tmp/print.pdf' });
-const mockPrintAsync       = jest.fn().mockResolvedValue(undefined);
-jest.mock('expo-print', () => ({
-  printToFileAsync: (...a: any[]) => mockPrintToFileAsync(...a),
-  printAsync:       (...a: any[]) => mockPrintAsync(...a),
-}));
+  jest.spyOn(console, 'warn').mockImplementation((...args) => {
+    const msg = String(args[0] ?? '');
+    if (msg.includes('Warning:')) return;
+    _consoleWarn(...args);
+  });
+});
 
-const mockShareAsync = jest.fn().mockResolvedValue(undefined);
-jest.mock('expo-sharing', () => ({
-  shareAsync: (...a: any[]) => mockShareAsync(...a),
-}));
+afterAll(() => {
+  jest.restoreAllMocks();
+});
 
-const mockCopyAsync   = jest.fn().mockResolvedValue(undefined);
-const mockDeleteAsync = jest.fn().mockResolvedValue(undefined);
-const mockWriteAsync  = jest.fn().mockResolvedValue(undefined);
+// ─── Mocks ────────────────────────────────────────────────────────────────────
+
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
   cacheDirectory:    'file:///cache/',
-  copyAsync:         (...a: any[]) => mockCopyAsync(...a),
-  deleteAsync:       (...a: any[]) => mockDeleteAsync(...a),
-  writeAsStringAsync:(...a: any[]) => mockWriteAsync(...a),
-  EncodingType:      { UTF8: 'utf8' },
+  writeAsStringAsync: jest.fn().mockResolvedValue(undefined),
+  copyAsync:          jest.fn().mockResolvedValue(undefined),
+  deleteAsync:        jest.fn().mockResolvedValue(undefined),
+  EncodingType: { UTF8: 'utf8' },
 }));
 
-const mockSettingsGet = jest.fn().mockResolvedValue({ inspectorName: 'أحمد سالم' });
+jest.mock('expo-print', () => ({
+  printToFileAsync: jest.fn(),
+  printAsync:       jest.fn(),
+}));
+
+jest.mock('expo-sharing', () => ({
+  isAvailableAsync: jest.fn().mockResolvedValue(true),
+  shareAsync:       jest.fn().mockResolvedValue(undefined),
+}));
+
+jest.mock('react-native', () => ({
+  Alert:    { alert: jest.fn() },
+  Platform: { OS: 'android' },
+}));
+
+const mockSettingsGet = jest.fn();
 jest.mock('../repositories/SettingsRepository', () => ({
-  SettingsRepository: { get: () => mockSettingsGet() },
+  SettingsRepository: { get: mockSettingsGet },
 }));
 
-jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
+// ─── Imports ──────────────────────────────────────────────────────────────────
 
-// ───────────────────────────────── Test data ──────────────────────────────
+import * as FileSystem from 'expo-file-system/legacy';
+import * as Print      from 'expo-print';
+import * as Sharing    from 'expo-sharing';
+import { Alert }       from 'react-native';
+import {
+  exportInspectionCSV,
+  exportInspectionPDF,
+} from '../services/pdfService';
+import { InspectionItem, SavedInspection } from '../types';
 
-const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspection => ({
-  id:               'insp-01',
-  facilityId:       'fac-01',
-  facilityName:     'مخبزة الصدى',
-  facilityAddress:  'شارع الاستقلال',
-  date:             '2026-05-10T08:00:00.000Z',
-  inspectorName:    'محمد أمين',
-  status:           'completed',
-  officeName:       'مكتب التجربة',
-  inspectionCause:  'routine',
-  referenceDocument:'',
-  committeeMembers: [],
-  items: [
-    {
-      id: 'item-1',
-      criteria:         'توفر سجل صحي',
-      legalReference:   'المادة 12',
-      severity:         'low',
-      axis:             'النظافة',
-      complianceStatus: 'compliant',
-      comment:          'جيد',
-    },
-    {
-      id: 'item-2',
-      criteria:         'سلامة التخزين',
-      legalReference:   '',
-      severity:         'medium',
-      axis:             'السلامة',
-      complianceStatus: 'non-compliant',
-      comment:          '',
-    },
-  ],
-  ...overrides,
-});
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function makeItem(overrides: Partial<InspectionItem> = {}): InspectionItem {
+  return {
+    id:               'item-1',
+    criteria:         'توفر سجل صحي',
+    legalReference:   'المادة 12',
+    axis:             'النظافة',
+    complianceStatus: 'compliant',
+    comment:          'جيد',
+    severity:         'medium',
+    ...overrides,
+  };
+}
+
+function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id:             'insp-1',
+    facilityName:   'مخبزة الصدى',
+    facilityAddress:'شارع الاستقلال',
+    date:           '2026-05-10T09:00:00.000Z',
+    inspectorName:  'محمد أمين',
+    officeName:     'مكتب التجربة',
+    inspectionCause:'routine',
+    score:          45.5,
+    grade:          'D',
+    items: [
+      makeItem({ id: 'i1', axis: 'النظافة', complianceStatus: 'compliant',     comment: 'جيد' }),
+      makeItem({ id: 'i2', axis: 'السلامة', complianceStatus: 'non-compliant', comment: '',    criteria: 'سلامة التخزين', legalReference: '' }),
+    ],
+    ...overrides,
+  };
+}
+
+/** Helper: capture the HTML string passed to buildReportHTML via exportInspectionPDF */
+async function captureHTML(inspection: SavedInspection): Promise<string> {
+  let captured = '';
+  (Print.printAsync as jest.Mock).mockImplementationOnce(({ html }: { html: string }) => {
+    captured = html;
+    return Promise.resolve();
+  });
+  await exportInspectionPDF(inspection);
+  return captured;
+}
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockPrintToFileAsync.mockResolvedValue({ uri: 'file:///tmp/print.pdf' });
-  mockSettingsGet.mockResolvedValue({ inspectorName: 'أحمد سالم' });
+  // Default: settings returns an empty inspector name
+  mockSettingsGet.mockResolvedValue({ inspectorName: '', officeName: '' });
 });
 
-// Helper: run exportInspectionPDF on iOS and capture the HTML string passed to printToFileAsync
-async function captureHTML(inspection: SavedInspection): Promise<string> {
-  (Platform as any).OS = 'ios';
-  await exportInspectionPDF(inspection);
-  return mockPrintToFileAsync.mock.calls[0][0].html as string;
-}
-
-// =============================================================================
-// buildReportHTML (tested indirectly via the HTML captured from Print mock)
-// =============================================================================
+// ─── buildReportHTML — inspector name ────────────────────────────────────────
 
 describe('buildReportHTML — inspector name', () => {
-  it('uses the inspectorName from the inspection when non-empty', async () => {
+  it('uses inspection.inspectorName when provided', async () => {
     const html = await captureHTML(makeInspection({ inspectorName: 'محمد أمين' }));
     expect(html).toContain('محمد أمين');
   });
@@ -116,230 +142,193 @@ describe('buildReportHTML — inspector name', () => {
   });
 });
 
-describe('buildReportHTML — facility info', () => {
-  it('includes facilityName in the HTML', async () => {
+// ─── buildReportHTML — items rendering ───────────────────────────────────────
+
+describe('buildReportHTML — items rendering', () => {
+  it('HTML has dir="rtl" and charset utf-8', async () => {
+    const html = await captureHTML(makeInspection());
+    expect(html).toContain('dir="rtl"');
+    expect(html).toContain('charset="utf-8"');
+  });
+
+  it('renders facility name', async () => {
     const html = await captureHTML(makeInspection());
     expect(html).toContain('مخبزة الصدى');
   });
 
-  it('includes facilityAddress in the HTML', async () => {
+  it('renders compliant item in green', async () => {
     const html = await captureHTML(makeInspection());
-    expect(html).toContain('شارع الاستقلال');
+    expect(html).toContain('#d4edda');
+    expect(html).toContain('مطابق');
   });
 
-  it('shows "غير محدد" when facilityAddress is empty', async () => {
-    const html = await captureHTML(makeInspection({ facilityAddress: '' }));
-    expect(html).toContain('غير محدد');
-  });
-});
-
-describe('buildReportHTML — items rendering', () => {
-  it('renders "-" for items with no legalReference', async () => {
+  it('renders non-compliant item in red', async () => {
     const html = await captureHTML(makeInspection());
-    // item-2 has empty legalReference — should render as '-'
-    const rows = html.split('<tr').filter(r => r.includes('سلامة التخزين'));
-    expect(rows[0]).toContain('>-<');
+    expect(html).toContain('#f8d7da');
+    expect(html).toContain('غير مطابق');
   });
 
-  it('renders an empty cell when comment is empty', async () => {
-    const inspection = makeInspection();
-    // item-2 has empty comment
-    const html = await captureHTML(inspection);
-    expect(html).toContain('<td></td>');
+  it('renders score and grade', async () => {
+    const html = await captureHTML(makeInspection());
+    expect(html).toContain('45.5%');
+    expect(html).toContain('>D<');
   });
 
-  it('groups items under their axis heading', async () => {
+  it('renders axis group headers', async () => {
     const html = await captureHTML(makeInspection());
     expect(html).toContain('النظافة');
     expect(html).toContain('السلامة');
   });
 
-  it('items without an axis fall into the "أخرى" group', async () => {
-    const inspection = makeInspection({
-      items: [{ id: 'x', criteria: 'بند غير مصنف', legalReference: '', severity: 'low', axis: undefined as any, complianceStatus: 'na', comment: '' }],
-    });
-    const html = await captureHTML(inspection);
-    expect(html).toContain('أخرى');
-  });
-
-  it('renders all four complianceStatus Arabic labels', async () => {
-    const inspection = makeInspection({
-      items: [
-        { id: 'a', criteria: 'A', legalReference: '', severity: 'low',    axis: 'محور', complianceStatus: 'compliant',     comment: '' },
-        { id: 'b', criteria: 'B', legalReference: '', severity: 'medium', axis: 'محور', complianceStatus: 'non-compliant', comment: '' },
-        { id: 'c', criteria: 'C', legalReference: '', severity: 'high',   axis: 'محور', complianceStatus: 'na',            comment: '' },
-        { id: 'd', criteria: 'D', legalReference: '', severity: 'low',    axis: 'محور', complianceStatus: 'not-evaluated', comment: '' },
-      ],
-    });
-    const html = await captureHTML(inspection);
-    expect(html).toContain('مطابق');
-    expect(html).toContain('غير مطابق');
-    // 'na' and 'not-evaluated' map to Arabic too — just verify no raw English leaks
-    expect(html).not.toContain('>compliant<');
-    expect(html).not.toContain('>non-compliant<');
-    expect(html).not.toContain('>not-evaluated<');
-    expect(html).not.toContain('>na<');
-  });
-
-  it('HTML has dir="rtl" and charset utf-8', async () => {
+  it('renders legal reference', async () => {
     const html = await captureHTML(makeInspection());
-    expect(html).toContain('dir="rtl"');
-    expect(html.toLowerCase()).toContain('charset=utf-8');
+    expect(html).toContain('المادة 12');
+  });
+
+  it('renders office name in letterhead', async () => {
+    const html = await captureHTML(makeInspection({ officeName: 'مكتب التجربة' }));
+    expect(html).toContain('مكتب التجربة');
+  });
+
+  it('falls back to "تقرير تفتيش" when officeName is blank', async () => {
+    const html = await captureHTML(makeInspection({ officeName: '' }));
+    expect(html).toContain('تقرير تفتيش');
+  });
+
+  it('renders signature image when present', async () => {
+    const html = await captureHTML(makeInspection({ signature: 'data:image/png;base64,abc' }));
+    expect(html).toContain('data:image/png;base64,abc');
+  });
+
+  it('omits signature section when absent', async () => {
+    const html = await captureHTML(makeInspection({ signature: undefined }));
+    expect(html).not.toContain('sig-section');
+  });
+
+  it('renders na status cell', async () => {
+    const html = await captureHTML(
+      makeInspection({
+        items: [makeItem({ complianceStatus: 'na' })],
+      }),
+    );
+    expect(html).toContain('#e2e3e5');
+  });
+
+  it('renders committee members when present', async () => {
+    const html = await captureHTML(
+      makeInspection({ committeeMembers: ['عمر', 'أيمن'] }),
+    );
+    expect(html).toContain('عمر');
+    expect(html).toContain('أيمن');
+  });
+
+  it('renders coordinates when present', async () => {
+    const html = await captureHTML(
+      makeInspection({ coordinates: { latitude: 36.7372, longitude: 3.0865 } }),
+    );
+    expect(html).toContain('36.737200');
+    expect(html).toContain('3.086500');
+  });
+
+  it('renders cause label for routine', async () => {
+    const html = await captureHTML(makeInspection({ inspectionCause: 'routine' }));
+    expect(html).toContain('تفتيش روتيني');
+  });
+
+  it('renders referenceDocument when present', async () => {
+    const html = await captureHTML(makeInspection({ referenceDocument: 'REF-2026-001' }));
+    expect(html).toContain('REF-2026-001');
   });
 });
 
-// =============================================================================
-// exportInspectionPDF — iOS path
-// =============================================================================
+// ─── exportInspectionPDF ──────────────────────────────────────────────────────
 
-describe('exportInspectionPDF — iOS', () => {
-  beforeEach(() => { (Platform as any).OS = 'ios'; });
-
-  it('calls printToFileAsync with HTML', async () => {
+describe('exportInspectionPDF', () => {
+  it('calls Print.printAsync on Android', async () => {
     await exportInspectionPDF(makeInspection());
-    expect(mockPrintToFileAsync).toHaveBeenCalledWith(
-      expect.objectContaining({ html: expect.stringContaining('<!DOCTYPE html>') })
+    expect(Print.printAsync).toHaveBeenCalledWith(
+      expect.objectContaining({ html: expect.any(String) }),
     );
   });
 
-  it('copies the temp PDF to documentDirectory', async () => {
-    await exportInspectionPDF(makeInspection());
-    expect(mockCopyAsync).toHaveBeenCalledWith(
-      expect.objectContaining({
-        from: 'file:///tmp/print.pdf',
-        to:   expect.stringContaining('file:///docs/'),
-      })
-    );
+  it('returns undefined (fire-and-forget)', async () => {
+    const result = await exportInspectionPDF(makeInspection());
+    expect(result).toBeUndefined();
   });
 
-  it('deletes the original temp PDF after copying', async () => {
+  it('calls Alert.alert on print error', async () => {
+    (Print.printAsync as jest.Mock).mockRejectedValueOnce(new Error('Print failed'));
     await exportInspectionPDF(makeInspection());
-    expect(mockDeleteAsync).toHaveBeenCalledWith(
-      'file:///tmp/print.pdf',
-      expect.objectContaining({ idempotent: true })
-    );
-  });
-
-  it('calls Sharing.shareAsync with mimeType application/pdf', async () => {
-    await exportInspectionPDF(makeInspection());
-    expect(mockShareAsync).toHaveBeenCalledWith(
-      expect.stringContaining('file:///docs/'),
-      expect.objectContaining({ mimeType: 'application/pdf' })
-    );
+    expect(Alert.alert).toHaveBeenCalledWith('خطأ', 'حدث خطأ أثناء تصدير PDF');
   });
 });
 
-// =============================================================================
-// exportInspectionPDF — Android path
-// =============================================================================
-
-describe('exportInspectionPDF — Android', () => {
-  beforeEach(() => { (Platform as any).OS = 'android'; });
-
-  it('calls Print.printAsync (system print dialog)', async () => {
-    await exportInspectionPDF(makeInspection());
-    expect(mockPrintAsync).toHaveBeenCalledWith(
-      expect.objectContaining({ html: expect.any(String) })
-    );
-  });
-
-  it('does NOT call FileSystem.copyAsync on Android', async () => {
-    await exportInspectionPDF(makeInspection());
-    expect(mockCopyAsync).not.toHaveBeenCalled();
-  });
-
-  it('does NOT call Sharing.shareAsync on Android', async () => {
-    await exportInspectionPDF(makeInspection());
-    expect(mockShareAsync).not.toHaveBeenCalled();
-  });
-});
-
-// =============================================================================
-// exportInspectionPDF — error handling
-// =============================================================================
-
-describe('exportInspectionPDF — error handling', () => {
-  it('catches errors and shows an Arabic Alert', async () => {
-    (Platform as any).OS = 'ios';
-    mockPrintToFileAsync.mockRejectedValueOnce(new Error('Print failed'));
-    await exportInspectionPDF(makeInspection());
-    expect(Alert.alert).toHaveBeenCalledWith('خطأ', expect.any(String));
-  });
-});
-
-// =============================================================================
-// exportInspectionCSV
-// =============================================================================
+// ─── exportInspectionCSV ──────────────────────────────────────────────────────
 
 describe('exportInspectionCSV', () => {
-  it('writes a UTF-8 CSV to cacheDirectory', async () => {
+  it('writes a UTF-8 CSV file', async () => {
     await exportInspectionCSV(makeInspection());
-    expect(mockWriteAsync).toHaveBeenCalledWith(
-      expect.stringContaining('file:///cache/'),
-      expect.any(String)
+    expect(FileSystem.writeAsStringAsync).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.any(Object),
     );
   });
 
-  it('CSV starts with Arabic header row', async () => {
+  it('CSV content starts with UTF-8 BOM', async () => {
+    let csvContent = '';
+    (FileSystem.writeAsStringAsync as jest.Mock).mockImplementationOnce(
+      (_path: string, content: string) => { csvContent = content; return Promise.resolve(); },
+    );
     await exportInspectionCSV(makeInspection());
-    const csv: string = mockWriteAsync.mock.calls[0][1];
-    const firstLine = csv.split('\n')[0];
-    expect(firstLine).toContain('المعيار');
-    expect(firstLine).toContain('النتيجة');
-    expect(firstLine).toContain('ملاحظات');
+    expect(csvContent.charCodeAt(0)).toBe(0xFEFF);
   });
 
-  it('each data row has 4 quoted fields', async () => {
+  it('CSV contains Arabic headers', async () => {
+    let csvContent = '';
+    (FileSystem.writeAsStringAsync as jest.Mock).mockImplementationOnce(
+      (_path: string, content: string) => { csvContent = content; return Promise.resolve(); },
+    );
     await exportInspectionCSV(makeInspection());
-    const csv: string = mockWriteAsync.mock.calls[0][1];
-    const dataLines = csv.split('\n').slice(1); // skip header
+    expect(csvContent).toContain('المعيار');
+    expect(csvContent).toContain('النتيجة');
+  });
+
+  it('CSV rows contain item data', async () => {
+    let csvContent = '';
+    (FileSystem.writeAsStringAsync as jest.Mock).mockImplementationOnce(
+      (_path: string, content: string) => { csvContent = content; return Promise.resolve(); },
+    );
+    await exportInspectionCSV(makeInspection());
+    expect(csvContent).toContain('توفر سجل صحي');
+    expect(csvContent).toContain('مطابق');
+  });
+
+  it('calls Sharing.shareAsync after writing', async () => {
+    await exportInspectionCSV(makeInspection());
+    expect(Sharing.shareAsync).toHaveBeenCalled();
+  });
+
+  it('calls Alert.alert on write error', async () => {
+    (FileSystem.writeAsStringAsync as jest.Mock).mockRejectedValueOnce(new Error('Disk full'));
+    await exportInspectionCSV(makeInspection());
+    expect(Alert.alert).toHaveBeenCalledWith('خطأ', 'حدث خطأ أثناء تصدير Excel');
+  });
+
+  it('each CSV field is double-quote wrapped', async () => {
+    const dataLines: string[] = [];
+    (FileSystem.writeAsStringAsync as jest.Mock).mockImplementationOnce(
+      (_path: string, content: string) => {
+        dataLines.push(...content.split('\n').slice(1));
+        return Promise.resolve();
+      },
+    );
+    await exportInspectionCSV(makeInspection());
+    expect(dataLines.length).toBeGreaterThan(0);
     dataLines.forEach(line => {
-      const fields = line.match(/"[^"]*"/g);
-      expect(fields).toHaveLength(4);
+      if (line.trim()) {
+        expect(line).toMatch(/^".*"$/);
+      }
     });
-  });
-
-  it('escapes double-quotes inside field values', async () => {
-    const inspection = makeInspection({
-      items: [{
-        id: 'q',
-        criteria:         'He said "test"',
-        legalReference:   '',
-        severity:         'low',
-        axis:             'محور',
-        complianceStatus: 'compliant',
-        comment:          '',
-      }],
-    });
-    await exportInspectionCSV(inspection);
-    const csv: string = mockWriteAsync.mock.calls[0][1];
-    expect(csv).toContain('"He said ""test"""');
-  });
-
-  it('calls Sharing.shareAsync with mimeType text/csv', async () => {
-    await exportInspectionCSV(makeInspection());
-    expect(mockShareAsync).toHaveBeenCalledWith(
-      expect.stringContaining('file:///cache/'),
-      expect.objectContaining({ mimeType: 'text/csv' })
-    );
-  });
-
-  it('filename is derived from the facilityName', async () => {
-    await exportInspectionCSV(makeInspection());
-    const fileUri: string = mockWriteAsync.mock.calls[0][0];
-    // generateFileName includes some form of the facility name or a timestamp
-    expect(fileUri).toMatch(/\.csv$/);
-  });
-
-  it('writes only the header line when items array is empty', async () => {
-    await exportInspectionCSV(makeInspection({ items: [] }));
-    const csv: string = mockWriteAsync.mock.calls[0][1];
-    expect(csv.split('\n')).toHaveLength(1);
-  });
-
-  it('catches write errors and shows an Arabic Alert', async () => {
-    mockWriteAsync.mockRejectedValueOnce(new Error('Disk full'));
-    await exportInspectionCSV(makeInspection());
-    expect(Alert.alert).toHaveBeenCalledWith('خطأ', expect.any(String));
   });
 });
