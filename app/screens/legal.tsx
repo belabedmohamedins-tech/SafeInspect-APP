@@ -1,9 +1,10 @@
+// app/screens/legal.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
 import React, { useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '../../constants';
+import { Colors, FontSize, Radius, Spacing } from '../../constants';
 import { criteriaByActivity } from '../../src/criteriaData';
 import { InspectionItem } from '../../src/types';
 
@@ -46,7 +47,8 @@ export default function LegalReferencesScreen() {
         <Picker
           selectedValue={selectedActivity}
           onValueChange={(itemValue) => setSelectedActivity(itemValue)}
-          style={styles.picker}>
+          style={styles.picker}
+        >
           <Picker.Item label="جميع المعايير (القاعدة العامة)" value="default" />
           {activities.map((activity) => (
             <Picker.Item key={activity} label={activity} value={activity} />
@@ -60,7 +62,7 @@ export default function LegalReferencesScreen() {
         contentContainerStyle={styles.list}
         ListEmptyComponent={
           <View style={styles.emptyContainer}>
-            <FontAwesome name="file-text" size={50} color="#bdc3c7" />
+            <FontAwesome name="file-text" size={50} color={Colors.border} />
             <Text style={styles.emptyText}>لا توجد معايير لهذا النشاط</Text>
           </View>
         }
@@ -70,17 +72,58 @@ export default function LegalReferencesScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  pickerContainer: { backgroundColor: '#fff', margin: 10, borderRadius: 8, borderWidth: 1, borderColor: '#e0e0e0', overflow: 'hidden' },
-  picker: { height: 50, width: '100%', color: '#2c3e50' },
-  list: { padding: 10 },
-  axisGroup: { marginBottom: 20 },
-  axisTitle: { fontSize: 18, fontWeight: 'bold', color: '#2c3e50', marginBottom: 8, paddingHorizontal: 4 },
-  itemCard: { backgroundColor: '#fff', borderRadius: 8, padding: 12, marginBottom: 6, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.05, shadowRadius: 1, elevation: 1 },
-  criteria: { fontSize: 14, fontWeight: '500', color: '#34495e', marginBottom: 4, textAlign: 'right' },
-  reference: { fontSize: 13, color: '#7f8c8d', lineHeight: 18, textAlign: 'right' },
-  categoryBadge: { alignSelf: 'flex-start', backgroundColor: Colors.blue + '20', paddingHorizontal: 8, paddingVertical: 2, borderRadius: 4, marginTop: 6 },
-  categoryText: { fontSize: 11, color: Colors.blue },
-  emptyContainer: { alignItems: 'center', padding: 40 },
-  emptyText: { fontSize: 16, color: '#7f8c8d', marginTop: 10 },
+  safeArea:        { flex: 1, backgroundColor: Colors.background },
+  pickerContainer: {
+    backgroundColor: Colors.white,
+    margin: Spacing.sm,
+    borderRadius: Radius.md,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    overflow: 'hidden',
+  },
+  picker:       { height: 50, width: '100%', color: Colors.dark },
+  list:         { padding: Spacing.sm },
+  axisGroup:    { marginBottom: Spacing.xl },
+  axisTitle:    {
+    fontSize: FontSize.xl,
+    fontWeight: 'bold',
+    color: Colors.dark,
+    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.xs,
+  },
+  itemCard: {
+    backgroundColor: Colors.white,
+    borderRadius: Radius.md,
+    padding: Spacing.md,
+    marginBottom: Spacing.xs,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 1,
+    elevation: 1,
+  },
+  criteria:  {
+    fontSize: FontSize.base,
+    fontWeight: '500',
+    color: Colors.textPrimary,
+    marginBottom: Spacing.xs,
+    textAlign: 'right',
+  },
+  reference: {
+    fontSize: FontSize.sm,
+    color: Colors.textSecondary,
+    lineHeight: 18,
+    textAlign: 'right',
+  },
+  categoryBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: `${Colors.blue}33`,
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+    marginTop: Spacing.xs,
+  },
+  categoryText:   { fontSize: FontSize.xs, color: Colors.blue },
+  emptyContainer: { alignItems: 'center', padding: Spacing.xxl },
+  emptyText:      { fontSize: FontSize.lg, color: Colors.textSecondary, marginTop: Spacing.sm },
 });
