@@ -13,6 +13,9 @@ export const StorageKeys = {
   NOTIFICATIONS:           'NOTIFICATIONS',
   NOTIFICATIONS_ENABLED:   'NOTIFICATIONS_ENABLED',
   CAP_NOTIF_LAST_RUN:      'CAP_NOTIF_LAST_RUN',
+  SYNC_QUEUE:              'SYNC_QUEUE',
+  SYNC_LAST_RUN:           'SYNC_LAST_RUN',
+  BACKUP_LAST_AT:          'BACKUP_LAST_AT',
 } as const;
 
 /** @deprecated use StorageKeys */

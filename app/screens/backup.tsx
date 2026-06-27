@@ -1,7 +1,10 @@
 // app/screens/backup.tsx
+//
+// Backup & Restore screen.
+// Reachable from Plus menu → 'النسخ الاحتياطي'.
+
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -12,280 +15,414 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, FontSize, Radius, Spacing } from '../../constants';
+import { Colors, Radius, Shadow, Spacing } from '../../constants';
 import {
-  BackupPayload,
-  ImportResult,
   exportBackup,
   getLastBackupDate,
   importBackup,
 } from '../../src/services/BackupService';
+import {
+  flush as syncFlush,
+  getSyncStatus,
+  SyncStatus,
+} from '../../src/services/SyncService';
+
+type AlertState = { type: 'success' | 'error'; message: string } | null;
+
+function InlineAlert({ alert }: { alert: AlertState }) {
+  if (!alert) return null;
+  const isSuccess = alert.type === 'success';
+  return (
+    <View
+      style={[
+        styles.alert,
+        isSuccess ? styles.alertSuccess : styles.alertError,
+      ]}
+    >
+      <FontAwesome
+        name={isSuccess ? 'check-circle' : 'exclamation-circle'}
+        size={16}
+        color={isSuccess ? Colors.success : Colors.danger}
+      />
+      <Text
+        style={[
+          styles.alertText,
+          { color: isSuccess ? Colors.success : Colors.danger },
+        ]}
+      >
+        {alert.message}
+      </Text>
+    </View>
+  );
+}
+
+function formatDate(d: Date | null): string {
+  if (!d) return 'لا يوجد';
+  return d.toLocaleDateString('ar-DZ', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
 
 export default function BackupScreen() {
-  const router = useRouter();
+  const [lastBackup, setLastBackup] = useState<Date | null>(null);
+  const [syncStatus, setSyncStatus] = useState<SyncStatus | null>(null);
+  const [loadingExport, setLoadingExport] = useState(false);
+  const [loadingImport, setLoadingImport] = useState(false);
+  const [loadingSync, setLoadingSync] = useState(false);
+  const [alert, setAlert] = useState<AlertState>(null);
 
-  const [lastBackup, setLastBackup]     = useState<Date | null>(null);
-  const [exporting, setExporting]       = useState(false);
-  const [importing, setImporting]       = useState(false);
-  const [lastExport, setLastExport]     = useState<BackupPayload | null>(null);
+  const showAlert = (type: 'success' | 'error', message: string) => {
+    setAlert({ type, message });
+    setTimeout(() => setAlert(null), 4000);
+  };
 
-  useEffect(() => {
-    getLastBackupDate().then(setLastBackup);
+  const loadStatus = useCallback(async () => {
+    const [backup, sync] = await Promise.all([
+      getLastBackupDate(),
+      getSyncStatus(),
+    ]);
+    setLastBackup(backup);
+    setSyncStatus(sync);
   }, []);
 
-  // ─── Export ────────────────────────────────────────────────────
+  useEffect(() => {
+    void loadStatus();
+  }, [loadStatus]);
+
+  // ── Export ──────────────────────────────────────────────────────────────
   const handleExport = async () => {
-    setExporting(true);
+    setLoadingExport(true);
+    setAlert(null);
     try {
       const payload = await exportBackup();
-      setLastExport(payload);
-      setLastBackup(new Date(payload.exportedAt));
-      Alert.alert(
-        'تم التصدير ✔',
-        [
-          `الفحوصات: ${payload.inspections.length}`,
-          `مهام الجدول: ${payload.agenda.length}`,
-          `منشآت مضافة: ${payload.userFacilities.length}`,
-        ].join('\n')
+      showAlert(
+        'success',
+        `تم تصدير ${payload.inspections.length} تفتيش و${payload.agenda.length} موعد بنجاح`,
       );
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'خطأ غير متوقع';
-      Alert.alert('خطأ', msg);
+      void loadStatus();
+    } catch (e: any) {
+      showAlert('error', e?.message ?? 'فشل التصدير');
     } finally {
-      setExporting(false);
+      setLoadingExport(false);
     }
   };
 
-  // ─── Import ────────────────────────────────────────────────────
+  // ── Import ──────────────────────────────────────────────────────────────
   const handleImport = () => {
     Alert.alert(
-      'استيراد نسخة احتياطية',
-      'سيتم استبدال جميع البيانات الحالية ببيانات الملف المختار. هذا الإجراء لا يمكن التراجع عنه.',
+      'استعادة النسخة الاحتياطية',
+      'سيتم استبدال جميع البيانات الحالية بمحتوى ملف النسخة الاحتياطية. هل تريد المتابعة؟',
       [
         { text: 'إلغاء', style: 'cancel' },
         {
-          text: 'متابعة',
+          text: 'استعادة',
           style: 'destructive',
-          onPress: doImport,
+          onPress: async () => {
+            setLoadingImport(true);
+            setAlert(null);
+            try {
+              const result = await importBackup();
+              if (result === null) {
+                // user cancelled picker
+              } else {
+                showAlert(
+                  'success',
+                  `تمت الاستعادة: ${result.inspections} تفتيش، ${result.agenda} موعد، ${result.userFacilities} منشأة`,
+                );
+                void loadStatus();
+              }
+            } catch (e: any) {
+              showAlert('error', e?.message ?? 'فشل الاستعادة');
+            } finally {
+              setLoadingImport(false);
+            }
+          },
         },
-      ]
+      ],
     );
   };
 
-  const doImport = async () => {
-    setImporting(true);
+  // ── Sync ─────────────────────────────────────────────────────────────────
+  const handleSync = async () => {
+    setLoadingSync(true);
+    setAlert(null);
     try {
-      const result: ImportResult | null = await importBackup();
-      if (!result) return; // user cancelled picker
-      Alert.alert(
-        'تم الاستيراد ✔',
-        [
-          `الفحوصات: ${result.inspections}`,
-          `مهام الجدول: ${result.agenda}`,
-          `منشآت مضافة: ${result.userFacilities}`,
-        ].join('\n'),
-        [{ text: 'حسناً', onPress: () => router.replace('/') }]
-      );
-    } catch (e: unknown) {
-      const msg = e instanceof Error ? e.message : 'خطأ غير متوقع';
-      Alert.alert('خطأ في الاستيراد', msg);
+      const synced = await syncFlush();
+      if (synced > 0) {
+        showAlert('success', `تمت مزامنة ${synced} تفتيش`);
+      } else if (!syncStatus?.isOnline) {
+        showAlert('error', 'لا يوجد اتصال بالإنترنت');
+      } else if ((syncStatus?.pendingCount ?? 0) === 0) {
+        showAlert('success', 'جميع البيانات محدّثة');
+      } else {
+        showAlert('error', 'فشل الاتصال بالخادم — سيتم المحاولة تلقائياً');
+      }
+      void loadStatus();
+    } catch (e: any) {
+      showAlert('error', e?.message ?? 'فشل المزامنة');
     } finally {
-      setImporting(false);
+      setLoadingSync(false);
     }
   };
 
-  const formatDate = (d: Date) =>
-    d.toLocaleDateString('ar-DZ') + ' — ' + d.toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' });
-
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>النسخ الاحتياطي</Text>
-        <View style={{ width: 20 }} />
-      </View>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Header */}
+        <Text style={styles.heading}>النسخ الاحتياطي والمزامنة</Text>
+        <Text style={styles.sub}>
+          احتفظ بنسخة احتياطية من بياناتك أو استعدها، وزامن التفتيشات مع
+          الخادم المركزي.
+        </Text>
 
-      <ScrollView contentContainerStyle={styles.content}>
+        <InlineAlert alert={alert} />
 
-        {/* Last backup timestamp */}
-        <View style={styles.statusCard}>
-          <FontAwesome name="clock-o" size={20} color={lastBackup ? Colors.success : Colors.textTertiary} />
-          <View style={styles.statusText}>
-            <Text style={styles.statusLabel}>آخر نسخة احتياطية</Text>
-            <Text style={[styles.statusValue, { color: lastBackup ? Colors.textPrimary : Colors.textTertiary }]}>
-              {lastBackup ? formatDate(lastBackup) : 'لم يتم إجراء نسخ احتياطية بعد'}
-            </Text>
-          </View>
-        </View>
-
-        {/* Export section */}
-        <Text style={styles.sectionTitle}>تصدير البيانات</Text>
+        {/* ── Local Backup card ─────────────────────────────────────────── */}
         <View style={styles.card}>
-          <Text style={styles.cardDesc}>
-            ينشئ ملف JSON يحتوي على جميع الفحوصات، مهام الجدول، المنشآت المضافة، وإعدادات المفتش. يمكن مشاركته عبر البريد الإلكتروني أو حفظه في السحابة.
-          </Text>
+          <View style={styles.cardHeader}>
+            <FontAwesome name="database" size={20} color={Colors.primary} />
+            <Text style={styles.cardTitle}>النسخة الاحتياطية المحلية</Text>
+          </View>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>آخر نسخة احتياطية</Text>
+            <Text style={styles.infoValue}>{formatDate(lastBackup)}</Text>
+          </View>
+
           <TouchableOpacity
-            style={[styles.actionBtn, { backgroundColor: Colors.primary }]}
+            style={[styles.btn, styles.btnPrimary]}
             onPress={handleExport}
-            disabled={exporting}
+            disabled={loadingExport}
+            activeOpacity={0.8}
           >
-            {exporting
-              ? <ActivityIndicator color={Colors.textInverse} />
-              : <FontAwesome name="upload" size={16} color={Colors.textInverse} />}
-            <Text style={styles.actionBtnText}>
-              {exporting ? 'جاري التصدير...' : 'تصدير ومشاركة'}
-            </Text>
+            {loadingExport ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <>
+                <FontAwesome name="cloud-upload" size={16} color="#fff" />
+                <Text style={styles.btnText}>تصدير النسخة الاحتياطية</Text>
+              </>
+            )}
           </TouchableOpacity>
 
-          {/* Last export summary */}
-          {lastExport && (
-            <View style={styles.summary}>
-              <SummaryRow icon="search" label="الفحوصات" value={lastExport.inspections.length} />
-              <SummaryRow icon="calendar" label="مهام الجدول" value={lastExport.agenda.length} />
-              <SummaryRow icon="building" label="منشآت مضافة" value={lastExport.userFacilities.length} />
+          <TouchableOpacity
+            style={[styles.btn, styles.btnSecondary]}
+            onPress={handleImport}
+            disabled={loadingImport}
+            activeOpacity={0.8}
+          >
+            {loadingImport ? (
+              <ActivityIndicator color={Colors.primary} />
+            ) : (
+              <>
+                <FontAwesome name="cloud-download" size={16} color={Colors.primary} />
+                <Text style={[styles.btnText, { color: Colors.primary }]}>
+                  استعادة من ملف
+                </Text>
+              </>
+            )}
+          </TouchableOpacity>
+        </View>
+
+        {/* ── Cloud Sync card ───────────────────────────────────────────── */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <FontAwesome name="refresh" size={20} color={Colors.primary} />
+            <Text style={styles.cardTitle}>المزامنة مع الخادم</Text>
+          </View>
+
+          {/* Online / offline pill */}
+          {syncStatus && (
+            <View style={styles.infoRow}>
+              <Text style={styles.infoLabel}>حالة الاتصال</Text>
+              <View
+                style={[
+                  styles.pill,
+                  syncStatus.isOnline ? styles.pillOnline : styles.pillOffline,
+                ]}
+              >
+                <Text style={styles.pillText}>
+                  {syncStatus.isOnline ? 'متصل' : 'غير متصل'}
+                </Text>
+              </View>
             </View>
           )}
-        </View>
 
-        {/* Import section */}
-        <Text style={styles.sectionTitle}>استيراد نسخة احتياطية</Text>
-        <View style={[styles.card, styles.dangerCard]}>
-          {/* Warning banner */}
-          <View style={styles.warningBanner}>
-            <FontAwesome name="exclamation-triangle" size={15} color={Colors.warning} />
-            <Text style={styles.warningText}>
-              سيؤدي الاستيراد إلى استبدال جميع البيانات الحالية. لا يمكن التراجع عن هذا الإجراء.
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>في انتظار المزامنة</Text>
+            <Text style={styles.infoValue}>
+              {syncStatus?.pendingCount ?? '—'} تفتيش
             </Text>
           </View>
-          <Text style={[styles.cardDesc, { marginTop: Spacing.sm }]}>
-            اختر ملف safeinspect-backup-*.json من جهازك لاستعادة جميع بياناتك.
-          </Text>
-          <TouchableOpacity
-            style={[styles.actionBtn, { backgroundColor: Colors.danger }]}
-            onPress={handleImport}
-            disabled={importing}
-          >
-            {importing
-              ? <ActivityIndicator color={Colors.textInverse} />
-              : <FontAwesome name="download" size={16} color={Colors.textInverse} />}
-            <Text style={styles.actionBtnText}>
-              {importing ? 'جاري الاستيراد...' : 'اختيار ملف واستيراد'}
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoLabel}>آخر مزامنة</Text>
+            <Text style={styles.infoValue}>
+              {formatDate(syncStatus?.lastSyncAt ?? null)}
             </Text>
+          </View>
+
+          <TouchableOpacity
+            style={[
+              styles.btn,
+              styles.btnPrimary,
+              !syncStatus?.isOnline && styles.btnDisabled,
+            ]}
+            onPress={handleSync}
+            disabled={loadingSync}
+            activeOpacity={0.8}
+          >
+            {loadingSync ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <>
+                <FontAwesome name="refresh" size={16} color="#fff" />
+                <Text style={styles.btnText}>مزامنة الآن</Text>
+              </>
+            )}
           </TouchableOpacity>
+
+          <Text style={styles.hint}>
+            تتم المزامنة التلقائية كل 15 دقيقة عند توفر الاتصال. لا تحتاج إلى
+            ضبط أي إعدادات إضافية في وضع العمل بدون اتصال.
+          </Text>
         </View>
 
-        <Text style={styles.footnote}>
-          ملاحظة: الصور المرفقة بالفحوص غير مضمّنة في ملف النسخ الاحتياطي.
-        </Text>
+        {/* ── Info card ─────────────────────────────────────────────────── */}
+        <View style={[styles.card, styles.infoCard]}>
+          <FontAwesome name="info-circle" size={18} color={Colors.textSecondary} />
+          <Text style={styles.infoCardText}>
+            ملاحظة: لا تتضمن النسخة الاحتياطية الصور المرفقة بالتفتيشات. يُنصح
+            بإجراء نسخة احتياطية أسبوعية على الأقل.
+          </Text>
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function SummaryRow({ icon, label, value }: { icon: string; label: string; value: number }) {
-  return (
-    <View style={styles.summaryRow}>
-      <Text style={styles.summaryValue}>{value}</Text>
-      <Text style={styles.summaryLabel}>{label}</Text>
-      <FontAwesome name={icon as any} size={14} color={Colors.textSecondary} />
-    </View>
-  );
-}
-
 const styles = StyleSheet.create({
-  container:   { flex: 1, backgroundColor: Colors.background },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    backgroundColor: Colors.surface,
+  container: { flex: 1, backgroundColor: Colors.background },
+  scroll: {
+    padding: Spacing.lg,
+    paddingBottom: Spacing.xxl,
+    gap: Spacing.lg,
   },
-  headerTitle: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary },
-  content: { padding: Spacing.lg, paddingBottom: 48 },
-
-  statusCard: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    padding: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    marginBottom: Spacing.xl,
+  heading: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    textAlign: 'right',
+    marginBottom: Spacing.xs,
   },
-  statusText:  { flex: 1, alignItems: 'flex-end' },
-  statusLabel: { fontSize: FontSize.sm, color: Colors.textSecondary },
-  statusValue: { fontSize: FontSize.base, fontWeight: '600', marginTop: 2, textAlign: 'right' },
-
-  sectionTitle: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
+  sub: {
+    fontSize: 14,
     color: Colors.textSecondary,
     textAlign: 'right',
+    lineHeight: 22,
     marginBottom: Spacing.sm,
-    marginTop: Spacing.md,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
-  card: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    padding: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.border,
-    marginBottom: Spacing.lg,
-    gap: Spacing.md,
-  },
-  dangerCard: { borderColor: Colors.danger + '40' },
-  cardDesc: { fontSize: FontSize.base, color: Colors.textSecondary, textAlign: 'right', lineHeight: 22 },
 
-  actionBtn: {
-    flexDirection: 'row',
+  // Alert
+  alert: {
+    flexDirection: 'row-reverse',
     alignItems: 'center',
-    justifyContent: 'center',
     gap: Spacing.sm,
     padding: Spacing.md,
     borderRadius: Radius.md,
+    marginBottom: Spacing.sm,
   },
-  actionBtnText: { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: '700' },
+  alertSuccess: { backgroundColor: '#edfaf0' },
+  alertError:   { backgroundColor: '#fef2f2' },
+  alertText: { flex: 1, fontSize: 13, textAlign: 'right' },
 
-  summary: {
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
-    paddingTop: Spacing.sm,
-    gap: Spacing.xs,
+  // Card
+  card: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radius.lg,
+    padding: Spacing.lg,
+    gap: Spacing.md,
+    ...Shadow.sm,
   },
-  summaryRow: {
-    flexDirection: 'row',
+  cardHeader: {
+    flexDirection: 'row-reverse',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     gap: Spacing.sm,
   },
-  summaryLabel: { fontSize: FontSize.sm, color: Colors.textSecondary },
-  summaryValue: { fontSize: FontSize.sm, fontWeight: '700', color: Colors.textPrimary },
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: '600',
+    color: Colors.textPrimary,
+  },
 
-  warningBanner: {
-    flexDirection: 'row',
+  // Info rows
+  infoRow: {
+    flexDirection: 'row-reverse',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: Spacing.xs,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  infoLabel: { fontSize: 13, color: Colors.textSecondary },
+  infoValue: { fontSize: 13, fontWeight: '500', color: Colors.textPrimary },
+
+  // Buttons
+  btn: {
+    flexDirection: 'row-reverse',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    borderRadius: Radius.md,
+  },
+  btnPrimary:   { backgroundColor: Colors.primary },
+  btnSecondary: {
+    backgroundColor: 'transparent',
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
+  },
+  btnDisabled: { opacity: 0.5 },
+  btnText: { fontSize: 15, fontWeight: '600', color: '#fff' },
+
+  // Online / offline pill
+  pill: {
+    paddingHorizontal: Spacing.md,
+    paddingVertical: 3,
+    borderRadius: Radius.full,
+  },
+  pillOnline:  { backgroundColor: '#d1fae5' },
+  pillOffline: { backgroundColor: '#fee2e2' },
+  pillText: { fontSize: 12, fontWeight: '600' },
+
+  // Hint
+  hint: {
+    fontSize: 12,
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    lineHeight: 18,
+  },
+
+  // Info note card
+  infoCard: {
+    flexDirection: 'row-reverse',
     alignItems: 'flex-start',
+    backgroundColor: Colors.surfaceOffset,
     gap: Spacing.sm,
-    backgroundColor: Colors.warning + '18',
-    borderRadius: Radius.sm,
-    padding: Spacing.sm,
+    padding: Spacing.md,
   },
-  warningText: { flex: 1, fontSize: FontSize.sm, color: Colors.warning, textAlign: 'right', lineHeight: 20 },
-
-  footnote: {
-    fontSize: FontSize.xs,
-    color: Colors.textTertiary,
-    textAlign: 'center',
-    marginTop: Spacing.sm,
+  infoCardText: {
+    flex: 1,
+    fontSize: 12,
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    lineHeight: 18,
   },
 });
