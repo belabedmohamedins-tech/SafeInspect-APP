@@ -51,7 +51,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ────────────────────────────────────────────────────────────────
+  // ─── Load ───────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -81,23 +81,28 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ────────────────────────────────────────────────────────────────
+  // ─── Save ──────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
       const sig = signatureRef.current;
       try {
-        const settings = await SettingsRepository.get();
+        // fixed: was SettingsRepository.get() with no key — always returned
+        // undefined, crashing on settings.inspectorName / settings.officeName
+        // and silently preventing the inspection from being saved.
+        const settings = await SettingsRepository.getAll();
+        const s = settings ?? {};
+
         const inspection: SavedInspection = {
           id: inspectionId,
           facilityId: p.facilityId,
           facilityName: p.facilityName,
           facilityAddress: p.facilityAddress,
           date: new Date().toISOString(),
-          inspectorName: p.writer || settings.inspectorName || 'المفتش',
+          inspectorName: p.writer || String(s.inspectorName ?? '') || 'المفتش',
           items: data,
           status,
-          officeName: settings.officeName || '',
+          officeName: String(s.officeName ?? ''),
           inspectionCause: p.cause,
           referenceDocument: p.reference,
           committeeMembers: p.committeeMembers,
@@ -127,7 +132,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     [inspectionId, data]
   );
 
-  // ─── Auto-save on back ───────────────────────────────────────────────────
+  // ─── Auto-save on back ─────────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -138,7 +143,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ───────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -158,18 +163,18 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
         const existingPhotos = item.photos ?? (item.photoUri ? [item.photoUri] : []);
         return {
           ...item,
-          photoUri: item.photoUri ?? uri, // keep first photo as legacy field
+          photoUri: item.photoUri ?? uri,
           photos: [...existingPhotos, uri],
         };
       })
     );
   }, []);
 
-  // ─── Finish (with validation gates) ─────────────────────────────────────
+  // ─── Finish (with validation gates) ──────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
-    // Gate 1: 85% completion requirement (FR-045)
+    // Gate 1: 85% completion requirement
     const applicable = data.filter(item => item.complianceStatus !== 'na');
-    const evaluated = applicable.filter(
+    const evaluated  = applicable.filter(
       item => item.complianceStatus !== 'not-evaluated'
     );
     const completionRate =
@@ -185,12 +190,10 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       return;
     }
 
-    // Gate 2: High-severity non-compliant items must have at least one photo (FR-046)
+    // Gate 2: High-severity non-compliant items must have photo
     const missingPhotos = getHighSeverityItemsMissingPhoto(data);
     if (missingPhotos.length > 0) {
-      const names = missingPhotos
-        .map(item => `• ${item.criteria}`)
-        .join('\n');
+      const names = missingPhotos.map(item => `• ${item.criteria}`).join('\n');
       Alert.alert(
         'صور مطلوبة',
         `البنود الحرجة التالية تحتاج صورة دليل قبل الإنهاء:\n\n${names}`,
@@ -221,9 +224,9 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [data, saveInspection, inspectionId, router]);
 
-  // ─── Derived values ──────────────────────────────────────────────────────
-  const sections = useMemo(() => groupByAxis(data), [data]);
-  const totalItems = useMemo(() => data.length, [data]);
+  // ─── Derived values ───────────────────────────────────────────────────────────
+  const sections       = useMemo(() => groupByAxis(data), [data]);
+  const totalItems     = useMemo(() => data.length, [data]);
   const evaluatedItems = useMemo(() => getEvaluatedCount(data), [data]);
   const progressPercent = useMemo(
     () => (totalItems > 0 ? (evaluatedItems / totalItems) * 100 : 0),
