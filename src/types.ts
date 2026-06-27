@@ -4,6 +4,9 @@ export type ControlType = 'visual' | 'doc' | 'test';
 export type ComplianceStatus = 'compliant' | 'non-compliant' | 'na' | 'not-evaluated';
 export type Category = 'تنظيمية' | 'بيئية' | 'صحيه' | 'سلامة' | 'نظافة' | 'عامة';
 
+/** Lifecycle of a supervisor approval decision on a completed inspection. */
+export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
+
 export interface InspectionItem {
   id: string;
   criteria: string;
@@ -26,15 +29,8 @@ export interface SavedInspection {
   facilityName: string;
   facilityAddress: string;
   date: string;
-  /** The name of the inspector / writer who conducted the inspection. */
   inspectorName: string;
   items: InspectionItem[];
-  /**
-   * - 'completed'   — fully submitted inspection
-   * - 'in-progress' — active checklist session
-   * - 'draft'       — saved mid-session via back-navigation
-   * getDrafts() returns both 'in-progress' and 'draft'.
-   */
   status: 'completed' | 'in-progress' | 'draft';
   score?: number;
   grade?: string;
@@ -46,19 +42,27 @@ export interface SavedInspection {
   committeeMembers?: string[];
   coordinates?: { latitude: number; longitude: number };
 
-  /**
-   * djb2 hex digest of the inspection's canonical JSON at the moment it
-   * was marked 'completed'. Set automatically by InspectionRepository.save().
-   * Use IntegrityService.verifyInspection() to check for tampering.
-   */
+  /** djb2 hex digest — set by InspectionRepository.save() on completion. */
   integrityHash?: string;
 
-  /**
-   * Written when the inspector overrides the geofencing gate.
-   * Contains the justification text entered by the inspector.
-   * Null / undefined = inspector was within range (no override needed).
-   */
+  /** Geofencing override justification text (null = was within range). */
   geofenceOverrideNote?: string;
+
+  // ── Supervisor Approval (FR-069→075) ─────────────────────────────────────
+  /**
+   * Approval lifecycle state. Defaults to 'pending' when inspection is
+   * first completed. Set to 'approved' | 'returned' | 'escalated' by a
+   * supervisor via ApprovalRepository.
+   */
+  approvalStatus?: ApprovalStatus;
+  /** Display name of the supervisor who last acted on this inspection. */
+  approvedBy?: string;
+  /** ISO datetime of the approval / return / escalation action. */
+  approvedAt?: string;
+  /** Reason text when returned for revision. */
+  returnedReason?: string;
+  /** Optional supervisor note attached to any approval decision. */
+  approvalNote?: string;
 }
 
 export interface Facility {
@@ -67,14 +71,8 @@ export interface Facility {
   ownerName: string;
   activity: string;
   address: string;
-  /**
-   * Geographic coordinates for map display and geofencing.
-   * Optional — populated when the facility has known GPS data.
-   */
   lat?: number;
   lng?: number;
-  // Fields below are metadata from the source data set.
-  // They are rarely populated by app-created facilities — treat as optional.
   licenseType?: string;
   licenseDetails?: string;
   year?: string;
@@ -90,38 +88,23 @@ export interface AgendaItem {
   activity?: string;
   date: string;
   notes: string;
-  /**
-   * Single source of truth for agenda item lifecycle:
-   * - 'pending'   — scheduled, not yet acted on
-   * - 'completed' — linked to a finished inspection or manually marked done
-   * - 'cancelled' — explicitly cancelled by the user
-   */
   status: 'pending' | 'completed' | 'cancelled';
   inspectionId?: string;
 }
 
-/**
- * A single corrective action item generated from a non-compliant
- * inspection finding. Part of the Corrective Action Plan (CAP) module.
- */
 export interface CorrectiveAction {
   id: string;
-  /** The inspection that generated this CAP item. */
   inspectionId: string;
-  /** The specific InspectionItem id this CAP item addresses. */
   inspectionItemId: string;
   facilityId: string;
   facilityName: string;
-  /** Copied from InspectionItem.criteria at creation time. */
   criteria: string;
   severity: Severity;
-  /** ISO date string (YYYY-MM-DD) by which the violation must be remediated. */
   deadline: string;
-  /** Name of the person / department responsible for fixing the violation. */
   assignedTo: string;
   status: 'open' | 'in-progress' | 'resolved' | 'overdue';
   notes?: string;
-  createdAt: string;  // ISO datetime
-  updatedAt: string;  // ISO datetime
-  closedAt?: string;  // ISO datetime — set when status becomes 'resolved'
+  createdAt: string;
+  updatedAt: string;
+  closedAt?: string;
 }
