@@ -87,7 +87,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           facilityName: p.facilityName,
           facilityAddress: p.facilityAddress,
           date: new Date().toISOString(),
-          inspectorName: p.writer || 'المفتش (اسم افتراضي)',
+          inspectorName: p.writer || settings.inspectorName || 'المفتش',
           items: data,
           status,
           officeName: settings.officeName || '',
@@ -148,16 +148,16 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const handleFinish = useCallback(async () => {
     setIsFinishing(true);
     const saved = await saveInspection('completed');
-    if (!saved) return;
+    if (!saved) {
+      setIsFinishing(false);
+      return;
+    }
 
     const agendaId = paramsRef.current.agendaId;
     if (agendaId) {
       try {
-        const agenda: AgendaItem[] = await AgendaRepository.getAll();
-        const updated = agenda.map(item =>
-          item.id === agendaId ? { ...item, completed: true } : item
-        );
-        await AgendaRepository.saveAll(updated);
+        // FIX #4: use the dedicated method instead of the non-existent saveAll()
+        await AgendaRepository.updateInspectionLink(agendaId, inspectionId);
       } catch (e) {
         console.error('Error updating agenda:', e);
       }
@@ -167,7 +167,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     }
 
     router.replace('/(tabs)/inspection');
-  }, [saveInspection, router]);
+  }, [saveInspection, inspectionId, router]);
 
   // ─── Derived values ──────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);

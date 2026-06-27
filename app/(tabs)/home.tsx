@@ -85,14 +85,24 @@ export default function HomeScreen() {
           onViewAll={() => router.push('/(tabs)/inspection')}
         />
 
+        {/* FIX #2: map Facility → SavedInspection shape with safe fallback fields */}
         {recentFacilities.length > 0 && (
           <InspectionSection
             title="آخر المنشآت المفتشة"
             items={recentFacilities.map(f => ({
               id:              f.id,
+              facilityId:      f.id,
               facilityName:    f.projectName,
-              facilityAddress: f.address,
-            } as any))}
+              facilityAddress: f.address ?? '',
+              date:            new Date().toISOString(),
+              inspectorName:   '',
+              items:           [],
+              status:          'completed' as const,
+              officeName:      '',
+              inspectionCause: '',
+              referenceDocument: '',
+              committeeMembers:  [],
+            }))}
             emptyIcon="home"
             emptyText=""
             onItemPress={() => router.push('/screens/facilities')}

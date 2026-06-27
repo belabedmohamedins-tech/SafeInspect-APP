@@ -7,7 +7,7 @@ export interface AppSettings {
   officeName: string;
   inspectorName: string;
   inspectionCause: string;
-  /** Cached stats written by InspectionRepository.writeAll(). May be undefined on first run. */
+  /** Cached stats written by InspectionRepository.writeAll() or stats.tsx. */
   statsCache?: StatsCache;
 }
 
@@ -39,11 +39,13 @@ export const SettingsRepository = {
     }
   },
 
-  async set(settings: Partial<Omit<AppSettings, 'statsCache'>>): Promise<void> {
+  // FIX #3: statsCache is now an accepted field so stats.tsx can persist it
+  async set(settings: Partial<AppSettings>): Promise<void> {
     const pairs: [string, string][] = [];
     if (settings.officeName      !== undefined) pairs.push([StorageKeys.OFFICE_NAME,      settings.officeName]);
     if (settings.inspectorName   !== undefined) pairs.push([StorageKeys.INSPECTOR_NAME,   settings.inspectorName]);
     if (settings.inspectionCause !== undefined) pairs.push([StorageKeys.INSPECTION_CAUSE, settings.inspectionCause]);
+    if (settings.statsCache      !== undefined) pairs.push([StorageKeys.STATS_CACHE,      JSON.stringify(settings.statsCache)]);
     if (pairs.length > 0) await AsyncStorage.multiSet(pairs);
   },
 };

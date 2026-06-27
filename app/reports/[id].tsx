@@ -67,15 +67,22 @@ export default function ReportDetailScreen() {
     );
   };
 
+  // FIX #1: pass ALL metadata fields so the checklist can re-save correctly
   const reopenInspection = () => {
     if (!inspection) return;
     router.push({
       pathname: '/(tabs)/inspection/checklist',
       params: {
-        draftId:         inspection.id,
-        facilityId:      inspection.facilityId,
-        facilityName:    inspection.facilityName,
-        facilityAddress: inspection.facilityAddress,
+        draftId:          inspection.id,
+        facilityId:       inspection.facilityId,
+        facilityName:     inspection.facilityName,
+        facilityAddress:  inspection.facilityAddress ?? '',
+        cause:            inspection.inspectionCause ?? '',
+        reference:        inspection.referenceDocument ?? '',
+        committeeMembers: JSON.stringify(inspection.committeeMembers ?? []),
+        writer:           inspection.inspectorName ?? '',
+        lat:              inspection.coordinates?.latitude  ?? '',
+        lng:              inspection.coordinates?.longitude ?? '',
       },
     });
   };
@@ -227,18 +234,12 @@ export default function ReportDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:         { flex: 1, backgroundColor: Colors.background },
-  centered:         { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  errorText:        { fontSize: FontSize.lg, color: Colors.danger },
-  headerActions:    { flexDirection: 'row' },
-  headerBtn:        { marginRight: Spacing.md },
-  header: {
-    backgroundColor: Colors.surface,
-    padding: Spacing.base,
-    marginBottom: Spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
+  safeArea:          { flex: 1, backgroundColor: Colors.background },
+  centered:          { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText:         { fontSize: FontSize.lg, color: Colors.danger },
+  headerActions:     { flexDirection: 'row' },
+  headerBtn:         { marginRight: Spacing.md },
+  header:            { backgroundColor: Colors.surface, padding: Spacing.base, marginBottom: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
   officeName:        { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.primary, marginBottom: 4 },
   facilityName:      { fontSize: FontSize.xxl, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
   address:           { fontSize: FontSize.base, color: Colors.textSecondary, marginBottom: 4 },
