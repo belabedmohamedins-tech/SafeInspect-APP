@@ -32,9 +32,11 @@
     "expo-linear-gradient": "~56.0.4",
     "expo-linking": "~56.0.14",
     "expo-location": "~56.0.18",
+    "expo-local-authentication": "~15.1.0",
     "expo-notifications": "~0.31.0",
     "expo-print": "~56.0.4",
     "expo-router": "~56.2.11",
+    "expo-secure-store": "~14.2.0",
     "expo-sharing": "~56.0.18",
     "expo-splash-screen": "~56.0.10",
     "expo-status-bar": "~56.0.4",
@@ -78,14 +80,12 @@
       "**/__tests__/**/*.test.ts?(x)",
       "**/__tests__/**/*.test.tsx"
     ],
-    "setupFilesAfterFramework": [
-      "@testing-library/jest-native/extend-expect"
-    ],
+    "setupFilesAfterFramework": [],
     "moduleNameMapper": {
       "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-worklets))"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-worklets))"
     ]
   }
 }
