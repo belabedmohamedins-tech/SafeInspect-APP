@@ -4,13 +4,39 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { I18nProvider } from '../src/i18n';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
+import { initializeDatabase } from '../src/db/schema';
+import { startSyncScheduler } from '../src/db/syncEngine';
 
 export default function RootLayout() {
   const router = useRouter();
   const segments = useSegments();
   const [checked, setChecked] = useState(false);
+  const [dbReady, setDbReady] = useState(false);
 
+  // ── 1. Initialize DB and sync scheduler on app start ──────────────────────
   useEffect(() => {
+    let stopSync: (() => void) | undefined;
+
+    initializeDatabase()
+      .then(() => {
+        setDbReady(true);
+        // Start background sync — runs every 30s and triggers immediately on reconnect
+        stopSync = startSyncScheduler(30000);
+      })
+      .catch((err) => {
+        console.error('[RAQIB] Database initialization failed:', err);
+      });
+
+    return () => {
+      // Clean up sync scheduler when app unmounts
+      stopSync?.();
+    };
+  }, []);
+
+  // ── 2. Onboarding check — only runs after DB is ready ─────────────────────
+  useEffect(() => {
+    if (!dbReady) return;
+
     (async () => {
       const done = await SettingsRepository.get<string>('onboardingDone');
       if (done !== 'true') {
@@ -20,7 +46,7 @@ export default function RootLayout() {
       }
       setChecked(true);
     })();
-  }, []);
+  }, [dbReady]);
 
   return (
     <I18nProvider>
