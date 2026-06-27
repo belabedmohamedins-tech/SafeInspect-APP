@@ -5,12 +5,12 @@ import { AgendaItem } from '../../src/types';
 
 // ─── Mock AsyncStorage with an in-memory Map ─────────────────────────────────
 
-const store = new Map<string, string>();
+const mockStore = new Map<string, string>();
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn((key: string) => Promise.resolve(store.get(key) ?? null)),
-  setItem:    jest.fn((key: string, value: string) => { store.set(key, value); return Promise.resolve(); }),
-  removeItem: jest.fn((key: string) => { store.delete(key); return Promise.resolve(); }),
+  getItem:    jest.fn((key: string) => Promise.resolve(mockStore.get(key) ?? null)),
+  setItem:    jest.fn((key: string, value: string) => { mockStore.set(key, value); return Promise.resolve(); }),
+  removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
 }));
 
 function makeAgendaItem(overrides: Partial<AgendaItem> & { id: string }): AgendaItem {
@@ -25,7 +25,7 @@ function makeAgendaItem(overrides: Partial<AgendaItem> & { id: string }): Agenda
   };
 }
 
-beforeEach(() => store.clear());
+beforeEach(() => mockStore.clear());
 
 // ─── getAll ───────────────────────────────────────────────────────────────────
 
@@ -36,12 +36,12 @@ describe('AgendaRepository.getAll', () => {
 
   it('returns all stored agenda items', async () => {
     const data = [makeAgendaItem({ id: '1' }), makeAgendaItem({ id: '2' })];
-    store.set(StorageKeys.AGENDA, JSON.stringify(data));
+    mockStore.set(StorageKeys.AGENDA, JSON.stringify(data));
     expect(await AgendaRepository.getAll()).toHaveLength(2);
   });
 
   it('returns empty array on corrupt JSON (graceful)', async () => {
-    store.set(StorageKeys.AGENDA, 'BAD_JSON');
+    mockStore.set(StorageKeys.AGENDA, 'BAD_JSON');
     expect(await AgendaRepository.getAll()).toEqual([]);
   });
 });
@@ -50,7 +50,7 @@ describe('AgendaRepository.getAll', () => {
 
 describe('AgendaRepository.getById', () => {
   it('returns the matching item', async () => {
-    store.set(StorageKeys.AGENDA, JSON.stringify([makeAgendaItem({ id: 'abc' })]));
+    mockStore.set(StorageKeys.AGENDA, JSON.stringify([makeAgendaItem({ id: 'abc' })]));
     const result = await AgendaRepository.getById('abc');
     expect(result?.id).toBe('abc');
   });
@@ -82,7 +82,7 @@ describe('AgendaRepository.save', () => {
 describe('AgendaRepository.delete', () => {
   it('removes the item with the given id', async () => {
     const data = [makeAgendaItem({ id: '1' }), makeAgendaItem({ id: '2' })];
-    store.set(StorageKeys.AGENDA, JSON.stringify(data));
+    mockStore.set(StorageKeys.AGENDA, JSON.stringify(data));
     await AgendaRepository.delete('1');
     const all = await AgendaRepository.getAll();
     expect(all).toHaveLength(1);
@@ -111,7 +111,7 @@ describe('AgendaRepository.updateInspectionLink', () => {
 
   it('does not modify other agenda items', async () => {
     const data = [makeAgendaItem({ id: 'a' }), makeAgendaItem({ id: 'b' })];
-    store.set(StorageKeys.AGENDA, JSON.stringify(data));
+    mockStore.set(StorageKeys.AGENDA, JSON.stringify(data));
     await AgendaRepository.updateInspectionLink('a', 'ins-001');
     const b = await AgendaRepository.getById('b');
     expect(b?.inspectionId).toBeUndefined();

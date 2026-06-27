@@ -6,12 +6,12 @@ import { SavedInspection } from '../../src/types';
 
 // ─── Mock AsyncStorage with an in-memory Map ─────────────────────────────────
 
-const store = new Map<string, string>();
+const mockStore = new Map<string, string>();
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn((key: string) => Promise.resolve(store.get(key) ?? null)),
-  setItem:    jest.fn((key: string, value: string) => { store.set(key, value); return Promise.resolve(); }),
-  removeItem: jest.fn((key: string) => { store.delete(key); return Promise.resolve(); }),
+  getItem:    jest.fn((key: string) => Promise.resolve(mockStore.get(key) ?? null)),
+  setItem:    jest.fn((key: string, value: string) => { mockStore.set(key, value); return Promise.resolve(); }),
+  removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
 }));
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -30,7 +30,7 @@ function makeInspection(overrides: Partial<SavedInspection> & { id: string; stat
 
 // ─── Setup: clear store before each test ─────────────────────────────────────
 
-beforeEach(() => store.clear());
+beforeEach(() => mockStore.clear());
 
 // ─── getAll ───────────────────────────────────────────────────────────────────
 
@@ -41,12 +41,12 @@ describe('InspectionRepository.getAll', () => {
 
   it('returns parsed inspections from storage', async () => {
     const data = [makeInspection({ id: '1', status: 'completed' })];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     expect(await InspectionRepository.getAll()).toHaveLength(1);
   });
 
   it('returns empty array on JSON parse error (graceful)', async () => {
-    store.set(StorageKeys.INSPECTIONS, 'NOT_JSON');
+    mockStore.set(StorageKeys.INSPECTIONS, 'NOT_JSON');
     expect(await InspectionRepository.getAll()).toEqual([]);
   });
 });
@@ -60,7 +60,7 @@ describe('InspectionRepository.getCompleted', () => {
       makeInspection({ id: '2', status: 'in-progress' }),
       makeInspection({ id: '3', status: 'draft' }),
     ];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     const result = await InspectionRepository.getCompleted();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('1');
@@ -76,7 +76,7 @@ describe('InspectionRepository.getDrafts', () => {
       makeInspection({ id: '2', status: 'in-progress' }),
       makeInspection({ id: '3', status: 'draft' }),
     ];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     const result = await InspectionRepository.getDrafts();
     expect(result).toHaveLength(2);
     expect(result.map(r => r.id)).toEqual(expect.arrayContaining(['2', '3']));
@@ -84,7 +84,7 @@ describe('InspectionRepository.getDrafts', () => {
 
   it('returns empty array when there are no drafts', async () => {
     const data = [makeInspection({ id: '1', status: 'completed' })];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     expect(await InspectionRepository.getDrafts()).toEqual([]);
   });
 });
@@ -94,7 +94,7 @@ describe('InspectionRepository.getDrafts', () => {
 describe('InspectionRepository.getById', () => {
   it('returns the matching inspection', async () => {
     const data = [makeInspection({ id: 'abc', status: 'completed' })];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     const result = await InspectionRepository.getById('abc');
     expect(result?.id).toBe('abc');
   });
@@ -123,9 +123,9 @@ describe('InspectionRepository.save', () => {
   });
 
   it('invalidates stats cache on save', async () => {
-    store.set(StorageKeys.STATS_CACHE, 'stale');
+    mockStore.set(StorageKeys.STATS_CACHE, 'stale');
     await InspectionRepository.save(makeInspection({ id: 'y', status: 'completed' }));
-    expect(store.has(StorageKeys.STATS_CACHE)).toBe(false);
+    expect(mockStore.has(StorageKeys.STATS_CACHE)).toBe(false);
   });
 });
 
@@ -137,7 +137,7 @@ describe('InspectionRepository.delete', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'completed' }),
     ];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     await InspectionRepository.delete('1');
     const all = await InspectionRepository.getAll();
     expect(all).toHaveLength(1);
@@ -146,7 +146,7 @@ describe('InspectionRepository.delete', () => {
 
   it('is a no-op for an unknown id', async () => {
     const data = [makeInspection({ id: '1', status: 'completed' })];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     await InspectionRepository.delete('missing');
     expect(await InspectionRepository.getAll()).toHaveLength(1);
   });
@@ -161,7 +161,7 @@ describe('InspectionRepository.deleteMany', () => {
       makeInspection({ id: '2', status: 'completed' }),
       makeInspection({ id: '3', status: 'completed' }),
     ];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     await InspectionRepository.deleteMany(['1', '3']);
     const all = await InspectionRepository.getAll();
     expect(all).toHaveLength(1);
@@ -170,7 +170,7 @@ describe('InspectionRepository.deleteMany', () => {
 
   it('handles empty ids array gracefully', async () => {
     const data = [makeInspection({ id: '1', status: 'completed' })];
-    store.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
     await InspectionRepository.deleteMany([]);
     expect(await InspectionRepository.getAll()).toHaveLength(1);
   });

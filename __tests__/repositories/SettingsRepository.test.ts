@@ -4,19 +4,19 @@ import { StorageKeys } from '../../src/repositories/keys';
 
 // ─── Mock AsyncStorage with in-memory map (multiGet / multiSet) ───────────────
 
-const store = new Map<string, string>();
+const mockStore = new Map<string, string>();
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
   multiGet: jest.fn((keys: string[]) =>
-    Promise.resolve(keys.map((k: string) => [k, store.get(k) ?? null] as [string, string | null]))
+    Promise.resolve(keys.map((k: string) => [k, mockStore.get(k) ?? null] as [string, string | null]))
   ),
   multiSet: jest.fn((pairs: [string, string][]) => {
-    pairs.forEach(([k, v]) => store.set(k, v));
+    pairs.forEach(([k, v]) => mockStore.set(k, v));
     return Promise.resolve();
   }),
 }));
 
-beforeEach(() => store.clear());
+beforeEach(() => mockStore.clear());
 
 // ─── get ──────────────────────────────────────────────────────────────────────
 
@@ -29,9 +29,9 @@ describe('SettingsRepository.get', () => {
   });
 
   it('returns values from storage when present', async () => {
-    store.set(StorageKeys.OFFICE_NAME, 'مكتب الصحة');
-    store.set(StorageKeys.INSPECTOR_NAME, 'محمد');
-    store.set(StorageKeys.INSPECTION_CAUSE, 'روتيني');
+    mockStore.set(StorageKeys.OFFICE_NAME, 'مكتب الصحة');
+    mockStore.set(StorageKeys.INSPECTOR_NAME, 'محمد');
+    mockStore.set(StorageKeys.INSPECTION_CAUSE, 'روتيني');
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('مكتب الصحة');
     expect(settings.inspectorName).toBe('محمد');
