@@ -14,6 +14,7 @@
 //   AUDIT_LOG            → AuditLogRepository (append-only)
 //   INSPECTION_HASHES    → IntegrityService (tamperproof hashes)
 //   CORRECTIVE_ACTIONS   → CorrectiveActionRepository
+//   CAP_NOTIF_LAST_RUN   → CapNotificationService (ISO date of last scheduling pass)
 
 export const StorageKeys = {
   INSPECTIONS:           'inspections',
@@ -28,4 +29,5 @@ export const StorageKeys = {
   AUDIT_LOG:             'auditLog',
   INSPECTION_HASHES:     'inspectionHashes',
   CORRECTIVE_ACTIONS:    'correctiveActions',
+  CAP_NOTIF_LAST_RUN:    'capNotifLastRun',
 } as const;

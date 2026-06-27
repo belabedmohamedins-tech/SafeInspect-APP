@@ -2,6 +2,7 @@
 // Pure async function — no React, no hooks. Easy to unit-test.
 import { facilities as hardcodedFacilities } from '../facilitiesData';
 import { AgendaRepository } from '../repositories/AgendaRepository';
+import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../repositories/InspectionRepository';
 import { SettingsRepository } from '../repositories/SettingsRepository';
 import { getUserFacilities } from '../facilitiesService';
@@ -19,6 +20,7 @@ export interface HomeData {
     totalCompleted:         number;
     totalDrafts:            number;
     nonCompliantFacilities: number;
+    openCapCount:           number;  // open + in-progress + overdue CAP items
   };
 }
 
@@ -33,12 +35,13 @@ export function getFacilityForAgenda(
 }
 
 export async function loadHomeData(): Promise<HomeData> {
-  const [settings, allAgenda, completed, drafts, userFacs] = await Promise.all([
+  const [settings, allAgenda, completed, drafts, userFacs, openCap] = await Promise.all([
     SettingsRepository.get(),
     AgendaRepository.getAll(),
     InspectionRepository.getCompleted(),
     InspectionRepository.getDrafts(),
     getUserFacilities(),
+    CorrectiveActionRepository.getOpen(),
   ]);
 
   // ── Agenda ────────────────────────────────────────────────────────
@@ -72,9 +75,10 @@ export async function loadHomeData(): Promise<HomeData> {
     recentFacilities:      userFacs.slice(-3).reverse(),
     userFacilities:        userFacs,
     stats: {
-      totalCompleted:         completedInspections.length,
-      totalDrafts:            inProgressInspections.length,
+      totalCompleted:         completed.length,
+      totalDrafts:            drafts.length,
       nonCompliantFacilities: nonCompliant,
+      openCapCount:           openCap.length,
     },
   };
 }
