@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/hooks/useCollapsibleSections.ts
  */
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../hooks/useCollapsibleSections';
 
 describe('useCollapsibleSections', () => {

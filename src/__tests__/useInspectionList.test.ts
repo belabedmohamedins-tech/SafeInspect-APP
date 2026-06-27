@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/hooks/useInspectionList.ts
  */
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useInspectionList } from '../hooks/useInspectionList';
 import { SavedInspection } from '../types';
@@ -44,9 +44,8 @@ describe('useInspectionList — loading', () => {
   it('loads all inspections on focus', async () => {
     const data = [makeInsp('i1', 'completed', '2026-05-01T00:00:00Z')];
     mockGetAll.mockResolvedValue(data);
-    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
-    await waitForNextUpdate();
-    expect(result.current.totalCount).toBe(1);
+    const { result } = renderHook(() => useInspectionList());
+    await waitFor(() => expect(result.current.totalCount).toBe(1));
   });
 
   it('filtered is sorted by date descending by default', async () => {
@@ -54,8 +53,8 @@ describe('useInspectionList — loading', () => {
       makeInsp('old', 'completed', '2026-01-01T00:00:00Z'),
       makeInsp('new', 'completed', '2026-06-01T00:00:00Z'),
     ]);
-    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useInspectionList());
+    await waitFor(() => expect(result.current.filtered).toHaveLength(2));
     expect(result.current.filtered[0].id).toBe('new');
     expect(result.current.filtered[1].id).toBe('old');
   });
@@ -69,7 +68,7 @@ describe('useInspectionList — filtering', () => {
       makeInsp('d1', 'in-progress', '2026-04-01T00:00:00Z', 'صيدلية النور',  'شارع رقم 2'),
     ]);
     const hook = renderHook(() => useInspectionList());
-    await hook.waitForNextUpdate();
+    await waitFor(() => expect(hook.result.current.totalCount).toBe(3));
     return hook.result;
   }
 
@@ -126,15 +125,15 @@ describe('useInspectionList — filtering', () => {
 
 describe('useInspectionList — setters', () => {
   it('setSearchQuery updates searchQuery', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useInspectionList());
+    await waitFor(() => expect(result.current.totalCount).toBeDefined());
     act(() => result.current.setSearchQuery('بحث'));
     expect(result.current.searchQuery).toBe('بحث');
   });
 
   it('setActiveFilter updates activeFilter', async () => {
-    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useInspectionList());
+    await waitFor(() => expect(result.current.totalCount).toBeDefined());
     act(() => result.current.setActiveFilter('completed'));
     expect(result.current.activeFilter).toBe('completed');
   });

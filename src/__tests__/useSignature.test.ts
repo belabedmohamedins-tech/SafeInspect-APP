@@ -1,7 +1,7 @@
 /**
  * Unit tests for src/hooks/useSignature.ts
  */
-import { act, renderHook } from '@testing-library/react-hooks';
+import { act, renderHook } from '@testing-library/react-native';
 import { useSignature } from '../hooks/useSignature';
 
 describe('useSignature', () => {

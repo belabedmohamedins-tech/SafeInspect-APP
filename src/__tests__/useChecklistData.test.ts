@@ -4,10 +4,10 @@
  * Approach:
  *  - Mock expo-crypto, expo-router, react-native Alert, and all repositories
  *    so the hook can run in a plain Node/Jest environment.
- *  - Use @testing-library/react-hooks for renderHook + act.
+ *  - Use @testing-library/react-native for renderHook + act.
  */
 
-import { act, renderHook, waitForNextUpdate } from '@testing-library/react-hooks';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 
 // ─── Mocks ─────────────────────────────────────────────────────────────────────
@@ -75,9 +75,8 @@ describe('useChecklistData — initial load', () => {
     const { result } = renderHook(() =>
       useChecklistData({ ...BASE_PARAMS, activity }, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
-    expect(result.current.isLoading).toBe(false);
     expect(result.current.data.length).toBe(criteriaByActivity[activity].length);
   });
 
@@ -85,7 +84,7 @@ describe('useChecklistData — initial load', () => {
     const { result } = renderHook(() =>
       useChecklistData({ ...BASE_PARAMS, activity: '__UNKNOWN__' }, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(result.current.data.length).toBe(criteriaByActivity.default.length);
   });
@@ -94,7 +93,7 @@ describe('useChecklistData — initial load', () => {
     const { result } = renderHook(() =>
       useChecklistData(BASE_PARAMS, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     result.current.data.forEach(item =>
       expect(item.complianceStatus).toBe('not-evaluated')
@@ -108,7 +107,7 @@ describe('useChecklistData — initial load', () => {
     const { result } = renderHook(() =>
       useChecklistData({ ...BASE_PARAMS, draftId: 'draft-id' }, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     expect(result.current.data).toEqual(draftItems);
   });
@@ -119,7 +118,7 @@ describe('useChecklistData — item handlers', () => {
     const { result } = renderHook(() =>
       useChecklistData(BASE_PARAMS, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
     return result;
   }
 
@@ -156,14 +155,14 @@ describe('useChecklistData — item handlers', () => {
 describe('useChecklistData — derived values', () => {
   it('progressPercent is 0 when nothing is evaluated', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS, undefined));
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
     expect(result.current.progressPercent).toBe(0);
     expect(result.current.evaluatedItems).toBe(0);
   });
 
   it('progressPercent is 100 when all items are evaluated', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS, undefined));
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     act(() => {
       result.current.data.forEach(item =>
@@ -176,7 +175,7 @@ describe('useChecklistData — derived values', () => {
 
   it('sections groups items by axis', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS, undefined));
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     const allItems = result.current.data;
     const uniqueAxes = Array.from(new Set(allItems.map(i => i.axis || 'أخرى')));
@@ -187,7 +186,7 @@ describe('useChecklistData — derived values', () => {
 describe('useChecklistData — handleFinish', () => {
   it('calls InspectionRepository.save with status="completed" and navigates away', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS, undefined));
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     await act(async () => {
       await result.current.handleFinish();
@@ -203,7 +202,7 @@ describe('useChecklistData — handleFinish', () => {
     const { result } = renderHook(() =>
       useChecklistData({ ...BASE_PARAMS, agendaId: 'agenda-99' }, undefined)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     await act(async () => {
       await result.current.handleFinish();
@@ -214,7 +213,7 @@ describe('useChecklistData — handleFinish', () => {
 
   it('attaches score and grade to the saved inspection', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS, undefined));
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     // evaluate all items so a score can be computed
     act(() => {
@@ -237,7 +236,7 @@ describe('useChecklistData — handleFinish', () => {
     const { result } = renderHook(() =>
       useChecklistData(BASE_PARAMS, sig)
     );
-    await waitForNextUpdate();
+    await waitFor(() => expect(result.current.isLoading).toBe(false));
 
     await act(async () => {
       await result.current.handleFinish();
