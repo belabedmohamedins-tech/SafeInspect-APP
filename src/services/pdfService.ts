@@ -7,19 +7,11 @@ import { SettingsRepository } from '../repositories/SettingsRepository';
 import { InspectionItem, SavedInspection } from '../types';
 import { formatDateLong } from '../utils/dateUtils';
 import { generateFileName } from '../utils/fileUtils';
+import { groupByAxisRaw } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
 import { getStatusText } from '../utils/statusUtils';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function groupItemsByAxis(items: InspectionItem[]): Record<string, InspectionItem[]> {
-  return items.reduce<Record<string, InspectionItem[]>>((acc, item) => {
-    const axis = item.axis || 'أخرى';
-    if (!acc[axis]) acc[axis] = [];
-    acc[axis].push(item);
-    return acc;
-  }, {});
-}
 
 /** Returns a CSS background color matching the compliance status. */
 function statusBg(status: InspectionItem['complianceStatus']): string {
@@ -68,7 +60,7 @@ function buildReportHTML(
   inspection: SavedInspection,
   fallbackInspector: string,
 ): string {
-  const groups     = groupItemsByAxis(inspection.items);
+  const groups     = groupByAxisRaw(inspection.items);
   const inspector  = inspection.inspectorName.trim() || fallbackInspector || 'غير محدد';
   const office     = inspection.officeName?.trim() || '';
 
@@ -133,7 +125,7 @@ function buildReportHTML(
 
   // ── Checklist rows grouped by axis ──────────────────────────────────────
   let rowIndex = 0;
-  const groupsHTML = Object.entries(groups)
+  const groupsHTML = groups
     .map(([axis, items]) => {
       const rows = items
         .map(item => {
