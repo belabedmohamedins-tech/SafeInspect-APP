@@ -9,6 +9,15 @@ import { getAllFacilities } from '../../src/facilitiesService';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { Facility } from '../../src/types';
 
+/** Escape special HTML characters to prevent XSS in WebView popups. */
+const escHtml = (s: string) =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+
 export default function MapScreen() {
   const [html, setHtml]       = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -40,13 +49,14 @@ export default function MapScreen() {
           .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())[0];
 
         let weight = 1;
-        if (latest?.grade === 'A')           weight = 0.5;
-        else if (latest?.grade === 'B')      weight = 1.5;
-        else if (latest?.grade === 'C')      weight = 3;
-        else if (latest?.grade === 'D')      weight = 5;
+        if (latest?.grade === 'A')            weight = 0.5;
+        else if (latest?.grade === 'B')       weight = 1.5;
+        else if (latest?.grade === 'C')       weight = 3;
+        else if (latest?.grade === 'D')       weight = 5;
         else if (latest?.score !== undefined) weight = ((100 - latest.score) / 100) * 5;
 
-        points.push({ lat, lng, name: facility.name ?? '', weight });
+        // Fix: Facility type uses `projectName`, not `name`
+        points.push({ lat, lng, name: facility.projectName ?? '', weight });
       });
 
       setHtml(generateMapHtml(points));
@@ -133,7 +143,7 @@ function generateMapHtml(points: { lat: number; lng: number; name: string; weigh
           html:'<div style="background:${markerColor};width:10px;height:10px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 3px rgba(0,0,0,.35)"></div>',
           iconSize:[10,10]
         })
-      }).bindPopup('<b>${p.name.replace(/'/g, '&#39;')}</b><br>وزن: ${p.weight.toFixed(1)}').addTo(map);
+      }).bindPopup('<b>${escHtml(p.name)}</b><br>وزن: ${p.weight.toFixed(1)}').addTo(map);
     `).join('')}
   </script>
 </body>
