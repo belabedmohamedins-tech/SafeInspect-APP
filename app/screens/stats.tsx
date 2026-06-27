@@ -9,7 +9,6 @@ import { InspectionRepository } from '../../src/repositories/InspectionRepositor
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
 
-// Maps grade letter to design-token color
 const GRADE_COLORS: Record<string, string> = {
   A: Colors.gradeA,
   B: Colors.gradeB,

@@ -152,7 +152,6 @@ export default function ReportDetailScreen() {
         }}
       />
 
-      {/* Info header */}
       <View style={styles.header}>
         {inspection.officeName && <Text style={styles.officeName}>{inspection.officeName}</Text>}
         <Text style={styles.facilityName}>{inspection.facilityName}</Text>
