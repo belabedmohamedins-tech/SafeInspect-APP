@@ -50,6 +50,12 @@ export interface Facility {
   ownerName: string;
   activity: string;
   address: string;
+  /**
+   * Geographic coordinates for map display and geofencing.
+   * Optional — populated when the facility has known GPS data.
+   */
+  lat?: number;
+  lng?: number;
   // Fields below are metadata from the source data set.
   // They are rarely populated by app-created facilities — treat as optional.
   licenseType?: string;
