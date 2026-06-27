@@ -33,6 +33,7 @@
     "expo-linking": "~56.0.14",
     "expo-location": "~56.0.18",
     "expo-local-authentication": "~15.1.0",
+    "expo-modules-core": "~56.0.0",
     "expo-notifications": "~0.31.0",
     "expo-print": "~56.0.4",
     "expo-router": "~56.2.11",
@@ -82,7 +83,8 @@
     ],
     "setupFilesAfterFramework": [],
     "moduleNameMapper": {
-      "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts"
+      "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts",
+      "^expo-modules-core$": "<rootDir>/src/__mocks__/expo-modules-core.ts"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-worklets))"
