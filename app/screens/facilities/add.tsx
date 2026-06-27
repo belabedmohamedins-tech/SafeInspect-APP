@@ -55,8 +55,8 @@ export default function AddFacilityScreen() {
     try {
       const selected = facilityCategories[selectedCategoryIndex];
       const activityDisplay = `${selected.rubrique} - ${selected.label} (${selected.regime})`;
+      // NOTE: no `id` field — FacilityRepository.add() generates it automatically
       await addUserFacility({
-        id: '',
         projectName,
         ownerName,
         activity: activityDisplay,
