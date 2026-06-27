@@ -1,0 +1,41 @@
+// src/services/geofencingService.ts
+// Haversine-based proximity check — no native module needed.
+
+const EARTH_RADIUS_M = 6_371_000;
+const GEOFENCE_RADIUS_M = 300; // PRD § 13.5 — 300 m threshold
+
+function toRad(deg: number): number {
+  return (deg * Math.PI) / 180;
+}
+
+export function haversineDistance(
+  lat1: number, lng1: number,
+  lat2: number, lng2: number
+): number {
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return EARTH_RADIUS_M * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+}
+
+export interface ProximityResult {
+  withinRange: boolean;
+  distanceMetres: number;
+  thresholdMetres: number;
+}
+
+export function checkProximity(
+  facilityLat: number,
+  facilityLng: number,
+  userLat: number,
+  userLng: number
+): ProximityResult {
+  const distanceMetres = haversineDistance(facilityLat, facilityLng, userLat, userLng);
+  return {
+    withinRange: distanceMetres <= GEOFENCE_RADIUS_M,
+    distanceMetres: Math.round(distanceMetres),
+    thresholdMetres: GEOFENCE_RADIUS_M,
+  };
+}

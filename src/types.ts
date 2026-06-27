@@ -52,6 +52,13 @@ export interface SavedInspection {
    * Use IntegrityService.verifyInspection() to check for tampering.
    */
   integrityHash?: string;
+
+  /**
+   * Written when the inspector overrides the geofencing gate.
+   * Contains the justification text entered by the inspector.
+   * Null / undefined = inspector was within range (no override needed).
+   */
+  geofenceOverrideNote?: string;
 }
 
 export interface Facility {
