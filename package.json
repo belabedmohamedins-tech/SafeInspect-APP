@@ -78,7 +78,8 @@
       "**/__tests__/**/*.test.tsx"
     ],
     "moduleNameMapper": {
-      "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts"
+      "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts",
+      "@react-native-async-storage/async-storage": "<rootDir>/__mocks__/@react-native-async-storage/async-storage.js"
     },
     "transformIgnorePatterns": [
       "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-worklets))"
