@@ -20,7 +20,7 @@ export interface HomeData {
     totalCompleted:         number;
     totalDrafts:            number;
     nonCompliantFacilities: number;
-    openCapCount:           number;  // open + in-progress + overdue CAP items
+    openCapCount:           number;
   };
 }
 
@@ -36,7 +36,7 @@ export function getFacilityForAgenda(
 
 export async function loadHomeData(): Promise<HomeData> {
   const [settings, allAgenda, completed, drafts, userFacs, openCap] = await Promise.all([
-    SettingsRepository.get(),
+    SettingsRepository.getAll(),   // fixed: was .get() with no key — always returned undefined
     AgendaRepository.getAll(),
     InspectionRepository.getCompleted(),
     InspectionRepository.getDrafts(),
@@ -44,7 +44,10 @@ export async function loadHomeData(): Promise<HomeData> {
     CorrectiveActionRepository.getOpen(),
   ]);
 
-  // ── Agenda ────────────────────────────────────────────────────────
+  // Null-safe: getAll() returns {} on first run (no data saved yet)
+  const s = settings ?? {};
+
+  // ── Agenda ──────────────────────────────────────────────────────────────
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const agendaItems = allAgenda
@@ -57,18 +60,18 @@ export async function loadHomeData(): Promise<HomeData> {
     .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
     .slice(0, 3);
 
-  // ── Inspections ───────────────────────────────────────────────────
+  // ── Inspections ─────────────────────────────────────────────────────────
   const completedInspections  = completed.slice(-3).reverse();
   const inProgressInspections = drafts.slice(-3).reverse();
 
-  // ── Stats ─────────────────────────────────────────────────────────
+  // ── Stats ────────────────────────────────────────────────────────────────
   let nonCompliant = 0;
   completedInspections.forEach(ins => {
     if (getComplianceSummary(ins.items).nonCompliant > 0) nonCompliant++;
   });
 
   return {
-    officeName:            settings.officeName || '',
+    officeName:            String(s.officeName ?? ''),
     agendaItems,
     completedInspections,
     inProgressInspections,

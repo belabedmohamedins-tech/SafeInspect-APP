@@ -1,7 +1,7 @@
 // src/hooks/useHomeData.ts
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
-import { AgendaItem, Facility, SavedInspection } from '../types';
+import { AgendaItem, Facility } from '../types';
 import { loadHomeData, getFacilityForAgenda as _getFacility, HomeData } from '../utils/loadHomeData';
 
 const EMPTY: HomeData = {
@@ -11,7 +11,12 @@ const EMPTY: HomeData = {
   inProgressInspections: [],
   recentFacilities:      [],
   userFacilities:        [],
-  stats: { totalCompleted: 0, totalDrafts: 0, nonCompliantFacilities: 0 },
+  stats: {
+    totalCompleted:         0,
+    totalDrafts:            0,
+    nonCompliantFacilities: 0,
+    openCapCount:           0,   // fixed: was missing, causing TS mismatch
+  },
 };
 
 export function useHomeData() {
