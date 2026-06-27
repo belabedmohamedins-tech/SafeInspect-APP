@@ -1,5 +1,6 @@
 // app/screens/settings.tsx
 import { FontAwesome } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -14,113 +15,106 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Radius, Spacing } from '../../constants';
-import { AuthRepository } from '../../src/repositories/AuthRepository';
-import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import {
+  isEnabled as isNotifEnabled,
+  requestPermission,
+  setEnabled as setNotifEnabled,
+} from '../../src/services/NotificationService';
+
+const STORAGE_KEYS = {
+  inspectorName: '@settings/inspectorName',
+  organisation:  '@settings/organisation',
+  department:    '@settings/department',
+  showGrade:     '@settings/showGrade',
+  signature:     '@signature',
+} as const;
 
 const APP_VERSION = '1.0.0';
 
 export default function SettingsScreen() {
   const router = useRouter();
 
-  // ── Inspector fields ──
   const [inspectorName, setInspectorName] = useState('');
-  const [officeName,    setOfficeName]    = useState('');
+  const [organisation,  setOrganisation]  = useState('');
+  const [department,    setDepartment]    = useState('');
+  const [showGrade,     setShowGrade]     = useState(true);
   const [saved,         setSaved]         = useState(false);
+  const [notifEnabled,  setNotifEnabledState] = useState(true);
 
-  // ── PIN state ──
-  const [pinConfigured, setPinConfigured] = useState(false);
-  const [showPinSetup,  setShowPinSetup]  = useState(false);
-  const [newPin,        setNewPin]        = useState('');
-  const [confirmPin,    setConfirmPin]    = useState('');
-  const [pinError,      setPinError]      = useState('');
-
-  // ── Biometric state ──
-  const [bioAvailable, setBioAvailable] = useState(false);
-  const [bioEnabled,   setBioEnabled]   = useState(false);
-  const [bioLabel,     setBioLabel]     = useState('البصمة / الوجه');
-
-  // ── Load ──
+  // ─── Load persisted settings ─────────────────────────────────
   useEffect(() => {
     (async () => {
-      const settings = await SettingsRepository.get();
-      setInspectorName(settings.inspectorName);
-      setOfficeName(settings.officeName);
+      try {
+        const [name, org, dept, grade] = await Promise.all([
+          AsyncStorage.getItem(STORAGE_KEYS.inspectorName),
+          AsyncStorage.getItem(STORAGE_KEYS.organisation),
+          AsyncStorage.getItem(STORAGE_KEYS.department),
+          AsyncStorage.getItem(STORAGE_KEYS.showGrade),
+        ]);
+        if (name)  setInspectorName(name);
+        if (org)   setOrganisation(org);
+        if (dept)  setDepartment(dept);
+        if (grade !== null) setShowGrade(grade === 'true');
 
-      const pin = await AuthRepository.getPin();
-      setPinConfigured(pin !== null);
-
-      const available = await AuthRepository.isBiometricAvailable();
-      setBioAvailable(available);
-      if (available) {
-        const enabled = await AuthRepository.isBiometricEnabled();
-        setBioEnabled(enabled);
-        const type = await AuthRepository.getBiometricType();
-        setBioLabel(
-          type === 'FACE_RECOGNITION' ? 'الدخول بالوجه (Face ID)'
-          : type === 'FINGERPRINT'    ? 'الدخول بالبصمة'
-          : 'البيومتري'
-        );
+        // Load notification preference
+        const enabled = await isNotifEnabled();
+        setNotifEnabledState(enabled);
+      } catch (e) {
+        console.warn('Settings load error', e);
       }
     })();
   }, []);
 
-  // ── Save inspector settings ──
+  // ─── Notification toggle handler ─────────────────────────────
+  const handleNotifToggle = async (value: boolean) => {
+    if (value) {
+      // Ask for permission before turning on
+      const granted = await requestPermission();
+      if (!granted) {
+        Alert.alert(
+          'الإذن مرفوض',
+          'يرجى تفعيل الإشعارات من إعدادات الهاتف للسماح للتطبيق بإرسال تذكيرات.'
+        );
+        return;
+      }
+    }
+    setNotifEnabledState(value);
+    await setNotifEnabled(value);
+  };
+
+  // ─── Save ────────────────────────────────────────────────────
   const handleSave = async () => {
     try {
-      await SettingsRepository.set({
-        inspectorName: inspectorName.trim(),
-        officeName:    officeName.trim(),
-      });
+      await AsyncStorage.multiSet([
+        [STORAGE_KEYS.inspectorName, inspectorName.trim()],
+        [STORAGE_KEYS.organisation,  organisation.trim()],
+        [STORAGE_KEYS.department,    department.trim()],
+        [STORAGE_KEYS.showGrade,     String(showGrade)],
+      ]);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    } catch {
+    } catch (e) {
       Alert.alert('خطأ', 'تعذّر حفظ الإعدادات');
     }
   };
 
-  // ── PIN handlers ──
-  const handleSetPin = async () => {
-    setPinError('');
-    if (newPin.length !== 4 || !/^\d{4}$/.test(newPin)) {
-      setPinError('يجب أن يتكون الرمز من 4 أرقام بالضبط');
-      return;
-    }
-    if (newPin !== confirmPin) {
-      setPinError('الرمزان غير متطابقين');
-      return;
-    }
-    await AuthRepository.setPin(newPin);
-    setPinConfigured(true);
-    setShowPinSetup(false);
-    setNewPin('');
-    setConfirmPin('');
-    Alert.alert('نجاح', 'تم تفعيل رمز الدخول بنجاح');
-  };
-
-  const handleRemovePin = () => {
+  // ─── Reset signature ─────────────────────────────────────────
+  const handleResetSignature = () => {
     Alert.alert(
-      'إلغاء رمز الدخول',
-      'سيتم إلغاء حماية التطبيق. هل أنت متأكد؟',
+      'حذف التوقيع',
+      'هل تريد حذف التوقيع المحفوظ؟',
       [
         { text: 'إلغاء', style: 'cancel' },
         {
-          text: 'نعم، إلغاء الرمز',
+          text: 'حذف',
           style: 'destructive',
           onPress: async () => {
-            await AuthRepository.setPin(null);
-            await AuthRepository.setBiometricEnabled(false);
-            setPinConfigured(false);
-            setBioEnabled(false);
+            await AsyncStorage.removeItem(STORAGE_KEYS.signature);
+            Alert.alert('تم', 'تم حذف التوقيع');
           },
         },
       ]
     );
-  };
-
-  // ── Biometric toggle ──
-  const handleBioToggle = async (value: boolean) => {
-    await AuthRepository.setBiometricEnabled(value);
-    setBioEnabled(value);
   };
 
   return (
@@ -136,102 +130,74 @@ export default function SettingsScreen() {
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-        {/* Inspector Info */}
+        {/* ─── Inspector Info ─────────────────── */}
         <Text style={styles.sectionTitle}>بيانات المفتش</Text>
         <View style={styles.card}>
-          <Field label="اسم المفتش" value={inspectorName} onChange={setInspectorName} placeholder="الاسم الكامل" />
+          <Field
+            label="اسم المفتش"
+            value={inspectorName}
+            onChange={setInspectorName}
+            placeholder="الاسم الكامل"
+          />
           <Divider />
-          <Field label="المصلحة / المكتب" value={officeName} onChange={setOfficeName} placeholder="مديرية التجارة ..." />
+          <Field
+            label="المؤسسة / الهيئة"
+            value={organisation}
+            onChange={setOrganisation}
+            placeholder="مديرية التجارة ..."
+          />
+          <Divider />
+          <Field
+            label="المصلحة / القسم"
+            value={department}
+            onChange={setDepartment}
+            placeholder="مصلحة حماية المستهلك ..."
+          />
         </View>
 
-        {/* Security */}
-        <Text style={styles.sectionTitle}>الأمان</Text>
+        {/* ─── Report Options ─────────────────── */}
+        <Text style={styles.sectionTitle}>خيارات التقرير</Text>
         <View style={styles.card}>
-
-          {/* PIN toggle */}
           <View style={styles.switchRow}>
             <Switch
-              value={pinConfigured}
-              onValueChange={v => v ? setShowPinSetup(true) : handleRemovePin()}
+              value={showGrade}
+              onValueChange={setShowGrade}
               trackColor={{ false: Colors.border, true: Colors.primary }}
               thumbColor={Colors.textInverse}
             />
-            <Text style={styles.switchLabel}>رمز الدخول (PIN)</Text>
+            <Text style={styles.switchLabel}>إظهار التنقيط (A – D) في التقارير</Text>
           </View>
-
-          {/* PIN setup form */}
-          {showPinSetup && (
-            <View style={styles.pinSetupBox}>
-              <Text style={styles.pinSetupHint}>أدخل رمزًا مكونًا من 4 أرقام</Text>
-              <TextInput
-                style={styles.pinInput}
-                value={newPin}
-                onChangeText={t => { setNewPin(t.replace(/\D/g, '').slice(0, 4)); setPinError(''); }}
-                placeholder="الرمز الجديد"
-                placeholderTextColor={Colors.textTertiary}
-                keyboardType="number-pad"
-                secureTextEntry
-                maxLength={4}
-                textAlign="center"
-              />
-              <TextInput
-                style={styles.pinInput}
-                value={confirmPin}
-                onChangeText={t => { setConfirmPin(t.replace(/\D/g, '').slice(0, 4)); setPinError(''); }}
-                placeholder="تأكيد الرمز"
-                placeholderTextColor={Colors.textTertiary}
-                keyboardType="number-pad"
-                secureTextEntry
-                maxLength={4}
-                textAlign="center"
-              />
-              {pinError ? <Text style={styles.pinError}>{pinError}</Text> : null}
-              <View style={styles.pinActions}>
-                <TouchableOpacity
-                  style={[styles.pinBtn, styles.pinBtnCancel]}
-                  onPress={() => { setShowPinSetup(false); setNewPin(''); setConfirmPin(''); setPinError(''); }}
-                >
-                  <Text style={styles.pinBtnText}>إلغاء</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={[styles.pinBtn, styles.pinBtnConfirm]} onPress={handleSetPin}>
-                  <Text style={[styles.pinBtnText, { color: '#fff' }]}>تأكيد</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-
-          {/* Change PIN link */}
-          {pinConfigured && !showPinSetup && (
-            <>
-              <Divider />
-              <TouchableOpacity
-                style={styles.linkRow}
-                onPress={() => { setShowPinSetup(true); setNewPin(''); setConfirmPin(''); }}
-              >
-                <FontAwesome name="lock" size={14} color={Colors.primary} />
-                <Text style={styles.linkText}>تغيير رمز الدخول</Text>
-              </TouchableOpacity>
-            </>
-          )}
-
-          {/* Biometric toggle — only when hardware is enrolled */}
-          {bioAvailable && pinConfigured && (
-            <>
-              <Divider />
-              <View style={styles.switchRow}>
-                <Switch
-                  value={bioEnabled}
-                  onValueChange={handleBioToggle}
-                  trackColor={{ false: Colors.border, true: Colors.primary }}
-                  thumbColor={Colors.textInverse}
-                />
-                <Text style={styles.switchLabel}>{bioLabel}</Text>
-              </View>
-            </>
-          )}
         </View>
 
-        {/* Save button */}
+        {/* ─── Notifications ──────────────────── */}
+        <Text style={styles.sectionTitle}>الإشعارات</Text>
+        <View style={styles.card}>
+          <View style={styles.switchRow}>
+            <Switch
+              value={notifEnabled}
+              onValueChange={handleNotifToggle}
+              trackColor={{ false: Colors.border, true: Colors.primary }}
+              thumbColor={Colors.textInverse}
+            />
+            <View style={styles.switchLabelBlock}>
+              <Text style={styles.switchLabel}>تذكيرات المهام</Text>
+              <Text style={styles.switchSubLabel}>
+                إشعار قبل ساعة من الزيارة وفي صباح يوم الزيارة
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        {/* ─── Signature ──────────────────────── */}
+        <Text style={styles.sectionTitle}>التوقيع</Text>
+        <View style={styles.card}>
+          <TouchableOpacity style={styles.dangerRow} onPress={handleResetSignature}>
+            <FontAwesome name="trash" size={16} color={Colors.danger} />
+            <Text style={styles.dangerText}>حذف التوقيع المحفوظ</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* ─── Save button ────────────────────── */}
         <TouchableOpacity
           style={[styles.saveBtn, saved && styles.saveBtnDone]}
           onPress={handleSave}
@@ -240,15 +206,18 @@ export default function SettingsScreen() {
           <Text style={styles.saveBtnText}>{saved ? 'تم الحفظ ✔' : 'حفظ الإعدادات'}</Text>
         </TouchableOpacity>
 
+        {/* ─── App info ───────────────────────── */}
         <Text style={styles.version}>SafeInspect v{APP_VERSION}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-function Field({ label, value, onChange, placeholder }: {
-  label: string; value: string; onChange: (v: string) => void; placeholder: string;
-}) {
+// ─── Sub-components ────────────────────────────────────────────
+
+function Field({
+  label, value, onChange, placeholder,
+}: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <View style={fieldStyles.wrap}>
       <Text style={fieldStyles.label}>{label}</Text>
@@ -271,54 +240,88 @@ function Divider() {
 const fieldStyles = StyleSheet.create({
   wrap:  { paddingVertical: Spacing.sm },
   label: { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4, textAlign: 'right' },
-  input: { fontSize: FontSize.lg, color: Colors.textPrimary, paddingVertical: Spacing.xs, textAlign: 'right' },
+  input: {
+    fontSize: FontSize.lg,
+    color: Colors.textPrimary,
+    paddingVertical: Spacing.xs,
+    textAlign: 'right',
+  },
 });
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   header: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md,
-    borderBottomWidth: 1, borderBottomColor: Colors.border,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.md,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
     backgroundColor: Colors.surface,
   },
-  headerTitle: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary },
+  headerTitle: {
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+  },
   content: { padding: Spacing.lg, paddingBottom: Spacing.xxl },
   sectionTitle: {
-    fontSize: FontSize.base, fontWeight: '600', color: Colors.textSecondary,
-    textAlign: 'right', marginTop: Spacing.xl, marginBottom: Spacing.sm,
-    textTransform: 'uppercase', letterSpacing: 0.5,
+    fontSize: FontSize.base,
+    fontWeight: '600',
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    marginTop: Spacing.xl,
+    marginBottom: Spacing.sm,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   card: {
-    backgroundColor: Colors.surface, borderRadius: Radius.md,
-    paddingHorizontal: Spacing.base, borderWidth: 1, borderColor: Colors.border,
+    backgroundColor: Colors.surface,
+    borderRadius: Radius.md,
+    paddingHorizontal: Spacing.base,
+    borderWidth: 1,
+    borderColor: Colors.border,
   },
   switchRow: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
-    paddingVertical: Spacing.md, gap: Spacing.md,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: Spacing.md,
+    gap: Spacing.md,
   },
   switchLabel: { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
-  pinSetupBox:  { paddingVertical: Spacing.md, gap: Spacing.sm },
-  pinSetupHint: { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.xs },
-  pinInput: {
-    borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
-    fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary,
-    paddingVertical: Spacing.sm, letterSpacing: 12, backgroundColor: Colors.background,
+  switchLabelBlock: { flex: 1, alignItems: 'flex-end' },
+  switchSubLabel: {
+    fontSize: FontSize.xs,
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    marginTop: 2,
   },
-  pinError: { fontSize: FontSize.sm, color: Colors.danger, textAlign: 'center' },
-  pinActions: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.xs },
-  pinBtn:        { flex: 1, paddingVertical: Spacing.sm, borderRadius: Radius.sm, alignItems: 'center' },
-  pinBtnCancel:  { borderWidth: 1, borderColor: Colors.border },
-  pinBtnConfirm: { backgroundColor: Colors.primary },
-  pinBtnText:    { fontSize: FontSize.base, fontWeight: '600', color: Colors.textPrimary },
-  linkRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingVertical: Spacing.md, gap: Spacing.sm },
-  linkText: { fontSize: FontSize.base, color: Colors.primary, fontWeight: '600' },
+  dangerRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
+    justifyContent: 'flex-end',
+  },
+  dangerText: { fontSize: FontSize.lg, color: Colors.danger },
   saveBtn: {
-    flexDirection: 'row', backgroundColor: Colors.primary, borderRadius: Radius.md,
-    padding: Spacing.md, alignItems: 'center', justifyContent: 'center',
-    gap: Spacing.sm, marginTop: Spacing.xl,
+    flexDirection: 'row',
+    backgroundColor: Colors.primary,
+    borderRadius: Radius.md,
+    padding: Spacing.md,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.sm,
+    marginTop: Spacing.xl,
   },
   saveBtnDone: { backgroundColor: Colors.success },
   saveBtnText: { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: '700' },
-  version: { textAlign: 'center', fontSize: FontSize.xs, color: Colors.textTertiary, marginTop: Spacing.xl },
+  version: {
+    textAlign: 'center',
+    fontSize: FontSize.xs,
+    color: Colors.textTertiary,
+    marginTop: Spacing.xl,
+  },
 });

@@ -1,5 +1,9 @@
 // src/repositories/AgendaRepository.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {
+  cancelForAgendaItem,
+  scheduleForAgendaItem,
+} from '../services/NotificationService';
 import { AgendaItem } from '../types';
 import { StorageKeys } from './keys';
 
@@ -27,6 +31,11 @@ export const AgendaRepository = {
     return all.find(i => i.id === id) ?? null;
   },
 
+  /**
+   * Persist an agenda item (insert or update).
+   * Automatically schedules (or reschedules) a local notification
+   * for pending items, and cancels it for completed/cancelled items.
+   */
   async save(item: AgendaItem): Promise<void> {
     const all = await readAll();
     const index = all.findIndex(i => i.id === item.id);
@@ -36,16 +45,34 @@ export const AgendaRepository = {
       all.push(item);
     }
     await writeAll(all);
+
+    // Sync notification state with item status
+    if (item.status === 'pending') {
+      await scheduleForAgendaItem({
+        id: item.id,
+        facilityName: item.facilityName,
+        date: item.date,
+        notes: item.notes,
+      });
+    } else {
+      // completed / cancelled → no upcoming notification needed
+      await cancelForAgendaItem(item.id);
+    }
   },
 
+  /**
+   * Delete an agenda item and cancel its scheduled notifications.
+   */
   async delete(id: string): Promise<void> {
     const all = await readAll();
     await writeAll(all.filter(i => i.id !== id));
+    await cancelForAgendaItem(id);
   },
 
   /**
    * Links a completed inspection to an agenda item and marks it as completed.
    * Uses the single `status` field — no redundant `completed` boolean.
+   * Also cancels pending notifications since the visit is done.
    */
   async updateInspectionLink(agendaId: string, inspectionId: string): Promise<void> {
     const all = await readAll();
@@ -57,6 +84,7 @@ export const AgendaRepository = {
         status: 'completed',
       };
       await writeAll(all);
+      await cancelForAgendaItem(agendaId);
     }
   },
 };
