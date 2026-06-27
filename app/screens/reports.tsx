@@ -34,11 +34,7 @@ export default function ReportsScreen() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      loadInspections();
-    }, [])
-  );
+  useFocusEffect(useCallback(() => { loadInspections(); }, []));
 
   const deleteInspection = async (id: string) => {
     Alert.alert(
@@ -66,10 +62,7 @@ export default function ReportsScreen() {
   const handlePreview = (inspection: SavedInspection) => {
     router.push({
       pathname: '/preview',
-      params: {
-        inspectionId: inspection.id,
-        title: inspection.facilityName,
-      },
+      params: { inspectionId: inspection.id, title: inspection.facilityName },
     });
   };
 
@@ -81,7 +74,7 @@ export default function ReportsScreen() {
       if (!matchesSearch) return false;
       if (filterStatus === 'all') return true;
       const summary = getComplianceSummary(inspection.items);
-      if (filterStatus === 'compliant') return summary.nonCompliant === 0;
+      if (filterStatus === 'compliant')     return summary.nonCompliant === 0;
       if (filterStatus === 'non-compliant') return summary.nonCompliant > 0;
       return true;
     });
@@ -101,14 +94,14 @@ export default function ReportsScreen() {
       <Swipeable renderRightActions={() => renderRightActions(item.id)}>
         <TouchableOpacity
           style={styles.card}
-          onPress={() => router.push({ pathname: '/reports/[id]', params: { id: item.id } })}>
+          onPress={() => router.push({ pathname: '/reports/[id]', params: { id: item.id } })}
+        >
           <View style={styles.cardHeader}>
             <Text style={styles.facilityName}>{item.facilityName}</Text>
-            <View
-              style={[
-                styles.statusBadge,
-                { backgroundColor: isCompliant ? Colors.green : Colors.red },
-              ]}>
+            <View style={[
+              styles.statusBadge,
+              { backgroundColor: isCompliant ? Colors.green : Colors.red },
+            ]}>
               <Text style={styles.statusBadgeText}>{isCompliant ? 'مطابق' : 'غير مطابق'}</Text>
             </View>
           </View>
@@ -143,15 +136,18 @@ export default function ReportsScreen() {
       <TextInput
         style={styles.searchInput}
         placeholder="بحث..."
+        placeholderTextColor={Colors.textTertiary}
         value={searchQuery}
         onChangeText={setSearchQuery}
+        textAlign="right"
       />
       <View style={styles.filterRow}>
         {(['all', 'compliant', 'non-compliant'] as const).map(f => (
           <TouchableOpacity
             key={f}
             style={[styles.filterBtn, filterStatus === f && styles.filterBtnActive]}
-            onPress={() => setFilterStatus(f)}>
+            onPress={() => setFilterStatus(f)}
+          >
             <Text style={[styles.filterBtnText, filterStatus === f && styles.filterBtnTextActive]}>
               {f === 'all' ? 'الكل' : f === 'compliant' ? 'مطابق' : 'غير مطابق'}
             </Text>
@@ -175,7 +171,7 @@ export default function ReportsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
+  safeArea: { flex: 1, backgroundColor: Colors.background },
   searchInput: {
     margin: 10,
     padding: 10,
@@ -183,54 +179,44 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: Colors.border,
+    textAlign: 'right',
+    color: Colors.dark,
   },
   filterRow: { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8 },
   filterBtn: {
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-    backgroundColor: Colors.background,
+    paddingHorizontal: 12, paddingVertical: 6,
+    borderRadius: 16, backgroundColor: Colors.background,
   },
-  filterBtnActive: { backgroundColor: Colors.blue },
-  filterBtnText: { fontSize: 13, color: Colors.mid },
+  filterBtnActive:     { backgroundColor: Colors.blue },
+  filterBtnText:       { fontSize: 13, color: Colors.mid },
   filterBtnTextActive: { color: Colors.white },
   list: { padding: 10 },
   card: {
-    backgroundColor: Colors.white,
-    borderRadius: 10,
-    padding: 14,
-    marginBottom: 10,
+    backgroundColor: Colors.white, borderRadius: 10,
+    padding: 14, marginBottom: 10,
     elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.08,
-    shadowRadius: 2,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08, shadowRadius: 2,
   },
   cardHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 6,
+    flexDirection: 'row', justifyContent: 'space-between',
+    alignItems: 'center', marginBottom: 6,
   },
-  facilityName: { fontSize: 16, fontWeight: 'bold', color: Colors.dark, flex: 1, marginRight: 8 },
-  statusBadge: { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
+  facilityName:    { fontSize: 16, fontWeight: 'bold', color: Colors.dark, flex: 1, marginRight: 8 },
+  statusBadge:     { paddingHorizontal: 8, paddingVertical: 3, borderRadius: 4 },
   statusBadgeText: { color: Colors.white, fontSize: 11, fontWeight: 'bold' },
-  date: { fontSize: 13, color: Colors.mid, marginBottom: 2 },
-  inspector: { fontSize: 13, color: Colors.blue, marginBottom: 8 },
-  statsRow: { flexDirection: 'row', gap: 12, marginBottom: 10 },
-  statItem: { fontSize: 13, color: Colors.dark },
-  actionsRow: { flexDirection: 'row', gap: 12 },
-  actionBtn: { flexDirection: 'row', alignItems: 'center', gap: 4 },
-  actionBtnText: { fontSize: 13 },
+  date:            { fontSize: 13, color: Colors.mid, marginBottom: 2 },
+  inspector:       { fontSize: 13, color: Colors.blue, marginBottom: 8 },
+  statsRow:        { flexDirection: 'row', gap: 12, marginBottom: 10 },
+  statItem:        { fontSize: 13, color: Colors.dark },
+  actionsRow:      { flexDirection: 'row', gap: 12 },
+  actionBtn:       { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  actionBtnText:   { fontSize: 13 },
   deleteButton: {
-    backgroundColor: Colors.red,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 72,
-    borderRadius: 10,
-    marginBottom: 10,
+    backgroundColor: Colors.red, justifyContent: 'center',
+    alignItems: 'center', width: 72, borderRadius: 10, marginBottom: 10,
   },
-  deleteText: { color: Colors.white, fontSize: 12, marginTop: 4 },
+  deleteText:     { color: Colors.white, fontSize: 12, marginTop: 4 },
   emptyContainer: { alignItems: 'center', padding: 40 },
-  emptyText: { fontSize: 16, color: Colors.mid, marginTop: 10 },
+  emptyText:      { fontSize: 16, color: Colors.mid, marginTop: 10 },
 });
