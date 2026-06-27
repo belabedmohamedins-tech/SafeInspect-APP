@@ -15,20 +15,24 @@ import { useChecklistData } from '../../../src/hooks/useChecklistData';
 import { useCollapsibleSections } from '../../../src/hooks/useCollapsibleSections';
 import { useSignature } from '../../../src/hooks/useSignature';
 
+/** Safely parse a JSON string that is expected to be a string[]. */
+function parseStringArray(raw: string | string[] | undefined): string[] {
+  if (!raw) return [];
+  const str = Array.isArray(raw) ? raw[0] : raw;
+  try {
+    const parsed = JSON.parse(str);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    // Plain comma-separated fallback (defensive)
+    return str.split(',').map(s => s.trim()).filter(Boolean);
+  }
+}
+
 export default function ChecklistScreen() {
   const params = useLocalSearchParams();
   const router = useRouter();
 
   const { showSignature, setShowSignature, signature, handleSignature } = useSignature();
-
-  // Safely parse committeeMembers — passed as JSON.stringify(string[]) from start.tsx
-  let committeeMembers: string[] = [];
-  try {
-    const raw = params.committeeMembers;
-    if (raw) committeeMembers = JSON.parse(Array.isArray(raw) ? raw[0] : raw);
-  } catch {
-    committeeMembers = [];
-  }
 
   const checklistParams = {
     draftId:          params.draftId as string | undefined,
@@ -37,10 +41,11 @@ export default function ChecklistScreen() {
     facilityAddress:  params.facilityAddress as string,
     activity:         params.activity as string | undefined,
     agendaId:         params.agendaId as string | undefined,
-    cause:            params.cause as string,
-    reference:        params.reference as string,
-    committeeMembers,
-    writer:           params.writer as string,
+    cause:            (params.cause    as string) ?? '',
+    reference:        (params.reference as string) ?? '',
+    // FIX: parse the JSON-stringified array passed from reports/[id].tsx reopenInspection
+    committeeMembers: parseStringArray(params.committeeMembers as string | string[] | undefined),
+    writer:           (params.writer as string) ?? '',
     lat:              params.lat ? parseFloat(params.lat as string) : undefined,
     lng:              params.lng ? parseFloat(params.lng as string) : undefined,
   };
