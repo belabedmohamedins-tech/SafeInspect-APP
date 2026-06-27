@@ -1,6 +1,13 @@
 // app/preview/index.tsx
 // Full printable preview of a completed inspection.
-// Navigated from: app/reports/[id].tsx via router.push({ pathname: '/preview', params: { inspectionId, title } })
+//
+// Navigated from:
+//   • app/reports/[id].tsx          → { inspectionId: '<real-id>', title }
+//   • app/screens/checklists.tsx     → { inspectionId: '__preview__', title }
+//
+// When inspectionId === '__preview__' the screen loads from CriteriaPreviewStore
+// (an in-memory fake inspection) instead of InspectionRepository, so the
+// checklists screen can show a raw criteria list without saving anything.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -21,10 +28,13 @@ import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../con
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { exportInspectionPDF } from '../../src/services/pdfService';
+import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
 import { CorrectiveAction, InspectionItem, SavedInspection } from '../../src/types';
 import { formatDateLong, formatDateShort } from '../../src/utils/dateUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
 import { getStatusColor, getStatusText } from '../../src/utils/statusUtils';
+
+const PREVIEW_ID = '__preview__';
 
 // ─────────────────────── helpers ───────────────────────
 const GRADE_COLORS: Record<string, string> = {
@@ -46,10 +56,10 @@ const SEVERITY_COLOR: Record<string, string> = {
   minor:    Colors.info ?? Colors.textTertiary,
 };
 const CAP_STATUS_LABEL: Record<string, string> = {
-  open:     'مفتوح',
+  open:        'مفتوح',
   in_progress: 'قيد التنفيذ',
-  resolved: 'محلول',
-  overdue:  'متأخر',
+  resolved:    'محلول',
+  overdue:     'متأخر',
 };
 const CAP_STATUS_COLOR: Record<string, string> = {
   open:        Colors.warning,
@@ -58,10 +68,10 @@ const CAP_STATUS_COLOR: Record<string, string> = {
   overdue:     Colors.danger,
 };
 
-// ─────────────────────── types ──────────────────────────
+// ─────────────────────── types ───────────────────────
 type SectionGroup = { axis: string; items: InspectionItem[] };
 
-// ─────────────────────── sub-components ─────────────────
+// ─────────────────────── sub-components ─────────────────────
 function MetaRow({ label, value }: { label: string; value: string }) {
   if (!value) return null;
   return (
@@ -73,7 +83,7 @@ function MetaRow({ label, value }: { label: string; value: string }) {
 }
 
 function ScoreGaugeCard({ score, grade }: { score: number; grade: string }) {
-  const filled = Math.round(score / 10); // 0-10 bars
+  const filled = Math.round(score / 10);
   return (
     <View style={s.gaugeCard}>
       <View style={[s.gradeBubble, { backgroundColor: gradeColor(grade) }]}>
@@ -81,13 +91,7 @@ function ScoreGaugeCard({ score, grade }: { score: number; grade: string }) {
       </View>
       <View style={s.gaugeBars}>
         {Array.from({ length: 10 }).map((_, i) => (
-          <View
-            key={i}
-            style={[
-              s.gaugeBar,
-              { backgroundColor: i < filled ? gradeColor(grade) : Colors.border },
-            ]}
-          />
+          <View key={i} style={[s.gaugeBar, { backgroundColor: i < filled ? gradeColor(grade) : Colors.border }]} />
         ))}
       </View>
       <Text style={s.gaugeScore}>{score}%</Text>
@@ -134,9 +138,7 @@ function ItemCard({ item }: { item: InspectionItem }) {
           <Text style={s.commentText}>{item.comment}</Text>
         </View>
       ) : null}
-      {item.photoUri ? (
-        <Image source={{ uri: item.photoUri }} style={s.photo} resizeMode="cover" />
-      ) : null}
+      {item.photoUri ? <Image source={{ uri: item.photoUri }} style={s.photo} resizeMode="cover" /> : null}
     </View>
   );
 }
@@ -161,7 +163,7 @@ function CapCard({ action }: { action: CorrectiveAction }) {
   );
 }
 
-// ─────────────────────── screen ─────────────────────────
+// ─────────────────────── screen ───────────────────────
 export default function InspectionPreviewScreen() {
   const { inspectionId, title } = useLocalSearchParams<{ inspectionId: string; title: string }>();
   const router = useRouter();
@@ -171,25 +173,34 @@ export default function InspectionPreviewScreen() {
   const [loading,    setLoading]    = useState(true);
   const [exporting,  setExporting]  = useState(false);
 
+  const isPreviewMode = inspectionId === PREVIEW_ID;
+
   const load = useCallback(async () => {
-    if (!inspectionId) { setLoading(false); return; }
     try {
-      const [ins, allCaps] = await Promise.all([
-        InspectionRepository.getById(inspectionId),
-        CorrectiveActionRepository.getAll(),
-      ]);
-      setInspection(ins);
-      setCaps(allCaps.filter(c => c.inspectionId === inspectionId));
+      if (isPreviewMode) {
+        // Raw checklist preview — load fake inspection from in-memory store.
+        // No CAPs for a preview.
+        const stored = CriteriaPreviewStore.getInspection();
+        setInspection(stored);
+        setCaps([]);
+      } else {
+        if (!inspectionId) { setLoading(false); return; }
+        const [ins, allCaps] = await Promise.all([
+          InspectionRepository.getById(inspectionId),
+          CorrectiveActionRepository.getAll(),
+        ]);
+        setInspection(ins);
+        setCaps(allCaps.filter(c => c.inspectionId === inspectionId));
+      }
     } catch (e) {
       console.error('PreviewScreen load error', e);
     } finally {
       setLoading(false);
     }
-  }, [inspectionId]);
+  }, [inspectionId, isPreviewMode]);
 
   useEffect(() => { load(); }, [load]);
 
-  // Group items by axis
   const sections = useMemo((): SectionGroup[] => {
     if (!inspection) return [];
     const map: Record<string, InspectionItem[]> = {};
@@ -219,7 +230,7 @@ export default function InspectionPreviewScreen() {
     () => inspection?.items.filter(i => i.complianceStatus === 'not_applicable').length ?? 0,
     [inspection]
   );
-  const openCaps   = caps.filter(c => c.status === 'open' || c.status === 'in_progress').length;
+  const openCaps    = caps.filter(c => c.status === 'open' || c.status === 'in_progress').length;
   const resolvedCaps = caps.filter(c => c.status === 'resolved').length;
 
   const handleExportPDF = async () => {
@@ -234,7 +245,6 @@ export default function InspectionPreviewScreen() {
     }
   };
 
-  // ── loading ──
   if (loading) {
     return (
       <SafeAreaView style={s.centered}>
@@ -244,7 +254,6 @@ export default function InspectionPreviewScreen() {
     );
   }
 
-  // ── not found ──
   if (!inspection) {
     return (
       <SafeAreaView style={s.centered}>
@@ -259,7 +268,6 @@ export default function InspectionPreviewScreen() {
 
   return (
     <SafeAreaView style={s.safeArea}>
-      {/* ── nav header ── */}
       <Stack.Screen
         options={{
           title: title ?? 'معاينة التفتيش',
@@ -282,11 +290,9 @@ export default function InspectionPreviewScreen() {
 
       <ScrollView style={s.scroll} contentContainerStyle={s.scrollContent} showsVerticalScrollIndicator={false}>
 
-        {/* ══ 1. OFFICE + FACILITY HEADER ══ */}
+        {/* 1. FACILITY HEADER */}
         <View style={s.facilityCard}>
-          {inspection.officeName ? (
-            <Text style={s.officeName}>{inspection.officeName}</Text>
-          ) : null}
+          {inspection.officeName ? <Text style={s.officeName}>{inspection.officeName}</Text> : null}
           <Text style={s.facilityName}>{inspection.facilityName}</Text>
           {inspection.facilityAddress ? (
             <View style={s.addressRow}>
@@ -294,14 +300,11 @@ export default function InspectionPreviewScreen() {
               <Text style={s.addressText}>{inspection.facilityAddress}</Text>
             </View>
           ) : null}
-
           <View style={s.metaDivider} />
-
-          <MetaRow label="التاريخ" value={formatDateLong(inspection.date)} />
-          <MetaRow label="المحرر" value={inspection.inspectorName} />
-          <MetaRow label="سبب التفتيش" value={inspection.inspectionCause ?? ''} />
-          <MetaRow label="مرجع المستند" value={inspection.referenceDocument ?? ''} />
-
+          <MetaRow label="التاريخ"          value={formatDateLong(inspection.date)} />
+          <MetaRow label="المحرر"            value={inspection.inspectorName} />
+          <MetaRow label="سبب التفتيش"       value={inspection.inspectionCause ?? ''} />
+          <MetaRow label="مرجع المستند"     value={inspection.referenceDocument ?? ''} />
           {(inspection.committeeMembers ?? []).length > 0 && (
             <View style={s.committeeBox}>
               <Text style={s.committeeLabel}>أعضاء اللجنة:</Text>
@@ -310,7 +313,6 @@ export default function InspectionPreviewScreen() {
               ))}
             </View>
           )}
-
           {inspection.coordinates && (
             <View style={s.coordRow}>
               <FontAwesome name="crosshairs" size={11} color={Colors.textTertiary} />
@@ -322,35 +324,39 @@ export default function InspectionPreviewScreen() {
           )}
         </View>
 
-        {/* ══ 2. INTEGRITY BADGE ══ */}
-        <IntegrityBadge inspection={inspection} />
+        {/* 2. INTEGRITY BADGE (skip for raw preview) */}
+        {!isPreviewMode && <IntegrityBadge inspection={inspection} />}
 
-        {/* ══ 3. SCORE + GRADE ══ */}
-        {score !== undefined && grade && (
+        {/* 3. SCORE + GRADE (skip for raw preview — all items are not-evaluated) */}
+        {!isPreviewMode && score !== undefined && grade && (
           <ScoreGaugeCard score={score} grade={grade} />
         )}
 
-        {/* ══ 4. KPI SUMMARY BAR ══ */}
+        {/* 4. KPI SUMMARY */}
         <View style={s.kpiRow}>
           <View style={s.kpiBox}>
             <Text style={s.kpiValue}>{inspection.items.length}</Text>
             <Text style={s.kpiLabel}>إجمالي البنود</Text>
           </View>
-          <View style={[s.kpiBox, { borderColor: Colors.gradeA }]}>
-            <Text style={[s.kpiValue, { color: Colors.gradeA }]}>{compliantCount}</Text>
-            <Text style={s.kpiLabel}>مطابق</Text>
-          </View>
-          <View style={[s.kpiBox, { borderColor: Colors.danger }]}>
-            <Text style={[s.kpiValue, { color: Colors.danger }]}>{nonCompliantCount}</Text>
-            <Text style={s.kpiLabel}>غير مطابق</Text>
-          </View>
-          <View style={[s.kpiBox, { borderColor: Colors.textTertiary }]}>
-            <Text style={[s.kpiValue, { color: Colors.textTertiary }]}>{naCount}</Text>
-            <Text style={s.kpiLabel}>لا ينطبق</Text>
-          </View>
+          {!isPreviewMode && (
+            <>
+              <View style={[s.kpiBox, { borderColor: Colors.gradeA }]}>
+                <Text style={[s.kpiValue, { color: Colors.gradeA }]}>{compliantCount}</Text>
+                <Text style={s.kpiLabel}>مطابق</Text>
+              </View>
+              <View style={[s.kpiBox, { borderColor: Colors.danger }]}>
+                <Text style={[s.kpiValue, { color: Colors.danger }]}>{nonCompliantCount}</Text>
+                <Text style={s.kpiLabel}>غير مطابق</Text>
+              </View>
+              <View style={[s.kpiBox, { borderColor: Colors.textTertiary }]}>
+                <Text style={[s.kpiValue, { color: Colors.textTertiary }]}>{naCount}</Text>
+                <Text style={s.kpiLabel}>لا ينطبق</Text>
+              </View>
+            </>
+          )}
         </View>
 
-        {/* ══ 5. CAP SUMMARY (if any) ══ */}
+        {/* 5. CAP SUMMARY */}
         {caps.length > 0 && (
           <View style={s.capSummaryCard}>
             <Text style={s.sectionHeading}>ملخص خطة الإجراءات التصحيحية</Text>
@@ -372,7 +378,7 @@ export default function InspectionPreviewScreen() {
           </View>
         )}
 
-        {/* ══ 6. INSPECTION ITEMS BY AXIS ══ */}
+        {/* 6. INSPECTION ITEMS BY AXIS */}
         {sections.map(({ axis, items }) => {
           const nc = items.filter(i => i.complianceStatus === 'non_compliant').length;
           return (
@@ -383,7 +389,7 @@ export default function InspectionPreviewScreen() {
           );
         })}
 
-        {/* ══ 7. SIGNATURE ══ */}
+        {/* 7. SIGNATURE */}
         {inspection.signature && (
           <View style={s.signatureCard}>
             <Text style={s.sectionHeading}>التوقيع</Text>
@@ -391,7 +397,7 @@ export default function InspectionPreviewScreen() {
           </View>
         )}
 
-        {/* ══ 8. EXPORT FOOTER BUTTON ══ */}
+        {/* 8. EXPORT FOOTER */}
         <TouchableOpacity
           style={[s.exportBtn, exporting && s.exportBtnDisabled]}
           onPress={handleExportPDF}
@@ -409,7 +415,7 @@ export default function InspectionPreviewScreen() {
   );
 }
 
-// ─────────────────────── styles ─────────────────────────
+// ─────────────────────── styles ───────────────────────
 const s = StyleSheet.create({
   safeArea:          { flex: 1, backgroundColor: Colors.background },
   scroll:            { flex: 1 },
@@ -420,8 +426,6 @@ const s = StyleSheet.create({
   backBtn:           { marginTop: Spacing.md, paddingHorizontal: Spacing.xl, paddingVertical: Spacing.sm, backgroundColor: Colors.primary, borderRadius: Radius.md },
   backBtnText:       { color: '#fff', fontSize: FontSize.base, fontWeight: FontWeight.semibold },
   headerBtn:         { marginRight: Spacing.md },
-
-  // ── facility card ──
   facilityCard:      { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, marginBottom: Spacing.base, ...Shadow.md },
   officeName:        { fontSize: FontSize.sm, fontWeight: FontWeight.bold, color: Colors.primary, marginBottom: 2, textAlign: 'right' },
   facilityName:      { fontSize: FontSize.xxl, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right', marginBottom: Spacing.xs },
@@ -436,25 +440,17 @@ const s = StyleSheet.create({
   committeeMember:   { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right' },
   coordRow:          { flexDirection: 'row', alignItems: 'center', gap: 4, justifyContent: 'flex-end', marginTop: Spacing.xs },
   coordText:         { fontSize: FontSize.xs, color: Colors.textTertiary },
-
-  // ── score gauge ──
   gaugeCard:         { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, marginBottom: Spacing.base, flexDirection: 'row', alignItems: 'center', gap: Spacing.md, ...Shadow.sm },
   gradeBubble:       { width: 64, height: 64, borderRadius: 32, justifyContent: 'center', alignItems: 'center' },
   gradeLetter:       { fontSize: FontSize.xxxl ?? 32, fontWeight: FontWeight.bold, color: '#fff' },
   gaugeBars:         { flex: 1, flexDirection: 'row', gap: 3 },
   gaugeBar:          { flex: 1, height: 16, borderRadius: 3 },
   gaugeScore:        { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary, minWidth: 48, textAlign: 'right' },
-
-  // ── kpi row ──
   kpiRow:            { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.base },
   kpiBox:            { flex: 1, backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.sm, alignItems: 'center', borderWidth: 1.5, borderColor: Colors.border, ...Shadow.xs ?? Shadow.sm },
   kpiValue:          { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary },
   kpiLabel:          { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'center', marginTop: 2 },
-
-  // ── section heading ──
   sectionHeading:    { fontSize: FontSize.lg, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right', marginBottom: Spacing.sm },
-
-  // ── axis section ──
   axisSection:       { marginBottom: Spacing.lg },
   axisHeader:        { backgroundColor: Colors.primary + '18', borderRadius: Radius.md, padding: Spacing.sm, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
   axisTitle:         { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.primary, flex: 1, textAlign: 'right' },
@@ -462,8 +458,6 @@ const s = StyleSheet.create({
   axisCount:         { fontSize: FontSize.xs, color: Colors.textSecondary },
   axisAlert:         { backgroundColor: Colors.danger, borderRadius: Radius.sm, paddingHorizontal: Spacing.xs, paddingVertical: 2 },
   axisAlertText:     { fontSize: FontSize.xs, color: '#fff', fontWeight: FontWeight.semibold },
-
-  // ── item card ──
   itemCard:          { backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.md, marginBottom: Spacing.sm, ...Shadow.sm },
   itemCardNc:        { borderLeftWidth: 3, borderLeftColor: Colors.danger },
   itemTop:           { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.xs, marginBottom: Spacing.xs },
@@ -477,8 +471,6 @@ const s = StyleSheet.create({
   commentBox:        { flexDirection: 'row', alignItems: 'flex-start', gap: 4, backgroundColor: Colors.warning + '18', borderRadius: Radius.sm, padding: Spacing.xs, marginTop: 4 },
   commentText:       { fontSize: FontSize.xs, color: Colors.warning, flex: 1, textAlign: 'right' },
   photo:             { width: '100%', height: 160, borderRadius: Radius.sm, marginTop: Spacing.sm },
-
-  // ── cap summary ──
   capSummaryCard:    { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, marginBottom: Spacing.base, ...Shadow.sm },
   capSummaryRow:     { flexDirection: 'row', justifyContent: 'space-around', marginBottom: Spacing.md },
   capSummaryItem:    { alignItems: 'center' },
@@ -495,12 +487,8 @@ const s = StyleSheet.create({
   capDeadline:       { fontSize: FontSize.xs, color: Colors.textSecondary },
   capAssigned:       { fontSize: FontSize.xs, color: Colors.textSecondary },
   capNotes:          { fontSize: FontSize.xs, color: Colors.textTertiary, textAlign: 'right', fontStyle: 'italic' },
-
-  // ── signature ──
   signatureCard:     { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, marginBottom: Spacing.base, alignItems: 'center', ...Shadow.sm },
   signatureImage:    { width: 260, height: 120, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm, backgroundColor: Colors.background },
-
-  // ── export button ──
   exportBtn:         { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, backgroundColor: Colors.primary, borderRadius: Radius.md, paddingVertical: Spacing.md, marginTop: Spacing.sm },
   exportBtnDisabled: { opacity: 0.6 },
   exportBtnText:     { color: '#fff', fontSize: FontSize.base, fontWeight: FontWeight.semibold },

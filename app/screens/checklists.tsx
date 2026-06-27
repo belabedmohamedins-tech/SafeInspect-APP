@@ -19,34 +19,38 @@ import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdf
 import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
 import { SavedInspection } from '../../src/types';
 
+/** Stable fake id used so preview/index.tsx knows to read from the store. */
+const PREVIEW_ID = '__preview__';
+
 export default function ChecklistsScreen() {
   const router = useRouter();
   const [selectedActivity, setSelectedActivity] = useState<string | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [modalVisible, setModalVisible]         = useState(false);
+  const [searchQuery,   setSearchQuery]          = useState('');
 
-  const activities = Object.keys(criteriaByActivity).filter(key => key !== 'default');
-  const filteredActivities = activities.filter(activity =>
-    activity.toLowerCase().includes(searchQuery.toLowerCase())
+  const activities         = Object.keys(criteriaByActivity).filter(k => k !== 'default');
+  const filteredActivities = activities.filter(a =>
+    a.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const buildInspectionPayload = (): SavedInspection | null => {
+  /** Build a fake SavedInspection from raw criteria so preview & export work. */
+  const buildPayload = (): SavedInspection | null => {
     if (!selectedActivity) return null;
     const criteria = criteriaByActivity[selectedActivity] || [];
     return {
-      id: selectedActivity,
-      facilityId: selectedActivity,
-      facilityName: selectedActivity,
-      facilityAddress: '',
-      date: new Date().toISOString(),
-      inspectorName: '',
-      inspectionCause: '',
-      status: 'completed',
-      items: criteria.map((item, index) => ({
+      id:               PREVIEW_ID,
+      facilityId:       selectedActivity,
+      facilityName:     selectedActivity,
+      facilityAddress:  '',
+      date:             new Date().toISOString(),
+      inspectorName:    '',
+      inspectionCause:  '',
+      status:           'completed',
+      items: criteria.map((item, idx) => ({
         ...item,
-        id: `${selectedActivity}-${index}`,
-        complianceStatus: 'not-evaluated' as const,
-        comment: '',
+        id:                `${selectedActivity}-${idx}`,
+        complianceStatus:  'not-evaluated' as const,
+        comment:           '',
       })),
     } as SavedInspection;
   };
@@ -56,37 +60,29 @@ export default function ChecklistsScreen() {
       Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
       return;
     }
-    const criteria = criteriaByActivity[selectedActivity] || [];
-    CriteriaPreviewStore.set(
-      criteria.map((item, index) => ({
-        ...item,
-        id: `${selectedActivity}-${index}`,
-        complianceStatus: 'not-evaluated' as const,
-        comment: '',
-      }))
-    );
+    const payload = buildPayload();
+    if (!payload) return;
+
+    // Store the fake inspection so preview/index.tsx can load it without
+    // hitting InspectionRepository (which would return null -> not found).
+    CriteriaPreviewStore.setInspection(payload);
+
     router.push({
       pathname: '/preview',
-      params: { title: selectedActivity },
+      params: { inspectionId: PREVIEW_ID, title: selectedActivity },
     });
   };
 
   const handlePDF = async () => {
-    const inspection = buildInspectionPayload();
-    if (!inspection) {
-      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
-      return;
-    }
-    await exportInspectionPDF(inspection);
+    const payload = buildPayload();
+    if (!payload) { Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة'); return; }
+    await exportInspectionPDF(payload);
   };
 
   const handleExcel = async () => {
-    const inspection = buildInspectionPayload();
-    if (!inspection) {
-      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
-      return;
-    }
-    await exportInspectionCSV(inspection);
+    const payload = buildPayload();
+    if (!payload) { Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة'); return; }
+    await exportInspectionCSV(payload);
   };
 
   const selectActivity = (activity: string) => {
@@ -135,7 +131,7 @@ export default function ChecklistsScreen() {
 
       <Modal
         animationType="slide"
-        transparent={true}
+        transparent
         visible={modalVisible}
         onRequestClose={() => setModalVisible(false)}
       >
