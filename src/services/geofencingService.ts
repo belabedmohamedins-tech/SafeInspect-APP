@@ -27,15 +27,14 @@ export interface ProximityResult {
 }
 
 export function checkProximity(
-  facilityLat: number,
-  facilityLng: number,
-  userLat: number,
-  userLng: number
+  a: { latitude: number; longitude: number },
+  b: { latitude: number; longitude: number },
+  thresholdMetres: number = GEOFENCE_RADIUS_M
 ): ProximityResult {
-  const distanceMetres = haversineDistance(facilityLat, facilityLng, userLat, userLng);
+  const distanceMetres = haversineDistance(a.latitude, a.longitude, b.latitude, b.longitude);
   return {
-    withinRange: distanceMetres <= GEOFENCE_RADIUS_M,
+    withinRange: distanceMetres <= thresholdMetres,
     distanceMetres: Math.round(distanceMetres),
-    thresholdMetres: GEOFENCE_RADIUS_M,
+    thresholdMetres,
   };
 }

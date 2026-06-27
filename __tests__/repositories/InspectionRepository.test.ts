@@ -4,7 +4,7 @@ import { StorageKeys } from '../../src/repositories/keys';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../../src/types';
 
-// ─── Mock AsyncStorage with an in-memory Map ─────────────────────────────────
+// ─── Mock AsyncStorage with an in-memory Map ────────────────────────────────────────────
 
 const mockStore = new Map<string, string>();
 
@@ -14,7 +14,32 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
 }));
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Mock IntegrityService ──────────────────────────────────────────────────────────────
+
+jest.mock('../../src/services/IntegrityService', () => ({
+  IntegrityService: {
+    computeHash:      jest.fn(() => 'mock-hash-abc123'),
+    verifyInspection: jest.fn(() => true),
+  },
+}));
+
+// ─── Mock AuditLogRepository ─────────────────────────────────────────────────────────
+
+jest.mock('../../src/repositories/AuditLogRepository', () => ({
+  AuditLogRepository: {
+    append: jest.fn(() => Promise.resolve()),
+  },
+}));
+
+// ─── Mock CorrectiveActionRepository ──────────────────────────────────────────────
+
+jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
+  CorrectiveActionRepository: {
+    createFromInspection: jest.fn(() => Promise.resolve()),
+  },
+}));
+
+// ─── Helpers ────────────────────────────────────────────────────────────────────────
 
 function makeInspection(overrides: Partial<SavedInspection> & { id: string; status: SavedInspection['status'] }): SavedInspection {
   return {
@@ -28,11 +53,11 @@ function makeInspection(overrides: Partial<SavedInspection> & { id: string; stat
   };
 }
 
-// ─── Setup: clear store before each test ─────────────────────────────────────
+// ─── Setup: clear store before each test ──────────────────────────────────────────────
 
 beforeEach(() => mockStore.clear());
 
-// ─── getAll ───────────────────────────────────────────────────────────────────
+// ─── getAll ────────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getAll', () => {
   it('returns empty array when storage is empty', async () => {
@@ -51,7 +76,7 @@ describe('InspectionRepository.getAll', () => {
   });
 });
 
-// ─── getCompleted ─────────────────────────────────────────────────────────────
+// ─── getCompleted ────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getCompleted', () => {
   it('returns only completed inspections', async () => {
@@ -67,7 +92,7 @@ describe('InspectionRepository.getCompleted', () => {
   });
 });
 
-// ─── getDrafts ────────────────────────────────────────────────────────────────
+// ─── getDrafts ───────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getDrafts', () => {
   it('returns in-progress and draft inspections', async () => {
@@ -89,7 +114,7 @@ describe('InspectionRepository.getDrafts', () => {
   });
 });
 
-// ─── getById ──────────────────────────────────────────────────────────────────
+// ─── getById ────────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getById', () => {
   it('returns the matching inspection', async () => {
@@ -104,7 +129,7 @@ describe('InspectionRepository.getById', () => {
   });
 });
 
-// ─── save ──────────────────────────────────────────────────────────────────────
+// ─── save ────────────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.save', () => {
   it('inserts a new inspection', async () => {
@@ -129,7 +154,7 @@ describe('InspectionRepository.save', () => {
   });
 });
 
-// ─── delete ───────────────────────────────────────────────────────────────────
+// ─── delete ───────────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.delete', () => {
   it('removes the inspection with the given id', async () => {
@@ -152,7 +177,7 @@ describe('InspectionRepository.delete', () => {
   });
 });
 
-// ─── deleteMany ───────────────────────────────────────────────────────────────
+// ─── deleteMany ────────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.deleteMany', () => {
   it('removes all inspections whose ids are in the set', async () => {

@@ -15,13 +15,13 @@ import {
 import { facilities as hardcoded } from '../facilitiesData';
 import { Facility } from '../types';
 
-// ─── Mock AsyncStorage with an in-memory Map ──────────────────────────────────
-const store = new Map<string, string>();
+// ─── Mock AsyncStorage with an in-memory Map ────────────────────────────────────────────
+let mockStore = new Map<string, string>();
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn((k: string)        => Promise.resolve(store.get(k) ?? null)),
-  setItem:    jest.fn((k: string, v: string) => { store.set(k, v); return Promise.resolve(); }),
-  removeItem: jest.fn((k: string)        => { store.delete(k); return Promise.resolve(); }),
+  getItem:    jest.fn((k: string)             => Promise.resolve(mockStore.get(k) ?? null)),
+  setItem:    jest.fn((k: string, v: string)  => { mockStore.set(k, v); return Promise.resolve(); }),
+  removeItem: jest.fn((k: string)             => { mockStore.delete(k); return Promise.resolve(); }),
 }));
 
 const KEY = 'userFacilities';
@@ -41,11 +41,11 @@ const makeUserFacility = (partial: Partial<Facility> = {}): Facility => ({
 });
 
 beforeEach(() => {
-  store.clear();
+  mockStore = new Map();
   jest.clearAllMocks();
 });
 
-// ─── getAllFacilities ────────────────────────────────────────────────
+// ─── getAllFacilities ──────────────────────────────────────────────────
 describe('getAllFacilities', () => {
   it('returns at least the hardcoded facilities when storage is empty', async () => {
     const result = await getAllFacilities();
@@ -58,12 +58,11 @@ describe('getAllFacilities', () => {
     await addUserFacility(user);
     const result = await getAllFacilities();
     expect(result.length).toBe(hardcoded.length + 1);
-    // hardcoded come first
     expect(result[hardcoded.length].projectName).toBe('مطعم الأمل');
   });
 });
 
-// ─── getFacilityById ────────────────────────────────────────────────
+// ─── getFacilityById ──────────────────────────────────────────────────
 describe('getFacilityById', () => {
   it('finds a hardcoded facility by id', async () => {
     const first = hardcoded[0];
@@ -86,10 +85,9 @@ describe('getFacilityById', () => {
   });
 });
 
-// ─── searchFacilities ───────────────────────────────────────────────
+// ─── searchFacilities ───────────────────────────────────────────────────
 describe('searchFacilities', () => {
   beforeEach(async () => {
-    // Add two user facilities with distinct names
     await addUserFacility(makeUserFacility({ projectName: 'صيدلية النور', ownerName: 'أحمد كريم', activity: 'صيدليات' }));
     await addUserFacility(makeUserFacility({ projectName: 'مخبز الصباح', ownerName: 'سامي بلال', activity: 'مخابز' }));
   });
@@ -121,9 +119,7 @@ describe('searchFacilities', () => {
   });
 
   it('strips Arabic diacritics before matching', async () => {
-    // Add facility with diacriticised name
     await addUserFacility(makeUserFacility({ projectName: 'مَطْعَم النِعمَة', activity: 'مطاعم' }));
-    // Search without diacritics
     const result = await searchFacilities('مطعم النعمة');
     expect(result.some(f => f.projectName === 'مَطْعَم النِعمَة')).toBe(true);
   });
@@ -134,7 +130,7 @@ describe('searchFacilities', () => {
   });
 });
 
-// ─── filterByActivity ──────────────────────────────────────────────
+// ─── filterByActivity ──────────────────────────────────────────────────
 describe('filterByActivity', () => {
   const ACTIVITY = 'صيدليات';
 
@@ -155,7 +151,7 @@ describe('filterByActivity', () => {
 
   it('is diacritic-insensitive', async () => {
     await addUserFacility(makeUserFacility({ activity: 'صَيْدَلِيَات' }));
-    const result = await filterByActivity(ACTIVITY); // no diacritics
+    const result = await filterByActivity(ACTIVITY);
     expect(result.some(f => f.activity === 'صَيْدَلِيَات')).toBe(true);
   });
 
@@ -165,7 +161,7 @@ describe('filterByActivity', () => {
   });
 });
 
-// ─── searchAndFilter ───────────────────────────────────────────────
+// ─── searchAndFilter ───────────────────────────────────────────────────
 describe('searchAndFilter', () => {
   it('returns all when query is empty and no activity filter', async () => {
     const result = await searchAndFilter('');
@@ -180,7 +176,7 @@ describe('searchAndFilter', () => {
 
   it('applies both search and activity filter together', async () => {
     await addUserFacility(makeUserFacility({ projectName: 'صيدلية البركة', activity: 'صيدليات' }));
-    await addUserFacility(makeUserFacility({ projectName: 'صيدلية البركة', activity: 'مخابز' })); // same name, different activity
+    await addUserFacility(makeUserFacility({ projectName: 'صيدلية البركة', activity: 'مخابز' }));
     const result = await searchAndFilter('بركة', 'صيدليات');
     expect(result.every(f => f.activity === 'صيدليات')).toBe(true);
     expect(result.some(f => f.activity === 'مخابز')).toBe(false);
@@ -193,7 +189,7 @@ describe('searchAndFilter', () => {
   });
 });
 
-// ─── addUserFacility ───────────────────────────────────────────────
+// ─── addUserFacility ───────────────────────────────────────────────────
 describe('addUserFacility', () => {
   it('assigns a unique id prefixed with U', async () => {
     const f = makeUserFacility();
@@ -203,7 +199,7 @@ describe('addUserFacility', () => {
 
   it('persists the facility in storage', async () => {
     await addUserFacility(makeUserFacility({ projectName: 'مطعم الوطن' }));
-    const raw = store.get(KEY);
+    const raw = mockStore.get(KEY);
     expect(raw).not.toBeNull();
     const saved: Facility[] = JSON.parse(raw!);
     expect(saved.some(f => f.projectName === 'مطعم الوطن')).toBe(true);
@@ -217,7 +213,7 @@ describe('addUserFacility', () => {
   });
 });
 
-// ─── updateUserFacility ──────────────────────────────────────────────
+// ─── updateUserFacility ──────────────────────────────────────────────────
 describe('updateUserFacility', () => {
   it('updates a field on a user facility', async () => {
     const f = makeUserFacility();
@@ -239,7 +235,7 @@ describe('updateUserFacility', () => {
   });
 });
 
-// ─── deleteUserFacility ──────────────────────────────────────────────
+// ─── deleteUserFacility ──────────────────────────────────────────────────
 describe('deleteUserFacility', () => {
   it('removes a user facility by id', async () => {
     const f = makeUserFacility();
@@ -258,7 +254,7 @@ describe('deleteUserFacility', () => {
   });
 });
 
-// ─── clearAllUserFacilities ───────────────────────────────────────────
+// ─── clearAllUserFacilities ─────────────────────────────────────────────────
 describe('clearAllUserFacilities', () => {
   it('removes all user-added facilities from storage', async () => {
     await addUserFacility(makeUserFacility({ projectName: 'A' }));

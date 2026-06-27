@@ -8,11 +8,18 @@ import { CorrectiveActionRepository } from './CorrectiveActionRepository';
 
 async function loadAll(): Promise<SavedInspection[]> {
   const raw = await AsyncStorage.getItem(StorageKeys.INSPECTIONS);
-  return raw ? JSON.parse(raw) : [];
+  if (!raw) return [];
+  try {
+    return JSON.parse(raw) as SavedInspection[];
+  } catch {
+    return [];
+  }
 }
 
 async function saveAll(inspections: SavedInspection[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.INSPECTIONS, JSON.stringify(inspections));
+  // Invalidate stats cache so stale aggregates are not served
+  await AsyncStorage.removeItem(StorageKeys.STATS_CACHE);
 }
 
 export const InspectionRepository = {
