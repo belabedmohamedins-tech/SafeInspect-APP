@@ -2,21 +2,24 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
+  // collapsed map: false = expanded (visible), true = collapsed (hidden)
+  // Tests expect initial value to be false (expanded) for all sections.
+  const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(sectionTitles.map(t => [t, false]))
+  );
 
-  // Stable string dep — only changes when titles actually change,
-  // not every render due to a new array reference.
+  // Stable string dep — only changes when titles actually change
   const titlesKey = sectionTitles.join('||');
   const titlesRef = useRef(sectionTitles);
   titlesRef.current = sectionTitles;
 
   useEffect(() => {
-    setCollapsedSections(prev => {
+    setCollapsed(prev => {
       const next = { ...prev };
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = true;
+          next[title] = false;
           changed = true;
         }
       }
@@ -25,12 +28,13 @@ export function useCollapsibleSections(sectionTitles: string[]) {
   }, [titlesKey]);
 
   const toggleSection = useCallback((title: string) => {
-    setCollapsedSections(prev => ({ ...prev, [title]: !prev[title] }));
+    setCollapsed(prev => ({ ...prev, [title]: !prev[title] }));
   }, []);
 
+  // isCollapsed() kept for backward compatibility with existing screen components
   const isCollapsed = useCallback(
-    (title: string) => collapsedSections[title] ?? true,
-    [collapsedSections]
+    (title: string) => collapsed[title] ?? false,
+    [collapsed]
   );
 
   const getSectionProgress = useCallback(
@@ -41,5 +45,5 @@ export function useCollapsibleSections(sectionTitles: string[]) {
     []
   );
 
-  return { isCollapsed, toggleSection, getSectionProgress };
+  return { collapsed, isCollapsed, toggleSection, getSectionProgress };
 }

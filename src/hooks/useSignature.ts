@@ -3,17 +3,26 @@ import { useCallback, useState } from 'react';
 
 export function useSignature() {
   const [showSignature, setShowSignature] = useState(false);
-  const [signature, setSignature] = useState<string | undefined>();
+  const [signature, setSignatureState] = useState<string>('');
 
-  const handleSignature = useCallback((sig: string) => {
-    setSignature(sig);
+  const setSignature = useCallback((sig: string) => {
+    setSignatureState(sig);
     setShowSignature(false);
   }, []);
+
+  const clearSignature = useCallback(() => {
+    setSignatureState('');
+  }, []);
+
+  // handleSignature kept as alias for backward compatibility
+  const handleSignature = setSignature;
 
   return {
     showSignature,
     setShowSignature,
     signature,
+    setSignature,
+    clearSignature,
     handleSignature,
   };
 }

@@ -16,6 +16,10 @@ export const StorageKeys = {
   SYNC_QUEUE:              'SYNC_QUEUE',
   SYNC_LAST_RUN:           'SYNC_LAST_RUN',
   BACKUP_LAST_AT:          'BACKUP_LAST_AT',
+  // Settings field keys — used by SettingsRepository to store individual fields
+  OFFICE_NAME:             'OFFICE_NAME',
+  INSPECTOR_NAME:          'INSPECTOR_NAME',
+  INSPECTION_CAUSE:        'INSPECTION_CAUSE',
 } as const;
 
 /** @deprecated use StorageKeys */

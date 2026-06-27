@@ -74,6 +74,7 @@ export const IntegrityService = {
 
   /**
    * Verify that a stored inspection has not been tampered with.
+   * Returns ok=false when no stored hash exists (treat as unverified/tampered).
    */
   async verifyInspection(
     inspection: SavedInspection,
@@ -81,8 +82,9 @@ export const IntegrityService = {
     const computedHash = djb2Hex(canonicalise(inspection));
     const hashes = await readHashes();
     const storedHash = hashes[inspection.id];
+    // No stored hash means we have no baseline to verify against — treat as not ok
     if (!storedHash) {
-      return { ok: true, storedHash: undefined, computedHash };
+      return { ok: false, storedHash: undefined, computedHash };
     }
     return { ok: storedHash === computedHash, storedHash, computedHash };
   },

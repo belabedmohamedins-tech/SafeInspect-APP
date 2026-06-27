@@ -4,7 +4,7 @@ import { checkProximity } from '../services/geofencingService';
 
 // Coordinates used across tests
 const ALGIERS  = { latitude: 36.7538, longitude: 3.0588 };   // Algiers centre
-const ORAN     = { latitude: 35.6969, longitude: -0.6331 };  // Oran (~320 km west)
+const ORAN     = { latitude: 35.6969, longitude: -0.6331 };  // Oran (~351 km west)
 const NEAR     = { latitude: 36.7548, longitude: 3.0608 };   // ~200 m from Algiers
 const FAR      = { latitude: 36.760,  longitude: 3.090  };   // ~3 km from Algiers
 
@@ -27,11 +27,11 @@ describe('checkProximity', () => {
     expect(result.withinRange).toBe(true);
   });
 
-  it('returns correct large distance between Algiers and Oran (~320 km)', () => {
+  it('returns correct large distance between Algiers and Oran (~351 km)', () => {
     const result = checkProximity(ALGIERS, ORAN);
-    // Haversine gives ~320 km; assert between 300 000 m and 340 000 m
+    // Haversine gives ~351 km; assert between 300 000 m and 360 000 m
     expect(result.distanceMetres).toBeGreaterThan(300_000);
-    expect(result.distanceMetres).toBeLessThan(340_000);
+    expect(result.distanceMetres).toBeLessThan(360_000);
     expect(result.withinRange).toBe(false);
   });
 

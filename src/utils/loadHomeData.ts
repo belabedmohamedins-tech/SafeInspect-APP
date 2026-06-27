@@ -36,7 +36,7 @@ export function getFacilityForAgenda(
 
 export async function loadHomeData(): Promise<HomeData> {
   const [settings, allAgenda, completed, drafts, userFacs, openCap] = await Promise.all([
-    SettingsRepository.getAll(),   // fixed: was .get() with no key — always returned undefined
+    SettingsRepository.get(),
     AgendaRepository.getAll(),
     InspectionRepository.getCompleted(),
     InspectionRepository.getDrafts(),
@@ -44,7 +44,7 @@ export async function loadHomeData(): Promise<HomeData> {
     CorrectiveActionRepository.getOpen(),
   ]);
 
-  // Null-safe: getAll() returns {} on first run (no data saved yet)
+  // Null-safe: get() returns defaults on first run (no data saved yet)
   const s = settings ?? {};
 
   // ── Agenda ──────────────────────────────────────────────────────────────

@@ -9,8 +9,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "lint": "expo lint",
-    "test": "jest --passWithNoTests",
-    "test:coverage": "jest --coverage --passWithNoTests"
+    "test": "node --experimental-vm-modules node_modules/.bin/jest --passWithNoTests",
+    "test:coverage": "node --experimental-vm-modules node_modules/.bin/jest --coverage --passWithNoTests"
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
