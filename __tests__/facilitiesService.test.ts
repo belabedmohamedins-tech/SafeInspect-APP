@@ -16,12 +16,12 @@ import { Facility } from '../src/types';
 
 // ─── Mock AsyncStorage ────────────────────────────────────────────────────────
 
-const store = new Map<string, string>();
+let mockStore = new Map<string, string>();
 
 jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn((key: string) => Promise.resolve(store.get(key) ?? null)),
-  setItem:    jest.fn((key: string, value: string) => { store.set(key, value); return Promise.resolve(); }),
-  removeItem: jest.fn((key: string) => { store.delete(key); return Promise.resolve(); }),
+  getItem:    jest.fn((key: string) => Promise.resolve(mockStore.get(key) ?? null)),
+  setItem:    jest.fn((key: string, value: string) => { mockStore.set(key, value); return Promise.resolve(); }),
+  removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
 }));
 
 // ─── Mock hardcoded facilities ────────────────────────────────────────────────
@@ -51,7 +51,10 @@ function makeUserFacility(overrides: Partial<Facility> = {}): Omit<Facility, 'id
   };
 }
 
-beforeEach(() => store.clear());
+beforeEach(() => {
+  mockStore = new Map();
+  jest.clearAllMocks();
+});
 
 // ─── getAllFacilities ─────────────────────────────────────────────────────────
 
@@ -63,14 +66,14 @@ describe('getAllFacilities', () => {
   });
 
   it('appends user facilities after hardcoded ones', async () => {
-    store.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
+    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
     const all = await getAllFacilities();
     expect(all).toHaveLength(3);
     expect(all[2].id).toBe('U1');
   });
 
   it('returns hardcoded list when stored JSON is corrupt (graceful)', async () => {
-    store.set(StorageKeys.USER_FACILITIES, 'NOT_JSON');
+    mockStore.set(StorageKeys.USER_FACILITIES, 'NOT_JSON');
     const all = await getAllFacilities();
     expect(all).toHaveLength(2);
   });
@@ -84,7 +87,7 @@ describe('getUserFacilities', () => {
   });
 
   it('returns only user-added facilities', async () => {
-    store.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
+    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
     const result = await getUserFacilities();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('U1');
@@ -101,7 +104,7 @@ describe('getFacilityById', () => {
   });
 
   it('finds a user-added facility', async () => {
-    store.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U99' }]));
+    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U99' }]));
     const result = await getFacilityById('U99');
     expect(result?.id).toBe('U99');
   });
