@@ -2,76 +2,111 @@
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
-import { Colors } from '../../../constants';
 import {
-    FlatList,
-    Modal,
-    SafeAreaView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  FlatList,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { getAllFacilities, searchFacilities } from '../../../src/facilitiesService';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors, Spacing } from '../../../constants';
+import { deleteUserFacility, getAllFacilities, getUserFacilities, searchFacilities } from '../../../src/facilitiesService';
 import { Facility } from '../../../src/types';
 
 export default function FacilitiesScreen() {
   const router = useRouter();
   const [facilitiesList, setFacilitiesList] = useState<Facility[]>([]);
-  const [searchResults, setSearchResults] = useState<Facility[]>([]);
+  const [userIds, setUserIds] = useState<Set<string>>(new Set());
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
-  const [modalVisible, setModalVisible] = useState(false);
 
-  const loadFacilities = async () => {
-    const all = await getAllFacilities();
+  const load = useCallback(async () => {
+    const [all, user] = await Promise.all([getAllFacilities(), getUserFacilities()]);
     setFacilitiesList(all);
-    setSearchResults([]);
-    setSearchQuery('');
-  };
+    setUserIds(new Set(user.map(f => f.id)));
+  }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      loadFacilities();
-    }, [])
-  );
+  useFocusEffect(useCallback(() => { load(); }, [load]));
 
   const handleSearch = async (text: string) => {
     setSearchQuery(text);
     if (text.trim() === '') {
-      setSearchResults([]);
+      const all = await getAllFacilities();
+      setFacilitiesList(all);
     } else {
-      const results = await searchFacilities(text);
-      setSearchResults(results);
+      setFacilitiesList(await searchFacilities(text));
     }
   };
 
-  const handleFacilityPress = (facility: Facility) => {
-    setSelectedFacility(facility);
-    setModalVisible(true);
+  const handleDelete = (facility: Facility) => {
+    Alert.alert(
+      'حذف منشأة',
+      `هل تريد حذف «${facility.projectName}» نهائيا؟`,
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        {
+          text: 'حذف',
+          style: 'destructive',
+          onPress: async () => {
+            await deleteUserFacility(facility.id);
+            load();
+          },
+        },
+      ]
+    );
   };
 
-  const renderFacility = ({ item }: { item: Facility }) => (
-    <TouchableOpacity style={styles.card} onPress={() => handleFacilityPress(item)}>
-      <Text style={styles.projectName}>{item.projectName}</Text>
-      <Text style={styles.owner}>{item.ownerName}</Text>
-      <Text style={styles.address}>{item.address || 'بدون عنوان'}</Text>
-    </TouchableOpacity>
-  );
+  const renderFacility = ({ item }: { item: Facility }) => {
+    const isUserFacility = userIds.has(item.id);
+    return (
+      <View style={styles.card}>
+        <View style={styles.cardBody}>
+          <Text style={styles.projectName}>{item.projectName}</Text>
+          <Text style={styles.owner}>{item.ownerName}</Text>
+          <Text style={styles.address}>{item.address || 'بدون عنوان'}</Text>
+          <Text style={styles.activity} numberOfLines={1}>{item.activity}</Text>
+        </View>
+        {isUserFacility && (
+          <View style={styles.cardActions}>
+            <TouchableOpacity
+              style={[styles.actionBtn, { backgroundColor: Colors.warning ?? '#e67e22' }]}
+              onPress={() =>
+                router.push({
+                  pathname: '/screens/facilities/edit',
+                  params: { id: item.id },
+                })
+              }
+            >
+              <FontAwesome name="pencil" size={15} color="#fff" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.actionBtn, { backgroundColor: Colors.danger ?? '#e74c3c' }]}
+              onPress={() => handleDelete(item)}
+            >
+              <FontAwesome name="trash" size={15} color="#fff" />
+            </TouchableOpacity>
+          </View>
+        )}
+      </View>
+    );
+  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      {/* Add button */}
       <TouchableOpacity
         style={[styles.addButton, { backgroundColor: Colors.blue }]}
         onPress={() => router.push('/screens/facilities/add')}
       >
-        <FontAwesome name="plus-circle" size={24} color="#fff" />
+        <FontAwesome name="plus-circle" size={22} color="#fff" />
         <Text style={styles.addButtonText}>إضافة منشأة جديدة</Text>
       </TouchableOpacity>
 
+      {/* Search bar */}
       <View style={styles.searchContainer}>
-        <FontAwesome name="search" size={18} color="#7f8c8d" style={styles.searchIcon} />
+        <FontAwesome name="search" size={16} color="#7f8c8d" style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="ابحث عن منشأة..."
@@ -81,110 +116,81 @@ export default function FacilitiesScreen() {
         />
         {searchQuery !== '' && (
           <TouchableOpacity onPress={() => handleSearch('')}>
-            <FontAwesome name="times-circle" size={18} color="#7f8c8d" />
+            <FontAwesome name="times-circle" size={16} color="#7f8c8d" />
           </TouchableOpacity>
         )}
       </View>
 
-      {searchQuery !== '' && (
-        <FlatList
-          data={searchResults}
-          keyExtractor={(item) => item.id}
-          renderItem={renderFacility}
-          contentContainerStyle={styles.list}
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              <Text style={styles.emptyText}>لا توجد منشآت تطابق البحث</Text>
-            </View>
-          }
-        />
-      )}
-
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}
-      >
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-            {selectedFacility && (
-              <>
-                <Text style={styles.modalTitle}>{selectedFacility.projectName}</Text>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.ownerName}</Text>
-                  <Text style={styles.modalLabel}>صاحب المشروع</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.activity}</Text>
-                  <Text style={styles.modalLabel}>النشاط</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.address || 'غير محدد'}</Text>
-                  <Text style={styles.modalLabel}>العنوان</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.licenseType || 'غير محدد'}</Text>
-                  <Text style={styles.modalLabel}>نوع الرخصة</Text>
-                </View>
-                <View style={styles.modalRow}>
-                  <Text style={styles.modalValue}>{selectedFacility.licenseDetails || 'لا يوجد'}</Text>
-                  <Text style={styles.modalLabel}>تفاصيل الرخصة</Text>
-                </View>
-                {selectedFacility.notes && (
-                  <View style={styles.modalRow}>
-                    <Text style={styles.modalValue}>{selectedFacility.notes}</Text>
-                    <Text style={styles.modalLabel}>ملاحظات</Text>
-                  </View>
-                )}
-                <TouchableOpacity
-                  style={[styles.modalCloseButton, { backgroundColor: Colors.blue }]}
-                  onPress={() => setModalVisible(false)}
-                >
-                  <Text style={styles.modalCloseText}>إغلاق</Text>
-                </TouchableOpacity>
-              </>
-            )}
+      {/* Full list — always visible */}
+      <FlatList
+        data={facilitiesList}
+        keyExtractor={item => item.id}
+        renderItem={renderFacility}
+        contentContainerStyle={styles.list}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <FontAwesome name="building-o" size={40} color="#bdc3c7" />
+            <Text style={styles.emptyTitle}>لا توجد منشآت</Text>
+            <Text style={styles.emptySubtitle}>اضغط «إضافة منشأة» للبدء</Text>
           </View>
-        </View>
-      </Modal>
+        }
+      />
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
+  safeArea: { flex: 1 },
   addButton: {
-    flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
-    padding: 15, margin: 10, marginBottom: 5, borderRadius: 8,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1, shadowRadius: 4, elevation: 3,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    margin: Spacing.base,
+    marginBottom: Spacing.sm,
+    padding: Spacing.base,
+    borderRadius: 8,
+    gap: Spacing.sm,
   },
-  addButtonText: { color: '#fff', fontSize: 16, fontWeight: 'bold', marginLeft: 10 },
+  addButtonText: { color: '#fff', fontSize: 15, fontWeight: '600' },
   searchContainer: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff',
-    margin: 10, marginTop: 5, paddingHorizontal: 10, borderRadius: 8,
-    borderWidth: 1, borderColor: '#e0e0e0',
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    marginHorizontal: Spacing.base,
+    marginBottom: Spacing.sm,
+    paddingHorizontal: Spacing.base,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e0e0e0',
   },
-  searchIcon: { marginRight: 8 },
-  searchInput: { flex: 1, height: 45, fontSize: 16, textAlign: 'right', color: '#2c3e50' },
-  list: { padding: 10 },
+  searchIcon: { marginRight: Spacing.sm },
+  searchInput: { flex: 1, height: 44, fontSize: 15, textAlign: 'right', color: '#2c3e50' },
+  list: { paddingHorizontal: Spacing.base, paddingBottom: Spacing.xl },
   card: {
-    backgroundColor: '#fff', padding: 16, borderRadius: 8, marginBottom: 8,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1, shadowRadius: 2, elevation: 2,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    marginBottom: Spacing.sm,
+    flexDirection: 'row',
+    overflow: 'hidden',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.08,
+    shadowRadius: 2,
   },
-  projectName: { fontSize: 16, fontWeight: 'bold', color: '#34495e', textAlign: 'right' },
-  owner: { fontSize: 14, color: '#7f8c8d', marginTop: 4, textAlign: 'right' },
-  address: { fontSize: 13, color: '#95a5a6', marginTop: 2, textAlign: 'right' },
-  empty: { alignItems: 'center', padding: 20 },
-  emptyText: { color: '#95a5a6', fontSize: 16 },
-  modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  modalContent: { backgroundColor: '#fff', borderRadius: 8, padding: 20, width: '80%', maxHeight: '80%' },
-  modalTitle: { fontSize: 20, fontWeight: 'bold', color: '#2c3e50', marginBottom: 15, textAlign: 'center' },
-  modalRow: { flexDirection: 'row', marginBottom: 10, justifyContent: 'space-between' },
-  modalLabel: { fontSize: 14, fontWeight: 'bold', color: '#34495e', textAlign: 'left', flex: 1, marginLeft: 10 },
-  modalValue: { fontSize: 14, color: '#7f8c8d', textAlign: 'right', flex: 2 },
-  modalCloseButton: { padding: 10, borderRadius: 6, alignItems: 'center', marginTop: 20 },
-  modalCloseText: { color: '#fff', fontSize: 16, fontWeight: 'bold' },
+  cardBody: { flex: 1, padding: Spacing.base },
+  projectName: { fontSize: 15, fontWeight: '700', color: '#2c3e50', textAlign: 'right' },
+  owner:       { fontSize: 13, color: '#7f8c8d', marginTop: 2, textAlign: 'right' },
+  address:     { fontSize: 12, color: '#95a5a6', marginTop: 2, textAlign: 'right' },
+  activity:    { fontSize: 12, color: '#95a5a6', marginTop: 2, textAlign: 'right' },
+  cardActions: { flexDirection: 'column', justifyContent: 'center' },
+  actionBtn: {
+    width: 40,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  empty: { alignItems: 'center', paddingTop: 60, gap: Spacing.md },
+  emptyTitle:    { fontSize: 16, fontWeight: '600', color: '#7f8c8d', marginTop: Spacing.sm },
+  emptySubtitle: { fontSize: 13, color: '#95a5a6' },
 });
