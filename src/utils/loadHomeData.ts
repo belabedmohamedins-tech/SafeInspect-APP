@@ -52,7 +52,8 @@ export async function loadHomeData(): Promise<HomeData> {
   today.setHours(0, 0, 0, 0);
   const agendaItems = allAgenda
     .filter(item => {
-      if (item.completed) return false;
+      // Use status field — AgendaItem has no .completed boolean
+      if (item.status === 'completed') return false;
       const d = new Date(item.date);
       d.setHours(0, 0, 0, 0);
       return d >= today;

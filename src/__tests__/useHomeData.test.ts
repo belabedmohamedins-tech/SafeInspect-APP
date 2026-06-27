@@ -5,11 +5,12 @@ import { AgendaItem, Facility, SavedInspection } from '../types';
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-const mockSettingsGet      = jest.fn().mockResolvedValue({ officeName: 'مكتب التجربة' });
-const mockAgendaGetAll     = jest.fn().mockResolvedValue([]);
-const mockGetCompleted     = jest.fn().mockResolvedValue([]);
-const mockGetDrafts        = jest.fn().mockResolvedValue([]);
+const mockSettingsGet       = jest.fn().mockResolvedValue({ officeName: 'مكتب التجربة' });
+const mockAgendaGetAll      = jest.fn().mockResolvedValue([]);
+const mockGetCompleted      = jest.fn().mockResolvedValue([]);
+const mockGetDrafts         = jest.fn().mockResolvedValue([]);
 const mockGetUserFacilities = jest.fn().mockResolvedValue([]);
+const mockGetOpen           = jest.fn().mockResolvedValue([]);
 
 jest.mock('../repositories/SettingsRepository', () => ({
   SettingsRepository: { get: () => mockSettingsGet() },
@@ -22,6 +23,9 @@ jest.mock('../repositories/InspectionRepository', () => ({
     getCompleted: () => mockGetCompleted(),
     getDrafts:    () => mockGetDrafts(),
   },
+}));
+jest.mock('../repositories/CorrectiveActionRepository', () => ({
+  CorrectiveActionRepository: { getOpen: () => mockGetOpen() },
 }));
 jest.mock('../facilitiesService', () => ({
   getUserFacilities: () => mockGetUserFacilities(),
@@ -79,6 +83,7 @@ beforeEach(() => {
   mockGetCompleted.mockResolvedValue([]);
   mockGetDrafts.mockResolvedValue([]);
   mockGetUserFacilities.mockResolvedValue([]);
+  mockGetOpen.mockResolvedValue([]);
 });
 
 // ─── Tests ────────────────────────────────────────────────────────────────────
