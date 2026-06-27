@@ -1,3 +1,4 @@
+// app/screens/checklists.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
@@ -40,6 +41,7 @@ export default function ChecklistsScreen() {
       date: new Date().toISOString(),
       inspectorName: '',
       inspectionCause: '',
+      status: 'completed',
       items: criteria.map((item, index) => ({
         ...item,
         id: `${selectedActivity}-${index}`,
@@ -108,7 +110,8 @@ export default function ChecklistsScreen() {
         {selectedActivity && (
           <TouchableOpacity
             style={[styles.previewButton, { backgroundColor: Colors.blue }]}
-            onPress={handlePreview}>
+            onPress={handlePreview}
+          >
             <FontAwesome name="eye" size={20} color={Colors.white} />
             <Text style={styles.previewButtonText}>معاينة القائمة</Text>
           </TouchableOpacity>
@@ -119,10 +122,7 @@ export default function ChecklistsScreen() {
             <FontAwesome name="file-pdf-o" size={20} color={Colors.white} />
             <Text style={styles.actionButtonText}>PDF</Text>
           </TouchableOpacity>
-
-          <TouchableOpacity
-            style={[styles.actionButton, styles.excelButton]}
-            onPress={handleExcel}>
+          <TouchableOpacity style={[styles.actionButton, styles.excelButton]} onPress={handleExcel}>
             <FontAwesome name="file-excel-o" size={20} color={Colors.white} />
             <Text style={styles.actionButtonText}>Excel</Text>
           </TouchableOpacity>
@@ -137,7 +137,8 @@ export default function ChecklistsScreen() {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        onRequestClose={() => setModalVisible(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <View style={styles.modalHeader}>
@@ -155,6 +156,7 @@ export default function ChecklistsScreen() {
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 placeholderTextColor={Colors.mid}
+                textAlign="right"
               />
             </View>
 
@@ -181,9 +183,9 @@ export default function ChecklistsScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: 'transparent' },
-  container: { padding: 20 },
-  label: { fontSize: 16, fontWeight: 'bold', color: Colors.dark, marginBottom: 8 },
+  safeArea:         { flex: 1, backgroundColor: Colors.background },
+  container:        { padding: 20 },
+  label:            { fontSize: 16, fontWeight: 'bold', color: Colors.dark, marginBottom: 8 },
   pickerButton: {
     backgroundColor: Colors.white,
     borderWidth: 1,
@@ -195,8 +197,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  pickerButtonText: { fontSize: 14, color: Colors.dark },
-  placeholderText: { fontSize: 14, color: Colors.mid },
+  pickerButtonText:  { fontSize: 14, color: Colors.dark },
+  placeholderText:   { fontSize: 14, color: Colors.mid },
   previewButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -206,7 +208,7 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   previewButtonText: { color: Colors.white, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
-  buttonsRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
+  buttonsRow:        { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20 },
   actionButton: {
     flex: 1,
     flexDirection: 'row',
@@ -216,20 +218,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginHorizontal: 5,
   },
-  pdfButton: { backgroundColor: Colors.red },
-  excelButton: { backgroundColor: Colors.green },
-  actionButtonText: { color: Colors.white, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
-  note: { fontSize: 12, color: Colors.mid, textAlign: 'center' },
-  modalOverlay: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
-  modalContent: { backgroundColor: Colors.white, borderRadius: 8, width: '90%', maxHeight: '80%', padding: 16 },
-  modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  modalTitle: { fontSize: 18, fontWeight: 'bold', color: Colors.dark },
+  pdfButton:         { backgroundColor: Colors.red },
+  excelButton:       { backgroundColor: Colors.green },
+  actionButtonText:  { color: Colors.white, fontSize: 16, fontWeight: 'bold', marginLeft: 8 },
+  note:              { fontSize: 12, color: Colors.mid, textAlign: 'center' },
+  modalOverlay:      { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)' },
+  modalContent:      { backgroundColor: Colors.white, borderRadius: 8, width: '90%', maxHeight: '80%', padding: 16 },
+  modalHeader:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
+  modalTitle:        { fontSize: 18, fontWeight: 'bold', color: Colors.dark },
   modalSearchContainer: { flexDirection: 'row', alignItems: 'center', backgroundColor: Colors.background, borderRadius: 6, paddingHorizontal: 8, marginBottom: 12 },
-  modalSearchIcon: { marginRight: 6 },
-  modalSearchInput: { flex: 1, height: 40, fontSize: 14, color: Colors.dark },
-  modalList: { paddingBottom: 16 },
-  modalItem: { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: Colors.background },
-  modalItemText: { fontSize: 14, color: Colors.dark },
-  modalEmpty: { alignItems: 'center', padding: 20 },
-  modalEmptyText: { color: Colors.mid, fontSize: 14 },
+  modalSearchIcon:   { marginRight: 6 },
+  modalSearchInput:  { flex: 1, height: 40, fontSize: 14, color: Colors.dark, textAlign: 'right' },
+  modalList:         { paddingBottom: 16 },
+  modalItem:         { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: Colors.background },
+  modalItemText:     { fontSize: 14, color: Colors.dark },
+  modalEmpty:        { alignItems: 'center', padding: 20 },
+  modalEmptyText:    { color: Colors.mid, fontSize: 14 },
 });
