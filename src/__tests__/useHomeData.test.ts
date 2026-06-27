@@ -33,9 +33,6 @@ const FAKE_FACILITY: Facility = {
   ownerName: 'مالك',
   activity: 'مخبز',
   address: '',
-  category: '',
-  phone: '',
-  registrationNumber: '',
 };
 jest.mock('../facilitiesData', () => ({ facilities: [FAKE_FACILITY] }));
 jest.mock('./statusUtils', () => ({
@@ -47,9 +44,12 @@ jest.mock('./statusUtils', () => ({
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 const makeAgenda = (id: string, date: string, completed = false): AgendaItem => ({
-  id, facilityId: 'fac-1', facilityName: 'منشأة',
-  date, completed, cause: '', reference: '', notes: '',
-  committeeMembers: [], writer: '',
+  id,
+  facilityId: 'fac-1',
+  facilityName: 'منشأة',
+  date,
+  notes: '',
+  status: completed ? 'completed' : 'pending',
 });
 
 const makeInsp = (
@@ -62,8 +62,13 @@ const makeInsp = (
   inspectorName: '', status, officeName: '', inspectionCause: '',
   referenceDocument: '', committeeMembers: [],
   items: Array.from({ length: nonCompliant }, (_, i) => ({
-    id: `item-${i}`, criteria: '', legalReference: '', axis: '',
-    complianceStatus: 'non-compliant' as const, comment: '',
+    id: `item-${i}`,
+    criteria: '',
+    legalReference: '',
+    severity: 'low' as const,
+    axis: '',
+    complianceStatus: 'non-compliant' as const,
+    comment: '',
   })),
 });
 
