@@ -55,8 +55,6 @@ export default function SettingsScreen() {
         if (org)   setOrganisation(org);
         if (dept)  setDepartment(dept);
         if (grade !== null) setShowGrade(grade === 'true');
-
-        // Load notification preference
         const enabled = await isNotifEnabled();
         setNotifEnabledState(enabled);
       } catch (e) {
@@ -65,10 +63,9 @@ export default function SettingsScreen() {
     })();
   }, []);
 
-  // ─── Notification toggle handler ─────────────────────────────
+  // ─── Notification toggle ───────────────────────────────────
   const handleNotifToggle = async (value: boolean) => {
     if (value) {
-      // Ask for permission before turning on
       const granted = await requestPermission();
       if (!granted) {
         Alert.alert(
@@ -82,7 +79,7 @@ export default function SettingsScreen() {
     await setNotifEnabled(value);
   };
 
-  // ─── Save ────────────────────────────────────────────────────
+  // ─── Save ───────────────────────────────────────────────
   const handleSave = async () => {
     try {
       await AsyncStorage.multiSet([
@@ -98,7 +95,7 @@ export default function SettingsScreen() {
     }
   };
 
-  // ─── Reset signature ─────────────────────────────────────────
+  // ─── Reset signature ─────────────────────────────────
   const handleResetSignature = () => {
     Alert.alert(
       'حذف التوقيع',
@@ -133,26 +130,11 @@ export default function SettingsScreen() {
         {/* ─── Inspector Info ─────────────────── */}
         <Text style={styles.sectionTitle}>بيانات المفتش</Text>
         <View style={styles.card}>
-          <Field
-            label="اسم المفتش"
-            value={inspectorName}
-            onChange={setInspectorName}
-            placeholder="الاسم الكامل"
-          />
+          <Field label="اسم المفتش" value={inspectorName} onChange={setInspectorName} placeholder="الاسم الكامل" />
           <Divider />
-          <Field
-            label="المؤسسة / الهيئة"
-            value={organisation}
-            onChange={setOrganisation}
-            placeholder="مديرية التجارة ..."
-          />
+          <Field label="المؤسسة / الهيئة" value={organisation} onChange={setOrganisation} placeholder="مديرية التجارة ..." />
           <Divider />
-          <Field
-            label="المصلحة / القسم"
-            value={department}
-            onChange={setDepartment}
-            placeholder="مصلحة حماية المستهلك ..."
-          />
+          <Field label="المصلحة / القسم" value={department} onChange={setDepartment} placeholder="مصلحة حماية المستهلك ..." />
         </View>
 
         {/* ─── Report Options ─────────────────── */}
@@ -181,11 +163,25 @@ export default function SettingsScreen() {
             />
             <View style={styles.switchLabelBlock}>
               <Text style={styles.switchLabel}>تذكيرات المهام</Text>
-              <Text style={styles.switchSubLabel}>
-                إشعار قبل ساعة من الزيارة وفي صباح يوم الزيارة
-              </Text>
+              <Text style={styles.switchSubLabel}>إشعار قبل ساعة من الزيارة وفي صباح يوم الزيارة</Text>
             </View>
           </View>
+        </View>
+
+        {/* ─── Data / Backup ──────────────────── */}
+        <Text style={styles.sectionTitle}>البيانات</Text>
+        <View style={styles.card}>
+          <TouchableOpacity
+            style={styles.navRow}
+            onPress={() => router.push('/screens/backup')}
+          >
+            <FontAwesome name="chevron-left" size={14} color={Colors.textTertiary} />
+            <View style={styles.navRowText}>
+              <Text style={styles.navRowLabel}>النسخ الاحتياطي والاستيراد</Text>
+              <Text style={styles.navRowSub}>تصدير أو استيراد جميع بياناتك</Text>
+            </View>
+            <FontAwesome name="database" size={18} color={Colors.primary} />
+          </TouchableOpacity>
         </View>
 
         {/* ─── Signature ──────────────────────── */}
@@ -206,18 +202,13 @@ export default function SettingsScreen() {
           <Text style={styles.saveBtnText}>{saved ? 'تم الحفظ ✔' : 'حفظ الإعدادات'}</Text>
         </TouchableOpacity>
 
-        {/* ─── App info ───────────────────────── */}
         <Text style={styles.version}>SafeInspect v{APP_VERSION}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-// ─── Sub-components ────────────────────────────────────────────
-
-function Field({
-  label, value, onChange, placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
+function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
   return (
     <View style={fieldStyles.wrap}>
       <Text style={fieldStyles.label}>{label}</Text>
@@ -240,12 +231,7 @@ function Divider() {
 const fieldStyles = StyleSheet.create({
   wrap:  { paddingVertical: Spacing.sm },
   label: { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4, textAlign: 'right' },
-  input: {
-    fontSize: FontSize.lg,
-    color: Colors.textPrimary,
-    paddingVertical: Spacing.xs,
-    textAlign: 'right',
-  },
+  input: { fontSize: FontSize.lg, color: Colors.textPrimary, paddingVertical: Spacing.xs, textAlign: 'right' },
 });
 
 const styles = StyleSheet.create({
@@ -260,11 +246,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Colors.border,
     backgroundColor: Colors.surface,
   },
-  headerTitle: {
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-  },
+  headerTitle: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary },
   content: { padding: Spacing.lg, paddingBottom: Spacing.xxl },
   sectionTitle: {
     fontSize: FontSize.base,
@@ -290,14 +272,18 @@ const styles = StyleSheet.create({
     paddingVertical: Spacing.md,
     gap: Spacing.md,
   },
-  switchLabel: { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
+  switchLabel:      { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
   switchLabelBlock: { flex: 1, alignItems: 'flex-end' },
-  switchSubLabel: {
-    fontSize: FontSize.xs,
-    color: Colors.textSecondary,
-    textAlign: 'right',
-    marginTop: 2,
+  switchSubLabel:   { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'right', marginTop: 2 },
+  navRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.sm,
+    paddingVertical: Spacing.md,
   },
+  navRowText: { flex: 1, alignItems: 'flex-end' },
+  navRowLabel: { fontSize: FontSize.lg, color: Colors.textPrimary, fontWeight: '500' },
+  navRowSub:   { fontSize: FontSize.sm, color: Colors.textSecondary, marginTop: 2 },
   dangerRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -318,10 +304,5 @@ const styles = StyleSheet.create({
   },
   saveBtnDone: { backgroundColor: Colors.success },
   saveBtnText: { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: '700' },
-  version: {
-    textAlign: 'center',
-    fontSize: FontSize.xs,
-    color: Colors.textTertiary,
-    marginTop: Spacing.xl,
-  },
+  version: { textAlign: 'center', fontSize: FontSize.xs, color: Colors.textTertiary, marginTop: Spacing.xl },
 });
