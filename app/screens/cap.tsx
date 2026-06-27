@@ -1,5 +1,5 @@
 // app/screens/cap.tsx
-// Corrective Action Plan — full list with filter, status update & delete
+// Corrective Action Plan — full list with filter, status update, delete & PDF export
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -17,15 +17,16 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
+import { CapReportService } from '../../src/services/CapReportService';
 import { CorrectiveAction } from '../../src/types';
 
 type StatusFilter = 'all' | CorrectiveAction['status'];
 
 const STATUS_LABELS: Record<CorrectiveAction['status'], string> = {
-  open:        'مفتوح',
+  open:          'مفتوح',
   'in-progress': 'جارٍ',
-  resolved:    'محلول',
-  overdue:     'متأخر',
+  resolved:      'محلول',
+  overdue:       'متأخر',
 };
 
 const SEVERITY_COLORS: Record<CorrectiveAction['severity'], string> = {
@@ -43,10 +44,10 @@ const SEVERITY_LABELS: Record<CorrectiveAction['severity'], string> = {
 };
 
 const STATUS_CHIP_COLOR: Record<CorrectiveAction['status'], string> = {
-  open:        Colors.primary,
+  open:          Colors.primary,
   'in-progress': Colors.warning,
-  resolved:    Colors.success,
-  overdue:     Colors.danger,
+  resolved:      Colors.success,
+  overdue:       Colors.danger,
 };
 
 const FILTERS: { label: string; value: StatusFilter }[] = [
@@ -61,10 +62,11 @@ const NEW_STATUSES: CorrectiveAction['status'][] = ['open', 'in-progress', 'reso
 
 export default function CAPScreen() {
   const router = useRouter();
-  const [items, setItems]       = useState<CorrectiveAction[]>([]);
-  const [loading, setLoading]   = useState(true);
-  const [filter, setFilter]     = useState<StatusFilter>('all');
-  const [selected, setSelected] = useState<CorrectiveAction | null>(null);
+  const [items, setItems]         = useState<CorrectiveAction[]>([]);
+  const [loading, setLoading]     = useState(true);
+  const [exporting, setExporting] = useState(false);
+  const [filter, setFilter]       = useState<StatusFilter>('all');
+  const [selected, setSelected]   = useState<CorrectiveAction | null>(null);
   const repo = CorrectiveActionRepository;
 
   const load = useCallback(async () => {
@@ -77,6 +79,17 @@ export default function CAPScreen() {
   useEffect(() => { load(); }, [load]);
 
   const visible = filter === 'all' ? items : items.filter(i => i.status === filter);
+
+  // ── Export handler ─────────────────────────────────────────────────────────
+  const handleExport = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      await CapReportService.export('open');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   const handleUpdateStatus = async (newStatus: CorrectiveAction['status']) => {
     if (!selected) return;
@@ -152,6 +165,17 @@ export default function CAPScreen() {
           <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
         </TouchableOpacity>
         <Text style={styles.title}>خطة الإجراءات التصحيحية</Text>
+        {/* Export button */}
+        <TouchableOpacity
+          onPress={handleExport}
+          style={styles.exportBtn}
+          disabled={exporting}
+          accessibilityLabel="تصدير PDF"
+        >
+          {exporting
+            ? <ActivityIndicator size="small" color={Colors.danger} />
+            : <FontAwesome name="share" size={20} color={Colors.danger} />}
+        </TouchableOpacity>
       </View>
 
       {/* Filters */}
@@ -231,6 +255,7 @@ const styles = StyleSheet.create({
   header:      { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, backgroundColor: Colors.surface, borderBottomWidth: 1, borderBottomColor: Colors.border },
   backBtn:     { padding: Spacing.xs },
   title:       { flex: 1, fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right' },
+  exportBtn:   { padding: Spacing.xs, minWidth: 32, alignItems: 'center' },
 
   filterRow:     { maxHeight: 52, backgroundColor: Colors.surface },
   filterContent: { paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, gap: Spacing.sm, flexDirection: 'row' },
