@@ -12,6 +12,7 @@ export const StorageKeys = {
   APPROVAL_QUEUE:          'APPROVAL_QUEUE',
   NOTIFICATIONS:           'NOTIFICATIONS',
   NOTIFICATIONS_ENABLED:   'NOTIFICATIONS_ENABLED',
+  CAP_NOTIF_LAST_RUN:      'CAP_NOTIF_LAST_RUN',
 } as const;
 
 /** @deprecated use StorageKeys */
