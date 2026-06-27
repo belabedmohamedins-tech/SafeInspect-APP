@@ -1,6 +1,6 @@
 // app/(tabs)/home.tsx
 import { useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Alert, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AgendaSection from '../../components/home/AgendaSection';
@@ -10,6 +10,7 @@ import InspectionSection from '../../components/home/InspectionSection';
 import StatsBar from '../../components/home/StatsBar';
 import { Colors } from '../../constants';
 import { useHomeData } from '../../src/hooks/useHomeData';
+import { scheduleCapDeadlineNotifications } from '../../src/services/CapNotificationService';
 import { AgendaItem, SavedInspection } from '../../src/types';
 
 export default function HomeScreen() {
@@ -18,6 +19,11 @@ export default function HomeScreen() {
     officeName, agendaItems, completedInspections,
     inProgressInspections, recentFacilities, stats, getFacilityForAgenda,
   } = useHomeData();
+
+  // Schedule CAP deadline notifications once per day when home mounts
+  useEffect(() => {
+    scheduleCapDeadlineNotifications();
+  }, []);
 
   const handleAgendaPress = (item: AgendaItem) => {
     const facility = getFacilityForAgenda(item);
@@ -56,7 +62,12 @@ export default function HomeScreen() {
       <HomeHeader officeName={officeName} />
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        <StatsBar {...stats} />
+        <StatsBar
+          totalCompleted={stats.totalCompleted}
+          totalDrafts={stats.totalDrafts}
+          nonCompliantFacilities={stats.nonCompliantFacilities}
+          openCapCount={stats.openCapCount}
+        />
 
         <AgendaSection
           items={agendaItems}

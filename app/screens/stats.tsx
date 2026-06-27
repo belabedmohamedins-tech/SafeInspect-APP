@@ -1,12 +1,15 @@
 // app/screens/stats.tsx
 import { FontAwesome } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Radius, Shadow, Spacing } from '../../constants';
+import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { CorrectiveAction } from '../../src/types';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
 
 const GRADE_COLORS: Record<string, string> = {
@@ -17,11 +20,37 @@ const GRADE_COLORS: Record<string, string> = {
 };
 const getGradeColor = (grade: string) => GRADE_COLORS[grade] ?? Colors.textTertiary;
 
+// ─── CAP summary helpers ──────────────────────────────────────────────────────
+
+interface CapSummary {
+  open:       number;
+  inProgress: number;
+  overdue:    number;
+  resolved:   number;
+}
+
+function buildCapSummary(items: CorrectiveAction[]): CapSummary {
+  return items.reduce(
+    (acc, item) => {
+      if (item.status === 'open')        acc.open++;
+      else if (item.status === 'in-progress') acc.inProgress++;
+      else if (item.status === 'overdue')     acc.overdue++;
+      else if (item.status === 'resolved')    acc.resolved++;
+      return acc;
+    },
+    { open: 0, inProgress: 0, overdue: 0, resolved: 0 } as CapSummary,
+  );
+}
+
+// ─── Component ────────────────────────────────────────────────────────────────
+
 export default function StatsScreen() {
+  const router = useRouter();
   const [stats,         setStats]         = useState<StatsCache | null>(null);
   const [loading,       setLoading]       = useState(true);
   const [refreshing,    setRefreshing]    = useState(false);
   const [topViolations, setTopViolations] = useState<{ criteria: string; count: number }[]>([]);
+  const [capSummary,    setCapSummary]    = useState<CapSummary>({ open: 0, inProgress: 0, overdue: 0, resolved: 0 });
 
   const loadStats = async (forceRefresh = false) => {
     try {
@@ -35,7 +64,14 @@ export default function StatsScreen() {
       }
       if (forceRefresh) setRefreshing(true);
 
-      const completed = await InspectionRepository.getCompleted();
+      const [completed, allCap] = await Promise.all([
+        InspectionRepository.getCompleted(),
+        CorrectiveActionRepository.getAll(),
+      ]);
+
+      // ── CAP summary ─────────────────────────────────────────────
+      setCapSummary(buildCapSummary(allCap));
+
       if (completed.length > 0) {
         const freshStats = computeStats(completed);
         await SettingsRepository.set({ statsCache: freshStats as any });
@@ -81,6 +117,8 @@ export default function StatsScreen() {
 
   if (!stats) return null;
 
+  const totalCap = capSummary.open + capSummary.inProgress + capSummary.overdue + capSummary.resolved;
+
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
@@ -105,6 +143,42 @@ export default function StatsScreen() {
             <Text style={styles.kpiValue}>{stats.averageScore}%</Text>
           </View>
         </View>
+
+        {/* ── CAP Summary ─────────────────────────────────────────── */}
+        <TouchableOpacity
+          style={styles.capCard}
+          onPress={() => router.push('/screens/cap')}
+          activeOpacity={0.8}
+        >
+          <View style={styles.capHeader}>
+            <Text style={styles.subtitle}>الإجراءات التصحيحية</Text>
+            <FontAwesome name="chevron-left" size={14} color={Colors.textSecondary} />
+          </View>
+
+          <View style={styles.capRow}>
+            <CapPill label="مفتوح"      value={capSummary.open}       color={Colors.warning} />
+            <CapPill label="جارٍ"        value={capSummary.inProgress} color={Colors.primary} />
+            <CapPill label="متأخر"      value={capSummary.overdue}    color={Colors.danger}  />
+            <CapPill label="مُغلق"       value={capSummary.resolved}   color={Colors.success} />
+          </View>
+
+          {/* Resolution progress bar */}
+          {totalCap > 0 && (
+            <View style={styles.progressBg}>
+              <View
+                style={[
+                  styles.progressFill,
+                  { width: `${(capSummary.resolved / totalCap) * 100}%` as any },
+                ]}
+              />
+            </View>
+          )}
+          {totalCap > 0 && (
+            <Text style={styles.progressLabel}>
+              {((capSummary.resolved / totalCap) * 100).toFixed(0)}% مكتمل
+            </Text>
+          )}
+        </TouchableOpacity>
 
         {/* Grade bubbles */}
         <Text style={styles.subtitle}>التوزيع حسب الفئة</Text>
@@ -167,6 +241,22 @@ export default function StatsScreen() {
   );
 }
 
+// ─── CAP pill sub-component ────────────────────────────────────────────────────
+function CapPill({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <View style={capStyles.pill}>
+      <Text style={[capStyles.value, { color }]}>{value}</Text>
+      <Text style={capStyles.label}>{label}</Text>
+    </View>
+  );
+}
+
+const capStyles = StyleSheet.create({
+  pill:  { alignItems: 'center', flex: 1 },
+  value: { fontSize: 22, fontWeight: 'bold' },
+  label: { fontSize: 11, color: Colors.textSecondary, marginTop: 2 },
+});
+
 const styles = StyleSheet.create({
   container:    { flex: 1, backgroundColor: Colors.background },
   center:       { flex: 1, justifyContent: 'center', alignItems: 'center' },
@@ -180,6 +270,14 @@ const styles = StyleSheet.create({
   kpiLabel:     { fontSize: FontSize.base, color: Colors.textSecondary, marginBottom: Spacing.sm, textAlign: 'center' },
   kpiValue:     { fontSize: 32, fontWeight: 'bold', color: Colors.primary },
   subtitle:     { fontSize: FontSize.xl, fontWeight: '600', color: Colors.textPrimary, marginTop: Spacing.sm, marginBottom: Spacing.md, alignSelf: 'flex-start' },
+  // CAP card
+  capCard:      { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, width: '100%', marginBottom: Spacing.lg, ...Shadow.sm },
+  capHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
+  capRow:       { flexDirection: 'row', justifyContent: 'space-around', marginBottom: Spacing.md },
+  progressBg:   { height: 8, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.full, overflow: 'hidden', marginBottom: Spacing.sm },
+  progressFill: { height: '100%', backgroundColor: Colors.success, borderRadius: Radius.full },
+  progressLabel:{ fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'center' },
+  // Grade bubbles
   gradesContainer: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginBottom: Spacing.lg },
   gradeItem:    { alignItems: 'center' },
   gradeBadge:   { width: 50, height: 50, borderRadius: Radius.full, justifyContent: 'center', alignItems: 'center', marginBottom: Spacing.sm },
