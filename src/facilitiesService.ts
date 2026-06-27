@@ -23,17 +23,21 @@ export const getAllFacilities = async (): Promise<Facility[]> => {
   return [...hardcodedFacilities, ...userFacilities];
 };
 
-/** Looks up a single facility by id. Checks hardcoded first, then user-added. */
-export const getFacilityById = async (id: string): Promise<Facility | null> => {
+/**
+ * Looks up a single facility by id.
+ * Checks hardcoded first, then user-added.
+ * Returns `undefined` (not null) so callers can use `if (!facility)` safely.
+ */
+export const getFacilityById = async (id: string): Promise<Facility | undefined> => {
   const hardcoded = hardcodedFacilities.find(f => f.id === id);
   if (hardcoded) return hardcoded;
 
   const json = await AsyncStorage.getItem(USER_FACILITIES_KEY);
   if (json) {
     const userFacilities: Facility[] = JSON.parse(json);
-    return userFacilities.find(f => f.id === id) ?? null;
+    return userFacilities.find(f => f.id === id);
   }
-  return null;
+  return undefined;
 };
 
 /** Returns only the facilities added by the current user. */
@@ -66,10 +70,6 @@ export const searchFacilities = async (query: string): Promise<Facility[]> => {
 /**
  * Returns all facilities whose `activity` field exactly matches the given
  * value (case-insensitive, diacritic-insensitive).
- *
- * Replaces the inline `.filter(f => f.activity === category)` pattern that
- * was used in several screens — that pattern silently excluded user-added
- * facilities because it queried the static array directly.
  */
 export const filterByActivity = async (activity: string): Promise<Facility[]> => {
   const all = await getAllFacilities();
