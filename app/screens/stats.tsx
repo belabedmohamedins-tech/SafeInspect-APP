@@ -9,6 +9,7 @@ import { Colors, FontSize, Radius, Shadow, Spacing } from '../../constants';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { CapReportService } from '../../src/services/CapReportService';
 import { CorrectiveAction } from '../../src/types';
 import { computeStats, StatsCache } from '../../src/utils/statsUtils';
 
@@ -32,7 +33,7 @@ interface CapSummary {
 function buildCapSummary(items: CorrectiveAction[]): CapSummary {
   return items.reduce(
     (acc, item) => {
-      if (item.status === 'open')        acc.open++;
+      if (item.status === 'open')             acc.open++;
       else if (item.status === 'in-progress') acc.inProgress++;
       else if (item.status === 'overdue')     acc.overdue++;
       else if (item.status === 'resolved')    acc.resolved++;
@@ -49,6 +50,7 @@ export default function StatsScreen() {
   const [stats,         setStats]         = useState<StatsCache | null>(null);
   const [loading,       setLoading]       = useState(true);
   const [refreshing,    setRefreshing]    = useState(false);
+  const [exporting,     setExporting]     = useState(false);
   const [topViolations, setTopViolations] = useState<{ criteria: string; count: number }[]>([]);
   const [capSummary,    setCapSummary]    = useState<CapSummary>({ open: 0, inProgress: 0, overdue: 0, resolved: 0 });
 
@@ -69,7 +71,6 @@ export default function StatsScreen() {
         CorrectiveActionRepository.getAll(),
       ]);
 
-      // ── CAP summary ─────────────────────────────────────────────
       setCapSummary(buildCapSummary(allCap));
 
       if (completed.length > 0) {
@@ -104,6 +105,16 @@ export default function StatsScreen() {
   };
 
   useFocusEffect(useCallback(() => { loadStats(); }, []));
+
+  const handleExportCap = async () => {
+    if (exporting) return;
+    setExporting(true);
+    try {
+      await CapReportService.export('open');
+    } finally {
+      setExporting(false);
+    }
+  };
 
   if (loading && !stats) {
     return (
@@ -144,7 +155,7 @@ export default function StatsScreen() {
           </View>
         </View>
 
-        {/* ── CAP Summary ─────────────────────────────────────────── */}
+        {/* ── CAP Summary card ── */}
         <TouchableOpacity
           style={styles.capCard}
           onPress={() => router.push('/screens/cap')}
@@ -156,13 +167,12 @@ export default function StatsScreen() {
           </View>
 
           <View style={styles.capRow}>
-            <CapPill label="مفتوح"      value={capSummary.open}       color={Colors.warning} />
-            <CapPill label="جارٍ"        value={capSummary.inProgress} color={Colors.primary} />
-            <CapPill label="متأخر"      value={capSummary.overdue}    color={Colors.danger}  />
-            <CapPill label="مُغلق"       value={capSummary.resolved}   color={Colors.success} />
+            <CapPill label="مفتوح"    value={capSummary.open}       color={Colors.warning} />
+            <CapPill label="جارٍ"      value={capSummary.inProgress} color={Colors.primary} />
+            <CapPill label="متأخر"    value={capSummary.overdue}    color={Colors.danger}  />
+            <CapPill label="مُغلق"     value={capSummary.resolved}   color={Colors.success} />
           </View>
 
-          {/* Resolution progress bar */}
           {totalCap > 0 && (
             <View style={styles.progressBg}>
               <View
@@ -178,6 +188,21 @@ export default function StatsScreen() {
               {((capSummary.resolved / totalCap) * 100).toFixed(0)}% مكتمل
             </Text>
           )}
+        </TouchableOpacity>
+
+        {/* Export CAP button */}
+        <TouchableOpacity
+          style={styles.exportBtn}
+          onPress={handleExportCap}
+          disabled={exporting}
+          activeOpacity={0.8}
+        >
+          {exporting
+            ? <ActivityIndicator size="small" color={Colors.textInverse} />
+            : <FontAwesome name="share" size={15} color={Colors.textInverse} />}
+          <Text style={styles.exportBtnText}>
+            {exporting ? 'جارٍ التصدير...' : 'تصدير تقرير CAP — PDF'}
+          </Text>
         </TouchableOpacity>
 
         {/* Grade bubbles */}
@@ -241,7 +266,7 @@ export default function StatsScreen() {
   );
 }
 
-// ─── CAP pill sub-component ────────────────────────────────────────────────────
+// ─── CapPill sub-component ────────────────────────────────────────────────────
 function CapPill({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <View style={capStyles.pill}>
@@ -271,12 +296,15 @@ const styles = StyleSheet.create({
   kpiValue:     { fontSize: 32, fontWeight: 'bold', color: Colors.primary },
   subtitle:     { fontSize: FontSize.xl, fontWeight: '600', color: Colors.textPrimary, marginTop: Spacing.sm, marginBottom: Spacing.md, alignSelf: 'flex-start' },
   // CAP card
-  capCard:      { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, width: '100%', marginBottom: Spacing.lg, ...Shadow.sm },
+  capCard:      { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, width: '100%', marginBottom: Spacing.md, ...Shadow.sm },
   capHeader:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
   capRow:       { flexDirection: 'row', justifyContent: 'space-around', marginBottom: Spacing.md },
   progressBg:   { height: 8, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.full, overflow: 'hidden', marginBottom: Spacing.sm },
   progressFill: { height: '100%', backgroundColor: Colors.success, borderRadius: Radius.full },
   progressLabel:{ fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'center' },
+  // Export button
+  exportBtn:    { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, backgroundColor: Colors.danger, borderRadius: Radius.lg, paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg, width: '100%', marginBottom: Spacing.lg, ...Shadow.sm },
+  exportBtnText:{ fontSize: FontSize.base, fontWeight: '600', color: Colors.textInverse },
   // Grade bubbles
   gradesContainer: { flexDirection: 'row', justifyContent: 'space-around', width: '100%', marginBottom: Spacing.lg },
   gradeItem:    { alignItems: 'center' },
