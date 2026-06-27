@@ -1,14 +1,20 @@
 // src/repositories/keys.ts
-export const KEYS = {
-  FACILITIES:          'FACILITIES',
-  INSPECTIONS:         'INSPECTIONS',
-  AGENDA:              'AGENDA',
-  SETTINGS:            'SETTINGS',
-  AUDIT_LOG:           'AUDIT_LOG',
-  INSPECTION_HASHES:   'INSPECTION_HASHES',
-  CORRECTIVE_ACTIONS:  'CORRECTIVE_ACTIONS',
-  APPROVAL_QUEUE:      'APPROVAL_QUEUE',
-  NOTIFICATIONS:       'NOTIFICATIONS',
+
+export const StorageKeys = {
+  FACILITIES:              'FACILITIES',
+  USER_FACILITIES:         'FACILITIES',
+  INSPECTIONS:             'INSPECTIONS',
+  AGENDA:                  'AGENDA',
+  SETTINGS:                'SETTINGS',
+  AUDIT_LOG:               'AUDIT_LOG',
+  INSPECTION_HASHES:       'INSPECTION_HASHES',
+  CORRECTIVE_ACTIONS:      'CORRECTIVE_ACTIONS',
+  APPROVAL_QUEUE:          'APPROVAL_QUEUE',
+  NOTIFICATIONS:           'NOTIFICATIONS',
+  NOTIFICATIONS_ENABLED:   'NOTIFICATIONS_ENABLED',
 } as const;
 
-export type StorageKey = typeof KEYS[keyof typeof KEYS];
+/** @deprecated use StorageKeys */
+export const KEYS = StorageKeys;
+
+export type StorageKey = typeof StorageKeys[keyof typeof StorageKeys];

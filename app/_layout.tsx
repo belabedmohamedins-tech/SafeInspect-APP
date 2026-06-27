@@ -14,7 +14,6 @@ export default function RootLayout() {
     (async () => {
       const done = await SettingsRepository.get<string>('onboardingDone');
       if (done !== 'true') {
-        // Only redirect if not already on the onboarding screen
         if (!segments.join('/').includes('onboarding')) {
           router.replace('/screens/onboarding');
         }
@@ -45,7 +44,7 @@ export default function RootLayout() {
         <Stack.Screen name="screens/legal" options={{ headerShown: false }} />
         <Stack.Screen name="screens/checklists" options={{ headerShown: false }} />
         <Stack.Screen name="screens/reports" options={{ headerShown: false }} />
-        <Stack.Screen name="reports/[id]" options={{ headerShown: false }} />
+        {/* reports/[id] is auto-registered by expo-router file system — do NOT add it here */}
       </Stack>
     </I18nProvider>
   );
