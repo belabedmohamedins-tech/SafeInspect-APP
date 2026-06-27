@@ -15,32 +15,26 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
 
-// ─── Canonical serialisation ──────────────────────────────────────────────────────────
+// ─── Canonical serialisation ─────────────────────────────────────────────────
 
-/**
- * Produces a stable JSON string of the inspection, excluding fields that
- * are legitimately mutated after completion (integrityHash itself, and
- * any future UI-only fields). Key order is sorted for determinism.
- */
 function canonicalise(inspection: SavedInspection): string {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { integrityHash: _omit, ...rest } = inspection;
   return JSON.stringify(rest, Object.keys(rest).sort());
 }
 
-// ─── djb2 hash ───────────────────────────────────────────────────────────────────
+// ─── djb2 hash ───────────────────────────────────────────────────────────────
 
 function djb2Hex(str: string): string {
   let hash = 5381;
   for (let i = 0; i < str.length; i++) {
-    // hash * 33 ^ charCode  (djb2 algorithm)
     hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
-    hash = hash >>> 0; // keep unsigned 32-bit
+    hash = hash >>> 0;
   }
   return hash.toString(16).padStart(8, '0');
 }
 
-// ─── Hash storage ────────────────────────────────────────────────────────────────────
+// ─── Hash storage ────────────────────────────────────────────────────────────
 
 async function readHashes(): Promise<Record<string, string>> {
   try {
@@ -55,9 +49,17 @@ async function writeHashes(hashes: Record<string, string>): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.INSPECTION_HASHES, JSON.stringify(hashes));
 }
 
-// ─── Public API ───────────────────────────────────────────────────────────────────
+// ─── Public API (object export — used by InspectionRepository) ───────────────
 
 export const IntegrityService = {
+  /**
+   * Synchronously compute the djb2 hash of an inspection.
+   * Used by InspectionRepository.save() on first completion.
+   */
+  computeHash(inspection: SavedInspection): string {
+    return djb2Hex(canonicalise(inspection));
+  },
+
   /**
    * Compute and persist the hash for a completed inspection.
    * Returns the hash string so the caller can embed it in SavedInspection.
@@ -72,8 +74,6 @@ export const IntegrityService = {
 
   /**
    * Verify that a stored inspection has not been tampered with.
-   * Returns { ok: true } if the hash matches, or { ok: false, storedHash, computedHash }
-   * if it has drifted.
    */
   async verifyInspection(
     inspection: SavedInspection,
@@ -82,23 +82,24 @@ export const IntegrityService = {
     const hashes = await readHashes();
     const storedHash = hashes[inspection.id];
     if (!storedHash) {
-      // No hash on record — inspection was saved before Phase 2 (legacy).
       return { ok: true, storedHash: undefined, computedHash };
     }
     return { ok: storedHash === computedHash, storedHash, computedHash };
   },
 
-  /** Remove the hash entry when an inspection is deleted. */
   async removeHash(inspectionId: string): Promise<void> {
     const hashes = await readHashes();
     delete hashes[inspectionId];
     await writeHashes(hashes);
   },
 
-  /** Remove multiple hash entries (bulk delete). */
   async removeHashes(inspectionIds: string[]): Promise<void> {
     const hashes = await readHashes();
     for (const id of inspectionIds) delete hashes[id];
     await writeHashes(hashes);
   },
 };
+
+// ─── Named exports for tests that import them directly ───────────────────────
+export const computeHash    = (i: SavedInspection) => IntegrityService.computeHash(i);
+export const verifyInspection = IntegrityService.verifyInspection.bind(IntegrityService);

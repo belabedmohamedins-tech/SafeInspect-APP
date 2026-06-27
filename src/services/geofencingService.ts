@@ -31,10 +31,13 @@ export function checkProximity(
   b: { latitude: number; longitude: number },
   thresholdMetres: number = GEOFENCE_RADIUS_M
 ): ProximityResult {
+  // Do NOT round here — rounding 200m to 200 is fine but rounding e.g.
+  // 0.4m to 0 would incorrectly flip withinRange when coords are identical.
+  // Consumers can round for display purposes.
   const distanceMetres = haversineDistance(a.latitude, a.longitude, b.latitude, b.longitude);
   return {
     withinRange: distanceMetres <= thresholdMetres,
-    distanceMetres: Math.round(distanceMetres),
+    distanceMetres,
     thresholdMetres,
   };
 }
