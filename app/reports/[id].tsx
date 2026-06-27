@@ -20,6 +20,7 @@ import { InspectionItem, SavedInspection } from '../../src/types';
 import { formatDateLong } from '../../src/utils/dateUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
 import { getStatusColor, getStatusText } from '../../src/utils/statusUtils';
+import IntegrityBadge from '../../components/inspection/IntegrityBadge';
 
 const GRADE_COLORS: Record<string, string> = {
   A: Colors.gradeA,
@@ -67,7 +68,6 @@ export default function ReportDetailScreen() {
     );
   };
 
-  // FIX #1: pass ALL metadata fields so the checklist can re-save correctly
   const reopenInspection = () => {
     if (!inspection) return;
     router.push({
@@ -198,6 +198,9 @@ export default function ReportDetailScreen() {
           </View>
         )}
       </View>
+
+      {/* ── IntegrityBadge: shown just below the header card, above the items list ── */}
+      <IntegrityBadge inspection={inspection} />
 
       <SectionList
         sections={sections}
