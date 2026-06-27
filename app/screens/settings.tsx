@@ -22,19 +22,24 @@ const APP_VERSION = '1.0.0';
 export default function SettingsScreen() {
   const router = useRouter();
 
-  // ── Inspector fields ────────────────────────────────────────────────
+  // ── Inspector fields ──
   const [inspectorName, setInspectorName] = useState('');
   const [officeName,    setOfficeName]    = useState('');
   const [saved,         setSaved]         = useState(false);
 
-  // ── PIN state ───────────────────────────────────────────────────────
-  const [pinConfigured,  setPinConfigured]  = useState(false);
-  const [showPinSetup,   setShowPinSetup]   = useState(false);
-  const [newPin,         setNewPin]         = useState('');
-  const [confirmPin,     setConfirmPin]     = useState('');
-  const [pinError,       setPinError]       = useState('');
+  // ── PIN state ──
+  const [pinConfigured, setPinConfigured] = useState(false);
+  const [showPinSetup,  setShowPinSetup]  = useState(false);
+  const [newPin,        setNewPin]        = useState('');
+  const [confirmPin,    setConfirmPin]    = useState('');
+  const [pinError,      setPinError]      = useState('');
 
-  // ── Load ────────────────────────────────────────────────────────────
+  // ── Biometric state ──
+  const [bioAvailable, setBioAvailable] = useState(false);
+  const [bioEnabled,   setBioEnabled]   = useState(false);
+  const [bioLabel,     setBioLabel]     = useState('البصمة / الوجه');
+
+  // ── Load ──
   useEffect(() => {
     (async () => {
       const settings = await SettingsRepository.get();
@@ -43,10 +48,23 @@ export default function SettingsScreen() {
 
       const pin = await AuthRepository.getPin();
       setPinConfigured(pin !== null);
+
+      const available = await AuthRepository.isBiometricAvailable();
+      setBioAvailable(available);
+      if (available) {
+        const enabled = await AuthRepository.isBiometricEnabled();
+        setBioEnabled(enabled);
+        const type = await AuthRepository.getBiometricType();
+        setBioLabel(
+          type === 'FACE_RECOGNITION' ? 'الدخول بالوجه (Face ID)'
+          : type === 'FINGERPRINT'    ? 'الدخول بالبصمة'
+          : 'البيومتري'
+        );
+      }
     })();
   }, []);
 
-  // ── Save inspector settings ─────────────────────────────────────────
+  // ── Save inspector settings ──
   const handleSave = async () => {
     try {
       await SettingsRepository.set({
@@ -60,7 +78,7 @@ export default function SettingsScreen() {
     }
   };
 
-  // ── PIN setup ───────────────────────────────────────────────────────
+  // ── PIN handlers ──
   const handleSetPin = async () => {
     setPinError('');
     if (newPin.length !== 4 || !/^\d{4}$/.test(newPin)) {
@@ -90,11 +108,19 @@ export default function SettingsScreen() {
           style: 'destructive',
           onPress: async () => {
             await AuthRepository.setPin(null);
+            await AuthRepository.setBiometricEnabled(false);
             setPinConfigured(false);
+            setBioEnabled(false);
           },
         },
       ]
     );
+  };
+
+  // ── Biometric toggle ──
+  const handleBioToggle = async (value: boolean) => {
+    await AuthRepository.setBiometricEnabled(value);
+    setBioEnabled(value);
   };
 
   return (
@@ -110,51 +136,33 @@ export default function SettingsScreen() {
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-        {/* ─── Inspector Info ────────────────── */}
+        {/* Inspector Info */}
         <Text style={styles.sectionTitle}>بيانات المفتش</Text>
         <View style={styles.card}>
-          <Field
-            label="اسم المفتش"
-            value={inspectorName}
-            onChange={setInspectorName}
-            placeholder="الاسم الكامل"
-          />
+          <Field label="اسم المفتش" value={inspectorName} onChange={setInspectorName} placeholder="الاسم الكامل" />
           <Divider />
-          <Field
-            label="المصلحة / المكتب"
-            value={officeName}
-            onChange={setOfficeName}
-            placeholder="مديرية التجارة ..."
-          />
+          <Field label="المصلحة / المكتب" value={officeName} onChange={setOfficeName} placeholder="مديرية التجارة ..." />
         </View>
 
-        {/* ─── Security ───────────────────── */}
+        {/* Security */}
         <Text style={styles.sectionTitle}>الأمان</Text>
         <View style={styles.card}>
 
-          {/* PIN toggle row */}
+          {/* PIN toggle */}
           <View style={styles.switchRow}>
             <Switch
               value={pinConfigured}
-              onValueChange={v => {
-                if (v) {
-                  setShowPinSetup(true);
-                } else {
-                  handleRemovePin();
-                }
-              }}
+              onValueChange={v => v ? setShowPinSetup(true) : handleRemovePin()}
               trackColor={{ false: Colors.border, true: Colors.primary }}
               thumbColor={Colors.textInverse}
             />
             <Text style={styles.switchLabel}>رمز الدخول (PIN)</Text>
           </View>
 
-          {/* PIN setup form — shown when enabling */}
+          {/* PIN setup form */}
           {showPinSetup && (
             <View style={styles.pinSetupBox}>
-              <Text style={styles.pinSetupHint}>
-                أدخل رمزًا مكونًا من 4 أرقام
-              </Text>
+              <Text style={styles.pinSetupHint}>أدخل رمزًا مكونًا من 4 أرقام</Text>
               <TextInput
                 style={styles.pinInput}
                 value={newPin}
@@ -192,7 +200,7 @@ export default function SettingsScreen() {
             </View>
           )}
 
-          {/* Change PIN link — shown when already configured */}
+          {/* Change PIN link */}
           {pinConfigured && !showPinSetup && (
             <>
               <Divider />
@@ -205,9 +213,25 @@ export default function SettingsScreen() {
               </TouchableOpacity>
             </>
           )}
+
+          {/* Biometric toggle — only when hardware is enrolled */}
+          {bioAvailable && pinConfigured && (
+            <>
+              <Divider />
+              <View style={styles.switchRow}>
+                <Switch
+                  value={bioEnabled}
+                  onValueChange={handleBioToggle}
+                  trackColor={{ false: Colors.border, true: Colors.primary }}
+                  thumbColor={Colors.textInverse}
+                />
+                <Text style={styles.switchLabel}>{bioLabel}</Text>
+              </View>
+            </>
+          )}
         </View>
 
-        {/* ─── Save button ────────────────── */}
+        {/* Save button */}
         <TouchableOpacity
           style={[styles.saveBtn, saved && styles.saveBtnDone]}
           onPress={handleSave}
@@ -216,18 +240,15 @@ export default function SettingsScreen() {
           <Text style={styles.saveBtnText}>{saved ? 'تم الحفظ ✔' : 'حفظ الإعدادات'}</Text>
         </TouchableOpacity>
 
-        {/* ─── App info ─────────────────── */}
         <Text style={styles.version}>SafeInspect v{APP_VERSION}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-// ─── Sub-components ─────────────────────────────────────
-
-function Field({
-  label, value, onChange, placeholder,
-}: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
+function Field({ label, value, onChange, placeholder }: {
+  label: string; value: string; onChange: (v: string) => void; placeholder: string;
+}) {
   return (
     <View style={fieldStyles.wrap}>
       <Text style={fieldStyles.label}>{label}</Text>
@@ -250,135 +271,54 @@ function Divider() {
 const fieldStyles = StyleSheet.create({
   wrap:  { paddingVertical: Spacing.sm },
   label: { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4, textAlign: 'right' },
-  input: {
-    fontSize: FontSize.lg,
-    color: Colors.textPrimary,
-    paddingVertical: Spacing.xs,
-    textAlign: 'right',
-  },
+  input: { fontSize: FontSize.lg, color: Colors.textPrimary, paddingVertical: Spacing.xs, textAlign: 'right' },
 });
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Colors.background },
   header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md,
+    borderBottomWidth: 1, borderBottomColor: Colors.border,
     backgroundColor: Colors.surface,
   },
-  headerTitle: {
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-  },
+  headerTitle: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary },
   content: { padding: Spacing.lg, paddingBottom: Spacing.xxl },
   sectionTitle: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
-    color: Colors.textSecondary,
-    textAlign: 'right',
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.sm,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
+    fontSize: FontSize.base, fontWeight: '600', color: Colors.textSecondary,
+    textAlign: 'right', marginTop: Spacing.xl, marginBottom: Spacing.sm,
+    textTransform: 'uppercase', letterSpacing: 0.5,
   },
   card: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    paddingHorizontal: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.border,
+    backgroundColor: Colors.surface, borderRadius: Radius.md,
+    paddingHorizontal: Spacing.base, borderWidth: 1, borderColor: Colors.border,
   },
   switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: Spacing.md,
-    gap: Spacing.md,
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    paddingVertical: Spacing.md, gap: Spacing.md,
   },
   switchLabel: { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
-  // PIN setup
-  pinSetupBox: {
-    paddingVertical: Spacing.md,
-    gap: Spacing.sm,
-  },
-  pinSetupHint: {
-    fontSize: FontSize.sm,
-    color: Colors.textSecondary,
-    textAlign: 'right',
-    marginBottom: Spacing.xs,
-  },
+  pinSetupBox:  { paddingVertical: Spacing.md, gap: Spacing.sm },
+  pinSetupHint: { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.xs },
   pinInput: {
-    borderWidth: 1,
-    borderColor: Colors.border,
-    borderRadius: Radius.sm,
-    fontSize: FontSize.xl,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    paddingVertical: Spacing.sm,
-    letterSpacing: 12,
-    backgroundColor: Colors.background,
+    borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
+    fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary,
+    paddingVertical: Spacing.sm, letterSpacing: 12, backgroundColor: Colors.background,
   },
-  pinError: {
-    fontSize: FontSize.sm,
-    color: Colors.danger,
-    textAlign: 'center',
-  },
-  pinActions: {
-    flexDirection: 'row',
-    gap: Spacing.sm,
-    marginTop: Spacing.xs,
-  },
-  pinBtn: {
-    flex: 1,
-    paddingVertical: Spacing.sm,
-    borderRadius: Radius.sm,
-    alignItems: 'center',
-  },
-  pinBtnCancel: {
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  pinBtnConfirm: {
-    backgroundColor: Colors.primary,
-  },
-  pinBtnText: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
-    color: Colors.textPrimary,
-  },
-  linkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingVertical: Spacing.md,
-    gap: Spacing.sm,
-  },
-  linkText: {
-    fontSize: FontSize.base,
-    color: Colors.primary,
-    fontWeight: '600',
-  },
+  pinError: { fontSize: FontSize.sm, color: Colors.danger, textAlign: 'center' },
+  pinActions: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.xs },
+  pinBtn:        { flex: 1, paddingVertical: Spacing.sm, borderRadius: Radius.sm, alignItems: 'center' },
+  pinBtnCancel:  { borderWidth: 1, borderColor: Colors.border },
+  pinBtnConfirm: { backgroundColor: Colors.primary },
+  pinBtnText:    { fontSize: FontSize.base, fontWeight: '600', color: Colors.textPrimary },
+  linkRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', paddingVertical: Spacing.md, gap: Spacing.sm },
+  linkText: { fontSize: FontSize.base, color: Colors.primary, fontWeight: '600' },
   saveBtn: {
-    flexDirection: 'row',
-    backgroundColor: Colors.primary,
-    borderRadius: Radius.md,
-    padding: Spacing.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.sm,
-    marginTop: Spacing.xl,
+    flexDirection: 'row', backgroundColor: Colors.primary, borderRadius: Radius.md,
+    padding: Spacing.md, alignItems: 'center', justifyContent: 'center',
+    gap: Spacing.sm, marginTop: Spacing.xl,
   },
   saveBtnDone: { backgroundColor: Colors.success },
   saveBtnText: { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: '700' },
-  version: {
-    textAlign: 'center',
-    fontSize: FontSize.xs,
-    color: Colors.textTertiary,
-    marginTop: Spacing.xl,
-  },
+  version: { textAlign: 'center', fontSize: FontSize.xs, color: Colors.textTertiary, marginTop: Spacing.xl },
 });
