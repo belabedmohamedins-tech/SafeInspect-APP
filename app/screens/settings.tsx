@@ -1,6 +1,5 @@
 // app/screens/settings.tsx
 import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import {
@@ -15,75 +14,83 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Radius, Spacing } from '../../constants';
-
-const STORAGE_KEYS = {
-  inspectorName: '@settings/inspectorName',
-  organisation:  '@settings/organisation',
-  department:    '@settings/department',
-  showGrade:     '@settings/showGrade',
-  signature:     '@signature',
-} as const;
+import { AuthRepository } from '../../src/repositories/AuthRepository';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 
 const APP_VERSION = '1.0.0';
 
 export default function SettingsScreen() {
   const router = useRouter();
 
+  // ── Inspector fields ────────────────────────────────────────────────
   const [inspectorName, setInspectorName] = useState('');
-  const [organisation,  setOrganisation]  = useState('');
-  const [department,    setDepartment]    = useState('');
-  const [showGrade,     setShowGrade]     = useState(true);
+  const [officeName,    setOfficeName]    = useState('');
   const [saved,         setSaved]         = useState(false);
 
-  // ─── Load persisted settings ─────────────────────────────────
+  // ── PIN state ───────────────────────────────────────────────────────
+  const [pinConfigured,  setPinConfigured]  = useState(false);
+  const [showPinSetup,   setShowPinSetup]   = useState(false);
+  const [newPin,         setNewPin]         = useState('');
+  const [confirmPin,     setConfirmPin]     = useState('');
+  const [pinError,       setPinError]       = useState('');
+
+  // ── Load ────────────────────────────────────────────────────────────
   useEffect(() => {
     (async () => {
-      try {
-        const [name, org, dept, grade] = await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEYS.inspectorName),
-          AsyncStorage.getItem(STORAGE_KEYS.organisation),
-          AsyncStorage.getItem(STORAGE_KEYS.department),
-          AsyncStorage.getItem(STORAGE_KEYS.showGrade),
-        ]);
-        if (name)  setInspectorName(name);
-        if (org)   setOrganisation(org);
-        if (dept)  setDepartment(dept);
-        if (grade !== null) setShowGrade(grade === 'true');
-      } catch (e) {
-        console.warn('Settings load error', e);
-      }
+      const settings = await SettingsRepository.get();
+      setInspectorName(settings.inspectorName);
+      setOfficeName(settings.officeName);
+
+      const pin = await AuthRepository.getPin();
+      setPinConfigured(pin !== null);
     })();
   }, []);
 
-  // ─── Save ────────────────────────────────────────────────────
+  // ── Save inspector settings ─────────────────────────────────────────
   const handleSave = async () => {
     try {
-      await AsyncStorage.multiSet([
-        [STORAGE_KEYS.inspectorName, inspectorName.trim()],
-        [STORAGE_KEYS.organisation,  organisation.trim()],
-        [STORAGE_KEYS.department,    department.trim()],
-        [STORAGE_KEYS.showGrade,     String(showGrade)],
-      ]);
+      await SettingsRepository.set({
+        inspectorName: inspectorName.trim(),
+        officeName:    officeName.trim(),
+      });
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
-    } catch (e) {
+    } catch {
       Alert.alert('خطأ', 'تعذّر حفظ الإعدادات');
     }
   };
 
-  // ─── Reset signature ─────────────────────────────────────────
-  const handleResetSignature = () => {
+  // ── PIN setup ───────────────────────────────────────────────────────
+  const handleSetPin = async () => {
+    setPinError('');
+    if (newPin.length !== 4 || !/^\d{4}$/.test(newPin)) {
+      setPinError('يجب أن يتكون الرمز من 4 أرقام بالضبط');
+      return;
+    }
+    if (newPin !== confirmPin) {
+      setPinError('الرمزان غير متطابقين');
+      return;
+    }
+    await AuthRepository.setPin(newPin);
+    setPinConfigured(true);
+    setShowPinSetup(false);
+    setNewPin('');
+    setConfirmPin('');
+    Alert.alert('نجاح', 'تم تفعيل رمز الدخول بنجاح');
+  };
+
+  const handleRemovePin = () => {
     Alert.alert(
-      'حذف التوقيع',
-      'هل تريد حذف التوقيع المحفوظ؟',
+      'إلغاء رمز الدخول',
+      'سيتم إلغاء حماية التطبيق. هل أنت متأكد؟',
       [
         { text: 'إلغاء', style: 'cancel' },
         {
-          text: 'حذف',
+          text: 'نعم، إلغاء الرمز',
           style: 'destructive',
           onPress: async () => {
-            await AsyncStorage.removeItem(STORAGE_KEYS.signature);
-            Alert.alert('تم', 'تم حذف التوقيع');
+            await AuthRepository.setPin(null);
+            setPinConfigured(false);
           },
         },
       ]
@@ -103,7 +110,7 @@ export default function SettingsScreen() {
 
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-        {/* ─── Inspector Info ─────────────────── */}
+        {/* ─── Inspector Info ────────────────── */}
         <Text style={styles.sectionTitle}>بيانات المفتش</Text>
         <View style={styles.card}>
           <Field
@@ -114,44 +121,93 @@ export default function SettingsScreen() {
           />
           <Divider />
           <Field
-            label="المؤسسة / الهيئة"
-            value={organisation}
-            onChange={setOrganisation}
+            label="المصلحة / المكتب"
+            value={officeName}
+            onChange={setOfficeName}
             placeholder="مديرية التجارة ..."
-          />
-          <Divider />
-          <Field
-            label="المصلحة / القسم"
-            value={department}
-            onChange={setDepartment}
-            placeholder="مصلحة حماية المستهلك ..."
           />
         </View>
 
-        {/* ─── Report Options ─────────────────── */}
-        <Text style={styles.sectionTitle}>خيارات التقرير</Text>
+        {/* ─── Security ───────────────────── */}
+        <Text style={styles.sectionTitle}>الأمان</Text>
         <View style={styles.card}>
+
+          {/* PIN toggle row */}
           <View style={styles.switchRow}>
             <Switch
-              value={showGrade}
-              onValueChange={setShowGrade}
+              value={pinConfigured}
+              onValueChange={v => {
+                if (v) {
+                  setShowPinSetup(true);
+                } else {
+                  handleRemovePin();
+                }
+              }}
               trackColor={{ false: Colors.border, true: Colors.primary }}
               thumbColor={Colors.textInverse}
             />
-            <Text style={styles.switchLabel}>إظهار التنقيط (A – D) في التقارير</Text>
+            <Text style={styles.switchLabel}>رمز الدخول (PIN)</Text>
           </View>
+
+          {/* PIN setup form — shown when enabling */}
+          {showPinSetup && (
+            <View style={styles.pinSetupBox}>
+              <Text style={styles.pinSetupHint}>
+                أدخل رمزًا مكونًا من 4 أرقام
+              </Text>
+              <TextInput
+                style={styles.pinInput}
+                value={newPin}
+                onChangeText={t => { setNewPin(t.replace(/\D/g, '').slice(0, 4)); setPinError(''); }}
+                placeholder="الرمز الجديد"
+                placeholderTextColor={Colors.textTertiary}
+                keyboardType="number-pad"
+                secureTextEntry
+                maxLength={4}
+                textAlign="center"
+              />
+              <TextInput
+                style={styles.pinInput}
+                value={confirmPin}
+                onChangeText={t => { setConfirmPin(t.replace(/\D/g, '').slice(0, 4)); setPinError(''); }}
+                placeholder="تأكيد الرمز"
+                placeholderTextColor={Colors.textTertiary}
+                keyboardType="number-pad"
+                secureTextEntry
+                maxLength={4}
+                textAlign="center"
+              />
+              {pinError ? <Text style={styles.pinError}>{pinError}</Text> : null}
+              <View style={styles.pinActions}>
+                <TouchableOpacity
+                  style={[styles.pinBtn, styles.pinBtnCancel]}
+                  onPress={() => { setShowPinSetup(false); setNewPin(''); setConfirmPin(''); setPinError(''); }}
+                >
+                  <Text style={styles.pinBtnText}>إلغاء</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.pinBtn, styles.pinBtnConfirm]} onPress={handleSetPin}>
+                  <Text style={[styles.pinBtnText, { color: '#fff' }]}>تأكيد</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+
+          {/* Change PIN link — shown when already configured */}
+          {pinConfigured && !showPinSetup && (
+            <>
+              <Divider />
+              <TouchableOpacity
+                style={styles.linkRow}
+                onPress={() => { setShowPinSetup(true); setNewPin(''); setConfirmPin(''); }}
+              >
+                <FontAwesome name="lock" size={14} color={Colors.primary} />
+                <Text style={styles.linkText}>تغيير رمز الدخول</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
 
-        {/* ─── Signature ──────────────────────── */}
-        <Text style={styles.sectionTitle}>التوقيع</Text>
-        <View style={styles.card}>
-          <TouchableOpacity style={styles.dangerRow} onPress={handleResetSignature}>
-            <FontAwesome name="trash" size={16} color={Colors.danger} />
-            <Text style={styles.dangerText}>حذف التوقيع المحفوظ</Text>
-          </TouchableOpacity>
-        </View>
-
-        {/* ─── Save button ────────────────────── */}
+        {/* ─── Save button ────────────────── */}
         <TouchableOpacity
           style={[styles.saveBtn, saved && styles.saveBtnDone]}
           onPress={handleSave}
@@ -160,14 +216,14 @@ export default function SettingsScreen() {
           <Text style={styles.saveBtnText}>{saved ? 'تم الحفظ ✔' : 'حفظ الإعدادات'}</Text>
         </TouchableOpacity>
 
-        {/* ─── App info ───────────────────────── */}
+        {/* ─── App info ─────────────────── */}
         <Text style={styles.version}>SafeInspect v{APP_VERSION}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-// ─── Sub-components ────────────────────────────────────────────
+// ─── Sub-components ─────────────────────────────────────
 
 function Field({
   label, value, onChange, placeholder,
@@ -245,14 +301,68 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   switchLabel: { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
-  dangerRow: {
+  // PIN setup
+  pinSetupBox: {
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
+  },
+  pinSetupHint: {
+    fontSize: FontSize.sm,
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    marginBottom: Spacing.xs,
+  },
+  pinInput: {
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.sm,
+    fontSize: FontSize.xl,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    paddingVertical: Spacing.sm,
+    letterSpacing: 12,
+    backgroundColor: Colors.background,
+  },
+  pinError: {
+    fontSize: FontSize.sm,
+    color: Colors.danger,
+    textAlign: 'center',
+  },
+  pinActions: {
+    flexDirection: 'row',
+    gap: Spacing.sm,
+    marginTop: Spacing.xs,
+  },
+  pinBtn: {
+    flex: 1,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.sm,
+    alignItems: 'center',
+  },
+  pinBtnCancel: {
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  pinBtnConfirm: {
+    backgroundColor: Colors.primary,
+  },
+  pinBtnText: {
+    fontSize: FontSize.base,
+    fontWeight: '600',
+    color: Colors.textPrimary,
+  },
+  linkRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.md,
     justifyContent: 'flex-end',
+    paddingVertical: Spacing.md,
+    gap: Spacing.sm,
   },
-  dangerText: { fontSize: FontSize.lg, color: Colors.danger },
+  linkText: {
+    fontSize: FontSize.base,
+    color: Colors.primary,
+    fontWeight: '600',
+  },
   saveBtn: {
     flexDirection: 'row',
     backgroundColor: Colors.primary,
