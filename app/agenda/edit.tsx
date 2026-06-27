@@ -43,8 +43,11 @@ export default function EditAgendaScreen() {
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
   const [notes, setNotes]                 = useState('');
 
+  // ── FIX: async IIFE was the last expression so the effect returned a Promise.
+  // Now we define a named async function and call it with void so the effect
+  // callback itself returns undefined — the only valid non-cleanup return value.
   useEffect(() => {
-    (async () => {
+    async function load() {
       if (!id) { router.back(); return; }
       const [allItems, facilities] = await Promise.all([
         AgendaRepository.getAll(),
@@ -52,7 +55,9 @@ export default function EditAgendaScreen() {
       ]);
       const found = allItems.find(i => i.id === id);
       if (!found) {
-        Alert.alert('خطأ', 'لم يتم العثور على المهمة'); router.back(); return;
+        Alert.alert('خطأ', 'لم يتم العثور على المهمة');
+        router.back();
+        return;
       }
       setItem(found);
       setFacilityName(found.facilityName);
@@ -64,7 +69,9 @@ export default function EditAgendaScreen() {
       setAllFacilities(facilities);
       setFiltered(facilities);
       setLoading(false);
-    })();
+    }
+
+    void load();
   }, [id]);
 
   useEffect(() => {
@@ -215,20 +222,20 @@ export default function EditAgendaScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:  { flex: 1 },
-  centered:  { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  container: { padding: Spacing.base },
-  label:     { fontSize: 14, fontWeight: '600', color: '#34495e', marginTop: Spacing.base, marginBottom: 4 },
-  inputRow:  { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6 },
-  input:     { flex: 1, padding: 12, fontSize: 15, color: '#2c3e50' },
-  clearBtn:  { padding: 12 },
-  dateInput: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6, flex: undefined },
-  dateText:  { fontSize: 15, color: '#2c3e50' },
-  pickerList:{ backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6, maxHeight: 220, overflow: 'hidden' },
-  pickerItem:{ padding: 12, borderBottomWidth: 1, borderBottomColor: '#ecf0f1' },
-  pickerName:{ fontSize: 14, color: '#2c3e50', fontWeight: '500' },
+  safeArea:   { flex: 1 },
+  centered:   { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container:  { padding: Spacing.base },
+  label:      { fontSize: 14, fontWeight: '600', color: '#34495e', marginTop: Spacing.base, marginBottom: 4 },
+  inputRow:   { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6 },
+  input:      { flex: 1, padding: 12, fontSize: 15, color: '#2c3e50' },
+  clearBtn:   { padding: 12 },
+  dateInput:  { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6, flex: undefined },
+  dateText:   { fontSize: 15, color: '#2c3e50' },
+  pickerList: { backgroundColor: '#fff', borderWidth: 1, borderColor: '#bdc3c7', borderRadius: 6, maxHeight: 220, overflow: 'hidden' },
+  pickerItem: { padding: 12, borderBottomWidth: 1, borderBottomColor: '#ecf0f1' },
+  pickerName: { fontSize: 14, color: '#2c3e50', fontWeight: '500' },
   pickerOwner:{ fontSize: 12, color: '#7f8c8d', marginTop: 2 },
-  textArea:  { height: 100, flex: undefined, textAlignVertical: 'top' },
-  saveBtn:   { padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 28, marginBottom: 20 },
+  textArea:   { height: 100, flex: undefined, textAlignVertical: 'top' },
+  saveBtn:    { padding: 14, borderRadius: 8, alignItems: 'center', marginTop: 28, marginBottom: 20 },
   saveBtnText:{ color: '#fff', fontSize: 16, fontWeight: '600' },
 });
