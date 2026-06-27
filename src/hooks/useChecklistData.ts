@@ -14,7 +14,13 @@ import {
   SavedInspection,
 } from '../types';
 import { getEvaluatedCount, groupByAxis } from '../utils/inspectionUtils';
-import { computeScoreAndGrade } from '../utils/scoringUtils';
+import {
+  computeScoreAndGrade,
+  getHighSeverityItemsMissingPhoto,
+} from '../utils/scoringUtils';
+
+/** Minimum fraction of applicable items that must be evaluated before finish. */
+const COMPLETION_GATE = 0.85;
 
 interface ChecklistParams {
   draftId?: string;
@@ -65,6 +71,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           complianceStatus: 'not-evaluated' as ComplianceStatus,
           comment: '',
           photoUri: undefined,
+          photos: [],
         }));
         setData(initial);
         setInspectionId(Crypto.randomUUID());
@@ -133,19 +140,65 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
 
   // ─── Item handlers ───────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, complianceStatus: status } : item));
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
+    );
   }, []);
 
   const handleCommentChange = useCallback((id: string, comment: string) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, comment } : item));
+    setData(prev =>
+      prev.map(item => (item.id === id ? { ...item, comment } : item))
+    );
   }, []);
 
   const handlePhotoTake = useCallback((id: string, uri: string) => {
-    setData(prev => prev.map(item => item.id === id ? { ...item, photoUri: uri } : item));
+    setData(prev =>
+      prev.map(item => {
+        if (item.id !== id) return item;
+        const existingPhotos = item.photos ?? (item.photoUri ? [item.photoUri] : []);
+        return {
+          ...item,
+          photoUri: item.photoUri ?? uri, // keep first photo as legacy field
+          photos: [...existingPhotos, uri],
+        };
+      })
+    );
   }, []);
 
-  // ─── Finish ──────────────────────────────────────────────────────────────
+  // ─── Finish (with validation gates) ─────────────────────────────────────
   const handleFinish = useCallback(async () => {
+    // Gate 1: 85% completion requirement (FR-045)
+    const applicable = data.filter(item => item.complianceStatus !== 'na');
+    const evaluated = applicable.filter(
+      item => item.complianceStatus !== 'not-evaluated'
+    );
+    const completionRate =
+      applicable.length > 0 ? evaluated.length / applicable.length : 1;
+
+    if (completionRate < COMPLETION_GATE) {
+      const remaining = applicable.length - evaluated.length;
+      Alert.alert(
+        'لم يكتمل التفتيش',
+        `يجب تقييم 85٪ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيّم.`,
+        [{ text: 'حسناً' }]
+      );
+      return;
+    }
+
+    // Gate 2: High-severity non-compliant items must have at least one photo (FR-046)
+    const missingPhotos = getHighSeverityItemsMissingPhoto(data);
+    if (missingPhotos.length > 0) {
+      const names = missingPhotos
+        .map(item => `• ${item.criteria}`)
+        .join('\n');
+      Alert.alert(
+        'صور مطلوبة',
+        `البنود الحرجة التالية تحتاج صورة دليل قبل الإنهاء:\n\n${names}`,
+        [{ text: 'حسناً' }]
+      );
+      return;
+    }
+
     setIsFinishing(true);
     const saved = await saveInspection('completed');
     if (!saved) {
@@ -156,7 +209,6 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     const agendaId = paramsRef.current.agendaId;
     if (agendaId) {
       try {
-        // FIX #4: use the dedicated method instead of the non-existent saveAll()
         await AgendaRepository.updateInspectionLink(agendaId, inspectionId);
       } catch (e) {
         console.error('Error updating agenda:', e);
@@ -167,7 +219,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     }
 
     router.replace('/(tabs)/inspection');
-  }, [saveInspection, inspectionId, router]);
+  }, [data, saveInspection, inspectionId, router]);
 
   // ─── Derived values ──────────────────────────────────────────────────────
   const sections = useMemo(() => groupByAxis(data), [data]);
@@ -179,7 +231,15 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   );
 
   return {
-    data, isLoading, sections, totalItems, evaluatedItems, progressPercent,
-    handleStatusChange, handleCommentChange, handlePhotoTake, handleFinish,
+    data,
+    isLoading,
+    sections,
+    totalItems,
+    evaluatedItems,
+    progressPercent,
+    handleStatusChange,
+    handleCommentChange,
+    handlePhotoTake,
+    handleFinish,
   };
 }

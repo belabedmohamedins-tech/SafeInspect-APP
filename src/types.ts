@@ -14,7 +14,10 @@ export interface InspectionItem {
   controlType?: ControlType;
   complianceStatus: ComplianceStatus;
   comment?: string;
+  /** Primary photo URI (legacy — kept for backwards compat with existing drafts). */
   photoUri?: string;
+  /** All evidence photos for this item. Use this for new code. */
+  photos?: string[];
 }
 
 export interface SavedInspection {

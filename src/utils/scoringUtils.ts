@@ -34,15 +34,43 @@ function getIndicatorForItem(item: InspectionItem): IndicatorKey {
 
 function computeIndicatorScore(items: InspectionItem[], indicator: IndicatorKey): number | null {
   const relevant = items.filter(item => getIndicatorForItem(item) === indicator);
-  const evaluated = relevant.filter(item => item.complianceStatus === 'compliant' || item.complianceStatus === 'non-compliant');
+  const evaluated = relevant.filter(item =>
+    item.complianceStatus === 'compliant' || item.complianceStatus === 'non-compliant'
+  );
   if (evaluated.length === 0) return null;
   const compliant = evaluated.filter(item => item.complianceStatus === 'compliant').length;
   return (compliant / evaluated.length) * 100;
 }
 
+/**
+ * Returns true if any high-severity item is non-compliant.
+ * When this is true the final grade must be capped at D regardless of the
+ * numeric score ("grade floor D" rule — FR-040 / FR-050).
+ */
+export function hasHighSeverityViolation(items: InspectionItem[]): boolean {
+  return items.some(
+    item => item.severity === 'high' && item.complianceStatus === 'non-compliant'
+  );
+}
+
+/**
+ * Returns all high-severity non-compliant items that have no photo evidence.
+ * Used by the finish gate to block submission until photos are attached.
+ */
+export function getHighSeverityItemsMissingPhoto(items: InspectionItem[]): InspectionItem[] {
+  return items.filter(
+    item =>
+      item.severity === 'high' &&
+      item.complianceStatus === 'non-compliant' &&
+      !item.photoUri &&
+      (!item.photos || item.photos.length === 0)
+  );
+}
+
 export function computeScoreAndGrade(items: InspectionItem[]): {
   score: number | undefined;
   grade: string | undefined;
+  gradeForcedD: boolean;
   indicators: {
     doc: number | null;
     clean: number | null;
@@ -68,19 +96,31 @@ export function computeScoreAndGrade(items: InspectionItem[]): {
   }
 
   if (totalWeight === 0) {
-    return { score: undefined, grade: undefined, indicators: indicatorScores };
+    return { score: undefined, grade: undefined, gradeForcedD: false, indicators: indicatorScores };
   }
 
   const finalScore = weightedSum / totalWeight;
-  let grade: string | undefined;
-  if (finalScore >= 85) grade = 'A';
-  else if (finalScore >= 70) grade = 'B';
-  else if (finalScore >= 50) grade = 'C';
-  else grade = 'D';
+
+  // Grade floor D: any high-severity non-compliant item overrides the grade.
+  const gradeForcedD = hasHighSeverityViolation(items);
+
+  let grade: string;
+  if (gradeForcedD) {
+    grade = 'D';
+  } else if (finalScore >= 85) {
+    grade = 'A';
+  } else if (finalScore >= 70) {
+    grade = 'B';
+  } else if (finalScore >= 50) {
+    grade = 'C';
+  } else {
+    grade = 'D';
+  }
 
   return {
     score: Math.round(finalScore * 10) / 10,
     grade,
+    gradeForcedD,
     indicators: indicatorScores,
   };
 }
