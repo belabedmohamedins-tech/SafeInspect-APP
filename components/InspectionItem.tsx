@@ -3,8 +3,12 @@ import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import {
+  ActionSheetIOS,
+  Alert,
   Image,
   Modal,
+  Platform,
+  Pressable,
   StyleSheet,
   Text,
   TextInput,
@@ -12,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import { Colors, Radius, Spacing } from '../constants';
+import { copyToAppStorage, deletePhoto } from '../src/services/PhotoService';
 import { ComplianceStatus, InspectionItem } from '../src/types';
 import { getStatusColor, getStatusText } from '../src/utils/statusUtils';
 
@@ -19,10 +24,9 @@ interface Props {
   item: InspectionItem;
   onStatusChange: (id: string, status: ComplianceStatus) => void;
   onCommentChange: (id: string, comment: string) => void;
-  onPhotoTake: (id: string, uri: string) => void;
+  onPhotoTake: (id: string, uri: string | undefined) => void;
 }
 
-/** All four status buttons shown in the action row, including reset. */
 const STATUS_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
 
 const InspectionItemComponent: React.FC<Props> = ({
@@ -31,36 +35,121 @@ const InspectionItemComponent: React.FC<Props> = ({
   onCommentChange,
   onPhotoTake,
 }) => {
-  const [modalVisible, setModalVisible] = useState(false);
+  const [legalModalVisible, setLegalModalVisible] = useState(false);
+  const [photoModalVisible, setPhotoModalVisible] = useState(false);
 
-  const takePhoto = async () => {
+  // ─── Photo source picker ──────────────────────────────────────────
+  const handlePhotoPress = () => {
+    if (Platform.OS === 'ios') {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ['إلغاء', 'التقاط صورة', 'اختيار من المعرض'],
+          cancelButtonIndex: 0,
+        },
+        async (buttonIndex) => {
+          if (buttonIndex === 1) await launchCamera();
+          if (buttonIndex === 2) await launchGallery();
+        }
+      );
+    } else {
+      Alert.alert(
+        'إضافة صورة',
+        '',
+        [
+          { text: 'إلغاء', style: 'cancel' },
+          { text: 'التقاط صورة', onPress: launchCamera },
+          { text: 'اختيار من المعرض', onPress: launchGallery },
+        ]
+      );
+    }
+  };
+
+  const launchCamera = async () => {
     const { status } = await ImagePicker.requestCameraPermissionsAsync();
     if (status !== 'granted') {
-      alert('صلاحية الكاميرا مطلوبة لالتقاط الصور');
+      Alert.alert('صلاحية مطلوبة', 'يرجى السماح باستخدام الكاميرا لالتقاط الصور');
       return;
     }
     const result = await ImagePicker.launchCameraAsync({
       allowsEditing: true,
-      quality: 0.7,
+      quality: 0.75,
     });
     if (!result.canceled) {
-      onPhotoTake(item.id, result.assets[0].uri);
+      await persistPhoto(result.assets[0].uri);
     }
   };
 
-  /** Tapping the active status button resets the item to 'not-evaluated'. */
-  const handleStatusPress = (status: ComplianceStatus) => {
-    if (item.complianceStatus === status) {
-      onStatusChange(item.id, 'not-evaluated');
-    } else {
-      onStatusChange(item.id, status);
+  const launchGallery = async () => {
+    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (status !== 'granted') {
+      Alert.alert('صلاحية مطلوبة', 'يرجى السماح بالوصول إلى المعرض لاختيار الصورة');
+      return;
     }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 0.75,
+    });
+    if (!result.canceled) {
+      await persistPhoto(result.assets[0].uri);
+    }
+  };
+
+  /**
+   * Copy the temp URI to permanent app storage, then notify the parent.
+   * If the item already has a photo, delete the old file first.
+   */
+  const persistPhoto = async (tempUri: string) => {
+    try {
+      // Remove previous photo file if one exists
+      if (item.photoUri) {
+        await deletePhoto(item.photoUri);
+      }
+      const permanentUri = await copyToAppStorage(tempUri, item.id);
+      if (permanentUri) {
+        onPhotoTake(item.id, permanentUri);
+      } else {
+        Alert.alert('خطأ', 'تعذّر حفظ الصورة. حاول مرة أخرى.');
+      }
+    } catch (error) {
+      console.warn('[InspectionItem] persistPhoto error:', error);
+      Alert.alert('خطأ', 'حدث خطأ أثناء حفظ الصورة.');
+    }
+  };
+
+  // ─── Delete photo ─────────────────────────────────────────────
+  const handleDeletePhoto = () => {
+    Alert.alert(
+      'حذف الصورة',
+      'هل تريد حذف الصورة المرفقة بهذا البند؟',
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        {
+          text: 'حذف',
+          style: 'destructive',
+          onPress: async () => {
+            if (item.photoUri) await deletePhoto(item.photoUri);
+            onPhotoTake(item.id, undefined);
+            setPhotoModalVisible(false);
+          },
+        },
+      ]
+    );
+  };
+
+  // ─── Status button handler ──────────────────────────────────────
+  const handleStatusPress = (status: ComplianceStatus) => {
+    onStatusChange(
+      item.id,
+      item.complianceStatus === status ? 'not-evaluated' : status
+    );
   };
 
   const isEvaluated = item.complianceStatus !== 'not-evaluated';
 
   return (
     <View style={styles.container}>
+
       {/* ── Header row: badges + info button ── */}
       <View style={styles.headerRow}>
         <View style={styles.badgeContainer}>
@@ -90,7 +179,7 @@ const InspectionItemComponent: React.FC<Props> = ({
             </View>
           )}
         </View>
-        <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.infoButton}>
+        <TouchableOpacity onPress={() => setLegalModalVisible(true)} style={styles.infoButton}>
           <FontAwesome name="info-circle" size={20} color={Colors.primary} />
         </TouchableOpacity>
       </View>
@@ -99,7 +188,7 @@ const InspectionItemComponent: React.FC<Props> = ({
       <Text style={styles.criteria}>{item.criteria}</Text>
       <Text style={styles.reference}>{item.legalReference}</Text>
 
-      {/* ── Status buttons + camera ── */}
+      {/* ── Status buttons + camera button ── */}
       <View style={styles.buttonsRow}>
         {STATUS_BUTTONS.map((status) => {
           const active = item.complianceStatus === status;
@@ -114,28 +203,37 @@ const InspectionItemComponent: React.FC<Props> = ({
               onPress={() => handleStatusPress(status)}
               accessibilityLabel={getStatusText(status)}
               accessibilityState={{ selected: active }}>
-              <Text
-                style={[
-                  styles.statusButtonText,
-                  active && styles.statusButtonTextActive,
-                ]}>
+              <Text style={[styles.statusButtonText, active && styles.statusButtonTextActive]}>
                 {getStatusText(status)}
               </Text>
             </TouchableOpacity>
           );
         })}
 
-        <TouchableOpacity style={styles.cameraButton} onPress={takePhoto}>
-          <FontAwesome name="camera" size={18} color={Colors.primary} />
+        {/* Camera/Gallery button — indicator dot when photo exists */}
+        <TouchableOpacity
+          style={[
+            styles.cameraButton,
+            item.photoUri && styles.cameraButtonActive,
+          ]}
+          onPress={handlePhotoPress}
+          accessibilityLabel="إضافة صورة"
+        >
+          <FontAwesome
+            name={item.photoUri ? 'camera' : 'camera'}
+            size={18}
+            color={item.photoUri ? Colors.textInverse : Colors.primary}
+          />
+          {item.photoUri && <View style={styles.photoDot} />}
         </TouchableOpacity>
       </View>
 
-      {/* ── Reset hint (shown when a status is active) ── */}
+      {/* ── Reset hint ── */}
       {isEvaluated && (
         <Text style={styles.resetHint}>اضغط على الزر المحدد مرة أخرى لإلغاء التقييم</Text>
       )}
 
-      {/* ── Comment field — always visible once item has any status ── */}
+      {/* ── Comment field ── */}
       {isEvaluated && (
         <TextInput
           style={styles.commentInput}
@@ -148,24 +246,84 @@ const InspectionItemComponent: React.FC<Props> = ({
         />
       )}
 
-      {/* ── Photo thumbnail ── */}
+      {/* ── Photo thumbnail — tap to open full-screen viewer ── */}
       {item.photoUri && (
-        <Image source={{ uri: item.photoUri }} style={styles.thumbnail} />
+        <Pressable onPress={() => setPhotoModalVisible(true)} style={styles.thumbnailWrapper}>
+          <Image
+            source={{ uri: item.photoUri }}
+            style={styles.thumbnail}
+            resizeMode="cover"
+          />
+          <View style={styles.thumbnailOverlay}>
+            <FontAwesome name="expand" size={14} color="#fff" />
+          </View>
+        </Pressable>
       )}
 
-      {/* ── Legal reference modal ── */}
+      {/* ──────────────────────────────────────────────────────
+          Full-screen photo viewer modal
+         ────────────────────────────────────────────────────── */}
+      <Modal
+        animationType="fade"
+        transparent
+        visible={photoModalVisible}
+        onRequestClose={() => setPhotoModalVisible(false)}
+        statusBarTranslucent
+      >
+        <View style={styles.photoModalOverlay}>
+          {/* Top bar */}
+          <View style={styles.photoModalBar}>
+            <TouchableOpacity
+              onPress={handleDeletePhoto}
+              style={styles.photoModalAction}
+              accessibilityLabel="حذف الصورة"
+            >
+              <FontAwesome name="trash" size={20} color="#ff6b6b" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setPhotoModalVisible(false)}
+              style={styles.photoModalAction}
+              accessibilityLabel="إغلاق"
+            >
+              <FontAwesome name="times" size={22} color="#fff" />
+            </TouchableOpacity>
+          </View>
+
+          {/* Full-screen image */}
+          {item.photoUri && (
+            <Image
+              source={{ uri: item.photoUri }}
+              style={styles.photoModalImage}
+              resizeMode="contain"
+            />
+          )}
+
+          {/* Criteria label at bottom */}
+          <View style={styles.photoModalCaption}>
+            <Text style={styles.photoModalCaptionText} numberOfLines={2}>
+              {item.criteria}
+            </Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* ──────────────────────────────────────────────────────
+          Legal reference modal
+         ────────────────────────────────────────────────────── */}
       <Modal
         animationType="slide"
         transparent
-        visible={modalVisible}
-        onRequestClose={() => setModalVisible(false)}>
+        visible={legalModalVisible}
+        onRequestClose={() => setLegalModalVisible(false)}
+      >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContent}>
             <Text style={styles.modalTitle}>السند القانوني</Text>
             <Text style={styles.modalReference}>{item.legalReference}</Text>
             <TouchableOpacity
               style={styles.modalCloseButton}
-              onPress={() => setModalVisible(false)}>
+              onPress={() => setLegalModalVisible(false)}
+            >
               <Text style={styles.modalCloseText}>إغلاق</Text>
             </TouchableOpacity>
           </View>
@@ -242,7 +400,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   statusButtonActive: {
-    // Subtle elevation to reinforce selection
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.15,
@@ -252,6 +409,7 @@ const styles = StyleSheet.create({
   statusButtonText:       { fontSize: 12, fontWeight: '500', color: Colors.textPrimary },
   statusButtonTextActive: { color: Colors.textInverse },
 
+  // Camera button: neutral when no photo, filled primary when photo exists
   cameraButton: {
     padding: Spacing.sm,
     backgroundColor: Colors.primary + '18',
@@ -259,6 +417,22 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
     width: 40,
     alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  cameraButtonActive: {
+    backgroundColor: Colors.primary,
+  },
+  photoDot: {
+    position: 'absolute',
+    top: 4,
+    right: 4,
+    width: 7,
+    height: 7,
+    borderRadius: 4,
+    backgroundColor: '#4cd964',
+    borderWidth: 1,
+    borderColor: Colors.surface,
   },
 
   resetHint: {
@@ -281,8 +455,70 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  thumbnail: { width: 100, height: 100, marginTop: Spacing.sm, borderRadius: Radius.sm },
+  // Photo thumbnail
+  thumbnailWrapper: {
+    marginTop: Spacing.sm,
+    alignSelf: 'flex-start',
+    borderRadius: Radius.md,
+    overflow: 'hidden',
+    position: 'relative',
+  },
+  thumbnail: {
+    width: 120,
+    height: 120,
+    borderRadius: Radius.md,
+  },
+  thumbnailOverlay: {
+    position: 'absolute',
+    bottom: 6,
+    right: 6,
+    backgroundColor: 'rgba(0,0,0,0.45)',
+    borderRadius: 4,
+    padding: 4,
+  },
 
+  // Full-screen photo viewer
+  photoModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.94)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  photoModalBar: {
+    position: 'absolute',
+    top: 48,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: Spacing.lg,
+  },
+  photoModalAction: {
+    padding: Spacing.md,
+    backgroundColor: 'rgba(255,255,255,0.1)',
+    borderRadius: Radius.full,
+  },
+  photoModalImage: {
+    width: '100%',
+    height: '75%',
+  },
+  photoModalCaption: {
+    position: 'absolute',
+    bottom: 40,
+    left: Spacing.lg,
+    right: Spacing.lg,
+    backgroundColor: 'rgba(0,0,0,0.6)',
+    borderRadius: Radius.md,
+    padding: Spacing.sm,
+  },
+  photoModalCaptionText: {
+    color: '#fff',
+    fontSize: 13,
+    textAlign: 'right',
+    lineHeight: 20,
+  },
+
+  // Legal reference modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
