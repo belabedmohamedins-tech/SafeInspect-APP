@@ -71,7 +71,7 @@ export const AgendaRepository = {
 
   /**
    * Links a completed inspection to an agenda item and marks it as completed.
-   * Uses the single `status` field — no redundant `completed` boolean.
+   * Sets both `status: 'completed'` and `completed: true` for full compatibility.
    * Also cancels pending notifications since the visit is done.
    */
   async updateInspectionLink(agendaId: string, inspectionId: string): Promise<void> {
@@ -81,6 +81,7 @@ export const AgendaRepository = {
       all[index] = {
         ...all[index],
         inspectionId,
+        completed: true,
         status: 'completed',
       };
       await writeAll(all);
