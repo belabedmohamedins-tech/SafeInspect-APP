@@ -1,13 +1,14 @@
 // src/repositories/keys.ts
-export const StorageKeys = {
-  INSPECTIONS:        '@safeinspect/inspections',
-  USER_FACILITIES:    '@safeinspect/user_facilities',
-  AGENDA:             '@safeinspect/agenda',
-  SETTINGS:           '@safeinspect/settings',
-  AUDIT_LOG:          '@safeinspect/audit_log',
-  INSPECTION_HASHES:  '@safeinspect/inspection_hashes',
-  CORRECTIVE_ACTIONS: '@safeinspect/corrective_actions',
-  APPROVAL_QUEUE:     '@safeinspect/approval_queue',
+export const KEYS = {
+  FACILITIES:          'FACILITIES',
+  INSPECTIONS:         'INSPECTIONS',
+  AGENDA:              'AGENDA',
+  SETTINGS:            'SETTINGS',
+  AUDIT_LOG:           'AUDIT_LOG',
+  INSPECTION_HASHES:   'INSPECTION_HASHES',
+  CORRECTIVE_ACTIONS:  'CORRECTIVE_ACTIONS',
+  APPROVAL_QUEUE:      'APPROVAL_QUEUE',
+  NOTIFICATIONS:       'NOTIFICATIONS',
 } as const;
 
-export type StorageKey = typeof StorageKeys[keyof typeof StorageKeys];
+export type StorageKey = typeof KEYS[keyof typeof KEYS];

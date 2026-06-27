@@ -3,9 +3,27 @@ export type Severity = 'low' | 'medium' | 'high';
 export type ControlType = 'visual' | 'doc' | 'test';
 export type ComplianceStatus = 'compliant' | 'non-compliant' | 'na' | 'not-evaluated';
 export type Category = 'تنظيمية' | 'بيئية' | 'صحيه' | 'سلامة' | 'نظافة' | 'عامة';
-
-/** Lifecycle of a supervisor approval decision on a completed inspection. */
 export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
+
+/** Notification types surfaced in the Notification Centre. */
+export type NotificationType =
+  | 'CAP_DEADLINE'
+  | 'AGENDA_REMINDER'
+  | 'APPROVAL_ACTION'
+  | 'FOLLOW_UP'
+  | 'SYSTEM';
+
+export interface NotificationItem {
+  id: string;
+  type: NotificationType;
+  title: string;
+  body: string;
+  createdAt: string;        // ISO datetime
+  readAt?: string;          // ISO datetime — undefined = unread
+  dismissed?: boolean;
+  /** Deep-link target: screen name + params */
+  link?: { screen: string; params?: Record<string, string> };
+}
 
 export interface InspectionItem {
   id: string;
@@ -17,9 +35,7 @@ export interface InspectionItem {
   controlType?: ControlType;
   complianceStatus: ComplianceStatus;
   comment?: string;
-  /** Primary photo URI (legacy — kept for backwards compat with existing drafts). */
   photoUri?: string;
-  /** All evidence photos for this item. Use this for new code. */
   photos?: string[];
 }
 
@@ -35,33 +51,17 @@ export interface SavedInspection {
   score?: number;
   grade?: string;
   signature?: string;
-
   officeName?: string;
   inspectionCause?: string;
   referenceDocument?: string;
   committeeMembers?: string[];
   coordinates?: { latitude: number; longitude: number };
-
-  /** djb2 hex digest — set by InspectionRepository.save() on completion. */
   integrityHash?: string;
-
-  /** Geofencing override justification text (null = was within range). */
   geofenceOverrideNote?: string;
-
-  // ── Supervisor Approval (FR-069→075) ─────────────────────────────────────
-  /**
-   * Approval lifecycle state. Defaults to 'pending' when inspection is
-   * first completed. Set to 'approved' | 'returned' | 'escalated' by a
-   * supervisor via ApprovalRepository.
-   */
   approvalStatus?: ApprovalStatus;
-  /** Display name of the supervisor who last acted on this inspection. */
   approvedBy?: string;
-  /** ISO datetime of the approval / return / escalation action. */
   approvedAt?: string;
-  /** Reason text when returned for revision. */
   returnedReason?: string;
-  /** Optional supervisor note attached to any approval decision. */
   approvalNote?: string;
 }
 
