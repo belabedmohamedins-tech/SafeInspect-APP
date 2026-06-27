@@ -81,7 +81,6 @@
       "**/__tests__/**/*.test.ts?(x)",
       "**/__tests__/**/*.test.tsx"
     ],
-    "setupFilesAfterFramework": [],
     "moduleNameMapper": {
       "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts",
       "^expo-modules-core$": "<rootDir>/src/__mocks__/expo-modules-core.ts"
