@@ -73,6 +73,9 @@
   "private": true,
   "jest": {
     "preset": "jest-expo",
+    "setupFilesAfterFramework": [
+      "<rootDir>/jest.setup.ts"
+    ],
     "testMatch": [
       "**/__tests__/**/*.test.ts?(x)",
       "**/__tests__/**/*.test.tsx"
