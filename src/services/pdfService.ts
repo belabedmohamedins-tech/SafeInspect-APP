@@ -61,7 +61,7 @@ function buildReportHTML(
   fallbackInspector: string,
 ): string {
   const groups     = groupByAxisRaw(inspection.items);
-  const inspector  = inspection.inspectorName.trim() || fallbackInspector || 'غير محدد';
+  const inspector  = inspection.inspectorName?.trim() || fallbackInspector || 'غير محدد';
   const office     = inspection.officeName?.trim() || '';
 
   // Re-compute score/grade so the PDF is always up-to-date
@@ -404,7 +404,9 @@ function buildReportHTML(
 // ─── PDF export ───────────────────────────────────────────────────────────────
 
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
-  const { inspectorName: settingsInspector } = await SettingsRepository.get();
+  // SettingsRepository.get(key, default) returns a single value, not an object.
+  // Pull inspectorName safely with a fallback empty string.
+  const settingsInspector = await SettingsRepository.get<string>('inspectorName', '') ?? '';
   const html = buildReportHTML(inspection, settingsInspector);
 
   try {
