@@ -1,7 +1,13 @@
 // src/facilitiesService.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//
+// Read/search layer that merges the read-only hardcoded facility registry
+// with user-added facilities managed by FacilityRepository.
+//
+// ⚠️  All writes go through FacilityRepository — never call AsyncStorage
+//     directly from this file. This guarantees a single source of truth.
+
 import { facilities as hardcodedFacilities } from './facilitiesData';
-import { StorageKeys } from './repositories/keys';
+import { FacilityRepository } from './repositories/FacilityRepository';
 import { Facility } from './types';
 
 // ─── Helpers ────────────────────────────────────────────────────
@@ -15,11 +21,10 @@ const normaliseArabic = (s: string): string =>
 
 // ─── Read ──────────────────────────────────────────────────────
 
-/** Returns all facilities: hardcoded list first, then user-added. */
+/** Returns all facilities: hardcoded registry first, then user-added. */
 export const getAllFacilities = async (): Promise<Facility[]> => {
   try {
-    const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-    const userFacilities: Facility[] = json ? JSON.parse(json) : [];
+    const userFacilities = await FacilityRepository.getAll();
     return [...hardcodedFacilities, ...userFacilities];
   } catch {
     return [...hardcodedFacilities];
@@ -28,26 +33,19 @@ export const getAllFacilities = async (): Promise<Facility[]> => {
 
 /**
  * Looks up a single facility by id.
- * Checks hardcoded first (no storage read needed), then user-added.
+ * Checks hardcoded registry first (no storage read needed), then user-added.
  * Returns `null` if not found.
  */
 export const getFacilityById = async (id: string): Promise<Facility | null> => {
   const hardcoded = hardcodedFacilities.find(f => f.id === id);
   if (hardcoded) return hardcoded;
-
-  const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-  if (json) {
-    const userFacilities: Facility[] = JSON.parse(json);
-    return userFacilities.find(f => f.id === id) ?? null;
-  }
-  return null;
+  return FacilityRepository.getById(id);
 };
 
 /** Returns only the facilities added by the current user. */
 export const getUserFacilities = async (): Promise<Facility[]> => {
   try {
-    const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-    return json ? JSON.parse(json) : [];
+    return await FacilityRepository.getAll();
   } catch {
     return [];
   }
@@ -110,22 +108,16 @@ export const searchAndFilter = async (
   return searched.filter(f => normaliseArabic(f.activity) === target);
 };
 
-// ─── Write ──────────────────────────────────────────────────────
+// ─── Write (delegates to FacilityRepository) ────────────────────
 
 /**
  * Appends a new user facility. Assigns a unique id prefixed with 'U'.
  * Returns the saved facility (with the generated id).
  */
-export const addUserFacility = async (facility: Omit<Facility, 'id'> | Facility): Promise<Facility> => {
-  const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-  const userFacilities: Facility[] = json ? JSON.parse(json) : [];
-  const newFacility: Facility = {
-    ...facility as Facility,
-    id: 'U' + Date.now().toString() + '-' + Math.random().toString(36).substr(2, 5),
-  };
-  userFacilities.push(newFacility);
-  await AsyncStorage.setItem(StorageKeys.USER_FACILITIES, JSON.stringify(userFacilities));
-  return newFacility;
+export const addUserFacility = async (
+  facility: Omit<Facility, 'id'>
+): Promise<Facility> => {
+  return FacilityRepository.add(facility);
 };
 
 /**
@@ -138,36 +130,18 @@ export const updateUserFacility = async (
 ): Promise<boolean> => {
   // Reject updates to hardcoded facilities
   if (hardcodedFacilities.some(f => f.id === id)) return false;
-
-  const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-  if (!json) return false;
-
-  const userFacilities: Facility[] = JSON.parse(json);
-  const index = userFacilities.findIndex(f => f.id === id);
-  if (index === -1) return false;
-
-  userFacilities[index] = { ...userFacilities[index], ...updatedData };
-  await AsyncStorage.setItem(StorageKeys.USER_FACILITIES, JSON.stringify(userFacilities));
-  return true;
+  const result = await FacilityRepository.update(id, updatedData);
+  return result !== null;
 };
 
 /** Removes a user facility by id. Returns `false` if not found or hardcoded. */
 export const deleteUserFacility = async (id: string): Promise<boolean> => {
   // Reject deletion of hardcoded facilities
   if (hardcodedFacilities.some(f => f.id === id)) return false;
-
-  const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-  if (!json) return false;
-
-  const userFacilities: Facility[] = JSON.parse(json);
-  const updated = userFacilities.filter(f => f.id !== id);
-  if (updated.length === userFacilities.length) return false;
-
-  await AsyncStorage.setItem(StorageKeys.USER_FACILITIES, JSON.stringify(updated));
-  return true;
+  return FacilityRepository.remove(id);
 };
 
 /** Wipes all user-added facilities from storage. */
 export const clearAllUserFacilities = async (): Promise<void> => {
-  await AsyncStorage.removeItem(StorageKeys.USER_FACILITIES);
+  await FacilityRepository.clear();
 };
