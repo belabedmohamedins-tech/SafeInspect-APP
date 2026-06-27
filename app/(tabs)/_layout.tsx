@@ -1,8 +1,10 @@
+// app/(tabs)/_layout.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Colors } from '../../constants';
+import { NotificationBell } from '../../components/layout/NotificationBell';
 
 export default function TabLayout() {
   return (
@@ -24,7 +26,7 @@ export default function TabLayout() {
             fontWeight: '500',
           },
           headerStyle: {
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.primary,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
@@ -35,12 +37,13 @@ export default function TabLayout() {
         <Tabs.Screen
           name="home"
           options={{
-            title: 'الرئيسية',
+            title: 'SafeInspect',
             tabBarLabel: 'الرئيسية',
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="home" size={size} color={color} />
             ),
-            headerShown: false,
+            headerShown: true,
+            headerRight: () => <NotificationBell />,
           }}
         />
         <Tabs.Screen
@@ -62,7 +65,8 @@ export default function TabLayout() {
             tabBarIcon: ({ color, size }) => (
               <FontAwesome name="plus-circle" size={size} color={color} />
             ),
-            headerTitle: 'المزيد من الخيارات',
+            headerTitle: 'القائمة',
+            headerShown: true,
           }}
         />
       </Tabs>

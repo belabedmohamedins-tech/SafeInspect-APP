@@ -1,308 +1,190 @@
 // app/screens/settings.tsx
-import { FontAwesome } from '@expo/vector-icons';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
-  Alert,
-  ScrollView,
-  StyleSheet,
-  Switch,
+  View,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  ScrollView,
+  StyleSheet,
+  Alert,
+  Switch,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors, FontSize, Radius, Spacing } from '../../constants';
-import {
-  isEnabled as isNotifEnabled,
-  requestPermission,
-  setEnabled as setNotifEnabled,
-} from '../../src/services/NotificationService';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { useTranslation } from '../../src/i18n';
 
-const STORAGE_KEYS = {
-  inspectorName: '@settings/inspectorName',
-  organisation:  '@settings/organisation',
-  department:    '@settings/department',
-  showGrade:     '@settings/showGrade',
-  signature:     '@signature',
-} as const;
+interface Settings {
+  inspectorName: string;
+  officeName: string;
+  pinEnabled: boolean;
+  biometricEnabled: boolean;
+}
 
-const APP_VERSION = '1.0.0';
+const DEFAULT: Settings = {
+  inspectorName:    '',
+  officeName:       '',
+  pinEnabled:       false,
+  biometricEnabled: false,
+};
 
 export default function SettingsScreen() {
   const router = useRouter();
+  const { language, setLanguage } = useTranslation();
+  const [settings, setSettings] = useState<Settings>(DEFAULT);
+  const [saving, setSaving] = useState(false);
 
-  const [inspectorName, setInspectorName] = useState('');
-  const [organisation,  setOrganisation]  = useState('');
-  const [department,    setDepartment]    = useState('');
-  const [showGrade,     setShowGrade]     = useState(true);
-  const [saved,         setSaved]         = useState(false);
-  const [notifEnabled,  setNotifEnabledState] = useState(true);
-
-  // ─── Load persisted settings ─────────────────────────────────
-  useEffect(() => {
-    (async () => {
-      try {
-        const [name, org, dept, grade] = await Promise.all([
-          AsyncStorage.getItem(STORAGE_KEYS.inspectorName),
-          AsyncStorage.getItem(STORAGE_KEYS.organisation),
-          AsyncStorage.getItem(STORAGE_KEYS.department),
-          AsyncStorage.getItem(STORAGE_KEYS.showGrade),
-        ]);
-        if (name)  setInspectorName(name);
-        if (org)   setOrganisation(org);
-        if (dept)  setDepartment(dept);
-        if (grade !== null) setShowGrade(grade === 'true');
-        const enabled = await isNotifEnabled();
-        setNotifEnabledState(enabled);
-      } catch (e) {
-        console.warn('Settings load error', e);
-      }
-    })();
+  const load = useCallback(async () => {
+    const all = await SettingsRepository.getAll();
+    setSettings({
+      inspectorName:    (all['inspectorName']    as string)  || '',
+      officeName:       (all['officeName']       as string)  || '',
+      pinEnabled:       (all['pinEnabled']       as boolean) || false,
+      biometricEnabled: (all['biometricEnabled'] as boolean) || false,
+    });
   }, []);
 
-  // ─── Notification toggle ───────────────────────────────────
-  const handleNotifToggle = async (value: boolean) => {
-    if (value) {
-      const granted = await requestPermission();
-      if (!granted) {
-        Alert.alert(
-          'الإذن مرفوض',
-          'يرجى تفعيل الإشعارات من إعدادات الهاتف للسماح للتطبيق بإرسال تذكيرات.'
-        );
-        return;
-      }
-    }
-    setNotifEnabledState(value);
-    await setNotifEnabled(value);
-  };
+  useFocusEffect(useCallback(() => { load(); }, [load]));
 
-  // ─── Save ───────────────────────────────────────────────
-  const handleSave = async () => {
-    try {
-      await AsyncStorage.multiSet([
-        [STORAGE_KEYS.inspectorName, inspectorName.trim()],
-        [STORAGE_KEYS.organisation,  organisation.trim()],
-        [STORAGE_KEYS.department,    department.trim()],
-        [STORAGE_KEYS.showGrade,     String(showGrade)],
-      ]);
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
-    } catch (e) {
-      Alert.alert('خطأ', 'تعذّر حفظ الإعدادات');
-    }
-  };
-
-  // ─── Reset signature ─────────────────────────────────
-  const handleResetSignature = () => {
-    Alert.alert(
-      'حذف التوقيع',
-      'هل تريد حذف التوقيع المحفوظ؟',
-      [
-        { text: 'إلغاء', style: 'cancel' },
-        {
-          text: 'حذف',
-          style: 'destructive',
-          onPress: async () => {
-            await AsyncStorage.removeItem(STORAGE_KEYS.signature);
-            Alert.alert('تم', 'تم حذف التوقيع');
-          },
-        },
-      ]
-    );
+  const save = async () => {
+    setSaving(true);
+    await SettingsRepository.set('inspectorName',    settings.inspectorName);
+    await SettingsRepository.set('officeName',       settings.officeName);
+    await SettingsRepository.set('pinEnabled',       settings.pinEnabled);
+    await SettingsRepository.set('biometricEnabled', settings.biometricEnabled);
+    setSaving(false);
+    Alert.alert('', 'تم حفظ الإعدادات بنجاح ✓');
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-          <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
-        </TouchableOpacity>
         <Text style={styles.headerTitle}>الإعدادات</Text>
-        <View style={{ width: 20 }} />
       </View>
 
-      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
+      {/* Inspector Info */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>معلومات المفتش</Text>
 
-        {/* ─── Inspector Info ─────────────────── */}
-        <Text style={styles.sectionTitle}>بيانات المفتش</Text>
-        <View style={styles.card}>
-          <Field label="اسم المفتش" value={inspectorName} onChange={setInspectorName} placeholder="الاسم الكامل" />
-          <Divider />
-          <Field label="المؤسسة / الهيئة" value={organisation} onChange={setOrganisation} placeholder="مديرية التجارة ..." />
-          <Divider />
-          <Field label="المصلحة / القسم" value={department} onChange={setDepartment} placeholder="مصلحة حماية المستهلك ..." />
-        </View>
+        <Text style={styles.label}>اسم المفتش</Text>
+        <TextInput
+          style={styles.input}
+          value={settings.inspectorName}
+          onChangeText={v => setSettings(s => ({ ...s, inspectorName: v }))}
+          placeholder="أدخل اسم المفتش"
+          textAlign="right"
+        />
 
-        {/* ─── Report Options ─────────────────── */}
-        <Text style={styles.sectionTitle}>خيارات التقرير</Text>
-        <View style={styles.card}>
-          <View style={styles.switchRow}>
-            <Switch
-              value={showGrade}
-              onValueChange={setShowGrade}
-              trackColor={{ false: Colors.border, true: Colors.primary }}
-              thumbColor={Colors.textInverse}
-            />
-            <Text style={styles.switchLabel}>إظهار التنقيط (A – D) في التقارير</Text>
-          </View>
-        </View>
+        <Text style={styles.label}>اسم المكتب / الوحدة</Text>
+        <TextInput
+          style={styles.input}
+          value={settings.officeName}
+          onChangeText={v => setSettings(s => ({ ...s, officeName: v }))}
+          placeholder="أدخل اسم المكتب"
+          textAlign="right"
+        />
+      </View>
 
-        {/* ─── Notifications ──────────────────── */}
-        <Text style={styles.sectionTitle}>الإشعارات</Text>
-        <View style={styles.card}>
-          <View style={styles.switchRow}>
-            <Switch
-              value={notifEnabled}
-              onValueChange={handleNotifToggle}
-              trackColor={{ false: Colors.border, true: Colors.primary }}
-              thumbColor={Colors.textInverse}
-            />
-            <View style={styles.switchLabelBlock}>
-              <Text style={styles.switchLabel}>تذكيرات المهام</Text>
-              <Text style={styles.switchSubLabel}>إشعار قبل ساعة من الزيارة وفي صباح يوم الزيارة</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* ─── Data / Backup ──────────────────── */}
-        <Text style={styles.sectionTitle}>البيانات</Text>
-        <View style={styles.card}>
+      {/* Language */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>اللغة / Langue</Text>
+        <View style={styles.segControl}>
           <TouchableOpacity
-            style={styles.navRow}
-            onPress={() => router.push('/screens/backup')}
+            style={[styles.segBtn, language === 'ar' && styles.segBtnActive]}
+            onPress={() => setLanguage('ar')}
           >
-            <FontAwesome name="chevron-left" size={14} color={Colors.textTertiary} />
-            <View style={styles.navRowText}>
-              <Text style={styles.navRowLabel}>النسخ الاحتياطي والاستيراد</Text>
-              <Text style={styles.navRowSub}>تصدير أو استيراد جميع بياناتك</Text>
-            </View>
-            <FontAwesome name="database" size={18} color={Colors.primary} />
+            <Text style={[styles.segBtnText, language === 'ar' && styles.segBtnTextActive]}>
+              🇩🇿 العربية
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.segBtn, language === 'fr' && styles.segBtnActive]}
+            onPress={() => setLanguage('fr')}
+          >
+            <Text style={[styles.segBtnText, language === 'fr' && styles.segBtnTextActive]}>
+              🇫🇷 Français
+            </Text>
           </TouchableOpacity>
         </View>
+      </View>
 
-        {/* ─── Signature ──────────────────────── */}
-        <Text style={styles.sectionTitle}>التوقيع</Text>
-        <View style={styles.card}>
-          <TouchableOpacity style={styles.dangerRow} onPress={handleResetSignature}>
-            <FontAwesome name="trash" size={16} color={Colors.danger} />
-            <Text style={styles.dangerText}>حذف التوقيع المحفوظ</Text>
-          </TouchableOpacity>
+      {/* Security */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>الأمان</Text>
+
+        <View style={styles.switchRow}>
+          <Switch
+            value={settings.pinEnabled}
+            onValueChange={v => setSettings(s => ({ ...s, pinEnabled: v }))}
+            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
+            thumbColor="#fff"
+          />
+          <Text style={styles.switchLabel}>تفعيل قفل PIN</Text>
         </View>
 
-        {/* ─── Save button ────────────────────── */}
-        <TouchableOpacity
-          style={[styles.saveBtn, saved && styles.saveBtnDone]}
-          onPress={handleSave}
-        >
-          <FontAwesome name={saved ? 'check' : 'save'} size={16} color={Colors.textInverse} />
-          <Text style={styles.saveBtnText}>{saved ? 'تم الحفظ ✔' : 'حفظ الإعدادات'}</Text>
+        <View style={styles.switchRow}>
+          <Switch
+            value={settings.biometricEnabled}
+            onValueChange={v => setSettings(s => ({ ...s, biometricEnabled: v }))}
+            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
+            thumbColor="#fff"
+          />
+          <Text style={styles.switchLabel}>المصادقة البيومترية (بصمة / وجه)</Text>
+        </View>
+      </View>
+
+      {/* Navigation Shortcuts */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>روابط سريعة</Text>
+        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/backup')}>
+          <Text style={styles.linkText}>النسخ الاحتياطي والاستعادة →</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/inspector-profile')}>
+          <Text style={styles.linkText}>الملف الشخصي للمفتش →</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/legal')}>
+          <Text style={styles.linkText}>المراجع القانونية →</Text>
+        </TouchableOpacity>
+      </View>
 
-        <Text style={styles.version}>SafeInspect v{APP_VERSION}</Text>
-      </ScrollView>
-    </SafeAreaView>
+      {/* Save */}
+      <TouchableOpacity
+        style={[styles.saveBtn, saving && { opacity: 0.6 }]}
+        onPress={save}
+        disabled={saving}
+      >
+        <Text style={styles.saveBtnText}>{saving ? 'جاري الحفظ...' : 'حفظ الإعدادات'}</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 }
-
-function Field({ label, value, onChange, placeholder }: { label: string; value: string; onChange: (v: string) => void; placeholder: string }) {
-  return (
-    <View style={fieldStyles.wrap}>
-      <Text style={fieldStyles.label}>{label}</Text>
-      <TextInput
-        style={fieldStyles.input}
-        value={value}
-        onChangeText={onChange}
-        placeholder={placeholder}
-        placeholderTextColor={Colors.textTertiary}
-        textAlign="right"
-      />
-    </View>
-  );
-}
-
-function Divider() {
-  return <View style={{ height: 1, backgroundColor: Colors.border, marginVertical: Spacing.xs }} />;
-}
-
-const fieldStyles = StyleSheet.create({
-  wrap:  { paddingVertical: Spacing.sm },
-  label: { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4, textAlign: 'right' },
-  input: { fontSize: FontSize.lg, color: Colors.textPrimary, paddingVertical: Spacing.xs, textAlign: 'right' },
-});
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Colors.background },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    backgroundColor: Colors.surface,
-  },
-  headerTitle: { fontSize: FontSize.xl, fontWeight: '700', color: Colors.textPrimary },
-  content: { padding: Spacing.lg, paddingBottom: Spacing.xxl },
-  sectionTitle: {
-    fontSize: FontSize.base,
-    fontWeight: '600',
-    color: Colors.textSecondary,
-    textAlign: 'right',
-    marginTop: Spacing.xl,
-    marginBottom: Spacing.sm,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  card: {
-    backgroundColor: Colors.surface,
-    borderRadius: Radius.md,
-    paddingHorizontal: Spacing.base,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  switchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: Spacing.md,
-    gap: Spacing.md,
-  },
-  switchLabel:      { flex: 1, fontSize: FontSize.lg, color: Colors.textPrimary, textAlign: 'right' },
-  switchLabelBlock: { flex: 1, alignItems: 'flex-end' },
-  switchSubLabel:   { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'right', marginTop: 2 },
-  navRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.md,
-  },
-  navRowText: { flex: 1, alignItems: 'flex-end' },
-  navRowLabel: { fontSize: FontSize.lg, color: Colors.textPrimary, fontWeight: '500' },
-  navRowSub:   { fontSize: FontSize.sm, color: Colors.textSecondary, marginTop: 2 },
-  dangerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    paddingVertical: Spacing.md,
-    justifyContent: 'flex-end',
-  },
-  dangerText: { fontSize: FontSize.lg, color: Colors.danger },
-  saveBtn: {
-    flexDirection: 'row',
-    backgroundColor: Colors.primary,
-    borderRadius: Radius.md,
-    padding: Spacing.md,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: Spacing.sm,
-    marginTop: Spacing.xl,
-  },
-  saveBtnDone: { backgroundColor: Colors.success },
-  saveBtnText: { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: '700' },
-  version: { textAlign: 'center', fontSize: FontSize.xs, color: Colors.textTertiary, marginTop: Spacing.xl },
+  container:    { flex: 1, backgroundColor: '#f0f4f0' },
+  header:       { backgroundColor: '#2c7a4b', paddingHorizontal: 16,
+                  paddingTop: 52, paddingBottom: 18 },
+  headerTitle:  { fontSize: 22, fontWeight: '800', color: '#fff', textAlign: 'right' },
+  card:         { backgroundColor: '#fff', margin: 16, marginTop: 12, borderRadius: 12,
+                  padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+                  shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
+  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
+                  marginBottom: 12 },
+  label:        { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 8 },
+  input:        { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
+                  fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa' },
+  segControl:   { flexDirection: 'row', gap: 10 },
+  segBtn:       { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
+                  paddingVertical: 10, alignItems: 'center', backgroundColor: '#fafafa' },
+  segBtnActive: { borderColor: '#2c7a4b', backgroundColor: '#eaf6ef' },
+  segBtnText:   { fontSize: 14, color: '#555', fontWeight: '600' },
+  segBtnTextActive: { color: '#2c7a4b' },
+  switchRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                  paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
+  switchLabel:  { fontSize: 14, color: '#1a1a2e', flex: 1, textAlign: 'right', marginRight: 10 },
+  linkRow:      { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
+  linkText:     { fontSize: 14, color: '#2c7a4b', textAlign: 'right', fontWeight: '500' },
+  saveBtn:      { margin: 16, backgroundColor: '#2c7a4b', borderRadius: 10,
+                  paddingVertical: 14, alignItems: 'center' },
+  saveBtnText:  { color: '#fff', fontSize: 16, fontWeight: '700' },
 });

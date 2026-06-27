@@ -7,15 +7,19 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Radius, Shadow, Spacing } from '../../constants';
 
 const MENU_ITEMS = [
-  { name: 'المنشآت',              icon: 'building',      route: '/screens/facilities' },
-  { name: 'التقارير',             icon: 'file-text',     route: '/screens/reports' },
-  { name: 'إحصائيات',            icon: 'bar-chart',     route: '/screens/stats' },
-  { name: 'المراجع',             icon: 'book',           route: '/screens/legal' },
-  { name: 'قوائم التفتيش',       icon: 'print',         route: '/screens/checklists' },
-  { name: 'الخريطة',             icon: 'map-marker',    route: '/screens/map' },
-  { name: 'إجراءات تصحيحية',    icon: 'wrench',        route: '/screens/cap' },
-  { name: 'سجل الأحداث',         icon: 'history',       route: '/screens/audit-log' },
-  { name: 'الإعدادات',           icon: 'cog',           route: '/screens/settings' },
+  { name: 'المنشآت',            icon: 'building',      route: '/screens/facilities' },
+  { name: 'التقارير',           icon: 'file-text',     route: '/screens/reports' },
+  { name: 'إحصائيات',          icon: 'bar-chart',     route: '/screens/stats' },
+  { name: 'المراجع',           icon: 'book',           route: '/screens/legal' },
+  { name: 'قوائم التفتيش',     icon: 'print',         route: '/screens/checklists' },
+  { name: 'الخريطة',           icon: 'map-marker',    route: '/screens/map' },
+  { name: 'إجراءات تصحيحية',  icon: 'wrench',        route: '/screens/cap' },
+  { name: 'سجل الأحداث',       icon: 'history',       route: '/screens/audit-log' },
+  { name: 'طابور الاعتماد',    icon: 'check-square',  route: '/screens/approval-queue' },
+  { name: 'الإشعارات',         icon: 'bell',          route: '/screens/notifications' },
+  { name: 'ملفي الشخصي',      icon: 'user-circle',   route: '/screens/inspector-profile' },
+  { name: 'النسخ الاحتياطي',   icon: 'cloud-upload',  route: '/screens/backup' },
+  { name: 'الإعدادات',         icon: 'cog',           route: '/screens/settings' },
 ] as const;
 
 export default function PlusScreen() {
