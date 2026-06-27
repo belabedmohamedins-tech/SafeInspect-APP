@@ -22,13 +22,15 @@ interface Props {
   onPhotoTake: (id: string, uri: string) => void;
 }
 
+/** All four status buttons shown in the action row, including reset. */
+const STATUS_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
+
 const InspectionItemComponent: React.FC<Props> = ({
   item,
   onStatusChange,
   onCommentChange,
   onPhotoTake,
 }) => {
-  const [showComment, setShowComment] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
   const takePhoto = async () => {
@@ -46,8 +48,20 @@ const InspectionItemComponent: React.FC<Props> = ({
     }
   };
 
+  /** Tapping the active status button resets the item to 'not-evaluated'. */
+  const handleStatusPress = (status: ComplianceStatus) => {
+    if (item.complianceStatus === status) {
+      onStatusChange(item.id, 'not-evaluated');
+    } else {
+      onStatusChange(item.id, status);
+    }
+  };
+
+  const isEvaluated = item.complianceStatus !== 'not-evaluated';
+
   return (
     <View style={styles.container}>
+      {/* ── Header row: badges + info button ── */}
       <View style={styles.headerRow}>
         <View style={styles.badgeContainer}>
           {item.axis && (
@@ -69,10 +83,8 @@ const InspectionItemComponent: React.FC<Props> = ({
                 item.controlType === 'test'   && styles.controlTest,
               ]}>
               <Text style={styles.controlText}>
-                {item.controlType === 'visual'
-                  ? 'بصري'
-                  : item.controlType === 'doc'
-                  ? 'مستندي'
+                {item.controlType === 'visual' ? 'بصري'
+                  : item.controlType === 'doc' ? 'مستندي'
                   : 'اختباري'}
               </Text>
             </View>
@@ -83,60 +95,65 @@ const InspectionItemComponent: React.FC<Props> = ({
         </TouchableOpacity>
       </View>
 
+      {/* ── Criteria + legal reference ── */}
       <Text style={styles.criteria}>{item.criteria}</Text>
       <Text style={styles.reference}>{item.legalReference}</Text>
 
+      {/* ── Status buttons + camera ── */}
       <View style={styles.buttonsRow}>
-        {(['compliant', 'non-compliant', 'na'] as ComplianceStatus[]).map((status) => (
-          <TouchableOpacity
-            key={status}
-            style={[
-              styles.statusButton,
-              {
-                backgroundColor:
-                  item.complianceStatus === status
-                    ? getStatusColor(status)
-                    : Colors.surfaceOffset,
-              },
-            ]}
-            onPress={() => onStatusChange(item.id, status)}>
-            <Text
+        {STATUS_BUTTONS.map((status) => {
+          const active = item.complianceStatus === status;
+          return (
+            <TouchableOpacity
+              key={status}
               style={[
-                styles.statusButtonText,
-                item.complianceStatus === status && styles.statusButtonTextActive,
-              ]}>
-              {getStatusText(status)}
-            </Text>
-          </TouchableOpacity>
-        ))}
+                styles.statusButton,
+                { backgroundColor: active ? getStatusColor(status) : Colors.surfaceOffset },
+                active && styles.statusButtonActive,
+              ]}
+              onPress={() => handleStatusPress(status)}
+              accessibilityLabel={getStatusText(status)}
+              accessibilityState={{ selected: active }}>
+              <Text
+                style={[
+                  styles.statusButtonText,
+                  active && styles.statusButtonTextActive,
+                ]}>
+                {getStatusText(status)}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
 
         <TouchableOpacity style={styles.cameraButton} onPress={takePhoto}>
           <FontAwesome name="camera" size={18} color={Colors.primary} />
         </TouchableOpacity>
       </View>
 
-      {(item.complianceStatus === 'non-compliant' || item.complianceStatus === 'na') && (
-        <TouchableOpacity onPress={() => setShowComment(!showComment)}>
-          <Text style={styles.addComment}>
-            {showComment ? 'إخفاء التعليق' : '➕ إضافة تعليق'}
-          </Text>
-        </TouchableOpacity>
+      {/* ── Reset hint (shown when a status is active) ── */}
+      {isEvaluated && (
+        <Text style={styles.resetHint}>اضغط على الزر المحدد مرة أخرى لإلغاء التقييم</Text>
       )}
 
-      {showComment && (
+      {/* ── Comment field — always visible once item has any status ── */}
+      {isEvaluated && (
         <TextInput
           style={styles.commentInput}
-          placeholder="أدخل ملاحظاتك هنا..."
+          placeholder="ملاحظات (اختياري)..."
+          placeholderTextColor={Colors.textTertiary}
           value={item.comment}
           onChangeText={(text) => onCommentChange(item.id, text)}
           multiline
+          textAlign="right"
         />
       )}
 
+      {/* ── Photo thumbnail ── */}
       {item.photoUri && (
         <Image source={{ uri: item.photoUri }} style={styles.thumbnail} />
       )}
 
+      {/* ── Legal reference modal ── */}
       <Modal
         animationType="slide"
         transparent
@@ -224,6 +241,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  statusButtonActive: {
+    // Subtle elevation to reinforce selection
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.15,
+    shadowRadius: 2,
+    elevation: 2,
+  },
   statusButtonText:       { fontSize: 12, fontWeight: '500', color: Colors.textPrimary },
   statusButtonTextActive: { color: Colors.textInverse },
 
@@ -236,17 +261,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 
-  addComment: { color: Colors.primary, marginVertical: Spacing.sm, textAlign: 'right' },
+  resetHint: {
+    fontSize: 10,
+    color: Colors.textTertiary,
+    textAlign: 'right',
+    marginBottom: Spacing.xs,
+  },
 
   commentInput: {
     borderWidth: 1,
     borderColor: Colors.border,
     borderRadius: Radius.sm,
     padding: Spacing.sm,
-    marginTop: Spacing.sm,
+    marginTop: Spacing.xs,
     textAlignVertical: 'top',
-    minHeight: 60,
+    minHeight: 56,
     color: Colors.textPrimary,
+    fontSize: 13,
+    backgroundColor: Colors.background,
   },
 
   thumbnail: { width: 100, height: 100, marginTop: Spacing.sm, borderRadius: Radius.sm },

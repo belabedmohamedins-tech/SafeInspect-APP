@@ -21,6 +21,15 @@ export default function ChecklistScreen() {
 
   const { showSignature, setShowSignature, signature, handleSignature } = useSignature();
 
+  // Safely parse committeeMembers — passed as JSON.stringify(string[]) from start.tsx
+  let committeeMembers: string[] = [];
+  try {
+    const raw = params.committeeMembers;
+    if (raw) committeeMembers = JSON.parse(Array.isArray(raw) ? raw[0] : raw);
+  } catch {
+    committeeMembers = [];
+  }
+
   const checklistParams = {
     draftId:          params.draftId as string | undefined,
     facilityId:       params.facilityId as string,
@@ -30,7 +39,7 @@ export default function ChecklistScreen() {
     agendaId:         params.agendaId as string | undefined,
     cause:            params.cause as string,
     reference:        params.reference as string,
-    committeeMembers: [],
+    committeeMembers,
     writer:           params.writer as string,
     lat:              params.lat ? parseFloat(params.lat as string) : undefined,
     lng:              params.lng ? parseFloat(params.lng as string) : undefined,
