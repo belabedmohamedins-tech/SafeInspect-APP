@@ -10,6 +10,18 @@
  * that intentionally spy on console still work.
  */
 
+// ─── Expo winter-fetch native module stub ───────────────────────────────────
+// jest-expo's preset tries to bootstrap expo/src/winter/fetch/ExpoFetchModule
+// at startup, which requires a native runtime that doesn't exist in Node.
+// Mocking it here (belt-and-suspenders alongside moduleNameMapper) prevents
+// "Cannot find native module 'ExpoFetchModule'" from crashing every suite.
+jest.mock('expo/src/winter/fetch/ExpoFetchModule', () => ({
+  fetch: jest.fn(),
+  Headers: jest.fn(),
+  Request: jest.fn(),
+  Response: jest.fn(),
+}), { virtual: true });
+
 // ─── React Native Platform mock ─────────────────────────────────────────────
 // jest-expo's preset mocks most of RN but Platform.select is not always wired.
 // pdfService → statusUtils → constants/theme.ts calls Platform.select() at

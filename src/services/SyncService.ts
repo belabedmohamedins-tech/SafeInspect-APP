@@ -14,13 +14,19 @@
 //     inspection object.
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
+//
+// NOTE: SYNC_API_URL is intentionally read lazily (inside each function) so
+// that tests can mutate process.env + call jest.resetModules() to exercise
+// both the "no URL" and "URL configured" branches without module caching.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
 
-const SYNC_API_URL: string | undefined =
-  (process.env.EXPO_PUBLIC_SYNC_API_URL ?? '').trim() || undefined;
+/** Read the API URL fresh each call — lets jest.resetModules() + env work. */
+function getSyncApiUrl(): string | undefined {
+  return (process.env.EXPO_PUBLIC_SYNC_API_URL ?? '').trim() || undefined;
+}
 
 export interface SyncQueueItem {
   inspection: SavedInspection;
@@ -101,12 +107,13 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
  * Silent no-op if SYNC_API_URL is not configured.
  */
 export async function flush(): Promise<number> {
+  const SYNC_API_URL = getSyncApiUrl();
   if (!SYNC_API_URL) return 0;
 
   const isOnline = await checkOnline();
   if (!isOnline) return 0;
 
-  let queue = await readQueue();
+  const queue = await readQueue();
   if (queue.length === 0) return 0;
 
   let synced = 0;
