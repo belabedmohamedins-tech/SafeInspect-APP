@@ -2,24 +2,22 @@
 //
 // ARCHITECTURE:
 //   useFocusEffect is mocked globally (jest.setup.ts) to call cb() directly
-//   on mount — no useEffect, no hook violation. The callback contains an
-//   async run() that calls InspectionRepository.getAll(). Because getAll is
-//   mocked with mockResolvedValue(), the Promise settles as a microtask after
-//   renderHook returns. We use waitFor() to wait for totalCount to update.
+//   on mount AND on every re-render. The callback calls
+//   InspectionRepository.getAll() asynchronously. This means after any
+//   state update that causes a re-render, getAll() is called again.
+//
+//   CONSEQUENCE FOR DELETE TEST: after onPress() calls
+//   setInspections(prev => prev.filter()), React re-renders →
+//   useFocusEffect fires again → getAll() runs again. If getAll() still
+//   returns the deleted item, the item is restored. The fix is to override
+//   mockGetAll to return [] before triggering onPress confirm.
 //
 // IMPORTANT — RTLRN v14 renderHook() is async → always await it.
 //
-// IMPORTANT — act() wrapping state setter calls must be:
-//   await act(async () => { setter(...) })
-//   Plain act(() => setter()) does not guarantee the update is committed in
-//   RTLRN v14 before the next assertion runs.
-//
 // MOCK SCOPING RULE:
 //   Only the outer beforeEach calls jest.clearAllMocks(). Nested beforeEach
-//   blocks only call mockGetAll.mockResolvedValue() — they must NOT call
-//   jest.clearAllMocks() or jest.resetAllMocks(), as that wipes useNavigation
-//   and useRouter stubs set by jest.setup.ts, causing renderHook to throw
-//   and result.current to be null for every subsequent test.
+//   blocks must NOT call jest.clearAllMocks() — that wipes useNavigation /
+//   useRouter stubs from jest.setup.ts, causing result.current to be null.
 
 jest.mock('../repositories/InspectionRepository', () => ({
   InspectionRepository: {
@@ -60,17 +58,16 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
   } as SavedInspection;
 }
 
-// Outer beforeEach — runs before EVERY test. Resets all mocks cleanly.
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetAll.mockResolvedValue([]);
   mockDelete.mockResolvedValue(undefined);
 });
 
-// ─── initial state ───────────────────────────────────────────────────────────
+// --- initial state ---
 describe('useInspectionList — initial state', () => {
   it('starts with empty filtered list and zero totalCount before load resolves', async () => {
-    mockGetAll.mockReturnValue(new Promise(() => {})); // never resolves
+    mockGetAll.mockReturnValue(new Promise(() => {}));
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     expect(result.current.filtered).toEqual([]);
     expect(result.current.totalCount).toBe(0);
@@ -79,7 +76,7 @@ describe('useInspectionList — initial state', () => {
   });
 });
 
-// ─── data load on mount ───────────────────────────────────────────────────────
+// --- data load on mount ---
 describe('useInspectionList — data load on mount', () => {
   it('loads inspections via useFocusEffect on mount', async () => {
     mockGetAll.mockResolvedValue([
@@ -99,9 +96,7 @@ describe('useInspectionList — data load on mount', () => {
   });
 });
 
-// ─── filter by status ─────────────────────────────────────────────────────────
-// NOTE: nested beforeEach here does NOT call jest.clearAllMocks().
-// It only overrides mockGetAll for this describe block.
+// --- filter by status ---
 describe('useInspectionList — filter by status', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([
@@ -134,7 +129,7 @@ describe('useInspectionList — filter by status', () => {
   });
 });
 
-// ─── search ───────────────────────────────────────────────────────────────────
+// --- search ---
 describe('useInspectionList — search', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([
@@ -173,7 +168,7 @@ describe('useInspectionList — search', () => {
   });
 });
 
-// ─── sort order ───────────────────────────────────────────────────────────────
+// --- sort order ---
 describe('useInspectionList — sort order', () => {
   it('filtered list is sorted descending by date', async () => {
     mockGetAll.mockResolvedValue([
@@ -188,15 +183,13 @@ describe('useInspectionList — sort order', () => {
   });
 });
 
-// ─── deleteInspection ─────────────────────────────────────────────────────────
+// --- deleteInspection ---
 describe('useInspectionList — deleteInspection', () => {
   it('calls Alert.alert with the confirmation message', async () => {
     mockGetAll.mockResolvedValue([makeInspection({ id: 'del-1' })]);
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(1));
-    await act(async () => {
-      await result.current.deleteInspection('del-1');
-    });
+    await act(async () => { await result.current.deleteInspection('del-1'); });
     expect(Alert.alert).toHaveBeenCalledWith(
       '\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062d\u0630\u0641',
       '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u062d\u0630\u0641 \u0647\u0630\u0627 \u0627\u0644\u062a\u0641\u062a\u064a\u0634\u061f',
@@ -209,22 +202,28 @@ describe('useInspectionList — deleteInspection', () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(1));
 
-    // CRITICAL: install the capturing mock BEFORE calling deleteInspection.
-    // Alert.alert fires synchronously inside deleteInspection — if the mock
-    // is installed after the call, alertButtons stays [] and onPress() is
-    // never invoked, so the item is never removed from the list.
+    // Install Alert capturing mock BEFORE calling deleteInspection
+    // (Alert.alert fires synchronously inside deleteInspection)
     let alertButtons: any[] = [];
     (Alert.alert as jest.Mock).mockImplementation((_t, _m, buttons) => {
       alertButtons = buttons;
     });
 
-    // Trigger the delete — Alert.alert fires here, alertButtons is now populated
+    // Trigger the confirmation dialog
     await act(async () => { result.current.deleteInspection('del-1'); });
 
-    // Simulate user pressing the confirm button (index 1 = 'حذف')
+    // KEY FIX: update mockGetAll to return [] BEFORE confirming delete.
+    // Because useFocusEffect re-fires on every re-render (jest.setup.ts
+    // mock), the state update from onPress() triggers a re-render which
+    // triggers getAll() again. If getAll still returns [del-1], the item
+    // gets restored. Returning [] ensures the re-fetch does not undo the
+    // optimistic filter.
+    mockGetAll.mockResolvedValue([]);
+
+    // Simulate user tapping confirm
     await act(async () => { await alertButtons[1].onPress(); });
 
-    // Wait for React to commit the setInspections state update
+    // Wait for React to settle with the empty list
     await waitFor(() => expect(result.current.filtered).toHaveLength(0));
 
     expect(mockDelete).toHaveBeenCalledWith('del-1');
