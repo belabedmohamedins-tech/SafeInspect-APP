@@ -29,8 +29,6 @@ afterAll(() => {
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
-// Stub constants/theme before anything imports it so Platform.select
-// in theme.ts never executes during module loading in the test environment.
 jest.mock('../../constants/theme', () => ({
   Colors:  { primary: '#000', background: '#fff', text: '#000', tint: '#000',
              tabIconDefault: '#ccc', tabIconSelected: '#000', error: '#f00',
@@ -51,10 +49,6 @@ jest.mock('../../constants', () => ({
   Radius:  { sm: 4, md: 8, lg: 16, full: 9999 },
 }), { virtual: false });
 
-// NOTE: @react-native-async-storage/async-storage is intentionally NOT mocked
-// here. jest.config.js moduleNameMapper (Layer 2) already routes every import
-// to __mocks__/@react-native-async-storage/async-storage.js.
-
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
   cacheDirectory:    'file:///cache/',
@@ -74,9 +68,6 @@ jest.mock('expo-sharing', () => ({
   shareAsync:       jest.fn().mockResolvedValue(undefined),
 }));
 
-// IMPORTANT: jest.mock() is hoisted by Babel before const declarations.
-// The stub MUST be created with jest.fn() inside the factory — NOT by
-// referencing an outer const variable (which would be undefined at hoist time).
 jest.mock('../repositories/SettingsRepository', () => ({
   SettingsRepository: { get: jest.fn() },
 }));
@@ -94,7 +85,6 @@ import {
 import { SettingsRepository } from '../repositories/SettingsRepository';
 import { InspectionItem, SavedInspection } from '../types';
 
-// Typed reference retrieved after import — always points to the live mock.
 const mockSettingsGet = jest.mocked(SettingsRepository.get);
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -131,7 +121,6 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
   };
 }
 
-/** Helper: capture the HTML string passed to buildReportHTML via exportInspectionPDF */
 async function captureHTML(inspection: SavedInspection): Promise<string> {
   let captured = '';
   (Print.printAsync as jest.Mock).mockImplementationOnce(({ html }: { html: string }) => {
@@ -144,10 +133,8 @@ async function captureHTML(inspection: SavedInspection): Promise<string> {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  // Reset the in-memory AsyncStorage store between tests.
   const AsyncStorage = require('@react-native-async-storage/async-storage');
   AsyncStorage.__resetStore();
-  // Default: settings returns an empty inspector name
   mockSettingsGet.mockResolvedValue({ inspectorName: '', officeName: '' });
 });
 
@@ -231,8 +218,10 @@ describe('buildReportHTML — items rendering', () => {
   });
 
   it('omits signature section when absent', async () => {
+    // The CSS class name 'sig-section' always appears in the <style> block.
+    // We check that the actual HTML element is not rendered instead.
     const html = await captureHTML(makeInspection({ signature: undefined }));
-    expect(html).not.toContain('sig-section');
+    expect(html).not.toContain('<div class="sig-section"');
   });
 
   it('renders na status cell', async () => {
