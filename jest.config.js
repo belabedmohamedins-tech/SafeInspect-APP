@@ -42,12 +42,15 @@ module.exports = {
     '!src/app/**',
   ],
 
+  // ─── Thresholds ─────────────────────────────────────────────────────────────
+  // Last passing run: branches 79.73 / functions 97.42 / lines 95.21 / stmts 93.66
+  // Set slightly below current to give headroom while blocking regressions.
   coverageThreshold: {
     global: {
-      branches:   60,
-      functions:  70,
-      lines:      70,
-      statements: 70,
+      branches:   78,
+      functions:  95,
+      lines:      93,
+      statements: 92,
     },
   },
 

@@ -21,6 +21,26 @@ function renderPureHook<T>(hook: () => T) {
   return snapshot;
 }
 
+// Renders a hook whose input can be changed between acts.
+function renderPureHookStateful<TProps, TResult>(
+  useHook: (p: TProps) => TResult,
+  initialProps: TProps,
+) {
+  const snapshot: { current: TResult | null } = { current: null };
+  let latestProps: TProps = initialProps;
+  let renderer: ReturnType<typeof create>;
+  function Wrapper() {
+    snapshot.current = useHook(latestProps);
+    return null;
+  }
+  rtrAct(() => { renderer = create(React.createElement(Wrapper)); });
+  function rerender(newProps: TProps) {
+    latestProps = newProps;
+    rtrAct(() => { renderer.update(React.createElement(Wrapper)); });
+  }
+  return { snapshot, rerender };
+}
+
 // ─── Tests ───────────────────────────────────────────────────────────────────
 
 describe('useCollapsibleSections', () => {
@@ -69,5 +89,35 @@ describe('useCollapsibleSections', () => {
       { complianceStatus: 'non-compliant' },
     ];
     expect(result.current!.getSectionProgress(items)).toBe('2/3');
+  });
+
+  // ── lines 22-23: useEffect branch — new title added after initial render ──
+  it('adds a new section key as expanded when sectionTitles grows', () => {
+    const { snapshot, rerender } = renderPureHookStateful(
+      (titles: string[]) => useCollapsibleSections(titles),
+      ['A', 'B'],
+    );
+    // Sanity: initial state
+    expect(snapshot.current!.collapsed['A']).toBe(false);
+    expect(snapshot.current!.collapsed['B']).toBe(false);
+    expect(snapshot.current!.collapsed['C']).toBeUndefined();
+
+    // Re-render with a new title → useEffect fires → 'C' added as false
+    rerender(['A', 'B', 'C']);
+    expect(snapshot.current!.collapsed['C']).toBe(false);
+  });
+
+  it('does NOT reset collapsed state of existing sections when a new one is added', () => {
+    const { snapshot, rerender } = renderPureHookStateful(
+      (titles: string[]) => useCollapsibleSections(titles),
+      ['A', 'B'],
+    );
+    rtrAct(() => { snapshot.current!.toggleSection('A'); });
+    expect(snapshot.current!.collapsed['A']).toBe(true);
+
+    rerender(['A', 'B', 'C']);
+    // 'A' must remain collapsed — the effect only adds missing keys
+    expect(snapshot.current!.collapsed['A']).toBe(true);
+    expect(snapshot.current!.collapsed['C']).toBe(false);
   });
 });

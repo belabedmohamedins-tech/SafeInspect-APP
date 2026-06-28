@@ -81,6 +81,24 @@ describe('useHomeData — data load on mount', () => {
     });
     expect(result.current.officeName).toBe('');
   });
+
+  // ── lines 29-32: isActive cleanup branch ──────────────────────────────────
+  // Unmounting before the promise resolves must NOT call setData.
+  // If it did, React would log a "state update on unmounted component" warning
+  // and the test would fail on the post-unmount assertion.
+  it('does not update state after unmount (isActive guard)', async () => {
+    let resolveLoad!: (v: any) => void;
+    mockLoadHomeData.mockReturnValue(
+      new Promise(res => { resolveLoad = res; }),
+    );
+    const { result, unmount } = await renderHook(() => useHomeData(), { wrapper: Wrapper });
+    // Unmount before the promise settles
+    unmount();
+    // Now resolve — isActive is false, setData must NOT be called
+    act(() => { resolveLoad(FULL_DATA); });
+    // State stays at EMPTY (the hook is unmounted, result.current is frozen)
+    expect(result.current.officeName).toBe('');
+  });
 });
 
 describe('useHomeData — getFacilityForAgenda', () => {

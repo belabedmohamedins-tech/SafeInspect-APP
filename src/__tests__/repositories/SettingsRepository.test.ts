@@ -44,6 +44,15 @@ describe('SettingsRepository.get', () => {
     expect(settings.officeName).toBe('My Office');
     expect(settings.inspectorName).toBe('John');
   });
+
+  it('returns DEFAULTS when AsyncStorage.multiGet throws', async () => {
+    const original = AsyncStorage.multiGet;
+    (AsyncStorage as any).multiGet = jest.fn().mockRejectedValue(new Error('storage unavailable'));
+    const settings = await SettingsRepository.get();
+    expect(settings.officeName).toBe('');
+    expect(settings.inspectorName).toBe('');
+    (AsyncStorage as any).multiGet = original;
+  });
 });
 
 // ─── set ──────────────────────────────────────────────────────────────────────
@@ -71,5 +80,17 @@ describe('SettingsRepository.set', () => {
     expect(settings.officeName).toBe('Office C');
     // inspectorName was not overwritten
     expect(settings.inspectorName).toBe('Inspector B');
+  });
+
+  // ── line 54: early-return guard — set() called with empty object ──────────
+  it('is a no-op when called with an empty object', async () => {
+    await SettingsRepository.set({ officeName: 'Pre-set' });
+    const multiSetSpy = jest.spyOn(AsyncStorage, 'multiSet');
+    await SettingsRepository.set({});
+    expect(multiSetSpy).not.toHaveBeenCalled();
+    // Storage untouched
+    const settings = await SettingsRepository.get();
+    expect(settings.officeName).toBe('Pre-set');
+    multiSetSpy.mockRestore();
   });
 });
