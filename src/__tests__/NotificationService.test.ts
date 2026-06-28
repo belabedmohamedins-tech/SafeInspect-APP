@@ -1,24 +1,18 @@
 // src/__tests__/NotificationService.test.ts
-//
-// expo-notifications is mapped at Layer 2 (moduleNameMapper) to
-// __mocks__/expo-notifications.js which exposes real jest.fn() stubs.
-// expo-constants is mapped to __mocks__/expo-constants.js which sets
-// appOwnership = 'standalone' so IS_EXPO_GO = false and all branches run.
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
 // ─── Typed stubs ─────────────────────────────────────────────────────────────
-const mockGetPerms    = jest.mocked(Notifications.getPermissionsAsync);
-const mockReqPerms    = jest.mocked(Notifications.requestPermissionsAsync);
-const mockSetChannel  = jest.mocked(Notifications.setNotificationChannelAsync);
-const mockSchedule    = jest.mocked(Notifications.scheduleNotificationAsync);
-const mockCancelOne   = jest.mocked(Notifications.cancelScheduledNotificationAsync);
-const mockCancelAll   = jest.mocked(Notifications.cancelAllScheduledNotificationsAsync);
+const mockGetPerms   = jest.mocked(Notifications.getPermissionsAsync);
+const mockReqPerms   = jest.mocked(Notifications.requestPermissionsAsync);
+const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
+const mockSchedule   = jest.mocked(Notifications.scheduleNotificationAsync);
+const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsync);
+const mockCancelAll  = jest.mocked(Notifications.cancelAllScheduledNotificationsAsync);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
-// Import AFTER mocks are wired up
 import {
   requestPermission,
   isEnabled,
@@ -27,10 +21,9 @@ import {
   cancelForAgendaItem,
   rescheduleAll,
   AgendaNotificationPayload,
-} from '../../services/NotificationService';
+} from '../services/NotificationService';
 
-const FUTURE = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(); // +2 days
-const PAST   = new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(); // -2 days
+const FUTURE = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString();
 
 function makeItem(overrides: Partial<AgendaNotificationPayload> = {}): AgendaNotificationPayload {
   return { id: 'item-1', facilityName: 'Test Facility', date: FUTURE, ...overrides };
@@ -39,7 +32,6 @@ function makeItem(overrides: Partial<AgendaNotificationPayload> = {}): AgendaNot
 beforeEach(() => {
   resetAsync();
   jest.clearAllMocks();
-  // Restore default implementations
   mockGetPerms.mockResolvedValue({ status: 'granted' } as any);
   mockReqPerms.mockResolvedValue({ status: 'granted' } as any);
   mockSetChannel.mockResolvedValue(null as any);
@@ -113,7 +105,6 @@ describe('NotificationService', () => {
   describe('scheduleForAgendaItem', () => {
     it('schedules two notifications for a future item', async () => {
       await scheduleForAgendaItem(makeItem());
-      // cancelForAgendaItem fires 2 cancels + up to 2 schedules
       expect(mockSchedule).toHaveBeenCalledTimes(2);
     });
 
@@ -132,10 +123,8 @@ describe('NotificationService', () => {
     });
 
     it('does not schedule pre-notification for an item less than 1 hour away', async () => {
-      // date is only 30 min in the future — pre-date (now - 30min) is in the past
       const soonDate = new Date(Date.now() + 30 * 60 * 1000).toISOString();
       await scheduleForAgendaItem(makeItem({ date: soonDate }));
-      // Only day-of notification might fire (or none if morning already passed)
       const identifiers = mockSchedule.mock.calls.map(c => (c[0] as any).identifier as string);
       expect(identifiers).not.toContain('agenda-item-1-pre');
     });

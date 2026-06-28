@@ -1,25 +1,21 @@
 // src/__tests__/PhotoService.test.ts
-//
-// expo-file-system is already proxied through expo-modules-core (Layer 2).
-// We mock it at Layer 4 here since PhotoService uses the top-level
-// `expo-file-system` (not the /legacy sub-path).
 
 jest.mock('expo-file-system', () => ({
-  documentDirectory: 'file:///app/',
-  getInfoAsync:      jest.fn(),
-  makeDirectoryAsync: jest.fn(),
-  copyAsync:         jest.fn(),
-  deleteAsync:       jest.fn(),
+  documentDirectory:   'file:///app/',
+  getInfoAsync:        jest.fn(),
+  makeDirectoryAsync:  jest.fn(),
+  copyAsync:           jest.fn(),
+  deleteAsync:         jest.fn(),
 }));
 
 import * as FileSystem from 'expo-file-system';
-import { copyToAppStorage, deletePhoto, photoExists } from '../../services/PhotoService';
+import { copyToAppStorage, deletePhoto, photoExists } from '../services/PhotoService';
 
 // ─── Typed stubs ─────────────────────────────────────────────────────────────
-const mockGetInfo  = jest.mocked(FileSystem.getInfoAsync);
-const mockMakeDir  = jest.mocked(FileSystem.makeDirectoryAsync);
-const mockCopy     = jest.mocked(FileSystem.copyAsync);
-const mockDelete   = jest.mocked(FileSystem.deleteAsync);
+const mockGetInfo = jest.mocked(FileSystem.getInfoAsync);
+const mockMakeDir = jest.mocked(FileSystem.makeDirectoryAsync);
+const mockCopy    = jest.mocked(FileSystem.copyAsync);
+const mockDelete  = jest.mocked(FileSystem.deleteAsync);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -31,13 +27,9 @@ beforeEach(() => {
 describe('PhotoService', () => {
   describe('copyToAppStorage', () => {
     it('creates the photos directory when it does not exist', async () => {
-      mockGetInfo.mockResolvedValueOnce({ exists: false } as any); // dir check
-      mockGetInfo.mockResolvedValueOnce({ exists: true } as any);  // unused
+      mockGetInfo.mockResolvedValueOnce({ exists: false } as any);
       await copyToAppStorage('file:///tmp/photo.jpg', 'item-1');
-      expect(mockMakeDir).toHaveBeenCalledWith(
-        'file:///app/photos/',
-        { intermediates: true },
-      );
+      expect(mockMakeDir).toHaveBeenCalledWith('file:///app/photos/', { intermediates: true });
     });
 
     it('skips directory creation when it already exists', async () => {
@@ -49,9 +41,7 @@ describe('PhotoService', () => {
     it('copies the file and returns the permanent URI', async () => {
       mockGetInfo.mockResolvedValueOnce({ exists: true } as any);
       const result = await copyToAppStorage('file:///tmp/photo.jpg', 'item-42');
-      expect(mockCopy).toHaveBeenCalledWith(
-        expect.objectContaining({ from: 'file:///tmp/photo.jpg' }),
-      );
+      expect(mockCopy).toHaveBeenCalledWith(expect.objectContaining({ from: 'file:///tmp/photo.jpg' }));
       expect(result).toMatch(/^file:\/\/\/app\/photos\/insp-item-42-\d+\.jpg$/);
     });
 
@@ -72,10 +62,7 @@ describe('PhotoService', () => {
     it('deletes the file when it exists', async () => {
       mockGetInfo.mockResolvedValueOnce({ exists: true } as any);
       await deletePhoto('file:///app/photos/insp-item-1-123.jpg');
-      expect(mockDelete).toHaveBeenCalledWith(
-        'file:///app/photos/insp-item-1-123.jpg',
-        { idempotent: true },
-      );
+      expect(mockDelete).toHaveBeenCalledWith('file:///app/photos/insp-item-1-123.jpg', { idempotent: true });
     });
 
     it('does not call deleteAsync when the file does not exist', async () => {

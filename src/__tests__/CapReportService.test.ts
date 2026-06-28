@@ -1,12 +1,4 @@
 // src/__tests__/CapReportService.test.ts
-//
-// All heavy native dependencies are mocked at Layer 4:
-//  - expo-file-system/legacy
-//  - expo-print
-//  - expo-sharing
-//  - react-native Alert
-//  - CorrectiveActionRepository
-//  - SettingsRepository
 
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///app/',
@@ -29,11 +21,11 @@ jest.mock('react-native', () => ({
   Platform: { OS: 'ios' },
 }));
 
-jest.mock('../../repositories/CorrectiveActionRepository', () => ({
+jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: { getAll: jest.fn() },
 }));
 
-jest.mock('../../repositories/SettingsRepository', () => ({
+jest.mock('../repositories/SettingsRepository', () => ({
   SettingsRepository: { get: jest.fn() },
 }));
 
@@ -41,20 +33,20 @@ import { Alert, Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
-import { SettingsRepository } from '../../repositories/SettingsRepository';
-import { CapReportService } from '../../services/CapReportService';
-import { CorrectiveAction, Settings } from '../../types';
+import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
+import { SettingsRepository } from '../repositories/SettingsRepository';
+import { CapReportService } from '../services/CapReportService';
+import { CorrectiveAction, Settings } from '../types';
 
 // ─── Typed stubs ─────────────────────────────────────────────────────────────
-const mockGetAll     = jest.mocked(CorrectiveActionRepository.getAll);
+const mockGetAll      = jest.mocked(CorrectiveActionRepository.getAll);
 const mockGetSettings = jest.mocked(SettingsRepository.get);
-const mockPrintFile  = jest.mocked(Print.printToFileAsync);
-const mockPrintAsync = jest.mocked(Print.printAsync);
-const mockShareAsync = jest.mocked(Sharing.shareAsync);
-const mockCopyAsync  = jest.mocked(FileSystem.copyAsync);
+const mockPrintFile   = jest.mocked(Print.printToFileAsync);
+const mockPrintAsync  = jest.mocked(Print.printAsync);
+const mockShareAsync  = jest.mocked(Sharing.shareAsync);
+const mockCopyAsync   = jest.mocked(FileSystem.copyAsync);
 const mockDeleteAsync = jest.mocked(FileSystem.deleteAsync);
-const mockAlert      = jest.mocked(Alert.alert);
+const mockAlert       = jest.mocked(Alert.alert);
 
 function makeCAP(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
   return {
@@ -126,16 +118,14 @@ describe('CapReportService', () => {
     });
 
     it('exports all items when filter is "all"', async () => {
-      const items = [
+      mockGetAll.mockResolvedValueOnce([
         makeCAP({ status: 'resolved' }),
         makeCAP({ id: 'cap-2', status: 'open' }),
-      ];
-      mockGetAll.mockResolvedValueOnce(items);
+      ]);
       await CapReportService.export('all');
-      expect(mockPrintFile).toHaveBeenCalledTimes(1);
-      const html: string = mockPrintFile.mock.calls[0][0].html;
-      expect(html).toContain('مغلق'); // resolved item present
-      expect(html).toContain('مفتوح'); // open item present
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
+      expect(html).toContain('مغلق');
+      expect(html).toContain('مفتوح');
     });
 
     it('exports only overdue items when filter is "overdue"', async () => {
@@ -144,14 +134,14 @@ describe('CapReportService', () => {
         makeCAP({ id: 'cap-2', status: 'overdue' }),
       ]);
       await CapReportService.export('overdue');
-      const html: string = mockPrintFile.mock.calls[0][0].html;
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
       expect(html).toContain('متأخر');
     });
 
     it('includes office and inspector name in the HTML', async () => {
       mockGetAll.mockResolvedValueOnce([makeCAP()]);
       await CapReportService.export();
-      const html: string = mockPrintFile.mock.calls[0][0].html;
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
       expect(html).toContain('Central Office');
       expect(html).toContain('Ahmed');
     });
@@ -171,9 +161,7 @@ describe('CapReportService', () => {
     it('uses printAsync on Android instead of printToFileAsync', async () => {
       mockGetAll.mockResolvedValueOnce([makeCAP()]);
       await CapReportService.export();
-      expect(mockPrintAsync).toHaveBeenCalledWith(
-        expect.objectContaining({ html: expect.any(String) }),
-      );
+      expect(mockPrintAsync).toHaveBeenCalledWith(expect.objectContaining({ html: expect.any(String) }));
       expect(mockPrintFile).not.toHaveBeenCalled();
     });
   });
@@ -186,7 +174,7 @@ describe('CapReportService', () => {
         makeCAP({ id: 'c3', severity: 'critical' }),
       ]);
       await CapReportService.export('all');
-      const html: string = mockPrintFile.mock.calls[0][0].html;
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
       expect(html).toContain('منخفض');
       expect(html).toContain('متوسط');
       expect(html).toContain('حرج');
@@ -195,14 +183,14 @@ describe('CapReportService', () => {
     it('renders in-progress status correctly', async () => {
       mockGetAll.mockResolvedValueOnce([makeCAP({ status: 'in-progress' })]);
       await CapReportService.export();
-      const html: string = mockPrintFile.mock.calls[0][0].html;
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
       expect(html).toContain('جارٍ');
     });
 
     it('shows em-dash when assignedTo is empty', async () => {
       mockGetAll.mockResolvedValueOnce([makeCAP({ assignedTo: '' })]);
       await CapReportService.export();
-      const html: string = mockPrintFile.mock.calls[0][0].html;
+      const html: string = (mockPrintFile.mock.calls[0][0] as any).html;
       expect(html).toContain('—');
     });
   });

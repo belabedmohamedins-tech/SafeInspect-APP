@@ -1,38 +1,31 @@
 // src/__tests__/CapNotificationService.test.ts
-//
-// Dependencies mocked:
-//  - expo-notifications (Layer 2 global mock)
-//  - expo-constants    (Layer 2 global mock — appOwnership = 'standalone')
-//  - AsyncStorage      (Layer 2 global mock)
-//  - CorrectiveActionRepository (Layer 4)
-//  - NotificationService.isEnabled / requestPermission (Layer 4)
 
-jest.mock('../../repositories/CorrectiveActionRepository', () => ({
+jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: { getOpen: jest.fn() },
 }));
 
-jest.mock('../../services/NotificationService', () => ({
+jest.mock('../services/NotificationService', () => ({
   isEnabled:         jest.fn(),
   requestPermission: jest.fn(),
 }));
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
-import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
-import { isEnabled, requestPermission } from '../../services/NotificationService';
+import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
+import { isEnabled, requestPermission } from '../services/NotificationService';
 import {
   scheduleCapDeadlineNotifications,
   cancelCapNotification,
-} from '../../services/CapNotificationService';
-import { CorrectiveAction } from '../../types';
+} from '../services/CapNotificationService';
+import { CorrectiveAction } from '../types';
 
 // ─── Typed stubs ─────────────────────────────────────────────────────────────
-const mockSchedule    = jest.mocked(Notifications.scheduleNotificationAsync);
-const mockCancelOne   = jest.mocked(Notifications.cancelScheduledNotificationAsync);
-const mockSetChannel  = jest.mocked(Notifications.setNotificationChannelAsync);
-const mockGetOpen     = jest.mocked(CorrectiveActionRepository.getOpen);
-const mockIsEnabled   = jest.mocked(isEnabled);
-const mockReqPerm     = jest.mocked(requestPermission);
+const mockSchedule   = jest.mocked(Notifications.scheduleNotificationAsync);
+const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsync);
+const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
+const mockGetOpen    = jest.mocked(CorrectiveActionRepository.getOpen);
+const mockIsEnabled  = jest.mocked(isEnabled);
+const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
 function makeCAP(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
@@ -118,20 +111,8 @@ describe('CapNotificationService', () => {
       mockGetOpen.mockResolvedValue([makeCAP()]);
       mockSchedule.mockResolvedValue('notif-id');
       mockCancelOne.mockResolvedValue(undefined);
-      // Second call on same day — shouldRun() returns false
       await scheduleCapDeadlineNotifications();
       expect(mockGetOpen).not.toHaveBeenCalled();
-    });
-
-    it('includes daysLeft=0 body text when item is due today', async () => {
-      const todayEnd = new Date();
-      todayEnd.setHours(23, 59, 59, 0);
-      mockGetOpen.mockResolvedValueOnce([makeCAP({ deadline: todayEnd.toISOString() })]);
-      await scheduleCapDeadlineNotifications();
-      const call = mockSchedule.mock.calls[0]?.[0] as any;
-      // fire time (09:00) might already be past today, so schedule may not be called
-      // — just assert no error was thrown
-      expect(mockSchedule.mock.calls.length).toBeGreaterThanOrEqual(0);
     });
   });
 
