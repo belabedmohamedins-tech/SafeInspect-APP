@@ -1,62 +1,33 @@
-/**
- * Manual mock for expo-modules-core.
- *
- * jest-expo's own setup.js (line 234) eagerly requires
- * expo/src/winter/fetch/ExpoFetchModule, which chains into
- * expo-modules-core/src/index.ts → expo-modules-core/src/Platform.ts
- * before any jest.setup.ts mock can run.
- *
- * By placing a manual mock here and mapping it in moduleNameMapper,
- * Jest resolves this stub instead of the real package for every test
- * suite, preventing the "Cannot read properties of undefined (reading
- * 'select')" crash that blocked all 26 suites.
- */
+// __mocks__/expo-modules-core.js
+// Replaces expo-modules-core in Jest (Node environment).
+// requireNativeModule returns a Proxy so any property/method access on the
+// "native module" silently returns a jest.fn() instead of crashing.
 
-const Platform = {
-  OS: 'android',
-  select: (obj) => obj['android'] ?? obj['default'] ?? Object.values(obj)[0],
-  Version: 0,
-  isTesting: true,
-  isTV: false,
-};
+const makeProxy = () =>
+  new Proxy(
+    {},
+    {
+      get(_target, prop) {
+        if (prop === '__esModule') return false;
+        if (prop === 'then') return undefined; // not a Promise
+        return jest.fn();
+      },
+    },
+  );
 
 module.exports = {
-  // Platform shim
-  Platform,
-
-  // NativeModulesProxy — many expo packages call this at module level
-  NativeModulesProxy: new Proxy({}, { get: () => jest.fn() }),
-
-  // EventEmitter used by several expo hooks
-  EventEmitter: class EventEmitter {
-    addListener() { return { remove: jest.fn() }; }
+  NativeModulesProxy: {},
+  EventEmitter: class {
+    addListener() { return { remove: () => {} }; }
     removeAllListeners() {}
-    emit() {}
   },
-
-  // requireNativeModule / requireOptionalNativeModule — used by expo-file-system etc.
-  requireNativeModule: () => ({}),
-  requireOptionalNativeModule: () => null,
-
-  // uuid helper used by some expo packages
-  uuidv4: () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx',
-  uuidv5: () => 'xxxxxxxx-xxxx-5xxx-yxxx-xxxxxxxxxxxx',
-
-  // Permissions
-  PermissionStatus: {
-    GRANTED: 'granted',
-    DENIED: 'denied',
-    UNDETERMINED: 'undetermined',
+  Platform: { OS: 'android' },
+  UnavailabilityError: class extends Error {},
+  requireNativeModule: () => makeProxy(),
+  requireOptionalNativeModule: () => makeProxy(),
+  default: {
+    NativeModulesProxy: {},
+    requireNativeModule: () => makeProxy(),
+    requireOptionalNativeModule: () => makeProxy(),
   },
-
-  // Bare minimal stubs so deep expo module trees don't throw
-  CodedError: class CodedError extends Error {
-    constructor(code, message) {
-      super(message);
-      this.code = code;
-    }
-  },
-
-  // Suppress any fetch polyfill attempt
-  installGlobal: jest.fn(),
 };
