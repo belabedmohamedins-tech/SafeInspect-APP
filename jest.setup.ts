@@ -9,9 +9,16 @@
  *   (Layer 2).  The canonical reason is: the mock needs jest.mock() hoisting
  *   semantics, or it must override something the preset already loaded.
  *
- *   ✅ OK here : react-native (Proxy), Platform, safe-area-context,
- *                renderHook defaultWrapper
+ *   ✅ OK here : react-native (Proxy), Platform, safe-area-context
  *   ❌ NOT here : native module stubs → use moduleNameMapper + __mocks__/
+ *
+ * NOTE: configure({ defaultWrapper }) was removed.
+ *   @testing-library/react-native's configure() does NOT accept defaultWrapper
+ *   in the version installed — calling it throws "Unknown options passed to
+ *   configure" on every test suite and corrupts renderHook so that
+ *   result.current is always undefined.
+ *   Each hook test file passes its own `wrapper` to renderHook() directly,
+ *   which is the correct pattern for all RTLRN versions.
  *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
@@ -21,24 +28,6 @@
  */
 
 import React from 'react';
-import { configure } from '@testing-library/react-native';
-
-// ─── renderHook global wrapper ────────────────────────────────────────────────
-//
-// @testing-library/react-native's renderHook renders the hook inside a real
-// React component tree.  Without a root, result.current is undefined because
-// the reconciler has no host to attach to.
-//
-// React.Fragment is the minimal valid root: it satisfies the reconciler without
-// requiring any native context.  useFocusEffect is mocked at Layer 4 in every
-// hook test file, so no real navigator context is needed here.
-//
-// Effect: every renderHook() call in every test file inherits this wrapper
-// automatically — no per-call boilerplate required.
-configure({
-  defaultWrapper: ({ children }: { children: React.ReactNode }) =>
-    React.createElement(React.Fragment, null, children),
-});
 
 // ─── react-native-safe-area-context — global stub ────────────────────────────
 jest.mock('react-native-safe-area-context', () => ({
