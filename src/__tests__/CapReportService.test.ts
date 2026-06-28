@@ -15,8 +15,11 @@ jest.mock('expo-sharing', () => ({
   shareAsync: jest.fn(),
 }));
 
+// ⚠️  Do NOT use jest.requireActual('react-native') here — it triggers
+//     Modal → VirtualizedList → Platform.OS before our mock is applied,
+//     crashing with "Cannot read properties of undefined (reading 'OS')".
+//     Mock only the symbols this service file actually uses.
 jest.mock('react-native', () => ({
-  ...jest.requireActual('react-native'),
   Alert:    { alert: jest.fn() },
   Platform: { OS: 'ios' },
 }));

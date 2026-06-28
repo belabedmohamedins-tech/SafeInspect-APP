@@ -1,5 +1,17 @@
 // src/__tests__/NotificationService.test.ts
 
+jest.mock('expo-notifications', () => ({
+  scheduleNotificationAsync:            jest.fn(),
+  cancelScheduledNotificationAsync:     jest.fn(),
+  cancelAllScheduledNotificationsAsync: jest.fn(),
+  setNotificationChannelAsync:          jest.fn(),
+  getPermissionsAsync:                  jest.fn(),
+  requestPermissionsAsync:              jest.fn(),
+  setNotificationHandler:               jest.fn(),
+  AndroidImportance: { HIGH: 4, DEFAULT: 3, LOW: 2, MIN: 1, NONE: 0 },
+  SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
+}));
+
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
