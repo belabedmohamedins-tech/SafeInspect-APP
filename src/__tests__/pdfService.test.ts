@@ -31,6 +31,8 @@ afterAll(() => {
 
 // Stub constants/theme before anything imports it so Platform.select
 // in theme.ts never executes during module loading in the test environment.
+// jest.setup.ts already provides a global react-native mock with Platform.select;
+// we do NOT re-mock react-native here to avoid overriding that global mock.
 jest.mock('../../constants/theme', () => ({
   Colors:  { primary: '#000', background: '#fff', text: '#000', tint: '#000',
              tabIconDefault: '#ccc', tabIconSelected: '#000', error: '#f00',
@@ -68,15 +70,6 @@ jest.mock('expo-print', () => ({
 jest.mock('expo-sharing', () => ({
   isAvailableAsync: jest.fn().mockResolvedValue(true),
   shareAsync:       jest.fn().mockResolvedValue(undefined),
-}));
-
-jest.mock('react-native', () => ({
-  Alert:    { alert: jest.fn() },
-  Platform: {
-    OS: 'android',
-    select: (obj: Record<string, unknown>) =>
-      obj['android'] ?? obj['default'] ?? Object.values(obj)[0],
-  },
 }));
 
 const mockSettingsGet = jest.fn();

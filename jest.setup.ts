@@ -26,6 +26,25 @@ jest.mock('expo/src/winter/fetch/ExpoFetchModule', () => ({
   Response: jest.fn(),
 }), { virtual: true });
 
+// ─── react-native-safe-area-context — global stub ────────────────────────────
+//
+// expo-router imports react-native-safe-area-context which calls
+// TurboModuleRegistry.get synchronously at module-load time, before any
+// per-test jest.mock() factory runs.  Providing a global stub here ensures
+// every test file (especially useInspectionList.test.ts) gets a safe version.
+jest.mock('react-native-safe-area-context', () => ({
+  useSafeAreaInsets:    jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
+  useSafeAreaFrame:     jest.fn(() => ({ x: 0, y: 0, width: 375, height: 812 })),
+  SafeAreaProvider:     'SafeAreaProvider',
+  SafeAreaView:         'SafeAreaView',
+  SafeAreaConsumer:     'SafeAreaConsumer',
+  SafeAreaInsetsContext: { Consumer: 'SafeAreaInsetsContext.Consumer' },
+  initialWindowMetrics: {
+    frame:  { x: 0, y: 0, width: 375, height: 812 },
+    insets: { top: 0, bottom: 0, left: 0, right: 0 },
+  },
+}));
+
 // ─── React Native — synthetic Platform mock (BOTH known import paths) ────────
 //
 // We mock the bare 'react-native' module WITHOUT calling requireActual to avoid

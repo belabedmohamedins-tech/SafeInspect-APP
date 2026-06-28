@@ -4,7 +4,7 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { useSignature } from '../hooks/useSignature';
 
-// No wrapper needed: useSignature is a pure-logic hook with no context deps.
+// useSignature is a pure-logic hook — no context, no providers needed.
 describe('useSignature', () => {
   it('initialises with empty signature', () => {
     const { result } = renderHook(() => useSignature());

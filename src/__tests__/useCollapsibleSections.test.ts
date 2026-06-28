@@ -4,7 +4,7 @@
 import { act, renderHook } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../hooks/useCollapsibleSections';
 
-// No wrapper needed: useCollapsibleSections is a pure-logic hook.
+// useCollapsibleSections is a pure-logic hook — no context, no providers needed.
 describe('useCollapsibleSections', () => {
   it('initialises all sections as collapsed (false)', () => {
     const sections = ['A', 'B', 'C'];
