@@ -1,12 +1,11 @@
 // src/__tests__/utils/dateUtils.test.ts
-// Migrated from __tests__/utils/dateUtils.test.ts (pure path update).
 import {
   formatDateTimeShort,
   formatDateOnly,
   formatDateForCard,
   formatDateLong,
   formatDateForAgenda,
-} from '../utils/dateUtils';
+} from '../../utils/dateUtils';
 
 const ISO = '2026-03-15T14:30:00.000Z';
 
