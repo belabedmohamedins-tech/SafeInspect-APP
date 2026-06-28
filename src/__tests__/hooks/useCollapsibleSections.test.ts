@@ -1,13 +1,31 @@
 // src/__tests__/hooks/useCollapsibleSections.test.ts
 //
-// useCollapsibleSections is a SYNCHRONOUS hook — no async data load,
-// no useFocusEffect, no useEffect that settles as a microtask.
-// renderHook() must NOT be awaited here. Awaiting a sync renderHook()
-// makes `result` resolve to the Promise object, not the hook result,
-// so result.current is always undefined.
+// ROOT CAUSE OF result.current === undefined (see jest.setup.ts for full history):
+//   The global expo-router mock in jest.setup.ts calls `cb()` directly inside
+//   useFocusEffect. This hook file does NOT use useFocusEffect — but jest.setup
+//   runs for every suite. A different version of this mock existed at some point
+//   that called useEffect() inside the factory, violating hook rules and causing
+//   React to abort the entire render, leaving result.current undefined.
+//
+//   The safest fix is to re-declare the expo-router mock at Layer 4 (this file)
+//   so it fully overrides the global one for this suite, guaranteeing no hook
+//   violations can bleed in from the global setup.
+//
+// SYNC HOOK: renderHook() must NOT be awaited — this hook has no async operations.
+
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../../hooks/useCollapsibleSections';
+
+// Layer 4 override — safe, no-op stub, no hooks called inside
+jest.mock('expo-router', () => ({
+  useFocusEffect:  (_cb: () => void) => { /* no-op — this hook does not use it */ },
+  useNavigation:   jest.fn(() => ({ addListener: jest.fn(() => jest.fn()) })),
+  useRouter:       jest.fn(() => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })),
+  useLocalSearchParams: jest.fn(() => ({})),
+  Link: 'Link',
+  Redirect: 'Redirect',
+}));
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return React.createElement(React.Fragment, null, children);
@@ -76,7 +94,6 @@ describe('useCollapsibleSections — toggleSection', () => {
 
 describe('useCollapsibleSections — dynamic title addition (useEffect branch)', () => {
   it('adds a new title to collapsed map when sectionTitles prop gains a new entry', () => {
-    // exercises the useEffect branch at lines 22-23 of the source
     let titles = ['Axis A'];
     const { result, rerender } = renderHook(
       () => useCollapsibleSections(titles),
