@@ -5,9 +5,19 @@ jest.mock('../utils/loadHomeData', () => ({
   getFacilityForAgenda: jest.requireActual('../utils/loadHomeData').getFacilityForAgenda,
 }));
 
-jest.mock('expo-router', () => ({
-  useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
-}));
+// useFocusEffect must behave like useEffect (fires once on mount, not on every
+// render). Calling cb() synchronously on every render causes an infinite loop:
+// cb() → loadHomeData resolves → setState → re-render → cb() again → ...
+// Using React.useEffect here breaks that cycle.
+jest.mock('expo-router', () => {
+  const React = require('react');
+  return {
+    useFocusEffect: jest.fn((cb: () => void | (() => void)) => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      React.useEffect(() => { return cb() ?? undefined; }, []);
+    }),
+  };
+});
 
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
@@ -47,7 +57,11 @@ const SAMPLE_DATA: HomeData = {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockFocus.mockImplementation((cb) => { cb(); });
+  // Reset to useEffect-based implementation after clearAllMocks wipes the spy
+  mockFocus.mockImplementation((cb) => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    React.useEffect(() => { return cb() ?? undefined; }, []);
+  });
   mockLoad.mockResolvedValue(EMPTY_DATA);
 });
 
