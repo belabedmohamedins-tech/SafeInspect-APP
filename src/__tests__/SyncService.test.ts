@@ -22,10 +22,13 @@ jest.mock('@react-native-community/netinfo', () => ({
 }));
 
 beforeEach(async () => {
-  await AsyncStorage.clear();
-  mockFetch.mockReset();
+  // Order matters:
+  //   1. clearAllMocks() first — resets call counts / return values
+  //   2. AsyncStorage.clear() second — needs its implementation still intact
+  //   3. Re-assign global.fetch — clearAllMocks() does not touch globals,
+  //      but explicit reassignment makes the dependency clear.
   jest.clearAllMocks();
-  // Keep the global mock live after clearAllMocks
+  await AsyncStorage.clear();
   global.fetch = mockFetch;
 });
 
@@ -115,8 +118,8 @@ describe('flush — with API URL (mocked via env)', () => {
   beforeEach(() => {
     process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
     jest.resetModules();
-    // CRITICAL: re-assign global.fetch AFTER resetModules so the freshly
-    // required SyncService module closure sees our mock, not Node's native fetch.
+    // Re-assign global.fetch AFTER resetModules so the freshly-required
+    // SyncService module closure captures our mock, not Node's native fetch.
     global.fetch = mockFetch;
   });
 
