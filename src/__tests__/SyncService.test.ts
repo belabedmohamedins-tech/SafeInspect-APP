@@ -10,11 +10,11 @@ import {
 } from '../services/SyncService';
 import { SavedInspection } from '../types';
 
-// ─── Mock fetch globally ────────────────────────────────────────────────────
+// ─── Mock fetch globally ─────────────────────────────────────────────────────
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-// ─── Mock NetInfo ──────────────────────────────────────────────────────────────
+// ─── Mock NetInfo ─────────────────────────────────────────────────────────────
 jest.mock('@react-native-community/netinfo', () => ({
   default: {
     fetch: jest.fn().mockResolvedValue({ isConnected: true, isInternetReachable: true }),
@@ -25,23 +25,25 @@ beforeEach(async () => {
   await AsyncStorage.clear();
   mockFetch.mockReset();
   jest.clearAllMocks();
+  // Keep the global mock live after clearAllMocks
+  global.fetch = mockFetch;
 });
 
-// ─── Helpers ───────────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function makeInspection(id: string, updatedAt?: string): SavedInspection {
   return {
     id,
-    facilityId: 'fac-1',
-    facilityName: 'منشأة',
+    facilityId:    'fac-1',
+    facilityName:  'منشأة',
     inspectorName: 'مفتش',
-    officeName: 'مكتب',
-    date: '2026-06-27',
-    updatedAt: updatedAt ?? '2026-06-27T10:00:00Z',
-    status: 'completed',
-    items: [],
-    score: 80,
-    grade: 'B',
+    officeName:    'مكتب',
+    date:          '2026-06-27',
+    updatedAt:     updatedAt ?? '2026-06-27T10:00:00Z',
+    status:        'completed',
+    items:         [],
+    score:         80,
+    grade:         'B',
   } as unknown as SavedInspection;
 }
 
@@ -50,7 +52,7 @@ async function readQueue() {
   return raw ? JSON.parse(raw) : [];
 }
 
-// ─── enqueue ─────────────────────────────────────────────────────────────────────────
+// ─── enqueue ──────────────────────────────────────────────────────────────────
 
 describe('enqueue', () => {
   it('adds a new inspection to an empty queue', async () => {
@@ -94,7 +96,7 @@ describe('enqueue', () => {
   });
 });
 
-// ─── flush ───────────────────────────────────────────────────────────────────────────
+// ─── flush — no API URL ────────────────────────────────────────────────────────
 
 describe('flush — no API URL configured', () => {
   it('returns 0 without calling fetch', async () => {
@@ -105,19 +107,24 @@ describe('flush — no API URL configured', () => {
   });
 });
 
+// ─── flush — with API URL ──────────────────────────────────────────────────────
+
 describe('flush — with API URL (mocked via env)', () => {
   const ORIGINAL_ENV = process.env;
 
   beforeEach(() => {
     process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
     jest.resetModules();
+    // CRITICAL: re-assign global.fetch AFTER resetModules so the freshly
+    // required SyncService module closure sees our mock, not Node's native fetch.
+    global.fetch = mockFetch;
   });
 
   afterEach(() => {
     process.env = ORIGINAL_ENV;
   });
 
-  // Helper: require a fresh SyncService after env + resetModules
+  // Require a fresh SyncService after env + resetModules
   function freshSyncService() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('../services/SyncService') as typeof import('../services/SyncService');
@@ -179,7 +186,7 @@ describe('flush — with API URL (mocked via env)', () => {
   });
 });
 
-// ─── getSyncStatus ────────────────────────────────────────────────────────────────────
+// ─── getSyncStatus ────────────────────────────────────────────────────────────
 
 describe('getSyncStatus', () => {
   it('returns pendingCount equal to queue length', async () => {
@@ -207,7 +214,7 @@ describe('getSyncStatus', () => {
   });
 });
 
-// ─── clearQueue ─────────────────────────────────────────────────────────────────────────
+// ─── clearQueue ───────────────────────────────────────────────────────────────
 
 describe('clearQueue', () => {
   it('removes all items from the queue', async () => {
