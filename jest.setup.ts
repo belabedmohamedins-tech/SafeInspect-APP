@@ -10,6 +10,19 @@
  * that intentionally spy on console still work.
  */
 
+// ─── React Native Platform mock ─────────────────────────────────────────────
+// jest-expo's preset mocks most of RN but Platform.select is not always wired.
+// pdfService → statusUtils → constants/theme.ts calls Platform.select() at
+// module-evaluation time, which crashes the suite if the mock is missing.
+jest.mock('react-native/Libraries/Utilities/Platform', () => ({
+  OS: 'android',
+  select: (obj: Record<string, unknown>) =>
+    obj['android'] ?? obj['default'] ?? Object.values(obj)[0],
+  Version: 0,
+  isTesting: true,
+  isTV: false,
+}));
+
 const _consoleError = console.error.bind(console);
 const _consoleWarn  = console.warn.bind(console);
 

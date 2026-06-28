@@ -24,10 +24,10 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn((k: string)             => { mockStore.delete(k); return Promise.resolve(); }),
 }));
 
-const KEY = 'userFacilities';
+// The repository uses StorageKeys.USER_FACILITIES which resolves to 'FACILITIES'
+const KEY = 'FACILITIES';
 
-const makeUserFacility = (partial: Partial<Facility> = {}): Facility => ({
-  id: '',
+const makeUserFacility = (partial: Partial<Omit<Facility, 'id'>> = {}): Omit<Facility, 'id'> => ({
   projectName: 'مطعم الأمل',
   ownerName: 'محمد الأمين',
   activity: 'مطاعم',
@@ -54,8 +54,7 @@ describe('getAllFacilities', () => {
   });
 
   it('appends user-added facilities after hardcoded ones', async () => {
-    const user = makeUserFacility();
-    await addUserFacility(user);
+    await addUserFacility(makeUserFacility());
     const result = await getAllFacilities();
     expect(result.length).toBe(hardcoded.length + 1);
     expect(result[hardcoded.length].projectName).toBe('مطعم الأمل');
@@ -71,10 +70,7 @@ describe('getFacilityById', () => {
   });
 
   it('finds a user-added facility by id', async () => {
-    const user = makeUserFacility({ projectName: 'مخبز الفجر' });
-    await addUserFacility(user);
-    const all = await getAllFacilities();
-    const saved = all.find(f => f.projectName === 'مخبز الفجر')!;
+    const saved = await addUserFacility(makeUserFacility({ projectName: 'مخبز الفجر' }));
     const result = await getFacilityById(saved.id);
     expect(result).not.toBeNull();
     expect(result!.projectName).toBe('مخبز الفجر');
@@ -143,8 +139,7 @@ describe('filterByActivity', () => {
   });
 
   it('includes user-added facilities in the results', async () => {
-    const user = makeUserFacility({ projectName: 'صيدلية ساحة المدينة', activity: ACTIVITY });
-    await addUserFacility(user);
+    const user = await addUserFacility(makeUserFacility({ projectName: 'صيدلية ساحة المدينة', activity: ACTIVITY }));
     const result = await filterByActivity(ACTIVITY);
     expect(result.some(f => f.projectName === 'صيدلية ساحة المدينة')).toBe(true);
   });
@@ -192,9 +187,8 @@ describe('searchAndFilter', () => {
 // ─── addUserFacility ───────────────────────────────────────────────────
 describe('addUserFacility', () => {
   it('assigns a unique id prefixed with U', async () => {
-    const f = makeUserFacility();
-    await addUserFacility(f);
-    expect(f.id).toMatch(/^U/);
+    const saved = await addUserFacility(makeUserFacility());
+    expect(saved.id).toMatch(/^U/);
   });
 
   it('persists the facility in storage', async () => {
@@ -216,11 +210,10 @@ describe('addUserFacility', () => {
 // ─── updateUserFacility ──────────────────────────────────────────────────
 describe('updateUserFacility', () => {
   it('updates a field on a user facility', async () => {
-    const f = makeUserFacility();
-    await addUserFacility(f);
-    const ok = await updateUserFacility(f.id, { projectName: 'مطعم السعادة' });
+    const saved = await addUserFacility(makeUserFacility());
+    const ok = await updateUserFacility(saved.id, { projectName: 'مطعم السعادة' });
     expect(ok).toBe(true);
-    const updated = await getFacilityById(f.id);
+    const updated = await getFacilityById(saved.id);
     expect(updated!.projectName).toBe('مطعم السعادة');
   });
 
@@ -238,11 +231,10 @@ describe('updateUserFacility', () => {
 // ─── deleteUserFacility ──────────────────────────────────────────────────
 describe('deleteUserFacility', () => {
   it('removes a user facility by id', async () => {
-    const f = makeUserFacility();
-    await addUserFacility(f);
-    const ok = await deleteUserFacility(f.id);
+    const saved = await addUserFacility(makeUserFacility());
+    const ok = await deleteUserFacility(saved.id);
     expect(ok).toBe(true);
-    expect(await getFacilityById(f.id)).toBeNull();
+    expect(await getFacilityById(saved.id)).toBeNull();
   });
 
   it('returns false when id does not exist', async () => {
