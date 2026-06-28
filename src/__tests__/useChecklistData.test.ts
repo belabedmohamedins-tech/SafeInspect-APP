@@ -51,8 +51,9 @@ const mockAlert        = Alert.alert as jest.MockedFunction<typeof Alert.alert>;
 const mockRouterReplace = jest.fn();
 const mockAddListener   = jest.fn(() => jest.fn());
 
-const wrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(React.Fragment, null, children);
+function wrapper({ children }: { children: React.ReactNode }) {
+  return React.createElement(React.Fragment, null, children);
+}
 
 beforeEach(() => {
   jest.clearAllMocks();
