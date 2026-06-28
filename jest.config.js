@@ -1,16 +1,8 @@
 // jest.config.js
-// Replaces the "jest" block in package.json for easier multi-line config.
-
 /** @type {import('jest').Config} */
 module.exports = {
   preset: 'jest-expo',
 
-  // setupFiles runs BEFORE the test framework and BEFORE jest-expo's preset
-  // setup scripts.  We use it to patch global.fetch and any native stubs that
-  // jest-expo tries to bootstrap at that early phase.
-  setupFiles: ['<rootDir>/jest.earlySetup.js'],
-
-  // setupFilesAfterEnv runs after the framework — jest.mock() is available.
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   testMatch: [
@@ -19,14 +11,22 @@ module.exports = {
   ],
 
   moduleNameMapper: {
+    // Redirect the two entry points that jest-expo's preset setup.js
+    // touches at startup to empty stubs, breaking the chain before
+    // FetchResponse (which extends native Response) is ever evaluated.
+    '^expo/src/winter/installGlobal(.*)$': '<rootDir>/__mocks__/expoFetch.js',
+    '^expo/src/winter/runtime(.*)$':       '<rootDir>/__mocks__/expoFetch.js',
+    '^expo/src/winter/fetch(.*)$':         '<rootDir>/__mocks__/expoFetch.js',
+
     '^expo-modules-core$': '<rootDir>/__mocks__/expo-modules-core.js',
-    '^expo/src/winter/(.*)$': '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$': '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
     '@react-native-async-storage/async-storage':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',
   },
 
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))',
+    // Transpile all expo/* packages including expo/src/winter so Babel
+    // can downcompile ES class syntax before Node evaluates it.
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router|expo/src/winter))',
   ],
 };
