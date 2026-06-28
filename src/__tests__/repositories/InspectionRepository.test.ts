@@ -1,40 +1,33 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 //
-// WHY MOCK FACTORIES USE jest.fn() INLINE — NOT OUTER const REFS
-// ───────────────────────────────────────────────────────────────
-// Babel hoists jest.mock() calls to the TOP of the file, before any variable
-// declarations. If you write:
+// LAZY-IMPORT MOCKS — WHY jest.requireMock + mockResolvedValue IN beforeEach
+// ─────────────────────────────────────────────────────────────────────────────
+// InspectionRepository.save() calls two modules via await import():
 //
-//   const mockFn = jest.fn();          // ← declared here
-//   jest.mock('...', () => ({ fn: mockFn }));  // ← hoisted ABOVE the const
+//   const { createFollowUpIfNeeded } = await import('../services/followUpService');
+//   const { ApprovalRepository }     = await import('./ApprovalRepository');
 //
-// …the hoisted factory runs while mockFn is still in the Temporal Dead Zone.
-// The factory receives `undefined`, not the jest.fn() instance. Every call
-// from the source module then throws "is not a function".
+// Babel transforms await import(path) → Promise.resolve().then(() => require(path)).
+// The require(path) hits the Jest module registry using the RESOLVED absolute path.
+// jest.mock() registers the mock under that same resolved key — so the mock IS
+// returned by require(). This part works.
 //
-// SOLUTION: declare jest.fn() INSIDE the factory:
+// The problem is jest.clearAllMocks(): it resets all mock implementations to
+// jest.fn() with no return value. The lazy imports then call a function that
+// returns undefined, not a Promise. Inside the source:
 //
-//   jest.mock('...', () => ({ fn: jest.fn() }));
+//   try {
+//     await createFollowUpIfNeeded(toSave);  // returns undefined → await ok
+//   } catch { /* non-fatal */ }              // but if it throws, swallowed
 //
-// Then retrieve the live instance AFTER the module loads:
+// If the mock returns undefined (not a Promise), await undefined resolves
+// immediately — the call IS recorded. But if clearAllMocks wipes the mock
+// reference entirely (replaces the jest.fn() object), the reference held by
+// mockCreateFollowUp is stale and no longer the same function the module calls.
 //
-//   const mockFn = jest.requireMock('...').fn;
-//
-// WHY LAZY-IMPORT MOCKS USE jest.requireMock — NOT STATIC IMPORTS
-// ────────────────────────────────────────────────────────────────
-// InspectionRepository.save() uses await import() for followUpService and
-// ApprovalRepository. Babel transforms await import(path) to
-// Promise.resolve().then(() => require(path)), which hits the Jest module
-// registry keyed on the RESOLVED absolute path of the source file.
-//
-// When the test file does a static import of those modules, TypeScript/Babel
-// may resolve the path to a different registry key than what the source
-// file's require() uses. jest.requireMock(path) resolves from the TEST
-// file's location — giving the exact same key Jest used when registering
-// the mock — guaranteeing the same instance.
-//
-// Using jest.requireMock() instead of a static import is the only safe
-// approach when the mocked module is also lazy-imported by the source.
+// SOLUTION: retrieve handles via jest.requireMock() — same registry instance —
+// and call .mockResolvedValue(undefined) INSIDE beforeEach, AFTER clearAllMocks,
+// to re-bind the implementation on the live object every test.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../../repositories/keys';
@@ -57,40 +50,48 @@ jest.mock('../../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: { createFromInspection: jest.fn(() => Promise.resolve()) },
 }));
 
-// Lazy-import mocks — must use jest.requireMock() to retrieve handles (see header)
 jest.mock('../../services/followUpService', () => ({
-  createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
+  createFollowUpIfNeeded: jest.fn().mockResolvedValue(undefined),
 }));
 
 jest.mock('../../repositories/ApprovalRepository', () => ({
-  ApprovalRepository: { enqueue: jest.fn(() => Promise.resolve()) },
+  ApprovalRepository: { enqueue: jest.fn().mockResolvedValue(undefined) },
 }));
 
-// ─── module under test (imported AFTER all jest.mock declarations) ─────────────
+// ─── module under test ────────────────────────────────────────────────────────
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { IntegrityService } from '../../services/IntegrityService';
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
 
-// Typed handles — static imports safe here (no TDZ, factories already hoisted)
-const mockComputeHash           = IntegrityService.computeHash           as jest.Mock;
-const mockAuditAppend           = AuditLogRepository.append              as jest.Mock;
-const mockCreateFromInspection  = CorrectiveActionRepository.createFromInspection as jest.Mock;
+const mockComputeHash          = IntegrityService.computeHash                        as jest.Mock;
+const mockAuditAppend          = AuditLogRepository.append                           as jest.Mock;
+const mockCreateFromInspection = CorrectiveActionRepository.createFromInspection     as jest.Mock;
 
-// Lazy-import handles — retrieved via requireMock to match the registry key
-// the source file's await import() will resolve to at runtime.
-const mockCreateFollowUp = (jest.requireMock('../../services/followUpService') as any).createFollowUpIfNeeded as jest.Mock;
-const mockEnqueue        = (jest.requireMock('../../repositories/ApprovalRepository') as any).ApprovalRepository.enqueue as jest.Mock;
+// Lazy-import handles — retrieved via requireMock to guarantee the same
+// registry instance that await import() resolves to inside the source file.
+const mockCreateFollowUp = (jest.requireMock('../../services/followUpService') as {
+  createFollowUpIfNeeded: jest.Mock;
+}).createFollowUpIfNeeded;
+
+const mockEnqueue = (jest.requireMock('../../repositories/ApprovalRepository') as {
+  ApprovalRepository: { enqueue: jest.Mock };
+}).ApprovalRepository.enqueue;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
   (AsyncStorage as any).__resetStore();
   jest.clearAllMocks();
-  // Re-apply implementations cleared by jest.clearAllMocks()
+  // Re-apply Promise-returning implementations after clearAllMocks wipes them.
+  // Without this, the source's try/catch may swallow a "not a function" throw
+  // or await undefined without recording the call on the mock we hold a ref to.
   mockCreateFollowUp.mockResolvedValue(undefined);
   mockEnqueue.mockResolvedValue(undefined);
+  mockAuditAppend.mockResolvedValue(undefined);
+  mockCreateFromInspection.mockResolvedValue(undefined);
+  mockComputeHash.mockReturnValue('mock-hash-abc123');
 });
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
