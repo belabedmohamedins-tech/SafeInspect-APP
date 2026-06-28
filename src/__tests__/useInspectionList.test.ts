@@ -6,10 +6,10 @@
  * synchronous module-load side-effects (safe-area-context, TurboModuleRegistry)
  * never run.
  *
- * renderHook receives a React.Fragment wrapper to give RNTL v14 a valid
- * host component tree (same fix as useSignature / useCollapsibleSections).
+ * No wrapper is passed to renderHook — pure hooks work without one in RNTL v14.
+ * (The React.Fragment createElement wrapper pattern leaves result.current
+ * undefined due to the synthetic RN Proxy registered in jest.setup.ts.)
  */
-import React from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useInspectionList } from '../hooks/useInspectionList';
@@ -37,9 +37,6 @@ jest.mock('../repositories/InspectionRepository', () => ({
 const mockGetAll = jest.mocked(InspectionRepositoryModule.InspectionRepository.getAll);
 const mockAlert  = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
 
-const wrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(React.Fragment, null, children);
-
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
@@ -66,7 +63,7 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 describe('useInspectionList', () => {
   it('starts with an empty filtered list when repository returns []', async () => {
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     expect(result.current.filtered).toEqual([]);
     expect(result.current.totalCount).toBe(0);
@@ -74,7 +71,7 @@ describe('useInspectionList', () => {
 
   it('populates the filtered list from the repository on mount', async () => {
     mockGetAll.mockResolvedValueOnce([makeInspection()]);
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.totalCount).toBe(1);
@@ -84,7 +81,7 @@ describe('useInspectionList', () => {
     mockGetAll.mockResolvedValueOnce([
       makeInspection({ facilityName: 'مستشفى الرشيد' }),
     ]);
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setSearchQuery('رشيد'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -97,7 +94,7 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setActiveFilter('completed'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -109,7 +106,7 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setActiveFilter('in-progress'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -117,7 +114,7 @@ describe('useInspectionList', () => {
   });
 
   it('deleteInspection triggers an Alert confirmation dialog', async () => {
-    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    const { result } = renderHook(() => useInspectionList());
     await act(async () => { result.current.deleteInspection('insp-1'); });
     expect(mockAlert).toHaveBeenCalledTimes(1);
   });

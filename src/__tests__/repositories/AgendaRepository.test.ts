@@ -28,6 +28,9 @@ const mockCancel   = jest.mocked(NotificationService.cancelForAgendaItem);
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
+// status: 'pending' is required so save() calls scheduleForAgendaItem.
+// The source checks `item.status === 'pending'` — without this field
+// the condition is false and the mock is never called.
 function makeItem(overrides: Partial<AgendaItem> = {}): AgendaItem {
   return {
     id:           'item-1',
@@ -37,8 +40,9 @@ function makeItem(overrides: Partial<AgendaItem> = {}): AgendaItem {
     time:         '09:00',
     notes:        '',
     completed:    false,
+    status:       'pending',
     ...overrides,
-  };
+  } as AgendaItem;
 }
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
@@ -69,12 +73,18 @@ describe('AgendaRepository.getAll', () => {
 
 describe('AgendaRepository.save', () => {
   it('persists a new item and schedules a notification', async () => {
-    const item = makeItem();
+    const item = makeItem({ status: 'pending' });
     await AgendaRepository.save(item);
     const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.AGENDA))!);
     expect(stored).toHaveLength(1);
     expect(stored[0].id).toBe('item-1');
-    expect(mockSchedule).toHaveBeenCalledWith(item);
+    // save() calls scheduleForAgendaItem with a subset object, not the full item
+    expect(mockSchedule).toHaveBeenCalledWith({
+      id:           item.id,
+      facilityName: item.facilityName,
+      date:         item.date,
+      notes:        item.notes,
+    });
   });
 
   it('replaces an existing item with the same id', async () => {
@@ -107,13 +117,24 @@ describe('AgendaRepository.delete', () => {
   });
 });
 
-// ─── markComplete ─────────────────────────────────────────────────────────────
+// ─── updateInspectionLink ─────────────────────────────────────────────────────
+// NOTE: AgendaRepository does NOT expose a markComplete() method.
+// The equivalent is updateInspectionLink() which sets completed=true
+// and status='completed' as a side-effect of linking an inspection.
 
-describe('AgendaRepository.markComplete', () => {
-  it('sets completed to true on the matching item', async () => {
+describe('AgendaRepository.updateInspectionLink', () => {
+  it('sets completed to true and links the inspectionId', async () => {
     await AgendaRepository.save(makeItem({ completed: false }));
-    await AgendaRepository.markComplete('item-1');
+    jest.clearAllMocks();
+    await AgendaRepository.updateInspectionLink('item-1', 'insp-99');
     const stored: AgendaItem[] = JSON.parse((await AsyncStorage.getItem(StorageKeys.AGENDA))!);
     expect(stored[0].completed).toBe(true);
+    expect((stored[0] as any).inspectionId).toBe('insp-99');
+    expect(mockCancel).toHaveBeenCalledWith('item-1');
+  });
+
+  it('is a no-op when the agendaId does not exist', async () => {
+    await AgendaRepository.updateInspectionLink('ghost-id', 'insp-99');
+    expect(mockCancel).not.toHaveBeenCalled();
   });
 });

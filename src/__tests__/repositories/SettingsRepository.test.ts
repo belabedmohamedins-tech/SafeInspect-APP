@@ -7,6 +7,12 @@
 // SettingsRepository uses multiGet / multiSet. The Layer-2 stub at
 // __mocks__/@react-native-async-storage/async-storage.js must support both.
 // If multiGet/multiSet are missing from the stub, add them there — NOT here.
+//
+// Key fixes vs. the previous version:
+//   1. SettingsRepository exposes .get() and .set() — there is no .save().
+//      All write calls use .set().
+//   2. StorageKeys does NOT have SETTINGS_OFFICE_NAME / SETTINGS_INSPECTOR_NAME.
+//      The real keys are OFFICE_NAME and INSPECTOR_NAME.
 
 // ─── Imports ──────────────────────────────────────────────────────────────────
 
@@ -31,29 +37,39 @@ describe('SettingsRepository.get', () => {
   });
 
   it('returns merged settings when values are stored', async () => {
-    await AsyncStorage.setItem(StorageKeys.SETTINGS_OFFICE_NAME, 'My Office');
-    await AsyncStorage.setItem(StorageKeys.SETTINGS_INSPECTOR_NAME, 'John');
+    // Use the actual StorageKeys that SettingsRepository reads via multiGet
+    await AsyncStorage.setItem(StorageKeys.OFFICE_NAME, 'My Office');
+    await AsyncStorage.setItem(StorageKeys.INSPECTOR_NAME, 'John');
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('My Office');
     expect(settings.inspectorName).toBe('John');
   });
 });
 
-// ─── save ─────────────────────────────────────────────────────────────────────
+// ─── set ──────────────────────────────────────────────────────────────────────
 
-describe('SettingsRepository.save', () => {
+describe('SettingsRepository.set', () => {
   it('persists all provided fields', async () => {
-    await SettingsRepository.save({ officeName: 'HQ', inspectorName: 'Jane' });
-    const officeName = await AsyncStorage.getItem(StorageKeys.SETTINGS_OFFICE_NAME);
-    const inspectorName = await AsyncStorage.getItem(StorageKeys.SETTINGS_INSPECTOR_NAME);
+    await SettingsRepository.set({ officeName: 'HQ', inspectorName: 'Jane' });
+    const officeName    = await AsyncStorage.getItem(StorageKeys.OFFICE_NAME);
+    const inspectorName = await AsyncStorage.getItem(StorageKeys.INSPECTOR_NAME);
     expect(officeName).toBe('HQ');
     expect(inspectorName).toBe('Jane');
   });
 
-  it('round-trips: save then get returns same values', async () => {
-    await SettingsRepository.save({ officeName: 'Test Office', inspectorName: 'Test Inspector' });
+  it('round-trips: set then get returns same values', async () => {
+    await SettingsRepository.set({ officeName: 'Test Office', inspectorName: 'Test Inspector' });
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('Test Office');
     expect(settings.inspectorName).toBe('Test Inspector');
+  });
+
+  it('partial set does not overwrite untouched fields', async () => {
+    await SettingsRepository.set({ officeName: 'Office A', inspectorName: 'Inspector B' });
+    await SettingsRepository.set({ officeName: 'Office C' });
+    const settings = await SettingsRepository.get();
+    expect(settings.officeName).toBe('Office C');
+    // inspectorName was not overwritten
+    expect(settings.inspectorName).toBe('Inspector B');
   });
 });
