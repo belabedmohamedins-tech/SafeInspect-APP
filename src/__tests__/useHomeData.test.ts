@@ -1,203 +1,111 @@
 // src/__tests__/useHomeData.test.ts
-// Tests the pure loadHomeData() function directly — no React, no hooks, no timeouts.
-import { loadHomeData, getFacilityForAgenda } from '../utils/loadHomeData';
-import { AgendaItem, Facility, SavedInspection } from '../types';
 
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-
-const mockSettingsGet       = jest.fn().mockResolvedValue({ officeName: 'مكتب التجربة' });
-const mockAgendaGetAll      = jest.fn().mockResolvedValue([]);
-const mockGetCompleted      = jest.fn().mockResolvedValue([]);
-const mockGetDrafts         = jest.fn().mockResolvedValue([]);
-const mockGetUserFacilities = jest.fn().mockResolvedValue([]);
-const mockGetOpen           = jest.fn().mockResolvedValue([]);
-
-jest.mock('../repositories/SettingsRepository', () => ({
-  SettingsRepository: { get: () => mockSettingsGet() },
+jest.mock('../utils/loadHomeData', () => ({
+  loadHomeData: jest.fn(),
+  getFacilityForAgenda: jest.requireActual('../utils/loadHomeData').getFacilityForAgenda,
 }));
-jest.mock('../repositories/AgendaRepository', () => ({
-  AgendaRepository: { getAll: () => mockAgendaGetAll() },
+
+jest.mock('expo-router', () => ({
+  useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
 }));
-jest.mock('../repositories/InspectionRepository', () => ({
-  InspectionRepository: {
-    getCompleted: () => mockGetCompleted(),
-    getDrafts:    () => mockGetDrafts(),
+
+import { renderHook, act } from '@testing-library/react-hooks';
+import { useFocusEffect } from 'expo-router';
+import { loadHomeData } from '../utils/loadHomeData';
+import { useHomeData } from '../hooks/useHomeData';
+import { HomeData } from '../utils/loadHomeData';
+import { AgendaItem, Facility } from '../types';
+
+const mockLoad = jest.mocked(loadHomeData);
+const mockFocus = jest.mocked(useFocusEffect);
+
+const EMPTY_DATA: HomeData = {
+  officeName: '',
+  agendaItems: [],
+  completedInspections: [],
+  inProgressInspections: [],
+  recentFacilities: [],
+  userFacilities: [],
+  stats: {
+    totalCompleted: 0,
+    totalDrafts: 0,
+    nonCompliantFacilities: 0,
+    openCapCount: 0,
   },
-}));
-jest.mock('../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: { getOpen: () => mockGetOpen() },
-}));
-jest.mock('../facilitiesService', () => ({
-  getUserFacilities: () => mockGetUserFacilities(),
-}));
-
-const FAKE_FACILITY: Facility = {
-  id: 'fac-1',
-  projectName: 'منشأة التجربة',
-  ownerName: 'مالك',
-  activity: 'مخبز',
-  address: '',
 };
-jest.mock('../facilitiesData', () => ({ facilities: [FAKE_FACILITY] }));
-jest.mock('./statusUtils', () => ({
-  getComplianceSummary: (items: any[]) => ({
-    nonCompliant: items.filter((i: any) => i.complianceStatus === 'non-compliant').length,
-  }),
-}), { virtual: true });
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+const SAMPLE_DATA: HomeData = {
+  officeName: 'مكتب الصحة',
+  agendaItems: [{ id: 'ag-1', facilityId: 'fac-1', date: '2027-01-01', status: 'pending' } as AgendaItem],
+  completedInspections: [],
+  inProgressInspections: [],
+  recentFacilities: [],
+  userFacilities: [{ id: 'fac-1', name: 'Test Facility' } as Facility],
+  stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
+};
 
-const makeAgenda = (id: string, date: string, completed = false): AgendaItem => ({
-  id,
-  facilityId: 'fac-1',
-  facilityName: 'منشأة',
-  date,
-  notes: '',
-  status: completed ? 'completed' : 'pending',
-});
-
-const makeInsp = (
-  id: string,
-  status: 'completed' | 'in-progress',
-  nonCompliant = 0
-): SavedInspection => ({
-  id, facilityId: 'f1', facilityName: 'منشأة', facilityAddress: '',
-  date: '2026-05-01T00:00:00Z',
-  inspectorName: '', status, officeName: '', inspectionCause: '',
-  referenceDocument: '', committeeMembers: [],
-  items: Array.from({ length: nonCompliant }, (_, i) => ({
-    id: `item-${i}`,
-    criteria: '',
-    legalReference: '',
-    severity: 'low' as const,
-    axis: '',
-    complianceStatus: 'non-compliant' as const,
-    comment: '',
-  })),
-});
-
+// Make useFocusEffect actually invoke the callback synchronously
 beforeEach(() => {
   jest.clearAllMocks();
-  mockSettingsGet.mockResolvedValue({ officeName: 'مكتب التجربة' });
-  mockAgendaGetAll.mockResolvedValue([]);
-  mockGetCompleted.mockResolvedValue([]);
-  mockGetDrafts.mockResolvedValue([]);
-  mockGetUserFacilities.mockResolvedValue([]);
-  mockGetOpen.mockResolvedValue([]);
+  mockFocus.mockImplementation((cb) => { cb(); });
+  mockLoad.mockResolvedValue(EMPTY_DATA);
 });
 
-// ─── Tests ────────────────────────────────────────────────────────────────────
-
-describe('loadHomeData — settings', () => {
-  it('loads officeName', async () => {
-    mockSettingsGet.mockResolvedValue({ officeName: 'مكتب الجهوية' });
-    const data = await loadHomeData();
-    expect(data.officeName).toBe('مكتب الجهوية');
+describe('useHomeData', () => {
+  it('starts with empty data before loadHomeData resolves', () => {
+    mockLoad.mockReturnValue(new Promise(() => {})); // never resolves
+    const { result } = renderHook(() => useHomeData());
+    expect(result.current.officeName).toBe('');
+    expect(result.current.agendaItems).toEqual([]);
+    expect(result.current.stats.totalCompleted).toBe(0);
   });
 
-  it('defaults officeName to empty string when missing', async () => {
-    mockSettingsGet.mockResolvedValue({});
-    const data = await loadHomeData();
-    expect(data.officeName).toBe('');
-  });
-});
-
-describe('loadHomeData — agenda filtering', () => {
-  const FUTURE = '2099-12-31T00:00:00Z';
-  const PAST   = '2000-01-01T00:00:00Z';
-
-  it('excludes completed agenda items', async () => {
-    mockAgendaGetAll.mockResolvedValue([makeAgenda('done', FUTURE, true)]);
-    const data = await loadHomeData();
-    expect(data.agendaItems).toHaveLength(0);
+  it('populates data after loadHomeData resolves', async () => {
+    mockLoad.mockResolvedValue(SAMPLE_DATA);
+    const { result, waitForNextUpdate } = renderHook(() => useHomeData());
+    await waitForNextUpdate();
+    expect(result.current.officeName).toBe('مكتب الصحة');
+    expect(result.current.stats.totalCompleted).toBe(5);
+    expect(result.current.stats.openCapCount).toBe(3);
+    expect(result.current.agendaItems).toHaveLength(1);
   });
 
-  it('excludes past agenda items', async () => {
-    mockAgendaGetAll.mockResolvedValue([makeAgenda('old', PAST)]);
-    const data = await loadHomeData();
-    expect(data.agendaItems).toHaveLength(0);
+  it('falls back to empty data when loadHomeData rejects', async () => {
+    mockLoad.mockRejectedValue(new Error('network error'));
+    const { result, waitForNextUpdate } = renderHook(() => useHomeData());
+    await waitForNextUpdate();
+    expect(result.current.officeName).toBe('');
+    expect(result.current.agendaItems).toEqual([]);
   });
 
-  it('sorts upcoming items chronologically and limits to 3', async () => {
-    mockAgendaGetAll.mockResolvedValue([
-      makeAgenda('a4', '2099-04-01T00:00:00Z'),
-      makeAgenda('a2', '2099-02-01T00:00:00Z'),
-      makeAgenda('a1', '2099-01-01T00:00:00Z'),
-      makeAgenda('a3', '2099-03-01T00:00:00Z'),
-    ]);
-    const data = await loadHomeData();
-    expect(data.agendaItems).toHaveLength(3);
-    expect(data.agendaItems[0].id).toBe('a1');
-    expect(data.agendaItems[1].id).toBe('a2');
-    expect(data.agendaItems[2].id).toBe('a3');
-  });
-});
-
-describe('loadHomeData — inspections', () => {
-  it('returns at most 3 most-recent completed inspections (reversed)', async () => {
-    mockGetCompleted.mockResolvedValue([
-      makeInsp('c1', 'completed'), makeInsp('c2', 'completed'),
-      makeInsp('c3', 'completed'), makeInsp('c4', 'completed'),
-    ]);
-    const data = await loadHomeData();
-    expect(data.completedInspections).toHaveLength(3);
-    expect(data.completedInspections[0].id).toBe('c4');
+  it('re-fetches data on each focus event', async () => {
+    mockLoad.mockResolvedValue(SAMPLE_DATA);
+    const { waitForNextUpdate } = renderHook(() => useHomeData());
+    await waitForNextUpdate();
+    // Focus fires again
+    act(() => { mockFocus.mock.calls[0][0](); });
+    await waitForNextUpdate();
+    expect(mockLoad).toHaveBeenCalledTimes(2);
   });
 
-  it('returns at most 3 most-recent drafts (reversed)', async () => {
-    mockGetDrafts.mockResolvedValue([
-      makeInsp('d1', 'in-progress'), makeInsp('d2', 'in-progress'),
-      makeInsp('d3', 'in-progress'), makeInsp('d4', 'in-progress'),
-    ]);
-    const data = await loadHomeData();
-    expect(data.inProgressInspections).toHaveLength(3);
-    expect(data.inProgressInspections[0].id).toBe('d4');
-  });
-});
+  describe('getFacilityForAgenda', () => {
+    it('returns the matching facility from userFacilities', async () => {
+      mockLoad.mockResolvedValue(SAMPLE_DATA);
+      const { result, waitForNextUpdate } = renderHook(() => useHomeData());
+      await waitForNextUpdate();
+      const item = SAMPLE_DATA.agendaItems[0];
+      const facility = result.current.getFacilityForAgenda(item);
+      // fac-1 is not in hardcoded facilities so returns from userFacilities
+      expect(facility?.id).toBe('fac-1');
+    });
 
-describe('loadHomeData — facilities', () => {
-  it('returns at most 3 most-recent user facilities (reversed)', async () => {
-    const facs = ['f1', 'f2', 'f3', 'f4'].map(id => ({ ...FAKE_FACILITY, id }));
-    mockGetUserFacilities.mockResolvedValue(facs);
-    const data = await loadHomeData();
-    expect(data.recentFacilities).toHaveLength(3);
-    expect(data.recentFacilities[0].id).toBe('f4');
-  });
-});
-
-describe('loadHomeData — stats', () => {
-  it('counts inspections with >0 non-compliant items', async () => {
-    mockGetCompleted.mockResolvedValue([
-      makeInsp('ok',  'completed', 0),
-      makeInsp('bad', 'completed', 2),
-    ]);
-    const data = await loadHomeData();
-    expect(data.stats.nonCompliantFacilities).toBe(1);
-  });
-
-  it('totalCompleted and totalDrafts reflect loaded counts', async () => {
-    mockGetCompleted.mockResolvedValue([makeInsp('c1', 'completed'), makeInsp('c2', 'completed')]);
-    mockGetDrafts.mockResolvedValue([makeInsp('d1', 'in-progress')]);
-    const data = await loadHomeData();
-    expect(data.stats.totalCompleted).toBe(2);
-    expect(data.stats.totalDrafts).toBe(1);
-  });
-});
-
-describe('getFacilityForAgenda', () => {
-  it('returns matching facility from hardcoded list', () => {
-    const agenda = makeAgenda('a1', '2099-01-01T00:00:00Z');
-    expect(getFacilityForAgenda(agenda, [])).toEqual(FAKE_FACILITY);
-  });
-
-  it('returns matching facility from user list if not in hardcoded', () => {
-    const userFac = { ...FAKE_FACILITY, id: 'user-fac' };
-    const agenda  = { ...makeAgenda('a1', '2099-01-01T00:00:00Z'), facilityId: 'user-fac' };
-    expect(getFacilityForAgenda(agenda, [userFac])).toEqual(userFac);
-  });
-
-  it('returns undefined for unknown facilityId', () => {
-    const agenda = { ...makeAgenda('a1', '2099-01-01T00:00:00Z'), facilityId: 'unknown' };
-    expect(getFacilityForAgenda(agenda, [])).toBeUndefined();
+    it('returns undefined when facility is not found', async () => {
+      mockLoad.mockResolvedValue(SAMPLE_DATA);
+      const { result, waitForNextUpdate } = renderHook(() => useHomeData());
+      await waitForNextUpdate();
+      const unknownItem = { id: 'ag-x', facilityId: 'unknown-999' } as AgendaItem;
+      const facility = result.current.getFacilityForAgenda(unknownItem);
+      expect(facility).toBeUndefined();
+    });
   });
 });

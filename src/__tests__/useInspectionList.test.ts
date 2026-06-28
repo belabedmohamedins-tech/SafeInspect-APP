@@ -1,230 +1,189 @@
-/**
- * Tests for useInspectionList behaviour.
- *
- * The async data-loading path (useFocusEffect -> run() -> setInspections)
- * cannot be driven reliably through react-test-renderer in this project's
- * Jest/Babel/RN setup: useFocusEffect fires synchronously during render but
- * the Promise chain never settles inside the reconciler regardless of how
- * many act() ticks we flush.
- *
- * Strategy
- * --------
- * 1. Repository wiring  — verify InspectionRepository.getAll is called when
- *    the focus callback fires (proves the hook is wired correctly).
- * 2. Filtering logic    — exercise the filter/search/sort logic directly by
- *    calling the same pure transformation the hook's useMemo uses, so we
- *    test the real production code without renderer involvement.
- * 3. deleteInspection   — render the hook, call delete, verify Alert fires.
- */
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const { act: rtrAct, create } = require('react-test-renderer');
-import React from 'react';
-import { Alert } from 'react-native';
-import { useInspectionList } from '../hooks/useInspectionList';
-import type { SavedInspection } from '../types';
-import * as InspectionRepositoryModule from '../repositories/InspectionRepository';
-
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-
-// Capture the focus callback so we can fire it manually in tests
-let capturedFocusCb: (() => (() => void) | void) | null = null;
-
-jest.mock('expo-router', () => ({
-  useFocusEffect: (cb: () => (() => void) | void) => {
-    capturedFocusCb = cb;
-  },
-  useRouter:            jest.fn(() => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })),
-  useLocalSearchParams: jest.fn(() => ({})),
-  Link:  'Link',
-  Stack: { Screen: 'Stack.Screen' },
-  Tabs:  { Screen: 'Tabs.Screen' },
-}));
+// src/__tests__/useInspectionList.test.ts
 
 jest.mock('../repositories/InspectionRepository', () => ({
   InspectionRepository: {
-    getAll:  jest.fn(() => Promise.resolve([])),
-    delete:  jest.fn(() => Promise.resolve()),
+    getAll: jest.fn(),
+    delete: jest.fn(),
   },
 }));
 
-const mockGetAll = jest.mocked(InspectionRepositoryModule.InspectionRepository.getAll);
-const mockAlert  = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
+jest.mock('expo-router', () => ({
+  useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
+}));
 
-// ─── renderPureHook ───────────────────────────────────────────────────────────
+jest.mock('react-native', () => ({
+  Alert: { alert: jest.fn() },
+}));
 
-function renderPureHook<T>(hook: () => T) {
-  const snapshot: { current: T | null } = { current: null };
-  function Wrapper() {
-    snapshot.current = hook();
-    return null;
-  }
-  rtrAct(() => { create(React.createElement(Wrapper)); });
-  return snapshot;
-}
+import { renderHook, act } from '@testing-library/react-hooks';
+import { Alert } from 'react-native';
+import { useFocusEffect } from 'expo-router';
+import { InspectionRepository } from '../repositories/InspectionRepository';
+import { useInspectionList } from '../hooks/useInspectionList';
+import { SavedInspection } from '../types';
 
-// ─── Setup ────────────────────────────────────────────────────────────────────
-
-beforeEach(() => {
-  jest.clearAllMocks();
-  capturedFocusCb = null;
-  mockGetAll.mockResolvedValue([]);
-});
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+const mockGetAll = jest.mocked(InspectionRepository.getAll);
+const mockDelete = jest.mocked(InspectionRepository.delete);
+const mockFocus  = jest.mocked(useFocusEffect);
+const mockAlert  = jest.mocked(Alert.alert);
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
-    id:              'insp-1',
-    facilityName:    'Test Facility',
-    facilityAddress: '123 Test St',
-    date:            new Date().toISOString(),
-    status:          'completed',
-    items:           [],
-    signature:       '',
+    id: 'insp-1',
+    facilityId: 'fac-1',
+    facilityName: 'Test Facility',
+    facilityAddress: '123 Main St',
+    date: new Date().toISOString(),
+    inspectorName: 'Ahmed',
+    officeName: 'Central Office',
+    status: 'completed',
+    items: [],
+    inspectionCause: '',
+    referenceDocument: '',
+    committeeMembers: [],
     ...overrides,
   } as SavedInspection;
 }
 
-/**
- * The same filter+sort logic the hook's useMemo uses.
- * Tested directly so we verify the real production algorithm.
- */
-function applyFilters(
-  inspections: SavedInspection[],
-  activeFilter: 'all' | 'completed' | 'in-progress',
-  searchQuery: string,
-): SavedInspection[] {
-  return inspections
-    .filter(i => activeFilter === 'all' || i.status === activeFilter)
-    .filter(i => {
-      if (!searchQuery) return true;
-      const q = searchQuery.toLowerCase();
-      return (
-        i.facilityName?.toLowerCase().includes(q) ||
-        i.facilityAddress?.toLowerCase().includes(q)
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockFocus.mockImplementation((cb) => { cb(); });
+  mockGetAll.mockResolvedValue([]);
+  mockDelete.mockResolvedValue(undefined);
+});
+
+describe('useInspectionList', () => {
+  it('starts with empty inspections', () => {
+    mockGetAll.mockReturnValue(new Promise(() => {}));
+    const { result } = renderHook(() => useInspectionList());
+    expect(result.current.filtered).toEqual([]);
+    expect(result.current.totalCount).toBe(0);
+  });
+
+  it('loads inspections on focus', async () => {
+    const items = [makeInspection({ id: 'i1' }), makeInspection({ id: 'i2' })];
+    mockGetAll.mockResolvedValue(items);
+    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+    await waitForNextUpdate();
+    expect(result.current.totalCount).toBe(2);
+  });
+
+  it('handles load error gracefully', async () => {
+    mockGetAll.mockRejectedValue(new Error('db error'));
+    const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+    await waitForNextUpdate();
+    expect(result.current.filtered).toEqual([]);
+  });
+
+  describe('filtering', () => {
+    const completed    = makeInspection({ id: 'c1', status: 'completed', facilityName: 'Alpha' });
+    const inProgress   = makeInspection({ id: 'p1', status: 'in-progress', facilityName: 'Beta' });
+
+    beforeEach(() => {
+      mockGetAll.mockResolvedValue([completed, inProgress]);
+    });
+
+    it('shows all inspections with activeFilter=all', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      expect(result.current.filtered).toHaveLength(2);
+    });
+
+    it('filters to completed only', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      act(() => { result.current.setActiveFilter('completed'); });
+      expect(result.current.filtered).toHaveLength(1);
+      expect(result.current.filtered[0].id).toBe('c1');
+    });
+
+    it('filters to in-progress only', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      act(() => { result.current.setActiveFilter('in-progress'); });
+      expect(result.current.filtered).toHaveLength(1);
+      expect(result.current.filtered[0].id).toBe('p1');
+    });
+
+    it('filters by facilityName search query', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      act(() => { result.current.setSearchQuery('alpha'); });
+      expect(result.current.filtered).toHaveLength(1);
+      expect(result.current.filtered[0].id).toBe('c1');
+    });
+
+    it('filters by facilityAddress search query', async () => {
+      const withAddress = makeInspection({ id: 'a1', facilityAddress: 'Rue de la Paix' });
+      mockGetAll.mockResolvedValue([withAddress]);
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      act(() => { result.current.setSearchQuery('paix'); });
+      expect(result.current.filtered).toHaveLength(1);
+    });
+
+    it('returns empty when search query matches nothing', async () => {
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      act(() => { result.current.setSearchQuery('zzznomatch'); });
+      expect(result.current.filtered).toHaveLength(0);
+    });
+
+    it('sorts by date descending (newest first)', async () => {
+      const older = makeInspection({ id: 'old', date: '2025-01-01T00:00:00.000Z' });
+      const newer = makeInspection({ id: 'new', date: '2026-01-01T00:00:00.000Z' });
+      mockGetAll.mockResolvedValue([older, newer]);
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      expect(result.current.filtered[0].id).toBe('new');
+      expect(result.current.filtered[1].id).toBe('old');
+    });
+  });
+
+  describe('deleteInspection', () => {
+    it('shows a confirmation alert when called', async () => {
+      mockGetAll.mockResolvedValue([makeInspection()]);
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
+      await act(async () => { await result.current.deleteInspection('insp-1'); });
+      expect(mockAlert).toHaveBeenCalledWith(
+        'تأكيد الحذف',
+        expect.any(String),
+        expect.arrayContaining([
+          expect.objectContaining({ text: 'إلغاء' }),
+          expect.objectContaining({ text: 'حذف' }),
+        ])
       );
-    })
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-}
+    });
 
-// ─── Tests ────────────────────────────────────────────────────────────────────
+    it('calls InspectionRepository.delete and removes item on confirm', async () => {
+      const item = makeInspection({ id: 'del-1' });
+      mockGetAll.mockResolvedValue([item]);
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
 
-describe('useInspectionList — repository wiring', () => {
-  it('registers a focus callback that calls InspectionRepository.getAll', () => {
-    renderPureHook(() => useInspectionList());
-    expect(capturedFocusCb).not.toBeNull();
-    // Fire the callback manually — simulates screen coming into focus
-    capturedFocusCb!();
-    expect(mockGetAll).toHaveBeenCalledTimes(1);
-  });
+      // Capture and trigger the destructive button onPress directly
+      await act(async () => { await result.current.deleteInspection('del-1'); });
+      const buttons: any[] = (mockAlert.mock.calls[0] as any)[2];
+      const destructive = buttons.find((b: any) => b.style === 'destructive');
+      await act(async () => { await destructive.onPress(); });
 
-  it('focus callback calls getAll again on every focus (no stale closure)', () => {
-    renderPureHook(() => useInspectionList());
-    capturedFocusCb!();
-    capturedFocusCb!();
-    expect(mockGetAll).toHaveBeenCalledTimes(2);
-  });
-});
+      expect(mockDelete).toHaveBeenCalledWith('del-1');
+      expect(result.current.filtered.find(i => i.id === 'del-1')).toBeUndefined();
+    });
 
-describe('useInspectionList — filtering logic (pure)', () => {
-  it('returns all items when filter is "all" and query is empty', () => {
-    const items = [makeInspection({ id: '1' }), makeInspection({ id: '2', status: 'in-progress' })];
-    expect(applyFilters(items, 'all', '')).toHaveLength(2);
-  });
+    it('handles delete repository error gracefully', async () => {
+      mockDelete.mockRejectedValueOnce(new Error('db error'));
+      mockGetAll.mockResolvedValue([makeInspection({ id: 'err-1' })]);
+      const { result, waitForNextUpdate } = renderHook(() => useInspectionList());
+      await waitForNextUpdate();
 
-  it('returns [] when source list is empty', () => {
-    expect(applyFilters([], 'all', '')).toEqual([]);
-  });
-
-  it('narrows to completed only', () => {
-    const items = [
-      makeInspection({ id: '1', status: 'completed' }),
-      makeInspection({ id: '2', status: 'in-progress' }),
-    ];
-    const result = applyFilters(items, 'completed', '');
-    expect(result).toHaveLength(1);
-    expect(result[0].status).toBe('completed');
-  });
-
-  it('narrows to in-progress only', () => {
-    const items = [
-      makeInspection({ id: '1', status: 'completed' }),
-      makeInspection({ id: '2', status: 'in-progress' }),
-    ];
-    const result = applyFilters(items, 'in-progress', '');
-    expect(result).toHaveLength(1);
-    expect(result[0].status).toBe('in-progress');
-  });
-
-  it('filters by facilityName search query (case-insensitive)', () => {
-    const items = [
-      makeInspection({ facilityName: 'مستشفى الرشيد' }),
-      makeInspection({ id: '2', facilityName: 'مدرسة الأمل' }),
-    ];
-    expect(applyFilters(items, 'all', 'رشيد')).toHaveLength(1);
-    expect(applyFilters(items, 'all', 'xyz')).toHaveLength(0);
-  });
-
-  it('filters by facilityAddress search query', () => {
-    const items = [
-      makeInspection({ facilityAddress: 'Rue Didouche Mourad' }),
-      makeInspection({ id: '2', facilityAddress: 'Boulevard Zighoud Youcef' }),
-    ];
-    expect(applyFilters(items, 'all', 'didouche')).toHaveLength(1);
-  });
-
-  it('sorts by date descending (newest first)', () => {
-    const older = makeInspection({ id: '1', date: '2024-01-01T00:00:00.000Z' });
-    const newer = makeInspection({ id: '2', date: '2025-06-01T00:00:00.000Z' });
-    const result = applyFilters([older, newer], 'all', '');
-    expect(result[0].id).toBe('2');
-    expect(result[1].id).toBe('1');
-  });
-
-  it('combined: filter + search both apply', () => {
-    const items = [
-      makeInspection({ id: '1', status: 'completed',    facilityName: 'مصنع الأمل' }),
-      makeInspection({ id: '2', status: 'in-progress',  facilityName: 'مصنع الأمل' }),
-      makeInspection({ id: '3', status: 'completed',    facilityName: 'مدرسة' }),
-    ];
-    const result = applyFilters(items, 'completed', 'مصنع');
-    expect(result).toHaveLength(1);
-    expect(result[0].id).toBe('1');
-  });
-});
-
-describe('useInspectionList — deleteInspection', () => {
-  it('triggers an Alert confirmation dialog', () => {
-    const snapshot = renderPureHook(() => useInspectionList());
-    rtrAct(() => { snapshot.current!.deleteInspection('insp-1'); });
-    expect(mockAlert).toHaveBeenCalledTimes(1);
-  });
-
-  it('Alert is called with correct title', () => {
-    const snapshot = renderPureHook(() => useInspectionList());
-    rtrAct(() => { snapshot.current!.deleteInspection('insp-1'); });
-    expect(mockAlert).toHaveBeenCalledWith(
-      expect.stringContaining('تأكيد'),
-      expect.any(String),
-      expect.any(Array),
-    );
-  });
-});
-
-describe('useInspectionList — initial state', () => {
-  it('starts with empty filtered list', () => {
-    const snapshot = renderPureHook(() => useInspectionList());
-    expect(snapshot.current!.filtered).toEqual([]);
-    expect(snapshot.current!.totalCount).toBe(0);
-  });
-
-  it('starts with activeFilter = "all"', () => {
-    const snapshot = renderPureHook(() => useInspectionList());
-    expect(snapshot.current!.activeFilter).toBe('all');
-  });
-
-  it('starts with empty searchQuery', () => {
-    const snapshot = renderPureHook(() => useInspectionList());
-    expect(snapshot.current!.searchQuery).toBe('');
+      await act(async () => { await result.current.deleteInspection('err-1'); });
+      const buttons: any[] = (mockAlert.mock.calls[0] as any)[2];
+      const destructive = buttons.find((b: any) => b.style === 'destructive');
+      // Should not throw
+      await act(async () => { await destructive.onPress(); });
+      expect(mockDelete).toHaveBeenCalledWith('err-1');
+    });
   });
 });

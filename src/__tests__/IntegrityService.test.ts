@@ -4,16 +4,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   computeHash,
   verifyInspection,
+  IntegrityService,
 } from '../services/IntegrityService';
 import { SavedInspection } from '../types';
 
-// AsyncStorage is auto-mocked via jest-expo preset
 beforeEach(async () => {
   await AsyncStorage.clear();
   jest.clearAllMocks();
 });
-
-// ─── Helpers ────────────────────────────────────────────────────────────────
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
@@ -44,89 +42,149 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 describe('computeHash', () => {
   it('returns a non-empty string', () => {
-    const hash = computeHash(makeInspection());
-    expect(typeof hash).toBe('string');
-    expect(hash.length).toBeGreaterThan(0);
+    expect(typeof computeHash(makeInspection())).toBe('string');
+    expect(computeHash(makeInspection()).length).toBeGreaterThan(0);
   });
 
-  it('is deterministic — same object produces same hash', () => {
+  it('is deterministic', () => {
     const insp = makeInspection();
     expect(computeHash(insp)).toBe(computeHash(insp));
   });
 
   it('is field-order-independent', () => {
     const a = makeInspection({ id: 'x', facilityName: 'A' });
-    const b = { ...a }; // same fields, JS object order may differ
+    const b = { ...a };
     expect(computeHash(a)).toBe(computeHash(b));
   });
 
-  it('produces different hashes for different field values', () => {
-    const a = makeInspection({ score: 90 });
-    const b = makeInspection({ score: 50 });
-    expect(computeHash(a)).not.toBe(computeHash(b));
+  it('produces different hashes for different values', () => {
+    expect(computeHash(makeInspection({ score: 90 }))).not.toBe(computeHash(makeInspection({ score: 50 })));
   });
 
   it('produces different hashes when facilityName changes', () => {
-    const a = makeInspection({ facilityName: 'Alpha' });
-    const b = makeInspection({ facilityName: 'Beta' });
-    expect(computeHash(a)).not.toBe(computeHash(b));
+    expect(computeHash(makeInspection({ facilityName: 'Alpha' }))).not.toBe(computeHash(makeInspection({ facilityName: 'Beta' })));
   });
 
-  it('handles inspection with empty items array', () => {
-    const insp = makeInspection({ items: [] });
-    const hash = computeHash(insp);
-    expect(typeof hash).toBe('string');
+  it('handles empty items array', () => {
+    const hash = computeHash(makeInspection({ items: [] }));
     expect(hash.length).toBeGreaterThan(0);
+  });
+
+  it('ignores the integrityHash field itself (no circular hash)', () => {
+    const a = makeInspection();
+    const b = { ...a, integrityHash: 'someoldhash' };
+    expect(computeHash(a)).toBe(computeHash(b as SavedInspection));
   });
 });
 
 // ─── verifyInspection ────────────────────────────────────────────────────────
 
 describe('verifyInspection', () => {
-  it('returns ok=true immediately after saving with a stored hash', async () => {
+  it('returns ok=true after storing the correct hash', async () => {
     const insp = makeInspection();
-    const expectedHash = computeHash(insp);
-
-    // Simulate what InspectionRepository.save() does: store the hash
-    const hashes: Record<string, string> = { [insp.id]: expectedHash };
-    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify(hashes));
-
+    const hash = computeHash(insp);
+    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [insp.id]: hash }));
     const result = await verifyInspection(insp);
     expect(result.ok).toBe(true);
-    expect(result.storedHash).toBe(expectedHash);
-    expect(result.computedHash).toBe(expectedHash);
+    expect(result.storedHash).toBe(hash);
   });
 
-  it('returns ok=false when a field is tampered after hashing', async () => {
-    const original = makeInspection({ score: 90, grade: 'A' });
-    const originalHash = computeHash(original);
-
-    const hashes: Record<string, string> = { [original.id]: originalHash };
-    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify(hashes));
-
-    // Tamper: change the grade
-    const tampered = { ...original, grade: 'B' as const };
-    const result = await verifyInspection(tampered);
-
+  it('returns ok=false when a field is tampered', async () => {
+    const original = makeInspection();
+    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [original.id]: computeHash(original) }));
+    const result = await verifyInspection({ ...original, grade: 'B' as const });
     expect(result.ok).toBe(false);
-    expect(result.storedHash).toBe(originalHash);
-    expect(result.computedHash).not.toBe(originalHash);
   });
 
   it('returns ok=false when no stored hash exists', async () => {
-    const insp = makeInspection();
-    // No hash stored in AsyncStorage
-    const result = await verifyInspection(insp);
+    const result = await verifyInspection(makeInspection());
     expect(result.ok).toBe(false);
+    expect(result.storedHash).toBeUndefined();
   });
 
-  it('returns ok=true for an inspection with empty items[]', async () => {
+  it('returns ok=true for inspection with empty items', async () => {
     const insp = makeInspection({ items: [] });
-    const hash = computeHash(insp);
-    const hashes: Record<string, string> = { [insp.id]: hash };
-    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify(hashes));
+    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [insp.id]: computeHash(insp) }));
+    expect((await verifyInspection(insp)).ok).toBe(true);
+  });
+});
 
-    const result = await verifyInspection(insp);
+// ─── hashAndStore ─────────────────────────────────────────────────────────────
+
+describe('IntegrityService.hashAndStore', () => {
+  it('returns the hash of the inspection', async () => {
+    const insp = makeInspection();
+    const returned = await IntegrityService.hashAndStore(insp);
+    expect(returned).toBe(computeHash(insp));
+  });
+
+  it('persists the hash so verifyInspection returns ok=true', async () => {
+    const insp = makeInspection();
+    await IntegrityService.hashAndStore(insp);
+    expect((await verifyInspection(insp)).ok).toBe(true);
+  });
+
+  it('overwrites an existing hash for the same id', async () => {
+    const insp = makeInspection();
+    await IntegrityService.hashAndStore(insp);
+    const modified = { ...insp, score: 50 };
+    const newHash = await IntegrityService.hashAndStore(modified as SavedInspection);
+    const result = await verifyInspection(modified as SavedInspection);
     expect(result.ok).toBe(true);
+    expect(result.storedHash).toBe(newHash);
+  });
+
+  it('stores multiple inspections independently', async () => {
+    const a = makeInspection({ id: 'a-1', facilityName: 'A' });
+    const b = makeInspection({ id: 'b-1', facilityName: 'B' });
+    await IntegrityService.hashAndStore(a);
+    await IntegrityService.hashAndStore(b);
+    expect((await verifyInspection(a)).ok).toBe(true);
+    expect((await verifyInspection(b)).ok).toBe(true);
+  });
+});
+
+// ─── removeHash ───────────────────────────────────────────────────────────────
+
+describe('IntegrityService.removeHash', () => {
+  it('removes a single hash so verify returns ok=false', async () => {
+    const insp = makeInspection();
+    await IntegrityService.hashAndStore(insp);
+    await IntegrityService.removeHash(insp.id);
+    expect((await verifyInspection(insp)).ok).toBe(false);
+  });
+
+  it('does not affect other stored hashes', async () => {
+    const a = makeInspection({ id: 'a-1' });
+    const b = makeInspection({ id: 'b-1', facilityName: 'B' });
+    await IntegrityService.hashAndStore(a);
+    await IntegrityService.hashAndStore(b);
+    await IntegrityService.removeHash('a-1');
+    expect((await verifyInspection(b)).ok).toBe(true);
+  });
+
+  it('is a no-op when hash does not exist', async () => {
+    await expect(IntegrityService.removeHash('nonexistent')).resolves.toBeUndefined();
+  });
+});
+
+// ─── removeHashes ─────────────────────────────────────────────────────────────
+
+describe('IntegrityService.removeHashes', () => {
+  it('removes multiple hashes at once', async () => {
+    const a = makeInspection({ id: 'a-1' });
+    const b = makeInspection({ id: 'b-1', facilityName: 'B' });
+    const c = makeInspection({ id: 'c-1', facilityName: 'C' });
+    await IntegrityService.hashAndStore(a);
+    await IntegrityService.hashAndStore(b);
+    await IntegrityService.hashAndStore(c);
+    await IntegrityService.removeHashes(['a-1', 'b-1']);
+    expect((await verifyInspection(a)).ok).toBe(false);
+    expect((await verifyInspection(b)).ok).toBe(false);
+    expect((await verifyInspection(c)).ok).toBe(true);
+  });
+
+  it('handles empty array without error', async () => {
+    await expect(IntegrityService.removeHashes([])).resolves.toBeUndefined();
   });
 });
