@@ -1,20 +1,12 @@
 // jest.config.js
-// Type-safety via JSDoc — no ts-node required.
 //
 // ═══════════════════════════════════════════════════════════════════════════
-// MOCK ARCHITECTURE CONTRACT — 4 layers, see TESTING.md for full details
+// MOCK ARCHITECTURE CONTRACT — 4 layers, see TESTING.md
 // ═══════════════════════════════════════════════════════════════════════════
 //  L1  jest.polyfill.js          — global polyfills before preset
 //  L2  moduleNameMapper (below)  — redirect native imports to __mocks__/
 //  L3  jest.setup.ts             — behavioral overrides (react-native Proxy)
 //  L4  test files                — domain-specific mocks only
-//
-// ═══════════════════════════════════════════════════════════════════════════
-// transformIgnorePatterns — MAINTENANCE NOTE
-// ⚠️ FRAGILE — if you add an Expo/RN package and see:
-//   "SyntaxError: Cannot use import statement outside a module"
-// add that package name to the allowlist regex below.
-// Last audited: June 2026 (RN 0.76, Expo SDK 52, jest-expo 52)
 
 /** @type {import('jest').Config} */
 module.exports = {
@@ -35,12 +27,11 @@ module.exports = {
     'src/**/*.{ts,tsx}',
 
     // ── EXCLUSIONS ──────────────────────────────────────────────────────────────────
-    // Type definitions: no executable code to cover.
+    // Type definitions: no executable code.
     '!src/**/*.d.ts',
     '!src/types.ts',
 
-    // Static data files: pure data exports, no logic branches.
-    // Testing that an array exists is not useful.
+    // Static data files: pure data exports, zero logic branches.
     '!src/criteria/**',
     '!src/criteriaData.ts',
     '!src/facilitiesData.ts',
@@ -49,17 +40,22 @@ module.exports = {
     // Translation files: static string maps, no logic.
     '!src/i18n/**',
 
+    // Barrel index files: pure re-exports, no logic.
+    // Cover these via the modules they re-export.
+    '!src/repositories/index.ts',
+    '!src/utils/index.ts',
+    '!src/constants/index.ts',
+
     // Test infrastructure.
     '!src/__tests__/**',
     '!src/__mocks__/**',
 
-    // Expo Router screens (src/app/): these are UI integration tests,
-    // not unit tests. Cover them with Detox/Maestro E2E, not Jest.
+    // Expo Router screens: cover with Detox/Maestro E2E, not Jest.
     '!src/app/**',
   ],
 
-  // Floors enforced to prevent silent erosion.
-  // Target: branches 75, functions 80, lines 80 once all services are covered.
+  // Thresholds enforced in CI to prevent silent regression.
+  // Target: branches 75, functions/lines/statements 80 once all services covered.
   coverageThreshold: {
     global: {
       branches:   60,
@@ -75,7 +71,6 @@ module.exports = {
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
-    // ⚠️ THE ONLY PLACE async-storage IS MOCKED.
     '@react-native-async-storage/async-storage':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',
     '^expo-print$':                           '<rootDir>/__mocks__/expo-print.js',
