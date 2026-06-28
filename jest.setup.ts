@@ -9,15 +9,36 @@
  *   (Layer 2).  The canonical reason is: the mock needs jest.mock() hoisting
  *   semantics, or it must override something the preset already loaded.
  *
- *   ✅ OK here : react-native (Proxy), Platform, safe-area-context
+ *   ✅ OK here : react-native (Proxy), Platform, safe-area-context,
+ *                renderHook defaultWrapper
  *   ❌ NOT here : native module stubs → use moduleNameMapper + __mocks__/
  *
  * Load order:
- *   1. jest.polyfill.js          — global fetch/Response via undici
+ *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
  *   3. THIS FILE (Layer 3)       — behavioral overrides
  *   4. each test file (Layer 4)  — domain-specific mocks
  */
+
+import React from 'react';
+import { configure } from '@testing-library/react-native';
+
+// ─── renderHook global wrapper ────────────────────────────────────────────────
+//
+// @testing-library/react-native's renderHook renders the hook inside a real
+// React component tree.  Without a root, result.current is undefined because
+// the reconciler has no host to attach to.
+//
+// React.Fragment is the minimal valid root: it satisfies the reconciler without
+// requiring any native context.  useFocusEffect is mocked at Layer 4 in every
+// hook test file, so no real navigator context is needed here.
+//
+// Effect: every renderHook() call in every test file inherits this wrapper
+// automatically — no per-call boilerplate required.
+configure({
+  defaultWrapper: ({ children }: { children: React.ReactNode }) =>
+    React.createElement(React.Fragment, null, children),
+});
 
 // ─── react-native-safe-area-context — global stub ────────────────────────────
 jest.mock('react-native-safe-area-context', () => ({
@@ -121,6 +142,7 @@ jest.mock('react-native', () => {
     SafeAreaView:   'SafeAreaView',
     KeyboardAvoidingView: 'KeyboardAvoidingView',
     StatusBar:      { setBarStyle: jest.fn(), setBackgroundColor: jest.fn(), currentHeight: 24 },
+    useWindowDimensions: jest.fn(() => ({ width: 375, height: 812 })),
   };
 
   return new Proxy(rnStubs, {
