@@ -31,8 +31,6 @@ afterAll(() => {
 
 // Stub constants/theme before anything imports it so Platform.select
 // in theme.ts never executes during module loading in the test environment.
-// jest.setup.ts already provides a global react-native mock with Platform.select;
-// we do NOT re-mock react-native here to avoid overriding that global mock.
 jest.mock('../../constants/theme', () => ({
   Colors:  { primary: '#000', background: '#fff', text: '#000', tint: '#000',
              tabIconDefault: '#ccc', tabIconSelected: '#000', error: '#f00',
@@ -55,11 +53,7 @@ jest.mock('../../constants', () => ({
 
 // NOTE: @react-native-async-storage/async-storage is intentionally NOT mocked
 // here. jest.config.js moduleNameMapper (Layer 2) already routes every import
-// to __mocks__/@react-native-async-storage/async-storage.js — a stateful
-// in-memory store that returns null (not undefined) from getItem, which is
-// what SettingsRepository.get expects. Adding an inline factory here would
-// override that stub with simple jest.fn() stubs that return undefined, causing
-// SettingsRepository.get to throw at runtime.
+// to __mocks__/@react-native-async-storage/async-storage.js.
 
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
@@ -80,9 +74,11 @@ jest.mock('expo-sharing', () => ({
   shareAsync:       jest.fn().mockResolvedValue(undefined),
 }));
 
-const mockSettingsGet = jest.fn();
+// IMPORTANT: jest.mock() is hoisted by Babel before const declarations.
+// The stub MUST be created with jest.fn() inside the factory — NOT by
+// referencing an outer const variable (which would be undefined at hoist time).
 jest.mock('../repositories/SettingsRepository', () => ({
-  SettingsRepository: { get: mockSettingsGet },
+  SettingsRepository: { get: jest.fn() },
 }));
 
 // ─── Imports ──────────────────────────────────────────────────────────────────
@@ -95,7 +91,11 @@ import {
   exportInspectionCSV,
   exportInspectionPDF,
 } from '../services/pdfService';
+import { SettingsRepository } from '../repositories/SettingsRepository';
 import { InspectionItem, SavedInspection } from '../types';
+
+// Typed reference retrieved after import — always points to the live mock.
+const mockSettingsGet = jest.mocked(SettingsRepository.get);
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -144,9 +144,7 @@ async function captureHTML(inspection: SavedInspection): Promise<string> {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  // Reset the in-memory AsyncStorage store between tests so SettingsRepository
-  // always starts from a clean state. Use __resetStore (no jest.fn() side-effects)
-  // rather than .clear() so mock call counts stay accurate.
+  // Reset the in-memory AsyncStorage store between tests.
   const AsyncStorage = require('@react-native-async-storage/async-storage');
   AsyncStorage.__resetStore();
   // Default: settings returns an empty inspector name

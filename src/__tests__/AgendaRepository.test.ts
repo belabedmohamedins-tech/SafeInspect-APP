@@ -9,19 +9,24 @@
 // Adding an inline factory would override that stub and remove .__resetStore,
 // breaking the beforeEach store-wipe below.
 
-const mockSchedule = jest.fn();
-const mockCancel   = jest.fn();
-
+// IMPORTANT: jest.mock() is hoisted by Babel to the top of the file before any
+// const/let declarations execute. Therefore stubs MUST be created inside the
+// factory using jest.fn(), and then retrieved via jest.mocked() after imports.
 jest.mock('../services/NotificationService', () => ({
-  scheduleForAgendaItem: mockSchedule,
-  cancelForAgendaItem:   mockCancel,
+  scheduleForAgendaItem: jest.fn(),
+  cancelForAgendaItem:   jest.fn(),
 }));
 
 // ─── Imports (after mocks) ────────────────────────────────────────────────────
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AgendaRepository } from '../repositories/AgendaRepository';
+import * as NotificationService from '../services/NotificationService';
 import { AgendaItem } from '../types';
+
+// Typed references to the auto-mocked stubs — safe to use after imports.
+const mockSchedule = jest.mocked(NotificationService.scheduleForAgendaItem);
+const mockCancel   = jest.mocked(NotificationService.cancelForAgendaItem);
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -140,6 +145,7 @@ describe('AgendaRepository.delete', () => {
   it('calls cancelForAgendaItem with the deleted id', async () => {
     await AgendaRepository.save(makeItem({ id: 'a1' }));
     jest.clearAllMocks();
+    mockCancel.mockResolvedValue(undefined);
     await AgendaRepository.delete('a1');
     expect(mockCancel).toHaveBeenCalledWith('a1');
   });
@@ -165,6 +171,7 @@ describe('AgendaRepository.updateInspectionLink', () => {
   it('cancels the notification after linking', async () => {
     await AgendaRepository.save(makeItem({ id: 'a1', status: 'pending' }));
     jest.clearAllMocks();
+    mockCancel.mockResolvedValue(undefined);
     await AgendaRepository.updateInspectionLink('a1', 'insp-99');
     expect(mockCancel).toHaveBeenCalledWith('a1');
   });
