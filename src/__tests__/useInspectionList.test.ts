@@ -1,15 +1,25 @@
 // src/__tests__/useInspectionList.test.ts
 //
-// STRATEGY: renderHook — useFocusEffect is mocked globally in jest.setup.ts
-// to fire the callback directly on mount (cb() call), so result.current is
-// populated correctly.
+// ARCHITECTURE:
+//   useFocusEffect is mocked globally (jest.setup.ts) to call cb() directly
+//   on mount — no useEffect, no hook violation. The callback contains an
+//   async run() that calls InspectionRepository.getAll(). Because getAll is
+//   mocked with mockResolvedValue(), the Promise settles as a microtask after
+//   renderHook returns. We use waitFor() to wait for totalCount to update.
 //
-// IMPORTANT — @testing-library/react-native v14 renderHook() is ASYNC.
-// Every renderHook() call MUST be awaited, otherwise { result } is
-// destructured from a Promise and result.current is always undefined.
+// IMPORTANT — RTLRN v14 renderHook() is async → always await it.
 //
-// wrapper: named function component returning React.createElement(
-//   React.Fragment, null, children).
+// IMPORTANT — act() wrapping state setter calls must be:
+//   await act(async () => { setter(...) })
+//   Plain act(() => setter()) does not guarantee the update is committed in
+//   RTLRN v14 before the next assertion runs.
+//
+// MOCK SCOPING RULE:
+//   Only the outer beforeEach calls jest.clearAllMocks(). Nested beforeEach
+//   blocks only call mockGetAll.mockResolvedValue() — they must NOT call
+//   jest.clearAllMocks() or jest.resetAllMocks(), as that wipes useNavigation
+//   and useRouter stubs set by jest.setup.ts, causing renderHook to throw
+//   and result.current to be null for every subsequent test.
 
 jest.mock('../repositories/InspectionRepository', () => ({
   InspectionRepository: {
@@ -34,23 +44,33 @@ function Wrapper({ children }: { children: React.ReactNode }) {
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
-    id: 'i1', facilityId: 'f1', facilityName: 'Alpha Facility',
-    facilityAddress: '10 Main St', date: new Date().toISOString(),
-    inspectorName: 'X', officeName: 'O', status: 'completed',
-    items: [], inspectionCause: '', referenceDocument: '', committeeMembers: [],
+    id: 'i1',
+    facilityId: 'f1',
+    facilityName: 'Alpha Facility',
+    facilityAddress: '10 Main St',
+    date: new Date().toISOString(),
+    inspectorName: 'X',
+    officeName: 'O',
+    status: 'completed',
+    items: [],
+    inspectionCause: '',
+    referenceDocument: '',
+    committeeMembers: [],
     ...overrides,
   } as SavedInspection;
 }
 
+// Outer beforeEach — runs before EVERY test. Resets all mocks cleanly.
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetAll.mockResolvedValue([]);
   mockDelete.mockResolvedValue(undefined);
 });
 
+// ─── initial state ────────────────────────────────────────────────────────────
 describe('useInspectionList — initial state', () => {
-  it('starts with empty filtered list and zero totalCount', async () => {
-    mockGetAll.mockReturnValue(new Promise(() => {}));
+  it('starts with empty filtered list and zero totalCount before load resolves', async () => {
+    mockGetAll.mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     expect(result.current.filtered).toEqual([]);
     expect(result.current.totalCount).toBe(0);
@@ -59,6 +79,7 @@ describe('useInspectionList — initial state', () => {
   });
 });
 
+// ─── data load on mount ───────────────────────────────────────────────────────
 describe('useInspectionList — data load on mount', () => {
   it('loads inspections via useFocusEffect on mount', async () => {
     mockGetAll.mockResolvedValue([
@@ -78,6 +99,9 @@ describe('useInspectionList — data load on mount', () => {
   });
 });
 
+// ─── filter by status ─────────────────────────────────────────────────────────
+// NOTE: nested beforeEach here does NOT call jest.clearAllMocks().
+// It only overrides mockGetAll for this describe block.
 describe('useInspectionList — filter by status', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([
@@ -96,7 +120,7 @@ describe('useInspectionList — filter by status', () => {
   it('filter "completed" returns only completed', async () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
-    act(() => result.current.setActiveFilter('completed'));
+    await act(async () => { result.current.setActiveFilter('completed'); });
     expect(result.current.filtered).toHaveLength(2);
     expect(result.current.filtered.every(i => i.status === 'completed')).toBe(true);
   });
@@ -104,12 +128,13 @@ describe('useInspectionList — filter by status', () => {
   it('filter "in-progress" returns only drafts', async () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
-    act(() => result.current.setActiveFilter('in-progress'));
+    await act(async () => { result.current.setActiveFilter('in-progress'); });
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.filtered[0].id).toBe('d1');
   });
 });
 
+// ─── search ───────────────────────────────────────────────────────────────────
 describe('useInspectionList — search', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([
@@ -128,7 +153,7 @@ describe('useInspectionList — search', () => {
   it('query matches facilityName case-insensitively', async () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
-    act(() => result.current.setSearchQuery('alpha'));
+    await act(async () => { result.current.setSearchQuery('alpha'); });
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.filtered[0].id).toBe('i1');
   });
@@ -136,27 +161,25 @@ describe('useInspectionList — search', () => {
   it('query matches facilityAddress case-insensitively', async () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
-    act(() => result.current.setSearchQuery('main'));
+    await act(async () => { result.current.setSearchQuery('main'); });
     expect(result.current.filtered).toHaveLength(2);
   });
 
   it('query with no match returns empty array', async () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
-    act(() => result.current.setSearchQuery('zzznomatch'));
+    await act(async () => { result.current.setSearchQuery('zzznomatch'); });
     expect(result.current.filtered).toHaveLength(0);
   });
 });
 
+// ─── sort order ───────────────────────────────────────────────────────────────
 describe('useInspectionList — sort order', () => {
   it('filtered list is sorted descending by date', async () => {
-    const d1 = new Date('2024-01-01').toISOString();
-    const d2 = new Date('2024-06-15').toISOString();
-    const d3 = new Date('2024-03-10').toISOString();
     mockGetAll.mockResolvedValue([
-      makeInspection({ id: 'old', date: d1 }),
-      makeInspection({ id: 'new', date: d2 }),
-      makeInspection({ id: 'mid', date: d3 }),
+      makeInspection({ id: 'old', date: new Date('2024-01-01').toISOString() }),
+      makeInspection({ id: 'new', date: new Date('2024-06-15').toISOString() }),
+      makeInspection({ id: 'mid', date: new Date('2024-03-10').toISOString() }),
     ]);
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(3));
@@ -165,6 +188,7 @@ describe('useInspectionList — sort order', () => {
   });
 });
 
+// ─── deleteInspection ─────────────────────────────────────────────────────────
 describe('useInspectionList — deleteInspection', () => {
   it('calls Alert.alert with the confirmation message', async () => {
     mockGetAll.mockResolvedValue([makeInspection({ id: 'del-1' })]);
@@ -174,8 +198,8 @@ describe('useInspectionList — deleteInspection', () => {
       await result.current.deleteInspection('del-1');
     });
     expect(Alert.alert).toHaveBeenCalledWith(
-      'تأكيد الحذف',
-      'هل أنت متأكد من حذف هذا التفتيش؟',
+      '\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062d\u0630\u0641',
+      '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u062d\u0630\u0641 \u0647\u0630\u0627 \u0627\u0644\u062a\u0641\u062a\u064a\u0634\u061f',
       expect.any(Array)
     );
   });
