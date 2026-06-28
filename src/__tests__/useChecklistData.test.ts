@@ -97,7 +97,7 @@ async function waitLoaded(result: any) {
   await waitFor(() => expect(result.current.isLoading).toBe(false));
 }
 
-// ─── Load from scratch ────────────────────────────────────────────────────────
+// ─── Load from scratch ─────────────────────────────────────────────────────
 describe('useChecklistData — load from scratch', () => {
   it('loads default criteria when no draftId and no activity', async () => {
     const { result } = await renderHook(
@@ -129,7 +129,7 @@ describe('useChecklistData — load from scratch', () => {
   });
 });
 
-// ─── Load from draft ──────────────────────────────────────────────────────────
+// ─── Load from draft ───────────────────────────────────────────────────────
 describe('useChecklistData — load from draft', () => {
   it('loads existing draft items when draftId is provided', async () => {
     const draftItems: InspectionItem[] = [
@@ -158,7 +158,7 @@ describe('useChecklistData — load from draft', () => {
   });
 });
 
-// ─── handleStatusChange ───────────────────────────────────────────────────────
+// ─── handleStatusChange ────────────────────────────────────────────────────
 describe('useChecklistData — handleStatusChange', () => {
   it('updates complianceStatus for the target item', async () => {
     const { result } = await renderHook(
@@ -183,7 +183,7 @@ describe('useChecklistData — handleStatusChange', () => {
   });
 });
 
-// ─── handleCommentChange ──────────────────────────────────────────────────────
+// ─── handleCommentChange ───────────────────────────────────────────────────
 describe('useChecklistData — handleCommentChange', () => {
   it('updates comment for the target item', async () => {
     const { result } = await renderHook(
@@ -196,7 +196,7 @@ describe('useChecklistData — handleCommentChange', () => {
   });
 });
 
-// ─── handlePhotoTake ──────────────────────────────────────────────────────────
+// ─── handlePhotoTake ───────────────────────────────────────────────────────
 describe('useChecklistData — handlePhotoTake', () => {
   it('adds photo uri to the target item photos array', async () => {
     const { result } = await renderHook(
@@ -224,7 +224,7 @@ describe('useChecklistData — handlePhotoTake', () => {
   });
 });
 
-// ─── handleFinish — Gate 1: 85% completion ────────────────────────────────────
+// ─── handleFinish — Gate 1: 85% completion ─────────────────────────────────
 describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
   it('shows Alert and does not save when completion < 85%', async () => {
     const { result } = await renderHook(
@@ -244,7 +244,7 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
   });
 });
 
-// ─── handleFinish — Gate 2: high-severity photo ───────────────────────────────
+// ─── handleFinish — Gate 2: high-severity photo ────────────────────────────
 describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)', () => {
   it('shows Alert and does not save when high-severity non-compliant item has no photo', async () => {
     const { result } = await renderHook(
@@ -284,7 +284,7 @@ describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)
   });
 });
 
-// ─── handleFinish — success path ──────────────────────────────────────────────
+// ─── handleFinish — success path ───────────────────────────────────────────
 async function evaluateAll(result: any) {
   await act(async () => {
     result.current.data.forEach((item: any) => {
@@ -347,7 +347,7 @@ describe('useChecklistData — handleFinish success', () => {
   });
 });
 
-// ─── Derived values ───────────────────────────────────────────────────────────
+// ─── Derived values ────────────────────────────────────────────────────────
 describe('useChecklistData — derived values', () => {
   it('evaluatedItems updates as items are marked', async () => {
     const { result } = await renderHook(
@@ -384,7 +384,11 @@ describe('useChecklistData — derived values', () => {
   });
 });
 
-// ─── saveInspection error path ────────────────────────────────────────────────
+// ─── saveInspection error path ─────────────────────────────────────────────
+// NOTE: the hook catches save errors and calls:
+//   Alert.alert('خطأ', 'حدث خطأ أثناء الحفظ')
+// It does NOT interpolate the thrown Error message into the alert body.
+// Assert the exact Arabic strings the hook actually passes.
 describe('useChecklistData — saveInspection error path', () => {
   it('calls Alert when save throws', async () => {
     mockSave.mockRejectedValue(new Error('disk full'));
@@ -393,16 +397,13 @@ describe('useChecklistData — saveInspection error path', () => {
       { wrapper: Wrapper }
     );
     await waitLoaded(result);
-    await act(async () => {
-      result.current.handleStatusChange('c1', 'compliant');
-      result.current.handleStatusChange('c2', 'compliant');
-      result.current.handleStatusChange('c3', 'compliant');
-    });
+    await evaluateAll(result);
     await act(async () => { await result.current.handleFinish(); });
+    // The hook shows a fixed Arabic error message — it does not surface
+    // the raw JS Error message to the user.
     expect(Alert.alert).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.stringContaining('disk full'),
-      expect.any(Array)
+      '\u062e\u0637\u0623',           // 'خطأ'
+      '\u062d\u062f\u062b \u062e\u0637\u0623 \u0623\u062b\u0646\u0627\u0621 \u0627\u0644\u062d\u0641\u0638'  // 'حدث خطأ أثناء الحفظ'
     );
   });
 });

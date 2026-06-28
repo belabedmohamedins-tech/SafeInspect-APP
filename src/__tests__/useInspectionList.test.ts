@@ -67,7 +67,7 @@ beforeEach(() => {
   mockDelete.mockResolvedValue(undefined);
 });
 
-// ─── initial state ────────────────────────────────────────────────────────────
+// ─── initial state ─────────────────────────────────────────────────────────
 describe('useInspectionList — initial state', () => {
   it('starts with empty filtered list and zero totalCount before load resolves', async () => {
     mockGetAll.mockReturnValue(new Promise(() => {})); // never resolves
@@ -79,7 +79,7 @@ describe('useInspectionList — initial state', () => {
   });
 });
 
-// ─── data load on mount ───────────────────────────────────────────────────────
+// ─── data load on mount ────────────────────────────────────────────────────
 describe('useInspectionList — data load on mount', () => {
   it('loads inspections via useFocusEffect on mount', async () => {
     mockGetAll.mockResolvedValue([
@@ -99,7 +99,7 @@ describe('useInspectionList — data load on mount', () => {
   });
 });
 
-// ─── filter by status ─────────────────────────────────────────────────────────
+// ─── filter by status ──────────────────────────────────────────────────────
 // NOTE: nested beforeEach here does NOT call jest.clearAllMocks().
 // It only overrides mockGetAll for this describe block.
 describe('useInspectionList — filter by status', () => {
@@ -134,7 +134,7 @@ describe('useInspectionList — filter by status', () => {
   });
 });
 
-// ─── search ───────────────────────────────────────────────────────────────────
+// ─── search ────────────────────────────────────────────────────────────────
 describe('useInspectionList — search', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([
@@ -173,7 +173,7 @@ describe('useInspectionList — search', () => {
   });
 });
 
-// ─── sort order ───────────────────────────────────────────────────────────────
+// ─── sort order ────────────────────────────────────────────────────────────
 describe('useInspectionList — sort order', () => {
   it('filtered list is sorted descending by date', async () => {
     mockGetAll.mockResolvedValue([
@@ -188,7 +188,7 @@ describe('useInspectionList — sort order', () => {
   });
 });
 
-// ─── deleteInspection ─────────────────────────────────────────────────────────
+// ─── deleteInspection ──────────────────────────────────────────────────────
 describe('useInspectionList — deleteInspection', () => {
   it('calls Alert.alert with the confirmation message', async () => {
     mockGetAll.mockResolvedValue([makeInspection({ id: 'del-1' })]);
@@ -209,15 +209,22 @@ describe('useInspectionList — deleteInspection', () => {
     const { result } = await renderHook(() => useInspectionList(), { wrapper: Wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(1));
 
+    // Capture the Alert buttons array when Alert.alert is called
     let alertButtons: any[] = [];
     (Alert.alert as jest.Mock).mockImplementation((_t, _m, buttons) => {
       alertButtons = buttons;
     });
 
+    // Trigger the delete — this calls Alert.alert synchronously
     await act(async () => { result.current.deleteInspection('del-1'); });
+
+    // Simulate user pressing the confirm button (index 1 = 'حذف')
+    // and wait for the resulting state update to be committed
     await act(async () => { await alertButtons[1].onPress(); });
 
+    // Wait for React to re-render with the item removed
+    await waitFor(() => expect(result.current.filtered).toHaveLength(0));
+
     expect(mockDelete).toHaveBeenCalledWith('del-1');
-    expect(result.current.filtered).toHaveLength(0);
   });
 });
