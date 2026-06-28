@@ -18,19 +18,23 @@
 //
 // Then retrieve the live instance AFTER the module loads:
 //
-//   import { IntegrityService } from '../../services/IntegrityService';
-//   const mockComputeHash = IntegrityService.computeHash as jest.Mock;
+//   const mockFn = jest.requireMock('...').fn;
 //
-// This is the standard pattern documented in the Jest docs under
-// "ES Module mocking" and is the only safe approach with Babel transforms.
+// WHY LAZY-IMPORT MOCKS USE jest.requireMock — NOT STATIC IMPORTS
+// ────────────────────────────────────────────────────────────────
+// InspectionRepository.save() uses await import() for followUpService and
+// ApprovalRepository. Babel transforms await import(path) to
+// Promise.resolve().then(() => require(path)), which hits the Jest module
+// registry keyed on the RESOLVED absolute path of the source file.
 //
-// LAZY IMPORTS (followUpService, ApprovalRepository)
-// ───────────────────────────────────────────────────
-// InspectionRepository.save() uses await import() for these two modules.
-// Static jest.mock() at the top registers them in the module registry before
-// any module loads. Babel transforms await import(path) → require(path) at
-// runtime, which hits the jest registry and returns the mock factory exports.
-// This works correctly as long as resetModules() is NOT called.
+// When the test file does a static import of those modules, TypeScript/Babel
+// may resolve the path to a different registry key than what the source
+// file's require() uses. jest.requireMock(path) resolves from the TEST
+// file's location — giving the exact same key Jest used when registering
+// the mock — guaranteeing the same instance.
+//
+// Using jest.requireMock() instead of a static import is the only safe
+// approach when the mocked module is also lazy-imported by the source.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../../repositories/keys';
@@ -53,6 +57,7 @@ jest.mock('../../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: { createFromInspection: jest.fn(() => Promise.resolve()) },
 }));
 
+// Lazy-import mocks — must use jest.requireMock() to retrieve handles (see header)
 jest.mock('../../services/followUpService', () => ({
   createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
 }));
@@ -67,21 +72,25 @@ import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { IntegrityService } from '../../services/IntegrityService';
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
-import { createFollowUpIfNeeded } from '../../services/followUpService';
-import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
-// Typed handles to the mock functions — retrieved after module load, safe from TDZ.
+// Typed handles — static imports safe here (no TDZ, factories already hoisted)
 const mockComputeHash           = IntegrityService.computeHash           as jest.Mock;
 const mockAuditAppend           = AuditLogRepository.append              as jest.Mock;
 const mockCreateFromInspection  = CorrectiveActionRepository.createFromInspection as jest.Mock;
-const mockCreateFollowUp        = createFollowUpIfNeeded                  as jest.Mock;
-const mockEnqueue               = ApprovalRepository.enqueue              as jest.Mock;
+
+// Lazy-import handles — retrieved via requireMock to match the registry key
+// the source file's await import() will resolve to at runtime.
+const mockCreateFollowUp = (jest.requireMock('../../services/followUpService') as any).createFollowUpIfNeeded as jest.Mock;
+const mockEnqueue        = (jest.requireMock('../../repositories/ApprovalRepository') as any).ApprovalRepository.enqueue as jest.Mock;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
   (AsyncStorage as any).__resetStore();
   jest.clearAllMocks();
+  // Re-apply implementations cleared by jest.clearAllMocks()
+  mockCreateFollowUp.mockResolvedValue(undefined);
+  mockEnqueue.mockResolvedValue(undefined);
 });
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
