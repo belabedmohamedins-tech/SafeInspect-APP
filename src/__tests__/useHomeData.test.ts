@@ -1,36 +1,30 @@
 // src/__tests__/useHomeData.test.ts
 //
-// TESTING STRATEGY — why focusEffect is injected:
+// TESTING STRATEGY — why focusEffect is injected and why the stub uses useRef:
 //
-// useFocusEffect (expo-router) needs a full React Navigation context tree.
-// In RTLRN v14 + React 19, any jest.mock approach that calls useEffect inside
-// the mock silently crashes renderHook (result.current stays undefined) due to
-// a React dispatcher invariant hit outside a real fiber.
+// 1. useFocusEffect (expo-router) requires a full React Navigation context tree.
+//    Passing it as an injectable parameter (with production default) lets tests
+//    supply a lightweight stub — no navigation context needed.
 //
-// Solution: useHomeData accepts focusEffect as an injectable parameter with
-// _useFocusEffect as its default (see useHomeData.ts). Tests pass stubFocusEffect
-// — a plain function that calls useEffect(cb, []) — directly to renderHook.
-// The stub is valid because it is called from inside renderHook's own fiber.
+// 2. The stub MUST NOT call useEffect() from a module-scope function.
+//    useEffect called outside a component call-stack violates React's dispatcher
+//    invariant, which is silently swallowed by renderHook and leaves
+//    result.current undefined.
 //
-// jest.mock('expo-router') is still required here: useHomeData.ts imports from
-// expo-router at the top level, and without a mock that entire import chain
-// runs (Navigator → Screen → useNavigation → utils → useColorScheme …) and
-// may throw on other unstubbed natives. The mock only needs to be a no-op
-// because the injected stub overrides useFocusEffect in every test anyway.
+// 3. stubFocusEffect uses useRef as a once-gate instead. useRef is a valid hook
+//    inside renderHook's fiber. The ref prevents the callback from running more
+//    than once on the initial render, matching useFocusEffect mount semantics.
 
 jest.mock('../utils/loadHomeData', () => ({
   loadHomeData: jest.fn(),
   getFacilityForAgenda: jest.requireActual('../utils/loadHomeData').getFacilityForAgenda,
 }));
 
-// Minimal no-op mock — prevents the real expo-router import chain from running.
-// useFocusEffect is never called via this mock in tests; the injected
-// stubFocusEffect is used instead.
-jest.mock('expo-router', () => ({
-  useFocusEffect: jest.fn(), // no-op; overridden by injection in every renderHook call
-}));
+// Minimal firewall — stops the real expo-router import chain from loading.
+// useFocusEffect is never called through this mock; the injected stub is used.
+jest.mock('expo-router', () => ({ useFocusEffect: jest.fn() }));
 
-import React, { useEffect } from 'react';
+import React, { useRef } from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { loadHomeData, HomeData } from '../utils/loadHomeData';
 import { useHomeData } from '../hooks/useHomeData';
@@ -38,12 +32,23 @@ import { AgendaItem, Facility } from '../types';
 
 const mockLoad = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 
-// stubFocusEffect: fires cb() exactly once on mount via useEffect.
-// Valid hook call — runs inside renderHook's React fiber, not in module scope.
-// eslint-disable-next-line react-hooks/rules-of-hooks
-const stubFocusEffect = (cb: () => void | (() => void)) => useEffect(cb, []);
+/**
+ * stubFocusEffect — fires cb() exactly once on the initial render.
+ *
+ * Uses useRef (a valid hook inside renderHook's fiber) as a once-gate.
+ * Does NOT use useEffect to avoid the dispatcher-invariant crash that occurs
+ * when useEffect is called from a module-scope function (outside a component).
+ */
+function stubFocusEffect(cb: () => void | (() => void)) {
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const called = useRef(false);
+  if (!called.current) {
+    called.current = true;
+    cb();
+  }
+}
 
-// Required by jest.setup.ts contract: each hook test passes its own wrapper.
+// jest.setup.ts contract: each hook test file passes its own wrapper.
 const wrapper = ({ children }: { children: React.ReactNode }) =>
   React.createElement(React.Fragment, null, children);
 
@@ -73,7 +78,7 @@ beforeEach(() => {
 });
 
 describe('useHomeData', () => {
-  it('starts with empty data before loadHomeData resolves', async () => {
+  it('starts with empty data before loadHomeData resolves', () => {
     mockLoad.mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = renderHook(() => useHomeData(stubFocusEffect), { wrapper });
     expect(result.current).toBeDefined();
@@ -100,20 +105,23 @@ describe('useHomeData', () => {
   });
 
   it('re-fetches data on each focus event', async () => {
-    // Capture the cb so we can call it manually to simulate a second focus.
+    // spyFocusEffect: stores cb so we can call it manually to simulate re-focus.
     let capturedCb: (() => void | (() => void)) | undefined;
-    const spyFocusEffect = (cb: () => void | (() => void)) => {
-      capturedCb = cb;
+    function spyFocusEffect(cb: () => void | (() => void)) {
       // eslint-disable-next-line react-hooks/rules-of-hooks
-      useEffect(cb, []);
-    };
+      const called = useRef(false);
+      if (!called.current) {
+        called.current = true;
+        capturedCb = cb;
+        cb();
+      }
+    }
 
     mockLoad.mockResolvedValue(SAMPLE_DATA);
     renderHook(() => useHomeData(spyFocusEffect), { wrapper });
     await waitFor(() => expect(mockLoad).toHaveBeenCalled());
     const callsAfterMount = mockLoad.mock.calls.length;
 
-    // Simulate re-focus (user navigates away and back)
     act(() => { capturedCb?.(); });
     await waitFor(() => expect(mockLoad).toHaveBeenCalledTimes(callsAfterMount + 1));
   });
@@ -131,7 +139,9 @@ describe('useHomeData', () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
       const { result } = renderHook(() => useHomeData(stubFocusEffect), { wrapper });
       await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
-      const facility = result.current.getFacilityForAgenda({ id: 'ax', facilityId: 'unknown-999' } as AgendaItem);
+      const facility = result.current.getFacilityForAgenda(
+        { id: 'ax', facilityId: 'unknown-999' } as AgendaItem
+      );
       expect(facility).toBeUndefined();
     });
   });
