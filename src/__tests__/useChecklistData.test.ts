@@ -36,7 +36,7 @@ jest.mock('../criteriaData', () => ({
 }));
 
 import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import { Alert } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
 import { InspectionRepository } from '../repositories/InspectionRepository';
