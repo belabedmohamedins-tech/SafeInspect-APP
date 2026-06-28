@@ -1,16 +1,18 @@
 /**
  * Unit tests for src/hooks/useInspectionList.ts
  *
- * Same renderPureHook pattern as useSignature.test.ts.
- * See that file for the full explanation of why RNTL renderHook is avoided.
+ * renderPureHook strategy:
+ *   We use react-test-renderer (pure JS reconciler) to avoid the two-React-
+ *   instance problem described in useSignature.test.ts.
  *
- * Async flush note:
- *   The hook calls an async run() inside useFocusEffect. After mount we need
- *   TWO async ticks:
- *     tick 1 — mockGetAll promise resolves
- *     tick 2 — setInspections triggers re-render and snapshot.current updates
- *   So every test that reads loaded data calls flushAsync() which does
- *   two consecutive await rtrAct(async () => {}) calls.
+ * Async re-render strategy:
+ *   The hook fires an async run() inside useFocusEffect. After the Promise
+ *   resolves, React queues a setState update. That update is only flushed
+ *   when the reconciler runs inside act(). We therefore:
+ *     1. renderPureHook  – mounts Wrapper, writes initial state
+ *     2. await flushAsync() – two rtrAct(async) ticks let the Promise resolve
+ *        AND the queued setState flush, re-invoking Wrapper each time
+ *     3. snapshot.current now holds the post-load values
  */
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const { act: rtrAct, create } = require('react-test-renderer');
@@ -42,21 +44,39 @@ const mockGetAll = jest.mocked(InspectionRepositoryModule.InspectionRepository.g
 const mockAlert  = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
 
 // ─── renderPureHook ───────────────────────────────────────────────────────────
-
+/**
+ * Mounts the hook in a pure-JS reconciler and returns:
+ *   snapshot  – { current } plain object, updated on every Wrapper render
+ *   rerender  – call inside rtrAct to force a fresh render cycle and
+ *               re-capture the latest hook return value
+ */
 function renderPureHook<T>(hook: () => T) {
   const snapshot: { current: T | null } = { current: null };
+
   function Wrapper() {
     snapshot.current = hook();
     return null;
   }
-  rtrAct(() => { create(React.createElement(Wrapper)); });
-  return snapshot;
+
+  let renderer: ReturnType<typeof create>;
+  rtrAct(() => {
+    renderer = create(React.createElement(Wrapper));
+  });
+
+  const rerender = () =>
+    rtrAct(() => renderer.update(React.createElement(Wrapper)));
+
+  return { snapshot, rerender };
 }
 
-/** Flush two microtask ticks so async state from useFocusEffect settles. */
-async function flushAsync() {
+/**
+ * Flush two microtask ticks then force a re-render so snapshot.current
+ * reflects the state that was set inside the resolved Promise.
+ */
+async function flushAsync(rerender: () => void) {
   await rtrAct(async () => {});
   await rtrAct(async () => {});
+  rerender();
 }
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
@@ -85,30 +105,30 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 describe('useInspectionList', () => {
   it('starts with an empty filtered list when repository returns []', async () => {
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    expect(result.current!.filtered).toEqual([]);
-    expect(result.current!.totalCount).toBe(0);
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    expect(snapshot.current!.filtered).toEqual([]);
+    expect(snapshot.current!.totalCount).toBe(0);
   });
 
   it('populates the filtered list from the repository on mount', async () => {
     mockGetAll.mockResolvedValueOnce([makeInspection()]);
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    expect(result.current!.filtered).toHaveLength(1);
-    expect(result.current!.totalCount).toBe(1);
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    expect(snapshot.current!.filtered).toHaveLength(1);
+    expect(snapshot.current!.totalCount).toBe(1);
   });
 
   it('setSearchQuery filters by facilityName', async () => {
     mockGetAll.mockResolvedValueOnce([
       makeInspection({ facilityName: 'مستشفى الرشيد' }),
     ]);
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    rtrAct(() => { result.current!.setSearchQuery('رشيد'); });
-    expect(result.current!.filtered).toHaveLength(1);
-    rtrAct(() => { result.current!.setSearchQuery('xyz'); });
-    expect(result.current!.filtered).toHaveLength(0);
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    rtrAct(() => { snapshot.current!.setSearchQuery('رشيد'); });
+    expect(snapshot.current!.filtered).toHaveLength(1);
+    rtrAct(() => { snapshot.current!.setSearchQuery('xyz'); });
+    expect(snapshot.current!.filtered).toHaveLength(0);
   });
 
   it('setActiveFilter narrows results to completed only', async () => {
@@ -116,11 +136,11 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    rtrAct(() => { result.current!.setActiveFilter('completed'); });
-    expect(result.current!.filtered).toHaveLength(1);
-    expect(result.current!.filtered[0].status).toBe('completed');
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    rtrAct(() => { snapshot.current!.setActiveFilter('completed'); });
+    expect(snapshot.current!.filtered).toHaveLength(1);
+    expect(snapshot.current!.filtered[0].status).toBe('completed');
   });
 
   it('setActiveFilter narrows results to in-progress only', async () => {
@@ -128,17 +148,17 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    rtrAct(() => { result.current!.setActiveFilter('in-progress'); });
-    expect(result.current!.filtered).toHaveLength(1);
-    expect(result.current!.filtered[0].status).toBe('in-progress');
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    rtrAct(() => { snapshot.current!.setActiveFilter('in-progress'); });
+    expect(snapshot.current!.filtered).toHaveLength(1);
+    expect(snapshot.current!.filtered[0].status).toBe('in-progress');
   });
 
   it('deleteInspection triggers an Alert confirmation dialog', async () => {
-    const result = renderPureHook(() => useInspectionList());
-    await flushAsync();
-    rtrAct(() => { result.current!.deleteInspection('insp-1'); });
+    const { snapshot, rerender } = renderPureHook(() => useInspectionList());
+    await flushAsync(rerender);
+    rtrAct(() => { snapshot.current!.deleteInspection('insp-1'); });
     expect(mockAlert).toHaveBeenCalledTimes(1);
   });
 });
