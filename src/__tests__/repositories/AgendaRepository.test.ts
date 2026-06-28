@@ -5,17 +5,10 @@
 // async-storage.js. Do NOT add an inline jest.mock() factory for it here.
 // Call AsyncStorage.__resetStore() in beforeEach to wipe the in-memory store.
 
-// ─── Mocks ────────────────────────────────────────────────────────────────────
-// IMPORTANT: jest.mock() is hoisted by Babel before any const/let declarations.
-// Stubs MUST be created with jest.fn() inside the factory.
-// Retrieve typed references via jest.mocked() after imports.
-
 jest.mock('../../services/NotificationService', () => ({
   scheduleForAgendaItem: jest.fn(),
   cancelForAgendaItem:   jest.fn(),
 }));
-
-// ─── Imports ──────────────────────────────────────────────────────────────────
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AgendaRepository } from '../../repositories/AgendaRepository';
@@ -26,11 +19,6 @@ import { AgendaItem } from '../../types';
 const mockSchedule = jest.mocked(NotificationService.scheduleForAgendaItem);
 const mockCancel   = jest.mocked(NotificationService.cancelForAgendaItem);
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-// status: 'pending' is required so save() calls scheduleForAgendaItem.
-// The source checks `item.status === 'pending'` — without this field
-// the condition is false and the mock is never called.
 function makeItem(overrides: Partial<AgendaItem> = {}): AgendaItem {
   return {
     id:           'item-1',
@@ -44,8 +32,6 @@ function makeItem(overrides: Partial<AgendaItem> = {}): AgendaItem {
     ...overrides,
   } as AgendaItem;
 }
-
-// ─── Setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -67,18 +53,40 @@ describe('AgendaRepository.getAll', () => {
     expect(items).toHaveLength(1);
     expect(items[0].id).toBe('item-1');
   });
+
+  it('returns [] when stored JSON is corrupt (parse-error branch)', async () => {
+    // Directly inject malformed JSON to exercise the catch branch in readAll()
+    await AsyncStorage.setItem(StorageKeys.AGENDA, 'NOT_VALID_JSON{{{');
+    const items = await AgendaRepository.getAll();
+    expect(items).toEqual([]);
+  });
+});
+
+// ─── getById ──────────────────────────────────────────────────────────────────
+
+describe('AgendaRepository.getById', () => {
+  it('returns the matching item', async () => {
+    await AgendaRepository.save(makeItem({ id: 'item-found' }));
+    const item = await AgendaRepository.getById('item-found');
+    expect(item?.id).toBe('item-found');
+  });
+
+  it('returns null when the id does not exist', async () => {
+    await AgendaRepository.save(makeItem({ id: 'item-1' }));
+    const item = await AgendaRepository.getById('ghost-id');
+    expect(item).toBeNull();
+  });
 });
 
 // ─── save ─────────────────────────────────────────────────────────────────────
 
 describe('AgendaRepository.save', () => {
-  it('persists a new item and schedules a notification', async () => {
+  it('persists a new pending item and schedules a notification', async () => {
     const item = makeItem({ status: 'pending' });
     await AgendaRepository.save(item);
     const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.AGENDA))!);
     expect(stored).toHaveLength(1);
     expect(stored[0].id).toBe('item-1');
-    // save() calls scheduleForAgendaItem with a subset object, not the full item
     expect(mockSchedule).toHaveBeenCalledWith({
       id:           item.id,
       facilityName: item.facilityName,
@@ -95,6 +103,20 @@ describe('AgendaRepository.save', () => {
     const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.AGENDA))!);
     expect(stored).toHaveLength(1);
     expect(stored[0].notes).toBe('updated');
+  });
+
+  it('calls cancelForAgendaItem instead of schedule when status is "completed"', async () => {
+    const item = makeItem({ status: 'completed' });
+    await AgendaRepository.save(item);
+    expect(mockSchedule).not.toHaveBeenCalled();
+    expect(mockCancel).toHaveBeenCalledWith('item-1');
+  });
+
+  it('calls cancelForAgendaItem instead of schedule when status is "cancelled"', async () => {
+    const item = makeItem({ status: 'cancelled' as any });
+    await AgendaRepository.save(item);
+    expect(mockSchedule).not.toHaveBeenCalled();
+    expect(mockCancel).toHaveBeenCalledWith('item-1');
   });
 });
 
@@ -118,17 +140,15 @@ describe('AgendaRepository.delete', () => {
 });
 
 // ─── updateInspectionLink ─────────────────────────────────────────────────────
-// NOTE: AgendaRepository does NOT expose a markComplete() method.
-// The equivalent is updateInspectionLink() which sets completed=true
-// and status='completed' as a side-effect of linking an inspection.
 
 describe('AgendaRepository.updateInspectionLink', () => {
-  it('sets completed to true and links the inspectionId', async () => {
+  it('sets completed=true, status="completed" and links the inspectionId', async () => {
     await AgendaRepository.save(makeItem({ completed: false }));
     jest.clearAllMocks();
     await AgendaRepository.updateInspectionLink('item-1', 'insp-99');
     const stored: AgendaItem[] = JSON.parse((await AsyncStorage.getItem(StorageKeys.AGENDA))!);
     expect(stored[0].completed).toBe(true);
+    expect(stored[0].status).toBe('completed');
     expect((stored[0] as any).inspectionId).toBe('insp-99');
     expect(mockCancel).toHaveBeenCalledWith('item-1');
   });
