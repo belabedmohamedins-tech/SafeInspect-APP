@@ -17,29 +17,9 @@
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
  *   3. THIS FILE (Layer 3)       — behavioral overrides
  *   4. each test file (Layer 4)  — domain-specific mocks
- *
- * Problem solved here:
- *   jest.mock('react-native', factory) where the factory calls
- *   jest.requireActual('react-native') triggers RN's full module graph
- *   synchronously, including Modal.js which reads Platform.OS before any
- *   Platform mock is in place → "Cannot read properties of undefined"
- *
- * Solution: return a purely synthetic object so requireActual is never called
- *   inside the factory.  jest-expo's preset already provides all component
- *   stubs (FlatList, ScrollView, Modal, …) that tests need.
  */
 
 // ─── react-native-safe-area-context — global stub ────────────────────────────
-//
-// expo-router imports react-native-safe-area-context which calls
-// TurboModuleRegistry.get synchronously at module-load time, before any
-// per-test jest.mock() factory runs.  A global stub here ensures every
-// test file gets a safe version (including useInspectionList.test.ts).
-//
-// Why Layer 3 and not Layer 2 (moduleNameMapper)?
-//   Because jest-expo's preset registers its own transform for this package.
-//   A moduleNameMapper entry would be ignored after the preset runs.
-//   jest.mock() in setupFilesAfterEnv correctly overrides the preset.
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets:     jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
   useSafeAreaFrame:      jest.fn(() => ({ x: 0, y: 0, width: 375, height: 812 })),
@@ -53,17 +33,7 @@ jest.mock('react-native-safe-area-context', () => ({
   },
 }));
 
-// ─── React Native — synthetic Platform mock (BOTH known import paths) ────────
-//
-// We mock the bare 'react-native' module WITHOUT calling requireActual to
-// avoid the circular crash.  We provide only what our source + test files
-// import.  Everything else (FlatList, ScrollView, etc.) comes from
-// jest-expo's preset.
-//
-// Why Layer 3 and not Layer 2?
-//   react-native is a virtual module synthesised by Metro/jest-expo.
-//   moduleNameMapper cannot reliably intercept it after the preset runs.
-
+// ─── React Native — synthetic Platform mock ───────────────────────────────────
 const PLATFORM = {
   OS:      'android' as const,
   select:  <T extends Record<string, unknown>>(spec: T): T[keyof T] =>
@@ -73,26 +43,17 @@ const PLATFORM = {
   isTV:      false,
 };
 
-// Path used by RN internals and jest-expo's resolver
 jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 
-// ─── React internal symbols that must return undefined/falsy ─────────────────
+// ─── React reconciler internal keys ──────────────────────────────────────────
 //
-// When react-test-renderer or @testing-library/react-native traverses a
-// component tree it reads internal Symbol keys ($$typeof, _context, _owner,
-// etc.) on every object it encounters — including our mock exports.
-// These must return `undefined` (falsy) so React does not mistake a mock
-// object for a React element or context.  They must NOT throw.
+// These are accessed on every object during React tree traversal.
+// They must return undefined/falsy silently — they are NOT RN API calls.
 //
-// Any access to a plain string key that is NOT in the explicit stub list
-// below will throw a descriptive error, forcing the developer to add an
-// explicit stub rather than silently getting a jest.fn() that hides the gap.
-//
-// NOTE: Variable names are prefixed with `mock` so Jest's Babel transform
-// allows them to be referenced inside jest.mock() factory functions.
-// Jest hoists jest.mock() calls before variable declarations run; only
-// variables whose names start with "mock" (case-insensitive) are permitted
-// inside those factories.  See: https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options
+// ⚠️  VERSIONING NOTE: last audited against React Native 0.76 / React 18.
+// If tests start throwing "[jest.setup.ts] react-native — unstubbed access"
+// for keys that look like React internals (e.g. __reactInternalMemoized*),
+// add them here AND update the version note above.
 const mockSafeFalsySymbols = new Set([
   Symbol.iterator,
   Symbol.toPrimitive,
@@ -101,9 +62,6 @@ const mockSafeFalsySymbols = new Set([
   Symbol.isConcatSpreadable,
 ]);
 
-// React reconciler internal string keys that must return undefined/falsy.
-// These are accessed on every object during tree traversal — they are NOT
-// RN API calls and must not throw.
 const mockReactInternalKeys = new Set([
   '$$typeof', '_context', '_owner', '_store', '_self', '_source',
   '__esModule', 'default', 'displayName', 'propTypes', 'defaultProps',
@@ -115,7 +73,6 @@ const mockReactInternalKeys = new Set([
   'then', 'catch', 'finally', // Promise-like checks
 ]);
 
-// Path used by application code: `import { Platform } from 'react-native'`
 jest.mock('react-native', () => {
   const rnStubs: Record<string, unknown> = {
     Platform:   PLATFORM,
@@ -168,17 +125,9 @@ jest.mock('react-native', () => {
 
   return new Proxy(rnStubs, {
     get(target, prop) {
-      // 1. Known explicit stubs — always return the real value.
       if (typeof prop === 'string' && prop in target) return target[prop];
-
-      // 2. React reconciler internals + JS built-ins — return undefined
-      //    silently so React tree traversal never throws.
       if (typeof prop === 'symbol' && mockSafeFalsySymbols.has(prop)) return undefined;
       if (typeof prop === 'string' && mockReactInternalKeys.has(prop))  return undefined;
-
-      // 3. Everything else — THROW so the missing stub is caught immediately.
-      //    This prevents false-positive tests caused by a silent jest.fn()
-      //    standing in for a real RN API that was never stubbed.
       throw new Error(
         `[jest.setup.ts] react-native — unstubbed access: "${String(prop)}"\n` +
         `Add an explicit stub for this key in the rnStubs object in jest.setup.ts.\n` +
@@ -188,9 +137,7 @@ jest.mock('react-native', () => {
   });
 });
 
-// ─── Console suppression ─────────────────────────────────────────────────────
-// Suppress known noisy warnings from RN/Expo internals that are not test
-// failures.  Real errors still surface.
+// ─── Console suppression ──────────────────────────────────────────────────────
 const _consoleError = console.error.bind(console);
 const _consoleWarn  = console.warn.bind(console);
 
