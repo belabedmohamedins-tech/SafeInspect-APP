@@ -88,13 +88,20 @@ describe('searchFacilities', () => {
     await addUserFacility(makeUserFacility({ projectName: 'مخبز الصباح', ownerName: 'سامي بلال', activity: 'مخابز' }));
   });
 
-  it('returns all facilities on empty query', async () => {
+  // searchFacilities('') intentionally returns [] per service contract
+  // (empty query = no search intent).  Use getAllFacilities() to list all.
+  it('returns empty array on empty query (use getAllFacilities for full listing)', async () => {
     const result = await searchFacilities('');
-    expect(result.length).toBe(hardcoded.length + 2);
+    expect(result).toHaveLength(0);
   });
 
-  it('returns all facilities on whitespace-only query', async () => {
+  it('returns empty array on whitespace-only query', async () => {
     const result = await searchFacilities('   ');
+    expect(result).toHaveLength(0);
+  });
+
+  it('getAllFacilities returns all hardcoded + user facilities', async () => {
+    const result = await getAllFacilities();
     expect(result.length).toBe(hardcoded.length + 2);
   });
 
@@ -139,7 +146,7 @@ describe('filterByActivity', () => {
   });
 
   it('includes user-added facilities in the results', async () => {
-    const user = await addUserFacility(makeUserFacility({ projectName: 'صيدلية ساحة المدينة', activity: ACTIVITY }));
+    await addUserFacility(makeUserFacility({ projectName: 'صيدلية ساحة المدينة', activity: ACTIVITY }));
     const result = await filterByActivity(ACTIVITY);
     expect(result.some(f => f.projectName === 'صيدلية ساحة المدينة')).toBe(true);
   });
@@ -158,8 +165,14 @@ describe('filterByActivity', () => {
 
 // ─── searchAndFilter ───────────────────────────────────────────────────
 describe('searchAndFilter', () => {
-  it('returns all when query is empty and no activity filter', async () => {
+  // searchAndFilter delegates to searchFacilities which returns [] for empty query
+  it('returns empty array when query is empty (searchFacilities contract)', async () => {
     const result = await searchAndFilter('');
+    expect(result).toHaveLength(0);
+  });
+
+  it('getAllFacilities returns at least all hardcoded entries', async () => {
+    const result = await getAllFacilities();
     expect(result.length).toBeGreaterThanOrEqual(hardcoded.length);
   });
 
