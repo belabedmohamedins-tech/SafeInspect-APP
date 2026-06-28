@@ -20,13 +20,33 @@
  *   Each hook test file passes its own `wrapper` to renderHook() directly,
  *   which is the correct pattern for all RTLRN versions.
  *
- * NOTE: expo-router global mock
- *   useFocusEffect — in a test environment there is no navigation stack, so
- *   the hook never fires. We replace it with a useEffect wrapper that fires
- *   the callback immediately on mount, matching the real screen-focus behaviour.
- *   useNavigation / useRouter stubs are provided so hooks that import them
- *   don't throw. Individual test files may override these via jest.mock() at
- *   Layer 4 if they need custom behaviour.
+ * NOTE: expo-router / useFocusEffect mock
+ *
+ *   THE BUG THIS COMMENT EXPLAINS (do not revert):
+ *   A previous version of this mock called useEffect() from require('react')
+ *   directly inside the useFocusEffect factory function:
+ *
+ *     useFocusEffect: (cb) => {
+ *       useEffect(() => { cb(); }, []);   // ← WRONG
+ *     }
+ *
+ *   This violates React's rules of hooks. useEffect (and all hooks) must be
+ *   called inside a React component or another hook. The useFocusEffect mock
+ *   is a plain factory function, not a component — React's hook dispatcher is
+ *   null when it executes. The result: React silently aborts the render of
+ *   every hook under test, leaving result.current === undefined in every
+ *   renderHook call. All 39 hook tests failed with:
+ *     TypeError: Cannot read properties of undefined (reading 'current')
+ *
+ *   THE FIX:
+ *   Call the callback directly — no hooks involved. This is correct because
+ *   the only purpose of the mock is to trigger the callback immediately when
+ *   the hook mounts, which renderHook does synchronously. The real
+ *   useFocusEffect fires on screen focus; in tests there is no navigation
+ *   stack, so a direct call on mount is the correct equivalent.
+ *
+ *   useNavigation / useRouter: minimal stubs. Test files that need specific
+ *   behaviour should override with jest.mock('expo-router', ...) at Layer 4.
  *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
@@ -38,22 +58,13 @@
 import React from 'react';
 
 // ─── expo-router — global stub ───────────────────────────────────────────────
-//
-// useFocusEffect: replace with useEffect so the callback fires on mount in
-//   renderHook. The real useFocusEffect only fires when a screen gains focus
-//   inside a navigation stack — which never happens in Jest.
-//
-// useNavigation / useRouter: minimal stubs. Test files that need specific
-//   behaviour should override with jest.mock('expo-router', ...) at Layer 4.
 jest.mock('expo-router', () => {
-  const { useEffect } = require('react');
   return {
+    // Direct call — no useEffect, no hook violation.
+    // The callback is called synchronously so renderHook sees the hook's
+    // initial data-load kick off immediately on mount.
     useFocusEffect: (cb: () => (() => void) | void) => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      useEffect(() => {
-        const cleanup = cb();
-        return cleanup ?? undefined;
-      }, []);
+      cb();
     },
     useNavigation: jest.fn(() => ({
       addListener: jest.fn(() => jest.fn()),
