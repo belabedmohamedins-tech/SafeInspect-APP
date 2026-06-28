@@ -198,9 +198,11 @@ describe('derived value logic', () => {
     expect(getEvaluatedCount(items)).toBe(1);
   });
 
-  it('evaluatedItems counts all statuses except not-evaluated and na', () => {
+  // getEvaluatedCount counts everything that is NOT 'not-evaluated' — including 'na'.
+  // It is a simple presence counter, not a "meaningful evaluation" counter.
+  it('evaluatedItems counts na as evaluated (counts all non-not-evaluated)', () => {
     const items = buildItems(['compliant', 'non-compliant', 'na', 'not-evaluated']);
-    expect(getEvaluatedCount(items)).toBe(2);
+    expect(getEvaluatedCount(items)).toBe(3);
   });
 
   it('progressPercent is 0 on fresh load', () => {
@@ -217,6 +219,7 @@ describe('derived value logic', () => {
     expect(percent).toBe(100);
   });
 
+  // groupByAxis returns Array<{title: string, data: InspectionItem[]}>, NOT a plain object.
   it('sections groups items by axis', () => {
     const items = [
       makeItem({ id: 'i1', axis: 'Axis A' }),
@@ -224,9 +227,10 @@ describe('derived value logic', () => {
       makeItem({ id: 'i3', axis: 'Axis A' }),
     ];
     const sections = groupByAxis(items);
-    expect(Object.keys(sections)).toContain('Axis A');
-    expect(Object.keys(sections)).toContain('Axis B');
-    expect(sections['Axis A']).toHaveLength(2);
+    const titles = sections.map(s => s.title);
+    expect(titles).toContain('Axis A');
+    expect(titles).toContain('Axis B');
+    expect(sections.find(s => s.title === 'Axis A')!.data).toHaveLength(2);
   });
 });
 
