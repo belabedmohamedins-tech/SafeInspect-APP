@@ -5,7 +5,7 @@ import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
 import type { SavedInspection } from '../../types';
 
-// ─── Mocks ──────────────────────────────────────────────────────────────────
+// ─── Mocks ───────────────────────────────────────────────────────────────────
 jest.mock('../../repositories/InspectionRepository', () => ({
   InspectionRepository: {
     getById: jest.fn(),
@@ -31,7 +31,7 @@ beforeEach(() => {
   mockAudit.mockResolvedValue(undefined);
 });
 
-// ─── Fixtures ───────────────────────────────────────────────────────────────
+// ─── Fixtures ────────────────────────────────────────────────────────────────
 const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspection => ({
   id: 'ins-1', facilityId: 'fac-1', facilityName: 'Facility',
   facilityAddress: 'Address', inspectorName: 'Inspector',
@@ -115,6 +115,13 @@ describe('ApprovalRepository', () => {
       await ApprovalRepository.approve('ins-1', 'Sup');
       expect(mockAudit).toHaveBeenCalledTimes(1);
     });
+
+    it('stores optional approvalNote', async () => {
+      await ApprovalRepository.enqueue(makeInspection());
+      await ApprovalRepository.approve('ins-1', 'Sup', 'Looks good');
+      const q = await ApprovalRepository.getQueue();
+      expect(q[0].approvalNote).toBe('Looks good');
+    });
   });
 
   describe('returnForRevision', () => {
@@ -139,6 +146,23 @@ describe('ApprovalRepository', () => {
         ApprovalRepository.returnForRevision('nonexistent', 'Sup', 'reason')
       ).rejects.toThrow('Record not found');
     });
+
+    // ── line 110: patches inspection when getById returns a record ────────────
+    it('patches the inspection record with returned status', async () => {
+      const ins = makeInspection();
+      mockGetById.mockResolvedValue(ins);
+      await ApprovalRepository.enqueue(ins);
+      await ApprovalRepository.returnForRevision('ins-1', 'Sup', 'Need more info');
+      expect(mockSave).toHaveBeenCalledWith(
+        expect.objectContaining({ approvalStatus: 'returned', returnedReason: 'Need more info' })
+      );
+    });
+
+    it('writes an audit log entry on return', async () => {
+      await ApprovalRepository.enqueue(makeInspection());
+      await ApprovalRepository.returnForRevision('ins-1', 'Sup', 'fix it');
+      expect(mockAudit).toHaveBeenCalledTimes(1);
+    });
   });
 
   describe('escalate', () => {
@@ -149,12 +173,35 @@ describe('ApprovalRepository', () => {
       expect(q[0].status).toBe('escalated');
     });
 
+    it('throws when inspectionId is not in queue', async () => {
+      await expect(
+        ApprovalRepository.escalate('nonexistent', 'Sup')
+      ).rejects.toThrow('Record not found');
+    });
+
     it('throws when trying to escalate an already-approved record', async () => {
       await ApprovalRepository.enqueue(makeInspection());
       await ApprovalRepository.approve('ins-1', 'Sup');
       await expect(
         ApprovalRepository.escalate('ins-1', 'Sup2')
       ).rejects.toThrow();
+    });
+
+    // ── line 142: patches inspection when getById returns a record ────────────
+    it('patches the inspection record with escalated status', async () => {
+      const ins = makeInspection();
+      mockGetById.mockResolvedValue(ins);
+      await ApprovalRepository.enqueue(ins);
+      await ApprovalRepository.escalate('ins-1', 'Sup', 'Needs director review');
+      expect(mockSave).toHaveBeenCalledWith(
+        expect.objectContaining({ approvalStatus: 'escalated' })
+      );
+    });
+
+    it('writes an audit log entry on escalation', async () => {
+      await ApprovalRepository.enqueue(makeInspection());
+      await ApprovalRepository.escalate('ins-1', 'Sup');
+      expect(mockAudit).toHaveBeenCalledTimes(1);
     });
   });
 });
