@@ -7,7 +7,10 @@ jest.mock('expo-router', () => ({
   useNavigation: jest.fn(() => ({ addListener: jest.fn(() => jest.fn()) })),
 }));
 
-jest.mock('react-native', () => ({ Alert: { alert: jest.fn() } }));
+// NOTE: No jest.mock('react-native') here.
+// Alert is already fully stubbed in jest.setup.ts (Alert: { alert: jest.fn() }).
+// Overriding react-native with a bare partial object destroys the Proxy-based
+// mock and breaks @testing-library/react-native's renderHook renderer.
 
 jest.mock('../repositories/InspectionRepository', () => ({
   InspectionRepository: { getById: jest.fn(), save: jest.fn() },

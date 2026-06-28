@@ -11,9 +11,10 @@ jest.mock('expo-router', () => ({
   useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
 }));
 
-jest.mock('react-native', () => ({
-  Alert: { alert: jest.fn() },
-}));
+// NOTE: No jest.mock('react-native') here.
+// Alert is already fully stubbed in jest.setup.ts (Alert: { alert: jest.fn() }).
+// Overriding react-native with a bare partial object destroys the Proxy-based
+// mock and breaks @testing-library/react-native's renderHook renderer.
 
 import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
