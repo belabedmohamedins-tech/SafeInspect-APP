@@ -19,9 +19,9 @@ import { AgendaItem, Facility } from '../types';
 const mockLoad  = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 const mockFocus = useFocusEffect as jest.MockedFunction<typeof useFocusEffect>;
 
-// Minimal wrapper so renderHook has a React tree
-const wrapper = ({ children }: { children: React.ReactNode }) =>
-  React.createElement(React.Fragment, null, children);
+function wrapper({ children }: { children: React.ReactNode }) {
+  return React.createElement(React.Fragment, null, children);
+}
 
 const EMPTY_DATA: HomeData = {
   officeName: '',
@@ -50,9 +50,10 @@ beforeEach(() => {
 });
 
 describe('useHomeData', () => {
-  it('starts with empty data before loadHomeData resolves', () => {
+  it('starts with empty data before loadHomeData resolves', async () => {
     mockLoad.mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => expect(result.current).toBeDefined());
     expect(result.current.officeName).toBe('');
     expect(result.current.agendaItems).toEqual([]);
     expect(result.current.stats.totalCompleted).toBe(0);
@@ -78,7 +79,6 @@ describe('useHomeData', () => {
   it('re-fetches data on each focus event', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
     renderHook(() => useHomeData(), { wrapper });
-    // wait for at least the initial fetch triggered by the mock
     await waitFor(() => expect(mockLoad).toHaveBeenCalled());
     const callsAfterMount = mockLoad.mock.calls.length;
     act(() => { mockFocus.mock.calls[0][0](); });
