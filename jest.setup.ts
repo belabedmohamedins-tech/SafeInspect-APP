@@ -60,7 +60,7 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 // These are accessed on every object during React tree traversal.
 // They must return undefined/falsy silently — they are NOT RN API calls.
 //
-// ⚠️  VERSIONING NOTE: last audited against React Native 0.76 / React 18.
+// ⚠️  VERSIONING NOTE: last audited against React Native 0.83 / React 19.
 // If tests start throwing "[jest.setup.ts] react-native — unstubbed access"
 // for keys that look like React internals (e.g. __reactInternalMemoized*),
 // add them here AND update the version note above.
@@ -114,6 +114,9 @@ jest.mock('react-native', () => {
     AccessibilityInfo: { isScreenReaderEnabled: jest.fn(() => Promise.resolve(false)), addEventListener: jest.fn(), removeEventListener: jest.fn(), announceForAccessibility: jest.fn() },
     Appearance: { getColorScheme: jest.fn(() => 'light'), addChangeListener: jest.fn() },
     InteractionManager: { runAfterInteractions: jest.fn((cb: () => void) => { cb(); return { cancel: jest.fn() }; }) },
+    // useColorScheme: accessed by expo-router's import chain (utils.ts → useNavigation →
+    // Screen → Navigator → exports → index). Must return a valid colour scheme string.
+    useColorScheme: jest.fn(() => 'light'),
     View:           'View',
     Text:           'Text',
     Image:          'Image',
