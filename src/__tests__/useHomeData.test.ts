@@ -1,20 +1,37 @@
 // src/__tests__/useHomeData.test.ts
+//
+// WHY useFocusEffect is mocked the way it is:
+//
+// useFocusEffect(cb) in the real expo-router requires a navigation context
+// (a Navigator tree) to be mounted. Without it the hook throws on render,
+// React catches it, and result.current is never populated.
+//
+// We cannot call React.useEffect() inside a jest.mock() factory — that runs
+// in module scope, outside any React fiber, and React throws "Invalid hook
+// call" which crashes the mount just as silently.
+//
+// The correct pattern is to alias useFocusEffect → React.useEffect directly.
+// When renderHook renders the hook, React.useEffect is a valid call inside
+// that fiber context. The callback fires once on mount (empty dep array),
+// matching real useFocusEffect semantics, with no navigation context needed
+// and no infinite re-render loop.
 
 jest.mock('../utils/loadHomeData', () => ({
   loadHomeData: jest.fn(),
   getFacilityForAgenda: jest.requireActual('../utils/loadHomeData').getFacilityForAgenda,
 }));
 
-// useFocusEffect must behave like useEffect (fires once on mount, not on every
-// render). Calling cb() synchronously on every render causes an infinite loop:
-// cb() → loadHomeData resolves → setState → re-render → cb() again → ...
-// Using React.useEffect here breaks that cycle.
 jest.mock('expo-router', () => {
-  const React = require('react');
+  // require inside the factory is safe — this executes at module-load time,
+  // before any test runs, so React is already available.
+  const { useEffect } = require('react');
   return {
+    // Alias: useFocusEffect(cb) becomes useEffect(() => cb(), []).
+    // cb is the useCallback-wrapped async loader — calling it returns the
+    // cleanup function (or undefined). The empty dep array ensures it fires
+    // exactly once per mount, never on re-renders caused by setState.
     useFocusEffect: jest.fn((cb: () => void | (() => void)) => {
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      React.useEffect(() => { return cb() ?? undefined; }, []);
+      useEffect(cb, []); // eslint-disable-line react-hooks/exhaustive-deps
     }),
   };
 });
@@ -30,8 +47,7 @@ const mockLoad  = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 const mockFocus = useFocusEffect as jest.MockedFunction<typeof useFocusEffect>;
 
 // Required by jest.setup.ts contract: configure({ defaultWrapper }) was removed
-// because it corrupts result.current on all RTLRN versions. Each hook test
-// must pass its own wrapper directly to renderHook().
+// because it corrupts result.current. Each hook test passes its own wrapper.
 const wrapper = ({ children }: { children: React.ReactNode }) =>
   React.createElement(React.Fragment, null, children);
 
@@ -57,10 +73,10 @@ const SAMPLE_DATA: HomeData = {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  // Reset to useEffect-based implementation after clearAllMocks wipes the spy
-  mockFocus.mockImplementation((cb) => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    React.useEffect(() => { return cb() ?? undefined; }, []);
+  // Re-apply the useEffect alias after clearAllMocks() wipes the spy.
+  const { useEffect } = require('react');
+  mockFocus.mockImplementation((cb: () => void | (() => void)) => {
+    useEffect(cb, []); // eslint-disable-line react-hooks/exhaustive-deps
   });
   mockLoad.mockResolvedValue(EMPTY_DATA);
 });
