@@ -87,7 +87,13 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 // Any access to a plain string key that is NOT in the explicit stub list
 // below will throw a descriptive error, forcing the developer to add an
 // explicit stub rather than silently getting a jest.fn() that hides the gap.
-const SAFE_FALSY_SYMBOLS = new Set([
+//
+// NOTE: Variable names are prefixed with `mock` so Jest's Babel transform
+// allows them to be referenced inside jest.mock() factory functions.
+// Jest hoists jest.mock() calls before variable declarations run; only
+// variables whose names start with "mock" (case-insensitive) are permitted
+// inside those factories.  See: https://jestjs.io/docs/jest-object#jestmockmodulename-factory-options
+const mockSafeFalsySymbols = new Set([
   Symbol.iterator,
   Symbol.toPrimitive,
   Symbol.toStringTag,
@@ -98,7 +104,7 @@ const SAFE_FALSY_SYMBOLS = new Set([
 // React reconciler internal string keys that must return undefined/falsy.
 // These are accessed on every object during tree traversal — they are NOT
 // RN API calls and must not throw.
-const REACT_INTERNAL_KEYS = new Set([
+const mockReactInternalKeys = new Set([
   '$$typeof', '_context', '_owner', '_store', '_self', '_source',
   '__esModule', 'default', 'displayName', 'propTypes', 'defaultProps',
   'contextTypes', 'childContextTypes', 'getDerivedStateFromProps',
@@ -167,8 +173,8 @@ jest.mock('react-native', () => {
 
       // 2. React reconciler internals + JS built-ins — return undefined
       //    silently so React tree traversal never throws.
-      if (typeof prop === 'symbol' && SAFE_FALSY_SYMBOLS.has(prop)) return undefined;
-      if (typeof prop === 'string' && REACT_INTERNAL_KEYS.has(prop))  return undefined;
+      if (typeof prop === 'symbol' && mockSafeFalsySymbols.has(prop)) return undefined;
+      if (typeof prop === 'string' && mockReactInternalKeys.has(prop))  return undefined;
 
       // 3. Everything else — THROW so the missing stub is caught immediately.
       //    This prevents false-positive tests caused by a silent jest.fn()
