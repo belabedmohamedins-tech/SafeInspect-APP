@@ -1,58 +1,47 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
-// AuthRepository uses expo-secure-store on native and AsyncStorage on web.
-// The jest-expo preset maps Platform.OS to 'ios' by default, so isNative=true.
-// expo-secure-store is mocked via expo-modules-core (Layer 2).
-// We override it here at Layer 4 with simple in-memory stubs.
+// expo-secure-store and expo-local-authentication are mapped at Layer 2
+// (moduleNameMapper in jest.config.js) to __mocks__/ files that expose
+// real jest.fn() stubs. We retrieve typed references here at Layer 4.
+//
+// Platform.OS is forced to 'ios' so that the isNative branch is exercised.
+// Without this, all SecureStore paths fall through to AsyncStorage and the
+// biometric methods return early with false/none.
+
+import { Platform } from 'react-native';
+(Platform as any).OS = 'ios'; // must run before AuthRepository is imported
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import * as LocalAuth from 'expo-local-authentication';
 import { AuthRepository } from '../../repositories/AuthRepository';
 
-// ─── Mocks ──────────────────────────────────────────────────────────────────
-// expo-secure-store: in-memory Map, same interface as AsyncStorage but sync-style
-const secureStore = new Map<string, string>();
-const mockSecureGet    = jest.fn((key: string) => Promise.resolve(secureStore.get(key) ?? null));
-const mockSecureSet    = jest.fn((key: string, value: string) => { secureStore.set(key, value); return Promise.resolve(); });
-const mockSecureDelete = jest.fn((key: string) => { secureStore.delete(key); return Promise.resolve(); });
+// ─── Typed stub references (resolved after moduleNameMapper maps the mocks) ───
+const mockSecureGet    = jest.mocked(SecureStore.getItemAsync);
+const mockSecureSet    = jest.mocked(SecureStore.setItemAsync);
+const mockSecureDelete = jest.mocked(SecureStore.deleteItemAsync);
+const { __resetStore: resetSecure } = SecureStore as any;
 
-jest.mock('expo-secure-store', () => ({
-  getItemAsync:    mockSecureGet,
-  setItemAsync:    mockSecureSet,
-  deleteItemAsync: mockSecureDelete,
-  WHEN_UNLOCKED: 'WHEN_UNLOCKED',
-}));
+const mockHasHardware    = jest.mocked(LocalAuth.hasHardwareAsync);
+const mockIsEnrolled     = jest.mocked(LocalAuth.isEnrolledAsync);
+const mockSupportedTypes = jest.mocked(LocalAuth.supportedAuthenticationTypesAsync);
+const mockAuthenticate   = jest.mocked(LocalAuth.authenticateAsync);
 
-// expo-local-authentication: default to hardware present + enrolled + success
-const mockHasHardware  = jest.fn().mockResolvedValue(true);
-const mockIsEnrolled   = jest.fn().mockResolvedValue(true);
-const mockSupportedTypes = jest.fn().mockResolvedValue([2]); // 2 = FINGERPRINT
-const mockAuthenticate = jest.fn().mockResolvedValue({ success: true });
+const { __resetStore: resetAsync } = AsyncStorage as any;
 
-jest.mock('expo-local-authentication', () => ({
-  hasHardwareAsync:                  mockHasHardware,
-  isEnrolledAsync:                   mockIsEnrolled,
-  supportedAuthenticationTypesAsync: mockSupportedTypes,
-  authenticateAsync:                 mockAuthenticate,
-  AuthenticationType: {
-    FINGERPRINT:         2,
-    FACIAL_RECOGNITION:  1,
-    IRIS:                3,
-  },
-}));
-
-const { __resetStore } = AsyncStorage as any;
 beforeEach(() => {
-  __resetStore();
-  secureStore.clear();
+  resetAsync();
+  resetSecure();
   jest.clearAllMocks();
-  // Restore default mock implementations after clearAllMocks()
-  mockSecureGet.mockImplementation((key: string) => Promise.resolve(secureStore.get(key) ?? null));
-  mockSecureSet.mockImplementation((key: string, value: string) => { secureStore.set(key, value); return Promise.resolve(); });
-  mockSecureDelete.mockImplementation((key: string) => { secureStore.delete(key); return Promise.resolve(); });
+  // Restore default implementations after clearAllMocks wipes them
   mockHasHardware.mockResolvedValue(true);
   mockIsEnrolled.mockResolvedValue(true);
-  mockSupportedTypes.mockResolvedValue([2]);
+  mockSupportedTypes.mockResolvedValue([2]); // FINGERPRINT
   mockAuthenticate.mockResolvedValue({ success: true });
+  // SecureStore stubs reconstruct in-memory operations from the now-cleared map
+  mockSecureGet.mockImplementation((key: string) =>
+    Promise.resolve((SecureStore as any).__store?.get(key) ?? null)
+  );
 });
 
 describe('AuthRepository', () => {
@@ -85,8 +74,8 @@ describe('AuthRepository', () => {
     });
 
     it('increments failed attempts and returns the new count', async () => {
-      const result = await AuthRepository.incrementFailedAttempts();
-      expect(result).toBe(1);
+      const count = await AuthRepository.incrementFailedAttempts();
+      expect(count).toBe(1);
       expect(await AuthRepository.getFailedAttempts()).toBe(1);
     });
 
@@ -129,17 +118,17 @@ describe('AuthRepository', () => {
 
   describe('getBiometricType', () => {
     it('returns FINGERPRINT when fingerprint is available', async () => {
-      mockSupportedTypes.mockResolvedValue([2]); // FINGERPRINT
+      mockSupportedTypes.mockResolvedValue([2]);
       expect(await AuthRepository.getBiometricType()).toBe('FINGERPRINT');
     });
 
     it('returns FACE_RECOGNITION when facial auth is available', async () => {
-      mockSupportedTypes.mockResolvedValue([1]); // FACIAL_RECOGNITION
+      mockSupportedTypes.mockResolvedValue([1]);
       expect(await AuthRepository.getBiometricType()).toBe('FACE_RECOGNITION');
     });
 
     it('returns IRIS when iris auth is available', async () => {
-      mockSupportedTypes.mockResolvedValue([3]); // IRIS
+      mockSupportedTypes.mockResolvedValue([3]);
       expect(await AuthRepository.getBiometricType()).toBe('IRIS');
     });
 

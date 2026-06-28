@@ -22,40 +22,26 @@ module.exports = {
     '<rootDir>/src/__tests__/**/*.test.tsx',
   ],
 
-  // ─── Coverage ──────────────────────────────────────────────────────────────────────
+  // ─── Coverage ───────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
 
-    // ── EXCLUSIONS ──────────────────────────────────────────────────────────────────
-    // Type definitions: no executable code.
+    // ── EXCLUSIONS ─────────────────────────────────────────────────────────────
     '!src/**/*.d.ts',
     '!src/types.ts',
-
-    // Static data files: pure data exports, zero logic branches.
     '!src/criteria/**',
     '!src/criteriaData.ts',
     '!src/facilitiesData.ts',
     '!src/facilityCategories.ts',
-
-    // Translation files: static string maps, no logic.
     '!src/i18n/**',
-
-    // Barrel index files: pure re-exports, no logic.
-    // Cover these via the modules they re-export.
     '!src/repositories/index.ts',
     '!src/utils/index.ts',
     '!src/constants/index.ts',
-
-    // Test infrastructure.
     '!src/__tests__/**',
     '!src/__mocks__/**',
-
-    // Expo Router screens: cover with Detox/Maestro E2E, not Jest.
     '!src/app/**',
   ],
 
-  // Thresholds enforced in CI to prevent silent regression.
-  // Target: branches 75, functions/lines/statements 80 once all services covered.
   coverageThreshold: {
     global: {
       branches:   60,
@@ -71,12 +57,16 @@ module.exports = {
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
-    '@react-native-async-storage/async-storage':
+    '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',
     '^expo-print$':                           '<rootDir>/__mocks__/expo-print.js',
     '^expo-sharing$':                         '<rootDir>/__mocks__/expo-sharing.js',
     '^expo-notifications$':                   '<rootDir>/__mocks__/expo-notifications.js',
     '^@react-native-community/netinfo$':      '<rootDir>/__mocks__/@react-native-community/netinfo.js',
+    // Auth-related native modules — must be mapped BEFORE expo-modules-core
+    // absorbs them as empty stubs, otherwise getItemAsync etc. are undefined.
+    '^expo-secure-store$':                    '<rootDir>/__mocks__/expo-secure-store.js',
+    '^expo-local-authentication$':            '<rootDir>/__mocks__/expo-local-authentication.js',
   },
 
   // ⚠️ FRAGILE — Last audited: June 2026 (RN 0.76, Expo SDK 52)
