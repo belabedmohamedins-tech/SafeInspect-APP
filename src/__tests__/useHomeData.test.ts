@@ -19,6 +19,12 @@ import { AgendaItem, Facility } from '../types';
 const mockLoad  = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 const mockFocus = useFocusEffect as jest.MockedFunction<typeof useFocusEffect>;
 
+// Required by jest.setup.ts contract: configure({ defaultWrapper }) was removed
+// because it corrupts result.current on all RTLRN versions. Each hook test
+// must pass its own wrapper directly to renderHook().
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);
+
 const EMPTY_DATA: HomeData = {
   officeName: '',
   agendaItems: [],
@@ -48,7 +54,7 @@ beforeEach(() => {
 describe('useHomeData', () => {
   it('starts with empty data before loadHomeData resolves', async () => {
     mockLoad.mockReturnValue(new Promise(() => {})); // never resolves
-    const { result } = renderHook(() => useHomeData());
+    const { result } = renderHook(() => useHomeData(), { wrapper });
     expect(result.current).toBeDefined();
     expect(result.current.officeName).toBe('');
     expect(result.current.agendaItems).toEqual([]);
@@ -57,7 +63,7 @@ describe('useHomeData', () => {
 
   it('populates data after loadHomeData resolves', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
-    const { result } = renderHook(() => useHomeData());
+    const { result } = renderHook(() => useHomeData(), { wrapper });
     await waitFor(() => expect(result.current.officeName).toBe('\u0645\u0643\u062a\u0628 \u0627\u0644\u0635\u062d\u0629'));
     expect(result.current.stats.totalCompleted).toBe(5);
     expect(result.current.stats.openCapCount).toBe(3);
@@ -66,7 +72,7 @@ describe('useHomeData', () => {
 
   it('falls back to empty data when loadHomeData rejects', async () => {
     mockLoad.mockRejectedValue(new Error('network error'));
-    const { result } = renderHook(() => useHomeData());
+    const { result } = renderHook(() => useHomeData(), { wrapper });
     await waitFor(() => expect(mockLoad).toHaveBeenCalled());
     expect(result.current.officeName).toBe('');
     expect(result.current.agendaItems).toEqual([]);
@@ -74,7 +80,7 @@ describe('useHomeData', () => {
 
   it('re-fetches data on each focus event', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
-    const { result } = renderHook(() => useHomeData());
+    const { result } = renderHook(() => useHomeData(), { wrapper });
     await waitFor(() => expect(mockLoad).toHaveBeenCalled());
     const callsAfterMount = mockLoad.mock.calls.length;
     act(() => { mockFocus.mock.calls[0][0](); });
@@ -84,7 +90,7 @@ describe('useHomeData', () => {
   describe('getFacilityForAgenda', () => {
     it('returns the matching facility from userFacilities', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
-      const { result } = renderHook(() => useHomeData());
+      const { result } = renderHook(() => useHomeData(), { wrapper });
       await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
       const facility = result.current.getFacilityForAgenda(SAMPLE_DATA.agendaItems[0]);
       expect(facility?.id).toBe('fac-1');
@@ -92,7 +98,7 @@ describe('useHomeData', () => {
 
     it('returns undefined when facility is not found', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
-      const { result } = renderHook(() => useHomeData());
+      const { result } = renderHook(() => useHomeData(), { wrapper });
       await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
       const facility = result.current.getFacilityForAgenda({ id: 'ax', facilityId: 'unknown-999' } as AgendaItem);
       expect(facility).toBeUndefined();
