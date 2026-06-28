@@ -2,15 +2,19 @@
  * Unit tests for src/hooks/useInspectionList.ts
  *
  * The hook uses useFocusEffect (expo-router) and InspectionRepository.
- * Both are mocked at Layer 4. expo-router is mocked first so its
- * synchronous module-load side-effects (safe-area-context, TurboModuleRegistry)
- * never run.
+ * Both are mocked at Layer 4.
  *
- * No wrapper is passed to renderHook — pure hooks work without one in RNTL v14.
- * (The React.Fragment createElement wrapper pattern leaves result.current
- * undefined due to the synthetic RN Proxy registered in jest.setup.ts.)
+ * WHY we do NOT use renderHook from @testing-library/react-native:
+ *   jest.setup.ts mocks 'react-native' with a Proxy whose fallback get trap
+ *   returns jest.fn() for every unknown key, including React internal symbols
+ *   ($$typeof, _context, ...) that RNTL's renderHook uses to mount its host
+ *   component wrapper tree. This leaves result.current = undefined.
+ *
+ * FIX: use a minimal renderPureHook shim backed by react-test-renderer.
+ * It never touches react-native host components.
  */
-import { act, renderHook } from '@testing-library/react-native';
+import React from 'react';
+import { act } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useInspectionList } from '../hooks/useInspectionList';
 import { SavedInspection } from '../types';
@@ -36,6 +40,20 @@ jest.mock('../repositories/InspectionRepository', () => ({
 
 const mockGetAll = jest.mocked(InspectionRepositoryModule.InspectionRepository.getAll);
 const mockAlert  = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
+
+// ─── Minimal renderHook shim (pure React, no RN host renderer) ───────────────
+
+function renderPureHook<T>(hook: () => T): { result: React.MutableRefObject<T> } {
+  const result = React.createRef() as React.MutableRefObject<T>;
+  function Wrapper() {
+    result.current = hook();
+    return null;
+  }
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const { create } = require('react-test-renderer');
+  act(() => { create(React.createElement(Wrapper)); });
+  return { result };
+}
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
@@ -63,7 +81,7 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 describe('useInspectionList', () => {
   it('starts with an empty filtered list when repository returns []', async () => {
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => {});
     expect(result.current.filtered).toEqual([]);
     expect(result.current.totalCount).toBe(0);
@@ -71,7 +89,7 @@ describe('useInspectionList', () => {
 
   it('populates the filtered list from the repository on mount', async () => {
     mockGetAll.mockResolvedValueOnce([makeInspection()]);
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => {});
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.totalCount).toBe(1);
@@ -81,7 +99,7 @@ describe('useInspectionList', () => {
     mockGetAll.mockResolvedValueOnce([
       makeInspection({ facilityName: 'مستشفى الرشيد' }),
     ]);
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setSearchQuery('رشيد'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -94,7 +112,7 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setActiveFilter('completed'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -106,7 +124,7 @@ describe('useInspectionList', () => {
       makeInspection({ id: '1', status: 'completed' }),
       makeInspection({ id: '2', status: 'in-progress' }),
     ]);
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => {});
     await act(async () => { result.current.setActiveFilter('in-progress'); });
     expect(result.current.filtered).toHaveLength(1);
@@ -114,7 +132,7 @@ describe('useInspectionList', () => {
   });
 
   it('deleteInspection triggers an Alert confirmation dialog', async () => {
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderPureHook(() => useInspectionList());
     await act(async () => { result.current.deleteInspection('insp-1'); });
     expect(mockAlert).toHaveBeenCalledTimes(1);
   });
