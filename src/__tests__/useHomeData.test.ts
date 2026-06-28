@@ -10,7 +10,7 @@ jest.mock('expo-router', () => ({
 }));
 
 import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useFocusEffect } from 'expo-router';
 import { loadHomeData, HomeData } from '../utils/loadHomeData';
 import { useHomeData } from '../hooks/useHomeData';

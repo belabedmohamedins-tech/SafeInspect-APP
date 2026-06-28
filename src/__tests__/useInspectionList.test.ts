@@ -16,7 +16,7 @@ jest.mock('react-native', () => ({
 }));
 
 import React from 'react';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { InspectionRepository } from '../repositories/InspectionRepository';
