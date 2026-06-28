@@ -3,6 +3,13 @@
 // Layer-2 contract: @react-native-async-storage/async-storage is mocked
 // globally via moduleNameMapper. Do NOT add an inline jest.mock() factory
 // for it here. Use AsyncStorage.__resetStore() in beforeEach.
+//
+// LAZY-IMPORT NOTE (lines 79, 85 of InspectionRepository.ts):
+//   InspectionRepository.save() uses dynamic `import()` for followUpService
+//   and ApprovalRepository to avoid circular deps. jest.mock() at module level
+//   intercepts these dynamic imports via Jest's module registry — the same
+//   mock instance is returned. To assert these were called, hold references to
+//   the mock fns BEFORE the test and assert on them directly.
 
 jest.mock('../../services/IntegrityService', () => ({
   IntegrityService: {
@@ -23,7 +30,9 @@ jest.mock('../../repositories/CorrectiveActionRepository', () => ({
   },
 }));
 
-// Lazy imports inside save() are handled via jest.mock below
+// These two mocks intercept the dynamic import() calls inside save().
+// Jest resolves dynamic imports through the same module registry as require(),
+// so jest.mock() here covers both static and dynamic usage.
 jest.mock('../../services/followUpService', () => ({
   createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
 }));
@@ -35,11 +44,17 @@ jest.mock('../../repositories/ApprovalRepository', () => ({
 }));
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InspectionRepository } from '../../repositories/InspectionRepository';
-import { StorageKeys }           from '../../repositories/keys';
-import { SavedInspection }       from '../../types';
-import { AuditLogRepository }    from '../../repositories/AuditLogRepository';
+import { InspectionRepository }       from '../../repositories/InspectionRepository';
+import { StorageKeys }                from '../../repositories/keys';
+import { SavedInspection }            from '../../types';
+import { AuditLogRepository }         from '../../repositories/AuditLogRepository';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
+// Import the lazy-loaded modules AFTER jest.mock() so we get the mock instances.
+import { createFollowUpIfNeeded }     from '../../services/followUpService';
+import { ApprovalRepository }         from '../../repositories/ApprovalRepository';
+
+const mockCreateFollowUp = createFollowUpIfNeeded as jest.MockedFunction<any>;
+const mockEnqueue        = ApprovalRepository.enqueue as jest.MockedFunction<any>;
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -48,15 +63,15 @@ beforeEach(() => {
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
-    id:              'insp-1',
-    facilityId:      'fac-1',
-    facilityName:    'Test Facility',
-    facilityAddress: '123 Test St',
-    date:            '2025-01-15T09:00:00.000Z',
-    inspectorName:   'Inspector A',
-    officeName:      'HQ',
-    status:          'completed',
-    items:           [],
+    id:                'insp-1',
+    facilityId:        'fac-1',
+    facilityName:      'Test Facility',
+    facilityAddress:   '123 Test St',
+    date:              '2025-01-15T09:00:00.000Z',
+    inspectorName:     'Inspector A',
+    officeName:        'HQ',
+    status:            'completed',
+    items:             [],
     inspectionCause:   '',
     referenceDocument: '',
     committeeMembers:  [],
@@ -70,8 +85,7 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 describe('InspectionRepository — corrupt storage', () => {
   it('getAll returns [] when stored JSON is corrupt', async () => {
     await AsyncStorage.setItem(StorageKeys.INSPECTIONS, 'CORRUPT{{{');
-    const result = await InspectionRepository.getAll();
-    expect(result).toEqual([]);
+    expect(await InspectionRepository.getAll()).toEqual([]);
   });
 });
 
@@ -83,8 +97,7 @@ describe('InspectionRepository.getAll', () => {
   });
 
   it('returns all stored inspections', async () => {
-    const insp = makeInspection();
-    await AsyncStorage.setItem(StorageKeys.INSPECTIONS, JSON.stringify([insp]));
+    await AsyncStorage.setItem(StorageKeys.INSPECTIONS, JSON.stringify([makeInspection()]));
     const result = await InspectionRepository.getAll();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('insp-1');
@@ -96,13 +109,11 @@ describe('InspectionRepository.getAll', () => {
 describe('InspectionRepository.getById', () => {
   it('returns the matching inspection', async () => {
     await InspectionRepository.save(makeInspection({ id: 'x1', status: 'in-progress' }));
-    const result = await InspectionRepository.getById('x1');
-    expect(result?.id).toBe('x1');
+    expect((await InspectionRepository.getById('x1'))?.id).toBe('x1');
   });
 
   it('returns null when id is not found', async () => {
-    const result = await InspectionRepository.getById('ghost');
-    expect(result).toBeNull();
+    expect(await InspectionRepository.getById('ghost')).toBeNull();
   });
 });
 
@@ -129,8 +140,7 @@ describe('InspectionRepository.getDrafts', () => {
     expect(result.map(i => i.id)).not.toContain('1');
   });
 
-  it('returns inspections with status "draft"', async () => {
-    // exercises the `|| i.status === 'draft'` branch (lines 41-42)
+  it('returns inspections with status "draft" (|| branch at lines 41-42)', async () => {
     await AsyncStorage.setItem(
       StorageKeys.INSPECTIONS,
       JSON.stringify([makeInspection({ id: 'd1', status: 'draft' as any })])
@@ -170,18 +180,19 @@ describe('InspectionRepository.save', () => {
   });
 
   it('calls followUpService and ApprovalRepository on first completion (lazy import paths)', async () => {
-    // exercises lines 79 and 85
+    // mockCreateFollowUp and mockEnqueue are the same instances Jest injects
+    // into the dynamic import() calls inside InspectionRepository.save().
     await InspectionRepository.save(makeInspection({ id: 'lazy-1', status: 'completed' }));
-    const { createFollowUpIfNeeded } = require('../../services/followUpService');
-    const { ApprovalRepository }     = require('../../repositories/ApprovalRepository');
-    expect(createFollowUpIfNeeded).toHaveBeenCalled();
-    expect(ApprovalRepository.enqueue).toHaveBeenCalled();
+    expect(mockCreateFollowUp).toHaveBeenCalled();
+    expect(mockEnqueue).toHaveBeenCalled();
   });
 
   it('does NOT trigger side-effects when saving an in-progress inspection', async () => {
     await InspectionRepository.save(makeInspection({ id: 'draft-x', status: 'in-progress' }));
     expect(AuditLogRepository.append).not.toHaveBeenCalled();
     expect(CorrectiveActionRepository.createFromInspection).not.toHaveBeenCalled();
+    expect(mockCreateFollowUp).not.toHaveBeenCalled();
+    expect(mockEnqueue).not.toHaveBeenCalled();
   });
 });
 
@@ -198,8 +209,7 @@ describe('InspectionRepository.delete', () => {
 
   it('is a no-op when id does not exist', async () => {
     await InspectionRepository.delete('nonexistent');
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]');
-    expect(stored).toHaveLength(0);
+    expect(JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]')).toHaveLength(0);
   });
 });
 

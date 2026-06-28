@@ -1,4 +1,10 @@
 // src/__tests__/hooks/useCollapsibleSections.test.ts
+//
+// useCollapsibleSections is a SYNCHRONOUS hook — no async data load,
+// no useFocusEffect, no useEffect that settles as a microtask.
+// renderHook() must NOT be awaited here. Awaiting a sync renderHook()
+// makes `result` resolve to the Promise object, not the hook result,
+// so result.current is always undefined.
 import React from 'react';
 import { renderHook, act } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../../hooks/useCollapsibleSections';
@@ -70,8 +76,7 @@ describe('useCollapsibleSections — toggleSection', () => {
 
 describe('useCollapsibleSections — dynamic title addition (useEffect branch)', () => {
   it('adds a new title to collapsed map when sectionTitles prop gains a new entry', () => {
-    // Start with ['Axis A'], then change to ['Axis A', 'Axis B']
-    // This exercises the useEffect branch at lines 22-23 of the source.
+    // exercises the useEffect branch at lines 22-23 of the source
     let titles = ['Axis A'];
     const { result, rerender } = renderHook(
       () => useCollapsibleSections(titles),
@@ -83,28 +88,23 @@ describe('useCollapsibleSections — dynamic title addition (useEffect branch)',
     titles = ['Axis A', 'Axis B'];
     rerender({});
 
-    // After re-render the effect runs and adds the new title
     expect(result.current.collapsed).toHaveProperty('Axis B');
     expect(result.current.collapsed['Axis B']).toBe(false);
   });
 
-  it('does not reset the collapsed state of existing sections when a new one is added', () => {
+  it('does not reset collapsed state of existing sections when a new one is added', () => {
     let titles = ['Axis A'];
     const { result, rerender } = renderHook(
       () => useCollapsibleSections(titles),
       { wrapper: Wrapper }
     );
-    // Collapse Axis A first
     act(() => { result.current.toggleSection('Axis A'); });
     expect(result.current.collapsed['Axis A']).toBe(true);
 
-    // Add a new title
     titles = ['Axis A', 'Axis C'];
     rerender({});
 
-    // Axis A must still be collapsed
     expect(result.current.collapsed['Axis A']).toBe(true);
-    // New title defaults to expanded
     expect(result.current.collapsed['Axis C']).toBe(false);
   });
 });
