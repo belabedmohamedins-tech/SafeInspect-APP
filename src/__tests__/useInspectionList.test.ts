@@ -8,7 +8,7 @@ jest.mock('../repositories/InspectionRepository', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-  useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
+  useFocusEffect: jest.fn((cb: () => void) => { Promise.resolve().then(() => cb()); }),
 }));
 
 jest.mock('react-native', () => ({
@@ -52,7 +52,7 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockFocus.mockImplementation((cb) => { cb(); });
+  mockFocus.mockImplementation((cb) => { Promise.resolve().then(() => cb()); });
   mockGetAll.mockResolvedValue([]);
   (mockDelete as jest.Mock).mockResolvedValue(undefined);
 });

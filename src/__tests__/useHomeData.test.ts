@@ -6,7 +6,7 @@ jest.mock('../utils/loadHomeData', () => ({
 }));
 
 jest.mock('expo-router', () => ({
-  useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
+  useFocusEffect: jest.fn((cb: () => void) => { Promise.resolve().then(() => cb()); }),
 }));
 
 import React from 'react';
@@ -45,7 +45,7 @@ const SAMPLE_DATA: HomeData = {
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockFocus.mockImplementation((cb) => { cb(); });
+  mockFocus.mockImplementation((cb) => { Promise.resolve().then(() => cb()); });
   mockLoad.mockResolvedValue(EMPTY_DATA);
 });
 
