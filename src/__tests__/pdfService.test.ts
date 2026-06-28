@@ -29,6 +29,28 @@ afterAll(() => {
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
+// Stub constants/theme before anything imports it so Platform.select
+// in theme.ts never executes during module loading in the test environment.
+jest.mock('../../constants/theme', () => ({
+  Colors:  { primary: '#000', background: '#fff', text: '#000', tint: '#000',
+             tabIconDefault: '#ccc', tabIconSelected: '#000', error: '#f00',
+             success: '#0f0', warning: '#ff0', info: '#00f', muted: '#999',
+             border: '#ccc', card: '#fff', notification: '#f00',
+             light: { background: '#fff', text: '#000' },
+             dark:  { background: '#000', text: '#fff' } },
+  Fonts:   { sans: 'normal', mono: 'monospace' },
+  Spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  Radius:  { sm: 4, md: 8, lg: 16, full: 9999 },
+  Shadow:  {},
+}), { virtual: false });
+
+jest.mock('../../constants', () => ({
+  Colors:  { primary: '#000', background: '#fff', text: '#000' },
+  Fonts:   { sans: 'normal', mono: 'monospace' },
+  Spacing: { xs: 4, sm: 8, md: 16, lg: 24, xl: 32 },
+  Radius:  { sm: 4, md: 8, lg: 16, full: 9999 },
+}), { virtual: false });
+
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
   cacheDirectory:    'file:///cache/',
@@ -50,7 +72,11 @@ jest.mock('expo-sharing', () => ({
 
 jest.mock('react-native', () => ({
   Alert:    { alert: jest.fn() },
-  Platform: { OS: 'android' },
+  Platform: {
+    OS: 'android',
+    select: (obj: Record<string, unknown>) =>
+      obj['android'] ?? obj['default'] ?? Object.values(obj)[0],
+  },
 }));
 
 const mockSettingsGet = jest.fn();
