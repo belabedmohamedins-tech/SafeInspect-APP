@@ -1,65 +1,77 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 //
-// LAZY IMPORT PROBLEM:
-//   InspectionRepository.save() uses `await import(...)` (dynamic import) for
-//   followUpService and ApprovalRepository to avoid circular deps.
+// LAZY IMPORT PROBLEM — ROOT CAUSE
+// ─────────────────────────────────
+// InspectionRepository.save() uses `await import('../services/followUpService')`
+// and `await import('./ApprovalRepository')` inside try/catch blocks.
 //
-//   jest.mock() at the top of this file registers the mock in Jest's module
-//   registry. HOWEVER, Jest's dynamic import() resolution is async and goes
-//   through a DIFFERENT code path than static require(). In some jest-expo
-//   configurations, the dynamic import resolves the __actual__ module (not
-//   the mock) because the moduleNameMapper or transform pipeline for dynamic
-//   imports is handled differently.
+// jest.mock() + static top-level import work perfectly for direct calls.
+// But for dynamic import() there is a known jest-expo / Babel interop issue:
+// the dynamic import can bypass jest.mock() and resolve the REAL module,
+// because Babel transforms dynamic import() into require() AFTER jest.mock()
+// hoisting has already locked in the registry for static imports.
 //
-//   SOLUTION: use jest.spyOn() on the module's exported object AFTER the
-//   static import. jest.spyOn replaces the property on the live object, so
-//   when the dynamic import inside save() runs, it gets the same module
-//   object and calls the spied-on function — no registry divergence.
-
-jest.mock('../../services/IntegrityService', () => ({
-  IntegrityService: {
-    computeHash:      jest.fn(() => 'mock-hash-abc123'),
-    verifyInspection: jest.fn(() => true),
-  },
-}));
-
-jest.mock('../../repositories/AuditLogRepository', () => ({
-  AuditLogRepository: {
-    append: jest.fn(() => Promise.resolve()),
-  },
-}));
-
-jest.mock('../../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: {
-    createFromInspection: jest.fn(() => Promise.resolve()),
-  },
-}));
-
-jest.mock('../../services/followUpService', () => ({
-  createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
-}));
-
-jest.mock('../../repositories/ApprovalRepository', () => ({
-  ApprovalRepository: {
-    enqueue: jest.fn(() => Promise.resolve()),
-  },
-}));
+// SOLUTION: jest.resetModules() + jest.doMock() (not jest.mock).
+//   - jest.resetModules() clears the module registry before each test so
+//     subsequent require/import calls re-resolve from scratch.
+//   - jest.doMock() (unlike jest.mock) is NOT hoisted — it runs in place,
+//     AFTER resetModules, so it registers the mock into the freshly cleared
+//     registry BEFORE any module loads.
+//   - We then load InspectionRepository with require() AFTER doMock so it
+//     gets the mocked versions when it executes its own import().
+//
+// All other mocks (IntegrityService, AuditLogRepository, etc.) that are used
+// via static import inside InspectionRepository are also re-registered via
+// doMock so the fresh registry is fully populated.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { InspectionRepository }       from '../../repositories/InspectionRepository';
-import { StorageKeys }                from '../../repositories/keys';
-import { SavedInspection }            from '../../types';
-import { AuditLogRepository }         from '../../repositories/AuditLogRepository';
-import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
-import * as followUpServiceModule     from '../../services/followUpService';
-import * as ApprovalRepositoryModule  from '../../repositories/ApprovalRepository';
+import { StorageKeys } from '../../repositories/keys';
+import { SavedInspection } from '../../types';
+
+// These are declared at module scope so every describe/it can access them.
+// They are re-assigned in beforeEach after resetModules.
+let InspectionRepository: any;
+let AuditLogRepository: any;
+let CorrectiveActionRepository: any;
+let createFollowUpIfNeeded: jest.Mock;
+let enqueue: jest.Mock;
 
 beforeEach(() => {
-  jest.clearAllMocks();
-  // Re-attach spies after clearAllMocks so they stay active per test
-  jest.spyOn(followUpServiceModule, 'createFollowUpIfNeeded').mockResolvedValue(undefined as any);
-  jest.spyOn(ApprovalRepositoryModule.ApprovalRepository, 'enqueue').mockResolvedValue(undefined as any);
+  jest.resetModules();
   (AsyncStorage as any).__resetStore();
+
+  // --- register all mocks into the fresh registry ---
+
+  jest.doMock('../../services/IntegrityService', () => ({
+    IntegrityService: {
+      computeHash:      jest.fn(() => 'mock-hash-abc123'),
+      verifyInspection: jest.fn(() => true),
+    },
+  }));
+
+  jest.doMock('../../repositories/AuditLogRepository', () => ({
+    AuditLogRepository: { append: jest.fn(() => Promise.resolve()) },
+  }));
+
+  jest.doMock('../../repositories/CorrectiveActionRepository', () => ({
+    CorrectiveActionRepository: { createFromInspection: jest.fn(() => Promise.resolve()) },
+  }));
+
+  createFollowUpIfNeeded = jest.fn(() => Promise.resolve());
+  enqueue               = jest.fn(() => Promise.resolve());
+
+  jest.doMock('../../services/followUpService', () => ({
+    createFollowUpIfNeeded,
+  }));
+
+  jest.doMock('../../repositories/ApprovalRepository', () => ({
+    ApprovalRepository: { enqueue },
+  }));
+
+  // Load AFTER all doMocks so the module sees the mocked deps on first require()
+  InspectionRepository      = require('../../repositories/InspectionRepository').InspectionRepository;
+  AuditLogRepository        = require('../../repositories/AuditLogRepository').AuditLogRepository;
+  CorrectiveActionRepository = require('../../repositories/CorrectiveActionRepository').CorrectiveActionRepository;
 });
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
@@ -83,7 +95,7 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 
 // ─── corrupt storage ──────────────────────────────────────────────────────────
 
-describe('InspectionRepository — corrupt storage', () => {
+describe('InspectionRepository \u2014 corrupt storage', () => {
   it('getAll returns [] when stored JSON is corrupt', async () => {
     await AsyncStorage.setItem(StorageKeys.INSPECTIONS, 'CORRUPT{{{');
     expect(await InspectionRepository.getAll()).toEqual([]);
@@ -137,11 +149,11 @@ describe('InspectionRepository.getDrafts', () => {
     await InspectionRepository.save(makeInspection({ id: '1', status: 'completed' }));
     await InspectionRepository.save(makeInspection({ id: '2', status: 'in-progress' }));
     const result = await InspectionRepository.getDrafts();
-    expect(result.map(i => i.id)).toContain('2');
-    expect(result.map(i => i.id)).not.toContain('1');
+    expect(result.map((i: any) => i.id)).toContain('2');
+    expect(result.map((i: any) => i.id)).not.toContain('1');
   });
 
-  it('returns inspections with status "draft" (|| branch at lines 41-42)', async () => {
+  it('returns inspections with status "draft"', async () => {
     await AsyncStorage.setItem(
       StorageKeys.INSPECTIONS,
       JSON.stringify([makeInspection({ id: 'd1', status: 'draft' as any })])
@@ -181,19 +193,21 @@ describe('InspectionRepository.save', () => {
   });
 
   it('calls followUpService and ApprovalRepository on first completion (lazy import paths)', async () => {
-    // spyOn in beforeEach ensures the spy is on the SAME module object that
-    // the dynamic import() inside save() will resolve — no registry divergence.
+    // createFollowUpIfNeeded and enqueue are the exact jest.fn() instances
+    // registered via doMock in beforeEach. Because resetModules cleared the
+    // registry and doMock re-registered them BEFORE InspectionRepository was
+    // loaded, the dynamic import() inside save() resolves the same instances.
     await InspectionRepository.save(makeInspection({ id: 'lazy-1', status: 'completed' }));
-    expect(followUpServiceModule.createFollowUpIfNeeded).toHaveBeenCalled();
-    expect(ApprovalRepositoryModule.ApprovalRepository.enqueue).toHaveBeenCalled();
+    expect(createFollowUpIfNeeded).toHaveBeenCalled();
+    expect(enqueue).toHaveBeenCalled();
   });
 
   it('does NOT trigger side-effects when saving an in-progress inspection', async () => {
     await InspectionRepository.save(makeInspection({ id: 'draft-x', status: 'in-progress' }));
     expect(AuditLogRepository.append).not.toHaveBeenCalled();
     expect(CorrectiveActionRepository.createFromInspection).not.toHaveBeenCalled();
-    expect(followUpServiceModule.createFollowUpIfNeeded).not.toHaveBeenCalled();
-    expect(ApprovalRepositoryModule.ApprovalRepository.enqueue).not.toHaveBeenCalled();
+    expect(createFollowUpIfNeeded).not.toHaveBeenCalled();
+    expect(enqueue).not.toHaveBeenCalled();
   });
 });
 
@@ -202,10 +216,6 @@ describe('InspectionRepository.save', () => {
 describe('InspectionRepository.delete', () => {
   it('removes the inspection by id', async () => {
     await InspectionRepository.save(makeInspection());
-    jest.clearAllMocks();
-    // Re-attach spies after clearAllMocks
-    jest.spyOn(followUpServiceModule, 'createFollowUpIfNeeded').mockResolvedValue(undefined as any);
-    jest.spyOn(ApprovalRepositoryModule.ApprovalRepository, 'enqueue').mockResolvedValue(undefined as any);
     await InspectionRepository.delete('insp-1');
     const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]');
     expect(stored).toHaveLength(0);
@@ -231,9 +241,6 @@ describe('InspectionRepository.deleteMany', () => {
   });
 
   it('appends a INSPECTION_BULK_DELETED audit entry', async () => {
-    jest.clearAllMocks();
-    jest.spyOn(followUpServiceModule, 'createFollowUpIfNeeded').mockResolvedValue(undefined as any);
-    jest.spyOn(ApprovalRepositoryModule.ApprovalRepository, 'enqueue').mockResolvedValue(undefined as any);
     await InspectionRepository.deleteMany(['x1', 'x2']);
     expect(
       (AuditLogRepository.append as jest.Mock).mock.calls.some(

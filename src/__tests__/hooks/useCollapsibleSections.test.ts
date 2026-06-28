@@ -1,166 +1,167 @@
 // src/__tests__/hooks/useCollapsibleSections.test.ts
 //
-// ROOT CAUSE OF result.current === undefined (see jest.setup.ts for full history):
-//   The global expo-router mock in jest.setup.ts calls `cb()` directly inside
-//   useFocusEffect. This hook file does NOT use useFocusEffect — but jest.setup
-//   runs for every suite. A different version of this mock existed at some point
-//   that called useEffect() inside the factory, violating hook rules and causing
-//   React to abort the entire render, leaving result.current undefined.
+// WHY WE DO NOT USE renderHook HERE
+// ──────────────────────────────────
+// Every attempt to use renderHook() for this hook leaves result.current
+// === undefined, regardless of whether `await` is present or absent, and
+// regardless of the `wrapper` option.  The jest.setup.ts file documents
+// exactly this failure mode and its root cause: configure({ defaultWrapper })
+// was removed because it corrupts result.current in the installed version
+// of @testing-library/react-native.  The corruption survives even when the
+// wrapper is passed per-call, because the problem is in how the RTLRN
+// version interacts with the jest-expo preset's React reconciler setup.
 //
-//   The safest fix is to re-declare the expo-router mock at Layer 4 (this file)
-//   so it fully overrides the global one for this suite, guaranteeing no hook
-//   violations can bleed in from the global setup.
-//
-// SYNC HOOK: renderHook() must NOT be awaited — this hook has no async operations.
+// SOLUTION: drive the hook through a real rendered component using `render`
+// from @testing-library/react-native.  We expose the hook's return value via
+// a ref attached to the component, which is updated on every render.
+// This is 100% equivalent to renderHook — it exercises the same React
+// lifecycle (useState, useEffect, useCallback, useRef) — with no reliance
+// on the broken renderHook path.
 
-import React from 'react';
-import { renderHook, act } from '@testing-library/react-native';
+import React, { useRef, useEffect } from 'react';
+import { View } from 'react-native';
+import { render, act } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../../hooks/useCollapsibleSections';
 
-// Layer 4 override — safe, no-op stub, no hooks called inside
-jest.mock('expo-router', () => ({
-  useFocusEffect:  (_cb: () => void) => { /* no-op — this hook does not use it */ },
-  useNavigation:   jest.fn(() => ({ addListener: jest.fn(() => jest.fn()) })),
-  useRouter:       jest.fn(() => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })),
-  useLocalSearchParams: jest.fn(() => ({})),
-  Link: 'Link',
-  Redirect: 'Redirect',
-}));
+// ─── Harness ──────────────────────────────────────────────────────────────────
+// A thin component that runs the hook and writes its return value into a ref
+// that the test can read synchronously after each render / act().
 
-function Wrapper({ children }: { children: React.ReactNode }) {
-  return React.createElement(React.Fragment, null, children);
+type HookResult = ReturnType<typeof useCollapsibleSections>;
+
+function makeHarness(getTitles: () => string[]) {
+  const ref = { current: null as HookResult | null };
+
+  function Harness() {
+    const result = useCollapsibleSections(getTitles());
+    // Write into ref on every render so tests always see the latest value.
+    // useEffect fires after render, but we need the value synchronously in
+    // act() — assign directly during render (safe: no side effects, pure write).
+    ref.current = result;
+    return React.createElement(View, null);
+  }
+
+  return { Harness, ref };
 }
 
-describe('useCollapsibleSections — initial state', () => {
+// ─── initial state ────────────────────────────────────────────────────────────
+
+describe('useCollapsibleSections \u2014 initial state', () => {
   it('all sections start expanded (collapsed=false)', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A', 'Axis B']),
-      { wrapper: Wrapper }
-    );
-    expect(result.current.collapsed['Axis A']).toBe(false);
-    expect(result.current.collapsed['Axis B']).toBe(false);
+    const { Harness, ref } = makeHarness(() => ['Axis A', 'Axis B']);
+    render(React.createElement(Harness));
+    expect(ref.current!.collapsed['Axis A']).toBe(false);
+    expect(ref.current!.collapsed['Axis B']).toBe(false);
   });
 
   it('isCollapsed() returns false for every section on init', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['S1', 'S2', 'S3']),
-      { wrapper: Wrapper }
-    );
-    expect(result.current.isCollapsed('S1')).toBe(false);
-    expect(result.current.isCollapsed('S2')).toBe(false);
-    expect(result.current.isCollapsed('S3')).toBe(false);
+    const { Harness, ref } = makeHarness(() => ['S1', 'S2', 'S3']);
+    render(React.createElement(Harness));
+    expect(ref.current!.isCollapsed('S1')).toBe(false);
+    expect(ref.current!.isCollapsed('S2')).toBe(false);
+    expect(ref.current!.isCollapsed('S3')).toBe(false);
   });
 
   it('isCollapsed() returns false for an unknown title (default fallback)', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Known']),
-      { wrapper: Wrapper }
-    );
-    expect(result.current.isCollapsed('Unknown')).toBe(false);
+    const { Harness, ref } = makeHarness(() => ['Known']);
+    render(React.createElement(Harness));
+    expect(ref.current!.isCollapsed('Unknown')).toBe(false);
   });
 });
 
-describe('useCollapsibleSections — toggleSection', () => {
+// ─── toggleSection ────────────────────────────────────────────────────────────
+
+describe('useCollapsibleSections \u2014 toggleSection', () => {
   it('collapses an expanded section', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A']),
-      { wrapper: Wrapper }
-    );
-    act(() => { result.current.toggleSection('Axis A'); });
-    expect(result.current.collapsed['Axis A']).toBe(true);
-    expect(result.current.isCollapsed('Axis A')).toBe(true);
+    const { Harness, ref } = makeHarness(() => ['Axis A']);
+    render(React.createElement(Harness));
+    act(() => { ref.current!.toggleSection('Axis A'); });
+    expect(ref.current!.collapsed['Axis A']).toBe(true);
+    expect(ref.current!.isCollapsed('Axis A')).toBe(true);
   });
 
   it('expands a collapsed section', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A']),
-      { wrapper: Wrapper }
-    );
-    act(() => { result.current.toggleSection('Axis A'); });
-    act(() => { result.current.toggleSection('Axis A'); });
-    expect(result.current.collapsed['Axis A']).toBe(false);
+    const { Harness, ref } = makeHarness(() => ['Axis A']);
+    render(React.createElement(Harness));
+    act(() => { ref.current!.toggleSection('Axis A'); });
+    act(() => { ref.current!.toggleSection('Axis A'); });
+    expect(ref.current!.collapsed['Axis A']).toBe(false);
   });
 
   it('toggling one section does not affect others', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['S1', 'S2']),
-      { wrapper: Wrapper }
-    );
-    act(() => { result.current.toggleSection('S1'); });
-    expect(result.current.collapsed['S1']).toBe(true);
-    expect(result.current.collapsed['S2']).toBe(false);
+    const { Harness, ref } = makeHarness(() => ['S1', 'S2']);
+    render(React.createElement(Harness));
+    act(() => { ref.current!.toggleSection('S1'); });
+    expect(ref.current!.collapsed['S1']).toBe(true);
+    expect(ref.current!.collapsed['S2']).toBe(false);
   });
 });
 
-describe('useCollapsibleSections — dynamic title addition (useEffect branch)', () => {
+// ─── dynamic title addition (useEffect branch) ────────────────────────────────
+
+describe('useCollapsibleSections \u2014 dynamic title addition (useEffect branch)', () => {
   it('adds a new title to collapsed map when sectionTitles prop gains a new entry', () => {
     let titles = ['Axis A'];
-    const { result, rerender } = renderHook(
-      () => useCollapsibleSections(titles),
-      { wrapper: Wrapper }
-    );
-    expect(result.current.collapsed).toHaveProperty('Axis A');
-    expect(result.current.collapsed).not.toHaveProperty('Axis B');
+    const { Harness, ref } = makeHarness(() => titles);
+    const { rerender } = render(React.createElement(Harness));
+
+    expect(ref.current!.collapsed).toHaveProperty('Axis A');
+    expect(ref.current!.collapsed).not.toHaveProperty('Axis B');
 
     titles = ['Axis A', 'Axis B'];
-    rerender({});
+    act(() => { rerender(React.createElement(Harness)); });
 
-    expect(result.current.collapsed).toHaveProperty('Axis B');
-    expect(result.current.collapsed['Axis B']).toBe(false);
+    expect(ref.current!.collapsed).toHaveProperty('Axis B');
+    expect(ref.current!.collapsed['Axis B']).toBe(false);
   });
 
   it('does not reset collapsed state of existing sections when a new one is added', () => {
     let titles = ['Axis A'];
-    const { result, rerender } = renderHook(
-      () => useCollapsibleSections(titles),
-      { wrapper: Wrapper }
-    );
-    act(() => { result.current.toggleSection('Axis A'); });
-    expect(result.current.collapsed['Axis A']).toBe(true);
+    const { Harness, ref } = makeHarness(() => titles);
+    const { rerender } = render(React.createElement(Harness));
+
+    act(() => { ref.current!.toggleSection('Axis A'); });
+    expect(ref.current!.collapsed['Axis A']).toBe(true);
 
     titles = ['Axis A', 'Axis C'];
-    rerender({});
+    act(() => { rerender(React.createElement(Harness)); });
 
-    expect(result.current.collapsed['Axis A']).toBe(true);
-    expect(result.current.collapsed['Axis C']).toBe(false);
+    expect(ref.current!.collapsed['Axis A']).toBe(true);
+    expect(ref.current!.collapsed['Axis C']).toBe(false);
   });
 });
 
-describe('useCollapsibleSections — getSectionProgress', () => {
+// ─── getSectionProgress ───────────────────────────────────────────────────────
+
+describe('useCollapsibleSections \u2014 getSectionProgress', () => {
   it('returns "0/N" when no items are evaluated', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A']),
-      { wrapper: Wrapper }
-    );
+    const { Harness, ref } = makeHarness(() => ['Axis A']);
+    render(React.createElement(Harness));
     const items = [
       { complianceStatus: 'not-evaluated' },
       { complianceStatus: 'not-evaluated' },
     ];
-    expect(result.current.getSectionProgress(items)).toBe('0/2');
+    expect(ref.current!.getSectionProgress(items)).toBe('0/2');
   });
 
   it('counts evaluated items correctly', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A']),
-      { wrapper: Wrapper }
-    );
+    const { Harness, ref } = makeHarness(() => ['Axis A']);
+    render(React.createElement(Harness));
     const items = [
       { complianceStatus: 'compliant' },
       { complianceStatus: 'not-evaluated' },
       { complianceStatus: 'non-compliant' },
     ];
-    expect(result.current.getSectionProgress(items)).toBe('2/3');
+    expect(ref.current!.getSectionProgress(items)).toBe('2/3');
   });
 
   it('returns "N/N" when all items are evaluated', () => {
-    const { result } = renderHook(
-      () => useCollapsibleSections(['Axis A']),
-      { wrapper: Wrapper }
-    );
+    const { Harness, ref } = makeHarness(() => ['Axis A']);
+    render(React.createElement(Harness));
     const items = [
       { complianceStatus: 'compliant' },
       { complianceStatus: 'compliant' },
     ];
-    expect(result.current.getSectionProgress(items)).toBe('2/2');
+    expect(ref.current!.getSectionProgress(items)).toBe('2/2');
   });
 });
