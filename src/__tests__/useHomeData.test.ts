@@ -1,10 +1,7 @@
 // src/__tests__/useHomeData.test.ts
 //
-// STRATEGY: contract + pure logic.
-// useHomeData wraps loadHomeData — test:
-//   1. loadHomeData contract (the only real dependency)
-//   2. getFacilityForAgenda delegation logic (pure)
-//   3. EMPTY initial state shape
+// STRATEGY: renderHook — useFocusEffect is mocked globally in jest.setup.ts
+// to fire via useEffect on mount, so result.current is populated correctly.
 
 jest.mock('../utils/loadHomeData', () => ({
   loadHomeData: jest.fn(),
@@ -17,78 +14,87 @@ jest.mock('../facilitiesData', () => ({
   ],
 }));
 
-import { loadHomeData, getFacilityForAgenda } from '../utils/loadHomeData';
+import React from 'react';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import { useHomeData } from '../hooks/useHomeData';
+import { loadHomeData } from '../utils/loadHomeData';
 import { AgendaItem, Facility } from '../types';
 
 const mockLoadHomeData = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 
-function makeFacility(id: string, name = 'Facility'): Facility {
-  return { id, name, address: '1 St', activityType: 'default', wilaya: '16', commune: 'A' } as Facility;
-}
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);
+
+const FULL_DATA = {
+  officeName:            'HQ',
+  agendaItems:           [],
+  completedInspections:  [],
+  inProgressInspections: [],
+  recentFacilities:      [],
+  userFacilities:        [{ id: 'user-1', name: 'User Fac', address: 'A', activityType: 'default', wilaya: '16', commune: 'A' }],
+  stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
+};
+
 function makeAgendaItem(facilityId: string): AgendaItem {
   return { id: 'a1', facilityId, facilityName: 'F', date: new Date().toISOString(), status: 'pending', inspectorId: 'u1', description: '' } as AgendaItem;
 }
 
-beforeEach(() => { jest.clearAllMocks(); });
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockLoadHomeData.mockResolvedValue(FULL_DATA as any);
+});
 
-describe('loadHomeData contract', () => {
-  it('resolves with a HomeData-shaped object', async () => {
-    mockLoadHomeData.mockResolvedValue({
-      officeName: 'HQ',
-      agendaItems: [],
-      completedInspections: [],
-      inProgressInspections: [],
-      recentFacilities: [],
-      userFacilities: [],
-      stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
+describe('useHomeData — initial EMPTY state', () => {
+  it('starts with empty arrays and zero stats before load resolves', () => {
+    // Make loadHomeData never resolve during this check
+    mockLoadHomeData.mockReturnValue(new Promise(() => {}));
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    expect(result.current.officeName).toBe('');
+    expect(result.current.agendaItems).toEqual([]);
+    expect(result.current.stats.totalCompleted).toBe(0);
+  });
+});
+
+describe('useHomeData — data load on mount', () => {
+  it('populates data after loadHomeData resolves', async () => {
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => {
+      expect(result.current.officeName).toBe('HQ');
     });
-    const result = await loadHomeData();
-    expect(result.officeName).toBe('HQ');
-    expect(result.stats.totalCompleted).toBe(5);
+    expect(result.current.stats.totalCompleted).toBe(5);
+    expect(result.current.stats.openCapCount).toBe(3);
   });
 
-  it('propagates rejection', async () => {
+  it('stays on EMPTY when loadHomeData rejects', async () => {
     mockLoadHomeData.mockRejectedValue(new Error('load failed'));
-    await expect(loadHomeData()).rejects.toThrow('load failed');
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => {
+      // After rejection the hook sets EMPTY — officeName stays ''
+      expect(mockLoadHomeData).toHaveBeenCalled();
+    });
+    expect(result.current.officeName).toBe('');
   });
 });
 
-describe('getFacilityForAgenda delegation logic', () => {
-  const userFacs = [makeFacility('user-1', 'User Facility')];
-
-  it('returns hardcoded facility for known hardcoded id', () => {
-    const result = getFacilityForAgenda(makeAgendaItem('hard-1'), userFacs);
-    expect(result?.id).toBe('hard-1');
+describe('useHomeData — getFacilityForAgenda', () => {
+  it('returns user facility from loaded userFacilities', async () => {
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => expect(result.current.officeName).toBe('HQ'));
+    const facility = result.current.getFacilityForAgenda(makeAgendaItem('user-1'));
+    expect(facility?.id).toBe('user-1');
   });
 
-  it('returns user facility when not in hardcoded list', () => {
-    const result = getFacilityForAgenda(makeAgendaItem('user-1'), userFacs);
-    expect(result?.id).toBe('user-1');
+  it('returns hardcoded facility when facilityId is in hardcoded list', async () => {
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => expect(result.current.officeName).toBe('HQ'));
+    const facility = result.current.getFacilityForAgenda(makeAgendaItem('hard-1'));
+    expect(facility?.name).toBe('Hardcoded Facility');
   });
 
-  it('returns undefined when not found in either list', () => {
-    const result = getFacilityForAgenda(makeAgendaItem('ghost-99'), userFacs);
-    expect(result).toBeUndefined();
-  });
-});
-
-describe('EMPTY initial state shape', () => {
-  it('HomeData shape has all required keys', () => {
-    const empty = {
-      officeName:            '',
-      agendaItems:           [],
-      completedInspections:  [],
-      inProgressInspections: [],
-      recentFacilities:      [],
-      userFacilities:        [],
-      stats: { totalCompleted: 0, totalDrafts: 0, nonCompliantFacilities: 0, openCapCount: 0 },
-    };
-    expect(Object.keys(empty)).toEqual(expect.arrayContaining([
-      'officeName', 'agendaItems', 'completedInspections',
-      'inProgressInspections', 'recentFacilities', 'userFacilities', 'stats',
-    ]));
-    expect(Object.keys(empty.stats)).toEqual(expect.arrayContaining([
-      'totalCompleted', 'totalDrafts', 'nonCompliantFacilities', 'openCapCount',
-    ]));
+  it('returns undefined when facilityId not found anywhere', async () => {
+    const { result } = renderHook(() => useHomeData(), { wrapper });
+    await waitFor(() => expect(result.current.officeName).toBe('HQ'));
+    const facility = result.current.getFacilityForAgenda(makeAgendaItem('ghost-99'));
+    expect(facility).toBeUndefined();
   });
 });

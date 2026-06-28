@@ -9,7 +9,7 @@
  *   (Layer 2).  The canonical reason is: the mock needs jest.mock() hoisting
  *   semantics, or it must override something the preset already loaded.
  *
- *   ✅ OK here : react-native (Proxy), Platform, safe-area-context
+ *   ✅ OK here : react-native (Proxy), Platform, safe-area-context, expo-router
  *   ❌ NOT here : native module stubs → use moduleNameMapper + __mocks__/
  *
  * NOTE: configure({ defaultWrapper }) was removed.
@@ -20,6 +20,14 @@
  *   Each hook test file passes its own `wrapper` to renderHook() directly,
  *   which is the correct pattern for all RTLRN versions.
  *
+ * NOTE: expo-router global mock
+ *   useFocusEffect — in a test environment there is no navigation stack, so
+ *   the hook never fires. We replace it with a useEffect wrapper that fires
+ *   the callback immediately on mount, matching the real screen-focus behaviour.
+ *   useNavigation / useRouter stubs are provided so hooks that import them
+ *   don't throw. Individual test files may override these via jest.mock() at
+ *   Layer 4 if they need custom behaviour.
+ *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
@@ -28,6 +36,43 @@
  */
 
 import React from 'react';
+
+// ─── expo-router — global stub ───────────────────────────────────────────────
+//
+// useFocusEffect: replace with useEffect so the callback fires on mount in
+//   renderHook. The real useFocusEffect only fires when a screen gains focus
+//   inside a navigation stack — which never happens in Jest.
+//
+// useNavigation / useRouter: minimal stubs. Test files that need specific
+//   behaviour should override with jest.mock('expo-router', ...) at Layer 4.
+jest.mock('expo-router', () => {
+  const { useEffect } = require('react');
+  return {
+    useFocusEffect: (cb: () => (() => void) | void) => {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+      useEffect(() => {
+        const cleanup = cb();
+        return cleanup ?? undefined;
+      }, []);
+    },
+    useNavigation: jest.fn(() => ({
+      addListener: jest.fn(() => jest.fn()),
+      dispatch:    jest.fn(),
+      navigate:    jest.fn(),
+      goBack:      jest.fn(),
+    })),
+    useRouter: jest.fn(() => ({
+      replace: jest.fn(),
+      push:    jest.fn(),
+      back:    jest.fn(),
+    })),
+    useLocalSearchParams: jest.fn(() => ({})),
+    Link: 'Link',
+    Redirect: 'Redirect',
+    Stack: { Screen: 'Stack.Screen' },
+    Tabs:  { Screen: 'Tabs.Screen' },
+  };
+});
 
 // ─── react-native-safe-area-context — global stub ────────────────────────────
 jest.mock('react-native-safe-area-context', () => ({
