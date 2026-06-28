@@ -1,18 +1,34 @@
 // src/__tests__/briefService.test.ts
+//
+// ROOT CAUSE REMINDER (see TESTING.md §Layer-4):
+// jest.mock() is hoisted ABOVE every `const` by Babel.
+// Any variable referenced inside the factory that is declared with `const`
+// will be undefined at hoist time — UNLESS it is prefixed with `mock`.
+//
+// FIX USED HERE: inline jest.fn() directly inside the factory object,
+// then retrieve the stub via jest.mocked() after the import.
+// This is the safest pattern for repositories that re-export from an index.
+
 import { buildBrief } from '../services/briefService';
 import { InspectionRepository } from '../repositories/InspectionRepository';
 import type { SavedInspection, InspectionItem } from '../types';
 
-// ─── Mocks ──────────────────────────────────────────────────────────────────────
-const mockGetCompleted = jest.fn();
-
+// ─── Mocks ──────────────────────────────────────────────────────────────────
 jest.mock('../repositories/InspectionRepository', () => ({
-  InspectionRepository: { getCompleted: mockGetCompleted },
+  InspectionRepository: {
+    getCompleted: jest.fn(),
+  },
 }));
 
-beforeEach(() => { jest.clearAllMocks(); });
+// Typed reference obtained AFTER the mock is registered.
+const mockGetCompleted = jest.mocked(InspectionRepository.getCompleted);
 
-// ─── Fixtures ──────────────────────────────────────────────────────────────────────
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockGetCompleted.mockResolvedValue([]);
+});
+
+// ─── Fixtures ───────────────────────────────────────────────────────────────
 const makeItem = (overrides: Partial<InspectionItem> = {}): InspectionItem => ({
   id: 'item-1', title: 'Test', axis: 'Hygiene',
   complianceStatus: 'compliant', severity: 'low', weight: 1, ...overrides,
@@ -25,6 +41,7 @@ const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspecti
   ...overrides,
 });
 
+// ─── Tests ──────────────────────────────────────────────────────────────────
 describe('buildBrief', () => {
   describe('no inspections for facility', () => {
     it('returns null lastInspection and empty violations when no matching inspections', async () => {
