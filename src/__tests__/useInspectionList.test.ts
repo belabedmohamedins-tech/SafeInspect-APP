@@ -1,54 +1,124 @@
 /**
  * Unit tests for src/hooks/useInspectionList.ts
+ *
+ * The hook uses useFocusEffect (expo-router) and InspectionRepository.
+ * Both are mocked at Layer 4. expo-router is mocked first so its
+ * synchronous module-load side-effects (safe-area-context, TurboModuleRegistry)
+ * never run.
+ *
+ * renderHook receives a React.Fragment wrapper to give RNTL v14 a valid
+ * host component tree (same fix as useSignature / useCollapsibleSections).
  */
+import React from 'react';
 import { act, renderHook } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useInspectionList } from '../hooks/useInspectionList';
 import { SavedInspection } from '../types';
+import * as InspectionRepositoryModule from '../repositories/InspectionRepository';
 
-// ─── Mock expo-router before any import resolves it ───────────────────────────
-// expo-router pulls in react-native-safe-area-context which calls
-// TurboModuleRegistry.get synchronously during module load.
-// Mocking expo-router directly prevents that entire chain.
+// ─── Mocks ────────────────────────────────────────────────────────────────────
+
 jest.mock('expo-router', () => ({
-  useFocusEffect: (cb: () => (() => void) | void) => {
-    // Execute the callback once synchronously, mimicking a focused screen.
-    const cleanup = cb();
-    return cleanup;
-  },
-  useRouter:      jest.fn(() => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })),
+  useFocusEffect: (cb: () => (() => void) | void) => { cb(); },
+  useRouter:            jest.fn(() => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() })),
   useLocalSearchParams: jest.fn(() => ({})),
-  Link:           'Link',
-  Stack:          { Screen: 'Stack.Screen' },
-  Tabs:           { Screen: 'Tabs.Screen' },
-}));
-
-// Also stub safe-area-context directly as a belt-and-suspenders guard
-// in case any other import in the chain requires it.
-jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets: jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
-  SafeAreaProvider:  'SafeAreaProvider',
-  SafeAreaView:      'SafeAreaView',
-  SafeAreaConsumer:  'SafeAreaConsumer',
-  initialWindowMetrics: { frame: { x: 0, y: 0, width: 375, height: 812 }, insets: { top: 0, bottom: 0, left: 0, right: 0 } },
+  Link:  'Link',
+  Stack: { Screen: 'Stack.Screen' },
+  Tabs:  { Screen: 'Tabs.Screen' },
 }));
 
 jest.mock('../repositories/InspectionRepository', () => ({
   InspectionRepository: {
-    getAll:     jest.fn(() => Promise.resolve([])),
-    delete:     jest.fn(() => Promise.resolve()),
-    deleteMany: jest.fn(() => Promise.resolve()),
+    getAll:  jest.fn(() => Promise.resolve([])),
+    delete:  jest.fn(() => Promise.resolve()),
   },
 }));
 
-const mockAlert = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
+const mockGetAll = jest.mocked(InspectionRepositoryModule.InspectionRepository.getAll);
+const mockAlert  = jest.spyOn(Alert, 'alert').mockImplementation(jest.fn());
 
-beforeEach(() => { jest.clearAllMocks(); });
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);
+
+// ─── Setup ────────────────────────────────────────────────────────────────────
+
+beforeEach(() => {
+  jest.clearAllMocks();
+  mockGetAll.mockResolvedValue([]);
+});
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id:              'insp-1',
+    facilityName:    'Test Facility',
+    facilityAddress: '123 Test St',
+    date:            new Date().toISOString(),
+    status:          'completed',
+    items:           [],
+    signature:       '',
+    ...overrides,
+  } as SavedInspection;
+}
+
+// ─── Tests ───────────────────────────────────────────────────────────────────
 
 describe('useInspectionList', () => {
-  it('loads inspections on mount', async () => {
-    const { result } = renderHook(() => useInspectionList());
+  it('starts with an empty filtered list when repository returns []', async () => {
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
     await act(async () => {});
-    expect(result.current.inspections).toEqual([]);
+    expect(result.current.filtered).toEqual([]);
+    expect(result.current.totalCount).toBe(0);
+  });
+
+  it('populates the filtered list from the repository on mount', async () => {
+    mockGetAll.mockResolvedValueOnce([makeInspection()]);
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    await act(async () => {});
+    expect(result.current.filtered).toHaveLength(1);
+    expect(result.current.totalCount).toBe(1);
+  });
+
+  it('setSearchQuery filters by facilityName', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeInspection({ facilityName: 'مستشفى الرشيد' }),
+    ]);
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    await act(async () => {});
+    await act(async () => { result.current.setSearchQuery('رشيد'); });
+    expect(result.current.filtered).toHaveLength(1);
+    await act(async () => { result.current.setSearchQuery('xyz'); });
+    expect(result.current.filtered).toHaveLength(0);
+  });
+
+  it('setActiveFilter narrows results to completed only', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeInspection({ id: '1', status: 'completed' }),
+      makeInspection({ id: '2', status: 'in-progress' }),
+    ]);
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    await act(async () => {});
+    await act(async () => { result.current.setActiveFilter('completed'); });
+    expect(result.current.filtered).toHaveLength(1);
+    expect(result.current.filtered[0].status).toBe('completed');
+  });
+
+  it('setActiveFilter narrows results to in-progress only', async () => {
+    mockGetAll.mockResolvedValueOnce([
+      makeInspection({ id: '1', status: 'completed' }),
+      makeInspection({ id: '2', status: 'in-progress' }),
+    ]);
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    await act(async () => {});
+    await act(async () => { result.current.setActiveFilter('in-progress'); });
+    expect(result.current.filtered).toHaveLength(1);
+    expect(result.current.filtered[0].status).toBe('in-progress');
+  });
+
+  it('deleteInspection triggers an Alert confirmation dialog', async () => {
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
+    await act(async () => { result.current.deleteInspection('insp-1'); });
+    expect(mockAlert).toHaveBeenCalledTimes(1);
   });
 });

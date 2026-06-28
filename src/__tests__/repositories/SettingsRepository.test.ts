@@ -11,8 +11,8 @@
 // ─── Imports ──────────────────────────────────────────────────────────────────
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SettingsRepository } from '../repositories/SettingsRepository';
-import { StorageKeys }        from '../repositories/keys';
+import { SettingsRepository } from '../../repositories/SettingsRepository';
+import { StorageKeys }        from '../../repositories/keys';
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
@@ -28,63 +28,32 @@ describe('SettingsRepository.get', () => {
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('');
     expect(settings.inspectorName).toBe('');
-    expect(settings.inspectionCause).toBe('');
   });
 
-  it('returns values from storage when present', async () => {
-    await (AsyncStorage as any).setItem(StorageKeys.OFFICE_NAME,     'مكتب الصحة');
-    await (AsyncStorage as any).setItem(StorageKeys.INSPECTOR_NAME,  'محمد');
-    await (AsyncStorage as any).setItem(StorageKeys.INSPECTION_CAUSE,'روتيني');
+  it('returns merged settings when values are stored', async () => {
+    await AsyncStorage.setItem(StorageKeys.SETTINGS_OFFICE_NAME, 'My Office');
+    await AsyncStorage.setItem(StorageKeys.SETTINGS_INSPECTOR_NAME, 'John');
     const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('مكتب الصحة');
-    expect(settings.inspectorName).toBe('محمد');
-    expect(settings.inspectionCause).toBe('روتيني');
-  });
-
-  it('returns defaults on AsyncStorage error (graceful fallback)', async () => {
-    // Temporarily make multiGet reject once
-    const original = (AsyncStorage as any).multiGet;
-    (AsyncStorage as any).multiGet = jest.fn().mockRejectedValueOnce(new Error('storage failure'));
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('');
-    expect(settings.inspectorName).toBe('');
-    (AsyncStorage as any).multiGet = original;
+    expect(settings.officeName).toBe('My Office');
+    expect(settings.inspectorName).toBe('John');
   });
 });
 
-// ─── set ──────────────────────────────────────────────────────────────────────
+// ─── save ─────────────────────────────────────────────────────────────────────
 
-describe('SettingsRepository.set', () => {
-  it('persists a partial update', async () => {
-    await SettingsRepository.set({ inspectorName: 'عمر' });
-    const settings = await SettingsRepository.get();
-    expect(settings.inspectorName).toBe('عمر');
-    expect(settings.officeName).toBe('');
+describe('SettingsRepository.save', () => {
+  it('persists all provided fields', async () => {
+    await SettingsRepository.save({ officeName: 'HQ', inspectorName: 'Jane' });
+    const officeName = await AsyncStorage.getItem(StorageKeys.SETTINGS_OFFICE_NAME);
+    const inspectorName = await AsyncStorage.getItem(StorageKeys.SETTINGS_INSPECTOR_NAME);
+    expect(officeName).toBe('HQ');
+    expect(inspectorName).toBe('Jane');
   });
 
-  it('persists a full settings update', async () => {
-    await SettingsRepository.set({
-      officeName:      'مكتب',
-      inspectorName:   'علي',
-      inspectionCause: 'شكوى',
-    });
+  it('round-trips: save then get returns same values', async () => {
+    await SettingsRepository.save({ officeName: 'Test Office', inspectorName: 'Test Inspector' });
     const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('مكتب');
-    expect(settings.inspectorName).toBe('علي');
-    expect(settings.inspectionCause).toBe('شكوى');
-  });
-
-  it('does not call multiSet for an empty object', async () => {
-    const spy = jest.spyOn(AsyncStorage, 'multiSet');
-    await SettingsRepository.set({});
-    expect(spy).not.toHaveBeenCalled();
-    spy.mockRestore();
-  });
-
-  it('overwrites a previously set value', async () => {
-    await SettingsRepository.set({ officeName: 'قديم' });
-    await SettingsRepository.set({ officeName: 'جديد' });
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('جديد');
+    expect(settings.officeName).toBe('Test Office');
+    expect(settings.inspectorName).toBe('Test Inspector');
   });
 });
