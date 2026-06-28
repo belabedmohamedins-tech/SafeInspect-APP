@@ -2,6 +2,13 @@
 
 // ─── Mocks ───────────────────────────────────────────────────────────────────
 
+// NOTE: @react-native-async-storage/async-storage is intentionally NOT mocked
+// inline here. jest.config.js moduleNameMapper (Layer 2) routes every import
+// to __mocks__/@react-native-async-storage/async-storage.js — a stateful
+// in-memory store with .getItem → null, .setItem, .clear, and .__resetStore.
+// Adding an inline factory would override that stub and remove .__resetStore,
+// breaking the beforeEach store-wipe below.
+
 const mockSchedule = jest.fn();
 const mockCancel   = jest.fn();
 
@@ -10,7 +17,7 @@ jest.mock('../services/NotificationService', () => ({
   cancelForAgendaItem:   mockCancel,
 }));
 
-// ─── Imports ─────────────────────────────────────────────────────────────────
+// ─── Imports (after mocks) ────────────────────────────────────────────────────
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { AgendaRepository } from '../repositories/AgendaRepository';
@@ -37,7 +44,9 @@ beforeEach(async () => {
   jest.clearAllMocks();
   mockSchedule.mockResolvedValue(undefined);
   mockCancel.mockResolvedValue(undefined);
-  await AsyncStorage.clear();
+  // Use __resetStore (not .clear()) to wipe the in-memory store without
+  // incrementing the jest.fn() call counter on AsyncStorage.clear.
+  (AsyncStorage as any).__resetStore();
 });
 
 // ─── getAll ───────────────────────────────────────────────────────────────────

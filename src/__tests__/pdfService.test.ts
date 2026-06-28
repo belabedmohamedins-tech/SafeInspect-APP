@@ -53,14 +53,13 @@ jest.mock('../../constants', () => ({
   Radius:  { sm: 4, md: 8, lg: 16, full: 9999 },
 }), { virtual: false });
 
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn().mockResolvedValue(null),
-  setItem:    jest.fn().mockResolvedValue(undefined),
-  removeItem: jest.fn().mockResolvedValue(undefined),
-  multiGet:   jest.fn().mockResolvedValue([]),
-  multiSet:   jest.fn().mockResolvedValue(undefined),
-  clear:      jest.fn().mockResolvedValue(undefined),
-}));
+// NOTE: @react-native-async-storage/async-storage is intentionally NOT mocked
+// here. jest.config.js moduleNameMapper (Layer 2) already routes every import
+// to __mocks__/@react-native-async-storage/async-storage.js — a stateful
+// in-memory store that returns null (not undefined) from getItem, which is
+// what SettingsRepository.get expects. Adding an inline factory here would
+// override that stub with simple jest.fn() stubs that return undefined, causing
+// SettingsRepository.get to throw at runtime.
 
 jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
@@ -145,6 +144,11 @@ async function captureHTML(inspection: SavedInspection): Promise<string> {
 
 beforeEach(() => {
   jest.clearAllMocks();
+  // Reset the in-memory AsyncStorage store between tests so SettingsRepository
+  // always starts from a clean state. Use __resetStore (no jest.fn() side-effects)
+  // rather than .clear() so mock call counts stay accurate.
+  const AsyncStorage = require('@react-native-async-storage/async-storage');
+  AsyncStorage.__resetStore();
   // Default: settings returns an empty inspector name
   mockSettingsGet.mockResolvedValue({ inspectorName: '', officeName: '' });
 });
