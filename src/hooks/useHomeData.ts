@@ -1,5 +1,5 @@
 // src/hooks/useHomeData.ts
-import { useFocusEffect as _useFocusEffect } from 'expo-router';
+import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { AgendaItem, Facility } from '../types';
 import { loadHomeData, getFacilityForAgenda as _getFacility, HomeData } from '../utils/loadHomeData';
@@ -19,17 +19,10 @@ const EMPTY: HomeData = {
   },
 };
 
-/**
- * useFocusEffect is injected as a parameter so tests can substitute a plain
- * useEffect-based stub without requiring a React Navigation context tree.
- * In production the default (_useFocusEffect from expo-router) is always used.
- */
-export function useHomeData(
-  focusEffect: (cb: () => void | (() => void)) => void = _useFocusEffect,
-) {
+export function useHomeData() {
   const [data, setData] = useState<HomeData>(EMPTY);
 
-  focusEffect(
+  useFocusEffect(
     useCallback(() => {
       let isActive = true;
       loadHomeData()
