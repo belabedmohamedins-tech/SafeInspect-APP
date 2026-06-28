@@ -28,11 +28,23 @@
 //              Never duplicate a mock already in Layer 2.
 //    Current : react-native (Proxy), Platform, react-native-safe-area-context
 //
-//  LAYER 4 — individual test files
+//  LAYER 4 — individual test files  (src/__tests__/**)
 //    Purpose : Domain-specific mocks for the unit under test.
 //    Rule    : Only mock direct dependencies of the module being tested
 //              (repositories, services, expo-router per test).
-//              Never mock infrastructure here (react-native, Platform, etc.)
+//              NEVER mock infrastructure here — no react-native, Platform,
+//              or @react-native-async-storage/async-storage inline factories.
+//              The async-storage mock lives exclusively in Layer 2.
+//              Use __resetStore() in beforeEach to wipe the in-memory store.
+//
+// ═══════════════════════════════════════════════════════════════════════════
+// CANONICAL TEST LOCATION: src/__tests__/
+// ═══════════════════════════════════════════════════════════════════════════
+//
+// All tests live under src/__tests__/. The root __tests__/ directory at the
+// project root is no longer used. testMatch below enforces this.
+// Having tests in two locations caused relative-path ambiguity and Layer-2
+// contract violations. Do NOT add tests outside src/__tests__/.
 //
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -48,9 +60,11 @@ module.exports = {
   // LAYER 3 — runs AFTER test framework is installed
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
+  // CANONICAL: only src/__tests__/ is the test tree.
+  // The root __tests__/ directory is excluded intentionally.
   testMatch: [
-    '**/__tests__/**/*.test.ts?(x)',
-    '**/__tests__/**/*.test.tsx',
+    '<rootDir>/src/__tests__/**/*.test.ts',
+    '<rootDir>/src/__tests__/**/*.test.tsx',
   ],
 
   // LAYER 2 — module routing
@@ -75,6 +89,9 @@ module.exports = {
       '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
 
     // async-storage: official Jest mock provided by the library.
+    // ⚠️  THIS IS THE ONLY PLACE THIS MODULE IS MOCKED.
+    // Do NOT add jest.mock('@react-native-async-storage/async-storage', ...)
+    // in any test file. ESLint enforces this rule.
     '@react-native-async-storage/async-storage':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',
   },
