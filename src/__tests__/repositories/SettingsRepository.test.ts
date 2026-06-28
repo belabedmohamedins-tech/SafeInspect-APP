@@ -13,6 +13,21 @@
 //      All write calls use .set().
 //   2. StorageKeys does NOT have SETTINGS_OFFICE_NAME / SETTINGS_INSPECTOR_NAME.
 //      The real keys are OFFICE_NAME and INSPECTOR_NAME.
+//
+// WHY the empty-object test installs the spy BEFORE the pre-set write
+// ─────────────────────────────────────────────────────────────────────
+// jest.spyOn wraps the method in-place on the AsyncStorage object. The L2
+// mock stores all calls on the same underlying jest.fn() reference. If the
+// spy is attached AFTER a write, jest.clearAllMocks() in beforeEach already
+// ran, but the spy did not exist yet — so the first write's call is logged
+// against the NEW spy (not the old mock fn). Result: spy shows 1 call even
+// though it was created after the write.
+//
+// Fix: install the spy BEFORE the pre-set write, then call mockClear() on the
+// spy immediately before the empty-object call. This way:
+//   • The pre-set write is tracked by the spy (call count = 1).
+//   • mockClear() resets the spy's call log to 0.
+//   • set({}) hits the early-return guard → multiSet is NOT called (count stays 0).
 
 // ─── Imports ──────────────────────────────────────────────────────────────────
 
@@ -37,7 +52,6 @@ describe('SettingsRepository.get', () => {
   });
 
   it('returns merged settings when values are stored', async () => {
-    // Use the actual StorageKeys that SettingsRepository reads via multiGet
     await AsyncStorage.setItem(StorageKeys.OFFICE_NAME, 'My Office');
     await AsyncStorage.setItem(StorageKeys.INSPECTOR_NAME, 'John');
     const settings = await SettingsRepository.get();
@@ -78,19 +92,27 @@ describe('SettingsRepository.set', () => {
     await SettingsRepository.set({ officeName: 'Office C' });
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('Office C');
-    // inspectorName was not overwritten
     expect(settings.inspectorName).toBe('Inspector B');
   });
 
   // ── line 54: early-return guard — set() called with empty object ──────────
   it('is a no-op when called with an empty object', async () => {
-    await SettingsRepository.set({ officeName: 'Pre-set' });
+    // Spy BEFORE the pre-set write so it owns the function reference from the start.
     const multiSetSpy = jest.spyOn(AsyncStorage, 'multiSet');
+
+    await SettingsRepository.set({ officeName: 'Pre-set' });
+
+    // Clear the spy's call log (resets count to 0) without removing the spy itself.
+    multiSetSpy.mockClear();
+
+    // This call must hit the early-return guard (entries.length === 0) — no multiSet.
     await SettingsRepository.set({});
     expect(multiSetSpy).not.toHaveBeenCalled();
-    // Storage untouched
+
+    // Verify storage was not touched.
     const settings = await SettingsRepository.get();
     expect(settings.officeName).toBe('Pre-set');
+
     multiSetSpy.mockRestore();
   });
 });
