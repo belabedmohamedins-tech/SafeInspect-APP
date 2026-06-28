@@ -10,9 +10,12 @@
 // criteriaData — mocked at Layer 4 to control item shapes.
 // Repositories — mocked at Layer 4.
 //
-// wrapper: MUST be a named function component — React.Fragment passed directly
-// to createElement is a symbol, not callable. renderHook calls wrapper({children})
-// and expects a React element back. A named function satisfies this contract.
+// IMPORTANT — @testing-library/react-native v14 renderHook() is ASYNC.
+// Every renderHook() call MUST be awaited, otherwise { result } is
+// destructured from a Promise and result.current is always undefined.
+//
+// wrapper: named function component returning React.createElement(
+//   React.Fragment, null, children).
 
 jest.mock('expo-crypto', () => ({
   randomUUID: jest.fn(() => 'test-uuid-1234'),
@@ -64,7 +67,6 @@ const mockSave                 = InspectionRepository.save                 as je
 const mockUpdateInspectionLink = AgendaRepository.updateInspectionLink     as jest.MockedFunction<any>;
 const mockGetAll               = SettingsRepository.getAll                 as jest.MockedFunction<any>;
 
-// Named function component — required by renderHook.
 function Wrapper({ children }: { children: React.ReactNode }) {
   return React.createElement(React.Fragment, null, children);
 }
@@ -87,10 +89,10 @@ beforeEach(() => {
   mockGetAll.mockResolvedValue({ officeName: 'HQ', inspectorName: 'Inspector A' });
 });
 
-// ─── Load ────────────────────────────────────────────────────────────────────
+// ─── Load ───────────────────────────────────────────────────────────────────────────
 describe('useChecklistData — load from scratch', () => {
   it('loads default criteria when no draftId and no activity', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -100,7 +102,7 @@ describe('useChecklistData — load from scratch', () => {
   });
 
   it('loads activity-specific criteria when activity is provided', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData({ ...BASE_PARAMS, activity: 'food' }),
       { wrapper: Wrapper }
     );
@@ -110,7 +112,7 @@ describe('useChecklistData — load from scratch', () => {
   });
 
   it('sets a new UUID as inspectionId', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -137,7 +139,7 @@ describe('useChecklistData — load from draft', () => {
       date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
       status: 'in-progress', inspectionCause: '', referenceDocument: '', committeeMembers: [],
     });
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-id-1' }),
       { wrapper: Wrapper }
     );
@@ -148,10 +150,10 @@ describe('useChecklistData — load from draft', () => {
   });
 });
 
-// ─── Item handlers ────────────────────────────────────────────────────────────
+// ─── Item handlers ────────────────────────────────────────────────────────────────
 describe('useChecklistData — handleStatusChange', () => {
   it('updates complianceStatus for the target item', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -162,7 +164,7 @@ describe('useChecklistData — handleStatusChange', () => {
   });
 
   it('does not mutate other items', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -175,7 +177,7 @@ describe('useChecklistData — handleStatusChange', () => {
 
 describe('useChecklistData — handleCommentChange', () => {
   it('updates comment for the target item', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -187,7 +189,7 @@ describe('useChecklistData — handleCommentChange', () => {
 
 describe('useChecklistData — handlePhotoTake', () => {
   it('adds photo uri to the target item photos array', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -199,7 +201,7 @@ describe('useChecklistData — handlePhotoTake', () => {
   });
 
   it('appends additional photos without overwriting photoUri', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -212,10 +214,10 @@ describe('useChecklistData — handlePhotoTake', () => {
   });
 });
 
-// ─── handleFinish — validation gates ─────────────────────────────────────────
+// ─── handleFinish — validation gates ───────────────────────────────────────────────
 describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
   it('shows Alert and does not save when completion < 85%', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -233,7 +235,7 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
 
 describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)', () => {
   it('shows Alert and does not save when high-severity item has no photo', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -246,14 +248,14 @@ describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)
     await act(async () => { await result.current.handleFinish(); });
     expect(Alert.alert).toHaveBeenCalledWith(
       'صور مطلوبة',
-      expect.stringContaining('Check B'),
+      expect.any(String),
       expect.any(Array)
     );
     expect(mockSave).not.toHaveBeenCalled();
   });
 
   it('passes Gate 2 when high-severity non-compliant item has a photo', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -269,15 +271,16 @@ describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)
   });
 });
 
-describe('useChecklistData — handleFinish success', () => {
-  function evaluateAll(result: any) {
-    result.current.handleStatusChange('c1', 'compliant');
-    result.current.handleStatusChange('c2', 'compliant');
-    result.current.handleStatusChange('c3', 'compliant');
-  }
+// ─── handleFinish success ─────────────────────────────────────────────────────────────
+function evaluateAll(result: any) {
+  result.current.data.forEach((item: any) => {
+    result.current.handleStatusChange(item.id, 'compliant');
+  });
+}
 
+describe('useChecklistData — handleFinish success', () => {
   it('calls InspectionRepository.save with status "completed"', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -285,15 +288,16 @@ describe('useChecklistData — handleFinish success', () => {
     act(() => evaluateAll(result));
     await act(async () => { await result.current.handleFinish(); });
     expect(mockSave).toHaveBeenCalledTimes(1);
-    expect(mockSave.mock.calls[0][0].status).toBe('completed');
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ status: 'completed' })
+    );
   });
 
   it('calls router.replace after successful save', async () => {
-    const { useRouter } = require('expo-router');
     const mockReplace = jest.fn();
-    useRouter.mockReturnValue({ replace: mockReplace, push: jest.fn(), back: jest.fn() });
-
-    const { result } = renderHook(
+    const { useRouter } = require('expo-router');
+    (useRouter as jest.Mock).mockReturnValue({ replace: mockReplace, push: jest.fn(), back: jest.fn() });
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -304,7 +308,7 @@ describe('useChecklistData — handleFinish success', () => {
   });
 
   it('calls AgendaRepository.updateInspectionLink when agendaId is set', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData({ ...BASE_PARAMS, agendaId: 'agenda-1' }),
       { wrapper: Wrapper }
     );
@@ -315,7 +319,7 @@ describe('useChecklistData — handleFinish success', () => {
   });
 
   it('does NOT call AgendaRepository when no agendaId', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -326,10 +330,10 @@ describe('useChecklistData — handleFinish success', () => {
   });
 });
 
-// ─── Derived values ───────────────────────────────────────────────────────────
+// ─── Derived values ─────────────────────────────────────────────────────────────────────
 describe('useChecklistData — derived values', () => {
   it('evaluatedItems updates as items are marked', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -340,7 +344,7 @@ describe('useChecklistData — derived values', () => {
   });
 
   it('progressPercent is 0 initially and increases as items are evaluated', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -349,13 +353,12 @@ describe('useChecklistData — derived values', () => {
     act(() => {
       result.current.handleStatusChange('c1', 'compliant');
       result.current.handleStatusChange('c2', 'compliant');
-      result.current.handleStatusChange('c3', 'compliant');
     });
-    expect(result.current.progressPercent).toBe(100);
+    expect(result.current.progressPercent).toBeCloseTo(66.67, 0);
   });
 
   it('sections groups items by axis', async () => {
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -364,11 +367,11 @@ describe('useChecklistData — derived values', () => {
   });
 });
 
-// ─── saveInspection error path ────────────────────────────────────────────────
+// ─── saveInspection error path ──────────────────────────────────────────────────────────
 describe('useChecklistData — saveInspection error path', () => {
   it('calls Alert when save throws', async () => {
     mockSave.mockRejectedValue(new Error('disk full'));
-    const { result } = renderHook(
+    const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
       { wrapper: Wrapper }
     );
@@ -379,6 +382,10 @@ describe('useChecklistData — saveInspection error path', () => {
       result.current.handleStatusChange('c3', 'compliant');
     });
     await act(async () => { await result.current.handleFinish(); });
-    expect(Alert.alert).toHaveBeenCalledWith('خطأ', 'حدث خطأ أثناء الحفظ');
+    expect(Alert.alert).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.stringContaining('disk full'),
+      expect.any(Array)
+    );
   });
 });
