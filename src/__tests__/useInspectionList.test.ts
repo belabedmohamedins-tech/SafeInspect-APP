@@ -15,6 +15,7 @@ jest.mock('react-native', () => ({
   Alert: { alert: jest.fn() },
 }));
 
+import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useFocusEffect } from 'expo-router';
@@ -26,6 +27,9 @@ const mockGetAll = InspectionRepository.getAll as jest.MockedFunction<typeof Ins
 const mockDelete = InspectionRepository.delete as jest.MockedFunction<typeof InspectionRepository.delete>;
 const mockFocus  = useFocusEffect as jest.MockedFunction<typeof useFocusEffect>;
 const mockAlert  = Alert.alert as jest.MockedFunction<typeof Alert.alert>;
+
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
@@ -55,7 +59,7 @@ beforeEach(() => {
 describe('useInspectionList', () => {
   it('starts with empty inspections', () => {
     mockGetAll.mockReturnValue(new Promise(() => {}));
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
     expect(result.current.filtered).toEqual([]);
     expect(result.current.totalCount).toBe(0);
   });
@@ -63,13 +67,13 @@ describe('useInspectionList', () => {
   it('loads inspections on focus', async () => {
     const items = [makeInspection({ id: 'i1' }), makeInspection({ id: 'i2' })];
     mockGetAll.mockResolvedValue(items);
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
     await waitFor(() => expect(result.current.totalCount).toBe(2));
   });
 
   it('handles load error gracefully', async () => {
     mockGetAll.mockRejectedValue(new Error('db error'));
-    const { result } = renderHook(() => useInspectionList());
+    const { result } = renderHook(() => useInspectionList(), { wrapper });
     await waitFor(() => expect(mockGetAll).toHaveBeenCalled());
     expect(result.current.filtered).toEqual([]);
   });
@@ -81,12 +85,12 @@ describe('useInspectionList', () => {
     beforeEach(() => { mockGetAll.mockResolvedValue([completed, inProgress]); });
 
     it('shows all inspections with activeFilter=all', async () => {
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.filtered).toHaveLength(2));
     });
 
     it('filters to completed only', async () => {
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(2));
       act(() => { result.current.setActiveFilter('completed'); });
       expect(result.current.filtered).toHaveLength(1);
@@ -94,7 +98,7 @@ describe('useInspectionList', () => {
     });
 
     it('filters to in-progress only', async () => {
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(2));
       act(() => { result.current.setActiveFilter('in-progress'); });
       expect(result.current.filtered).toHaveLength(1);
@@ -102,7 +106,7 @@ describe('useInspectionList', () => {
     });
 
     it('filters by facilityName search query', async () => {
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(2));
       act(() => { result.current.setSearchQuery('alpha'); });
       expect(result.current.filtered).toHaveLength(1);
@@ -111,14 +115,14 @@ describe('useInspectionList', () => {
 
     it('filters by facilityAddress search query', async () => {
       mockGetAll.mockResolvedValue([makeInspection({ id: 'a1', facilityAddress: 'Rue de la Paix' })]);
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(1));
       act(() => { result.current.setSearchQuery('paix'); });
       expect(result.current.filtered).toHaveLength(1);
     });
 
     it('returns empty when search query matches nothing', async () => {
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(2));
       act(() => { result.current.setSearchQuery('zzznomatch'); });
       expect(result.current.filtered).toHaveLength(0);
@@ -128,7 +132,7 @@ describe('useInspectionList', () => {
       const older = makeInspection({ id: 'old', date: '2025-01-01T00:00:00.000Z' });
       const newer = makeInspection({ id: 'new', date: '2026-01-01T00:00:00.000Z' });
       mockGetAll.mockResolvedValue([older, newer]);
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.filtered).toHaveLength(2));
       expect(result.current.filtered[0].id).toBe('new');
       expect(result.current.filtered[1].id).toBe('old');
@@ -138,15 +142,15 @@ describe('useInspectionList', () => {
   describe('deleteInspection', () => {
     it('shows a confirmation alert when called', async () => {
       mockGetAll.mockResolvedValue([makeInspection()]);
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(1));
       await act(async () => { await result.current.deleteInspection('insp-1'); });
       expect(mockAlert).toHaveBeenCalledWith(
-        'تأكيد الحذف',
+        '\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062d\u0630\u0641',
         expect.any(String),
         expect.arrayContaining([
-          expect.objectContaining({ text: 'إلغاء' }),
-          expect.objectContaining({ text: 'حذف' }),
+          expect.objectContaining({ text: '\u0625\u0644\u063a\u0627\u0621' }),
+          expect.objectContaining({ text: '\u062d\u0630\u0641' }),
         ])
       );
     });
@@ -154,7 +158,7 @@ describe('useInspectionList', () => {
     it('calls InspectionRepository.delete and removes item on confirm', async () => {
       const item = makeInspection({ id: 'del-1' });
       mockGetAll.mockResolvedValue([item]);
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(1));
 
       await act(async () => { await result.current.deleteInspection('del-1'); });
@@ -169,7 +173,7 @@ describe('useInspectionList', () => {
     it('handles delete repository error gracefully', async () => {
       (mockDelete as jest.Mock).mockRejectedValueOnce(new Error('db error'));
       mockGetAll.mockResolvedValue([makeInspection({ id: 'err-1' })]);
-      const { result } = renderHook(() => useInspectionList());
+      const { result } = renderHook(() => useInspectionList(), { wrapper });
       await waitFor(() => expect(result.current.totalCount).toBe(1));
 
       await act(async () => { await result.current.deleteInspection('err-1'); });

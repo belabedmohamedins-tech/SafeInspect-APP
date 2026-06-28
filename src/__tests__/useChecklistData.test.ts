@@ -35,6 +35,7 @@ jest.mock('../criteriaData', () => ({
   },
 }));
 
+import React from 'react';
 import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { Alert } from 'react-native';
 import { useRouter, useNavigation } from 'expo-router';
@@ -49,6 +50,9 @@ const mockUpdateAgenda = AgendaRepository.updateInspectionLink as jest.MockedFun
 const mockAlert        = Alert.alert as jest.MockedFunction<typeof Alert.alert>;
 const mockRouterReplace = jest.fn();
 const mockAddListener   = jest.fn(() => jest.fn());
+
+const wrapper = ({ children }: { children: React.ReactNode }) =>
+  React.createElement(React.Fragment, null, children);
 
 beforeEach(() => {
   jest.clearAllMocks();
@@ -69,29 +73,29 @@ const BASE_PARAMS = {
 };
 
 describe('useChecklistData', () => {
-  describe('initial load — new inspection (no draftId)', () => {
+  describe('initial load \u2014 new inspection (no draftId)', () => {
     it('loads default criteria when no activity specified', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.data).toHaveLength(2);
       expect(result.current.data[0].complianceStatus).toBe('not-evaluated');
     });
 
     it('loads activity-specific criteria when activity is provided', async () => {
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, activity: 'medical' }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, activity: 'medical' }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.data).toHaveLength(1);
       expect(result.current.data[0].id).toBe('m1');
     });
 
     it('falls back to default criteria for unknown activity', async () => {
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, activity: 'unknown-x' }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, activity: 'unknown-x' }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.data).toHaveLength(2);
     });
   });
 
-  describe('initial load — draft (with draftId)', () => {
+  describe('initial load \u2014 draft (with draftId)', () => {
     const draftItems: InspectionItem[] = [
       { id: 'd1', criteria: 'Draft C', legalReference: 'R1', severity: 'high', axis: 'Ax', complianceStatus: 'non-compliant', comment: 'note', photos: [] },
     ];
@@ -103,7 +107,7 @@ describe('useChecklistData', () => {
 
     it('loads existing draft items from repository', async () => {
       mockGetById.mockResolvedValue(draft);
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-001' }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-001' }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(mockGetById).toHaveBeenCalledWith('draft-001');
       expect(result.current.data).toHaveLength(1);
@@ -112,7 +116,7 @@ describe('useChecklistData', () => {
 
     it('handles null draft gracefully', async () => {
       mockGetById.mockResolvedValue(null);
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, draftId: 'missing' }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, draftId: 'missing' }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.data).toHaveLength(0);
     });
@@ -120,21 +124,21 @@ describe('useChecklistData', () => {
 
   describe('item handlers', () => {
     it('handleStatusChange updates the item status', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handleStatusChange('c1', 'compliant'); });
       expect(result.current.data.find(i => i.id === 'c1')?.complianceStatus).toBe('compliant');
     });
 
     it('handleCommentChange updates the item comment', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handleCommentChange('c2', 'needs repair'); });
       expect(result.current.data.find(i => i.id === 'c2')?.comment).toBe('needs repair');
     });
 
     it('handlePhotoTake adds a photo URI to the item', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handlePhotoTake('c1', 'file:///photo1.jpg'); });
       const item = result.current.data.find(i => i.id === 'c1')!;
@@ -143,7 +147,7 @@ describe('useChecklistData', () => {
     });
 
     it('handlePhotoTake accumulates multiple photos', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handlePhotoTake('c1', 'file:///p1.jpg'); });
       act(() => { result.current.handlePhotoTake('c1', 'file:///p2.jpg'); });
@@ -151,7 +155,7 @@ describe('useChecklistData', () => {
     });
 
     it('keeps original photoUri when second photo is added', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handlePhotoTake('c1', 'file:///first.jpg'); });
       act(() => { result.current.handlePhotoTake('c1', 'file:///second.jpg'); });
@@ -161,32 +165,32 @@ describe('useChecklistData', () => {
 
   describe('derived values', () => {
     it('totalItems equals the number of loaded criteria', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.totalItems).toBe(2);
     });
 
     it('evaluatedItems is 0 on fresh load', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.evaluatedItems).toBe(0);
     });
 
     it('evaluatedItems increments as items are evaluated', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handleStatusChange('c1', 'compliant'); });
       expect(result.current.evaluatedItems).toBe(1);
     });
 
     it('progressPercent is 0 on fresh load', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(result.current.progressPercent).toBe(0);
     });
 
     it('progressPercent is 100 when all items are evaluated', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -196,7 +200,7 @@ describe('useChecklistData', () => {
     });
 
     it('sections groups items by axis', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       expect(Object.keys(result.current.sections)).toContain('Axis A');
       expect(Object.keys(result.current.sections)).toContain('Axis B');
@@ -205,28 +209,28 @@ describe('useChecklistData', () => {
 
   describe('handleFinish', () => {
     it('shows alert when completion rate is below 85%', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => { result.current.handleStatusChange('c1', 'compliant'); }); // 1/2 = 50%
       await act(async () => { await result.current.handleFinish(); });
-      expect(mockAlert).toHaveBeenCalledWith('لم يكتمل التفتيش', expect.stringContaining('85'), expect.any(Array));
+      expect(mockAlert).toHaveBeenCalledWith('\u0644\u0645 \u064a\u0643\u062a\u0645\u0644 \u0627\u0644\u062a\u0641\u062a\u064a\u0634', expect.stringContaining('85'), expect.any(Array));
       expect(mockSave).not.toHaveBeenCalled();
     });
 
     it('shows alert when high-severity non-compliant item has no photo', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'non-compliant'); // high severity, no photo
         result.current.handleStatusChange('c2', 'compliant');
       });
       await act(async () => { await result.current.handleFinish(); });
-      expect(mockAlert).toHaveBeenCalledWith('صور مطلوبة', expect.stringContaining('Criterion 1'), expect.any(Array));
+      expect(mockAlert).toHaveBeenCalledWith('\u0635\u0648\u0631 \u0645\u0637\u0644\u0648\u0628\u0629', expect.stringContaining('Criterion 1'), expect.any(Array));
       expect(mockSave).not.toHaveBeenCalled();
     });
 
     it('saves and navigates when all gates pass', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -238,7 +242,7 @@ describe('useChecklistData', () => {
     });
 
     it('updates agenda link when agendaId is provided', async () => {
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, agendaId: 'ag-001' }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, agendaId: 'ag-001' }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -249,7 +253,7 @@ describe('useChecklistData', () => {
     });
 
     it('does not update agenda link when agendaId is absent', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -261,7 +265,7 @@ describe('useChecklistData', () => {
 
     it('shows error alert and does not navigate when save fails', async () => {
       mockSave.mockRejectedValueOnce(new Error('db error'));
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -272,7 +276,7 @@ describe('useChecklistData', () => {
     });
 
     it('includes signature in inspection when provided', async () => {
-      const { result } = renderHook(() => useChecklistData(BASE_PARAMS, 'data:image/png;base64,SIGN=='));
+      const { result } = renderHook(() => useChecklistData(BASE_PARAMS, 'data:image/png;base64,SIGN=='), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
@@ -283,7 +287,7 @@ describe('useChecklistData', () => {
     });
 
     it('saves with coordinates when lat/lng are provided', async () => {
-      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, lat: 36.7, lng: 3.05 }));
+      const { result } = renderHook(() => useChecklistData({ ...BASE_PARAMS, lat: 36.7, lng: 3.05 }), { wrapper });
       await waitFor(() => expect(result.current.isLoading).toBe(false));
       act(() => {
         result.current.handleStatusChange('c1', 'compliant');
