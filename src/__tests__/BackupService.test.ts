@@ -25,7 +25,6 @@ jest.mock('expo-sharing', () => ({
 // ─── Mock expo-document-picker ────────────────────────────────────────────────
 // The mock factory must be self-contained — variables declared outside
 // jest.mock() are not in scope when Jest hoists the factory.
-// We access the mock via the imported module reference after mocking.
 jest.mock('expo-document-picker', () => ({
   getDocumentAsync: jest.fn(),
 }));
@@ -39,12 +38,14 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import { rescheduleAll } from '../services/NotificationService';
 
-// Typed alias for convenience
 const mockGetDocumentAsync = DocumentPicker.getDocumentAsync as jest.Mock;
 
 beforeEach(async () => {
-  await AsyncStorage.clear();
+  // Order matters — same rule as SyncService.test.ts:
+  //   1. clearAllMocks() first: resets call counts without destroying implementations
+  //   2. AsyncStorage.clear() second: implementation must still be intact
   jest.clearAllMocks();
+  await AsyncStorage.clear();
 });
 
 // ─── Seed AsyncStorage with realistic data ────────────────────────────────────
