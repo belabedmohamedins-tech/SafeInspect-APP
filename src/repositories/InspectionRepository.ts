@@ -5,6 +5,8 @@ import { SavedInspection } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
 import { CorrectiveActionRepository } from './CorrectiveActionRepository';
+import { createFollowUpIfNeeded } from '../services/followUpService';
+import { ApprovalRepository } from './ApprovalRepository';
 
 async function loadAll(): Promise<SavedInspection[]> {
   const raw = await AsyncStorage.getItem(StorageKeys.INSPECTIONS);
@@ -73,15 +75,13 @@ export const InspectionRepository = {
       });
       await CorrectiveActionRepository.createFromInspection(toSave);
 
-      // Auto follow-up agenda (FR-025) — lazy import to avoid circular deps
+      // Auto follow-up agenda (FR-025)
       try {
-        const { createFollowUpIfNeeded } = await import('../services/followUpService');
         await createFollowUpIfNeeded(toSave);
       } catch { /* non-fatal */ }
 
-      // Enqueue for supervisor approval (FR-069) — lazy import
+      // Enqueue for supervisor approval (FR-069)
       try {
-        const { ApprovalRepository } = await import('./ApprovalRepository');
         await ApprovalRepository.enqueue(toSave);
       } catch { /* non-fatal */ }
     }

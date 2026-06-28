@@ -1,33 +1,26 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 //
-// LAZY-IMPORT MOCKS — WHY jest.requireMock + mockResolvedValue IN beforeEach
-// ─────────────────────────────────────────────────────────────────────────────
-// InspectionRepository.save() calls two modules via await import():
+// WHY MOCK FACTORIES USE jest.fn() INLINE — NOT OUTER const REFS
+// ───────────────────────────────────────────────────────────────
+// Babel hoists jest.mock() to the top of the file before any const/let.
+// Declaring jest.fn() outside the factory puts it in the Temporal Dead Zone
+// when the factory runs — the factory receives undefined, not a jest.Mock.
+// All jest.fn() calls must live INSIDE the factory.
+// Handles are retrieved AFTER module load via static import or requireMock.
 //
-//   const { createFollowUpIfNeeded } = await import('../services/followUpService');
-//   const { ApprovalRepository }     = await import('./ApprovalRepository');
+// WHY followUpService AND ApprovalRepository USE STATIC IMPORTS IN SOURCE
+// ───────────────────────────────────────────────────────────────────────
+// The source previously used await import() (lazy) for these two modules to
+// avoid circular dependencies. With jest-expo + node --experimental-vm-modules,
+// Babel transforms await import() to require() inside an async wrapper — but
+// this does NOT reliably hit the Jest module registry in all execution contexts.
+// The dynamic require resolves to the real (unmocked) module, which may throw,
+// and the try/catch { } swallows the error silently. Result: 0 mock calls.
 //
-// Babel transforms await import(path) → Promise.resolve().then(() => require(path)).
-// The require(path) hits the Jest module registry using the RESOLVED absolute path.
-// jest.mock() registers the mock under that same resolved key — so the mock IS
-// returned by require(). This part works.
-//
-// The problem is jest.clearAllMocks(): it resets all mock implementations to
-// jest.fn() with no return value. The lazy imports then call a function that
-// returns undefined, not a Promise. Inside the source:
-//
-//   try {
-//     await createFollowUpIfNeeded(toSave);  // returns undefined → await ok
-//   } catch { /* non-fatal */ }              // but if it throws, swallowed
-//
-// If the mock returns undefined (not a Promise), await undefined resolves
-// immediately — the call IS recorded. But if clearAllMocks wipes the mock
-// reference entirely (replaces the jest.fn() object), the reference held by
-// mockCreateFollowUp is stale and no longer the same function the module calls.
-//
-// SOLUTION: retrieve handles via jest.requireMock() — same registry instance —
-// and call .mockResolvedValue(undefined) INSIDE beforeEach, AFTER clearAllMocks,
-// to re-bind the implementation on the live object every test.
+// Converted to static top-level imports. Jest intercepts static imports
+// deterministically via its module registry. The circular-dep concern is
+// mitigated by the fact that neither followUpService nor ApprovalRepository
+// imports InspectionRepository directly.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../../repositories/keys';
@@ -51,47 +44,40 @@ jest.mock('../../repositories/CorrectiveActionRepository', () => ({
 }));
 
 jest.mock('../../services/followUpService', () => ({
-  createFollowUpIfNeeded: jest.fn().mockResolvedValue(undefined),
+  createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('../../repositories/ApprovalRepository', () => ({
-  ApprovalRepository: { enqueue: jest.fn().mockResolvedValue(undefined) },
+  ApprovalRepository: { enqueue: jest.fn(() => Promise.resolve()) },
 }));
 
-// ─── module under test ────────────────────────────────────────────────────────
+// ─── module under test (imported AFTER all jest.mock declarations) ─────────────
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { IntegrityService } from '../../services/IntegrityService';
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
+import { createFollowUpIfNeeded } from '../../services/followUpService';
+import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
-const mockComputeHash          = IntegrityService.computeHash                        as jest.Mock;
-const mockAuditAppend          = AuditLogRepository.append                           as jest.Mock;
-const mockCreateFromInspection = CorrectiveActionRepository.createFromInspection     as jest.Mock;
-
-// Lazy-import handles — retrieved via requireMock to guarantee the same
-// registry instance that await import() resolves to inside the source file.
-const mockCreateFollowUp = (jest.requireMock('../../services/followUpService') as {
-  createFollowUpIfNeeded: jest.Mock;
-}).createFollowUpIfNeeded;
-
-const mockEnqueue = (jest.requireMock('../../repositories/ApprovalRepository') as {
-  ApprovalRepository: { enqueue: jest.Mock };
-}).ApprovalRepository.enqueue;
+// Typed handles — retrieved after module load, safe from TDZ.
+const mockComputeHash          = IntegrityService.computeHash                    as jest.Mock;
+const mockAuditAppend          = AuditLogRepository.append                       as jest.Mock;
+const mockCreateFromInspection = CorrectiveActionRepository.createFromInspection as jest.Mock;
+const mockCreateFollowUp       = createFollowUpIfNeeded                          as jest.Mock;
+const mockEnqueue              = ApprovalRepository.enqueue                      as jest.Mock;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
   (AsyncStorage as any).__resetStore();
   jest.clearAllMocks();
-  // Re-apply Promise-returning implementations after clearAllMocks wipes them.
-  // Without this, the source's try/catch may swallow a "not a function" throw
-  // or await undefined without recording the call on the mock we hold a ref to.
-  mockCreateFollowUp.mockResolvedValue(undefined);
-  mockEnqueue.mockResolvedValue(undefined);
+  // Re-apply Promise-returning implementations after clearAllMocks resets them.
+  mockComputeHash.mockReturnValue('mock-hash-abc123');
   mockAuditAppend.mockResolvedValue(undefined);
   mockCreateFromInspection.mockResolvedValue(undefined);
-  mockComputeHash.mockReturnValue('mock-hash-abc123');
+  mockCreateFollowUp.mockResolvedValue(undefined);
+  mockEnqueue.mockResolvedValue(undefined);
 });
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
