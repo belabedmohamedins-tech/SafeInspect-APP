@@ -1,26 +1,28 @@
 // src/__tests__/hooks/useCollapsibleSections.test.ts
 //
+// WHY React.Fragment INSTEAD OF View
+// ─────────────────────────────────
+// The react-native mock in jest.setup.ts is a strict Proxy that throws on
+// any unstubbed key access. View is stubbed as the string 'View', not a
+// real component constructor. Rendering the string 'View' as a React element
+// causes React to silently abort the render — the Harness function body never
+// executes, ref.current stays null.
+// React.Fragment is a first-class React primitive that needs no native module
+// and always renders safely in test environments.
+//
 // WHY render() IS WRAPPED IN act()
 // ─────────────────────────────────
-// In this version of @testing-library/react-native, render() does NOT
-// synchronously flush the React reconciler. The component's first render
-// commit happens asynchronously.  Calling render() without act() leaves
-// ref.current === null immediately after the call returns.
+// In this version of @testing-library/react-native, render() does not
+// synchronously flush the React reconciler. Wrapping in act() forces React
+// to flush all pending state updates and effects before act() returns.
 //
-// Wrapping render() in act() forces React to flush all pending state updates
-// and effects synchronously before act() returns, so ref.current holds the
-// hook's return value by the time the expect() calls run.
-//
-// WHY WE USE A COMPONENT HARNESS INSTEAD OF renderHook
-// ──────────────────────────────────────────────────────
+// WHY renderHook IS NOT USED
+// ──────────────────────────
 // jest.setup.ts documents the root cause: configure({ defaultWrapper }) was
 // removed because it corrupts result.current in the installed RTLRN version.
-// The corruption persists even when a per-call wrapper is passed to
-// renderHook(). A component harness with render() sidesteps the broken path
-// entirely while exercising the exact same React lifecycle.
+// The corruption persists even with per-call wrapper options.
 
 import React from 'react';
-import { View } from 'react-native';
 import { render, act } from '@testing-library/react-native';
 import { useCollapsibleSections } from '../../hooks/useCollapsibleSections';
 
@@ -31,11 +33,11 @@ function makeHarness(getTitles: () => string[]) {
 
   function Harness() {
     const result = useCollapsibleSections(getTitles());
-    // Assign during render — safe, pure write, no side effect.
-    // This runs synchronously inside act(), so by the time act() returns
-    // ref.current holds the latest hook return value.
+    // Pure assignment during render — no side effect, safe.
+    // act() ensures this runs before returning to the test.
     ref.current = result;
-    return React.createElement(View, null);
+    // Fragment: no native module needed, always safe in jest environment.
+    return React.createElement(React.Fragment, null);
   }
 
   return { Harness, ref };
@@ -47,6 +49,7 @@ describe('useCollapsibleSections — initial state', () => {
   it('all sections start expanded (collapsed=false)', () => {
     const { Harness, ref } = makeHarness(() => ['Axis A', 'Axis B']);
     act(() => { render(React.createElement(Harness)); });
+    expect(ref.current).not.toBeNull();
     expect(ref.current!.collapsed['Axis A']).toBe(false);
     expect(ref.current!.collapsed['Axis B']).toBe(false);
   });
@@ -100,7 +103,7 @@ describe('useCollapsibleSections — dynamic title addition (useEffect branch)',
   it('adds a new title to collapsed map when sectionTitles prop gains a new entry', () => {
     let titles = ['Axis A'];
     const { Harness, ref } = makeHarness(() => titles);
-    let rerender: ReturnType<typeof render>['rerender'];
+    let rerender!: ReturnType<typeof render>['rerender'];
     act(() => { ({ rerender } = render(React.createElement(Harness))); });
 
     expect(ref.current!.collapsed).toHaveProperty('Axis A');
@@ -116,7 +119,7 @@ describe('useCollapsibleSections — dynamic title addition (useEffect branch)',
   it('does not reset collapsed state of existing sections when a new one is added', () => {
     let titles = ['Axis A'];
     const { Harness, ref } = makeHarness(() => titles);
-    let rerender: ReturnType<typeof render>['rerender'];
+    let rerender!: ReturnType<typeof render>['rerender'];
     act(() => { ({ rerender } = render(React.createElement(Harness))); });
 
     act(() => { ref.current!.toggleSection('Axis A'); });

@@ -1,76 +1,86 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 //
-// WHY THIS FILE DOES NOT USE jest.resetModules() / jest.doMock()
+// WHY MOCK FACTORIES USE jest.fn() INLINE — NOT OUTER const REFS
 // ───────────────────────────────────────────────────────────────
-// resetModules() clears the entire module registry — including AsyncStorage.
-// After reset, InspectionRepository loads a FRESH AsyncStorage instance
-// with an empty in-memory store, while the top-level import in this test
-// file still holds a reference to the OLD instance. Every setItem/getItem
-// call in test setup goes to the old instance; every read inside
-// InspectionRepository goes to the new one. They never see each other's data.
+// Babel hoists jest.mock() calls to the TOP of the file, before any variable
+// declarations. If you write:
 //
-// SOLUTION: Keep the static jest.mock() declarations at the top of the file
-// (hoisted by Babel, applied to the single shared registry for the whole
-// suite). AsyncStorage mock is provided by moduleNameMapper (Layer 2 in the
-// jest.config.js architecture). Call __resetStore() in beforeEach to wipe
-// in-memory state between tests — this works on the shared instance.
+//   const mockFn = jest.fn();          // ← declared here
+//   jest.mock('...', () => ({ fn: mockFn }));  // ← hoisted ABOVE the const
+//
+// …the hoisted factory runs while mockFn is still in the Temporal Dead Zone.
+// The factory receives `undefined`, not the jest.fn() instance. Every call
+// from the source module then throws "is not a function".
+//
+// SOLUTION: declare jest.fn() INSIDE the factory:
+//
+//   jest.mock('...', () => ({ fn: jest.fn() }));
+//
+// Then retrieve the live instance AFTER the module loads:
+//
+//   import { IntegrityService } from '../../services/IntegrityService';
+//   const mockComputeHash = IntegrityService.computeHash as jest.Mock;
+//
+// This is the standard pattern documented in the Jest docs under
+// "ES Module mocking" and is the only safe approach with Babel transforms.
 //
 // LAZY IMPORTS (followUpService, ApprovalRepository)
 // ───────────────────────────────────────────────────
 // InspectionRepository.save() uses await import() for these two modules.
-// Static jest.mock() at the top of the file registers the mock in the
-// module registry BEFORE any module loads. When Babel transforms
-// await import(path) → Promise.resolve(require(path)) at runtime, the
-// path hits the same jest registry and returns the mock factory's exports.
-// This works as long as resetModules() is NOT called (which would wipe
-// the registry and un-register the mocks).
+// Static jest.mock() at the top registers them in the module registry before
+// any module loads. Babel transforms await import(path) → require(path) at
+// runtime, which hits the jest registry and returns the mock factory exports.
+// This works correctly as long as resetModules() is NOT called.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../../repositories/keys';
 import { SavedInspection } from '../../types';
 
-// ─── static mocks (hoisted by Babel) ─────────────────────────────────────────
+// ─── mock factories — jest.fn() INSIDE the factory (never outside) ────────────
 
-const mockComputeHash      = jest.fn(() => 'mock-hash-abc123');
-const mockVerifyInspection = jest.fn(() => true);
 jest.mock('../../services/IntegrityService', () => ({
   IntegrityService: {
-    computeHash:      mockComputeHash,
-    verifyInspection: mockVerifyInspection,
+    computeHash:      jest.fn(() => 'mock-hash-abc123'),
+    verifyInspection: jest.fn(() => Promise.resolve({ ok: true, computedHash: 'mock-hash-abc123' })),
   },
 }));
 
-const mockAuditAppend = jest.fn(() => Promise.resolve());
 jest.mock('../../repositories/AuditLogRepository', () => ({
-  AuditLogRepository: { append: mockAuditAppend },
+  AuditLogRepository: { append: jest.fn(() => Promise.resolve()) },
 }));
 
-const mockCreateFromInspection = jest.fn(() => Promise.resolve());
 jest.mock('../../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: { createFromInspection: mockCreateFromInspection },
+  CorrectiveActionRepository: { createFromInspection: jest.fn(() => Promise.resolve()) },
 }));
 
-// Lazy-imported modules — registered here so await import() resolves the mock.
-const mockCreateFollowUpIfNeeded = jest.fn(() => Promise.resolve());
 jest.mock('../../services/followUpService', () => ({
-  createFollowUpIfNeeded: mockCreateFollowUpIfNeeded,
+  createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
 }));
 
-const mockEnqueue = jest.fn(() => Promise.resolve());
 jest.mock('../../repositories/ApprovalRepository', () => ({
-  ApprovalRepository: { enqueue: mockEnqueue },
+  ApprovalRepository: { enqueue: jest.fn(() => Promise.resolve()) },
 }));
 
-// ─── module under test (loaded AFTER all jest.mock declarations) ──────────────
+// ─── module under test (imported AFTER all jest.mock declarations) ─────────────
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
+import { IntegrityService } from '../../services/IntegrityService';
+import { AuditLogRepository } from '../../repositories/AuditLogRepository';
+import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
+import { createFollowUpIfNeeded } from '../../services/followUpService';
+import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
-// ─── helpers ──────────────────────────────────────────────────────────────────
+// Typed handles to the mock functions — retrieved after module load, safe from TDZ.
+const mockComputeHash           = IntegrityService.computeHash           as jest.Mock;
+const mockAuditAppend           = AuditLogRepository.append              as jest.Mock;
+const mockCreateFromInspection  = CorrectiveActionRepository.createFromInspection as jest.Mock;
+const mockCreateFollowUp        = createFollowUpIfNeeded                  as jest.Mock;
+const mockEnqueue               = ApprovalRepository.enqueue              as jest.Mock;
+
+// ─── setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  // Wipe in-memory AsyncStorage state between tests.
   (AsyncStorage as any).__resetStore();
-  // Clear call history on all mocks.
   jest.clearAllMocks();
 });
 
@@ -184,15 +194,13 @@ describe('InspectionRepository.save', () => {
 
   it('triggers AuditLog + CAP on first completion', async () => {
     await InspectionRepository.save(makeInspection({ id: 'new-c', status: 'completed' }));
-    expect(
-      mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_SAVED')
-    ).toBe(true);
+    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_SAVED')).toBe(true);
     expect(mockCreateFromInspection).toHaveBeenCalled();
   });
 
-  it('calls followUpService and ApprovalRepository on first completion (lazy import paths)', async () => {
+  it('calls followUpService and ApprovalRepository on completion (lazy import paths)', async () => {
     await InspectionRepository.save(makeInspection({ id: 'lazy-1', status: 'completed' }));
-    expect(mockCreateFollowUpIfNeeded).toHaveBeenCalled();
+    expect(mockCreateFollowUp).toHaveBeenCalled();
     expect(mockEnqueue).toHaveBeenCalled();
   });
 
@@ -200,8 +208,15 @@ describe('InspectionRepository.save', () => {
     await InspectionRepository.save(makeInspection({ id: 'draft-x', status: 'in-progress' }));
     expect(mockAuditAppend).not.toHaveBeenCalled();
     expect(mockCreateFromInspection).not.toHaveBeenCalled();
-    expect(mockCreateFollowUpIfNeeded).not.toHaveBeenCalled();
+    expect(mockCreateFollowUp).not.toHaveBeenCalled();
     expect(mockEnqueue).not.toHaveBeenCalled();
+  });
+
+  it('embeds the computed hash on completion', async () => {
+    await InspectionRepository.save(makeInspection({ id: 'h1', status: 'completed' }));
+    expect(mockComputeHash).toHaveBeenCalled();
+    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
+    expect(stored[0].integrityHash).toBe('mock-hash-abc123');
   });
 });
 
@@ -236,9 +251,7 @@ describe('InspectionRepository.deleteMany', () => {
 
   it('appends a INSPECTION_BULK_DELETED audit entry', async () => {
     await InspectionRepository.deleteMany(['x1', 'x2']);
-    expect(
-      mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_BULK_DELETED')
-    ).toBe(true);
+    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_BULK_DELETED')).toBe(true);
   });
 
   it('is a no-op when the id list is empty', async () => {
