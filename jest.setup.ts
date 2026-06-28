@@ -76,63 +76,110 @@ const PLATFORM = {
 // Path used by RN internals and jest-expo's resolver
 jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 
+// ─── React internal symbols that must return undefined/falsy ─────────────────
+//
+// When react-test-renderer or @testing-library/react-native traverses a
+// component tree it reads internal Symbol keys ($$typeof, _context, _owner,
+// etc.) on every object it encounters — including our mock exports.
+// These must return `undefined` (falsy) so React does not mistake a mock
+// object for a React element or context.  They must NOT throw.
+//
+// Any access to a plain string key that is NOT in the explicit stub list
+// below will throw a descriptive error, forcing the developer to add an
+// explicit stub rather than silently getting a jest.fn() that hides the gap.
+const SAFE_FALSY_SYMBOLS = new Set([
+  Symbol.iterator,
+  Symbol.toPrimitive,
+  Symbol.toStringTag,
+  Symbol.hasInstance,
+  Symbol.isConcatSpreadable,
+]);
+
+// React reconciler internal string keys that must return undefined/falsy.
+// These are accessed on every object during tree traversal — they are NOT
+// RN API calls and must not throw.
+const REACT_INTERNAL_KEYS = new Set([
+  '$$typeof', '_context', '_owner', '_store', '_self', '_source',
+  '__esModule', 'default', 'displayName', 'propTypes', 'defaultProps',
+  'contextTypes', 'childContextTypes', 'getDerivedStateFromProps',
+  'getDerivedStateFromError', 'contextType', 'prototype',
+  'render', 'name', 'length', 'caller', 'arguments', 'toString',
+  'valueOf', 'toJSON', '__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED',
+  'unstable_batchedUpdates', '__reactFiber', '__reactProps',
+  'then', 'catch', 'finally', // Promise-like checks
+]);
+
 // Path used by application code: `import { Platform } from 'react-native'`
 jest.mock('react-native', () => {
-  return new Proxy(
-    {
-      Platform:   PLATFORM,
-      StyleSheet: { create: (s: object) => s, flatten: (s: object) => s, hairlineWidth: 1 },
-      I18nManager: { isRTL: false, forceRTL: jest.fn(), allowRTL: jest.fn() },
-      Dimensions:  { get: jest.fn(() => ({ width: 375, height: 812 })), addEventListener: jest.fn(), removeEventListener: jest.fn() },
-      Animated: {
-        Value: jest.fn(() => ({ setValue: jest.fn(), interpolate: jest.fn(() => ({})) })),
-        timing: jest.fn(() => ({ start: jest.fn() })),
-        spring: jest.fn(() => ({ start: jest.fn() })),
-        sequence: jest.fn(() => ({ start: jest.fn() })),
-        parallel: jest.fn(() => ({ start: jest.fn() })),
-        View: 'Animated.View',
-        Text: 'Animated.Text',
-        Image: 'Animated.Image',
-        createAnimatedComponent: jest.fn((c: unknown) => c),
-        event: jest.fn(),
-        add: jest.fn(),
-      },
-      NativeModules: {},
-      NativeEventEmitter: jest.fn(() => ({ addListener: jest.fn(), removeAllListeners: jest.fn() })),
-      AppState: { addEventListener: jest.fn(), removeEventListener: jest.fn(), currentState: 'active' },
-      Linking:  { openURL: jest.fn(), canOpenURL: jest.fn(), getInitialURL: jest.fn(), addEventListener: jest.fn() },
-      Keyboard: { addListener: jest.fn(), removeAllListeners: jest.fn(), dismiss: jest.fn() },
-      Alert:    { alert: jest.fn() },
-      Share:    { share: jest.fn() },
-      Vibration: { vibrate: jest.fn(), cancel: jest.fn() },
-      PixelRatio: { get: jest.fn(() => 2), getFontScale: jest.fn(() => 1), getPixelSizeForLayoutSize: jest.fn((n: number) => n * 2), roundToNearestPixel: jest.fn((n: number) => n) },
-      AccessibilityInfo: { isScreenReaderEnabled: jest.fn(() => Promise.resolve(false)), addEventListener: jest.fn(), removeEventListener: jest.fn(), announceForAccessibility: jest.fn() },
-      Appearance: { getColorScheme: jest.fn(() => 'light'), addChangeListener: jest.fn() },
-      InteractionManager: { runAfterInteractions: jest.fn((cb: () => void) => { cb(); return { cancel: jest.fn() }; }) },
-      View:           'View',
-      Text:           'Text',
-      Image:          'Image',
-      ScrollView:     'ScrollView',
-      FlatList:       'FlatList',
-      SectionList:    'SectionList',
-      TouchableOpacity:     'TouchableOpacity',
-      TouchableHighlight:   'TouchableHighlight',
-      TouchableWithoutFeedback: 'TouchableWithoutFeedback',
-      Pressable:      'Pressable',
-      TextInput:      'TextInput',
-      Modal:          'Modal',
-      ActivityIndicator: 'ActivityIndicator',
-      Switch:         'Switch',
-      SafeAreaView:   'SafeAreaView',
-      KeyboardAvoidingView: 'KeyboardAvoidingView',
-      StatusBar:      { setBarStyle: jest.fn(), setBackgroundColor: jest.fn(), currentHeight: 24 },
+  const rnStubs: Record<string, unknown> = {
+    Platform:   PLATFORM,
+    StyleSheet: { create: (s: object) => s, flatten: (s: object) => s, hairlineWidth: 1 },
+    I18nManager: { isRTL: false, forceRTL: jest.fn(), allowRTL: jest.fn() },
+    Dimensions:  { get: jest.fn(() => ({ width: 375, height: 812 })), addEventListener: jest.fn(), removeEventListener: jest.fn() },
+    Animated: {
+      Value: jest.fn(() => ({ setValue: jest.fn(), interpolate: jest.fn(() => ({})) })),
+      timing: jest.fn(() => ({ start: jest.fn() })),
+      spring: jest.fn(() => ({ start: jest.fn() })),
+      sequence: jest.fn(() => ({ start: jest.fn() })),
+      parallel: jest.fn(() => ({ start: jest.fn() })),
+      View: 'Animated.View',
+      Text: 'Animated.Text',
+      Image: 'Animated.Image',
+      createAnimatedComponent: jest.fn((c: unknown) => c),
+      event: jest.fn(),
+      add: jest.fn(),
     },
-    {
-      get(target: Record<string, unknown>, prop: string) {
-        return prop in target ? target[prop] : jest.fn();
-      },
-    }
-  );
+    NativeModules: {},
+    NativeEventEmitter: jest.fn(() => ({ addListener: jest.fn(), removeAllListeners: jest.fn() })),
+    AppState: { addEventListener: jest.fn(), removeEventListener: jest.fn(), currentState: 'active' },
+    Linking:  { openURL: jest.fn(), canOpenURL: jest.fn(), getInitialURL: jest.fn(), addEventListener: jest.fn() },
+    Keyboard: { addListener: jest.fn(), removeAllListeners: jest.fn(), dismiss: jest.fn() },
+    Alert:    { alert: jest.fn() },
+    Share:    { share: jest.fn() },
+    Vibration: { vibrate: jest.fn(), cancel: jest.fn() },
+    PixelRatio: { get: jest.fn(() => 2), getFontScale: jest.fn(() => 1), getPixelSizeForLayoutSize: jest.fn((n: number) => n * 2), roundToNearestPixel: jest.fn((n: number) => n) },
+    AccessibilityInfo: { isScreenReaderEnabled: jest.fn(() => Promise.resolve(false)), addEventListener: jest.fn(), removeEventListener: jest.fn(), announceForAccessibility: jest.fn() },
+    Appearance: { getColorScheme: jest.fn(() => 'light'), addChangeListener: jest.fn() },
+    InteractionManager: { runAfterInteractions: jest.fn((cb: () => void) => { cb(); return { cancel: jest.fn() }; }) },
+    View:           'View',
+    Text:           'Text',
+    Image:          'Image',
+    ScrollView:     'ScrollView',
+    FlatList:       'FlatList',
+    SectionList:    'SectionList',
+    TouchableOpacity:     'TouchableOpacity',
+    TouchableHighlight:   'TouchableHighlight',
+    TouchableWithoutFeedback: 'TouchableWithoutFeedback',
+    Pressable:      'Pressable',
+    TextInput:      'TextInput',
+    Modal:          'Modal',
+    ActivityIndicator: 'ActivityIndicator',
+    Switch:         'Switch',
+    SafeAreaView:   'SafeAreaView',
+    KeyboardAvoidingView: 'KeyboardAvoidingView',
+    StatusBar:      { setBarStyle: jest.fn(), setBackgroundColor: jest.fn(), currentHeight: 24 },
+  };
+
+  return new Proxy(rnStubs, {
+    get(target, prop) {
+      // 1. Known explicit stubs — always return the real value.
+      if (typeof prop === 'string' && prop in target) return target[prop];
+
+      // 2. React reconciler internals + JS built-ins — return undefined
+      //    silently so React tree traversal never throws.
+      if (typeof prop === 'symbol' && SAFE_FALSY_SYMBOLS.has(prop)) return undefined;
+      if (typeof prop === 'string' && REACT_INTERNAL_KEYS.has(prop))  return undefined;
+
+      // 3. Everything else — THROW so the missing stub is caught immediately.
+      //    This prevents false-positive tests caused by a silent jest.fn()
+      //    standing in for a real RN API that was never stubbed.
+      throw new Error(
+        `[jest.setup.ts] react-native — unstubbed access: "${String(prop)}"\n` +
+        `Add an explicit stub for this key in the rnStubs object in jest.setup.ts.\n` +
+        `Do NOT restore the catch-all jest.fn() fallback.`
+      );
+    },
+  });
 });
 
 // ─── Console suppression ─────────────────────────────────────────────────────
