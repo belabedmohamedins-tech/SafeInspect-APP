@@ -9,15 +9,14 @@ jest.mock('expo-router', () => ({
   useFocusEffect: jest.fn((cb: () => void) => { cb(); }),
 }));
 
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act, waitFor } from '@testing-library/react-native';
 import { useFocusEffect } from 'expo-router';
-import { loadHomeData } from '../utils/loadHomeData';
+import { loadHomeData, HomeData } from '../utils/loadHomeData';
 import { useHomeData } from '../hooks/useHomeData';
-import { HomeData } from '../utils/loadHomeData';
 import { AgendaItem, Facility } from '../types';
 
-const mockLoad = jest.mocked(loadHomeData);
-const mockFocus = jest.mocked(useFocusEffect);
+const mockLoad  = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
+const mockFocus = useFocusEffect as jest.MockedFunction<typeof useFocusEffect>;
 
 const EMPTY_DATA: HomeData = {
   officeName: '',
@@ -26,12 +25,7 @@ const EMPTY_DATA: HomeData = {
   inProgressInspections: [],
   recentFacilities: [],
   userFacilities: [],
-  stats: {
-    totalCompleted: 0,
-    totalDrafts: 0,
-    nonCompliantFacilities: 0,
-    openCapCount: 0,
-  },
+  stats: { totalCompleted: 0, totalDrafts: 0, nonCompliantFacilities: 0, openCapCount: 0 },
 };
 
 const SAMPLE_DATA: HomeData = {
@@ -44,7 +38,6 @@ const SAMPLE_DATA: HomeData = {
   stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
 };
 
-// Make useFocusEffect actually invoke the callback synchronously
 beforeEach(() => {
   jest.clearAllMocks();
   mockFocus.mockImplementation((cb) => { cb(); });
@@ -62,9 +55,8 @@ describe('useHomeData', () => {
 
   it('populates data after loadHomeData resolves', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
-    const { result, waitForNextUpdate } = renderHook(() => useHomeData());
-    await waitForNextUpdate();
-    expect(result.current.officeName).toBe('مكتب الصحة');
+    const { result } = renderHook(() => useHomeData());
+    await waitFor(() => expect(result.current.officeName).toBe('مكتب الصحة'));
     expect(result.current.stats.totalCompleted).toBe(5);
     expect(result.current.stats.openCapCount).toBe(3);
     expect(result.current.agendaItems).toHaveLength(1);
@@ -72,39 +64,34 @@ describe('useHomeData', () => {
 
   it('falls back to empty data when loadHomeData rejects', async () => {
     mockLoad.mockRejectedValue(new Error('network error'));
-    const { result, waitForNextUpdate } = renderHook(() => useHomeData());
-    await waitForNextUpdate();
+    const { result } = renderHook(() => useHomeData());
+    await waitFor(() => expect(mockLoad).toHaveBeenCalled());
     expect(result.current.officeName).toBe('');
     expect(result.current.agendaItems).toEqual([]);
   });
 
   it('re-fetches data on each focus event', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
-    const { waitForNextUpdate } = renderHook(() => useHomeData());
-    await waitForNextUpdate();
-    // Focus fires again
+    renderHook(() => useHomeData());
+    await waitFor(() => expect(mockLoad).toHaveBeenCalledTimes(1));
     act(() => { mockFocus.mock.calls[0][0](); });
-    await waitForNextUpdate();
-    expect(mockLoad).toHaveBeenCalledTimes(2);
+    await waitFor(() => expect(mockLoad).toHaveBeenCalledTimes(2));
   });
 
   describe('getFacilityForAgenda', () => {
     it('returns the matching facility from userFacilities', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
-      const { result, waitForNextUpdate } = renderHook(() => useHomeData());
-      await waitForNextUpdate();
-      const item = SAMPLE_DATA.agendaItems[0];
-      const facility = result.current.getFacilityForAgenda(item);
-      // fac-1 is not in hardcoded facilities so returns from userFacilities
+      const { result } = renderHook(() => useHomeData());
+      await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
+      const facility = result.current.getFacilityForAgenda(SAMPLE_DATA.agendaItems[0]);
       expect(facility?.id).toBe('fac-1');
     });
 
     it('returns undefined when facility is not found', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
-      const { result, waitForNextUpdate } = renderHook(() => useHomeData());
-      await waitForNextUpdate();
-      const unknownItem = { id: 'ag-x', facilityId: 'unknown-999' } as AgendaItem;
-      const facility = result.current.getFacilityForAgenda(unknownItem);
+      const { result } = renderHook(() => useHomeData());
+      await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
+      const facility = result.current.getFacilityForAgenda({ id: 'ax', facilityId: 'unknown-999' } as AgendaItem);
       expect(facility).toBeUndefined();
     });
   });
