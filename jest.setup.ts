@@ -1,43 +1,51 @@
 /**
- * Global Jest setup — runs after the test framework is installed.
+ * jest.setup.ts — LAYER 3 of the mock architecture
+ *
+ * Runs after the test framework is installed (setupFilesAfterEnv).
+ * See jest.config.js for the full 4-layer mock architecture contract.
+ *
+ * RULE FOR THIS FILE:
+ *   Only add mocks here when they CANNOT be handled by moduleNameMapper
+ *   (Layer 2).  The canonical reason is: the mock needs jest.mock() hoisting
+ *   semantics, or it must override something the preset already loaded.
+ *
+ *   ✅ OK here : react-native (Proxy), Platform, safe-area-context
+ *   ❌ NOT here : native module stubs → use moduleNameMapper + __mocks__/
  *
  * Load order:
- *   1. jest.polyfill.js  (setupFiles)   — installs global fetch / TextEncoder
- *   2. jest-expo preset                 — loads @react-native/jest-preset,
- *      which mocks most RN components via mockComponent.js
- *   3. THIS FILE        (setupFilesAfterFramework) — runs last, can override
+ *   1. jest.polyfill.js          — global fetch/Response via undici
+ *   2. jest-expo preset          — @react-native/jest-preset component stubs
+ *   3. THIS FILE (Layer 3)       — behavioral overrides
+ *   4. each test file (Layer 4)  — domain-specific mocks
  *
  * Problem solved here:
  *   jest.mock('react-native', factory) where the factory calls
  *   jest.requireActual('react-native') triggers RN's full module graph
  *   synchronously, including Modal.js which reads Platform.OS before any
- *   Platform mock is in place → "Cannot read properties of undefined (reading 'OS')"
+ *   Platform mock is in place → "Cannot read properties of undefined"
  *
  * Solution: return a purely synthetic object so requireActual is never called
- * inside the factory.  jest-expo's @react-native/jest-preset already provides
- * all the component stubs (FlatList, ScrollView, Modal, …) that tests need.
+ *   inside the factory.  jest-expo's preset already provides all component
+ *   stubs (FlatList, ScrollView, Modal, …) that tests need.
  */
-
-// ─── Expo winter-fetch native module stub ────────────────────────────────────
-jest.mock('expo/src/winter/fetch/ExpoFetchModule', () => ({
-  fetch:    jest.fn(),
-  Headers:  jest.fn(),
-  Request:  jest.fn(),
-  Response: jest.fn(),
-}), { virtual: true });
 
 // ─── react-native-safe-area-context — global stub ────────────────────────────
 //
 // expo-router imports react-native-safe-area-context which calls
 // TurboModuleRegistry.get synchronously at module-load time, before any
-// per-test jest.mock() factory runs.  Providing a global stub here ensures
-// every test file (especially useInspectionList.test.ts) gets a safe version.
+// per-test jest.mock() factory runs.  A global stub here ensures every
+// test file gets a safe version (including useInspectionList.test.ts).
+//
+// Why Layer 3 and not Layer 2 (moduleNameMapper)?
+//   Because jest-expo's preset registers its own transform for this package.
+//   A moduleNameMapper entry would be ignored after the preset runs.
+//   jest.mock() in setupFilesAfterEnv correctly overrides the preset.
 jest.mock('react-native-safe-area-context', () => ({
-  useSafeAreaInsets:    jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
-  useSafeAreaFrame:     jest.fn(() => ({ x: 0, y: 0, width: 375, height: 812 })),
-  SafeAreaProvider:     'SafeAreaProvider',
-  SafeAreaView:         'SafeAreaView',
-  SafeAreaConsumer:     'SafeAreaConsumer',
+  useSafeAreaInsets:     jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
+  useSafeAreaFrame:      jest.fn(() => ({ x: 0, y: 0, width: 375, height: 812 })),
+  SafeAreaProvider:      'SafeAreaProvider',
+  SafeAreaView:          'SafeAreaView',
+  SafeAreaConsumer:      'SafeAreaConsumer',
   SafeAreaInsetsContext: { Consumer: 'SafeAreaInsetsContext.Consumer' },
   initialWindowMetrics: {
     frame:  { x: 0, y: 0, width: 375, height: 812 },
@@ -47,9 +55,14 @@ jest.mock('react-native-safe-area-context', () => ({
 
 // ─── React Native — synthetic Platform mock (BOTH known import paths) ────────
 //
-// We mock the bare 'react-native' module WITHOUT calling requireActual to avoid
-// the circular crash.  We provide only what our source + test files import.
-// Anything else (FlatList, ScrollView, etc.) comes from jest-expo's preset.
+// We mock the bare 'react-native' module WITHOUT calling requireActual to
+// avoid the circular crash.  We provide only what our source + test files
+// import.  Everything else (FlatList, ScrollView, etc.) comes from
+// jest-expo's preset.
+//
+// Why Layer 3 and not Layer 2?
+//   react-native is a virtual module synthesised by Metro/jest-expo.
+//   moduleNameMapper cannot reliably intercept it after the preset runs.
 
 const PLATFORM = {
   OS:      'android' as const,
@@ -64,15 +77,7 @@ const PLATFORM = {
 jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 
 // Path used by application code: `import { Platform } from 'react-native'`
-// We extend jest-expo's auto-mock with a safe Platform override.
-// Using jest.mock with a manual factory but WITHOUT requireActual stops
-// the circular crash.  The factory returns a proxy-like object: everything
-// maps to jest.fn() except Platform which we control.
 jest.mock('react-native', () => {
-  // jest-expo has already registered @react-native/jest-preset mocks;
-  // we only need to surface Platform and a handful of primitives.
-  // Other exports (View, Text, StyleSheet, etc.) are provided by
-  // jest-expo's automocking layer automatically.
   return new Proxy(
     {
       Platform:   PLATFORM,
@@ -104,8 +109,6 @@ jest.mock('react-native', () => {
       AccessibilityInfo: { isScreenReaderEnabled: jest.fn(() => Promise.resolve(false)), addEventListener: jest.fn(), removeEventListener: jest.fn(), announceForAccessibility: jest.fn() },
       Appearance: { getColorScheme: jest.fn(() => 'light'), addChangeListener: jest.fn() },
       InteractionManager: { runAfterInteractions: jest.fn((cb: () => void) => { cb(); return { cancel: jest.fn() }; }) },
-      // Components — returned as simple string tags (jest-expo's preset handles
-      // the real mocked components; these cover direct imports in non-component tests)
       View:           'View',
       Text:           'Text',
       Image:          'Image',
@@ -126,8 +129,6 @@ jest.mock('react-native', () => {
     },
     {
       get(target: Record<string, unknown>, prop: string) {
-        // Return known properties; for anything else return a jest.fn()
-        // so imports don't crash even if we didn't list them explicitly.
         return prop in target ? target[prop] : jest.fn();
       },
     }
@@ -135,6 +136,8 @@ jest.mock('react-native', () => {
 });
 
 // ─── Console suppression ─────────────────────────────────────────────────────
+// Suppress known noisy warnings from RN/Expo internals that are not test
+// failures.  Real errors still surface.
 const _consoleError = console.error.bind(console);
 const _consoleWarn  = console.warn.bind(console);
 
