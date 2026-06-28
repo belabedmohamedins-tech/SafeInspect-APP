@@ -22,11 +22,12 @@
       "**/__tests__/**/*.test.tsx"
     ],
     "moduleNameMapper": {
+      "^expo-modules-core$": "<rootDir>/__mocks__/expo-modules-core.js",
       "^expo-file-system/legacy$": "<rootDir>/src/__mocks__/expo-file-system-legacy.ts",
       "@react-native-async-storage/async-storage": "<rootDir>/__mocks__/@react-native-async-storage/async-storage.js"
     },
     "transformIgnorePatterns": [
-      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))"
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))"
     ]
   }
 }
