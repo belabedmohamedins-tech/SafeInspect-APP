@@ -53,26 +53,26 @@ describe('useHomeData', () => {
   it('starts with empty data before loadHomeData resolves', () => {
     mockLoad.mockReturnValue(new Promise(() => {})); // never resolves
     const { result } = renderHook(() => useHomeData(), { wrapper });
-    expect(result.current.officeName).toBe('');
-    expect(result.current.agendaItems).toEqual([]);
-    expect(result.current.stats.totalCompleted).toBe(0);
+    expect(result.officeName).toBe('');
+    expect(result.agendaItems).toEqual([]);
+    expect(result.stats.totalCompleted).toBe(0);
   });
 
   it('populates data after loadHomeData resolves', async () => {
     mockLoad.mockResolvedValue(SAMPLE_DATA);
     const { result } = renderHook(() => useHomeData(), { wrapper });
-    await waitFor(() => expect(result.current.officeName).toBe('\u0645\u0643\u062a\u0628 \u0627\u0644\u0635\u062d\u0629'));
-    expect(result.current.stats.totalCompleted).toBe(5);
-    expect(result.current.stats.openCapCount).toBe(3);
-    expect(result.current.agendaItems).toHaveLength(1);
+    await waitFor(() => expect(result.officeName).toBe('\u0645\u0643\u062a\u0628 \u0627\u0644\u0635\u062d\u0629'));
+    expect(result.stats.totalCompleted).toBe(5);
+    expect(result.stats.openCapCount).toBe(3);
+    expect(result.agendaItems).toHaveLength(1);
   });
 
   it('falls back to empty data when loadHomeData rejects', async () => {
     mockLoad.mockRejectedValue(new Error('network error'));
     const { result } = renderHook(() => useHomeData(), { wrapper });
     await waitFor(() => expect(mockLoad).toHaveBeenCalled());
-    expect(result.current.officeName).toBe('');
-    expect(result.current.agendaItems).toEqual([]);
+    expect(result.officeName).toBe('');
+    expect(result.agendaItems).toEqual([]);
   });
 
   it('re-fetches data on each focus event', async () => {
@@ -89,16 +89,16 @@ describe('useHomeData', () => {
     it('returns the matching facility from userFacilities', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
       const { result } = renderHook(() => useHomeData(), { wrapper });
-      await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
-      const facility = result.current.getFacilityForAgenda(SAMPLE_DATA.agendaItems[0]);
+      await waitFor(() => expect(result.userFacilities).toHaveLength(1));
+      const facility = result.getFacilityForAgenda(SAMPLE_DATA.agendaItems[0]);
       expect(facility?.id).toBe('fac-1');
     });
 
     it('returns undefined when facility is not found', async () => {
       mockLoad.mockResolvedValue(SAMPLE_DATA);
       const { result } = renderHook(() => useHomeData(), { wrapper });
-      await waitFor(() => expect(result.current.userFacilities).toHaveLength(1));
-      const facility = result.current.getFacilityForAgenda({ id: 'ax', facilityId: 'unknown-999' } as AgendaItem);
+      await waitFor(() => expect(result.userFacilities).toHaveLength(1));
+      const facility = result.getFacilityForAgenda({ id: 'ax', facilityId: 'unknown-999' } as AgendaItem);
       expect(facility).toBeUndefined();
     });
   });
