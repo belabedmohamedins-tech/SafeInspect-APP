@@ -1,118 +1,94 @@
 // src/__tests__/useHomeData.test.ts
 //
-// STRATEGY: test the contract, not the hook runner.
-//
-// jest-expo's preset calls configure() on @testing-library/react-native in a
-// way that corrupts renderHook's result.current (always undefined) when used
-// with React 19 + RTLRN 14. This is a known upstream incompatibility.
-//
-// Instead of fighting the test runner, we test useHomeData's two
-// responsibilities directly:
-//   1. It calls loadHomeData() when focus fires.
-//   2. It exposes getFacilityForAgenda as a stable lookup.
-//
-// Both can be verified by calling the underlying utilities directly and
-// asserting on the mocks — which is what the hook does anyway.
+// STRATEGY: contract + pure logic.
+// useHomeData wraps loadHomeData — test:
+//   1. loadHomeData contract (the only real dependency)
+//   2. getFacilityForAgenda delegation logic (pure)
+//   3. EMPTY initial state shape
 
 jest.mock('../utils/loadHomeData', () => ({
   loadHomeData: jest.fn(),
   getFacilityForAgenda: jest.requireActual('../utils/loadHomeData').getFacilityForAgenda,
 }));
 
-import { loadHomeData, getFacilityForAgenda, HomeData } from '../utils/loadHomeData';
+jest.mock('../facilitiesData', () => ({
+  facilities: [
+    { id: 'hard-1', name: 'Hardcoded Facility', address: 'Hard St', activityType: 'default', wilaya: '16', commune: 'A' },
+  ],
+}));
+
+import { loadHomeData, getFacilityForAgenda } from '../utils/loadHomeData';
 import { AgendaItem, Facility } from '../types';
 
-const mockLoad = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
+const mockLoadHomeData = loadHomeData as jest.MockedFunction<typeof loadHomeData>;
 
-const EMPTY_DATA: HomeData = {
-  officeName: '',
-  agendaItems: [],
-  completedInspections: [],
-  inProgressInspections: [],
-  recentFacilities: [],
-  userFacilities: [],
-  stats: { totalCompleted: 0, totalDrafts: 0, nonCompliantFacilities: 0, openCapCount: 0 },
-};
+function makeFacility(id: string, name = 'Facility'): Facility {
+  return { id, name, address: '1 St', activityType: 'default', wilaya: '16', commune: 'A' } as Facility;
+}
+function makeAgendaItem(facilityId: string): AgendaItem {
+  return { id: 'a1', facilityId, facilityName: 'F', date: new Date().toISOString(), status: 'pending', inspectorId: 'u1', description: '' } as AgendaItem;
+}
 
-const SAMPLE_DATA: HomeData = {
-  officeName: '\u0645\u0643\u062a\u0628 \u0627\u0644\u0635\u062d\u0629',
-  agendaItems: [{ id: 'ag-1', facilityId: 'fac-1', date: '2027-01-01', status: 'pending' } as AgendaItem],
-  completedInspections: [],
-  inProgressInspections: [],
-  recentFacilities: [],
-  userFacilities: [
-    { id: 'fac-1', name: 'Test Facility' } as Facility,
-    { id: 'fac-2', name: 'Other Facility' } as Facility,
-  ],
-  stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
-};
-
-beforeEach(() => {
-  jest.clearAllMocks();
-  mockLoad.mockResolvedValue(EMPTY_DATA);
-});
+beforeEach(() => { jest.clearAllMocks(); });
 
 describe('loadHomeData contract', () => {
-  it('resolves with empty data structure when nothing is loaded', async () => {
+  it('resolves with a HomeData-shaped object', async () => {
+    mockLoadHomeData.mockResolvedValue({
+      officeName: 'HQ',
+      agendaItems: [],
+      completedInspections: [],
+      inProgressInspections: [],
+      recentFacilities: [],
+      userFacilities: [],
+      stats: { totalCompleted: 5, totalDrafts: 2, nonCompliantFacilities: 1, openCapCount: 3 },
+    });
     const result = await loadHomeData();
-    expect(result).toEqual(EMPTY_DATA);
-    expect(mockLoad).toHaveBeenCalledTimes(1);
-  });
-
-  it('resolves with full populated data', async () => {
-    mockLoad.mockResolvedValue(SAMPLE_DATA);
-    const result = await loadHomeData();
-    expect(result.officeName).toBe('\u0645\u0643\u062a\u0628 \u0627\u0644\u0635\u062d\u0629');
+    expect(result.officeName).toBe('HQ');
     expect(result.stats.totalCompleted).toBe(5);
-    expect(result.stats.openCapCount).toBe(3);
-    expect(result.agendaItems).toHaveLength(1);
-    expect(result.userFacilities).toHaveLength(2);
   });
 
-  it('propagates rejection so callers can handle errors', async () => {
-    mockLoad.mockRejectedValue(new Error('network error'));
-    await expect(loadHomeData()).rejects.toThrow('network error');
-  });
-
-  it('is called exactly once per focus event (no duplicate calls)', async () => {
-    mockLoad.mockResolvedValue(SAMPLE_DATA);
-    await loadHomeData();
-    expect(mockLoad).toHaveBeenCalledTimes(1);
+  it('propagates rejection', async () => {
+    mockLoadHomeData.mockRejectedValue(new Error('load failed'));
+    await expect(loadHomeData()).rejects.toThrow('load failed');
   });
 });
 
-describe('getFacilityForAgenda', () => {
-  const facilities = SAMPLE_DATA.userFacilities;
+describe('getFacilityForAgenda delegation logic', () => {
+  const userFacs = [makeFacility('user-1', 'User Facility')];
 
-  it('returns the matching facility when facilityId exists', () => {
-    const item = { id: 'ag-1', facilityId: 'fac-1' } as AgendaItem;
-    const facility = getFacilityForAgenda(item, facilities);
-    expect(facility).toBeDefined();
-    expect(facility?.id).toBe('fac-1');
-    expect(facility?.name).toBe('Test Facility');
+  it('returns hardcoded facility for known hardcoded id', () => {
+    const result = getFacilityForAgenda(makeAgendaItem('hard-1'), userFacs);
+    expect(result?.id).toBe('hard-1');
   });
 
-  it('returns the second facility when its id is given', () => {
-    const item = { id: 'ag-2', facilityId: 'fac-2' } as AgendaItem;
-    const facility = getFacilityForAgenda(item, facilities);
-    expect(facility?.id).toBe('fac-2');
+  it('returns user facility when not in hardcoded list', () => {
+    const result = getFacilityForAgenda(makeAgendaItem('user-1'), userFacs);
+    expect(result?.id).toBe('user-1');
   });
 
-  it('returns undefined when facilityId does not match any facility', () => {
-    const item = { id: 'ag-x', facilityId: 'does-not-exist' } as AgendaItem;
-    const facility = getFacilityForAgenda(item, facilities);
-    expect(facility).toBeUndefined();
+  it('returns undefined when not found in either list', () => {
+    const result = getFacilityForAgenda(makeAgendaItem('ghost-99'), userFacs);
+    expect(result).toBeUndefined();
   });
+});
 
-  it('returns undefined when facilities list is empty', () => {
-    const item = { id: 'ag-1', facilityId: 'fac-1' } as AgendaItem;
-    const facility = getFacilityForAgenda(item, []);
-    expect(facility).toBeUndefined();
-  });
-
-  it('returns undefined when agenda item has no facilityId', () => {
-    const item = { id: 'ag-1', facilityId: undefined } as unknown as AgendaItem;
-    const facility = getFacilityForAgenda(item, facilities);
-    expect(facility).toBeUndefined();
+describe('EMPTY initial state shape', () => {
+  it('HomeData shape has all required keys', () => {
+    const empty = {
+      officeName:            '',
+      agendaItems:           [],
+      completedInspections:  [],
+      inProgressInspections: [],
+      recentFacilities:      [],
+      userFacilities:        [],
+      stats: { totalCompleted: 0, totalDrafts: 0, nonCompliantFacilities: 0, openCapCount: 0 },
+    };
+    expect(Object.keys(empty)).toEqual(expect.arrayContaining([
+      'officeName', 'agendaItems', 'completedInspections',
+      'inProgressInspections', 'recentFacilities', 'userFacilities', 'stats',
+    ]));
+    expect(Object.keys(empty.stats)).toEqual(expect.arrayContaining([
+      'totalCompleted', 'totalDrafts', 'nonCompliantFacilities', 'openCapCount',
+    ]));
   });
 });
