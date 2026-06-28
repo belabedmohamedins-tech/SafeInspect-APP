@@ -8,8 +8,7 @@ module.exports = {
   // missing globals, and ExpoFetchModule never crashes the suite.
   setupFiles: ['<rootDir>/jest.polyfill.js'],
 
-  setupFilesAfterFramework: ['<rootDir>/jest.setup.ts'],
-  setupFilesAfterEnv:       ['<rootDir>/jest.setup.ts'],
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   testMatch: [
     '**/__tests__/**/*.test.ts?(x)',

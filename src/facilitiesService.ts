@@ -57,12 +57,13 @@ export const getUserFacilities = async (): Promise<Facility[]> => {
  * Full-text search across projectName, ownerName, address, and activity.
  * - Case-insensitive.
  * - Diacritic-insensitive (Arabic tashkeel stripped before comparison).
- * - Empty / whitespace-only query returns the full facility list.
+ * - Empty / whitespace-only query returns [] (no query = no results).
  */
 export const searchFacilities = async (query: string): Promise<Facility[]> => {
   const q = normaliseArabic(query.trim());
+  if (!q) return [];
+
   const all = await getAllFacilities();
-  if (!q) return all;
 
   return all.filter(f => {
     const haystack = normaliseArabic(
