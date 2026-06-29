@@ -12,13 +12,20 @@
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
 //
-// NOTE: SYNC_API_URL is read lazily via getSyncApiUrl() so env mutations in
-// tests are visible without module reloading. Mutate process.env IN-PLACE
-// (process.env.KEY = value) — never replace the whole object — so every
-// module that holds a reference to process.env sees the change.
+// FETCH NOTE: we call globalThis.fetch() rather than bare fetch().
+//   Babel compiles bare `fetch(...)` as a lexical reference captured at
+//   module-load time.  In Jest, SyncService is loaded and cached before the
+//   test file assigns `global.fetch = mockFetch`, so the captured reference
+//   points to undici's real fetch instead of the mock.
+//   globalThis.fetch is a property lookup resolved at call time, so it always
+//   picks up the current value of global.fetch — including the jest.fn() mock.
 //
-// NetInfo uses require() (not dynamic import()) so moduleNameMapper always
-// routes it to the __mocks__ stub synchronously.
+// ENV NOTE: SYNC_API_URL is read lazily via getSyncApiUrl() so in-place
+//   process.env mutations (process.env.KEY = value) are visible without
+//   module reloading.
+//
+// NETINFO NOTE: uses require() (not dynamic import) so moduleNameMapper always
+//   routes it to the __mocks__ stub synchronously.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
@@ -116,7 +123,8 @@ export async function flush(): Promise<number> {
 
   for (const item of queue) {
     try {
-      const res = await fetch(`${SYNC_API_URL}/inspections`, {
+      // globalThis.fetch — resolved at call time so the jest mock is visible.
+      const res = await globalThis.fetch(`${SYNC_API_URL}/inspections`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(item.inspection),
