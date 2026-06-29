@@ -1,25 +1,10 @@
 // src/__tests__/NotificationService.test.ts
 //
-// expo-constants must be mocked BEFORE the service is imported so that
-// IS_EXPO_GO = Constants.appOwnership === 'expo' evaluates to false,
-// allowing the lazy `require('expo-notifications')` branch to execute
-// and populate the module-level `Notifications` variable.
-
-jest.mock('expo-constants', () => ({
-  default: { appOwnership: 'standalone' },
-}));
-
-jest.mock('expo-notifications', () => ({
-  scheduleNotificationAsync:            jest.fn(),
-  cancelScheduledNotificationAsync:     jest.fn(),
-  cancelAllScheduledNotificationsAsync: jest.fn(),
-  setNotificationChannelAsync:          jest.fn(),
-  getPermissionsAsync:                  jest.fn(),
-  requestPermissionsAsync:              jest.fn(),
-  setNotificationHandler:               jest.fn(),
-  AndroidImportance: { HIGH: 4, DEFAULT: 3, LOW: 2, MIN: 1, NONE: 0 },
-  SchedulableTriggerInputTypes: { DATE: 'date', TIME_INTERVAL: 'timeInterval' },
-}));
+// expo-constants is globally mocked via moduleNameMapper (jest.config.js) with
+// appOwnership: 'standalone', so IS_EXPO_GO = false and the lazy
+// require('expo-notifications') branch executes at module load, populating
+// the module-level `Notifications` variable.
+// expo-notifications is also globally mocked via moduleNameMapper.
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';

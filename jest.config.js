@@ -22,7 +22,7 @@ module.exports = {
     '<rootDir>/src/__tests__/**/*.test.tsx',
   ],
 
-  // ─── Coverage ───────────────────────────────────────────────────────────────
+  // ─── Coverage ───────────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
 
@@ -42,7 +42,7 @@ module.exports = {
     '!src/app/**',
   ],
 
-  // ─── Thresholds ─────────────────────────────────────────────────────────────
+  // ─── Thresholds ────────────────────────────────────────────────────────────────
   // Last passing run: branches 79.73 / functions 97.42 / lines 95.21 / stmts 93.66
   // Set slightly below current to give headroom while blocking regressions.
   coverageThreshold: {
@@ -70,6 +70,8 @@ module.exports = {
     // absorbs them as empty stubs, otherwise getItemAsync etc. are undefined.
     '^expo-secure-store$':                    '<rootDir>/__mocks__/expo-secure-store.js',
     '^expo-local-authentication$':            '<rootDir>/__mocks__/expo-local-authentication.js',
+    // expo-constants: override jest-expo preset default so IS_EXPO_GO = false
+    '^expo-constants$':                       '<rootDir>/__mocks__/expo-constants.js',
   },
 
   // ⚠️ FRAGILE — Last audited: June 2026 (RN 0.76, Expo SDK 52)
