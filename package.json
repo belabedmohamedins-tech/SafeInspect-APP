@@ -20,7 +20,7 @@
     "expo": "~52.0.46",
     "expo-constants": "~17.0.8",
     "expo-file-system": "~18.0.12",
-    "expo-local-authentication": "~14.0.3",
+    "expo-local-authentication": "~13.0.2",
     "expo-notifications": "~0.29.14",
     "expo-print": "~13.0.2",
     "expo-router": "~4.0.20",
