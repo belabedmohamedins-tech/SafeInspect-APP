@@ -15,6 +15,7 @@ export const StorageKeys = {
   CAP_NOTIF_LAST_RUN:      'CAP_NOTIF_LAST_RUN',
   SYNC_QUEUE:              'SYNC_QUEUE',
   SYNC_LAST_RUN:           'SYNC_LAST_RUN',
+  STATS_CACHE:             'STATS_CACHE',
   BACKUP_LAST_AT:          'BACKUP_LAST_AT',
   // Auth keys
   APP_PIN:                 'APP_PIN',
