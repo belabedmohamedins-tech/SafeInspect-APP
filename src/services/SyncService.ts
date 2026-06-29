@@ -14,9 +14,9 @@
 //
 // NOTE: SYNC_API_URL is read lazily so jest.resetModules() + env mutation
 // exercises both branches without module caching.
-// NetInfo uses dynamic import() — the __mocks__ file (always loaded via
-// moduleNameMapper) is resolved at call time and its fetch() is already
-// set to resolve { isConnected: true } by default.
+// NetInfo uses require() — the __mocks__ file (always loaded via
+// moduleNameMapper) is resolved synchronously from the live Jest registry
+// so its fetch() is guaranteed to be the mock stub.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
@@ -57,10 +57,11 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
 
 async function checkOnline(): Promise<boolean> {
   try {
-    // dynamic import() — moduleNameMapper always routes this to the __mocks__
-    // file whose fetch() resolves to { isConnected: true } by default.
-    const NetInfo = await import('@react-native-community/netinfo');
-    const state = await NetInfo.default.fetch();
+    // require() instead of dynamic import() — moduleNameMapper routes this
+    // synchronously to the __mocks__ stub so Jest tests always hit the mock.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NetInfo = (require('@react-native-community/netinfo') as { default: { fetch: () => Promise<{ isConnected: boolean | null; isInternetReachable: boolean | null }> } }).default;
+    const state = await NetInfo.fetch();
     return state.isConnected === true && state.isInternetReachable !== false;
   } catch {
     return true;
