@@ -1,18 +1,14 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
 // Web-branch strategy:
-//   AuthRepository exports `isNative` (Platform.OS !== 'web') as a named const
-//   frozen at require() time.  To test the web branch we use jest.isolateModules()
-//   inside beforeAll — which runs at execution time, after all setup files — to
-//   get a fresh copy of the module with Platform.OS temporarily set to 'web'.
+//   AuthRepository exports `isNative` frozen at require() time.
+//   We get a web copy by patching Platform.OS before an isolated require().
 //
-//   CRITICAL: do NOT call jest.resetModules() before isolateModules().  That
-//   wipes the mock registry so the isolated AuthRepository gets a raw
-//   (non-mock) AsyncStorage whose setItem/getItem are no-ops, causing getPin()
-//   to return null.
-//
-//   Instead, we only re-require AuthRepository.  Platform, AsyncStorage,
-//   SecureStore and LocalAuth stay in the registry as the correct mocks.
+//   jest.isolateModules() is synchronous — the callback runs immediately.
+//   We assign WebAuth inside the callback (synchronously) so it is ready
+//   before any test in the describe block runs.
+//   We do NOT call jest.resetModules() — that would wipe the AsyncStorage
+//   mock from the registry and break getPin/setPin.
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -34,7 +30,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-// ─── Native-platform tests ───────────────────────────────────────────────────
+// ─── Native-platform tests ──────────────────────────────────────────────────
 describe('AuthRepository', () => {
   describe('PIN management', () => {
     it('returns null when no PIN is set', async () => {
@@ -149,22 +145,17 @@ describe('AuthRepository', () => {
 });
 
 // ─── Web-platform branches ───────────────────────────────────────────────────
-// We get a fresh AuthRepository whose isNative = false by temporarily
-// patching Platform.OS before the isolated require().
-// The PLATFORM object in jest.setup.ts is a plain object (not a Proxy —
-// the Proxy wraps the rnStubs map for the 'react-native' module, but
-// 'react-native/Libraries/Utilities/Platform' is mapped directly to PLATFORM).
-// Writing to PLATFORM.OS is therefore a plain property assignment and
-// is immediately visible to the next require() of AuthRepository.
+// jest.isolateModules() is synchronous: the callback runs immediately and
+// WebAuth is assigned before beforeAll resolves. No Promise/done wrapper
+// needed — just call isolateModules() directly inside beforeAll.
 describe('AuthRepository — web platform (isNative = false)', () => {
   let WebAuth: typeof AuthRepository;
 
-  beforeAll(done => {
+  beforeAll(() => {
     jest.isolateModules(() => {
       (Platform as any).OS = 'web';
       WebAuth = require('../../repositories/AuthRepository').AuthRepository;
       (Platform as any).OS = 'android';
-      done();
     });
   });
 

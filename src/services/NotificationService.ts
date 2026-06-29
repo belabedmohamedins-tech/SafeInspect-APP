@@ -22,21 +22,19 @@ import { StorageKeys } from '../repositories/keys';
 // getNotifications() returns the expo-notifications module, or null when
 // running in Expo Go (SDK 53+ dropped notification support there).
 // Evaluated lazily on each call so that Jest can mock expo-constants and
-// expo-notifications before the first function is invoked, without needing
-// IS_EXPO_GO to be a module-level constant frozen at import time.
+// expo-notifications before the first function is invoked.
 function getNotifications(): typeof import('expo-notifications') | null {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const Constants = require('expo-constants').default ?? require('expo-constants');
     if (Constants.appOwnership === 'expo') return null;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('expo-notifications');
   } catch {
     return null;
   }
 }
 
-// Run the notification handler setup once, the first time we successfully
-// obtain the Notifications module.
 let _handlerInstalled = false;
 function getNotificationsWithHandler(): typeof import('expo-notifications') | null {
   const N = getNotifications();
@@ -60,7 +58,7 @@ export interface AgendaNotificationPayload {
   notes?: string;
 }
 
-// ─── Permission ───────────────────────────────────────────────────────────────────
+// ─── Permission ───────────────────────────────────────────────────────────────
 
 export async function requestPermission(): Promise<boolean> {
   const Notifications = getNotificationsWithHandler();
@@ -88,7 +86,7 @@ export async function requestPermission(): Promise<boolean> {
   }
 }
 
-// ─── User preference ─────────────────────────────────────────────────────────────────
+// ─── User preference ─────────────────────────────────────────────────────────
 
 export async function isEnabled(): Promise<boolean> {
   try {
@@ -107,13 +105,13 @@ export async function setEnabled(enabled: boolean): Promise<void> {
   }
 }
 
-// ─── Schedule / Cancel ────────────────────────────────────────────────────────────────
+// ─── Schedule / Cancel ───────────────────────────────────────────────────────
 
 export async function scheduleForAgendaItem(
   item: AgendaNotificationPayload
 ): Promise<void> {
   const Notifications = getNotificationsWithHandler();
-  if (!Notifications) return; // Expo Go — silent no-op
+  if (!Notifications) return;
   try {
     const enabled = await isEnabled();
     if (!enabled) return;
@@ -126,6 +124,7 @@ export async function scheduleForAgendaItem(
 
     await cancelForAgendaItem(item.id);
 
+    // Trigger 1: 1 hour before the appointment
     const preDate = new Date(itemDate.getTime() - 60 * 60 * 1000);
     if (preDate > now) {
       await Notifications.scheduleNotificationAsync({
@@ -140,9 +139,13 @@ export async function scheduleForAgendaItem(
       });
     }
 
+    // Trigger 2: morning-of reminder at 08:00 on the day of the appointment.
+    // Condition: morning time must still be in the future.
+    // We intentionally do NOT require morningDate < itemDate — an 08:00 reminder
+    // is useful even when the appointment itself is before 08:00 (e.g. 07:30).
     const morningDate = new Date(itemDate);
     morningDate.setHours(8, 0, 0, 0);
-    if (morningDate > now && morningDate < itemDate) {
+    if (morningDate > now) {
       await Notifications.scheduleNotificationAsync({
         identifier: `agenda-${item.id}-day`,
         content: {
