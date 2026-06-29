@@ -3,9 +3,18 @@ import { abattoirSpecificCriteria } from './criteria/abattoirCriteria';
 import { bakerySpecificCriteria } from './criteria/bakeryCriteria';
 import { baseFoodCriteria } from './criteria/baseFoodCriteria';
 import { baseGeneralCriteria } from './criteria/baseGeneralCriteria';
+import { blacksmithCriteria } from './criteria/blacksmithCriteria';
+import { carpenteryCriteria } from './criteria/carpenteryCriteria';
+import { carWashCriteria } from './criteria/carWashCriteria';
 import { coldRoomSpecificCriteria } from './criteria/coldRoomCriteria';
 import { couvoirSpecificCriteria } from './criteria/couvoirCriteria';
+import { gplCriteria } from './criteria/gplCriteria';
+import { marbleCriteria } from './criteria/marbleCriteria';
 import { mechanicWorkshopCriteria } from './criteria/mechanicCriteria';
+import { paintShopCriteria } from './criteria/paintShopCriteria';
+import { printingCriteria } from './criteria/printingCriteria';
+import { produceStorageCriteria } from './criteria/produceStorageCriteria';
+import { semiPharmaCriteria } from './criteria/semiPharmaCriteria';
 import { slaughterhouseSmallCriteria } from './criteria/slaughterhouseSmallCriteria';
 import { uabSpecificCriteria } from './criteria/uabCriteria';
 import { updSpecificCriteria } from './criteria/updCriteria';
@@ -58,6 +67,52 @@ const mechanicChecklist: InspectionItem[] = [
   ...mechanicWorkshopCriteria,
 ];
 
+const blacksmithChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...blacksmithCriteria,
+];
+
+const carpenteryChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...carpenteryCriteria,
+];
+
+const carWashChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...carWashCriteria,
+];
+
+const gplChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...gplCriteria,
+];
+
+const marbleChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...marbleCriteria,
+];
+
+const paintShopChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...paintShopCriteria,
+];
+
+const printingChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...printingCriteria,
+];
+
+const produceStorageChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...baseFoodCriteria,
+  ...produceStorageCriteria,
+];
+
+const semiPharmaChecklist: InspectionItem[] = [
+  ...baseGeneralCriteria,
+  ...semiPharmaCriteria,
+];
+
 export const criteriaByActivity: Record<string, InspectionItem[]> = {
   default: baseGeneralCriteria,
   'الديوان الوطني لأغذية الأنعام': uabChecklist,
@@ -79,4 +134,18 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'تربية الدواجن (03 حظائر)': updChecklist,
   'تربية الدواجن (حظيرتين)': updChecklist,
   'تربية الدواجن (حظيرة)': updChecklist,
+  // ── New activity types ──────────────────────────────────────────────────
+  'ورشة حدادة': blacksmithChecklist,
+  'صناعة سياج': blacksmithChecklist,
+  'ورشة نجارة': carpenteryChecklist,
+  'ورشة ألمنيوم': carpenteryChecklist,
+  'غسل وتشحيم السيارات': carWashChecklist,
+  'تركيب GPL': gplChecklist,
+  'تركيب GPL/C': gplChecklist,
+  'صناعة الرخام': marbleChecklist,
+  'ورشة طلاء السيارات': paintShopChecklist,
+  'مطبعة': printingChecklist,
+  'لوازم مدرسية ومكاتب': printingChecklist,
+  'وحدة تخزين الزيتون والخضر': produceStorageChecklist,
+  'تعبئة مواد شبه صيدلانية': semiPharmaChecklist,
 };
