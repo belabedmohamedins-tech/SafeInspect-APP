@@ -18,6 +18,11 @@
 // NOTE: SYNC_API_URL is intentionally read lazily (inside each function) so
 // that tests can mutate process.env + call jest.resetModules() to exercise
 // both the "no URL" and "URL configured" branches without module caching.
+//
+// NOTE: checkOnline() uses require() instead of import() for the same reason:
+// jest.mock() only intercepts require() and static imports — NOT dynamic
+// import() calls — so after jest.resetModules() a dynamic import() would
+// bypass the mock registry and hit the real (or stale) module.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
@@ -59,8 +64,11 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
 
 async function checkOnline(): Promise<boolean> {
   try {
-    // Lazy import so Expo Go (which may have NetInfo quirks) doesn't crash
-    const NetInfo = await import('@react-native-community/netinfo');
+    // Lazy require() — NOT import() — so jest.mock() interception works
+    // correctly after jest.resetModules() in tests.  Dynamic import() bypasses
+    // the Jest mock registry; require() does not.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NetInfo = require('@react-native-community/netinfo') as typeof import('@react-native-community/netinfo');
     const state = await NetInfo.default.fetch();
     return state.isConnected === true && state.isInternetReachable !== false;
   } catch {
