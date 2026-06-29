@@ -9,33 +9,26 @@
 //     can also be triggered manually from the Backup screen.
 //   - Each item is POSTed to SYNC_API_URL.  On 2xx the item is dequeued.
 //     On network error or non-2xx the item stays in the queue for the next run.
-//   - Conflict resolution: the server should compare updatedAt and keep the
-//     newest version (last-write-wins).  The client always sends the full
-//     inspection object.
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
 //
-// NOTE: SYNC_API_URL is intentionally read lazily (inside each function) so
-// that tests can mutate process.env + call jest.resetModules() to exercise
-// both the "no URL" and "URL configured" branches without module caching.
-//
-// NOTE: checkOnline() uses require() instead of import() for the same reason:
-// jest.mock() only intercepts require() and static imports — NOT dynamic
-// import() calls — so after jest.resetModules() a dynamic import() would
-// bypass the mock registry and hit the real (or stale) module.
+// NOTE: SYNC_API_URL is read lazily so jest.resetModules() + env mutation
+// exercises both branches without module caching.
+// NetInfo uses dynamic import() — the __mocks__ file (always loaded via
+// moduleNameMapper) is resolved at call time and its fetch() is already
+// set to resolve { isConnected: true } by default.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
 
-/** Read the API URL fresh each call — lets jest.resetModules() + env work. */
 function getSyncApiUrl(): string | undefined {
   return (process.env.EXPO_PUBLIC_SYNC_API_URL ?? '').trim() || undefined;
 }
 
 export interface SyncQueueItem {
   inspection: SavedInspection;
-  queuedAt: string;   // ISO timestamp
+  queuedAt: string;
   attempts: number;
 }
 
@@ -45,7 +38,7 @@ export interface SyncStatus {
   isOnline: boolean;
 }
 
-// ─── Queue helpers ────────────────────────────────────────────────────────────
+// ── Queue helpers ──────────────────────────────────────────────────────────────
 
 async function readQueue(): Promise<SyncQueueItem[]> {
   try {
@@ -60,30 +53,22 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(queue));
 }
 
-// ─── Network check ───────────────────────────────────────────────────────────
+// ── Network check ──────────────────────────────────────────────────────────────
 
 async function checkOnline(): Promise<boolean> {
   try {
-    // Lazy require() — NOT import() — so jest.mock() interception works
-    // correctly after jest.resetModules() in tests.  Dynamic import() bypasses
-    // the Jest mock registry; require() does not.
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const NetInfo = require('@react-native-community/netinfo') as typeof import('@react-native-community/netinfo');
+    // dynamic import() — moduleNameMapper always routes this to the __mocks__
+    // file whose fetch() resolves to { isConnected: true } by default.
+    const NetInfo = await import('@react-native-community/netinfo');
     const state = await NetInfo.default.fetch();
     return state.isConnected === true && state.isInternetReachable !== false;
   } catch {
-    // If NetInfo is not installed, assume online and let the fetch decide
     return true;
   }
 }
 
-// ─── Public API ───────────────────────────────────────────────────────────────
+// ── Public API ────────────────────────────────────────────────────────────────
 
-/**
- * Add or update an inspection in the sync queue.
- * Idempotent: if an entry with the same id already exists it is replaced
- * with the latest version (higher updatedAt wins).
- */
 export async function enqueue(inspection: SavedInspection): Promise<void> {
   const queue = await readQueue();
   const idx = queue.findIndex(q => q.inspection.id === inspection.id);
@@ -95,7 +80,6 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
   };
 
   if (idx >= 0) {
-    // Keep whichever version is newer
     const existing = queue[idx].inspection;
     const existingTs = existing.updatedAt ?? existing.date ?? '';
     const incomingTs = inspection.updatedAt ?? inspection.date ?? '';
@@ -109,11 +93,6 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
   await writeQueue(queue);
 }
 
-/**
- * Attempt to push all queued inspections to the sync endpoint.
- * Resolves with the number of successfully synced items.
- * Silent no-op if SYNC_API_URL is not configured.
- */
 export async function flush(): Promise<number> {
   const SYNC_API_URL = getSyncApiUrl();
   if (!SYNC_API_URL) return 0;
@@ -137,13 +116,10 @@ export async function flush(): Promise<number> {
 
       if (res.ok) {
         synced++;
-        // item successfully synced — drop from queue
       } else {
-        // Server rejected — keep in queue, bump attempts
         remaining.push({ ...item, attempts: item.attempts + 1 });
       }
     } catch {
-      // Network error — keep in queue
       remaining.push({ ...item, attempts: item.attempts + 1 });
     }
   }
@@ -160,9 +136,6 @@ export async function flush(): Promise<number> {
   return synced;
 }
 
-/**
- * Return the current sync status for display in the Backup screen.
- */
 export async function getSyncStatus(): Promise<SyncStatus> {
   const [queue, lastRaw] = await Promise.all([
     readQueue(),
@@ -178,9 +151,6 @@ export async function getSyncStatus(): Promise<SyncStatus> {
   };
 }
 
-/**
- * Discard the entire sync queue (e.g. after a full backup restore).
- */
 export async function clearQueue(): Promise<void> {
   await AsyncStorage.removeItem(StorageKeys.SYNC_QUEUE);
 }

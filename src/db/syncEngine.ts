@@ -18,12 +18,11 @@
 //   - All flush() errors are caught and logged — a sync failure must never
 //     crash the app.
 //
-// NOTE: Both SyncService and NetInfo are required lazily via require() rather
-// than static or dynamic import().  Jest's jest.mock() only intercepts
-// require() calls and static imports — NOT dynamic import() calls — so using
-// import() here would cause the mock registry to be bypassed after
-// jest.resetModules(), making tests unable to spy on flush().  Lazy require()
-// resolves the mock at call time, not at module-load time.
+// NOTE: SyncService is required lazily (require) so jest.resetModules() +
+// mock re-registration works correctly in tests.
+// NetInfo uses dynamic import() so the __mocks__ file (always loaded via
+// moduleNameMapper) is resolved at call time — tests inject their spy via
+// NetInfo.__setAddEventListener() rather than jest.mock() overrides.
 
 /** Returns true when a sync endpoint is configured. */
 function hasSyncUrl(): boolean {
@@ -55,41 +54,37 @@ async function safeFlush(): Promise<void> {
  */
 export function startSyncScheduler(intervalMs = 30_000): () => void {
   if (!hasSyncUrl()) {
-    // No endpoint configured — return a no-op cleanup.
     return () => {};
   }
 
-  // ── 1. Interval-based flush ──────────────────────────────────────────────
+  // ── 1. Interval-based flush ────────────────────────────────────────────────
   const timer = setInterval(safeFlush, intervalMs);
 
-  // ── 2. Connectivity-triggered flush ─────────────────────────────────────
+  // ── 2. Connectivity-triggered flush ───────────────────────────────────────
   //    Fire a flush as soon as the device comes back online so that
   //    inspections queued while offline are uploaded without waiting for
   //    the next interval tick.
   let unsubscribeNetInfo: (() => void) | undefined;
   let wasOnline: boolean | null = null;
 
-  // Lazy require() — NOT import() — so jest.mock() interception works after
-  // jest.resetModules().  Wrapped in try/catch so a missing NetInfo package
-  // degrades gracefully to interval-only mode.
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const NetInfo = require('@react-native-community/netinfo') as typeof import('@react-native-community/netinfo');
-    unsubscribeNetInfo = NetInfo.default.addEventListener((state) => {
-      const isOnline =
-        state.isConnected === true && state.isInternetReachable !== false;
+  import('@react-native-community/netinfo')
+    .then((NetInfo) => {
+      unsubscribeNetInfo = NetInfo.default.addEventListener((state) => {
+        const isOnline =
+          state.isConnected === true && state.isInternetReachable !== false;
 
-      // Transition: offline → online
-      if (wasOnline === false && isOnline) {
-        safeFlush();
-      }
-      wasOnline = isOnline;
+        // Transition: offline → online
+        if (wasOnline === false && isOnline) {
+          safeFlush();
+        }
+        wasOnline = isOnline;
+      });
+    })
+    .catch(() => {
+      // NetInfo not available — interval-only mode.
     });
-  } catch {
-    // NetInfo not available — interval-only mode, no action needed.
-  }
 
-  // ── 3. Cleanup ───────────────────────────────────────────────────────────
+  // ── 3. Cleanup ────────────────────────────────────────────────────────────
   return () => {
     clearInterval(timer);
     unsubscribeNetInfo?.();

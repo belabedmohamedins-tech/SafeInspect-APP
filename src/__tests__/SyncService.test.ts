@@ -14,22 +14,13 @@ import { SavedInspection } from '../types';
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-// ─── Mock NetInfo ─────────────────────────────────────────────────────────────
-// Top-level mock: used by tests that do NOT call jest.resetModules().
-// The 'flush — with API URL' describe re-registers this mock with a proper
-// mockResolvedValue after each resetModules() call (see its beforeEach).
-jest.mock('@react-native-community/netinfo', () => ({
-  default: {
-    fetch: jest.fn().mockResolvedValue({ isConnected: true, isInternetReachable: true }),
-  },
-}));
+// ─── NetInfo ──────────────────────────────────────────────────────────────────
+// moduleNameMapper routes @react-native-community/netinfo to the __mocks__ file
+// whose fetch() already resolves { isConnected: true } by default.
+// No jest.mock() override needed — the mapper file is always loaded and its
+// default state is online, so flush() will proceed past checkOnline().
 
 beforeEach(async () => {
-  // Order matters:
-  //   1. clearAllMocks() first — resets call counts / return values
-  //   2. AsyncStorage.clear() second — needs its implementation still intact
-  //   3. Re-assign global.fetch — clearAllMocks() does not touch globals,
-  //      but explicit reassignment makes the dependency clear.
   jest.clearAllMocks();
   await AsyncStorage.clear();
   global.fetch = mockFetch;
@@ -121,34 +112,17 @@ describe('flush — with API URL (mocked via env)', () => {
   beforeEach(() => {
     process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
     jest.resetModules();
-
-    // Re-register NetInfo mock AFTER resetModules so the freshly-required
-    // SyncService gets a NetInfo mock whose .fetch() actually resolves to
-    // { isConnected: true }.  Without this, the plain jest.fn() created by
-    // the top-level mock returns undefined, checkOnline() sees
-    // state.isConnected !== true and flush() returns 0 immediately.
-    jest.mock('@react-native-community/netinfo', () => ({
-      default: {
-        fetch: jest.fn().mockResolvedValue({ isConnected: true, isInternetReachable: true }),
-      },
-    }));
-
     // Re-assign global.fetch AFTER resetModules so the freshly-required
-    // SyncService module closure captures our mock, not Node's native fetch.
+    // SyncService module closure captures our mock.
     global.fetch = mockFetch;
+    // NetInfo: no jest.mock() needed — moduleNameMapper always loads the
+    // __mocks__ file whose fetch() resolves { isConnected: true } by default.
   });
 
   afterEach(() => {
     process.env = ORIGINAL_ENV;
   });
 
-  /**
-   * Require a fresh SyncService AND a fresh AsyncStorage after resetModules.
-   * jest.resetModules() tears down the whole module registry, so the
-   * re-required SyncService gets a new AsyncStorage instance.  We must
-   * use THAT same instance for enqueue/readQueue, otherwise enqueue writes
-   * to one store while flush reads from a different (empty) store.
-   */
   function freshModules() {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const storage = require('@react-native-async-storage/async-storage').default as typeof AsyncStorage;
