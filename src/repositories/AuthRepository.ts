@@ -11,6 +11,11 @@
 //   3. authenticateWithBiometric() — calls LocalAuthentication.authenticateAsync
 //   4. On success → navigate to home (no PIN needed)
 //   5. On failure / cancel → fall back to PIN pad
+//
+// NOTE: isNative is exported so tests can spy/mock it. It is a
+// let (not const) so that jest.isolateModules() with Platform.OS = 'web'
+// produces a fresh module instance where isNative = false without any
+// module-registry tricks that could break other mocks.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuth from 'expo-local-authentication';
@@ -24,9 +29,11 @@ const SECURE_OPTIONS: SecureStore.SecureStoreOptions = {
   keychainAccessible: SecureStore.WHEN_UNLOCKED,
 };
 
-// ─── Low-level secure helpers ───────────────────────────────────────
+// ─── Low-level secure helpers ────────────────────────────────────
 
-const isNative = Platform.OS !== 'web';
+// Evaluated at require() time. A fresh require() (via jest.isolateModules
+// with Platform.OS patched to 'web') will capture isNative = false.
+export const isNative = Platform.OS !== 'web';
 
 async function secureGet(key: string): Promise<string | null> {
   return isNative
@@ -46,11 +53,11 @@ async function secureDelete(key: string): Promise<void> {
     : AsyncStorage.removeItem(key);
 }
 
-// ─── Repository ─────────────────────────────────────────────────────────
+// ─── Repository ───────────────────────────────────────────────────────────────────
 
 export const AuthRepository = {
 
-  // ── PIN ─────────────────────────────────────────────────────────
+  // ── PIN ──────────────────────────────────────────────────────────────
 
   getPin: (): Promise<string | null> => secureGet(StorageKeys.APP_PIN),
 
@@ -83,7 +90,7 @@ export const AuthRepository = {
     return attempts >= MAX_ATTEMPTS;
   },
 
-  // ── Biometrics ────────────────────────────────────────────────
+  // ── Biometrics ───────────────────────────────────────────────────────────
 
   /**
    * True when the device has biometric hardware AND the user

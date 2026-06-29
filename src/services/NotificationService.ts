@@ -16,20 +16,33 @@
 //   "agenda-<id>-day"   → morning-of trigger
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import { StorageKeys } from '../repositories/keys';
 
-// Detect Expo Go — notifications are not supported there in SDK 53+
-const IS_EXPO_GO = Constants.appOwnership === 'expo';
+// getNotifications() returns the expo-notifications module, or null when
+// running in Expo Go (SDK 53+ dropped notification support there).
+// Evaluated lazily on each call so that Jest can mock expo-constants and
+// expo-notifications before the first function is invoked, without needing
+// IS_EXPO_GO to be a module-level constant frozen at import time.
+function getNotifications(): typeof import('expo-notifications') | null {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const Constants = require('expo-constants').default ?? require('expo-constants');
+    if (Constants.appOwnership === 'expo') return null;
+    return require('expo-notifications');
+  } catch {
+    return null;
+  }
+}
 
-// Lazily import expo-notifications only when not in Expo Go
-let Notifications: typeof import('expo-notifications') | null = null;
-try {
-  if (!IS_EXPO_GO) {
-    Notifications = require('expo-notifications');
-
-    Notifications!.setNotificationHandler({
+// Run the notification handler setup once, the first time we successfully
+// obtain the Notifications module.
+let _handlerInstalled = false;
+function getNotificationsWithHandler(): typeof import('expo-notifications') | null {
+  const N = getNotifications();
+  if (N && !_handlerInstalled) {
+    _handlerInstalled = true;
+    N.setNotificationHandler({
       handleNotification: async () => ({
         shouldShowAlert: true,
         shouldPlaySound: true,
@@ -37,8 +50,7 @@ try {
       }),
     });
   }
-} catch (e) {
-  console.warn('[NotificationService] expo-notifications unavailable:', e);
+  return N;
 }
 
 export interface AgendaNotificationPayload {
@@ -48,9 +60,10 @@ export interface AgendaNotificationPayload {
   notes?: string;
 }
 
-// ─── Permission ──────────────────────────────────────────────────────────────
+// ─── Permission ───────────────────────────────────────────────────────────────────
 
 export async function requestPermission(): Promise<boolean> {
+  const Notifications = getNotificationsWithHandler();
   if (!Notifications) return false;
   try {
     const { status: existing } = await Notifications.getPermissionsAsync();
@@ -75,7 +88,7 @@ export async function requestPermission(): Promise<boolean> {
   }
 }
 
-// ─── User preference ─────────────────────────────────────────────────────────
+// ─── User preference ─────────────────────────────────────────────────────────────────
 
 export async function isEnabled(): Promise<boolean> {
   try {
@@ -88,16 +101,18 @@ export async function isEnabled(): Promise<boolean> {
 
 export async function setEnabled(enabled: boolean): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.NOTIFICATIONS_ENABLED, String(enabled));
+  const Notifications = getNotificationsWithHandler();
   if (!enabled && Notifications) {
     await Notifications.cancelAllScheduledNotificationsAsync();
   }
 }
 
-// ─── Schedule / Cancel ───────────────────────────────────────────────────────
+// ─── Schedule / Cancel ────────────────────────────────────────────────────────────────
 
 export async function scheduleForAgendaItem(
   item: AgendaNotificationPayload
 ): Promise<void> {
+  const Notifications = getNotificationsWithHandler();
   if (!Notifications) return; // Expo Go — silent no-op
   try {
     const enabled = await isEnabled();
@@ -145,6 +160,7 @@ export async function scheduleForAgendaItem(
 }
 
 export async function cancelForAgendaItem(id: string): Promise<void> {
+  const Notifications = getNotificationsWithHandler();
   if (!Notifications) return;
   try {
     await Promise.all([
@@ -159,6 +175,7 @@ export async function cancelForAgendaItem(id: string): Promise<void> {
 export async function rescheduleAll(
   items: AgendaNotificationPayload[]
 ): Promise<void> {
+  const Notifications = getNotificationsWithHandler();
   if (!Notifications) return;
   try {
     await Notifications.cancelAllScheduledNotificationsAsync();

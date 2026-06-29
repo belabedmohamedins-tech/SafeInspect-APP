@@ -1,17 +1,15 @@
 // src/__tests__/NotificationService.test.ts
 //
-// Constants.appOwnership is patched to 'standalone' in jest.setup.ts (Layer 3)
-// so IS_EXPO_GO = false when NotificationService is first imported, causing
-// the lazy require('expo-notifications') branch to execute and populate the
-// module-level `Notifications` variable.
-//
-// expo-notifications is globally mocked via moduleNameMapper (jest.config.js).
+// NotificationService.getNotifications() calls require('expo-constants') lazily
+// on each function invocation (not at module-load time), so the moduleNameMapper
+// mock for expo-constants is always in effect by the time any test runs.
+// Our __mocks__/expo-constants.js sets appOwnership: 'standalone', so
+// getNotifications() returns the expo-notifications mock (not null).
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
-// ─── Typed stubs ─────────────────────────────────────────────────────────────
 const mockGetPerms   = jest.mocked(Notifications.getPermissionsAsync);
 const mockReqPerms   = jest.mocked(Notifications.requestPermissionsAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
@@ -39,7 +37,6 @@ function makeItem(overrides: Partial<AgendaNotificationPayload> = {}): AgendaNot
 beforeEach(() => {
   resetAsync();
   jest.clearAllMocks();
-  // Restore implementations cleared by jest.clearAllMocks()
   mockGetPerms.mockResolvedValue({ status: 'granted' } as any);
   mockReqPerms.mockResolvedValue({ status: 'granted' } as any);
   mockSetChannel.mockResolvedValue(null as any);
@@ -73,8 +70,10 @@ describe('NotificationService', () => {
       mockGetPerms.mockResolvedValueOnce({ status: 'undetermined' } as any);
       mockReqPerms.mockResolvedValueOnce({ status: 'granted' } as any);
       await requestPermission();
-      expect(mockSetChannel).toHaveBeenCalledWith('agenda', expect.objectContaining({ name: expect.any(String) }));
-      (Platform as any).OS = 'android'; // PLATFORM.OS is android by default in jest.setup.ts
+      expect(mockSetChannel).toHaveBeenCalledWith(
+        'agenda',
+        expect.objectContaining({ name: expect.any(String) }),
+      );
     });
 
     it('returns false when Notifications throws', async () => {
@@ -87,23 +86,19 @@ describe('NotificationService', () => {
     it('defaults to true when no value is stored', async () => {
       expect(await isEnabled()).toBe(true);
     });
-
     it('returns false after setEnabled(false)', async () => {
       await setEnabled(false);
       expect(await isEnabled()).toBe(false);
     });
-
     it('returns true after setEnabled(true)', async () => {
       await setEnabled(false);
       await setEnabled(true);
       expect(await isEnabled()).toBe(true);
     });
-
     it('cancels all scheduled notifications when disabled', async () => {
       await setEnabled(false);
       expect(mockCancelAll).toHaveBeenCalledTimes(1);
     });
-
     it('does not cancel notifications when enabled', async () => {
       await setEnabled(true);
       expect(mockCancelAll).not.toHaveBeenCalled();
@@ -115,7 +110,6 @@ describe('NotificationService', () => {
       await scheduleForAgendaItem(makeItem());
       expect(mockSchedule).toHaveBeenCalledTimes(2);
     });
-
     it('does nothing when notifications are disabled', async () => {
       await setEnabled(false);
       jest.clearAllMocks();
@@ -123,21 +117,18 @@ describe('NotificationService', () => {
       await scheduleForAgendaItem(makeItem());
       expect(mockSchedule).not.toHaveBeenCalled();
     });
-
     it('does nothing when permission is denied', async () => {
       mockGetPerms.mockResolvedValueOnce({ status: 'denied' } as any);
       mockReqPerms.mockResolvedValueOnce({ status: 'denied' } as any);
       await scheduleForAgendaItem(makeItem());
       expect(mockSchedule).not.toHaveBeenCalled();
     });
-
     it('does not schedule pre-notification for an item less than 1 hour away', async () => {
       const soonDate = new Date(Date.now() + 30 * 60 * 1000).toISOString();
       await scheduleForAgendaItem(makeItem({ date: soonDate }));
       const identifiers = mockSchedule.mock.calls.map(c => (c[0] as any).identifier as string);
       expect(identifiers).not.toContain('agenda-item-1-pre');
     });
-
     it('cancels existing notifications before rescheduling', async () => {
       await scheduleForAgendaItem(makeItem());
       expect(mockCancelOne).toHaveBeenCalledWith('agenda-item-1-pre');
@@ -160,7 +151,6 @@ describe('NotificationService', () => {
       expect(mockCancelAll).toHaveBeenCalledTimes(1);
       expect(mockSchedule.mock.calls.length).toBeGreaterThan(0);
     });
-
     it('cancels all but does not reschedule when disabled', async () => {
       await setEnabled(false);
       jest.clearAllMocks();

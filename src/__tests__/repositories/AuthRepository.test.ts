@@ -1,25 +1,24 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
-// isNative = Platform.OS !== 'web' is evaluated ONCE at module-load time.
-// We cannot change Platform.OS on the already-imported module and get a
-// different isNative value — the const is frozen at require() time.
+// isNative = Platform.OS !== 'web' is a module-level const frozen at require().
 //
-// Strategy for web-branch coverage:
-//   Use a beforeAll that calls jest.resetModules() + jest.isolateModules()
-//   with Platform.OS = 'web' set BEFORE requiring AuthRepository.
-//   resetModules() ensures the registry is clean so the isolated require
-//   gets a fresh copy rather than the cached ios one.
-//   WebAuth and webReset* are assigned inside an async-safe wrapper using
-//   a resolver pattern so the outer describe can reference them.
+// Web-branch strategy:
+//   jest.isolateModules() inside beforeAll is the correct hook (runs at
+//   execution time, after all setupFiles/setupFilesAfterEnv). We do NOT call
+//   jest.resetModules() because that would wipe the AsyncStorage mock from the
+//   registry — the isolated require would get a raw (non-mock) AsyncStorage
+//   and setPin/getPin would silently drop the value.
+//
+//   Instead we only isolate AuthRepository itself. Platform, AsyncStorage,
+//   SecureStore and LocalAuth are already in the module registry as the
+//   correct mocks; the isolated AuthRepository will pick them up from there.
 
 import { Platform } from 'react-native';
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuth from 'expo-local-authentication';
 import { AuthRepository } from '../../repositories/AuthRepository';
 
-// ─── Typed stub references ───────────────────────────────────────────────────
 const mockHasHardware    = jest.mocked(LocalAuth.hasHardwareAsync);
 const mockIsEnrolled     = jest.mocked(LocalAuth.isEnrolledAsync);
 const mockSupportedTypes = jest.mocked(LocalAuth.supportedAuthenticationTypesAsync);
@@ -34,24 +33,21 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-// ─── Native-platform tests ───────────────────────────────────────────────────
+// ─── Native-platform tests ─────────────────────────────────────────────────
 describe('AuthRepository', () => {
   describe('PIN management', () => {
     it('returns null when no PIN is set', async () => {
       expect(await AuthRepository.getPin()).toBeNull();
     });
-
     it('stores and retrieves a PIN', async () => {
       await AuthRepository.setPin('1234');
       expect(await AuthRepository.getPin()).toBe('1234');
     });
-
     it('deletes the PIN when setPin(null) is called', async () => {
       await AuthRepository.setPin('1234');
       await AuthRepository.setPin(null);
       expect(await AuthRepository.getPin()).toBeNull();
     });
-
     it('resets failed attempts when PIN is set', async () => {
       await AuthRepository.incrementFailedAttempts();
       await AuthRepository.setPin('5678');
@@ -63,27 +59,23 @@ describe('AuthRepository', () => {
     it('returns 0 failed attempts initially', async () => {
       expect(await AuthRepository.getFailedAttempts()).toBe(0);
     });
-
     it('increments failed attempts and returns the new count', async () => {
       const count = await AuthRepository.incrementFailedAttempts();
       expect(count).toBe(1);
       expect(await AuthRepository.getFailedAttempts()).toBe(1);
     });
-
     it('is not locked out below MAX_ATTEMPTS', async () => {
       for (let i = 0; i < AuthRepository.MAX_ATTEMPTS - 1; i++) {
         await AuthRepository.incrementFailedAttempts();
       }
       expect(await AuthRepository.isLockedOut()).toBe(false);
     });
-
     it('is locked out at MAX_ATTEMPTS', async () => {
       for (let i = 0; i < AuthRepository.MAX_ATTEMPTS; i++) {
         await AuthRepository.incrementFailedAttempts();
       }
       expect(await AuthRepository.isLockedOut()).toBe(true);
     });
-
     it('resets failed attempts to 0', async () => {
       await AuthRepository.incrementFailedAttempts();
       await AuthRepository.resetFailedAttempts();
@@ -95,12 +87,10 @@ describe('AuthRepository', () => {
     it('returns true when hardware is present and enrolled', async () => {
       expect(await AuthRepository.isBiometricAvailable()).toBe(true);
     });
-
     it('returns false when no hardware is present', async () => {
       mockHasHardware.mockResolvedValueOnce(false);
       expect(await AuthRepository.isBiometricAvailable()).toBe(false);
     });
-
     it('returns false when hardware present but not enrolled', async () => {
       mockIsEnrolled.mockResolvedValueOnce(false);
       expect(await AuthRepository.isBiometricAvailable()).toBe(false);
@@ -112,17 +102,14 @@ describe('AuthRepository', () => {
       mockSupportedTypes.mockResolvedValueOnce([2]);
       expect(await AuthRepository.getBiometricType()).toBe('FINGERPRINT');
     });
-
     it('returns FACE_RECOGNITION when facial auth is available', async () => {
       mockSupportedTypes.mockResolvedValueOnce([1]);
       expect(await AuthRepository.getBiometricType()).toBe('FACE_RECOGNITION');
     });
-
     it('returns IRIS when iris auth is available', async () => {
       mockSupportedTypes.mockResolvedValueOnce([3]);
       expect(await AuthRepository.getBiometricType()).toBe('IRIS');
     });
-
     it('returns none when no biometric type is supported', async () => {
       mockSupportedTypes.mockResolvedValueOnce([]);
       expect(await AuthRepository.getBiometricType()).toBe('none');
@@ -133,12 +120,10 @@ describe('AuthRepository', () => {
     it('returns false when biometric has not been enabled', async () => {
       expect(await AuthRepository.isBiometricEnabled()).toBe(false);
     });
-
     it('persists the biometric enabled preference', async () => {
       await AuthRepository.setBiometricEnabled(true);
       expect(await AuthRepository.isBiometricEnabled()).toBe(true);
     });
-
     it('can disable biometric preference', async () => {
       await AuthRepository.setBiometricEnabled(true);
       await AuthRepository.setBiometricEnabled(false);
@@ -151,12 +136,10 @@ describe('AuthRepository', () => {
       mockAuthenticate.mockResolvedValueOnce({ success: true });
       expect(await AuthRepository.authenticateWithBiometric()).toBe(true);
     });
-
     it('returns false when user cancels', async () => {
       mockAuthenticate.mockResolvedValueOnce({ success: false });
       expect(await AuthRepository.authenticateWithBiometric()).toBe(false);
     });
-
     it('returns false when authenticateAsync throws', async () => {
       mockAuthenticate.mockRejectedValueOnce(new Error('biometric error'));
       expect(await AuthRepository.authenticateWithBiometric()).toBe(false);
@@ -164,34 +147,26 @@ describe('AuthRepository', () => {
   });
 });
 
-// ─── Web-platform branches ───────────────────────────────────────────────────
-// isNative is a const frozen at the module's first require().
-// To test the web branch we need a fresh module load with Platform.OS = 'web'.
-//
-// Approach: beforeAll calls jest.resetModules() to wipe the module registry,
-// then jest.isolateModules() to load a private copy of AuthRepository with
-// Platform.OS patched to 'web' before the require. The isolated copy writes
-// to the same AsyncStorage mock store (same global mock object), so
-// webResetAsync() is just resetAsync() from the outer scope.
-//
-// afterAll restores Platform.OS to its original value so that other test
-// suites in this worker are unaffected (Jest workers may run multiple suites).
+// ─── Web-platform branches ─────────────────────────────────────────────────
+// beforeAll uses jest.isolateModules() WITHOUT jest.resetModules() so the
+// mock registry (AsyncStorage, SecureStore, LocalAuth) is preserved.
+// Platform.OS is patched to 'web' only for the duration of the require()
+// call, then immediately restored.
 describe('AuthRepository — web platform (isNative = false)', () => {
   let WebAuth: typeof AuthRepository;
 
   beforeAll(async () => {
-    // Wipe the module registry so AuthRepository is required fresh below.
-    jest.resetModules();
-    jest.isolateModules(() => {
-      (Platform as any).OS = 'web';
-      WebAuth = require('../../repositories/AuthRepository').AuthRepository;
-      // Restore immediately after require so nothing else sees OS='web'
-      (Platform as any).OS = 'android';
+    await new Promise<void>(resolve => {
+      jest.isolateModules(() => {
+        (Platform as any).OS = 'web';
+        WebAuth = require('../../repositories/AuthRepository').AuthRepository;
+        (Platform as any).OS = 'android';
+        resolve();
+      });
     });
   });
 
   afterEach(() => {
-    // Wipe stores between tests without clearing mock implementations
     resetAsync();
     resetSecure();
   });
