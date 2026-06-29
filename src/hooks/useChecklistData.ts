@@ -167,9 +167,9 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  // ─── Finish (with completion gate) ──────────────────────────────────────
+  // ─── Finish (with completion gates) ─────────────────────────────────────
   const handleFinish = useCallback(async () => {
-    // Gate: 85% completion requirement
+    // Gate 1: 85% completion requirement
     const applicable = data.filter(item => item.complianceStatus !== 'na');
     const evaluated  = applicable.filter(
       item => item.complianceStatus !== 'not-evaluated'
@@ -182,6 +182,24 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       Alert.alert(
         'لم يكتمل التفتيش',
         `يجب تقييم 85٪ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيّم.`,
+        [{ text: 'حسناً' }]
+      );
+      return;
+    }
+
+    // Gate 2: high-severity non-compliant items must have at least one photo
+    const missingPhoto = data.filter(
+      item =>
+        item.severity === 'high' &&
+        item.complianceStatus === 'non-compliant' &&
+        !(item.photos?.length) &&
+        !item.photoUri
+    );
+
+    if (missingPhoto.length > 0) {
+      Alert.alert(
+        'صور مطلوبة',
+        `يجب إرفاق صورة لكل بند غير مطابق ذي خطورة عالية.\nيوجد ${missingPhoto.length} بند بدون صورة.`,
         [{ text: 'حسناً' }]
       );
       return;

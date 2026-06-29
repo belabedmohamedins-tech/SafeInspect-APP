@@ -44,16 +44,6 @@ function gradeBadgeColor(grade?: string): string {
   }
 }
 
-function indicatorLabel(key: string): string {
-  const labels: Record<string, string> = {
-    doc:    'الهوية التنظيمية',
-    clean:  'النظافة والتهيئة',
-    waste:  'البيئة والنفايات',
-    health: 'الصحة والسلامة',
-  };
-  return labels[key] ?? key;
-}
-
 // ─── HTML builder ─────────────────────────────────────────────────────────────
 
 function buildReportHTML(
@@ -67,7 +57,55 @@ function buildReportHTML(
   const scoring    = computeScoreAndGrade(inspection.items);
   const score      = inspection.score ?? scoring.score;
   const grade      = inspection.grade ?? scoring.grade;
-  const indicators = scoring.indicators;
+
+  // Build per-severity indicator rows from violations profile.
+  // ScoringResult has no `indicators` map — we derive a simple display
+  // from the violations count and evaluated totals instead.
+  const { violations } = scoring;
+  const nonCompliant = inspection.items.filter(i => i.complianceStatus === 'non-compliant');
+  const compliant    = inspection.items.filter(i => i.complianceStatus === 'compliant');
+
+  function severityPct(sev: 'high' | 'medium' | 'low'): number | null {
+    const total = inspection.items.filter(
+      i => i.severity === sev && i.complianceStatus !== 'na'
+    );
+    const comp  = total.filter(i => i.complianceStatus === 'compliant');
+    return total.length > 0 ? (comp.length / total.length) * 100 : null;
+  }
+
+  const indicatorDefs: [string, number | null][] = [
+    ['الامتثال العالي الخطورة',    severityPct('high')],
+    ['الامتثال المتوسط الخطورة',   severityPct('medium')],
+    ['الامتثال المنخفض الخطورة',   severityPct('low')],
+  ];
+
+  const indicatorRows = indicatorDefs
+    .map(([label, val]) => {
+      const pct   = val !== null ? `${val.toFixed(1)}%` : 'N/A';
+      const barW  = val !== null ? `${Math.round(val)}%` : '0%';
+      const color = val === null ? '#bdc3c7'
+                  : val >= 85   ? '#27ae60'
+                  : val >= 70   ? '#2980b9'
+                  : val >= 50   ? '#f39c12'
+                  :               '#e74c3c';
+      return `
+        <tr>
+          <td class="ind-label">${label}</td>
+          <td class="ind-bar-cell">
+            <div class="ind-bar-bg">
+              <div class="ind-bar-fill" style="width:${barW};background:${color};"></div>
+            </div>
+          </td>
+          <td class="ind-pct" style="color:${color}">${pct}</td>
+        </tr>`;
+    })
+    .join('');
+
+  const indicatorsTableHTML = `
+    <div class="section-title">مؤشرات الأداء</div>
+    <table class="ind-table">
+      <tbody>${indicatorRows}</tbody>
+    </table>`;
 
   const committeeHTML = (inspection.committeeMembers ?? []).length > 0
     ? `<p><strong>أعضاء اللجنة:</strong>
@@ -89,34 +127,6 @@ function buildReportHTML(
          <div class="grade-badge" style="background:${gradeBadgeColor(grade)}">${grade ?? '-'}</div>
        </div>`
     : '';
-
-  const indicatorRows = Object.entries(indicators)
-    .map(([key, val]) => {
-      const pct   = val !== null ? `${val.toFixed(1)}%` : 'N/A';
-      const barW  = val !== null ? `${Math.round(val)}%` : '0%';
-      const color = val === null ? '#bdc3c7'
-                  : val >= 85   ? '#27ae60'
-                  : val >= 70   ? '#2980b9'
-                  : val >= 50   ? '#f39c12'
-                  :               '#e74c3c';
-      return `
-        <tr>
-          <td class="ind-label">${indicatorLabel(key)}</td>
-          <td class="ind-bar-cell">
-            <div class="ind-bar-bg">
-              <div class="ind-bar-fill" style="width:${barW};background:${color};"></div>
-            </div>
-          </td>
-          <td class="ind-pct" style="color:${color}">${pct}</td>
-        </tr>`;
-    })
-    .join('');
-
-  const indicatorsTableHTML = `
-    <div class="section-title">مؤشرات الأداء</div>
-    <table class="ind-table">
-      <tbody>${indicatorRows}</tbody>
-    </table>`;
 
   let rowIndex = 0;
   const groupsHTML = groups

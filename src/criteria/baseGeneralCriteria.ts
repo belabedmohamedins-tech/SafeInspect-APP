@@ -4,7 +4,7 @@ import { InspectionItem } from '../types';
 export const baseGeneralCriteria: InspectionItem[] = [
   // المحور 1: هوية المنشأة والوثائق (عام)
   {
-    id: 'GEN-01-01',
+    id: 'BGN-01-01',
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'رخصة الاستغلال سارية المفعول ومطابقة لنوع النشاط (منشأة مصنفة وفق الفئة الملائمة).',
@@ -14,7 +14,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-01-02',
+    id: 'BGN-01-02',
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'وجود سجلات للتطهير، مراقبة درجات الحرارة (عند الاقتضاء)، نتائج التحاليل، والإعذارات السابقة محفوظة ومتاحة للمراقبة.',
@@ -25,7 +25,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // المحور 2: الموقع والتهيئة العامة (عام)
   {
-    id: 'GEN-02-01',
+    id: 'BGN-02-01',
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'موقع المنشأة بعيد عن مصادر التلوث الظاهر (مفرغة، مياه راكدة، دخان صناعي).',
@@ -35,7 +35,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-02',
+    id: 'BGN-02-02',
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'نشاط المنشأة لا يسبب ضررًا للساكنة المجاورة (ضجيج، روائح، انبعاثات، اهتزازات).',
@@ -45,7 +45,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-03',
+    id: 'BGN-02-03',
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'نشاط المنشأة لا يسبب ضررًا للتربة الفلاحية أو المياه الجوفية.',
@@ -55,17 +55,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-04',
+    id: 'BGN-02-04',
     axis: 'الموقع والتهيئة العامة',
     category: 'تنظيمية',
-    criteria: 'المبنى مشيَّد بمواد صلبة ومطابق لرخصة البناء وشهادة المطابقة عند الاقتضاء.',
+    criteria: 'المبنى مشيَّد بمواد صلبة ومطابق لرخصة البناء وشهادة المطابقة عند الاقتضاء.',
     legalReference: 'القانون 90-29 (رخصة البناء وشهادة المطابقة) + المرسوم 06-198 (مطابقة الواقع للملف التقني).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-05',
+    id: 'BGN-02-05',
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
     criteria: 'أرضيات وجدران قابلة للتنظيف (حسب طبيعة النشاط)، ويفضل أن تكون ملساء وغير منفذة في الأنشطة التي تتطلب ذلك.',
@@ -75,7 +75,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-06',
+    id: 'BGN-02-06',
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'تهوية طبيعية أو ميكانيكية كافية حسب طبيعة النشاط.',
@@ -85,7 +85,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-02-07',
+    id: 'BGN-02-07',
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
     criteria: 'إضاءة طبيعية أو اصطناعية كافية في أماكن العمل.',
@@ -96,17 +96,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // المحور 3: المياه والصرف الصحي (عام)
   {
-    id: 'GEN-03-01',
+    id: 'BGN-03-01',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'توفر ماء صالح للشرب من شبكة عمومية أو خزان مراقَب في كل الأوقات وبضغط كافٍ.',
     legalReference: 'المرسوم التنفيذي 88-164 (مواصفات مياه الشرب).',
     severity: 'high',
-    controlType: 'test',
+    controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-03-02',
+    id: 'BGN-03-02',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'وجود شبكة صرف صحي فعالة، دون تسربات أو ركود مياه مستعملة.',
@@ -116,7 +116,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-03-03',
+    id: 'BGN-03-03',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'صرف مياه الغسل إلى شبكة الصرف الصحي أو محطة معالجة، وعدم طرحها مباشرة في الساحة أو التربة.',
@@ -126,17 +126,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-03-04',
+    id: 'BGN-03-04',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
-    criteria: 'تصميم قنوات الصرف غير متكسِّرة، ذات أقطار كافية، ومنحدرات ملائمة لتفادي الركود والانسداد.',
+    criteria: 'تصميم قنوات الصرف غير متكسِّرة، ذات أقطار كافية، ومنحدرات ملائمة لتفادي الركود والانسداد.',
     legalReference: 'قواعد الهندسة الصحية.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-03-05',
+    id: 'BGN-03-05',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'وجود حواجز مائية (سيفونات) في نقاط الصرف لمنع رجوع الروائح والغازات والحشرات.',
@@ -146,7 +146,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-03-06',
+    id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد مع الديوان الوطني للتطهير ONA ومعالجة المواد المستخرجة.',
@@ -157,7 +157,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // المحور 4: النظافة العامة وتسيير النفايات (عام)
   {
-    id: 'GEN-04-01',
+    id: 'BGN-04-01',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'وضع النفايات في حاويات مغلقة أو أكياس بلاستيكية مخصصة وعدم تركها مكشوفة.',
@@ -167,7 +167,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-04-02',
+    id: 'BGN-04-02',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'تنظيف وتعقيم حاويات النفايات بعد التفريغ بانتظام.',
@@ -177,7 +177,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-04-03',
+    id: 'BGN-04-03',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'وجود برنامج تنظيف يومي للأرضيات والجدران والتجهيزات مع وسائل ومواد تنظيف ملائمة.',
@@ -187,7 +187,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-04-04',
+    id: 'BGN-04-04',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'عدم وجود تراكم للنفايات في محيط المبنى أو في الساحة المجاورة.',
@@ -198,7 +198,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // المحور 7: مكافحة النواقل (عام)
   {
-    id: 'GEN-07-01',
+    id: 'BGN-07-01',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'عدم ظهور دلائل إصابة بقوارض أو حشرات (فضلات، أثر قرض، مسارات، روائح، حشرات حية أو ميتة) داخل أو خارج المؤسسة.',
@@ -208,7 +208,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-07-02',
+    id: 'BGN-07-02',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق).',
@@ -218,7 +218,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-07-03',
+    id: 'BGN-07-03',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'حاويات النفايات مغلقة ومحفوظة في مكان مناسب.',
@@ -228,7 +228,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-07-04',
+    id: 'BGN-07-04',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'سدّ الشقوق والفراغات في الجدران وحول الأنابيب ونقاط عبور الأسلاك لمنع دخول الآفات.',
@@ -238,7 +238,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-07-05',
+    id: 'BGN-07-05',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'استعمال مبيدات حشرية مرخّصة من طرف مؤسسات مؤهلة، واحترام فترات الغلق والتهوية.',
@@ -249,7 +249,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // المحور 8: السلامة العامة والوقاية من الحوادث (عام)
   {
-    id: 'GEN-08-01',
+    id: 'BGN-08-01',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'توفر تجهيزات مكافحة الحريق (مطفآت، صنابير حريق...) في حالة عمل وبعدد ومواقع مناسبة لطبيعة المنشأة.',
@@ -259,7 +259,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-08-02',
+    id: 'BGN-08-02',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'مسارات الإخلاء خالية من العوائق ومخارج الطوارئ تفتح نحو الخارج ومشار إليها بوضوح.',
@@ -269,7 +269,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'GEN-08-03',
+    id: 'BGN-08-03',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'تخزين آمن للمواد الكيميائية (منظفات، مبيدات، محروقات) بعيدًا عن مصادر الحرارة وبعبوات موسومة بوضوح.',
