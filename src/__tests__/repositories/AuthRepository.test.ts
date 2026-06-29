@@ -1,14 +1,9 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
 // Web-branch strategy:
-//   AuthRepository exports `isNative` frozen at require() time.
-//   We get a web copy by patching Platform.OS before an isolated require().
-//
-//   jest.isolateModules() is synchronous — the callback runs immediately.
-//   We assign WebAuth inside the callback (synchronously) so it is ready
-//   before any test in the describe block runs.
-//   We do NOT call jest.resetModules() — that would wipe the AsyncStorage
-//   mock from the registry and break getPin/setPin.
+//   AuthRepository now reads Platform.OS lazily (via isNative() function)
+//   on every call, so patching (Platform as any).OS = 'web' in beforeEach
+//   is enough — no isolateModules or module-registry tricks needed.
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,7 +25,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-// ─── Native-platform tests ──────────────────────────────────────────────────
+// ─── Native-platform tests ────────────────────────────────────────────────
 describe('AuthRepository', () => {
   describe('PIN management', () => {
     it('returns null when no PIN is set', async () => {
@@ -144,58 +139,48 @@ describe('AuthRepository', () => {
   });
 });
 
-// ─── Web-platform branches ───────────────────────────────────────────────────
-// jest.isolateModules() is synchronous: the callback runs immediately and
-// WebAuth is assigned before beforeAll resolves. No Promise/done wrapper
-// needed — just call isolateModules() directly inside beforeAll.
+// ─── Web-platform branches ───────────────────────────────────────────────
+// isNative() reads Platform.OS at call time, so patching it here is enough.
 describe('AuthRepository — web platform (isNative = false)', () => {
-  let WebAuth: typeof AuthRepository;
-
-  beforeAll(() => {
-    jest.isolateModules(() => {
-      (Platform as any).OS = 'web';
-      WebAuth = require('../../repositories/AuthRepository').AuthRepository;
-      (Platform as any).OS = 'android';
-    });
+  beforeEach(() => {
+    (Platform as any).OS = 'web';
+    resetAsync();
+    resetSecure();
+    jest.clearAllMocks();
   });
 
   afterEach(() => {
-    resetAsync();
-    resetSecure();
-  });
-
-  afterAll(() => {
     (Platform as any).OS = 'android';
   });
 
   it('reads and writes PIN via AsyncStorage (not SecureStore) on web', async () => {
-    await WebAuth.setPin('9999');
-    expect(await WebAuth.getPin()).toBe('9999');
+    await AuthRepository.setPin('9999');
+    expect(await AuthRepository.getPin()).toBe('9999');
   });
 
   it('deletes PIN via AsyncStorage on web', async () => {
-    await WebAuth.setPin('9999');
-    await WebAuth.setPin(null);
-    expect(await WebAuth.getPin()).toBeNull();
+    await AuthRepository.setPin('9999');
+    await AuthRepository.setPin(null);
+    expect(await AuthRepository.getPin()).toBeNull();
   });
 
   it('persists biometric preference via AsyncStorage on web', async () => {
-    await WebAuth.setBiometricEnabled(true);
-    expect(await WebAuth.isBiometricEnabled()).toBe(true);
+    await AuthRepository.setBiometricEnabled(true);
+    expect(await AuthRepository.isBiometricEnabled()).toBe(true);
   });
 
   it('isBiometricAvailable returns false on web without calling LocalAuth', async () => {
-    expect(await WebAuth.isBiometricAvailable()).toBe(false);
+    expect(await AuthRepository.isBiometricAvailable()).toBe(false);
     expect(mockHasHardware).not.toHaveBeenCalled();
   });
 
   it('getBiometricType returns "none" on web without calling LocalAuth', async () => {
-    expect(await WebAuth.getBiometricType()).toBe('none');
+    expect(await AuthRepository.getBiometricType()).toBe('none');
     expect(mockSupportedTypes).not.toHaveBeenCalled();
   });
 
   it('authenticateWithBiometric returns false on web without calling LocalAuth', async () => {
-    expect(await WebAuth.authenticateWithBiometric()).toBe(false);
+    expect(await AuthRepository.authenticateWithBiometric()).toBe(false);
     expect(mockAuthenticate).not.toHaveBeenCalled();
   });
 });
