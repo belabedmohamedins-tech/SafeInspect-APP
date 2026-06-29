@@ -1,7 +1,8 @@
 import { InspectionItem } from '../types';
+import { baseFoodCriteria } from './baseFoodCriteria';
 
 // Covers: "وحدة تخزين الزيتون والخضر" — olive and vegetable storage unit
-export const produceStorageCriteria: InspectionItem[] = [
+const produceStorageSpecificCriteria: InspectionItem[] = [
   {
     id: 'PRD-01-01',
     axis: 'هوية المنشأة والوثائق',
@@ -19,7 +20,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     criteria: 'تخزين الزيتون والخضروات في ظروف درجة الحرارة والرطوبة الملائمة لكل صنف (0-5°م للخضر، 7-15°م للزيتون) مع تهوية مناسبة.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (مراقبة درجات الحرارة كنقطة تحكم حرجة لحفظ المنتجات الغذائية) + القرارات الوزارية الخاصة بشروط حفظ المنتجات الفلاحية الطازجة.',
     severity: 'high',
-    controlType: 'measurement',
+    controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
@@ -102,4 +103,9 @@ export const produceStorageCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
+];
+
+export const produceStorageCriteria: InspectionItem[] = [
+  ...produceStorageSpecificCriteria,
+  ...baseFoodCriteria,
 ];
