@@ -1,23 +1,4 @@
-// src/services/SyncService.ts
-//
-// Offline-first sync queue.
-//
-// Design:
-//   - Completed inspections are enqueued locally (AsyncStorage) immediately
-//     after save, regardless of network state.
-//   - flush() is called by the scheduler in _layout.tsx (every 15 min) and
-//     can also be triggered manually from the Backup screen.
-//   - Each item is POSTed to SYNC_API_URL.  On 2xx the item is dequeued.
-//     On network error or non-2xx the item stays in the queue for the next run.
-//   - If SYNC_API_URL is not configured the service is a silent no-op so
-//     development / Expo Go usage is unaffected.
-//
-// NOTE: SYNC_API_URL is read lazily so jest.resetModules() + env mutation
-// exercises both branches without module caching.
-// NetInfo uses require() — the __mocks__ file (always loaded via
-// moduleNameMapper) is resolved synchronously from the live Jest registry
-// so its fetch() is guaranteed to be the mock stub.
-
+// src/services/SyncService.ts  [DEBUG BUILD — revert after diagnosis]
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
@@ -38,8 +19,6 @@ export interface SyncStatus {
   isOnline: boolean;
 }
 
-// ── Queue helpers ──────────────────────────────────────────────────────────────
-
 async function readQueue(): Promise<SyncQueueItem[]> {
   try {
     const raw = await AsyncStorage.getItem(StorageKeys.SYNC_QUEUE);
@@ -53,55 +32,45 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(queue));
 }
 
-// ── Network check ──────────────────────────────────────────────────────────────
-
 async function checkOnline(): Promise<boolean> {
   try {
-    // require() instead of dynamic import() — moduleNameMapper routes this
-    // synchronously to the __mocks__ stub so Jest tests always hit the mock.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const NetInfo = (require('@react-native-community/netinfo') as { default: { fetch: () => Promise<{ isConnected: boolean | null; isInternetReachable: boolean | null }> } }).default;
     const state = await NetInfo.fetch();
+    console.log('[DEBUG checkOnline] state=', JSON.stringify(state));
     return state.isConnected === true && state.isInternetReachable !== false;
-  } catch {
+  } catch (e) {
+    console.log('[DEBUG checkOnline] threw:', e);
     return true;
   }
 }
 
-// ── Public API ────────────────────────────────────────────────────────────────
-
 export async function enqueue(inspection: SavedInspection): Promise<void> {
   const queue = await readQueue();
   const idx = queue.findIndex(q => q.inspection.id === inspection.id);
-
-  const item: SyncQueueItem = {
-    inspection,
-    queuedAt: new Date().toISOString(),
-    attempts: 0,
-  };
-
+  const item: SyncQueueItem = { inspection, queuedAt: new Date().toISOString(), attempts: 0 };
   if (idx >= 0) {
     const existing = queue[idx].inspection;
     const existingTs = existing.updatedAt ?? existing.date ?? '';
     const incomingTs = inspection.updatedAt ?? inspection.date ?? '';
-    if (incomingTs >= existingTs) {
-      queue[idx] = item;
-    }
+    if (incomingTs >= existingTs) queue[idx] = item;
   } else {
     queue.push(item);
   }
-
   await writeQueue(queue);
 }
 
 export async function flush(): Promise<number> {
   const SYNC_API_URL = getSyncApiUrl();
+  console.log('[DEBUG flush] SYNC_API_URL=', SYNC_API_URL);
   if (!SYNC_API_URL) return 0;
 
   const isOnline = await checkOnline();
+  console.log('[DEBUG flush] isOnline=', isOnline);
   if (!isOnline) return 0;
 
   const queue = await readQueue();
+  console.log('[DEBUG flush] queue.length=', queue.length);
   if (queue.length === 0) return 0;
 
   let synced = 0;
@@ -109,31 +78,29 @@ export async function flush(): Promise<number> {
 
   for (const item of queue) {
     try {
+      console.log('[DEBUG flush] calling fetch for item', item.inspection.id);
+      console.log('[DEBUG flush] global.fetch is', typeof (global as any).fetch, (global as any).fetch === fetch ? 'SAME' : 'DIFFERENT');
       const res = await fetch(`${SYNC_API_URL}/inspections`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(item.inspection),
       });
-
+      console.log('[DEBUG flush] res=', JSON.stringify(res));
       if (res.ok) {
         synced++;
       } else {
         remaining.push({ ...item, attempts: item.attempts + 1 });
       }
-    } catch {
+    } catch (e) {
+      console.log('[DEBUG flush] fetch threw:', e);
       remaining.push({ ...item, attempts: item.attempts + 1 });
     }
   }
 
   await writeQueue(remaining);
-
   if (synced > 0) {
-    await AsyncStorage.setItem(
-      StorageKeys.SYNC_LAST_RUN,
-      new Date().toISOString(),
-    );
+    await AsyncStorage.setItem(StorageKeys.SYNC_LAST_RUN, new Date().toISOString());
   }
-
   return synced;
 }
 
@@ -142,14 +109,8 @@ export async function getSyncStatus(): Promise<SyncStatus> {
     readQueue(),
     AsyncStorage.getItem(StorageKeys.SYNC_LAST_RUN),
   ]);
-
   const isOnline = await checkOnline();
-
-  return {
-    pendingCount: queue.length,
-    lastSyncAt:  lastRaw ? new Date(lastRaw) : null,
-    isOnline,
-  };
+  return { pendingCount: queue.length, lastSyncAt: lastRaw ? new Date(lastRaw) : null, isOnline };
 }
 
 export async function clearQueue(): Promise<void> {
