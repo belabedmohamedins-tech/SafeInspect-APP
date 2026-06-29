@@ -12,12 +12,15 @@ const SECURE_OPTIONS: SecureStore.SecureStoreOptions = {
   keychainAccessible: SecureStore.WHEN_UNLOCKED,
 };
 
-// _platformOS is exported so tests can override it without module tricks.
-// Default: read from Platform at module load time.
-export let _platformOS: string = Platform.OS;
+// Babel compiles `export let` into a getter on exports — assigning to the
+// imported binding from a test file does NOT update the closure variable
+// that isNative() reads. Expose an explicit setter instead so tests can
+// reliably override the platform check without module-registry tricks.
+let _os: string = Platform.OS;
+export const setPlatformOS = (os: string): void => { _os = os; };
 
 function isNative(): boolean {
-  return _platformOS !== 'web';
+  return _os !== 'web';
 }
 
 async function secureGet(key: string): Promise<string | null> {

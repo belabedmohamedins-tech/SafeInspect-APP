@@ -1,15 +1,9 @@
 // src/__tests__/repositories/AuthRepository.test.ts
-//
-// Web-branch strategy:
-//   AuthRepository exports `_platformOS` (a plain string let). The web
-//   describe block sets it to 'web' in beforeEach and restores it in
-//   afterEach. No module tricks, no Proxy fights.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuth from 'expo-local-authentication';
-import { AuthRepository, _platformOS as _po } from '../../repositories/AuthRepository';
-import * as AuthModule from '../../repositories/AuthRepository';
+import { AuthRepository, setPlatformOS } from '../../repositories/AuthRepository';
 
 const mockHasHardware    = jest.mocked(LocalAuth.hasHardwareAsync);
 const mockIsEnrolled     = jest.mocked(LocalAuth.isEnrolledAsync);
@@ -140,19 +134,20 @@ describe('AuthRepository', () => {
 });
 
 // ─── Web-platform branches ───────────────────────────────────────────────
-// Set AuthModule._platformOS = 'web' directly — it is a plain exported `let`,
-// not a Proxy property. isNative() reads it on every call, so the web branch
-// is active for the duration of these tests.
+// setPlatformOS() writes directly into the module closure variable `_os`.
+// Babel's `export let` compiles to a getter-only property on the exports
+// object, so assigning to an imported binding from outside the module has
+// no effect. An explicit setter is the only reliable cross-module approach.
 describe('AuthRepository — web platform (isNative = false)', () => {
   beforeEach(() => {
-    AuthModule._platformOS = 'web';
+    setPlatformOS('web');
     resetAsync();
     resetSecure();
     jest.clearAllMocks();
   });
 
   afterEach(() => {
-    AuthModule._platformOS = 'android';
+    setPlatformOS('android');
   });
 
   it('reads and writes PIN via AsyncStorage (not SecureStore) on web', async () => {
