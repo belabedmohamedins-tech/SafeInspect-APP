@@ -15,13 +15,11 @@
 // (moduleNameMapper) to __mocks__/ files whose jest.fn() stubs use
 // mockImplementation — those implementations survive jest.clearAllMocks().
 //
-// WHY no resetAsync() in the web beforeEach:
-// jest.isolateModules() gives WebAuth a fresh module registry, but the
-// AsyncStorage mock is a singleton shared across all registries (the mock
-// factory is called once). Calling resetAsync() between setPin and getPin
-// would wipe the key that setPin just wrote, causing getPin to return null.
-// The web tests are self-contained (unique keys, no bleed into native tests)
-// so store-reset is not needed inside this block.
+// WHY no jest.clearAllMocks() in the web beforeEach:
+// jest.clearAllMocks() resets ALL mock implementations, including the
+// underlying store operations on the AsyncStorage mock (getItem, setItem, etc.).
+// This would break WebAuth.setPin / getPin since they rely on the mock
+// implementations being intact. Only resetAsync() (store wipe) is safe here.
 
 import { Platform } from 'react-native';
 (Platform as any).OS = 'ios';
@@ -182,6 +180,11 @@ describe('AuthRepository', () => {
 // Covers: secureGet/secureSet/secureDelete → AsyncStorage fallback paths,
 // and the three early-return false guards in isBiometricAvailable,
 // getBiometricType, and authenticateWithBiometric.
+//
+// The top-level beforeEach calls jest.clearAllMocks() which resets mock
+// implementations. To keep AsyncStorage working inside this block we
+// call resetAsync() (store-only wipe) in afterEach here instead, and
+// deliberately skip jest.clearAllMocks() so the implementations stay intact.
 describe('AuthRepository — web platform (isNative = false)', () => {
   let WebAuth: typeof AuthRepository;
 
@@ -194,19 +197,16 @@ describe('AuthRepository — web platform (isNative = false)', () => {
   });
 
   afterAll(() => {
-    // Restore ios so subsequent test files are not affected
     const { Platform } = require('react-native');
     Platform.OS = 'ios';
-    // Clean up any keys written by web tests
     resetAsync();
     resetSecure();
   });
 
-  // NOTE: No resetAsync() here — the AsyncStorage mock is a shared singleton.
-  // Calling resetAsync() between setPin() and getPin() in the same test would
-  // wipe the key that setPin just wrote. Only reset spy call counts.
-  beforeEach(() => {
-    jest.clearAllMocks();
+  afterEach(() => {
+    // Wipe store between web tests without clearing mock implementations
+    resetAsync();
+    resetSecure();
   });
 
   // lines 32-44: secureGet/Set/Delete fall back to AsyncStorage on web

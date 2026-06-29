@@ -1,4 +1,13 @@
 // src/__tests__/NotificationService.test.ts
+//
+// expo-constants must be mocked BEFORE the service is imported so that
+// IS_EXPO_GO = Constants.appOwnership === 'expo' evaluates to false,
+// allowing the lazy `require('expo-notifications')` branch to execute
+// and populate the module-level `Notifications` variable.
+
+jest.mock('expo-constants', () => ({
+  default: { appOwnership: 'standalone' },
+}));
 
 jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync:            jest.fn(),
@@ -16,7 +25,7 @@ import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
-// ─── Typed stubs ─────────────────────────────────────────────────────────────
+// ─── Typed stubs ─────────────────────────────────────────────────────────────────
 const mockGetPerms   = jest.mocked(Notifications.getPermissionsAsync);
 const mockReqPerms   = jest.mocked(Notifications.requestPermissionsAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
@@ -123,6 +132,7 @@ describe('NotificationService', () => {
     it('does nothing when notifications are disabled', async () => {
       await setEnabled(false);
       jest.clearAllMocks();
+      mockCancelOne.mockResolvedValue(undefined);
       await scheduleForAgendaItem(makeItem());
       expect(mockSchedule).not.toHaveBeenCalled();
     });
