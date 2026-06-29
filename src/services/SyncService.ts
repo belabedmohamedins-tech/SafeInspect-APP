@@ -1,12 +1,45 @@
-// src/services/SyncService.ts  [DEBUG — revert after diagnosis]
+// src/services/SyncService.ts
+//
+// Offline-first sync queue.
+//
+// Design:
+//   - Completed inspections are enqueued locally (AsyncStorage) immediately
+//     after save, regardless of network state.
+//   - flush() is called by the scheduler in _layout.tsx (every 15 min) and
+//     can also be triggered manually from the Backup screen.
+//   - Each item is POSTed to SYNC_API_URL.  On 2xx the item is dequeued.
+//     On network error or non-2xx the item stays in the queue for the next
+//     run.
+//   - If SYNC_API_URL is not configured the service is a silent no-op so
+//     development / Expo Go usage is unaffected.
+//
+// ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to `process.env.KEY`:
+//   babel-preset-expo ships babel-plugin-transform-inline-environment-variables
+//   which replaces the static form `process.env.EXPO_PUBLIC_*` with the
+//   LITERAL value of that variable at Babel/Jest compile time.  Because the
+//   variable is not set when Jest transforms this module the plugin writes
+//   `undefined` into the compiled JS and runtime mutations are invisible.
+//   Using a computed key `process.env[KEY]` is opaque to the plugin and is
+//   read from the live process.env object at call time.
+//
+// ⚠️  FETCH — keep `globalThis.fetch()` (not bare `fetch()`):
+//   Babel captures the bare identifier at module-load time; globalThis.fetch
+//   is a property lookup resolved at call time, ensuring the jest.fn() mock
+//   assigned in beforeEach is always visible.
+//
+// ⚠️  NETINFO — keep `require()` (not `import`):
+//   Dynamic require() is resolved through moduleNameMapper at call time;
+//   a static import would be hoisted and cached before mocks are wired.
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
 
+// Computed key — defeats babel-plugin-transform-inline-environment-variables.
+const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
+
 function getSyncApiUrl(): string | undefined {
-  const raw = process.env.EXPO_PUBLIC_SYNC_API_URL;
-  console.log('[ENV] raw=', raw, '| keys with SYNC=', Object.keys(process.env).filter(k => k.includes('SYNC')));
-  return (raw ?? '').trim() || undefined;
+  return (process.env[SYNC_API_URL_KEY] ?? '').trim() || undefined;
 }
 
 export interface SyncQueueItem {
@@ -21,6 +54,8 @@ export interface SyncStatus {
   isOnline: boolean;
 }
 
+// ── Queue helpers ──────────────────────────────────────────────────────────────
+
 async function readQueue(): Promise<SyncQueueItem[]> {
   try {
     const raw = await AsyncStorage.getItem(StorageKeys.SYNC_QUEUE);
@@ -34,11 +69,18 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(queue));
 }
 
+// ── Network check ──────────────────────────────────────────────────────────────
+
 async function checkOnline(): Promise<boolean> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const NetInfo = (require('@react-native-community/netinfo') as {
-      default: { fetch: () => Promise<{ isConnected: boolean | null; isInternetReachable: boolean | null }> };
+      default: {
+        fetch: () => Promise<{
+          isConnected: boolean | null;
+          isInternetReachable: boolean | null;
+        }>;
+      };
     }).default;
     const state = await NetInfo.fetch();
     return state.isConnected === true && state.isInternetReachable !== false;
@@ -47,18 +89,29 @@ async function checkOnline(): Promise<boolean> {
   }
 }
 
+// ── Public API ────────────────────────────────────────────────────────────────
+
 export async function enqueue(inspection: SavedInspection): Promise<void> {
   const queue = await readQueue();
   const idx = queue.findIndex(q => q.inspection.id === inspection.id);
-  const item: SyncQueueItem = { inspection, queuedAt: new Date().toISOString(), attempts: 0 };
+
+  const item: SyncQueueItem = {
+    inspection,
+    queuedAt: new Date().toISOString(),
+    attempts: 0,
+  };
+
   if (idx >= 0) {
     const existing = queue[idx].inspection;
     const existingTs = existing.updatedAt ?? existing.date ?? '';
     const incomingTs = inspection.updatedAt ?? inspection.date ?? '';
-    if (incomingTs >= existingTs) queue[idx] = item;
+    if (incomingTs >= existingTs) {
+      queue[idx] = item;
+    }
   } else {
     queue.push(item);
   }
+
   await writeQueue(queue);
 }
 
@@ -77,26 +130,33 @@ export async function flush(): Promise<number> {
 
   for (const item of queue) {
     try {
+      // globalThis.fetch — property lookup at call time so the jest mock is
+      // always visible (see FETCH NOTE in the file header).
       const res = await globalThis.fetch(`${SYNC_API_URL}/inspections`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(item.inspection),
       });
+
       if (res.ok) {
         synced++;
       } else {
         remaining.push({ ...item, attempts: item.attempts + 1 });
       }
-    } catch (e) {
-      console.log('[FETCH ERROR]', String(e));
+    } catch {
       remaining.push({ ...item, attempts: item.attempts + 1 });
     }
   }
 
   await writeQueue(remaining);
+
   if (synced > 0) {
-    await AsyncStorage.setItem(StorageKeys.SYNC_LAST_RUN, new Date().toISOString());
+    await AsyncStorage.setItem(
+      StorageKeys.SYNC_LAST_RUN,
+      new Date().toISOString(),
+    );
   }
+
   return synced;
 }
 
@@ -105,8 +165,14 @@ export async function getSyncStatus(): Promise<SyncStatus> {
     readQueue(),
     AsyncStorage.getItem(StorageKeys.SYNC_LAST_RUN),
   ]);
+
   const isOnline = await checkOnline();
-  return { pendingCount: queue.length, lastSyncAt: lastRaw ? new Date(lastRaw) : null, isOnline };
+
+  return {
+    pendingCount: queue.length,
+    lastSyncAt:  lastRaw ? new Date(lastRaw) : null,
+    isOnline,
+  };
 }
 
 export async function clearQueue(): Promise<void> {
