@@ -104,87 +104,68 @@ describe('flush — no API URL configured', () => {
 });
 
 // ─── flush — with API URL ──────────────────────────────────────────────────────
+//
+// No jest.resetModules() — module registry stays stable for the whole file.
+// process.env is mutated per-test; getSyncApiUrl() reads it lazily so the
+// env change is visible to the already-loaded SyncService module.
 
 describe('flush — with API URL (mocked via env)', () => {
   const ORIGINAL_ENV = process.env;
 
   beforeEach(() => {
     process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
-    jest.resetModules();
-    // Re-assign global.fetch AFTER resetModules so the freshly-required
-    // SyncService module closure captures our mock.
-    global.fetch = mockFetch;
   });
 
   afterEach(() => {
     process.env = ORIGINAL_ENV;
   });
 
-  function freshModules() {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const storage = require('@react-native-async-storage/async-storage').default as typeof AsyncStorage;
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const service = require('../services/SyncService') as typeof import('../services/SyncService');
-    return { storage, service };
-  }
-
-  async function freshReadQueue(storage: typeof AsyncStorage) {
-    const raw = await storage.getItem(StorageKeys.SYNC_QUEUE);
-    return raw ? JSON.parse(raw) : [];
-  }
-
   it('removes item from queue on 2xx response', async () => {
-    const { storage, service } = freshModules();
-    // Use service.enqueue — same module context as service.flush
-    await service.enqueue(makeInspection('i1'));
+    await enqueue(makeInspection('i1'));
     mockFetch.mockResolvedValueOnce({ ok: true, status: 200 });
-    const synced = await service.flush();
+    const synced = await flush();
     expect(synced).toBe(1);
-    const q = await freshReadQueue(storage);
+    const q = await readQueue();
     expect(q).toHaveLength(0);
   });
 
   it('keeps item in queue on 4xx response', async () => {
-    const { storage, service } = freshModules();
-    await service.enqueue(makeInspection('i1'));
+    await enqueue(makeInspection('i1'));
     mockFetch.mockResolvedValueOnce({ ok: false, status: 422 });
-    const synced = await service.flush();
+    const synced = await flush();
     expect(synced).toBe(0);
-    const q = await freshReadQueue(storage);
+    const q = await readQueue();
     expect(q).toHaveLength(1);
   });
 
   it('keeps item in queue when fetch throws (network error)', async () => {
-    const { storage, service } = freshModules();
-    await service.enqueue(makeInspection('i1'));
+    await enqueue(makeInspection('i1'));
     mockFetch.mockRejectedValueOnce(new Error('Network request failed'));
-    const synced = await service.flush();
+    const synced = await flush();
     expect(synced).toBe(0);
-    const q = await freshReadQueue(storage);
+    const q = await readQueue();
     expect(q).toHaveLength(1);
   });
 
   it('updates SYNC_LAST_RUN only when at least one item is synced', async () => {
-    const { storage, service } = freshModules();
-    await service.enqueue(makeInspection('i1'));
+    await enqueue(makeInspection('i1'));
     mockFetch.mockResolvedValueOnce({ ok: true, status: 200 });
-    await service.flush();
-    const lastRun = await storage.getItem(StorageKeys.SYNC_LAST_RUN);
+    await flush();
+    const lastRun = await AsyncStorage.getItem(StorageKeys.SYNC_LAST_RUN);
     expect(lastRun).not.toBeNull();
   });
 
   it('handles mixed success and failure in one flush', async () => {
-    const { storage, service } = freshModules();
-    await service.enqueue(makeInspection('i1'));
-    await service.enqueue(makeInspection('i2'));
-    await service.enqueue(makeInspection('i3'));
+    await enqueue(makeInspection('i1'));
+    await enqueue(makeInspection('i2'));
+    await enqueue(makeInspection('i3'));
     mockFetch
       .mockResolvedValueOnce({ ok: true,  status: 200 })
       .mockResolvedValueOnce({ ok: false, status: 500 })
       .mockResolvedValueOnce({ ok: true,  status: 201 });
-    const synced = await service.flush();
+    const synced = await flush();
     expect(synced).toBe(2);
-    const q = await freshReadQueue(storage);
+    const q = await readQueue();
     expect(q).toHaveLength(1);
     expect(q[0].inspection.id).toBe('i2');
   });
