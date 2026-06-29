@@ -43,15 +43,17 @@ module.exports = {
   ],
 
   // ─── Thresholds ────────────────────────────────────────────────────────────────
-  // Last passing run: branches 79.73 / functions 97.42 / lines 95.21 / stmts 93.66
+  // Last passing run (after schema.ts + syncEngine.ts added, commit ad94e33):
+  //   branches 81.x / functions 97.x / lines 95.x / statements 94.x
   // Thresholds set ~1 point below actuals to block regressions with headroom.
-  // Raised after: fileUtils suite added, stale inspectionUtils duplicate removed.
+  // To raise: run `npx jest --coverage`, update actuals comment above, then
+  // increment each threshold to (actual - 1), rounded down.
   coverageThreshold: {
     global: {
-      branches:   79,
+      branches:   81,
       functions:  97,
       lines:      95,
-      statements: 93,
+      statements: 94,
     },
   },
 
