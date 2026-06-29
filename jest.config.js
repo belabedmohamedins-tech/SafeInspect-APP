@@ -44,13 +44,14 @@ module.exports = {
 
   // ─── Thresholds ────────────────────────────────────────────────────────────────
   // Last passing run: branches 79.73 / functions 97.42 / lines 95.21 / stmts 93.66
-  // Set slightly below current to give headroom while blocking regressions.
+  // Thresholds set ~1 point below actuals to block regressions with headroom.
+  // Raised after: fileUtils suite added, stale inspectionUtils duplicate removed.
   coverageThreshold: {
     global: {
-      branches:   78,
-      functions:  95,
-      lines:      93,
-      statements: 92,
+      branches:   79,
+      functions:  97,
+      lines:      95,
+      statements: 93,
     },
   },
 
