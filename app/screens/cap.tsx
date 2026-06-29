@@ -17,6 +17,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
+import { CapNotificationService } from '../../src/services/CapNotificationService';
 import { CapReportService } from '../../src/services/CapReportService';
 import { CorrectiveAction } from '../../src/types';
 
@@ -91,9 +92,18 @@ export default function CAPScreen() {
     }
   };
 
+  // ── Status update + notify assignees ──────────────────────────────────────
   const handleUpdateStatus = async (newStatus: CorrectiveAction['status']) => {
     if (!selected) return;
     await repo.updateStatus(selected.id, newStatus);
+    // Notify the assignee that the status has changed
+    const updated: CorrectiveAction = { ...selected, status: newStatus };
+    try {
+      await CapNotificationService.notifyAssignees(updated);
+    } catch (err) {
+      // Notification failure must never block the UI update
+      console.warn('[CAP] notifyAssignees failed:', err);
+    }
     setSelected(null);
     load();
   };
