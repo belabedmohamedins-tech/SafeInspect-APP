@@ -1,33 +1,35 @@
 // src/__tests__/syncEngine.test.ts
 //
-// ─── NetInfo mock ─────────────────────────────────────────────────────────────
+// ─── Strategy ────────────────────────────────────────────────────────────────
 //
 // moduleNameMapper in jest.config.js permanently routes
 // @react-native-community/netinfo to __mocks__/@react-native-community/netinfo.js.
-// jest.mock() factory overrides do NOT win over moduleNameMapper after
-// jest.resetModules() — the mapper file always loads.
 //
-// Strategy: inject per-test spies via NetInfo.__setAddEventListener() which
-// the __mocks__ file delegates to when set.  This survives resetModules()
-// because the __mocks__ module itself is persistent (mapper always returns it)
-// and _addEventListenerImpl is a module-level variable inside it.
+// The key invariant: jest.resetModules() clears the module registry, so the
+// NEXT require/import of netinfo loads a FRESH instance of the mock file.
+// That fresh instance has _addEventListenerImpl = null.
+//
+// Therefore the NetInfo spy must be injected (via __setAddEventListener)
+// AFTER jest.resetModules() and using the SAME require() handle that
+// syncEngine will see when it does import('@react-native-community/netinfo').
+//
+// Concretely: in the inner beforeEach (which runs after the outer one),
+// we call jest.resetModules(), then re-require the NetInfo mock, then
+// inject the spy, then require syncEngine.
 
 type NetInfoChangeCallback = (state: {
   isConnected: boolean | null;
   isInternetReachable: boolean | null;
 }) => void;
 
-// Stable shared state — survives jest.resetModules().
+// Stable shared state updated by each test's beforeEach.
 const mockNetInfoState = {
   listener:    null as NetInfoChangeCallback | null,
   unsubscribe: jest.fn(),
 };
 
-// We do NOT call jest.mock() for netinfo here — moduleNameMapper handles it.
-// Instead we inject our spy via __setAddEventListener in beforeEach.
-
 // ─── SyncService mock ─────────────────────────────────────────────────────────
-
+// Registered at file-parse time (before any resetModules).
 const mockFlush = jest.fn().mockResolvedValue(0);
 jest.mock('../services/SyncService', () => ({
   flush: (...args: unknown[]) => mockFlush(...args),
@@ -55,28 +57,17 @@ async function drainImport() {
 
 // ─── Setup / Teardown ─────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const NetInfoMock = require('@react-native-community/netinfo').default as {
-  __setAddEventListener: (impl: ((cb: NetInfoChangeCallback) => () => void) | null) => void;
-  __resetAddEventListener: () => void;
-};
-
+// Outer beforeEach — runs first, sets up fakes.
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
   mockNetInfoState.listener    = null;
   mockNetInfoState.unsubscribe = jest.fn();
-  // Inject our spy into the persistent __mocks__ module.
-  NetInfoMock.__setAddEventListener((cb: NetInfoChangeCallback) => {
-    mockNetInfoState.listener = cb;
-    return mockNetInfoState.unsubscribe;
-  });
 });
 
 afterEach(() => {
   jest.useRealTimers();
   process.env = ORIGINAL_ENV;
-  NetInfoMock.__resetAddEventListener();
 });
 
 // ─── No API URL ───────────────────────────────────────────────────────────────
@@ -102,15 +93,33 @@ describe('startSyncScheduler — no API URL configured', () => {
 // ─── With API URL ─────────────────────────────────────────────────────────────
 
 describe('startSyncScheduler — with API URL', () => {
+  // Inner beforeEach — runs AFTER the outer one.
+  // Order: outer beforeEach → inner beforeEach → test → afterEach.
   beforeEach(() => {
     withSyncUrl();
+
+    // Step 1: reset module registry so syncEngine gets a fresh load.
     jest.resetModules();
-    // Re-register SyncService mock after resetModules.
+
+    // Step 2: re-register SyncService mock in the new registry.
     jest.mock('../services/SyncService', () => ({
       flush: (...args: unknown[]) => mockFlush(...args),
     }));
-    // No need to re-register NetInfo — __setAddEventListener injected in
-    // the outer beforeEach persists in the __mocks__ module-level variable.
+
+    // Step 3: require the NetInfo mock from the NEW registry — this is the
+    // same instance that syncEngine's dynamic import() will resolve to.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NetInfoMock = require('@react-native-community/netinfo').default as {
+      __setAddEventListener: (impl: ((cb: NetInfoChangeCallback) => () => void) | null) => void;
+      __resetAddEventListener: () => void;
+    };
+
+    // Step 4: inject spy so listener is captured when syncEngine calls
+    // NetInfo.default.addEventListener(cb).
+    NetInfoMock.__setAddEventListener((cb: NetInfoChangeCallback) => {
+      mockNetInfoState.listener = cb;
+      return mockNetInfoState.unsubscribe;
+    });
   });
 
   it('does NOT call flush synchronously on scheduler start', () => {
@@ -206,10 +215,17 @@ describe('startSyncScheduler — with API URL', () => {
   });
 
   it('falls back to interval-only mode when NetInfo import fails (no crash)', async () => {
-    // Override the addEventListener spy to throw, simulating missing package.
+    // Override the spy to throw, simulating a missing package.
+    // Must re-require NetInfoMock from the current registry to affect the
+    // right instance.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NetInfoMock = require('@react-native-community/netinfo').default as {
+      __setAddEventListener: (impl: ((cb: NetInfoChangeCallback) => () => void) | null) => void;
+    };
     NetInfoMock.__setAddEventListener(() => {
       throw new Error('module not found');
     });
+
     jest.resetModules();
     jest.mock('../services/SyncService', () => ({
       flush: (...args: unknown[]) => mockFlush(...args),

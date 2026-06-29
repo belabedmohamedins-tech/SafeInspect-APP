@@ -17,8 +17,7 @@ global.fetch = mockFetch;
 // ─── NetInfo ──────────────────────────────────────────────────────────────────
 // moduleNameMapper routes @react-native-community/netinfo to the __mocks__ file
 // whose fetch() already resolves { isConnected: true } by default.
-// No jest.mock() override needed — the mapper file is always loaded and its
-// default state is online, so flush() will proceed past checkOnline().
+// No jest.mock() override needed.
 
 beforeEach(async () => {
   jest.clearAllMocks();
@@ -115,8 +114,6 @@ describe('flush — with API URL (mocked via env)', () => {
     // Re-assign global.fetch AFTER resetModules so the freshly-required
     // SyncService module closure captures our mock.
     global.fetch = mockFetch;
-    // NetInfo: no jest.mock() needed — moduleNameMapper always loads the
-    // __mocks__ file whose fetch() resolves { isConnected: true } by default.
   });
 
   afterEach(() => {
@@ -138,6 +135,7 @@ describe('flush — with API URL (mocked via env)', () => {
 
   it('removes item from queue on 2xx response', async () => {
     const { storage, service } = freshModules();
+    // Use service.enqueue — same module context as service.flush
     await service.enqueue(makeInspection('i1'));
     mockFetch.mockResolvedValueOnce({ ok: true, status: 200 });
     const synced = await service.flush();
