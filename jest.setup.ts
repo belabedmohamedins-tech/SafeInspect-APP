@@ -48,6 +48,15 @@
  *   useNavigation / useRouter: minimal stubs. Test files that need specific
  *   behaviour should override with jest.mock('expo-router', ...) at Layer 4.
  *
+ * NOTE: expo-constants / IS_EXPO_GO guard
+ *
+ *   NotificationService captures IS_EXPO_GO = Constants.appOwnership === 'expo'
+ *   at module-load time. The jest-expo preset sets appOwnership to 'expo' via
+ *   its own resolver, which runs before moduleNameMapper. We override it here
+ *   (Layer 3, post-preset) by mutating the already-loaded Constants object so
+ *   that appOwnership is 'standalone'. This makes IS_EXPO_GO = false and allows
+ *   the lazy require('expo-notifications') branch to execute.
+ *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
@@ -56,6 +65,18 @@
  */
 
 import React from 'react';
+
+// ─── expo-constants — force IS_EXPO_GO = false ───────────────────────────────
+// jest-expo preset sets Constants.appOwnership = 'expo' via its resolver.
+// We mutate the object here (post-preset) so every subsequent require() sees
+// appOwnership = 'standalone', making IS_EXPO_GO = false in NotificationService.
+try {
+  const Constants = require('expo-constants');
+  const target = Constants.default ?? Constants;
+  target.appOwnership = 'standalone';
+} catch (_) {
+  // expo-constants not installed — ignore
+}
 
 // ─── expo-router — global stub ───────────────────────────────────────────────
 jest.mock('expo-router', () => {

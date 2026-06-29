@@ -1,16 +1,17 @@
 // src/__tests__/NotificationService.test.ts
 //
-// expo-constants is globally mocked via moduleNameMapper (jest.config.js) with
-// appOwnership: 'standalone', so IS_EXPO_GO = false and the lazy
-// require('expo-notifications') branch executes at module load, populating
-// the module-level `Notifications` variable.
-// expo-notifications is also globally mocked via moduleNameMapper.
+// Constants.appOwnership is patched to 'standalone' in jest.setup.ts (Layer 3)
+// so IS_EXPO_GO = false when NotificationService is first imported, causing
+// the lazy require('expo-notifications') branch to execute and populate the
+// module-level `Notifications` variable.
+//
+// expo-notifications is globally mocked via moduleNameMapper (jest.config.js).
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 
-// ─── Typed stubs ─────────────────────────────────────────────────────────────────
+// ─── Typed stubs ─────────────────────────────────────────────────────────────
 const mockGetPerms   = jest.mocked(Notifications.getPermissionsAsync);
 const mockReqPerms   = jest.mocked(Notifications.requestPermissionsAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
@@ -38,6 +39,7 @@ function makeItem(overrides: Partial<AgendaNotificationPayload> = {}): AgendaNot
 beforeEach(() => {
   resetAsync();
   jest.clearAllMocks();
+  // Restore implementations cleared by jest.clearAllMocks()
   mockGetPerms.mockResolvedValue({ status: 'granted' } as any);
   mockReqPerms.mockResolvedValue({ status: 'granted' } as any);
   mockSetChannel.mockResolvedValue(null as any);
@@ -72,7 +74,7 @@ describe('NotificationService', () => {
       mockReqPerms.mockResolvedValueOnce({ status: 'granted' } as any);
       await requestPermission();
       expect(mockSetChannel).toHaveBeenCalledWith('agenda', expect.objectContaining({ name: expect.any(String) }));
-      (Platform as any).OS = 'ios';
+      (Platform as any).OS = 'android'; // PLATFORM.OS is android by default in jest.setup.ts
     });
 
     it('returns false when Notifications throws', async () => {

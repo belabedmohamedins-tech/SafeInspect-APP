@@ -1,33 +1,25 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
 // isNative = Platform.OS !== 'web' is evaluated ONCE at module-load time.
-// We cannot reload the module with a different Platform.OS using
-// jest.isolateModules() inside beforeAll reliably across Jest versions.
+// We cannot change Platform.OS on the already-imported module and get a
+// different isNative value — the const is frozen at require() time.
 //
-// Strategy for web-branch coverage (lines 32-44, 94, 106, 135):
-// Rather than reloading the module, we verify the behaviour indirectly:
-//   • secureGet/secureSet/secureDelete on web call AsyncStorage, not SecureStore.
-//     Since the test file runs with Platform.OS = 'ios', isNative = true and
-//     SecureStore is used. We therefore use a dedicated jest.isolateModules()
-//     block that requires the module synchronously WITHIN the same callback,
-//     assigns WebAuth synchronously, and then calls it in normal async tests.
-//   • isBiometricAvailable / getBiometricType / authenticateWithBiometric on
-//     web simply return false/'none'/false without calling LocalAuth — these
-//     are verified in the web block below.
-//
-// NOTE: jest.isolateModules() callback is synchronous. We assign WebAuth
-// synchronously inside it, so WebAuth is defined by the time the describe
-// block's tests run.
+// Strategy for web-branch coverage:
+//   Use a beforeAll that calls jest.resetModules() + jest.isolateModules()
+//   with Platform.OS = 'web' set BEFORE requiring AuthRepository.
+//   resetModules() ensures the registry is clean so the isolated require
+//   gets a fresh copy rather than the cached ios one.
+//   WebAuth and webReset* are assigned inside an async-safe wrapper using
+//   a resolver pattern so the outer describe can reference them.
 
 import { Platform } from 'react-native';
-(Platform as any).OS = 'ios';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuth from 'expo-local-authentication';
 import { AuthRepository } from '../../repositories/AuthRepository';
 
-// ─── Typed stub references ────────────────────────────────────────────────────
+// ─── Typed stub references ───────────────────────────────────────────────────
 const mockHasHardware    = jest.mocked(LocalAuth.hasHardwareAsync);
 const mockIsEnrolled     = jest.mocked(LocalAuth.isEnrolledAsync);
 const mockSupportedTypes = jest.mocked(LocalAuth.supportedAuthenticationTypesAsync);
@@ -42,7 +34,7 @@ beforeEach(() => {
   jest.clearAllMocks();
 });
 
-// ─── Native-platform (ios) tests ─────────────────────────────────────────────
+// ─── Native-platform tests ───────────────────────────────────────────────────
 describe('AuthRepository', () => {
   describe('PIN management', () => {
     it('returns null when no PIN is set', async () => {
@@ -172,36 +164,42 @@ describe('AuthRepository', () => {
   });
 });
 
-// ─── Web-platform branches (lines 32-44, 94, 106, 135) ───────────────────────
-// We use jest.isolateModules() synchronously (not inside beforeAll) so
-// WebAuth is assigned before any test in the block runs.
-// The isolated registry gives WebAuth its own AsyncStorage module instance.
-// We keep the store clean via afterEach inside this block only.
+// ─── Web-platform branches ───────────────────────────────────────────────────
+// isNative is a const frozen at the module's first require().
+// To test the web branch we need a fresh module load with Platform.OS = 'web'.
+//
+// Approach: beforeAll calls jest.resetModules() to wipe the module registry,
+// then jest.isolateModules() to load a private copy of AuthRepository with
+// Platform.OS patched to 'web' before the require. The isolated copy writes
+// to the same AsyncStorage mock store (same global mock object), so
+// webResetAsync() is just resetAsync() from the outer scope.
+//
+// afterAll restores Platform.OS to its original value so that other test
+// suites in this worker are unaffected (Jest workers may run multiple suites).
 describe('AuthRepository — web platform (isNative = false)', () => {
-  // Assign synchronously outside any hook — isolateModules callback is sync.
-  let WebAuth!: typeof AuthRepository;
-  let webResetAsync!: () => void;
-  let webResetSecure!: () => void;
+  let WebAuth: typeof AuthRepository;
 
-  jest.isolateModules(() => {
-    const { Platform: P } = require('react-native');
-    P.OS = 'web';
-    const { AuthRepository: WA } = require('../../repositories/AuthRepository');
-    const WAsyncStorage = require('@react-native-async-storage/async-storage');
-    const WSecureStore   = require('expo-secure-store');
-    WebAuth        = WA;
-    webResetAsync  = (WAsyncStorage.default ?? WAsyncStorage).__resetStore;
-    webResetSecure = WSecureStore.__resetStore;
-    // Restore ios immediately so the outer module scope is unaffected
-    P.OS = 'ios';
+  beforeAll(async () => {
+    // Wipe the module registry so AuthRepository is required fresh below.
+    jest.resetModules();
+    jest.isolateModules(() => {
+      (Platform as any).OS = 'web';
+      WebAuth = require('../../repositories/AuthRepository').AuthRepository;
+      // Restore immediately after require so nothing else sees OS='web'
+      (Platform as any).OS = 'android';
+    });
   });
 
   afterEach(() => {
-    webResetAsync();
-    webResetSecure();
+    // Wipe stores between tests without clearing mock implementations
+    resetAsync();
+    resetSecure();
   });
 
-  // lines 32-44: secureGet/Set/Delete fall back to AsyncStorage on web
+  afterAll(() => {
+    (Platform as any).OS = 'android';
+  });
+
   it('reads and writes PIN via AsyncStorage (not SecureStore) on web', async () => {
     await WebAuth.setPin('9999');
     expect(await WebAuth.getPin()).toBe('9999');
@@ -218,19 +216,16 @@ describe('AuthRepository — web platform (isNative = false)', () => {
     expect(await WebAuth.isBiometricEnabled()).toBe(true);
   });
 
-  // line 94: isBiometricAvailable returns false on web without calling LocalAuth
   it('isBiometricAvailable returns false on web without calling LocalAuth', async () => {
     expect(await WebAuth.isBiometricAvailable()).toBe(false);
     expect(mockHasHardware).not.toHaveBeenCalled();
   });
 
-  // line 106: getBiometricType returns 'none' on web without calling LocalAuth
   it('getBiometricType returns "none" on web without calling LocalAuth', async () => {
     expect(await WebAuth.getBiometricType()).toBe('none');
     expect(mockSupportedTypes).not.toHaveBeenCalled();
   });
 
-  // line 135: authenticateWithBiometric returns false on web without calling LocalAuth
   it('authenticateWithBiometric returns false on web without calling LocalAuth', async () => {
     expect(await WebAuth.authenticateWithBiometric()).toBe(false);
     expect(mockAuthenticate).not.toHaveBeenCalled();
