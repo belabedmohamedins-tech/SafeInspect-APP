@@ -15,7 +15,9 @@ type NetInfoChangeCallback = (state: {
 
 // Stable shared state — survives jest.resetModules() because it lives in the
 // test-file scope, not inside the mock factory.
-const netInfoState = {
+// Prefixed with 'mock' so Jest's hoisting restriction allows it inside
+// jest.mock() factory closures (Jest permits variables named mock*).
+const mockNetInfoState = {
   listener: null as NetInfoChangeCallback | null,
   unsubscribe: jest.fn(),
 };
@@ -23,8 +25,8 @@ const netInfoState = {
 jest.mock('@react-native-community/netinfo', () => ({
   default: {
     addEventListener: jest.fn((cb: NetInfoChangeCallback) => {
-      netInfoState.listener = cb;
-      return netInfoState.unsubscribe;
+      mockNetInfoState.listener = cb;
+      return mockNetInfoState.unsubscribe;
     }),
   },
 }));
@@ -58,7 +60,7 @@ async function drainImport() {
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
-  netInfoState.listener = null;
+  mockNetInfoState.listener = null;
 });
 
 afterEach(() => {
@@ -94,12 +96,12 @@ describe('startSyncScheduler — with API URL', () => {
     jest.resetModules();
     // Re-register both mocks after resetModules so the freshly-required
     // syncEngine resolves to our spies.  The NetInfo factory writes into
-    // netInfoState (module-scope) so the listener is always captured.
+    // mockNetInfoState (module-scope) so the listener is always captured.
     jest.mock('@react-native-community/netinfo', () => ({
       default: {
         addEventListener: jest.fn((cb: NetInfoChangeCallback) => {
-          netInfoState.listener = cb;
-          return netInfoState.unsubscribe;
+          mockNetInfoState.listener = cb;
+          return mockNetInfoState.unsubscribe;
         }),
       },
     }));
@@ -156,12 +158,12 @@ describe('startSyncScheduler — with API URL', () => {
     // Drain the dynamic import() promise chain fully.
     await drainImport();
 
-    expect(netInfoState.listener).not.toBeNull();
+    expect(mockNetInfoState.listener).not.toBeNull();
 
     // Simulate: was offline
-    netInfoState.listener!({ isConnected: false, isInternetReachable: false });
+    mockNetInfoState.listener!({ isConnected: false, isInternetReachable: false });
     // Transition to online
-    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
+    mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
     await Promise.resolve();
 
     expect(mockFlush).toHaveBeenCalledTimes(1);
@@ -173,8 +175,8 @@ describe('startSyncScheduler — with API URL', () => {
 
     await drainImport();
 
-    netInfoState.listener!({ isConnected: true,  isInternetReachable: true });
-    netInfoState.listener!({ isConnected: false, isInternetReachable: false });
+    mockNetInfoState.listener!({ isConnected: true,  isInternetReachable: true });
+    mockNetInfoState.listener!({ isConnected: false, isInternetReachable: false });
     await Promise.resolve();
 
     expect(mockFlush).not.toHaveBeenCalled();
@@ -186,8 +188,8 @@ describe('startSyncScheduler — with API URL', () => {
 
     await drainImport();
 
-    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
-    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
+    mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
+    mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
     await Promise.resolve();
 
     expect(mockFlush).not.toHaveBeenCalled();
@@ -200,7 +202,7 @@ describe('startSyncScheduler — with API URL', () => {
     await drainImport();
 
     stop();
-    expect(netInfoState.unsubscribe).toHaveBeenCalledTimes(1);
+    expect(mockNetInfoState.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('falls back to interval-only mode when NetInfo import fails (no crash)', async () => {
