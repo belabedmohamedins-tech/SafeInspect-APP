@@ -10,30 +10,25 @@ import {
 } from '../services/SyncService';
 import { SavedInspection } from '../types';
 
-// ─── Mock fetch globally ─────────────────────────────────────────────────────
+// ─── Mock fetch globally ───────────────────────────────────────────────────────────
 const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
-// ─── NetInfo ──────────────────────────────────────────────────────────────────
-// moduleNameMapper routes @react-native-community/netinfo to the __mocks__ file.
-// We grab the stable instance here so we can call __reset() after clearAllMocks()
-// restores all mock implementations to undefined.
-// eslint-disable-next-line @typescript-eslint/no-var-requires
+// ─── NetInfo ─────────────────────────────────────────────────────────────────────────
 const NetInfoMock = require('@react-native-community/netinfo').default as {
   __reset: () => void;
 };
 
 beforeEach(async () => {
   jest.clearAllMocks();
-  // clearAllMocks() wipes mock implementations (including NetInfo.fetch's
-  // mockResolvedValue).  Restore the default online state so checkOnline()
-  // returns true and flush() doesn't short-circuit.
+  // clearAllMocks() wipes NetInfo.fetch's mockResolvedValue — restore it.
   NetInfoMock.__reset();
+  // Re-assign global.fetch after clearAllMocks() wipes mockFetch's impl.
   global.fetch = mockFetch;
   await AsyncStorage.clear();
 });
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Helpers ───────────────────────────────────────────────────────────────────────
 
 function makeInspection(id: string, updatedAt?: string): SavedInspection {
   return {
@@ -56,7 +51,7 @@ async function readQueue() {
   return raw ? JSON.parse(raw) : [];
 }
 
-// ─── enqueue ──────────────────────────────────────────────────────────────────
+// ─── enqueue ─────────────────────────────────────────────────────────────────────────────
 
 describe('enqueue', () => {
   it('adds a new inspection to an empty queue', async () => {
@@ -100,7 +95,7 @@ describe('enqueue', () => {
   });
 });
 
-// ─── flush — no API URL ────────────────────────────────────────────────────────
+// ─── flush — no API URL ───────────────────────────────────────────────────────────────────
 
 describe('flush — no API URL configured', () => {
   it('returns 0 without calling fetch', async () => {
@@ -111,21 +106,18 @@ describe('flush — no API URL configured', () => {
   });
 });
 
-// ─── flush — with API URL ──────────────────────────────────────────────────────
+// ─── flush — with API URL ───────────────────────────────────────────────────────────────
 //
-// No jest.resetModules() — module registry stays stable for the whole file.
-// process.env is mutated per-test; getSyncApiUrl() reads it lazily so the
-// env change is visible to the already-loaded SyncService module.
+// process.env is mutated IN-PLACE (not replaced) so every module that holds
+// a reference to the original process.env object sees the change immediately.
 
 describe('flush — with API URL (mocked via env)', () => {
-  const ORIGINAL_ENV = process.env;
-
   beforeEach(() => {
-    process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
+    process.env.EXPO_PUBLIC_SYNC_API_URL = 'https://api.test';
   });
 
   afterEach(() => {
-    process.env = ORIGINAL_ENV;
+    delete process.env.EXPO_PUBLIC_SYNC_API_URL;
   });
 
   it('removes item from queue on 2xx response', async () => {
@@ -179,7 +171,7 @@ describe('flush — with API URL (mocked via env)', () => {
   });
 });
 
-// ─── getSyncStatus ────────────────────────────────────────────────────────────
+// ─── getSyncStatus ───────────────────────────────────────────────────────────────────────
 
 describe('getSyncStatus', () => {
   it('returns pendingCount equal to queue length', async () => {
@@ -207,7 +199,7 @@ describe('getSyncStatus', () => {
   });
 });
 
-// ─── clearQueue ───────────────────────────────────────────────────────────────
+// ─── clearQueue ─────────────────────────────────────────────────────────────────────────
 
 describe('clearQueue', () => {
   it('removes all items from the queue', async () => {
