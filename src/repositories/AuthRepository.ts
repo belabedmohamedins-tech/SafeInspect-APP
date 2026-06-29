@@ -1,9 +1,4 @@
 // src/repositories/AuthRepository.ts
-//
-// Sole owner of all authentication state:
-//   • APP_PIN             → expo-secure-store (keychain / Keystore)
-//   • BIOMETRIC_ENABLED   → expo-secure-store (boolean preference)
-//   • PIN_FAILED_ATTEMPTS → AsyncStorage (non-sensitive counter)
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuth from 'expo-local-authentication';
@@ -17,10 +12,12 @@ const SECURE_OPTIONS: SecureStore.SecureStoreOptions = {
   keychainAccessible: SecureStore.WHEN_UNLOCKED,
 };
 
-// Read at call time so tests can patch Platform.OS without needing
-// isolateModules or module-registry tricks.
+// _platformOS is exported so tests can override it without module tricks.
+// Default: read from Platform at module load time.
+export let _platformOS: string = Platform.OS;
+
 function isNative(): boolean {
-  return Platform.OS !== 'web';
+  return _platformOS !== 'web';
 }
 
 async function secureGet(key: string): Promise<string | null> {
@@ -42,8 +39,6 @@ async function secureDelete(key: string): Promise<void> {
 }
 
 export const AuthRepository = {
-
-  // ── PIN ──────────────────────────────────────────────────────────────
 
   getPin: (): Promise<string | null> => secureGet(StorageKeys.APP_PIN),
 
@@ -75,8 +70,6 @@ export const AuthRepository = {
     const attempts = await AuthRepository.getFailedAttempts();
     return attempts >= MAX_ATTEMPTS;
   },
-
-  // ── Biometrics ────────────────────────────────────────────────────────
 
   isBiometricAvailable: async (): Promise<boolean> => {
     if (!isNative()) return false;

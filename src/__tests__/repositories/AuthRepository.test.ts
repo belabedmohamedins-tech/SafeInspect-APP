@@ -1,15 +1,15 @@
 // src/__tests__/repositories/AuthRepository.test.ts
 //
 // Web-branch strategy:
-//   AuthRepository now reads Platform.OS lazily (via isNative() function)
-//   on every call, so patching (Platform as any).OS = 'web' in beforeEach
-//   is enough — no isolateModules or module-registry tricks needed.
+//   AuthRepository exports `_platformOS` (a plain string let). The web
+//   describe block sets it to 'web' in beforeEach and restores it in
+//   afterEach. No module tricks, no Proxy fights.
 
-import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import * as LocalAuth from 'expo-local-authentication';
-import { AuthRepository } from '../../repositories/AuthRepository';
+import { AuthRepository, _platformOS as _po } from '../../repositories/AuthRepository';
+import * as AuthModule from '../../repositories/AuthRepository';
 
 const mockHasHardware    = jest.mocked(LocalAuth.hasHardwareAsync);
 const mockIsEnrolled     = jest.mocked(LocalAuth.isEnrolledAsync);
@@ -140,17 +140,19 @@ describe('AuthRepository', () => {
 });
 
 // ─── Web-platform branches ───────────────────────────────────────────────
-// isNative() reads Platform.OS at call time, so patching it here is enough.
+// Set AuthModule._platformOS = 'web' directly — it is a plain exported `let`,
+// not a Proxy property. isNative() reads it on every call, so the web branch
+// is active for the duration of these tests.
 describe('AuthRepository — web platform (isNative = false)', () => {
   beforeEach(() => {
-    (Platform as any).OS = 'web';
+    AuthModule._platformOS = 'web';
     resetAsync();
     resetSecure();
     jest.clearAllMocks();
   });
 
   afterEach(() => {
-    (Platform as any).OS = 'android';
+    AuthModule._platformOS = 'android';
   });
 
   it('reads and writes PIN via AsyncStorage (not SecureStore) on web', async () => {
