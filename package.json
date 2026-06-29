@@ -3,14 +3,15 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
-    "start":        "cross-env NODE_OPTIONS=--no-experimental-strip-types expo start",
-    "reset-project":"node ./scripts/reset-project.js",
-    "android":      "cross-env NODE_OPTIONS=--no-experimental-strip-types expo start --android",
-    "ios":          "cross-env NODE_OPTIONS=--no-experimental-strip-types expo start --ios",
-    "web":          "cross-env NODE_OPTIONS=--no-experimental-strip-types expo start --web",
-    "lint":         "expo lint",
-    "test":         "cross-env NODE_OPTIONS=--no-experimental-strip-types node --experimental-vm-modules node_modules/.bin/jest --passWithNoTests",
-    "test:coverage":"cross-env NODE_OPTIONS=--no-experimental-strip-types node --experimental-vm-modules node_modules/.bin/jest --coverage --passWithNoTests"
+    "postinstall":   "node -e \"const fs=require('fs');try{const p=require('./node_modules/expo-modules-core/package.json');if(p.main&&p.main.includes('src/index.ts')){p.main='build/index.js';fs.writeFileSync('./node_modules/expo-modules-core/package.json',JSON.stringify(p,null,2));console.log('patched expo-modules-core');}}catch(e){}\"",
+    "start":         "cross-env NODE_OPTIONS=\"--import tsx/esm --no-experimental-strip-types\" expo start",
+    "reset-project": "node ./scripts/reset-project.js",
+    "android":       "cross-env NODE_OPTIONS=\"--import tsx/esm --no-experimental-strip-types\" expo start --android",
+    "ios":           "cross-env NODE_OPTIONS=\"--import tsx/esm --no-experimental-strip-types\" expo start --ios",
+    "web":           "cross-env NODE_OPTIONS=\"--import tsx/esm --no-experimental-strip-types\" expo start --web",
+    "lint":          "expo lint",
+    "test":          "cross-env NODE_OPTIONS=\"--no-experimental-strip-types\" node --experimental-vm-modules node_modules/.bin/jest --passWithNoTests",
+    "test:coverage": "cross-env NODE_OPTIONS=\"--no-experimental-strip-types\" node --experimental-vm-modules node_modules/.bin/jest --coverage --passWithNoTests"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.4",
@@ -49,6 +50,7 @@
     "jest": "^29.7.0",
     "jest-expo": "~52.0.6",
     "react-test-renderer": "18.3.1",
+    "tsx": "^4.19.4",
     "typescript": "~5.3.3"
   }
 }
