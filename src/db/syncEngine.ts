@@ -18,13 +18,26 @@
 //   - All flush() errors are caught and logged — a sync failure must never
 //     crash the app.
 //
-// NOTE: Both SyncService and NetInfo are required lazily (require) so the
-// Jest moduleNameMapper-provided stubs are always resolved from the live
-// registry at call time — no jest.resetModules() needed in tests.
+// ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to
+//    `process.env.EXPO_PUBLIC_SYNC_API_URL`:
+//    babel-preset-expo ships babel-plugin-transform-inline-environment-variables
+//    which replaces the static dot-notation form with the LITERAL value of
+//    that variable at Babel/Jest compile time.  Because the variable is not
+//    set when Jest transforms this module the plugin writes `undefined` into
+//    the compiled JS and any runtime process.env mutation is invisible.
+//    Using a computed key `process.env[KEY]` is opaque to the plugin and
+//    reads the live process.env object at call time.
+//
+// ⚠️  IMPORTS — keep require() (not import) for SyncService and NetInfo:
+//    Dynamic require() is resolved through moduleNameMapper at call time;
+//    a static import would be hoisted and cached before mocks are wired.
+
+// Computed key — defeats babel-plugin-transform-inline-environment-variables.
+const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 
 /** Returns true when a sync endpoint is configured. */
 function hasSyncUrl(): boolean {
-  return Boolean((process.env.EXPO_PUBLIC_SYNC_API_URL ?? '').trim());
+  return Boolean((process.env[SYNC_API_URL_KEY] ?? '').trim());
 }
 
 async function safeFlush(): Promise<void> {
@@ -64,11 +77,6 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
   //    Fire a flush as soon as the device comes back online so that
   //    inspections queued while offline are uploaded without waiting for
   //    the next interval tick.
-  //
-  //    Lazy require() (not dynamic import()) keeps this inside the Jest
-  //    module registry so moduleNameMapper stubs are resolved correctly and
-  //    the __setAddEventListener() spy injected in beforeEach is in place
-  //    by the time this code runs.
   let unsubscribeNetInfo: (() => void) | undefined;
   let wasOnline: boolean | null = null;
 
@@ -86,7 +94,7 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
       const isOnline =
         state.isConnected === true && state.isInternetReachable !== false;
 
-      // Transition: offline → online
+      // Transition: offline → online only
       if (wasOnline === false && isOnline) {
         safeFlush();
       }
