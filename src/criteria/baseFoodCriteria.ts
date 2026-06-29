@@ -4,7 +4,7 @@ import { InspectionItem } from '../types';
 export const baseFoodCriteria: InspectionItem[] = [
   // المحور 1 (إضافي) – الاعتماد الصحي والتراخيص الغذائية
   {
-    id: 'FOOD-01-01',
+    id: 'BFD-01-01',
     axis: 'الاعتماد الصحي والتراخيص',
     category: 'تنظيمية',
     criteria: 'الاعتماد الصحي أو الترخيص الصحي عند الاقتضاء في الأنشطة الغذائية.',
@@ -15,7 +15,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // المحور 5: تجهيزات حفظ وتحضير الأغذية
   {
-    id: 'FOOD-05-01',
+    id: 'BFD-05-01',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'توفر ثلاجات وغرف تبريد مزودة بميزان حرارة داخلي مقروء.',
@@ -25,27 +25,27 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-02',
+    id: 'BFD-05-02',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
-    criteria: 'حفظ الأغذية المبردة في درجة حرارة بين 0 و5°م حسب طبيعة المنتوج.',
+    criteria: 'حفظ الأغذية المبردة في درجة حرارة بين 0 و 5°م حسب طبيعة المنتوج.',
     legalReference: 'المرسوم 17-140 + القرارات الوزارية الخاصة بالتخزين البارد.',
     severity: 'high',
-    controlType: 'test',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-03',
+    id: 'BFD-05-03',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'حفظ الأغذية المجمدة في درجة حرارة -18°م أو أقل.',
-    legalReference: 'القرارات الوزارية المتعلقة بالتجميد.',
+    legalReference: 'القراراد الوزارية المتعلقة بالتجميد.',
     severity: 'high',
-    controlType: 'test',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-04',
+    id: 'BFD-05-04',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'فصل واضح بين المواد الأولية والمنتجات الجاهزة في التحضير والتخزين لتجنب التلوث المتبادل.',
@@ -55,7 +55,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-05',
+    id: 'BFD-05-05',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'أسطح تحضير ملساء، غير منفذة، غير سامة، سهلة التطهير.',
@@ -65,7 +65,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-06',
+    id: 'BFD-05-06',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'توفر الماء الساخن للغسل في مناطق التحضير والتنظيف.',
@@ -75,7 +75,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-05-07',
+    id: 'BFD-05-07',
     axis: 'تجهيزات الحفظ والتحضير',
     category: 'صحيه',
     criteria: 'تنظيف المعدات وفق تسلسل: غسل – شطف – تعقيم – تجفيف، مع توثيق عند الاقتضاء.',
@@ -86,7 +86,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // المحور 6: صحة وسلوك العمال (مع تفاصيل غذائية)
   {
-    id: 'FOOD-06-01',
+    id: 'BFD-06-01',
     axis: 'صحة وسلوك العمال',
     category: 'صحيه',
     criteria: 'ارتداء لباس عمل نظيف، وأغطية رأس، ووسائل وقاية شخصية حسب طبيعة المهام.',
@@ -96,7 +96,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-06-02',
+    id: 'BFD-06-02',
     axis: 'صحة وسلوك العمال',
     category: 'صحيه',
     criteria: 'توفر أحواض غسل اليدين بالصابون والماء الدافئ ومناشف أحادية الاستعمال قرب مناطق العمل.',
@@ -106,7 +106,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-06-03',
+    id: 'BFD-06-03',
     axis: 'صحة وسلوك العمال',
     category: 'صحيه',
     criteria: 'إخضاع العمال لفحص طبي قبل التوظيف وفحوصات طبية دورية (كل 6 أشهر في قطاع الأغذية).',
@@ -116,7 +116,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-06-04',
+    id: 'BFD-06-04',
     axis: 'صحة وسلوك العمال',
     category: 'صحيه',
     criteria: 'منع الأكل والشرب والتدخين والبصق في أماكن تداول الأغذية والعمل الإنتاجي.',
@@ -127,7 +127,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // مكافحة النواقل إضافية للغذاء
   {
-    id: 'FOOD-07-01',
+    id: 'BFD-07-01',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'تركيب شبكات معدنية (شباك) على النوافذ والفتحات المطلة على الخارج، سهلة النزع للتنظيف.',
@@ -137,7 +137,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'FOOD-07-02',
+    id: 'BFD-07-02',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'إعداد خريطة مراقبة للقوارض والحشرات مع متابعة دورية.',

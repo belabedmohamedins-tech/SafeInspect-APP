@@ -1,8 +1,7 @@
 import { InspectionItem } from '../types';
-import { baseFoodCriteria } from './baseFoodCriteria';
 
 // Covers: "وحدة تخزين الزيتون والخضر" — olive and vegetable storage unit
-const produceStorageSpecificCriteria: InspectionItem[] = [
+export const produceStorageCriteria: InspectionItem[] = [
   {
     id: 'PRD-01-01',
     axis: 'هوية المنشأة والوثائق',
@@ -20,7 +19,7 @@ const produceStorageSpecificCriteria: InspectionItem[] = [
     criteria: 'تخزين الزيتون والخضروات في ظروف درجة الحرارة والرطوبة الملائمة لكل صنف (0-5°م للخضر، 7-15°م للزيتون) مع تهوية مناسبة.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (مراقبة درجات الحرارة كنقطة تحكم حرجة لحفظ المنتجات الغذائية) + القرارات الوزارية الخاصة بشروط حفظ المنتجات الفلاحية الطازجة.',
     severity: 'high',
-    controlType: 'visual',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
   },
   {
@@ -68,7 +67,7 @@ const produceStorageSpecificCriteria: InspectionItem[] = [
     axis: 'مكافحة الآفات',
     category: 'بيئية',
     criteria: 'وجود برنامج فعّال لمكافحة القوارض والحشرات (خاصة الذباب، عث التخزين، الفطريات) مع خريطة فخاخ محدّثة وسجل للتدخلات.',
-    legalReference: 'القانون 03-10 المادة 68 + المرسوم التنفيذي 17-140 المادة 26 (إلزامية وجود إجراءات فعالة لمكافحة الحيوانات الضارة في منشآت التخزين الغذائي).',
+    legalReference: 'القانون 03-10 المادة 68 + المرسوم التنفيذي 17-140 المادة 26.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -78,7 +77,7 @@ const produceStorageSpecificCriteria: InspectionItem[] = [
     axis: 'مكافحة الآفات',
     category: 'بيئية',
     criteria: 'سد جميع الثغرات والفتحات التي تسمح بدخول القوارض، وتركيب شبك معدني على فتحات التهوية لمنع دخول الحشرات والطيور.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 26 (وسائل الوقاية من الحيوانات الضارة: الشبكات الواقية، سد الفتحات، الحواجز الطبيعية).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 26.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -88,7 +87,7 @@ const produceStorageSpecificCriteria: InspectionItem[] = [
     axis: 'المياه والتخلص من النفايات',
     category: 'بيئية',
     criteria: 'إزالة المنتجات التالفة أو المتعفنة بانتظام من فضاءات التخزين ووضعها في حاويات نفايات مغطاة بعيداً عن المنتجات الصالحة للاستهلاك.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادتان 32 و 33 (إزالة النفايات والمنتجات التالفة بسرعة من مناطق الحفظ الغذائي).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادتان 32 و 33.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -98,14 +97,9 @@ const produceStorageSpecificCriteria: InspectionItem[] = [
     axis: 'التتبعية',
     category: 'تنظيمية',
     criteria: 'وجود سجل استقبال وتوزيع يتيح تتبع مصدر كل دفعة من المنتجات (المورد، تاريخ الاستقبال، الكمية) والجهة الموزعة إليها.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 4 (التتبعية Traçabilité في منشآت تخزين المواد الغذائية كجزء من متطلبات HACCP).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 4 (التتبعية Traçabilité).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-];
-
-export const produceStorageCriteria: InspectionItem[] = [
-  ...produceStorageSpecificCriteria,
-  ...baseFoodCriteria,
 ];
