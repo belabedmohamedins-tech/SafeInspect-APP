@@ -1,7 +1,7 @@
 # SafeInspect — Test Suite Reference
 
-> **Last updated:** commit `ad94e33` — `schema.test.ts` + `syncEngine.test.ts` added  
-> **Total test files:** 26 · **Total tests:** ~280
+> **Last updated:** commit `4591f1c` — `dateUtils.test.ts` + `inspectionUtils.test.ts` added  
+> **Total test files:** 28 · **Total tests:** ~320
 
 ---
 
@@ -9,10 +9,10 @@
 
 | Metric | Threshold (enforced) | Last measured actual |
 |---|---|---|
-| Branches | 81 | ~82 |
+| Branches | 83 | ~84 |
 | Functions | 97 | ~97 |
-| Lines | 95 | ~95 |
-| Statements | 94 | ~94 |
+| Lines | 96 | ~96 |
+| Statements | 95 | ~95 |
 
 **Rule:** when you raise a threshold, update both the `coverageThreshold` block in
 `jest.config.js` **and** the table above. Keep them in sync.
@@ -21,6 +21,28 @@ To check current actuals:
 ```bash
 npx jest --coverage --coverageReporters=text-summary
 ```
+
+---
+
+## Coverage Audit — All Gaps Closed
+
+Full cross-check of `collectCoverageFrom` sources vs test inventory (June 2026):
+
+| Directory | Source files measured | Test files | Status |
+|---|---|---|---|
+| `src/services/` | 11 | 11 | ✅ |
+| `src/repositories/` | 9 | 9 | ✅ |
+| `src/hooks/` | 5 | 5 | ✅ |
+| `src/utils/` | 6 (index.ts excluded) | 6 | ✅ |
+| `src/stores/` | 1 | 1 | ✅ |
+| `src/db/` | 2 | 2 | ✅ |
+| `src/` root | 1 (`facilitiesService.ts`) | 1 | ✅ |
+
+**No measurable source file is missing a test suite.**
+
+Exclusions (intentional, set in `jest.config.js`):
+`types.ts`, `criteria/**`, `criteriaData.ts`, `facilitiesData.ts`,
+`facilityCategories.ts`, `i18n/**`, barrel `index.ts` files, `app/**`, `__tests__/**`, `__mocks__/**`.
 
 ---
 
@@ -59,9 +81,12 @@ in all tests (matches production build behaviour).
 
 **`src/db/` modules** (`schema.ts`, `syncEngine.ts`) require no additional Layer 2 mocks.
 `AsyncStorage` is already mapped, and `SyncService` is mocked at Layer 4 in
-`syncEngine.test.ts` via `jest.mock('../services/SyncService', ...)`.  
+`syncEngine.test.ts` via `jest.mock('../services/SyncService', ...)`.
 NetInfo is already mapped at Layer 2 and additionally captured as a listener spy
 within `syncEngine.test.ts` — see the *NetInfo listener pattern* section below.
+
+**`src/utils/dateUtils.ts` and `src/utils/inspectionUtils.ts`** are pure functions with
+no native dependencies — no `jest.mock()` is required in their test files.
 
 ---
 
@@ -102,11 +127,9 @@ property mutations between tests, causing cross-test contamination.
 
 `startSyncScheduler()` registers a NetInfo `addEventListener` callback to detect
 `offline → online` transitions. Tests capture this callback by storing it in a
-closed-over `_netInfoListener` variable inside the `jest.mock` factory, then fire
-connectivity events directly:
+closed-over `_netInfoListener` variable inside the `jest.mock` factory:
 
 ```ts
-// In mock factory:
 let _netInfoListener = null;
 jest.mock('@react-native-community/netinfo', () => ({
   default: {
@@ -117,32 +140,58 @@ jest.mock('@react-native-community/netinfo', () => ({
   },
 }));
 
-// In test — after awaiting two Promise.resolve() ticks for the dynamic import:
-_netInfoListener({ isConnected: false, isInternetReachable: false }); // offline
-_netInfoListener({ isConnected: true,  isInternetReachable: true  }); // back online
-await Promise.resolve(); // drain safeFlush microtask
+// Fire connectivity events directly in tests:
+_netInfoListener({ isConnected: false, isInternetReachable: false });
+_netInfoListener({ isConnected: true,  isInternetReachable: true  });
+await Promise.resolve();
 expect(mockFlush).toHaveBeenCalledTimes(1);
 ```
 
 Two `await Promise.resolve()` ticks are needed before asserting the listener is
-registered because `startSyncScheduler()` uses a **dynamic `import()`** for NetInfo
-(to avoid crashing when the module is absent), which resolves asynchronously.
+registered because `startSyncScheduler()` uses a dynamic `import()` for NetInfo.
+
+### Timezone-Safe Date Assertions (`dateUtils.test.ts`)
+
+`formatDateTimeShort` uses `Date` local-time getters (`getFullYear`, `getMonth`, etc.).
+Test assertions must mirror the same local-time math — never hardcode the expected
+string, because the UTC ISO input resolves to different local times depending on the
+CI runner's timezone. Pattern:
+
+```ts
+function expectedShort(iso: string): string {
+  const d = new Date(iso);
+  const y  = d.getFullYear();
+  const mo = (d.getMonth() + 1).toString().padStart(2, '0');
+  const dy = d.getDate().toString().padStart(2, '0');
+  const h  = d.getHours().toString().padStart(2, '0');
+  const mi = d.getMinutes().toString().padStart(2, '0');
+  return `${y}-${mo}-${dy} ${h}:${mi}`;
+}
+
+it('formats correctly', () => {
+  const iso = '2026-03-15T14:30:00.000Z';
+  expect(formatDateTimeShort(iso)).toBe(expectedShort(iso)); // ✅ TZ-safe
+});
+```
+
+For `formatDateLong`, `formatDateOnly`, and `formatDateForAgenda` (which use
+`toLocaleDateString`), assert structural properties (non-empty, contains year,
+no time colon) rather than exact locale strings — locale rendering differs between
+Node.js ICU builds.
 
 ### `process.env` + `jest.resetModules()` for URL-Toggled Branches
 
 Modules that read `process.env.EXPO_PUBLIC_SYNC_API_URL` lazily (inside function
-bodies, not at module load time) can be toggled per-test without
-`jest.resetModules()`. Modules that read the env at load time require:
+bodies) can be toggled per-test without `jest.resetModules()`. Modules that read the
+env at load time require:
 
 ```ts
 beforeEach(() => {
   process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
   jest.resetModules();
 });
-afterEach(() => {
-  process.env = ORIGINAL_ENV;
-});
-const { startSyncScheduler } = require('../db/syncEngine'); // fresh module
+afterEach(() => { process.env = ORIGINAL_ENV; });
+const { startSyncScheduler } = require('../db/syncEngine');
 ```
 
 ---
@@ -162,7 +211,9 @@ src/__tests__/
 │   ├── NotificationRepository.test.ts
 │   └── SettingsRepository.test.ts
 ├── utils/
-│   └── fileUtils.test.ts
+│   ├── dateUtils.test.ts        ← NEW: 18 tests
+│   ├── fileUtils.test.ts
+│   └── inspectionUtils.test.ts  ← NEW: 22 tests
 ├── BackupService.test.ts
 ├── CapNotificationService.test.ts
 ├── CapReportService.test.ts
@@ -178,11 +229,11 @@ src/__tests__/
 ├── geofencingService.test.ts
 ├── loadHomeData.test.ts
 ├── pdfService.test.ts
-├── schema.test.ts          ← NEW: src/db/schema.ts (9 tests)
+├── schema.test.ts
 ├── scoringUtils.test.ts
 ├── statsUtils.test.ts
 ├── statusUtils.test.ts
-├── syncEngine.test.ts      ← NEW: src/db/syncEngine.ts (11 tests)
+├── syncEngine.test.ts
 ├── useChecklistData.test.ts
 ├── useCollapsibleSections.test.ts
 ├── useHomeData.test.ts
@@ -208,7 +259,7 @@ src/__tests__/
 | Mock architecture — 4-layer contract documented and enforced | ✅ |
 | Coverage thresholds locked in `jest.config.js` | ✅ |
 
-## Layer 2 Checklist
+## Layer 2 Checklist (all ✅ complete)
 
 | Item | Status |
 |---|---|
@@ -217,3 +268,13 @@ src/__tests__/
 | `schema.test.ts` — 9 tests | ✅ |
 | `syncEngine.test.ts` — 11 tests | ✅ |
 | Coverage thresholds raised to new baseline | ✅ |
+
+## Final Coverage Audit (all ✅ complete)
+
+| Item | Status |
+|---|---|
+| `dateUtils.test.ts` — 18 tests | ✅ |
+| `inspectionUtils.test.ts` — 22 tests | ✅ |
+| Zero uncovered source files remaining | ✅ |
+| Thresholds locked at branches 83 / fn 97 / lines 96 / stmts 95 | ✅ |
+| TESTING.md fully reflects current file tree and all patterns | ✅ |
