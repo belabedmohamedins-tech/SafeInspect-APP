@@ -18,7 +18,7 @@ type NetInfoChangeCallback = (state: {
 // Prefixed with 'mock' so Jest's hoisting restriction allows it inside
 // jest.mock() factory closures (Jest permits variables named mock*).
 const mockNetInfoState = {
-  listener: null as NetInfoChangeCallback | null,
+  listener:    null as NetInfoChangeCallback | null,
   unsubscribe: jest.fn(),
 };
 
@@ -50,6 +50,16 @@ function withoutSyncUrl() {
   process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: '' };
 }
 
+/**
+ * Drain enough microtask ticks for the dynamic import() chain to settle
+ * AND for safeFlush's async body to complete.
+ * safeFlush: async import → await flush() → done.  Each await is one tick.
+ * We use 8 ticks to be safe across all async chains.
+ */
+async function flushPromises() {
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+}
+
 /** Drain enough microtask ticks for the dynamic import() chain to settle. */
 async function drainImport() {
   for (let i = 0; i < 4; i++) await Promise.resolve();
@@ -60,7 +70,10 @@ async function drainImport() {
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
-  mockNetInfoState.listener = null;
+  // Reset listener and give unsubscribe a fresh jest.fn() so each test
+  // starts with a clean, call-count-zero spy.
+  mockNetInfoState.listener    = null;
+  mockNetInfoState.unsubscribe = jest.fn();
 });
 
 afterEach(() => {
@@ -120,7 +133,7 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(1000);
     jest.advanceTimersByTime(1000);
-    await Promise.resolve();
+    await flushPromises();
     expect(mockFlush).toHaveBeenCalledTimes(1);
   });
 
@@ -128,7 +141,7 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(1000);
     jest.advanceTimersByTime(3000);
-    await Promise.resolve();
+    await flushPromises();
     expect(mockFlush).toHaveBeenCalledTimes(3);
   });
 
@@ -136,10 +149,10 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     const stop = startSyncScheduler(1000);
     jest.advanceTimersByTime(1000);
-    await Promise.resolve();
+    await flushPromises();
     stop();
     jest.advanceTimersByTime(3000);
-    await Promise.resolve();
+    await flushPromises();
     expect(mockFlush).toHaveBeenCalledTimes(1);
   });
 
@@ -148,7 +161,7 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(1000);
     jest.advanceTimersByTime(1000);
-    await expect(Promise.resolve()).resolves.toBeUndefined();
+    await expect(flushPromises()).resolves.toBeUndefined();
   });
 
   it('fires flush when device transitions offline → online', async () => {
@@ -164,7 +177,7 @@ describe('startSyncScheduler — with API URL', () => {
     mockNetInfoState.listener!({ isConnected: false, isInternetReachable: false });
     // Transition to online
     mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
-    await Promise.resolve();
+    await flushPromises();
 
     expect(mockFlush).toHaveBeenCalledTimes(1);
   });
@@ -177,7 +190,7 @@ describe('startSyncScheduler — with API URL', () => {
 
     mockNetInfoState.listener!({ isConnected: true,  isInternetReachable: true });
     mockNetInfoState.listener!({ isConnected: false, isInternetReachable: false });
-    await Promise.resolve();
+    await flushPromises();
 
     expect(mockFlush).not.toHaveBeenCalled();
   });
@@ -190,7 +203,7 @@ describe('startSyncScheduler — with API URL', () => {
 
     mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
     mockNetInfoState.listener!({ isConnected: true, isInternetReachable: true });
-    await Promise.resolve();
+    await flushPromises();
 
     expect(mockFlush).not.toHaveBeenCalled();
   });
@@ -221,7 +234,7 @@ describe('startSyncScheduler — with API URL', () => {
     }).not.toThrow();
 
     jest.advanceTimersByTime(1000);
-    await Promise.resolve();
+    await flushPromises();
     expect(mockFlush).toHaveBeenCalledTimes(1);
     stop?.();
   });

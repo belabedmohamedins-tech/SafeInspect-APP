@@ -15,6 +15,9 @@ const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
 // ─── Mock NetInfo ─────────────────────────────────────────────────────────────
+// Top-level mock: used by tests that do NOT call jest.resetModules().
+// The 'flush — with API URL' describe re-registers this mock with a proper
+// mockResolvedValue after each resetModules() call (see its beforeEach).
 jest.mock('@react-native-community/netinfo', () => ({
   default: {
     fetch: jest.fn().mockResolvedValue({ isConnected: true, isInternetReachable: true }),
@@ -118,6 +121,18 @@ describe('flush — with API URL (mocked via env)', () => {
   beforeEach(() => {
     process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: 'https://api.test' };
     jest.resetModules();
+
+    // Re-register NetInfo mock AFTER resetModules so the freshly-required
+    // SyncService gets a NetInfo mock whose .fetch() actually resolves to
+    // { isConnected: true }.  Without this, the plain jest.fn() created by
+    // the top-level mock returns undefined, checkOnline() sees
+    // state.isConnected !== true and flush() returns 0 immediately.
+    jest.mock('@react-native-community/netinfo', () => ({
+      default: {
+        fetch: jest.fn().mockResolvedValue({ isConnected: true, isInternetReachable: true }),
+      },
+    }));
+
     // Re-assign global.fetch AFTER resetModules so the freshly-required
     // SyncService module closure captures our mock, not Node's native fetch.
     global.fetch = mockFetch;
