@@ -1,30 +1,16 @@
 // __mocks__/@react-native-community/netinfo.js
-// Layer 2 stub for @react-native-community/netinfo.
 // Wired via moduleNameMapper in jest.config.js.
 //
 // Default state: online wi-fi.
 //
-// ── Per-test spy injection ────────────────────────────────────────────────────
-// jest.mock() factory overrides do NOT win over moduleNameMapper after
-// jest.resetModules() — the mapper-provided file always loads.  Instead, tests
-// that need to intercept addEventListener (e.g. syncEngine.test.ts) should
-// call NetInfo.__setAddEventListener(spyFn) in beforeEach and reset it in
-// afterEach via NetInfo.__resetAddEventListener().
+// IMPORTANT: addEventListener is a plain function, NOT jest.fn().
+// If it were a jest.fn(), jest.clearAllMocks() would wipe its inline
+// implementation body, breaking any test that calls clearAllMocks() and
+// then expects __setAddEventListener() to work.
 //
-// Example:
-//   import NetInfo from '@react-native-community/netinfo';
-//   beforeEach(() => NetInfo.__setAddEventListener((cb) => {
-//     capturedListener = cb;
-//     return unsubscribeSpy;
-//   }));
-//   afterEach(() => NetInfo.__resetAddEventListener());
-//
-// ── Simulating offline ────────────────────────────────────────────────────────
-//   NetInfo.__setConnected(false);   // in beforeEach
-//   NetInfo.__setConnected(true);    // restore in afterEach
-//
-// ── Simulating a specific state object ───────────────────────────────────────
-//   NetInfo.__setState({ type: 'cellular', isConnected: true, ... });
+// fetch and useNetInfo remain jest.fn() so tests can assert call counts
+// and swap return values — just remember to call __reset() after
+// jest.clearAllMocks() to restore their mockResolvedValue.
 
 const makeState = (connected) => ({
   type:                connected ? 'wifi' : 'none',
@@ -35,18 +21,19 @@ const makeState = (connected) => ({
 
 let _state = makeState(true);
 
-// Injectable addEventListener implementation — replaced per-test when needed.
+// Injectable addEventListener implementation — replaced per-test via
+// __setAddEventListener().  Plain variable, not a mock.
 let _addEventListenerImpl = null;
-
-const defaultAddEventListener = jest.fn(() => jest.fn());
 
 const NetInfo = {
   fetch: jest.fn(() => Promise.resolve(_state)),
 
-  addEventListener: jest.fn((cb) => {
+  // Plain function — immune to jest.clearAllMocks().
+  addEventListener: function addEventListener(cb) {
     if (_addEventListenerImpl) return _addEventListenerImpl(cb);
-    return defaultAddEventListener(cb);
-  }),
+    // Default: no-op unsubscribe.
+    return function unsubscribe() {};
+  },
 
   useNetInfo: jest.fn(() => _state),
   configure:  jest.fn(),
@@ -54,26 +41,26 @@ const NetInfo = {
   // ── Test helpers ──────────────────────────────────────────────────────────
 
   /** Replace addEventListener implementation for this test. */
-  __setAddEventListener: (impl) => {
+  __setAddEventListener: function(impl) {
     _addEventListenerImpl = impl;
   },
 
   /** Restore default addEventListener behaviour. */
-  __resetAddEventListener: () => {
+  __resetAddEventListener: function() {
     _addEventListenerImpl = null;
   },
 
-  __setConnected: (connected) => {
+  __setConnected: function(connected) {
     _state = makeState(connected);
     NetInfo.fetch.mockResolvedValue(_state);
     NetInfo.useNetInfo.mockReturnValue(_state);
   },
-  __setState: (state) => {
+  __setState: function(state) {
     _state = state;
     NetInfo.fetch.mockResolvedValue(_state);
     NetInfo.useNetInfo.mockReturnValue(_state);
   },
-  __reset: () => {
+  __reset: function() {
     _state = makeState(true);
     _addEventListenerImpl = null;
     NetInfo.fetch.mockResolvedValue(_state);
@@ -83,14 +70,14 @@ const NetInfo = {
 
 module.exports = {
   __esModule: true,
-  default:              NetInfo,
-  fetch:                NetInfo.fetch,
-  addEventListener:     NetInfo.addEventListener,
-  useNetInfo:           NetInfo.useNetInfo,
-  configure:            NetInfo.configure,
+  default:                 NetInfo,
+  fetch:                   NetInfo.fetch,
+  addEventListener:        NetInfo.addEventListener,
+  useNetInfo:              NetInfo.useNetInfo,
+  configure:               NetInfo.configure,
   __setAddEventListener:   NetInfo.__setAddEventListener,
   __resetAddEventListener: NetInfo.__resetAddEventListener,
-  __setConnected:       NetInfo.__setConnected,
-  __setState:           NetInfo.__setState,
-  __reset:              NetInfo.__reset,
+  __setConnected:          NetInfo.__setConnected,
+  __setState:              NetInfo.__setState,
+  __reset:                 NetInfo.__reset,
 };
