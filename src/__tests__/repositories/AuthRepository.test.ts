@@ -14,6 +14,14 @@
 // expo-secure-store and expo-local-authentication are mapped at Layer 2
 // (moduleNameMapper) to __mocks__/ files whose jest.fn() stubs use
 // mockImplementation — those implementations survive jest.clearAllMocks().
+//
+// WHY no resetAsync() in the web beforeEach:
+// jest.isolateModules() gives WebAuth a fresh module registry, but the
+// AsyncStorage mock is a singleton shared across all registries (the mock
+// factory is called once). Calling resetAsync() between setPin and getPin
+// would wipe the key that setPin just wrote, causing getPin to return null.
+// The web tests are self-contained (unique keys, no bleed into native tests)
+// so store-reset is not needed inside this block.
 
 import { Platform } from 'react-native';
 (Platform as any).OS = 'ios';
@@ -189,11 +197,15 @@ describe('AuthRepository — web platform (isNative = false)', () => {
     // Restore ios so subsequent test files are not affected
     const { Platform } = require('react-native');
     Platform.OS = 'ios';
-  });
-
-  beforeEach(() => {
+    // Clean up any keys written by web tests
     resetAsync();
     resetSecure();
+  });
+
+  // NOTE: No resetAsync() here — the AsyncStorage mock is a shared singleton.
+  // Calling resetAsync() between setPin() and getPin() in the same test would
+  // wipe the key that setPin just wrote. Only reset spy call counts.
+  beforeEach(() => {
     jest.clearAllMocks();
   });
 
