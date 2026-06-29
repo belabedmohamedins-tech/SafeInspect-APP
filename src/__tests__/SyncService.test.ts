@@ -15,14 +15,22 @@ const mockFetch = jest.fn();
 global.fetch = mockFetch;
 
 // ─── NetInfo ──────────────────────────────────────────────────────────────────
-// moduleNameMapper routes @react-native-community/netinfo to the __mocks__ file
-// whose fetch() already resolves { isConnected: true } by default.
-// No jest.mock() override needed.
+// moduleNameMapper routes @react-native-community/netinfo to the __mocks__ file.
+// We grab the stable instance here so we can call __reset() after clearAllMocks()
+// restores all mock implementations to undefined.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const NetInfoMock = require('@react-native-community/netinfo').default as {
+  __reset: () => void;
+};
 
 beforeEach(async () => {
   jest.clearAllMocks();
-  await AsyncStorage.clear();
+  // clearAllMocks() wipes mock implementations (including NetInfo.fetch's
+  // mockResolvedValue).  Restore the default online state so checkOnline()
+  // returns true and flush() doesn't short-circuit.
+  NetInfoMock.__reset();
   global.fetch = mockFetch;
+  await AsyncStorage.clear();
 });
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -31,9 +39,9 @@ function makeInspection(id: string, updatedAt?: string): SavedInspection {
   return {
     id,
     facilityId:    'fac-1',
-    facilityName:  'منشأة',
-    inspectorName: 'مفتش',
-    officeName:    'مكتب',
+    facilityName:  '\u0645\u0646\u0634\u0623\u0629',
+    inspectorName: '\u0645\u0641\u062a\u0634',
+    officeName:    '\u0645\u0643\u062a\u0628',
     date:          '2026-06-27',
     updatedAt:     updatedAt ?? '2026-06-27T10:00:00Z',
     status:        'completed',

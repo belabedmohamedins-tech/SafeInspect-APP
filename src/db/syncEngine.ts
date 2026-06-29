@@ -18,11 +18,9 @@
 //   - All flush() errors are caught and logged — a sync failure must never
 //     crash the app.
 //
-// NOTE: SyncService is required lazily (require) so jest.resetModules() +
-// mock re-registration works correctly in tests.
-// NetInfo uses dynamic import() so the __mocks__ file (always loaded via
-// moduleNameMapper) is resolved at call time — tests inject their spy via
-// NetInfo.__setAddEventListener() rather than jest.mock() overrides.
+// NOTE: Both SyncService and NetInfo are required lazily (require) so the
+// Jest moduleNameMapper-provided stubs are always resolved from the live
+// registry at call time — no jest.resetModules() needed in tests.
 
 /** Returns true when a sync endpoint is configured. */
 function hasSyncUrl(): boolean {
@@ -32,6 +30,8 @@ function hasSyncUrl(): boolean {
 async function safeFlush(): Promise<void> {
   if (!hasSyncUrl()) return;
   try {
+    // Lazy require — resolved against the live Jest module registry so
+    // jest.mock('../services/SyncService') is always honoured.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { flush } = require('../services/SyncService') as typeof import('../services/SyncService');
     const synced = await flush();
@@ -64,25 +64,37 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
   //    Fire a flush as soon as the device comes back online so that
   //    inspections queued while offline are uploaded without waiting for
   //    the next interval tick.
+  //
+  //    Lazy require() (not dynamic import()) keeps this inside the Jest
+  //    module registry so moduleNameMapper stubs are resolved correctly and
+  //    the __setAddEventListener() spy injected in beforeEach is in place
+  //    by the time this code runs.
   let unsubscribeNetInfo: (() => void) | undefined;
   let wasOnline: boolean | null = null;
 
-  import('@react-native-community/netinfo')
-    .then((NetInfo) => {
-      unsubscribeNetInfo = NetInfo.default.addEventListener((state) => {
-        const isOnline =
-          state.isConnected === true && state.isInternetReachable !== false;
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const NetInfo = require('@react-native-community/netinfo') as {
+      default: {
+        addEventListener: (
+          cb: (state: { isConnected: boolean | null; isInternetReachable: boolean | null }) => void
+        ) => () => void;
+      };
+    };
 
-        // Transition: offline → online
-        if (wasOnline === false && isOnline) {
-          safeFlush();
-        }
-        wasOnline = isOnline;
-      });
-    })
-    .catch(() => {
-      // NetInfo not available — interval-only mode.
+    unsubscribeNetInfo = NetInfo.default.addEventListener((state) => {
+      const isOnline =
+        state.isConnected === true && state.isInternetReachable !== false;
+
+      // Transition: offline → online
+      if (wasOnline === false && isOnline) {
+        safeFlush();
+      }
+      wasOnline = isOnline;
     });
+  } catch {
+    // NetInfo not available — interval-only mode.
+  }
 
   // ── 3. Cleanup ────────────────────────────────────────────────────────────
   return () => {
