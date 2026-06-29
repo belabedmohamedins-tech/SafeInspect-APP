@@ -4,7 +4,9 @@ import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
 
 function getSyncApiUrl(): string | undefined {
-  return (process.env.EXPO_PUBLIC_SYNC_API_URL ?? '').trim() || undefined;
+  const raw = process.env.EXPO_PUBLIC_SYNC_API_URL;
+  console.log('[ENV] raw=', raw, '| keys with SYNC=', Object.keys(process.env).filter(k => k.includes('SYNC')));
+  return (raw ?? '').trim() || undefined;
 }
 
 export interface SyncQueueItem {
@@ -62,44 +64,35 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
 
 export async function flush(): Promise<number> {
   const SYNC_API_URL = getSyncApiUrl();
-  console.log('[D1] SYNC_API_URL=', SYNC_API_URL);
   if (!SYNC_API_URL) return 0;
 
   const isOnline = await checkOnline();
-  console.log('[D2] isOnline=', isOnline);
   if (!isOnline) return 0;
 
   const queue = await readQueue();
-  console.log('[D3] queue.length=', queue.length);
   if (queue.length === 0) return 0;
 
   let synced = 0;
   const remaining: SyncQueueItem[] = [];
 
   for (const item of queue) {
-    console.log('[D4] globalThis.fetch===mockFetch?', (globalThis as any).fetch?.name, typeof (globalThis as any).fetch, (globalThis as any).fetch?.toString().slice(0, 60));
     try {
-      let res: { ok: boolean };
-      const fn = (globalThis as any).fetch as typeof fetch;
-      console.log('[D5] fn name=', (fn as any).name, 'isMock=', (fn as any)._isMockFunction);
-      res = await fn(`${SYNC_API_URL}/inspections`, {
+      const res = await globalThis.fetch(`${SYNC_API_URL}/inspections`, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(item.inspection),
       });
-      console.log('[D6] res=', JSON.stringify(res), 'res.ok=', res?.ok);
       if (res.ok) {
         synced++;
       } else {
         remaining.push({ ...item, attempts: item.attempts + 1 });
       }
     } catch (e) {
-      console.log('[D7] fetch threw:', String(e));
+      console.log('[FETCH ERROR]', String(e));
       remaining.push({ ...item, attempts: item.attempts + 1 });
     }
   }
 
-  console.log('[D8] synced=', synced);
   await writeQueue(remaining);
   if (synced > 0) {
     await AsyncStorage.setItem(StorageKeys.SYNC_LAST_RUN, new Date().toISOString());
