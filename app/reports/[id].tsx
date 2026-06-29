@@ -31,23 +31,32 @@ const GRADE_COLORS: Record<string, string> = {
 const getGradeColor = (grade?: string) => (grade ? GRADE_COLORS[grade] : undefined) ?? Colors.textTertiary;
 
 export default function ReportDetailScreen() {
-  const { id } = useLocalSearchParams();
+  // `id` comes from the file-system route segment `[id]`.
+  // useLocalSearchParams can return a string or string[] — always normalise.
+  const params = useLocalSearchParams<{ id: string }>();
   const router  = useRouter();
+
+  const inspectionId: string | undefined = Array.isArray(params.id)
+    ? params.id[0]
+    : params.id ?? undefined;
+
   const [inspection, setInspection] = useState<SavedInspection | null>(null);
   const [loading,    setLoading]    = useState(true);
-  const inspectionId = Array.isArray(id) ? id[0] : id;
 
   useEffect(() => {
+    if (!inspectionId) { setLoading(false); return; }
+    let cancelled = false;
     (async () => {
-      if (!inspectionId) { setLoading(false); return; }
       try {
-        setInspection(await InspectionRepository.getById(inspectionId));
+        const result = await InspectionRepository.getById(inspectionId);
+        if (!cancelled) setInspection(result);
       } catch (e) {
         console.error('Failed to load inspection', e);
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
+    return () => { cancelled = true; };
   }, [inspectionId]);
 
   const deleteInspection = () => {
@@ -70,6 +79,14 @@ export default function ReportDetailScreen() {
 
   const reopenInspection = () => {
     if (!inspection) return;
+    // lat / lng must be strings for Expo Router params; guard against undefined.
+    const lat = inspection.coordinates?.latitude  != null
+      ? String(inspection.coordinates.latitude)
+      : '';
+    const lng = inspection.coordinates?.longitude != null
+      ? String(inspection.coordinates.longitude)
+      : '';
+
     router.push({
       pathname: '/(tabs)/inspection/checklist',
       params: {
@@ -81,8 +98,8 @@ export default function ReportDetailScreen() {
         reference:        inspection.referenceDocument ?? '',
         committeeMembers: JSON.stringify(inspection.committeeMembers ?? []),
         writer:           inspection.inspectorName ?? '',
-        lat:              inspection.coordinates?.latitude  ?? '',
-        lng:              inspection.coordinates?.longitude ?? '',
+        lat,
+        lng,
       },
     });
   };

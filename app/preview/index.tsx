@@ -178,8 +178,6 @@ export default function InspectionPreviewScreen() {
   const load = useCallback(async () => {
     try {
       if (isPreviewMode) {
-        // Raw checklist preview — load fake inspection from in-memory store.
-        // No CAPs for a preview.
         const stored = CriteriaPreviewStore.getInspection();
         setInspection(stored);
         setCaps([]);
@@ -200,6 +198,28 @@ export default function InspectionPreviewScreen() {
   }, [inspectionId, isPreviewMode]);
 
   useEffect(() => { load(); }, [load]);
+
+  // ── Signature gate ────────────────────────────────────────────────────────
+  // Once the inspection is loaded and we are NOT in raw preview mode,
+  // check whether a signature was collected. If it is missing, redirect the
+  // user to the signature capture screen so they cannot export or share an
+  // unsigned report. The redirect preserves inspectionId so the signature
+  // screen can write back and then navigate here again.
+  useEffect(() => {
+    if (isPreviewMode) return;          // raw checklist preview — no sig required
+    if (loading)       return;          // wait until data is ready
+    if (!inspection)   return;          // not-found is handled by the render below
+    if (inspection.signature) return;   // signature already present — all good
+
+    // Missing signature → redirect to capture.
+    // The signature screen is expected at /screens/signature and accepts
+    // { inspectionId } as a param. On completion it navigates back here.
+    router.replace({
+      pathname: '/screens/signature',
+      params: { inspectionId: inspection.id },
+    });
+  }, [isPreviewMode, loading, inspection, router]);
+  // ─────────────────────────────────────────────────────────────────────────
 
   const sections = useMemo((): SectionGroup[] => {
     if (!inspection) return [];
@@ -262,6 +282,16 @@ export default function InspectionPreviewScreen() {
         <TouchableOpacity style={s.backBtn} onPress={() => router.back()}>
           <Text style={s.backBtnText}>رجوع</Text>
         </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
+
+  // While the signature-gate redirect is in-flight, show nothing to avoid a
+  // flash of the unsigned report.
+  if (!isPreviewMode && !inspection.signature) {
+    return (
+      <SafeAreaView style={s.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
       </SafeAreaView>
     );
   }
