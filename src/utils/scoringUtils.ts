@@ -1,126 +1,218 @@
 // src/utils/scoringUtils.ts
-import { InspectionItem } from '../types';
+//
+// SCORING MODEL — Severity-Weighted Compliance with Critical Override
+//
+// Design rationale
+// ─────────────────
+// The previous system assigned arbitrary percentage weights to criterion
+// *categories* (doc 15 %, clean 25 %, waste 30 %, health 30 %).  Those
+// weights had no legal basis and could not be defended before a committee.
+//
+// This replacement derives weights solely from each criterion's `severity`
+// field, which already exists on every criterion and reflects the legal
+// gravity of the obligation it enforces:
+//
+//   high   → 3  (immediate risk to health / safety / environment)
+//   medium → 2  (significant operational non-compliance)
+//   low    → 1  (administrative / documentary non-compliance)
+//
+// The score is the severity-weighted compliance rate (0–100 %).
+// The grade (A / B / C / D) is a *prioritisation tool only* — it carries no
+// automatic legal consequence.  Legal decisions remain with the committee.
+//
+// Grade assignment — rules evaluated top-down, first match wins
+// ──────────────────────────────────────────────────────────────
+// Rule 1 (critical override):
+//   ≥ FORCED_D_THRESHOLD  high violations → grade = D  (forced)
+//   ≥ CEILING_C_THRESHOLD high violations → grade ≤ C  (ceiling)
+// Rule 2 (score-based):
+//   score ≥ GRADE_A_MIN AND no ceiling     → A
+//   score ≥ GRADE_B_MIN AND no ceiling     → B
+//   score ≥ GRADE_C_MIN                    → C
+//   else                                   → D
+//
+// Minimum completion:
+//   If < MIN_COMPLETION_PCT % of applicable items are evaluated the result
+//   is flagged as incomplete and no grade is issued.
+//
+// All thresholds are exported constants so administrators can tune them
+// without editing business logic.
 
-type IndicatorKey = 'doc' | 'clean' | 'waste' | 'health';
+import { InspectionItem, Severity } from '../types';
 
-const categoryToIndicator: Record<string, IndicatorKey> = {
-  'تنظيمية': 'doc',
-  'نظافة': 'clean',
-  'بيئية': 'waste',
-  'صحيه': 'health',
-  'سلامة': 'health',
-  'عامة': 'clean',
-};
+// ── Configurable thresholds ───────────────────────────────────────────────────
+export const SEVERITY_WEIGHTS: Record<Severity, number> = {
+  high:   3,
+  medium: 2,
+  low:    1,
+} as const;
 
-const weights: Record<IndicatorKey, number> = {
-  doc: 0.15,
-  clean: 0.25,
-  waste: 0.30,
-  health: 0.30,
-};
+export const GRADE_A_MIN = 85;   // score >= this → A (when no ceiling applies)
+export const GRADE_B_MIN = 70;   // score >= this → B (when no ceiling applies)
+export const GRADE_C_MIN = 50;   // score >= this → C; below → D
 
-function getIndicatorForItem(item: InspectionItem): IndicatorKey {
-  const category = item.category;
-  if (category && categoryToIndicator[category]) {
-    return categoryToIndicator[category];
+// Critical override thresholds — committee can adjust these values
+export const CEILING_C_THRESHOLD = 1;   // >= N high violations → grade capped at C
+export const FORCED_D_THRESHOLD  = 3;   // >= N high violations → grade forced to D
+
+// Minimum fraction of applicable items that must be evaluated for a grade to
+// be issued.  Below this the result is marked 'incomplete'.
+export const MIN_COMPLETION_RATE = 0.60; // 60 %
+
+// ── Types ─────────────────────────────────────────────────────────────────────
+export type Grade = 'A' | 'B' | 'C' | 'D';
+
+export type RiskLevel = 1 | 2 | 3 | 4;
+// 1 → routine     (24-month inspection cycle)
+// 2 → standard    (12-month cycle)
+// 3 → priority    (6-month cycle)
+// 4 → immediate   (30-day mandatory follow-up)
+
+export interface ViolationProfile {
+  high:   number;   // count of high-severity non-compliant items
+  medium: number;
+  low:    number;
+  total:  number;
+}
+
+export interface ScoringResult {
+  /** Severity-weighted compliance rate, 0–100. Always computed even when grade
+   *  is overridden, so the inspector can see the underlying score. */
+  score: number;
+
+  /** Prioritisation grade A / B / C / D. */
+  grade: Grade;
+
+  /** Risk level 1–4 derived from the grade; maps to an inspection frequency. */
+  riskLevel: RiskLevel;
+
+  /** Counts of non-compliant items by severity. */
+  violations: ViolationProfile;
+
+  /** True when one or more critical override rules changed the raw grade. */
+  criticalOverride: boolean;
+
+  /** The grade that would have been issued from score alone (before override). */
+  rawGrade: Grade;
+
+  /** Number of items evaluated (compliant + non-compliant). */
+  evaluatedCount: number;
+
+  /** Number of applicable items (evaluated + not-evaluated; excludes NA). */
+  applicableCount: number;
+
+  /** Fraction of applicable items that were evaluated (0–1). */
+  completionRate: number;
+
+  /** True when completionRate < MIN_COMPLETION_RATE.  Grade is not meaningful. */
+  incomplete: boolean;
+
+  /** Recommended minimum days until the next inspection. */
+  nextInspectionDays: number;
+
+  /** Arabic disclaimer — must be included on every report that shows a grade. */
+  disclaimer: string;
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function getSeverityWeight(item: InspectionItem): number {
+  return SEVERITY_WEIGHTS[item.severity] ?? SEVERITY_WEIGHTS.low;
+}
+
+function scoreToRawGrade(score: number): Grade {
+  if (score >= GRADE_A_MIN) return 'A';
+  if (score >= GRADE_B_MIN) return 'B';
+  if (score >= GRADE_C_MIN) return 'C';
+  return 'D';
+}
+
+function gradeToRiskLevel(grade: Grade): RiskLevel {
+  switch (grade) {
+    case 'A': return 1;
+    case 'B': return 2;
+    case 'C': return 3;
+    case 'D': return 4;
   }
-  const axis = item.axis || '';
-  if (axis.includes('هوية') || axis.includes('وثائق')) return 'doc';
-  if (axis.includes('نظافة') || axis.includes('تهيئة')) return 'clean';
-  if (axis.includes('مياه') || axis.includes('نفايات')) return 'waste';
-  if (axis.includes('صحة') || axis.includes('سلامة')) return 'health';
-  return 'clean';
 }
 
-function computeIndicatorScore(items: InspectionItem[], indicator: IndicatorKey): number | null {
-  const relevant = items.filter(item => getIndicatorForItem(item) === indicator);
-  const evaluated = relevant.filter(item =>
-    item.complianceStatus === 'compliant' || item.complianceStatus === 'non-compliant'
-  );
-  if (evaluated.length === 0) return null;
-  const compliant = evaluated.filter(item => item.complianceStatus === 'compliant').length;
-  return (compliant / evaluated.length) * 100;
+function riskLevelToNextInspectionDays(level: RiskLevel): number {
+  switch (level) {
+    case 1: return 730;   // 24 months
+    case 2: return 365;   // 12 months
+    case 3: return 180;   //  6 months
+    case 4: return 30;    //  30 days (immediate follow-up)
+  }
 }
 
-/**
- * Returns true if any high-severity item is non-compliant.
- * When this is true the final grade must be capped at D regardless of the
- * numeric score ("grade floor D" rule — FR-040 / FR-050).
- */
-export function hasHighSeverityViolation(items: InspectionItem[]): boolean {
-  return items.some(
-    item => item.severity === 'high' && item.complianceStatus === 'non-compliant'
-  );
-}
+// ── Main export ───────────────────────────────────────────────────────────────
+export function computeScoreAndGrade(items: InspectionItem[]): ScoringResult {
+  // Partition items
+  const compliantItems    = items.filter(i => i.complianceStatus === 'compliant');
+  const nonCompliantItems = items.filter(i => i.complianceStatus === 'non-compliant');
+  const evaluatedItems    = [...compliantItems, ...nonCompliantItems];
 
-/**
- * Returns all high-severity non-compliant items that have no photo evidence.
- * Used by the finish gate to block submission until photos are attached.
- */
-export function getHighSeverityItemsMissingPhoto(items: InspectionItem[]): InspectionItem[] {
-  return items.filter(
-    item =>
-      item.severity === 'high' &&
-      item.complianceStatus === 'non-compliant' &&
-      !item.photoUri &&
-      (!item.photos || item.photos.length === 0)
-  );
-}
+  // Applicable = everything that isn't NA (not-evaluated counts as applicable
+  // because it *should* have been evaluated).
+  const applicableItems = items.filter(i => i.complianceStatus !== 'na');
 
-export function computeScoreAndGrade(items: InspectionItem[]): {
-  score: number | undefined;
-  grade: string | undefined;
-  gradeForcedD: boolean;
-  indicators: {
-    doc: number | null;
-    clean: number | null;
-    waste: number | null;
-    health: number | null;
-  };
-} {
-  const indicatorScores: Record<IndicatorKey, number | null> = {
-    doc: computeIndicatorScore(items, 'doc'),
-    clean: computeIndicatorScore(items, 'clean'),
-    waste: computeIndicatorScore(items, 'waste'),
-    health: computeIndicatorScore(items, 'health'),
+  const evaluatedCount  = evaluatedItems.length;
+  const applicableCount = applicableItems.length;
+  const completionRate  = applicableCount > 0 ? evaluatedCount / applicableCount : 0;
+  const incomplete      = completionRate < MIN_COMPLETION_RATE;
+
+  // Violation profile
+  const violations: ViolationProfile = {
+    high:   nonCompliantItems.filter(i => i.severity === 'high').length,
+    medium: nonCompliantItems.filter(i => i.severity === 'medium').length,
+    low:    nonCompliantItems.filter(i => i.severity === 'low').length,
+    total:  nonCompliantItems.length,
   };
 
-  let totalWeight = 0;
-  let weightedSum = 0;
-  for (const key of Object.keys(weights) as IndicatorKey[]) {
-    const score = indicatorScores[key];
-    if (score !== null) {
-      weightedSum += score * weights[key];
-      totalWeight += weights[key];
+  // Severity-weighted score
+  const compliantWeight = compliantItems.reduce((s, i) => s + getSeverityWeight(i), 0);
+  const evaluatedWeight = evaluatedItems.reduce((s, i) => s + getSeverityWeight(i), 0);
+  const score = evaluatedWeight > 0
+    ? Math.round((compliantWeight / evaluatedWeight) * 1000) / 10  // 1 decimal place
+    : 0;
+
+  // Raw grade (score only, no override)
+  const rawGrade = scoreToRawGrade(score);
+
+  // Apply critical override rules
+  let grade: Grade = rawGrade;
+  let criticalOverride = false;
+
+  if (violations.high >= FORCED_D_THRESHOLD) {
+    // Rule 1a: forced D
+    grade = 'D';
+    criticalOverride = grade !== rawGrade;
+  } else if (violations.high >= CEILING_C_THRESHOLD) {
+    // Rule 1b: ceiling C
+    if (rawGrade === 'A' || rawGrade === 'B') {
+      grade = 'C';
+      criticalOverride = true;
     }
   }
 
-  if (totalWeight === 0) {
-    return { score: undefined, grade: undefined, gradeForcedD: false, indicators: indicatorScores };
-  }
-
-  const finalScore = weightedSum / totalWeight;
-
-  // Grade floor D: any high-severity non-compliant item overrides the grade.
-  const gradeForcedD = hasHighSeverityViolation(items);
-
-  let grade: string;
-  if (gradeForcedD) {
-    grade = 'D';
-  } else if (finalScore >= 85) {
-    grade = 'A';
-  } else if (finalScore >= 70) {
-    grade = 'B';
-  } else if (finalScore >= 50) {
-    grade = 'C';
-  } else {
-    grade = 'D';
-  }
+  const riskLevel          = gradeToRiskLevel(grade);
+  const nextInspectionDays = riskLevelToNextInspectionDays(riskLevel);
 
   return {
-    score: Math.round(finalScore * 10) / 10,
+    score,
     grade,
-    gradeForcedD,
-    indicators: indicatorScores,
+    riskLevel,
+    violations,
+    criticalOverride,
+    rawGrade,
+    evaluatedCount,
+    applicableCount,
+    completionRate,
+    incomplete,
+    nextInspectionDays,
+    disclaimer:
+      'هذا التصنيف (A, B, C, D) هو أداة إدارية لتحديد أولويات التفتيش. ' +
+      'لا يُرتّب عليه أي أثر قانوني تلقائي. القرارات القانونية (الإنذار، ' +
+      'الغلق، الغرامة) تتخذ من قبل السلطات المختصة وفقاً للقانون 03-10 ' +
+      'والمرسوم التنفيذي 06-198.',
   };
 }

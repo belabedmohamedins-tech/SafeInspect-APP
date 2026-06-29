@@ -2,17 +2,24 @@
 import { SavedInspection } from '../types';
 
 export interface StatsCache {
-  total: number;
-  gradeCounts: { A: number; B: number; C: number; D: number };
+  total:        number;
+  gradeCounts:  { A: number; B: number; C: number; D: number };
+  /** Severity-weighted average score across all completed inspections. */
   averageScore: number | string;
-  lastUpdated: number;
+  /** Total high-severity violations found across all inspections. */
+  totalHighViolations: number;
+  /** Count of inspections where a critical override was applied. */
+  criticalOverrideCount: number;
+  lastUpdated:  number;
 }
 
 export const computeStats = (inspections: SavedInspection[]): StatsCache => {
-  const total = inspections.length;
+  const total       = inspections.length;
   const gradeCounts = { A: 0, B: 0, C: 0, D: 0 };
-  let totalScore = 0;
+  let totalScore    = 0;
   let validScoreCount = 0;
+  let totalHighViolations   = 0;
+  let criticalOverrideCount = 0;
 
   inspections.forEach(ins => {
     if      (ins.grade === 'A') gradeCounts.A++;
@@ -24,19 +31,26 @@ export const computeStats = (inspections: SavedInspection[]): StatsCache => {
       totalScore += ins.score;
       validScoreCount++;
     }
+
+    if (ins.violations?.high) {
+      totalHighViolations += ins.violations.high;
+    }
+
+    if (ins.criticalOverride) {
+      criticalOverrideCount++;
+    }
   });
 
   // Guard on validScoreCount — not on the computed value — so a genuine
   // average of 0% is displayed as '0.0' rather than 'N/A'.
-  const averageScore =
-    validScoreCount === 0
-      ? 'N/A'
-      : (totalScore / validScoreCount).toFixed(1);
+  const avg = validScoreCount > 0 ? totalScore / validScoreCount : 0;
 
   return {
     total,
     gradeCounts,
-    averageScore,
-    lastUpdated: Date.now(),
+    averageScore:         validScoreCount === 0 ? 'N/A' : avg.toFixed(1),
+    totalHighViolations,
+    criticalOverrideCount,
+    lastUpdated:          Date.now(),
   };
 };

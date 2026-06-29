@@ -39,17 +39,47 @@ export interface InspectionItem {
   photos?: string[];
 }
 
+/** Counts of non-compliant items by severity level. */
+export interface ViolationSummary {
+  high:   number;
+  medium: number;
+  low:    number;
+  total:  number;
+}
+
 export interface SavedInspection {
   id: string;
   facilityId: string;
   facilityName: string;
   facilityAddress: string;
   date: string;
+  /** The name of the inspector / writer who conducted the inspection. */
   inspectorName: string;
   items: InspectionItem[];
+  /**
+   * - 'completed'   — fully submitted inspection
+   * - 'in-progress' — active checklist session
+   * - 'draft'       — saved mid-session via back-navigation
+   */
   status: 'completed' | 'in-progress' | 'draft';
+
+  // ── Scoring ──────────────────────────────────────────────────────────────
+  /** Severity-weighted compliance score, 0–100. */
   score?: number;
+  /** Prioritisation grade: A / B / C / D. */
   grade?: string;
+  /** Risk level 1 (low) – 4 (critical). Drives inspection frequency. */
+  riskLevel?: 1 | 2 | 3 | 4;
+  /** Violation counts by severity. */
+  violations?: ViolationSummary;
+  /** True when a critical override rule changed the score-derived grade. */
+  criticalOverride?: boolean;
+  /** True when fewer than 60 % of items were evaluated (grade not meaningful). */
+  incomplete?: boolean;
+  /** Recommended days to next inspection based on grade. */
+  nextInspectionDays?: number;
+
+  // ── Metadata ─────────────────────────────────────────────────────────────
   signature?: string;
   officeName?: string;
   inspectionCause?: string;
