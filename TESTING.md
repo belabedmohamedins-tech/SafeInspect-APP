@@ -50,7 +50,22 @@ Layer 4 ─ src/__tests__/**          (domain-specific, per test file)
 
 **Purpose**: Redirect native/Expo module imports to safe JavaScript stubs before Jest resolves them. These modules crash in Node because they depend on native binaries.
 
-**What lives here**: `expo-modules-core`, `expo-notifications`, `expo-print`, `expo-sharing`, `@react-native-community/netinfo`, `@react-native-async-storage/async-storage`.
+**Current mapped modules:**
+
+| Module | Stub file | Notes |
+|---|---|---|
+| `expo-modules-core` | `__mocks__/expo-modules-core.js` | Strict Proxy for all native modules |
+| `expo-notifications` | `__mocks__/expo-notifications.js` | Includes `AndroidImportance` |
+| `expo-print` | `__mocks__/expo-print.js` | |
+| `expo-sharing` | `__mocks__/expo-sharing.js` | |
+| `expo-secure-store` | `__mocks__/expo-secure-store.js` | Must appear **before** `expo-modules-core` |
+| `expo-local-authentication` | `__mocks__/expo-local-authentication.js` | Must appear **before** `expo-modules-core` |
+| `expo-constants` | `__mocks__/expo-constants.js` | Overrides jest-expo default; sets `IS_EXPO_GO = false` |
+| `expo/src/winter/fetch/ExpoFetchModule` | `__mocks__/expoFetchModule.js` | |
+| `expo/src/winter/fetch(.*)` | `__mocks__/expoFetch.js` | |
+| `expo-file-system/legacy` | `src/__mocks__/expo-file-system-legacy.ts` | |
+| `@react-native-async-storage/async-storage` | `__mocks__/@react-native-async-storage/async-storage.js` | Stateful in-memory store |
+| `@react-native-community/netinfo` | `__mocks__/@react-native-community/netinfo.js` | Supports `__setConnected()` |
 
 **Rule**: Every entry must point to a file in `__mocks__/`. Never write an inline factory here.
 
@@ -73,6 +88,8 @@ Layer 4 ─ src/__tests__/**          (domain-specific, per test file)
 **Rule**: Only add here when Layer 2 cannot handle it (i.e., when the module is a virtual module synthesised by Metro/jest-expo that `moduleNameMapper` cannot reliably intercept after the preset runs).
 
 **⚠️ Important — React internal keys**: The `mockReactInternalKeys` set in `jest.setup.ts` lists known React reconciler internal string keys that must return `undefined` silently. If you upgrade the Expo SDK and tests start throwing `[jest.setup.ts] react-native — unstubbed access: "__reactInternalMemoized*"`, add the new key to that set and update the version comment.
+
+**⚠️ Important — console.error suppression**: `jest.setup.ts` suppresses `console.error` output that matches expected error-path patterns (e.g., "AsyncStorage: error", "[repository] save failed"). This is intentional — it keeps the test output clean when deliberately exercising error branches. Do not remove these suppressions; do not add new ones for non-error-path noise.
 
 ---
 
@@ -120,6 +137,8 @@ beforeEach(() => {
 });
 ```
 
+**⚠️ Web-platform tests**: When a module under test writes to AsyncStorage in a `beforeAll`/`beforeEach` setup (e.g., `AuthRepository` seeding the web credential store), do **not** call `__resetStore()` inside the web-platform `beforeEach` — it will wipe the store that the module just wrote to. Reset only in `afterAll` or at the very beginning of `beforeAll`.
+
 ---
 
 ## NetInfo: `__setConnected()` Pattern
@@ -140,6 +159,26 @@ it('queues action when offline', async () => {
 
 ---
 
+## Platform OS: `setPlatformOS()` Pattern
+
+Modules that branch on `Platform.OS` (e.g., `AuthRepository` skipping biometrics on web) expose a test-only setter:
+
+```ts
+import { setPlatformOS } from '../repositories/AuthRepository';
+
+beforeEach(() => setPlatformOS('ios')); // restore default
+afterAll(() => setPlatformOS('ios'));
+
+it('skips biometrics on web', () => {
+  setPlatformOS('web');
+  // ... test the web branch ...
+});
+```
+
+**Rule**: Only use `setPlatformOS()` on modules that explicitly export it. Never mutate `Platform.OS` directly on the `react-native` mock — the Layer 3 Proxy will throw.
+
+---
+
 ## File Locations
 
 ```
@@ -148,10 +187,13 @@ project root/
 ├── jest.setup.ts          ← Layer 3 behavioral mocks
 ├── jest.polyfill.js       ← Layer 1 global polyfills
 ├── __mocks__/
-│   ├── expo-modules-core.js          ← strict Proxy for native modules
-│   ├── expo-notifications.js
+│   ├── expo-modules-core.js
+│   ├── expo-notifications.js         ← includes AndroidImportance
 │   ├── expo-print.js
 │   ├── expo-sharing.js
+│   ├── expo-secure-store.js
+│   ├── expo-local-authentication.js
+│   ├── expo-constants.js             ← IS_EXPO_GO = false
 │   ├── expoFetch.js
 │   ├── expoFetchModule.js
 │   ├── @react-native-async-storage/
@@ -162,14 +204,35 @@ project root/
     ├── __mocks__/
     │   └── expo-file-system-legacy.ts
     └── __tests__/
-        ├── repositories/             ← AgendaRepository, InspectionRepository, …
-        ├── utils/                    ← dateUtils, statsUtils, inspectionUtils
+        ├── repositories/             ← AgendaRepository, ApprovalRepository,
+        │                                AuthRepository, FacilityRepository,
+        │                                InspectionRepository, SettingsRepository, …
+        ├── utils/                    ← dateUtils, fileUtils, inspectionUtils,
+        │                                statsUtils
         ├── BackupService.test.ts
+        ├── CapNotificationService.test.ts
+        ├── CapReportService.test.ts
+        ├── CriteriaPreviewStore.test.ts
+        ├── IntegrityService.test.ts
+        ├── NotificationService.test.ts
+        ├── PhotoService.test.ts
         ├── SyncService.test.ts
-        └── …
+        ├── briefService.test.ts
+        ├── facilitiesService.test.ts
+        ├── followUpService.test.ts
+        ├── geofencingService.test.ts
+        ├── loadHomeData.test.ts
+        ├── pdfService.test.ts
+        ├── scoringUtils.test.ts
+        ├── statusUtils.test.ts
+        ├── useChecklistData.test.ts
+        ├── useCollapsibleSections.test.ts
+        ├── useHomeData.test.ts
+        ├── useInspectionList.test.ts
+        └── useSignature.test.ts
 ```
 
-**Rule**: All tests live under `src/__tests__/`. Do not place test files anywhere else.
+**Rule**: All tests live under `src/__tests__/`. Do not place test files anywhere else. One test file per source module — never duplicate a test file at the root and inside a subdirectory.
 
 ---
 
@@ -182,17 +245,18 @@ Run `npx jest --coverage` to see the full report. The following are **intentiona
 - `src/criteriaData.ts`, `src/facilitiesData.ts`, `src/facilityCategories.ts` — static data
 - `src/i18n/**` — translation string maps
 - `src/app/**` — Expo Router UI screens (cover with E2E tests)
+- `src/repositories/index.ts`, `src/utils/index.ts`, `src/constants/index.ts` — barrel re-exports only
 
-Current **minimum thresholds** (enforced in CI):
+Current **enforced thresholds** (last measured actuals: branches 79.73 / functions 97.42 / lines 95.21 / stmts 93.66):
 
-| Metric | Minimum | Target |
+| Metric | Threshold | Last measured |
 |---|---|---|
-| Branches | 60% | 75% |
-| Functions | 70% | 80% |
-| Lines | 70% | 80% |
-| Statements | 70% | 80% |
+| Branches | 79% | 79.73% |
+| Functions | 97% | 97.42% |
+| Lines | 95% | 95.21% |
+| Statements | 93% | 93.66% |
 
-Raise the thresholds in `jest.config.js` as coverage grows.
+Thresholds are set ~1 point below the last measured actual to block regressions while allowing minor natural fluctuation. **Update both the threshold in `jest.config.js` and the table above whenever you raise them.**
 
 ---
 
