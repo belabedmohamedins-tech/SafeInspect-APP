@@ -1,65 +1,72 @@
 #!/usr/bin/env node
 /**
- * patch-expo.js
- * Patches all known expo-* packages that ship raw TypeScript source
- * as their "main" entry point. Runs automatically on `npm install`
- * via the postinstall hook.
+ * patch-expo.js — Node 22 compatibility patch for Expo SDK 53
+ *
+ * Several expo-* packages ship "main": "src/index.ts" in their package.json,
+ * which causes Node 22 to crash with ERR_UNKNOWN_FILE_EXTENSION when Expo CLI
+ * tries to load them. This script rewrites those entries to point at the
+ * pre-compiled build/ JS files instead.
+ *
+ * Runs automatically via the postinstall npm hook.
  */
-const fs = require('fs');
+const fs   = require('fs');
 const path = require('path');
 
-const patches = [
+// List of packages whose package.json "main" field points at a .ts file
+const PKG_PATCHES = [
+  { pkg: 'expo-modules-core', from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-sharing',      from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-crypto',       from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-print',        from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-document-picker', from: 'src/index.ts', to: 'build/index.js'  },
+  { pkg: 'expo-secure-store', from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-local-authentication', from: 'src/index.ts', to: 'build/index.js' },
+  { pkg: 'expo-notifications', from: 'src/index.ts',  to: 'build/index.js'   },
+  { pkg: 'expo-file-system',  from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-constants',    from: 'src/index.ts',   to: 'build/index.js'   },
+  { pkg: 'expo-splash-screen', from: 'src/index.ts',  to: 'build/index.js'   },
+];
+
+// Also patch any require() calls inside build JS files that reference .ts
+const FILE_PATCHES = [
   {
-    pkg: 'expo-modules-core',
-    from: 'src/index.ts',
-    to:   'build/index.js',
-  },
-  {
-    pkg: 'expo-sharing',
-    // expo-sharing/build/ExpoSharing native module is a .ts file
-    // Patch the main entry so Node resolves the built JS instead
-    from: 'build/ExpoSharing.ts',
-    to:   'build/ExpoSharing.js',
-    file: 'build/Sharing.js',   // patch the require() line inside this file
-    replaceIn: true,
+    pkg:  'expo-sharing',
+    file: 'build/Sharing.js',
+    from: './ExpoSharing.ts',
+    to:   './ExpoSharing.js',
   },
 ];
 
-for (const patch of patches) {
-  const pkgJsonPath = path.join(__dirname, 'node_modules', patch.pkg, 'package.json');
+let patched = 0;
 
-  if (!fs.existsSync(pkgJsonPath)) {
-    console.log(`[patch-expo] Skipping ${patch.pkg} (not installed)`);
-    continue;
-  }
+for (const { pkg, from, to } of PKG_PATCHES) {
+  const pkgJsonPath = path.join(__dirname, 'node_modules', pkg, 'package.json');
+  if (!fs.existsSync(pkgJsonPath)) continue;
 
-  if (patch.replaceIn) {
-    // Replace a require/import path inside a built JS file
-    const targetFile = path.join(__dirname, 'node_modules', patch.pkg, patch.file);
-    if (fs.existsSync(targetFile)) {
-      let src = fs.readFileSync(targetFile, 'utf8');
-      if (src.includes(patch.from)) {
-        src = src.split(patch.from).join(patch.to);
-        fs.writeFileSync(targetFile, src);
-        console.log(`[patch-expo] Patched ${patch.pkg}/${patch.file}: ${patch.from} → ${patch.to}`);
-      } else {
-        console.log(`[patch-expo] ${patch.pkg}/${patch.file} already patched or pattern not found.`);
-      }
-    } else {
-      console.log(`[patch-expo] ${patch.pkg}/${patch.file} not found, skipping.`);
+  const pkgJson = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
+  if (pkgJson.main && pkgJson.main.includes(from)) {
+    const buildPath = path.join(__dirname, 'node_modules', pkg, to);
+    if (!fs.existsSync(buildPath)) {
+      console.warn(`[patch-expo] WARNING: ${pkg}/${to} does not exist — skipping.`);
+      continue;
     }
-    continue;
-  }
-
-  // Patch the package.json "main" field
-  const pkg = JSON.parse(fs.readFileSync(pkgJsonPath, 'utf8'));
-  if (pkg.main && pkg.main.includes(patch.from)) {
-    pkg.main = patch.to;
-    fs.writeFileSync(pkgJsonPath, JSON.stringify(pkg, null, 2));
-    console.log(`[patch-expo] Patched ${patch.pkg}/package.json: main → ${patch.to}`);
-  } else {
-    console.log(`[patch-expo] ${patch.pkg} already patched (main: ${pkg.main}).`);
+    pkgJson.main = to;
+    fs.writeFileSync(pkgJsonPath, JSON.stringify(pkgJson, null, 2));
+    console.log(`[patch-expo] ${pkg}: main → ${to}`);
+    patched++;
   }
 }
 
-console.log('[patch-expo] Done.');
+for (const { pkg, file, from, to } of FILE_PATCHES) {
+  const filePath = path.join(__dirname, 'node_modules', pkg, file);
+  if (!fs.existsSync(filePath)) continue;
+
+  let src = fs.readFileSync(filePath, 'utf8');
+  if (src.includes(from)) {
+    fs.writeFileSync(filePath, src.split(from).join(to));
+    console.log(`[patch-expo] ${pkg}/${file}: ${from} → ${to}`);
+    patched++;
+  }
+}
+
+console.log(`[patch-expo] Done. ${patched} patch(es) applied.`);

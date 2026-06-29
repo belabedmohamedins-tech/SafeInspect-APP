@@ -3,6 +3,7 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "scripts": {
+    "postinstall": "node patch-expo.js",
     "start":         "expo start",
     "reset-project": "node ./scripts/reset-project.js",
     "android":       "expo start --android",
@@ -23,6 +24,7 @@
     "expo-document-picker": "~13.1.6",
     "expo-file-system": "~18.1.11",
     "expo-local-authentication": "~16.0.5",
+    "expo-modules-core": "2.3.13",
     "expo-notifications": "~0.31.5",
     "expo-print": "~14.1.4",
     "expo-router": "~5.1.11",
