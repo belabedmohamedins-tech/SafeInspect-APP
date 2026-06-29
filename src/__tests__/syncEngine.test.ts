@@ -1,23 +1,30 @@
 // src/__tests__/syncEngine.test.ts
-
+//
 // ─── NetInfo mock ─────────────────────────────────────────────────────────────
 //
-// We capture the listener registered by startSyncScheduler so tests can
-// fire connectivity-change events directly.
+// syncEngine.ts uses a dynamic import() for NetInfo inside startSyncScheduler.
+// Because the 'with API URL' suite calls jest.resetModules() before every test
+// we must re-register the mock each time.  To keep _netInfoListener stable
+// across re-registrations we hoist the captured state into a plain object that
+// every factory invocation closes over.
 
 type NetInfoChangeCallback = (state: {
   isConnected: boolean | null;
   isInternetReachable: boolean | null;
 }) => void;
 
-let _netInfoListener: NetInfoChangeCallback | null = null;
-const mockUnsubscribe = jest.fn();
+// Stable shared state — survives jest.resetModules() because it lives in the
+// test-file scope, not inside the mock factory.
+const netInfoState = {
+  listener: null as NetInfoChangeCallback | null,
+  unsubscribe: jest.fn(),
+};
 
 jest.mock('@react-native-community/netinfo', () => ({
   default: {
     addEventListener: jest.fn((cb: NetInfoChangeCallback) => {
-      _netInfoListener = cb;
-      return mockUnsubscribe;
+      netInfoState.listener = cb;
+      return netInfoState.unsubscribe;
     }),
   },
 }));
@@ -41,12 +48,17 @@ function withoutSyncUrl() {
   process.env = { ...ORIGINAL_ENV, EXPO_PUBLIC_SYNC_API_URL: '' };
 }
 
+/** Drain enough microtask ticks for the dynamic import() chain to settle. */
+async function drainImport() {
+  for (let i = 0; i < 4; i++) await Promise.resolve();
+}
+
 // ─── Setup / Teardown ─────────────────────────────────────────────────────────
 
 beforeEach(() => {
   jest.clearAllMocks();
   jest.useFakeTimers();
-  _netInfoListener = null;
+  netInfoState.listener = null;
 });
 
 afterEach(() => {
@@ -80,18 +92,19 @@ describe('startSyncScheduler — with API URL', () => {
   beforeEach(() => {
     withSyncUrl();
     jest.resetModules();
-    // Re-apply mocks after resetModules so the freshly-required module
-    // resolves to our spies, not the real implementations.
-    jest.mock('../services/SyncService', () => ({
-      flush: (...args: unknown[]) => mockFlush(...args),
-    }));
+    // Re-register both mocks after resetModules so the freshly-required
+    // syncEngine resolves to our spies.  The NetInfo factory writes into
+    // netInfoState (module-scope) so the listener is always captured.
     jest.mock('@react-native-community/netinfo', () => ({
       default: {
         addEventListener: jest.fn((cb: NetInfoChangeCallback) => {
-          _netInfoListener = cb;
-          return mockUnsubscribe;
+          netInfoState.listener = cb;
+          return netInfoState.unsubscribe;
         }),
       },
+    }));
+    jest.mock('../services/SyncService', () => ({
+      flush: (...args: unknown[]) => mockFlush(...args),
     }));
   });
 
@@ -105,7 +118,6 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(1000);
     jest.advanceTimersByTime(1000);
-    // Let the microtask queue drain so the async safeFlush body runs.
     await Promise.resolve();
     expect(mockFlush).toHaveBeenCalledTimes(1);
   });
@@ -134,8 +146,6 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(1000);
     jest.advanceTimersByTime(1000);
-    // The promise returned by safeFlush is not observed by the caller,
-    // so this simply must not throw synchronously or cause unhandled rejection.
     await expect(Promise.resolve()).resolves.toBeUndefined();
   });
 
@@ -143,16 +153,15 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(60_000);
 
-    // Allow the dynamic NetInfo import to settle.
-    await Promise.resolve();
-    await Promise.resolve();
+    // Drain the dynamic import() promise chain fully.
+    await drainImport();
 
-    expect(_netInfoListener).not.toBeNull();
+    expect(netInfoState.listener).not.toBeNull();
 
     // Simulate: was offline
-    _netInfoListener!({ isConnected: false, isInternetReachable: false });
+    netInfoState.listener!({ isConnected: false, isInternetReachable: false });
     // Transition to online
-    _netInfoListener!({ isConnected: true, isInternetReachable: true });
+    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
     await Promise.resolve();
 
     expect(mockFlush).toHaveBeenCalledTimes(1);
@@ -162,11 +171,10 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(60_000);
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await drainImport();
 
-    _netInfoListener!({ isConnected: true,  isInternetReachable: true });
-    _netInfoListener!({ isConnected: false, isInternetReachable: false });
+    netInfoState.listener!({ isConnected: true,  isInternetReachable: true });
+    netInfoState.listener!({ isConnected: false, isInternetReachable: false });
     await Promise.resolve();
 
     expect(mockFlush).not.toHaveBeenCalled();
@@ -176,11 +184,10 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     startSyncScheduler(60_000);
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await drainImport();
 
-    _netInfoListener!({ isConnected: true, isInternetReachable: true });
-    _netInfoListener!({ isConnected: true, isInternetReachable: true });
+    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
+    netInfoState.listener!({ isConnected: true, isInternetReachable: true });
     await Promise.resolve();
 
     expect(mockFlush).not.toHaveBeenCalled();
@@ -190,11 +197,10 @@ describe('startSyncScheduler — with API URL', () => {
     const { startSyncScheduler } = require('../db/syncEngine');
     const stop = startSyncScheduler(60_000);
 
-    await Promise.resolve();
-    await Promise.resolve();
+    await drainImport();
 
     stop();
-    expect(mockUnsubscribe).toHaveBeenCalledTimes(1);
+    expect(netInfoState.unsubscribe).toHaveBeenCalledTimes(1);
   });
 
   it('falls back to interval-only mode when NetInfo import fails (no crash)', async () => {
@@ -208,14 +214,12 @@ describe('startSyncScheduler — with API URL', () => {
 
     const { startSyncScheduler } = require('../db/syncEngine');
     let stop: (() => void) | undefined;
-    // Must not throw even though NetInfo import will fail
     expect(() => {
       stop = startSyncScheduler(1000);
     }).not.toThrow();
 
     jest.advanceTimersByTime(1000);
     await Promise.resolve();
-    // Interval flush still works
     expect(mockFlush).toHaveBeenCalledTimes(1);
     stop?.();
   });
