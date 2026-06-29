@@ -17,8 +17,14 @@
 //     is not installed the scheduler falls back to interval-only mode.
 //   - All flush() errors are caught and logged — a sync failure must never
 //     crash the app.
-
-import { flush } from '../services/SyncService';
+//
+// NOTE: SyncService is required lazily inside safeFlush() rather than via a
+// top-level static import.  A static import is compiled by Babel/tsc into a
+// binding that is captured at module-load time.  When tests call
+// jest.resetModules() and re-register the SyncService mock AFTER requiring
+// this module, the static binding would already point at the wrong (real)
+// module.  A lazy require() call resolves the mock registry at call time,
+// so jest.resetModules() + mock re-registration works as expected.
 
 /** Returns true when a sync endpoint is configured. */
 function hasSyncUrl(): boolean {
@@ -28,6 +34,8 @@ function hasSyncUrl(): boolean {
 async function safeFlush(): Promise<void> {
   if (!hasSyncUrl()) return;
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { flush } = require('../services/SyncService') as typeof import('../services/SyncService');
     const synced = await flush();
     if (synced > 0) {
       console.info(`[SafeInspect] Sync: ${synced} inspection(s) uploaded.`);
@@ -52,10 +60,10 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
     return () => {};
   }
 
-  // ── 1. Interval-based flush ───────────────────────────────────────────────
+  // ── 1. Interval-based flush ──────────────────────────────────────────────────
   const timer = setInterval(safeFlush, intervalMs);
 
-  // ── 2. Connectivity-triggered flush ──────────────────────────────────────
+  // ── 2. Connectivity-triggered flush ───────────────────────────────────────────
   //    Fire a flush as soon as the device comes back online so that
   //    inspections queued while offline are uploaded without waiting for
   //    the next interval tick.
@@ -79,7 +87,7 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
       // NetInfo not available — interval-only mode, no action needed.
     });
 
-  // ── 3. Cleanup ────────────────────────────────────────────────────────────
+  // ── 3. Cleanup ───────────────────────────────────────────────────────────────
   return () => {
     clearInterval(timer);
     unsubscribeNetInfo?.();
