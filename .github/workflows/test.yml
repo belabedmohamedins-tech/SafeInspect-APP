@@ -1,53 +1,43 @@
-# .github/workflows/test.yml
-#
-# Runs the full Jest test suite on every push and pull request.
-# Fails the build if any test fails OR if coverage drops below the
-# thresholds defined in jest.config.js (coverageThreshold).
-#
-# What this covers:
-#   - Unit tests: repositories, services, hooks, utils
-#   - Coverage enforcement: branches 60%, functions/lines/statements 70%
-#
-# What this does NOT cover (add separate workflows for these):
-#   - E2E / device tests (Detox, Maestro) — require a real device or emulator
-#   - Expo build checks (eas build --platform android) — run on release branches
-
 name: Tests
 
 on:
   push:
-    branches: ['**']
+    branches: [main]
   pull_request:
-    branches: ['**']
+    branches: [main]
 
 jobs:
   test:
-    name: Jest — unit tests + coverage
+    name: Jest – Node 20
     runs-on: ubuntu-latest
-    timeout-minutes: 15
 
     steps:
+      # 1. Check out the repository
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Node.js 20
+      # 2. Set up Node.js 20 LTS with npm cache
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: '20'
           cache: 'npm'
 
+      # 3. Install dependencies (clean install from lock file)
       - name: Install dependencies
         run: npm ci
 
+      # 4. Run full suite WITH coverage (enforces thresholds from jest.config.ts)
+      #    Uses the project's own `test:coverage` script so --experimental-vm-modules
+      #    and all other flags are kept in sync with your local setup.
       - name: Run tests with coverage
-        run: npx jest --coverage --ci --forceExit
-        env:
-          CI: true
+        run: npm run test:coverage
 
+      # 5. Upload the coverage report as a downloadable artifact (90-day retention)
       - name: Upload coverage report
-        if: always()
+        if: always()          # upload even when tests fail – useful for diagnosis
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage/
-          retention-days: 14
+          retention-days: 90
