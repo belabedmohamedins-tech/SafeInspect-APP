@@ -36,4 +36,17 @@ module.exports = {
     WEEKLY:   'weekly',
     CALENDAR: 'calendar',
   },
+
+  // Android importance levels — required by setNotificationChannelAsync calls
+  // in NotificationService.requestPermission(). Missing this caused an uncaught
+  // TypeError (undefined.HIGH) inside the try/catch, making requestPermission
+  // silently return false instead of true.
+  AndroidImportance: {
+    DEFAULT:  3,
+    HIGH:     4,
+    LOW:      2,
+    MAX:      5,
+    MIN:      1,
+    NONE:     0,
+  },
 };
