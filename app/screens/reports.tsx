@@ -23,6 +23,7 @@ import {
 import { SavedInspection } from '../../src/types';
 import { formatDateForCard } from '../../src/utils/dateUtils';
 import { getComplianceSummary } from '../../src/utils/statusUtils';
+import CapFollowUpSheet from '../../components/reports/CapFollowUpSheet';
 
 // ── Phase-9: extended filter type ───────────────────────────────────────────
 type FilterStatus = 'all' | 'compliant' | 'non-compliant' | 'violations';
@@ -115,10 +116,13 @@ const bannerStyles = StyleSheet.create({
 
 // ────────────────────────────────────────────────────────────────────────────────
 export default function ReportsScreen() {
-  const [inspections,   setInspections]   = useState<SavedInspection[]>([]);
-  const [searchQuery,   setSearchQuery]   = useState('');
-  const [filterStatus,  setFilterStatus]  = useState<FilterStatus>('all');
-  const [batchExporting, setBatchExporting] = useState(false);  // Phase-10
+  const [inspections,    setInspections]    = useState<SavedInspection[]>([]);
+  const [searchQuery,    setSearchQuery]    = useState('');
+  const [filterStatus,   setFilterStatus]   = useState<FilterStatus>('all');
+  const [batchExporting, setBatchExporting] = useState(false);
+  // Phase-11: sheet state
+  const [sheetInspection, setSheetInspection] = useState<SavedInspection | null>(null);
+  const [sheetVisible,    setSheetVisible]    = useState(false);
   const router = useRouter();
 
   const loadInspections = async () => {
@@ -162,7 +166,7 @@ export default function ReportsScreen() {
     });
   };
 
-  // ── Phase-9: single-item export notice with guard ───────────────────────
+  // Phase-9: single-item export notice with guard
   const handleExportNotice = (item: SavedInspection) => {
     const count = item.items.filter(i => i.complianceStatus === 'non-compliant').length;
     if (count === 0) {
@@ -172,7 +176,7 @@ export default function ReportsScreen() {
     exportNonConformityNoticePDF(item);
   };
 
-  // ── Phase-10: batch export all notices in the current filtered view ──────
+  // Phase-10: batch export
   const handleExportAllNotices = async (withViolations: SavedInspection[]) => {
     if (withViolations.length === 0) return;
     Alert.alert(
@@ -187,7 +191,6 @@ export default function ReportsScreen() {
             try {
               for (const ins of withViolations) {
                 await exportNonConformityNoticePDF(ins);
-                // small delay so the share sheet can dismiss before the next one appears
                 await new Promise(resolve => setTimeout(resolve, 600));
               }
             } finally {
@@ -199,7 +202,13 @@ export default function ReportsScreen() {
     );
   };
 
-  // ── Derived data: filtered list + banner stats ───────────────────────────
+  // Phase-11: open the CAP sheet
+  const handleOpenSheet = (item: SavedInspection) => {
+    setSheetInspection(item);
+    setSheetVisible(true);
+  };
+
+  // Derived data
   const { filteredInspections, inspectionsWithViolations, totalViolationCount } =
     useMemo(() => {
       const filtered = inspections.filter(inspection => {
@@ -214,8 +223,6 @@ export default function ReportsScreen() {
         if (filterStatus === 'violations')     return summary.nonCompliant > 0;
         return true;
       });
-
-      // Banner stats — always computed over the filtered view
       const withViolations = filtered.filter(
         ins => ins.items.some(i => i.complianceStatus === 'non-compliant'),
       );
@@ -224,7 +231,6 @@ export default function ReportsScreen() {
           acc + ins.items.filter(i => i.complianceStatus === 'non-compliant').length,
         0,
       );
-
       return {
         filteredInspections:       filtered,
         inspectionsWithViolations: withViolations,
@@ -240,7 +246,7 @@ export default function ReportsScreen() {
   );
 
   const renderItem = ({ item }: { item: SavedInspection }) => {
-    const summary = getComplianceSummary(item.items);
+    const summary     = getComplianceSummary(item.items);
     const isCompliant   = summary.nonCompliant === 0;
     const hasViolations = summary.nonCompliant > 0;
     return (
@@ -278,16 +284,27 @@ export default function ReportsScreen() {
               <FontAwesome name="file-excel-o" size={16} color={Colors.green} />
               <Text style={[styles.actionBtnText, { color: Colors.green }]}>Excel</Text>
             </TouchableOpacity>
-            {/* Phase-9: Notice button — only on cards with violations */}
             {hasViolations && (
-              <TouchableOpacity
-                style={styles.actionBtn}
-                onPress={() => handleExportNotice(item)}
-                accessibilityLabel="تصدير محضر المخالفة"
-              >
-                <FontAwesome name="file-text-o" size={16} color="#e65100" />
-                <Text style={[styles.actionBtnText, { color: '#e65100' }]}>محضر</Text>
-              </TouchableOpacity>
+              <>
+                {/* Phase-9: direct notice export */}
+                <TouchableOpacity
+                  style={styles.actionBtn}
+                  onPress={() => handleExportNotice(item)}
+                  accessibilityLabel="تصدير محضر المخالفة"
+                >
+                  <FontAwesome name="file-text-o" size={16} color="#e65100" />
+                  <Text style={[styles.actionBtnText, { color: '#e65100' }]}>محضر</Text>
+                </TouchableOpacity>
+                {/* Phase-11: open CAP deadline sheet */}
+                <TouchableOpacity
+                  style={styles.actionBtn}
+                  onPress={() => handleOpenSheet(item)}
+                  accessibilityLabel="عرض مواعيد المعالجة"
+                >
+                  <FontAwesome name="clock-o" size={16} color="#7b1fa2" />
+                  <Text style={[styles.actionBtnText, { color: '#7b1fa2' }]}>مواعيد</Text>
+                </TouchableOpacity>
+              </>
             )}
           </View>
         </TouchableOpacity>
@@ -350,6 +367,13 @@ export default function ReportsScreen() {
             <Text style={styles.emptyText}>لا توجد تقارير</Text>
           </View>
         }
+      />
+
+      {/* Phase-11: CAP deadlines sheet */}
+      <CapFollowUpSheet
+        inspection={sheetInspection}
+        visible={sheetVisible}
+        onClose={() => setSheetVisible(false)}
       />
     </SafeAreaView>
   );
