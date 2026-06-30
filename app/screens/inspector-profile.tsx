@@ -1,5 +1,5 @@
 // app/screens/inspector-profile.tsx — Inspector Profile Screen
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import {
   View,
   Text,
@@ -55,28 +55,39 @@ export default function InspectorProfileScreen() {
   const [stats, setStats] = useState({ total: 0, avgGrade: '—', openCaps: 0 });
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
-    const settings = await SettingsRepository.getAll();
-    setProfile({
-      fullName:    (settings['profile_fullName']    as string) || '',
-      badgeNumber: (settings['profile_badgeNumber'] as string) || '',
-      office:      (settings['profile_office']      as string) || '',
-      phone:       (settings['profile_phone']       as string) || '',
-      email:       (settings['profile_email']       as string) || '',
-      role:        ((settings['profile_role']       as string) || 'inspector') as 'inspector' | 'supervisor',
-    });
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
 
-    const inspections = await InspectionRepository.getCompleted();
-    const openCaps = (await CorrectiveActionRepository.getOpen()).length;
-    const grades = inspections.map(i => i.score ?? 0).filter(s => s > 0);
-    const avg = grades.length ? Math.round(grades.reduce((a, b) => a + b, 0) / grades.length) : null;
-    const gradeLabel = avg !== null
-      ? avg >= 90 ? 'A' : avg >= 75 ? 'B' : avg >= 60 ? 'C' : 'D'
-      : '—';
-    setStats({ total: inspections.length, avgGrade: gradeLabel, openCaps });
-  }, []);
+      Promise.all([
+        SettingsRepository.getAll(),
+        InspectionRepository.getCompleted(),
+        CorrectiveActionRepository.getOpen(),
+      ]).then(([all, inspections, openCapsList]) => {
+        if (!active) return;
 
-  useFocusEffect(useCallback(() => { load(); }, [load]));
+        setProfile({
+          fullName:    all['profile_fullName']    || '',
+          badgeNumber: all['profile_badgeNumber'] || '',
+          office:      all['profile_office']      || '',
+          phone:       all['profile_phone']       || '',
+          email:       all['profile_email']       || '',
+          role:        (all['profile_role'] as 'inspector' | 'supervisor') || 'inspector',
+        });
+
+        const grades = inspections.map(i => i.score ?? 0).filter(s => s > 0);
+        const avg = grades.length
+          ? Math.round(grades.reduce((a, b) => a + b, 0) / grades.length)
+          : null;
+        const gradeLabel = avg !== null
+          ? avg >= 90 ? 'A' : avg >= 75 ? 'B' : avg >= 60 ? 'C' : 'D'
+          : '—';
+        setStats({ total: inspections.length, avgGrade: gradeLabel, openCaps: openCapsList.length });
+      });
+
+      return () => { active = false; };
+    }, [])
+  );
 
   const handleSave = async () => {
     if (!profile.fullName.trim()) {

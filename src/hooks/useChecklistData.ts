@@ -48,7 +48,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ────────────────────────────────────────────────────────────────
+  // ─── Load ───────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -78,14 +78,14 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ────────────────────────────────────────────────────────────────
+  // ─── Save ───────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
       const sig = signatureRef.current;
       try {
-        const settings = await SettingsRepository.getAll();
-        const s = settings ?? {};
+        // Use get() here — we only need the core typed settings
+        const settings = await SettingsRepository.get();
 
         const inspection: SavedInspection = {
           id: inspectionId,
@@ -93,10 +93,10 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
           facilityName: p.facilityName,
           facilityAddress: p.facilityAddress,
           date: new Date().toISOString(),
-          inspectorName: p.writer || String(s.inspectorName ?? '') || 'المفتش',
+          inspectorName: p.writer || settings.inspectorName || 'المفتش',
           items: data,
           status,
-          officeName: String(s.officeName ?? ''),
+          officeName: settings.officeName,
           inspectionCause: p.cause,
           referenceDocument: p.reference,
           committeeMembers: p.committeeMembers,
@@ -129,7 +129,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     [inspectionId, data]
   );
 
-  // ─── Auto-save on back ───────────────────────────────────────────────────
+  // ─── Auto-save on back ────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -140,7 +140,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ───────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -167,9 +167,8 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  // ─── Finish (with completion gates) ─────────────────────────────────────
+  // ─── Finish (with completion gates) ──────────────────────────────────────────
   const handleFinish = useCallback(async () => {
-    // Gate 1: 85% completion requirement
     const applicable = data.filter(item => item.complianceStatus !== 'na');
     const evaluated  = applicable.filter(
       item => item.complianceStatus !== 'not-evaluated'
@@ -187,7 +186,6 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       return;
     }
 
-    // Gate 2: high-severity non-compliant items must have at least one photo
     const missingPhoto = data.filter(
       item =>
         item.severity === 'high' &&
@@ -227,7 +225,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [data, saveInspection, inspectionId, router]);
 
-  // ─── Derived values ──────────────────────────────────────────────────────
+  // ─── Derived values ───────────────────────────────────────────────────────────
   const sections        = useMemo(() => groupByAxis(data), [data]);
   const totalItems      = useMemo(() => data.length, [data]);
   const evaluatedItems  = useMemo(() => getEvaluatedCount(data), [data]);

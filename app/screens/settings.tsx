@@ -34,24 +34,29 @@ export default function SettingsScreen() {
   const [settings, setSettings] = useState<Settings>(DEFAULT);
   const [saving, setSaving] = useState(false);
 
-  const load = useCallback(async () => {
-    const all = await SettingsRepository.getAll();
-    setSettings({
-      inspectorName:    (all['inspectorName']    as string)  || '',
-      officeName:       (all['officeName']       as string)  || '',
-      pinEnabled:       (all['pinEnabled']       as boolean) || false,
-      biometricEnabled: (all['biometricEnabled'] as boolean) || false,
-    });
-  }, []);
-
-  useFocusEffect(useCallback(() => { load(); }, [load]));
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      SettingsRepository.getAll().then(all => {
+        if (!active) return;
+        setSettings({
+          inspectorName:    all['inspectorName']    || '',
+          officeName:       all['officeName']       || '',
+          // stored as the string 'true' / 'false'
+          pinEnabled:       all['pinEnabled']       === 'true',
+          biometricEnabled: all['biometricEnabled'] === 'true',
+        });
+      });
+      return () => { active = false; };
+    }, [])
+  );
 
   const save = async () => {
     setSaving(true);
     await SettingsRepository.set('inspectorName',    settings.inspectorName);
     await SettingsRepository.set('officeName',       settings.officeName);
-    await SettingsRepository.set('pinEnabled',       settings.pinEnabled);
-    await SettingsRepository.set('biometricEnabled', settings.biometricEnabled);
+    await SettingsRepository.set('pinEnabled',       String(settings.pinEnabled));
+    await SettingsRepository.set('biometricEnabled', String(settings.biometricEnabled));
     setSaving(false);
     Alert.alert('', 'تم حفظ الإعدادات بنجاح ✓');
   };
