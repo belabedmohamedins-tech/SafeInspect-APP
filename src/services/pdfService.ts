@@ -10,26 +10,32 @@ import { generateFileName } from '../utils/fileUtils';
 import { groupByAxisRaw } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
 import { getStatusText } from '../utils/statusUtils';
+import { InspectionRepository } from '../repositories/InspectionRepository';
+import { buildDifferentialViewSync, DifferentialView } from './differentialView';
 
-// ─── Helpers ─────────────────────────────────────────────────────────────────
+// ─── Helpers ─────────────────────────────────────────────────────────────────────────────
 
 /** Returns a CSS background color matching the compliance status. */
 function statusBg(status: InspectionItem['complianceStatus']): string {
   switch (status) {
-    case 'compliant':     return '#d4edda';
-    case 'non-compliant': return '#f8d7da';
-    case 'na':            return '#e2e3e5';
-    default:              return '#fff3cd';
+    case 'compliant':          return '#d4edda';
+    case 'non-compliant':      return '#f8d7da';
+    case 'na':                 return '#e2e3e5';
+    case 'observation-only':   return '#d1ecf1';
+    case 'unable-to-verify':   return '#fff3cd';
+    default:                   return '#fff3cd';
   }
 }
 
 /** Returns a CSS text color for the compliance status cell. */
 function statusColor(status: InspectionItem['complianceStatus']): string {
   switch (status) {
-    case 'compliant':     return '#155724';
-    case 'non-compliant': return '#721c24';
-    case 'na':            return '#383d41';
-    default:              return '#856404';
+    case 'compliant':          return '#155724';
+    case 'non-compliant':      return '#721c24';
+    case 'na':                 return '#383d41';
+    case 'observation-only':   return '#0c5460';
+    case 'unable-to-verify':   return '#856404';
+    default:                   return '#856404';
   }
 }
 
@@ -44,11 +50,100 @@ function gradeBadgeColor(grade?: string): string {
   }
 }
 
-// ─── HTML builder (full inspection report) ────────────────────────────────────
+// ─── Phase-3: Differential verification section HTML ─────────────────────────────
+
+/**
+ * Builds the HTML block for the "تقرير التحقق من الإجراءات التصحيحية"
+ * section inserted into follow-up inspection reports.
+ *
+ * @param diff   Pre-computed differential view (sync version).
+ * @param prior  The prior inspection (for its date label).
+ */
+function buildDifferentialSectionHTML(diff: DifferentialView): string {
+  if (!diff.priorInspection) return '';
+
+  const priorDate = formatDateLong(diff.priorInspection.date);
+
+  // ── Resolved rows ────────────────────────────────────────────────────────
+  const resolvedRows = diff.resolved
+    .map(
+      e => `
+      <tr>
+        <td style="background:#d4edda;color:#155724;text-align:center;font-weight:700">
+          ✓ تم التصحيح
+        </td>
+        <td>${e.item.criteria}</td>
+        <td style="text-align:center;font-size:11px;color:#7f8c8d">${severityLabel(e.item.severity)}</td>
+      </tr>`,
+    )
+    .join('');
+
+  // ── Still-failing rows ───────────────────────────────────────────────────
+  const failingRows = diff.stillFailing
+    .map(
+      e => `
+      <tr>
+        <td style="background:#f8d7da;color:#721c24;text-align:center;font-weight:700">
+          ⚠ لا يزال غير مطابق
+        </td>
+        <td>${e.item.criteria}</td>
+        <td style="text-align:center;font-size:11px;color:#7f8c8d">${severityLabel(e.item.severity)}</td>
+      </tr>`,
+    )
+    .join('');
+
+  // ── New violations ────────────────────────────────────────────────────────
+  const newRows = diff.newViolations
+    .map(
+      e => `
+      <tr>
+        <td style="background:#fff3cd;color:#856404;text-align:center;font-weight:700">
+          🆕 مخالفة جديدة
+        </td>
+        <td>${e.item.criteria}</td>
+        <td style="text-align:center;font-size:11px;color:#7f8c8d">${severityLabel(e.item.severity)}</td>
+      </tr>`,
+    )
+    .join('');
+
+  // ── Escalation suggestion (3.6) ──────────────────────────────────────────
+  const escalationHTML = diff.hasUnresolvedPriorViolations
+    ? `<div style="margin-top:12px;background:#fff3cd;border-right:4px solid #f39c12;
+         border-radius:6px;padding:10px 14px;font-size:12px;color:#856404;font-weight:600">
+         💡 يُقترح اتخاذ إجراء تصعيدي بسبب وجود مخالفات لم تُعالج منذ الزيارة السابقة (${priorDate}).
+       </div>`
+    : '';
+
+  return `
+    <div class="section-title" style="margin-top:20px">
+      تقرير التحقق من الإجراءات التصحيحية
+    </div>
+    <p style="font-size:12px;color:#7f8c8d;margin-bottom:10px">
+      مقارنة مع الزيارة السابقة: ${priorDate}
+    </p>
+    <table class="main-table">
+      <thead>
+        <tr>
+          <th style="width:140px">حالة التصحيح</th>
+          <th>المعيار</th>
+          <th style="width:70px">الخطورة</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${resolvedRows}
+        ${failingRows}
+        ${newRows}
+      </tbody>
+    </table>
+    ${escalationHTML}`;
+}
+
+// ─── HTML builder (full inspection report) ────────────────────────────────────────────────────
 
 function buildReportHTML(
   inspection: SavedInspection,
   fallbackInspector: string,
+  diffView?: DifferentialView | null,
 ): string {
   const groups     = groupByAxisRaw(inspection.items);
   const inspector  = inspection.inspectorName?.trim() || fallbackInspector || 'غير محدد';
@@ -125,6 +220,17 @@ function buildReportHTML(
        </div>`
     : '';
 
+  // ── Phase-3: inspection type badge in header ──────────────────────────────
+  const inspTypeMap: Record<string, string> = {
+    routine:   'تفتيش روتيني',
+    'follow-up': 'متابعة',
+    complaint: 'بعد شكوى',
+  };
+  const inspTypeLabel = inspTypeMap[inspection.inspectionType ?? 'routine'] ?? 'تفتيش روتيني';
+  const inspTypeBadgeColor = inspection.inspectionType === 'follow-up' ? '#2980b9'
+    : inspection.inspectionType === 'complaint' ? '#e74c3c'
+    : '#1a6b5a';
+
   let rowIndex = 0;
   const groupsHTML = groups
     .map(([axis, items]) => {
@@ -134,9 +240,27 @@ function buildReportHTML(
           const color = statusColor(item.complianceStatus);
           const even  = rowIndex++ % 2 === 0;
           const rowBg = even ? '#ffffff' : '#f9fafb';
+
+          // Phase-3: diff indicator inside main table cell
+          const diffEntry = diffView?.all.find(e => e.item.id === item.id);
+          let diffHTML = '';
+          if (diffEntry && diffEntry.diffStatus !== 'unchanged' && diffEntry.diffStatus !== 'not-in-prior') {
+            const diffCfg: Record<string, { bg: string; color: string; label: string }> = {
+              'resolved':      { bg: '#d4edda', color: '#155724', label: '✓ تم التصحيح' },
+              'still-failing': { bg: '#f8d7da', color: '#721c24', label: '⚠ لا يزال' },
+              'new-violation': { bg: '#fff3cd', color: '#856404', label: '🆕 جديد' },
+            };
+            const cfg = diffCfg[diffEntry.diffStatus];
+            if (cfg) {
+              diffHTML = `<span style="display:inline-block;font-size:10px;font-weight:700;
+                padding:1px 6px;border-radius:4px;background:${cfg.bg};color:${cfg.color};
+                margin-right:4px">${cfg.label}</span>`;
+            }
+          }
+
           return `
             <tr style="background:${rowBg}">
-              <td>${item.criteria}</td>
+              <td>${item.criteria}${diffHTML}</td>
               <td class="ref-col">${item.legalReference || '-'}</td>
               <td class="status-cell" style="background:${bg};color:${color}">
                 ${getStatusText(item.complianceStatus)}
@@ -152,6 +276,12 @@ function buildReportHTML(
         ${rows}`;
     })
     .join('');
+
+  // ── Phase-3: differential section HTML ─────────────────────────────────
+  const differentialSectionHTML =
+    inspection.inspectionType === 'follow-up' && diffView
+      ? buildDifferentialSectionHTML(diffView)
+      : '';
 
   const signatureHTML = inspection.signature
     ? `<div class="sig-section">
@@ -181,7 +311,7 @@ function buildReportHTML(
     .letterhead { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #1a6b5a; padding-bottom: 14px; margin-bottom: 18px; }
     .letterhead-title { font-size: 22px; font-weight: 900; color: #1a6b5a; letter-spacing: 0.5px; }
     .letterhead-subtitle { font-size: 13px; color: #7f8c8d; margin-top: 3px; }
-    .report-badge { background: #1a6b5a; color: #fff; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 20px; }
+    .report-badge { color: #fff; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 20px; }
     .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 20px; background: #f4f7f6; border: 1px solid #dce8e5; border-radius: 8px; padding: 14px 18px; margin-bottom: 16px; }
     .meta-grid p { font-size: 13px; line-height: 1.7; }
     .meta-grid strong { color: #1a6b5a; }
@@ -216,7 +346,7 @@ function buildReportHTML(
       <div class="letterhead-title">${office || 'تقرير تفتيش'}</div>
       <div class="letterhead-subtitle">SafeInspect — نظام التفتيش الميداني</div>
     </div>
-    <div class="report-badge">تقرير رسمي</div>
+    <div class="report-badge" style="background:${inspTypeBadgeColor}">${inspTypeLabel}</div>
   </div>
   <div class="meta-grid">
     <p><strong>المنشأة:</strong> ${inspection.facilityName}</p>
@@ -232,6 +362,7 @@ function buildReportHTML(
   </div>
   ${scoreHTML}
   ${score !== undefined ? indicatorsTableHTML : ''}
+  ${differentialSectionHTML}
   <div class="checklist-title">بنود التفتيش</div>
   <table class="main-table">
     <thead>
@@ -253,7 +384,7 @@ function buildReportHTML(
 </html>`;
 }
 
-// ─── HTML builder (blank printable checklist) ─────────────────────────────────
+// ─── HTML builder (blank printable checklist) ────────────────────────────────────────────────────
 
 function buildBlankChecklistHTML(
   activityName: string,
@@ -269,7 +400,6 @@ function buildBlankChecklistHTML(
         .map(item => {
           const even  = rowIndex++ % 2 === 0;
           const rowBg = even ? '#ffffff' : '#f9fafb';
-          // Three empty tick boxes: مطابق / غير مطابق / لا ينطبق
           return `
             <tr style="background:${rowBg}">
               <td class="num-col">${rowIndex}</td>
@@ -302,26 +432,18 @@ function buildBlankChecklistHTML(
     @media print { body { padding: 10px 16px; } }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Cairo', Arial, sans-serif; font-size: 12px; color: #1a1a1a; background: #fff; padding: 20px 28px; direction: rtl; }
-
-    /* Header */
     .letterhead { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #1a6b5a; padding-bottom: 12px; margin-bottom: 14px; }
     .letterhead-title { font-size: 20px; font-weight: 900; color: #1a6b5a; }
     .letterhead-subtitle { font-size: 12px; color: #7f8c8d; margin-top: 2px; }
     .blank-badge { background: #fff; color: #1a6b5a; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 2px solid #1a6b5a; }
-
-    /* Meta fields */
     .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; background: #f4f7f6; border: 1px solid #dce8e5; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; }
     .meta-grid .field { display: flex; align-items: center; gap: 6px; font-size: 12px; }
     .meta-grid .field-label { color: #1a6b5a; font-weight: 700; white-space: nowrap; }
     .meta-grid .field-line { flex: 1; border-bottom: 1px solid #aaa; min-width: 60px; height: 18px; }
-
-    /* Summary row */
     .summary-row { display: flex; gap: 12px; margin-bottom: 14px; }
     .summary-box { flex: 1; border: 1px solid #d5e0dd; border-radius: 6px; padding: 8px 12px; text-align: center; }
     .summary-box .sb-label { font-size: 11px; color: #7f8c8d; margin-bottom: 4px; }
     .summary-box .sb-val { font-size: 18px; font-weight: 900; color: #1a6b5a; }
-
-    /* Table */
     .checklist-title { font-size: 14px; font-weight: 700; color: #1a6b5a; border-right: 4px solid #1a6b5a; padding-right: 10px; margin-bottom: 10px; }
     table.main-table { width: 100%; border-collapse: collapse; font-size: 11px; }
     table.main-table th, table.main-table td { border: 1px solid #c8d8d4; padding: 5px 6px; vertical-align: middle; text-align: right; }
@@ -332,12 +454,8 @@ function buildBlankChecklistHTML(
     .sev-col  { text-align: center; width: 60px; font-size: 10px; }
     .tick-col { text-align: center; width: 38px; font-size: 16px; line-height: 1; }
     .notes-col { width: 120px; }
-
-    /* Signature section */
     .sig-section { margin-top: 22px; display: flex; justify-content: space-between; gap: 20px; }
     .sig-box { flex: 1; border-top: 1px solid #aaa; padding-top: 6px; text-align: center; font-size: 11px; color: #555; }
-
-    /* Footer */
     .footer { margin-top: 16px; border-top: 1px solid #d5e0dd; padding-top: 8px; font-size: 10px; color: #95a5a6; text-align: center; }
   </style>
 </head>
@@ -349,7 +467,6 @@ function buildBlankChecklistHTML(
     </div>
     <div class="blank-badge">نموذج ورقي للطباعة</div>
   </div>
-
   <div class="meta-grid">
     <div class="field"><span class="field-label">اسم المنشأة:</span><span class="field-line"></span></div>
     <div class="field"><span class="field-label">العنوان:</span><span class="field-line"></span></div>
@@ -358,7 +475,6 @@ function buildBlankChecklistHTML(
     <div class="field"><span class="field-label">سبب التفتيش:</span><span class="field-line"></span></div>
     <div class="field"><span class="field-label">رقم المحضر:</span><span class="field-line"></span></div>
   </div>
-
   <div class="summary-row">
     <div class="summary-box"><div class="sb-label">إجمالي البنود</div><div class="sb-val">${items.length}</div></div>
     <div class="summary-box"><div class="sb-label">مطابق ✔</div><div class="sb-val sb-empty">___</div></div>
@@ -366,7 +482,6 @@ function buildBlankChecklistHTML(
     <div class="summary-box"><div class="sb-label">لا ينطبق —</div><div class="sb-val sb-empty">___</div></div>
     <div class="summary-box"><div class="sb-label">التقييم النهائي</div><div class="sb-val sb-empty">___</div></div>
   </div>
-
   <div class="checklist-title">بنود التفتيش</div>
   <table class="main-table">
     <thead>
@@ -383,13 +498,11 @@ function buildBlankChecklistHTML(
     </thead>
     <tbody>${groupsHTML}</tbody>
   </table>
-
   <div class="sig-section">
     <div class="sig-box">توقيع المفتش</div>
     <div class="sig-box">توقيع مدير المنشأة</div>
     <div class="sig-box">ختم المنشأة</div>
   </div>
-
   <div class="footer">
     SafeInspect — نظام التفتيش الميداني &nbsp;|&nbsp;
     ${new Date().toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' })}
@@ -407,12 +520,32 @@ function severityLabel(sev?: string): string {
   }
 }
 
-// ─── PDF export (full report) ─────────────────────────────────────────────────
+// ─── PDF export (full report) ─────────────────────────────────────────────────────────────────────────────
 
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
   const settings = await SettingsRepository.get();
   const settingsInspector = settings.inspectorName ?? '';
-  const html = buildReportHTML(inspection, settingsInspector);
+
+  // Phase-3: load prior inspection for follow-up diff
+  let diffView: DifferentialView | null = null;
+  if (inspection.inspectionType === 'follow-up') {
+    try {
+      let prior: SavedInspection | null = null;
+      if (inspection.priorInspectionId) {
+        prior = await InspectionRepository.getById(inspection.priorInspectionId);
+      }
+      if (!prior) {
+        const all = await InspectionRepository.getAll();
+        const candidates = all
+          .filter(i => i.facilityId === inspection.facilityId && i.status === 'completed' && i.id !== inspection.id)
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        prior = candidates[0] ?? null;
+      }
+      diffView = buildDifferentialViewSync(inspection, prior);
+    } catch { /* non-fatal */ }
+  }
+
+  const html = buildReportHTML(inspection, settingsInspector, diffView);
 
   try {
     if (Platform.OS === 'ios') {
@@ -436,7 +569,7 @@ export async function exportInspectionPDF(inspection: SavedInspection): Promise<
   }
 }
 
-// ─── PDF export (blank printable checklist) ───────────────────────────────────
+// ─── PDF export (blank printable checklist) ────────────────────────────────────────────────────
 
 export async function exportBlankChecklistPDF(
   activityName: string,
@@ -468,7 +601,7 @@ export async function exportBlankChecklistPDF(
   }
 }
 
-// ─── CSV export ───────────────────────────────────────────────────────────────
+// ─── CSV export ───────────────────────────────────────────────────────────────────────────────────
 
 export async function exportInspectionCSV(inspection: SavedInspection): Promise<void> {
   const dir = FileSystem.cacheDirectory;
