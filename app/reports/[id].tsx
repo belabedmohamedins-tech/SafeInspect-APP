@@ -15,7 +15,11 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Radius, Shadow, Spacing } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
-import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
+import {
+  exportInspectionCSV,
+  exportInspectionPDF,
+  exportNonConformityNoticePDF,
+} from '../../src/services/pdfService';
 import { InspectionItem, InspectionType, SavedInspection } from '../../src/types';
 import { formatDateLong } from '../../src/utils/dateUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
@@ -31,7 +35,7 @@ const GRADE_COLORS: Record<string, string> = {
 const getGradeColor = (grade?: string) =>
   (grade ? GRADE_COLORS[grade] : undefined) ?? Colors.textTertiary;
 
-// ── Phase-3: inspection type → Arabic label + badge colour ───────────────────
+// ── Phase-3: inspection type → Arabic label + badge colour ───────────────────────
 const TYPE_META: Record<
   InspectionType,
   { label: string; bg: string; fg: string }
@@ -56,7 +60,7 @@ const typeBadgeStyles = StyleSheet.create({
   text:  { fontSize: FontSize.xs + 1, fontWeight: '700' },
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ────────────────────────────────────────────────────────────────────────────────
 
 export default function ReportDetailScreen() {
   const params = useLocalSearchParams<{ id: string }>();
@@ -140,6 +144,27 @@ export default function ReportDetailScreen() {
     });
   };
 
+  // ── Phase-7: export non-conformity notice ───────────────────────────────────────
+  const handleExportNotice = () => {
+    if (!inspection) return;
+    const violationCount = inspection.items.filter(
+      i => i.complianceStatus === 'non-compliant',
+    ).length;
+    if (violationCount === 0) {
+      Alert.alert(
+        'لا توجد مخالفات',
+        'لا يمكن إنشاء محضر مخالفة لأن هذا التفتيش لا يحتوي على أي بنود غير مطابقة.',
+      );
+      return;
+    }
+    exportNonConformityNoticePDF(inspection);
+  };
+
+  // ── True when the inspection has at least one non-compliant item ────────────
+  const hasViolations = (inspection?.items ?? []).some(
+    i => i.complianceStatus === 'non-compliant',
+  );
+
   const sections = useMemo(() => {
     if (!inspection) return [];
     const groups: Record<string, InspectionItem[]> = {};
@@ -193,6 +218,16 @@ export default function ReportDetailScreen() {
               <TouchableOpacity onPress={() => exportInspectionCSV(inspection)} style={styles.headerBtn}>
                 <FontAwesome name="file-excel-o" size={20} color={Colors.textInverse} />
               </TouchableOpacity>
+              {/* Phase-7: Export non-conformity notice — only shown when violations exist */}
+              {hasViolations && (
+                <TouchableOpacity
+                  onPress={handleExportNotice}
+                  style={styles.headerBtn}
+                  accessibilityLabel="تصدير محضر المخالفة"
+                >
+                  <FontAwesome name="file-text-o" size={20} color="#ffcc80" />
+                </TouchableOpacity>
+              )}
               <TouchableOpacity onPress={reopenInspection} style={styles.headerBtn}>
                 <FontAwesome name="pencil" size={20} color={Colors.textInverse} />
               </TouchableOpacity>
@@ -238,6 +273,20 @@ export default function ReportDetailScreen() {
             <View style={[styles.gradeBadge, { backgroundColor: getGradeColor(gradeDisplay) }]}>
               <Text style={styles.gradeText}>{gradeDisplay}</Text>
             </View>
+          </View>
+        )}
+        {/* Phase-7: inline violation count badge when violations exist */}
+        {hasViolations && (
+          <View style={styles.violationCountRow}>
+            <FontAwesome name="exclamation-triangle" size={13} color="#e65100" />
+            <Text style={styles.violationCountText}>
+              {
+                inspection.items.filter(i => i.complianceStatus === 'non-compliant').length
+              }{' '}
+              مخالفة — اضغط على{' '}
+              <Text style={styles.violationCountLink}>‹فوق؟›</Text>
+              {' '}لإنشاء محضر المخالفة
+            </Text>
           </View>
         )}
         {inspection.signature && (
@@ -286,42 +335,46 @@ export default function ReportDetailScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:          { flex: 1, backgroundColor: Colors.background },
-  centered:          { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  errorText:         { fontSize: FontSize.lg, color: Colors.danger },
-  headerActions:     { flexDirection: 'row' },
-  headerBtn:         { marginRight: Spacing.md },
-  header:            { backgroundColor: Colors.surface, padding: Spacing.base, marginBottom: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
-  officeName:        { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.primary, marginBottom: 4 },
-  facilityName:      { fontSize: FontSize.xxl, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
-  address:           { fontSize: FontSize.base, color: Colors.textSecondary, marginBottom: 4 },
-  date:              { fontSize: FontSize.sm + 1, color: Colors.textTertiary, marginBottom: 2 },
-  inspector:         { fontSize: FontSize.sm + 1, color: Colors.primary, marginBottom: 2 },
-  metaLine:          { fontSize: FontSize.sm + 1, color: Colors.textPrimary, marginBottom: 2 },
-  committeeContainer:{ marginVertical: 4 },
-  committeeLabel:    { fontSize: FontSize.sm + 1, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 2 },
-  committeeMember:   { fontSize: FontSize.sm + 1, color: Colors.textSecondary, marginLeft: Spacing.sm },
-  coordinates:       { fontSize: FontSize.xs + 1, color: Colors.textSecondary, marginTop: 4 },
-  scoreRow:          { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
-  scoreLabel:        { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.textPrimary, marginRight: Spacing.sm },
-  scoreValue:        { fontSize: FontSize.base, color: Colors.textPrimary, marginRight: Spacing.sm },
-  gradeBadge:        { paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: Radius.sm },
-  gradeText:         { color: Colors.textInverse, fontSize: FontSize.sm, fontWeight: 'bold' },
-  signatureContainer:{ marginTop: Spacing.sm, alignItems: 'center' },
-  signatureLabel:    { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
-  signatureImage:    { width: 200, height: 100, resizeMode: 'contain', borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm, backgroundColor: Colors.surface },
-  list:              { padding: Spacing.sm + 2 },
-  sectionHeader:     { backgroundColor: Colors.surfaceOffset, paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, marginTop: Spacing.sm, borderRadius: Radius.sm },
-  sectionTitle:      { fontSize: FontSize.lg, fontWeight: 'bold', color: Colors.textPrimary, textAlign: 'right' },
-  itemCard:          { backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.md, marginBottom: Spacing.sm, ...Shadow.sm },
-  headerRow:         { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
-  badgeContainer:    { flexDirection: 'row', flexWrap: 'wrap', flex: 1 },
-  categoryBadge:     { backgroundColor: Colors.primary + '20', paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: Radius.sm, marginRight: 4, marginBottom: 4 },
-  categoryText:      { fontSize: FontSize.xs + 1, color: Colors.primary },
-  statusBadge:       { paddingHorizontal: Spacing.sm, paddingVertical: 3, borderRadius: Radius.sm },
-  statusText:        { color: Colors.textInverse, fontSize: FontSize.xs + 1, fontWeight: 'bold' },
-  criteria:          { fontSize: FontSize.md, fontWeight: '500', color: Colors.textPrimary, marginBottom: 4 },
-  referenceText:     { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4 },
-  comment:           { fontSize: FontSize.sm + 1, color: Colors.warning, marginTop: 4 },
-  thumbnail:         { width: 80, height: 80, marginTop: Spacing.sm, borderRadius: Radius.sm },
+  safeArea:             { flex: 1, backgroundColor: Colors.background },
+  centered:             { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  errorText:            { fontSize: FontSize.lg, color: Colors.danger },
+  headerActions:        { flexDirection: 'row' },
+  headerBtn:            { marginRight: Spacing.md },
+  header:               { backgroundColor: Colors.surface, padding: Spacing.base, marginBottom: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
+  officeName:           { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.primary, marginBottom: 4 },
+  facilityName:         { fontSize: FontSize.xxl, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
+  address:              { fontSize: FontSize.base, color: Colors.textSecondary, marginBottom: 4 },
+  date:                 { fontSize: FontSize.sm + 1, color: Colors.textTertiary, marginBottom: 2 },
+  inspector:            { fontSize: FontSize.sm + 1, color: Colors.primary, marginBottom: 2 },
+  metaLine:             { fontSize: FontSize.sm + 1, color: Colors.textPrimary, marginBottom: 2 },
+  committeeContainer:   { marginVertical: 4 },
+  committeeLabel:       { fontSize: FontSize.sm + 1, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 2 },
+  committeeMember:      { fontSize: FontSize.sm + 1, color: Colors.textSecondary, marginLeft: Spacing.sm },
+  coordinates:          { fontSize: FontSize.xs + 1, color: Colors.textSecondary, marginTop: 4 },
+  scoreRow:             { flexDirection: 'row', alignItems: 'center', marginTop: 4 },
+  scoreLabel:           { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.textPrimary, marginRight: Spacing.sm },
+  scoreValue:           { fontSize: FontSize.base, color: Colors.textPrimary, marginRight: Spacing.sm },
+  gradeBadge:           { paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: Radius.sm },
+  gradeText:            { color: Colors.textInverse, fontSize: FontSize.sm, fontWeight: 'bold' },
+  // Phase-7: violation count hint row
+  violationCountRow:    { flexDirection: 'row', alignItems: 'center', marginTop: Spacing.sm, gap: 5 },
+  violationCountText:   { fontSize: FontSize.xs + 1, color: '#e65100' },
+  violationCountLink:   { fontWeight: '700', textDecorationLine: 'underline' },
+  signatureContainer:   { marginTop: Spacing.sm, alignItems: 'center' },
+  signatureLabel:       { fontSize: FontSize.base, fontWeight: 'bold', color: Colors.textPrimary, marginBottom: 4 },
+  signatureImage:       { width: 200, height: 100, resizeMode: 'contain', borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm, backgroundColor: Colors.surface },
+  list:                 { padding: Spacing.sm + 2 },
+  sectionHeader:        { backgroundColor: Colors.surfaceOffset, paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, marginTop: Spacing.sm, borderRadius: Radius.sm },
+  sectionTitle:         { fontSize: FontSize.lg, fontWeight: 'bold', color: Colors.textPrimary, textAlign: 'right' },
+  itemCard:             { backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.md, marginBottom: Spacing.sm, ...Shadow.sm },
+  headerRow:            { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
+  badgeContainer:       { flexDirection: 'row', flexWrap: 'wrap', flex: 1 },
+  categoryBadge:        { backgroundColor: Colors.primary + '20', paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: Radius.sm, marginRight: 4, marginBottom: 4 },
+  categoryText:         { fontSize: FontSize.xs + 1, color: Colors.primary },
+  statusBadge:          { paddingHorizontal: Spacing.sm, paddingVertical: 3, borderRadius: Radius.sm },
+  statusText:           { color: Colors.textInverse, fontSize: FontSize.xs + 1, fontWeight: 'bold' },
+  criteria:             { fontSize: FontSize.md, fontWeight: '500', color: Colors.textPrimary, marginBottom: 4 },
+  referenceText:        { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: 4 },
+  comment:              { fontSize: FontSize.sm + 1, color: Colors.warning, marginTop: 4 },
+  thumbnail:            { width: 80, height: 80, marginTop: Spacing.sm, borderRadius: Radius.sm },
 });
