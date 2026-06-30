@@ -14,15 +14,29 @@ import { Swipeable } from 'react-native-gesture-handler';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
-import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
+import {
+  exportInspectionCSV,
+  exportInspectionPDF,
+  exportNonConformityNoticePDF,
+} from '../../src/services/pdfService';
 import { SavedInspection } from '../../src/types';
 import { formatDateForCard } from '../../src/utils/dateUtils';
 import { getComplianceSummary } from '../../src/utils/statusUtils';
 
+// ── Phase-9: extended filter type ───────────────────────────────────────────
+type FilterStatus = 'all' | 'compliant' | 'non-compliant' | 'violations';
+
+const FILTER_LABELS: Record<FilterStatus, string> = {
+  all:            'الكل',
+  compliant:      'مطابق',
+  'non-compliant': 'غير مطابق',
+  violations:     '⚠️ مخالفات',
+};
+
 export default function ReportsScreen() {
   const [inspections, setInspections] = useState<SavedInspection[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<'all' | 'compliant' | 'non-compliant'>('all');
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
   const router = useRouter();
 
   const loadInspections = async () => {
@@ -66,6 +80,16 @@ export default function ReportsScreen() {
     });
   };
 
+  // ── Phase-9: export notice with guard ────────────────────────────────────
+  const handleExportNotice = (item: SavedInspection) => {
+    const count = item.items.filter(i => i.complianceStatus === 'non-compliant').length;
+    if (count === 0) {
+      Alert.alert('لا توجد مخالفات', 'هذا التفتيش مطابق بالكامل.');
+      return;
+    }
+    exportNonConformityNoticePDF(item);
+  };
+
   const filteredInspections = useMemo(() => {
     return inspections.filter(inspection => {
       const matchesSearch = inspection.facilityName
@@ -74,8 +98,10 @@ export default function ReportsScreen() {
       if (!matchesSearch) return false;
       if (filterStatus === 'all') return true;
       const summary = getComplianceSummary(inspection.items);
-      if (filterStatus === 'compliant')     return summary.nonCompliant === 0;
-      if (filterStatus === 'non-compliant') return summary.nonCompliant > 0;
+      if (filterStatus === 'compliant')      return summary.nonCompliant === 0;
+      if (filterStatus === 'non-compliant')  return summary.nonCompliant > 0;
+      // Phase-9: violations = same as non-compliant (shortcut to Notice-ready inspections)
+      if (filterStatus === 'violations')     return summary.nonCompliant > 0;
       return true;
     });
   }, [inspections, searchQuery, filterStatus]);
@@ -90,6 +116,7 @@ export default function ReportsScreen() {
   const renderItem = ({ item }: { item: SavedInspection }) => {
     const summary = getComplianceSummary(item.items);
     const isCompliant = summary.nonCompliant === 0;
+    const hasViolations = summary.nonCompliant > 0;
     return (
       <Swipeable renderRightActions={() => renderRightActions(item.id)}>
         <TouchableOpacity
@@ -125,6 +152,17 @@ export default function ReportsScreen() {
               <FontAwesome name="file-excel-o" size={16} color={Colors.green} />
               <Text style={[styles.actionBtnText, { color: Colors.green }]}>Excel</Text>
             </TouchableOpacity>
+            {/* Phase-9: Notice button — only on cards with violations */}
+            {hasViolations && (
+              <TouchableOpacity
+                style={styles.actionBtn}
+                onPress={() => handleExportNotice(item)}
+                accessibilityLabel="تصدير محضر المخالفة"
+              >
+                <FontAwesome name="file-text-o" size={16} color="#e65100" />
+                <Text style={[styles.actionBtnText, { color: '#e65100' }]}>محضر</Text>
+              </TouchableOpacity>
+            )}
           </View>
         </TouchableOpacity>
       </Swipeable>
@@ -141,15 +179,22 @@ export default function ReportsScreen() {
         onChangeText={setSearchQuery}
         textAlign="right"
       />
+      {/* Phase-9: 4-chip filter row */}
       <View style={styles.filterRow}>
-        {(['all', 'compliant', 'non-compliant'] as const).map(f => (
+        {(Object.keys(FILTER_LABELS) as FilterStatus[]).map(f => (
           <TouchableOpacity
             key={f}
-            style={[styles.filterBtn, filterStatus === f && styles.filterBtnActive]}
+            style={[
+              styles.filterBtn,
+              filterStatus === f && (f === 'violations' ? styles.filterBtnViolations : styles.filterBtnActive),
+            ]}
             onPress={() => setFilterStatus(f)}
           >
-            <Text style={[styles.filterBtnText, filterStatus === f && styles.filterBtnTextActive]}>
-              {f === 'all' ? 'الكل' : f === 'compliant' ? 'مطابق' : 'غير مطابق'}
+            <Text style={[
+              styles.filterBtnText,
+              filterStatus === f && (f === 'violations' ? styles.filterBtnTextViolations : styles.filterBtnTextActive),
+            ]}>
+              {FILTER_LABELS[f]}
             </Text>
           </TouchableOpacity>
         ))}
@@ -182,14 +227,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     color: Colors.dark,
   },
-  filterRow: { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8 },
-  filterBtn: {
-    paddingHorizontal: 12, paddingVertical: 6,
-    borderRadius: 16, backgroundColor: Colors.background,
-  },
-  filterBtnActive:     { backgroundColor: Colors.blue },
-  filterBtnText:       { fontSize: 13, color: Colors.mid },
-  filterBtnTextActive: { color: Colors.white },
+  filterRow:              { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8, flexWrap: 'wrap' },
+  filterBtn:              { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: Colors.background },
+  filterBtnActive:        { backgroundColor: Colors.blue },
+  filterBtnViolations:    { backgroundColor: '#e65100' },
+  filterBtnText:          { fontSize: 13, color: Colors.mid },
+  filterBtnTextActive:    { color: Colors.white },
+  filterBtnTextViolations:{ color: Colors.white, fontWeight: '700' },
   list: { padding: 10 },
   card: {
     backgroundColor: Colors.white, borderRadius: 10,
@@ -209,7 +253,7 @@ const styles = StyleSheet.create({
   inspector:       { fontSize: 13, color: Colors.blue, marginBottom: 8 },
   statsRow:        { flexDirection: 'row', gap: 12, marginBottom: 10 },
   statItem:        { fontSize: 13, color: Colors.dark },
-  actionsRow:      { flexDirection: 'row', gap: 12 },
+  actionsRow:      { flexDirection: 'row', gap: 12, flexWrap: 'wrap' },
   actionBtn:       { flexDirection: 'row', alignItems: 'center', gap: 4 },
   actionBtnText:   { fontSize: 13 },
   deleteButton: {
