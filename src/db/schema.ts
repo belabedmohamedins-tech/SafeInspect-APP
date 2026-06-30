@@ -7,15 +7,34 @@
 // calls on startup, keeping the door open for a future SQLite migration
 // without touching the layout file.
 //
-// What it does today:
-//   1. Verifies AsyncStorage is reachable by issuing a cheap read.
-//   2. Seeds the STATS_CACHE key if it is absent (prevents undefined reads
-//      in loadHomeData after a fresh install).
-//   3. Resolves with void on success — _layout.tsx sets dbReady = true.
-//   4. Rejects with an Error on hard failure so _layout.tsx can log it.
+// Schema version history:
+//   v1 — initial (ComplianceStatus: compliant | non-compliant | na | not-evaluated)
+//   v2 — Phase-1 checklist roadmap fields added to InspectionItem + SavedInspection:
+//          InspectionItem:
+//            + complianceStatus: adds 'observation-only' | 'unable-to-verify'
+//            + numericValue?: number
+//            + numericUnit?: string
+//            + isRepeatViolation?: boolean
+//            + priorInspectionStatus?: ComplianceStatus
+//            + rootCause?: RootCause
+//            + sanctionTier?: SanctionTier
+//          SavedInspection:
+//            + inspectionType?: InspectionType  (default: 'routine')
+//            + priorInspectionId?: string
+//            + openingMeetingDone?: boolean      (default: false)
+//            + closingMeetingDone?: boolean      (default: false)
+//            + reportSequenceNumber?: string
+//            + escalationOverrideReason?: string
+//
+//   All new fields are optional — existing stored inspections deserialise
+//   without error (missing fields resolve to undefined, treated as defaults).
+//   No destructive migration is required for v1 → v2.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../repositories/keys';
+
+/** Increment this when the shape of any stored type changes. */
+export const SCHEMA_VERSION = 2;
 
 /**
  * Initialise the application data layer.
@@ -25,7 +44,7 @@ import { StorageKeys } from '../repositories/keys';
  * keys are in place.
  */
 export async function initializeDatabase(): Promise<void> {
-  // ── 1. Warm-up read — confirms the storage engine is accessible ──────────
+  // ── 1. Warm-up read — confirms the storage engine is accessible ────────────
   //    Using INSPECTIONS is intentional: it is the largest key and the one
   //    most likely to expose a corrupted store early.
   try {
@@ -49,12 +68,25 @@ export async function initializeDatabase(): Promise<void> {
     // Non-fatal — the app can run without the stats cache seed.
   }
 
-  // ── 3. Future: run SQLite migrations here ────────────────────────────────
+  // ── 3. Schema version stamp ─────────────────────────────────────────────
+  //    Writes the current schema version to storage so future migrations
+  //    can detect what version a device is upgrading from.
+  try {
+    const stored = await AsyncStorage.getItem(StorageKeys.SCHEMA_VERSION ?? '@schema_version');
+    if (stored === null || parseInt(stored, 10) < SCHEMA_VERSION) {
+      await AsyncStorage.setItem('@schema_version', String(SCHEMA_VERSION));
+      console.info(`[SafeInspect] Schema upgraded to v${SCHEMA_VERSION}.`);
+    }
+  } catch {
+    // Non-fatal — version stamp is advisory only.
+  }
+
+  // ── 4. Future: run SQLite migrations here ──────────────────────────────
   //    When the SQLite layer is added, replace the AsyncStorage warm-up above
   //    with:
   //      const db = await SQLite.openDatabaseAsync('safeinspect.db');
   //      await runMigrations(db);
   //    and store the db reference in a module-level singleton for repositories.
 
-  console.info('[SafeInspect] Database initialised (AsyncStorage mode).');
+  console.info('[SafeInspect] Database initialised (AsyncStorage mode, schema v2).');
 }
