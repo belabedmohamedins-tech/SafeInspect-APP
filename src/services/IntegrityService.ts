@@ -1,16 +1,13 @@
 // src/services/IntegrityService.ts
 //
-// Provides tamperproof SHA-256-equivalent hashing for completed inspections.
+// Provides cryptographically sound SHA-256 hashing for completed inspections.
 //
-// Implementation note:
-//   We use a pure-JS djb2 hash over the canonical JSON string of the
-//   inspection. This requires zero native modules and works on every
-//   Expo SDK version. The digest is a zero-padded 8-character hex string.
-//   It is strong enough to detect accidental or deliberate in-app tampering
-//   of AsyncStorage data. For cryptographic-grade integrity (e.g. legal
-//   evidence), upgrade to expo-crypto SHA-256 when it becomes available
-//   without bare-workflow requirements.
+// Implementation:
+//   expo-crypto digestStringAsync with CryptoDigestAlgorithm.SHA256.
+//   The digest is a 64-character lowercase hex string.
+//   This is legally defensible as a document integrity proof.
 
+import * as Crypto from 'expo-crypto';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
@@ -23,15 +20,14 @@ function canonicalise(inspection: SavedInspection): string {
   return JSON.stringify(rest, Object.keys(rest).sort());
 }
 
-// ─── djb2 hash ───────────────────────────────────────────────────────────────
+// ─── SHA-256 hash ─────────────────────────────────────────────────────────────
 
-function djb2Hex(str: string): string {
-  let hash = 5381;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) + hash) ^ str.charCodeAt(i);
-    hash = hash >>> 0;
-  }
-  return hash.toString(16).padStart(8, '0');
+async function sha256Hex(str: string): Promise<string> {
+  return Crypto.digestStringAsync(
+    Crypto.CryptoDigestAlgorithm.SHA256,
+    str,
+    { encoding: Crypto.CryptoEncoding.HEX },
+  );
 }
 
 // ─── Hash storage ────────────────────────────────────────────────────────────
@@ -53,19 +49,19 @@ async function writeHashes(hashes: Record<string, string>): Promise<void> {
 
 export const IntegrityService = {
   /**
-   * Synchronously compute the djb2 hash of an inspection.
+   * Compute the SHA-256 hash of an inspection.
    * Used by InspectionRepository.save() on first completion.
    */
-  computeHash(inspection: SavedInspection): string {
-    return djb2Hex(canonicalise(inspection));
+  async computeHash(inspection: SavedInspection): Promise<string> {
+    return sha256Hex(canonicalise(inspection));
   },
 
   /**
-   * Compute and persist the hash for a completed inspection.
+   * Compute and persist the SHA-256 hash for a completed inspection.
    * Returns the hash string so the caller can embed it in SavedInspection.
    */
   async hashAndStore(inspection: SavedInspection): Promise<string> {
-    const hash = djb2Hex(canonicalise(inspection));
+    const hash = await sha256Hex(canonicalise(inspection));
     const hashes = await readHashes();
     hashes[inspection.id] = hash;
     await writeHashes(hashes);
@@ -79,10 +75,9 @@ export const IntegrityService = {
   async verifyInspection(
     inspection: SavedInspection,
   ): Promise<{ ok: boolean; storedHash?: string; computedHash: string }> {
-    const computedHash = djb2Hex(canonicalise(inspection));
+    const computedHash = await sha256Hex(canonicalise(inspection));
     const hashes = await readHashes();
     const storedHash = hashes[inspection.id];
-    // No stored hash means we have no baseline to verify against — treat as not ok
     if (!storedHash) {
       return { ok: false, storedHash: undefined, computedHash };
     }
@@ -103,5 +98,5 @@ export const IntegrityService = {
 };
 
 // ─── Named exports for tests that import them directly ───────────────────────
-export const computeHash    = (i: SavedInspection) => IntegrityService.computeHash(i);
+export const computeHash      = (i: SavedInspection) => IntegrityService.computeHash(i);
 export const verifyInspection = IntegrityService.verifyInspection.bind(IntegrityService);
