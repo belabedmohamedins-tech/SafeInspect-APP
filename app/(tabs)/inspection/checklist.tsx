@@ -1,6 +1,8 @@
 // app/(tabs)/inspection/checklist.tsx
-// Phase-5 update: opening-meeting gate safety-net + closing-meeting gate
+// Phase-5: opening-meeting gate safety-net + closing-meeting gate
 // before handleFinish is allowed to proceed.
+// Gate flags are threaded into checklistParams so saveInspection always
+// persists the current state on every auto-save and on finish.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -33,12 +35,8 @@ import {
   DifferentialView,
 } from '../../../src/services/differentialView';
 import { createCapItemsFromInspection } from '../../../src/services/capFactory';
-import {
-  persistClosingMeetingDone,
-  persistOpeningMeetingDone,
-} from '../../../src/services/meetingGateService';
-import { SavedInspection } from '../../../src/types';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
+import { SavedInspection } from '../../../src/types';
 
 /** Safely parse a JSON string that is expected to be a string[]. */
 function parseStringArray(raw: string | string[] | undefined): string[] {
@@ -64,32 +62,34 @@ export default function ChecklistScreen() {
   const isFollowUp        = inspectionType === 'follow-up';
 
   // ── Phase-5: meeting gate state ─────────────────────────────────────────────
-  // openingMeetingDone comes from route param (set by facilities.tsx gate)
   const openingFromParam = params.openingMeetingDone === 'true';
-  const [openingDone,  setOpeningDone]  = useState(openingFromParam);
-  const [closingDone,  setClosingDone]  = useState(false);
+  const [openingDone,     setOpeningDone]     = useState(openingFromParam);
+  const [closingDone,     setClosingDone]     = useState(false);
   const [showOpeningGate, setShowOpeningGate] = useState(!openingFromParam);
   const [showClosingGate, setShowClosingGate] = useState(false);
-  // Pending finish: set true when inspector taps Finish, gate resolves it
   const pendingFinish = useRef(false);
 
   const [diffView, setDiffView] = useState<DifferentialView | null>(null);
 
+  // ── Build checklist params — gate flags are live state so paramsRef stays current ──
   const checklistParams = {
-    draftId:          params.draftId as string | undefined,
-    facilityId:       params.facilityId as string,
-    facilityName:     params.facilityName as string,
-    facilityAddress:  params.facilityAddress as string,
-    activity:         params.activity as string | undefined,
-    agendaId:         params.agendaId as string | undefined,
-    cause:            (params.cause     as string) ?? '',
-    reference:        (params.reference as string) ?? '',
-    committeeMembers: parseStringArray(params.committeeMembers as string | string[] | undefined),
-    writer:           (params.writer    as string) ?? '',
-    lat:              params.lat ? parseFloat(params.lat as string) : undefined,
-    lng:              params.lng ? parseFloat(params.lng as string) : undefined,
+    draftId:             params.draftId as string | undefined,
+    facilityId:          params.facilityId as string,
+    facilityName:        params.facilityName as string,
+    facilityAddress:     params.facilityAddress as string,
+    activity:            params.activity as string | undefined,
+    agendaId:            params.agendaId as string | undefined,
+    cause:               (params.cause     as string) ?? '',
+    reference:           (params.reference as string) ?? '',
+    committeeMembers:    parseStringArray(params.committeeMembers as string | string[] | undefined),
+    writer:              (params.writer    as string) ?? '',
+    lat:                 params.lat ? parseFloat(params.lat as string) : undefined,
+    lng:                 params.lng ? parseFloat(params.lng as string) : undefined,
     inspectionType,
     priorInspectionId,
+    // Phase-5: live flags — paramsRef.current always has the latest values
+    openingMeetingDone: openingDone,
+    closingMeetingDone: closingDone,
   };
 
   const {
@@ -129,25 +129,20 @@ export default function ChecklistScreen() {
   }, [isFollowUp, isLoading, data.length]);
 
   // ── Phase-5: opening gate confirmed (safety-net path) ──────────────────────
-  const handleOpeningConfirmed = async () => {
+  const handleOpeningConfirmed = () => {
     setShowOpeningGate(false);
     setOpeningDone(true);
-    // Persist flag if draft already exists
-    if (checklistParams.draftId) {
-      await persistOpeningMeetingDone(checklistParams.draftId).catch(console.warn);
-    }
+    // paramsRef is updated on next render automatically (checklistParams object is rebuilt)
   };
 
   const handleOpeningCancelled = () => {
-    // Inspector chose not to do the opening meeting — go back
     setShowOpeningGate(false);
     router.back();
   };
 
-  // ── Phase-5: handleFinish shows closing gate first ───────────────────────
+  // ── Phase-5: handleFinish wraps the hook's _handleFinish with closing gate ──
   const handleFinish = () => {
     if (!closingDone) {
-      // Show closing gate; actual finish triggered after confirmation
       pendingFinish.current = true;
       setShowClosingGate(true);
     } else {
@@ -155,22 +150,20 @@ export default function ChecklistScreen() {
     }
   };
 
-  const handleClosingConfirmed = async () => {
+  const handleClosingConfirmed = () => {
     setShowClosingGate(false);
     setClosingDone(true);
-    if (checklistParams.draftId) {
-      await persistClosingMeetingDone(checklistParams.draftId).catch(console.warn);
-    }
     if (pendingFinish.current) {
       pendingFinish.current = false;
-      doFinish();
+      // closingDone state update is async — call doFinish on next tick so
+      // paramsRef.current picks up closingMeetingDone: true before saveInspection runs
+      setTimeout(doFinish, 0);
     }
   };
 
   const handleClosingCancelled = () => {
     pendingFinish.current = false;
     setShowClosingGate(false);
-    // Inspector stays on checklist
   };
 
   const doFinish = async () => {
@@ -178,7 +171,7 @@ export default function ChecklistScreen() {
     try {
       let saved: SavedInspection | undefined;
       if (checklistParams.draftId) {
-        saved = await InspectionRepository.getById(checklistParams.draftId);
+        saved = (await InspectionRepository.getById(checklistParams.draftId)) ?? undefined;
       } else {
         const all = await InspectionRepository.getAll();
         saved = all
@@ -319,7 +312,11 @@ const styles = StyleSheet.create({
   safeArea:          { flex: 1 },
   centered:          { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md },
   loadingText:       { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
-  meetingDoneStrip:  { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#eafaf1', paddingHorizontal: Spacing.base, paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#a9dfbf' },
+  meetingDoneStrip:  {
+    flexDirection: 'row', alignItems: 'center', gap: 6,
+    backgroundColor: '#eafaf1', paddingHorizontal: Spacing.base,
+    paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#a9dfbf',
+  },
   meetingDoneText:   { fontSize: 12, color: '#27ae60', fontWeight: '600' },
   sectionHeader: {
     flexDirection: 'row', alignItems: 'center',
