@@ -1,145 +1,127 @@
 // src/__tests__/schema.test.ts
 //
-// WHAT IS TESTED:
-//   initializeDatabase() → getDb() → SQLite.openDatabaseAsync + runMigrations.
-//   The function does NOT touch AsyncStorage — those assertions were incorrect
-//   and have been removed.
-//
-// WHY expo-sqlite IS MOCKED:
-//   In the Jest environment there is no native filesystem. The real
-//   expo-sqlite pathUtils resolves the database directory from
-//   FileSystem.documentDirectory (a native constant). Without the mock it
-//   throws "Both provided directory and defaultDatabaseDirectory are null."
-//   before any test can run.
-//
-// MOCK DESIGN:
-//   The SQLite stub uses a simple in-memory Map as the _migrations table so
-//   that runMigrations() behaves correctly (skips already-applied migrations on
-//   repeated calls) without any real SQL engine.
+// Jest hoists jest.mock() calls before any variable declarations.
+// Only variables whose names start with 'mock' (case-insensitive) may be
+// referenced inside a jest.mock() factory — all others trigger a
+// ReferenceError at build time. That is why every helper here is prefixed
+// with 'mock'.
 
-// Applied-migration tracker shared across all calls within a test.
-let appliedMigrations: Set<string>;
+// Applied-migration tracker — reset in beforeEach.
+let mockAppliedMigrations: Set<string>;
 
-// db stub factory — recreated for each openDatabaseAsync call
-function makeDbStub() {
+// Current db stub — set inside the factory so tests can inspect calls.
+let mockCurrentDbStub: ReturnType<typeof mockMakeDbStub>;
+
+function mockMakeDbStub() {
   return {
-    execAsync:           jest.fn().mockResolvedValue(undefined),
-    runAsync:            jest.fn().mockResolvedValue(undefined),
-    getFirstAsync:       jest.fn().mockImplementation(
+    execAsync:            jest.fn().mockResolvedValue(undefined),
+    runAsync:             jest.fn().mockResolvedValue(undefined),
+    getFirstAsync:        jest.fn().mockImplementation(
       (_sql: string, params: [string]) => {
         const name = params[0];
-        return Promise.resolve(appliedMigrations.has(name) ? { name } : null);
-      }
+        return Promise.resolve(
+          mockAppliedMigrations.has(name) ? { name } : null,
+        );
+      },
     ),
     withTransactionAsync: jest.fn().mockImplementation(
-      async (fn: () => Promise<void>) => {
-        await fn();
-      }
+      async (fn: () => Promise<void>) => fn(),
     ),
     closeAsync: jest.fn().mockResolvedValue(undefined),
   };
 }
 
-let currentDbStub: ReturnType<typeof makeDbStub>;
-
 jest.mock('expo-sqlite', () => ({
   openDatabaseAsync: jest.fn().mockImplementation(() => {
-    currentDbStub = makeDbStub();
-    // Intercept runAsync to track applied migrations so getFirstAsync
-    // returns the right value on subsequent runMigrations() calls.
-    currentDbStub.runAsync.mockImplementation(
-      (_sql: string, params: [string]) => {
-        // INSERT INTO _migrations (name) VALUES (?)
-        if (_sql.includes('_migrations') && _sql.includes('INSERT') && params?.[0]) {
-          appliedMigrations.add(params[0]);
+    mockCurrentDbStub = mockMakeDbStub();
+    // Track INSERT INTO _migrations so getFirstAsync returns the right
+    // value when runMigrations is called a second time on the same stub.
+    mockCurrentDbStub.runAsync.mockImplementation(
+      (sql: string, params: [string]) => {
+        if (sql.includes('_migrations') && sql.includes('INSERT') && params?.[0]) {
+          mockAppliedMigrations.add(params[0]);
         }
         return Promise.resolve(undefined);
-      }
+      },
     );
-    return Promise.resolve(currentDbStub);
+    return Promise.resolve(mockCurrentDbStub);
   }),
 }));
 
 import * as SQLite from 'expo-sqlite';
-import { initializeDatabase, getDb, runMigrations } from '../db/schema';
 
 const mockOpenDatabase = SQLite.openDatabaseAsync as jest.Mock;
 
 beforeEach(() => {
-  // Reset migration state and the db singleton between tests.
-  appliedMigrations = new Set();
+  mockAppliedMigrations = new Set();
   jest.resetModules();
   jest.clearAllMocks();
-  // Re-import after resetModules to get a fresh singleton (_db = null).
-  // This is handled by requiring lazily in each test — see note below.
 });
 
-// ─── Happy path ───────────────────────────────────────────────────────────
+// ─── Happy path ───────────────────────────────────────────────────────────────
 
 describe('initializeDatabase — happy path', () => {
   it('resolves without throwing', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await expect(init()).resolves.toBeUndefined();
+    const { initializeDatabase } = require('../db/schema');
+    await expect(initializeDatabase()).resolves.toBeUndefined();
   });
 
   it('calls openDatabaseAsync with the correct filename', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
     expect(mockOpenDatabase).toHaveBeenCalledWith('safeinspect.db');
   });
 
   it('creates the _migrations tracking table', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
-    expect(currentDbStub.execAsync).toHaveBeenCalledWith(
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
+    expect(mockCurrentDbStub.execAsync).toHaveBeenCalledWith(
       expect.stringContaining('CREATE TABLE IF NOT EXISTS _migrations'),
     );
   });
 
-  it('runs all 9 MIGRATIONS entries (withTransactionAsync called 9 times)', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
-    // 9 migrations defined in MIGRATIONS array.
-    expect(currentDbStub.withTransactionAsync).toHaveBeenCalledTimes(9);
+  it('runs all 9 MIGRATIONS (withTransactionAsync called 9 times)', async () => {
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
+    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(9);
   });
 
   it('records each migration name via runAsync INSERT', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
-    const insertCalls = (currentDbStub.runAsync as jest.Mock).mock.calls.filter(
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
+    const insertCalls = (mockCurrentDbStub.runAsync as jest.Mock).mock.calls.filter(
       ([sql]: [string]) => sql.includes('INSERT INTO _migrations'),
     );
     expect(insertCalls).toHaveLength(9);
   });
 });
 
-// ─── Idempotency ──────────────────────────────────────────────────────────
+// ─── Idempotency ──────────────────────────────────────────────────────────────
 
 describe('initializeDatabase — idempotency', () => {
   it('opens the database only once when called twice (singleton _db)', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
-    await init();
-    // openDatabaseAsync must be called exactly once — the singleton is reused.
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
+    await initializeDatabase();
     expect(mockOpenDatabase).toHaveBeenCalledTimes(1);
   });
 
   it('does not re-apply migrations on the second call', async () => {
-    const { initializeDatabase: init } = require('../db/schema');
-    await init();
-    const firstCallCount = (currentDbStub.withTransactionAsync as jest.Mock).mock.calls.length;
-    await init();
-    // withTransactionAsync call count must not increase on the second call.
-    expect(currentDbStub.withTransactionAsync).toHaveBeenCalledTimes(firstCallCount);
+    const { initializeDatabase } = require('../db/schema');
+    await initializeDatabase();
+    const countAfterFirst =
+      (mockCurrentDbStub.withTransactionAsync as jest.Mock).mock.calls.length;
+    await initializeDatabase();
+    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(
+      countAfterFirst,
+    );
   });
 });
 
-// ─── runMigrations — skips already-applied ─────────────────────────────────
+// ─── runMigrations — skips already-applied ────────────────────────────────────
 
 describe('runMigrations — skips already-applied migrations', () => {
-  it('skips migrations that are already in the _migrations table', async () => {
-    const { runMigrations: run } = require('../db/schema');
-    // Pre-populate all migration names so every getFirstAsync returns a hit.
+  it('does not call withTransactionAsync when all migrations are present', async () => {
     const allNames = [
       '001_create_inspections',
       '001_create_facilities',
@@ -151,22 +133,22 @@ describe('runMigrations — skips already-applied migrations', () => {
       '002_inspections_add_index_status',
       '002_corrective_actions_add_index_inspection',
     ];
-    allNames.forEach(n => appliedMigrations.add(n));
+    allNames.forEach(n => mockAppliedMigrations.add(n));
 
-    const db = await (SQLite.openDatabaseAsync as jest.Mock)('safeinspect.db');
-    await run(db);
+    const { runMigrations } = require('../db/schema');
+    const db = await mockOpenDatabase('safeinspect.db');
+    await runMigrations(db);
 
-    // All migrations already applied — withTransactionAsync should not be called.
-    expect(currentDbStub.withTransactionAsync).not.toHaveBeenCalled();
+    expect(mockCurrentDbStub.withTransactionAsync).not.toHaveBeenCalled();
   });
 });
 
-// ─── openDatabaseAsync failure ────────────────────────────────────────────────
+// ─── Failure paths ────────────────────────────────────────────────────────────
 
 describe('initializeDatabase — failure paths', () => {
   it('rejects when openDatabaseAsync throws', async () => {
     mockOpenDatabase.mockRejectedValueOnce(new Error('disk full'));
-    const { initializeDatabase: init } = require('../db/schema');
-    await expect(init()).rejects.toThrow('disk full');
+    const { initializeDatabase } = require('../db/schema');
+    await expect(initializeDatabase()).rejects.toThrow('disk full');
   });
 });
