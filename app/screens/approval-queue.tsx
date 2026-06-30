@@ -6,6 +6,7 @@ import {
   ActivityIndicator, Modal, TextInput, Alert, I18nManager,
 } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { ApprovalRecord, ApprovalRepository } from '../../src/repositories/ApprovalRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 
@@ -22,14 +23,17 @@ const FILTER_TABS: { key: FilterTab; label: string }[] = [
 ];
 
 const STATUS_COLOR: Record<string, string> = {
-  pending:   '#d97706',
-  approved:  '#16a34a',
-  returned:  '#dc2626',
+  pending:   Colors.warning,
+  approved:  Colors.success,
+  returned:  Colors.danger,
   escalated: '#7c3aed',
 };
 
 const GRADE_COLOR: Record<string, string> = {
-  A: '#16a34a', B: '#2563eb', C: '#d97706', D: '#dc2626',
+  A: Colors.success,
+  B: Colors.primary,
+  C: Colors.warning,
+  D: Colors.danger,
 };
 
 type ActionSheet = { record: ApprovalRecord; mode: 'approve' | 'return' | 'escalate' } | null;
@@ -102,7 +106,7 @@ export default function ApprovalQueueScreen() {
           </Text>
         </View>
         {item.grade && (
-          <Text style={[styles.grade, { color: GRADE_COLOR[item.grade] ?? '#374151' }]}>
+          <Text style={[styles.grade, { color: GRADE_COLOR[item.grade] ?? Colors.textPrimary }]}>
             {item.grade}
           </Text>
         )}
@@ -121,13 +125,13 @@ export default function ApprovalQueueScreen() {
             style={[styles.actionBtn, styles.approveBtn]}
             onPress={() => openAction(item, 'approve')}
           >
-            <Text style={styles.actionBtnText}>اعتماد</Text>
+            <Text style={[styles.actionBtnText, { color: Colors.success }]}>اعتماد</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionBtn, styles.returnBtn]}
             onPress={() => openAction(item, 'return')}
           >
-            <Text style={[styles.actionBtnText, { color: '#dc2626' }]}>إعادة</Text>
+            <Text style={[styles.actionBtnText, { color: Colors.danger }]}>إعادة</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.actionBtn, styles.escalateBtn]}
@@ -165,7 +169,7 @@ export default function ApprovalQueueScreen() {
       </View>
 
       {loading ? (
-        <ActivityIndicator style={{ marginTop: 40 }} size="large" color="#1e40af" />
+        <ActivityIndicator style={{ marginTop: 40 }} size="large" color={Colors.primary} />
       ) : filtered.length === 0 ? (
         <View style={styles.empty}>
           <Text style={styles.emptyText}>لا توجد تقارير في هذا القسم</Text>
@@ -200,7 +204,7 @@ export default function ApprovalQueueScreen() {
                   ? 'سبب الإعادة (إلزامي)'
                   : 'ملاحظة اختيارية'
               }
-              placeholderTextColor="#9ca3af"
+              placeholderTextColor={Colors.textFaint}
               multiline
               textAlign="right"
             />
@@ -224,45 +228,43 @@ export default function ApprovalQueueScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc' },
-  header: { backgroundColor: '#1e40af', padding: 20, alignItems: 'center' },
-  headerTitle: { color: '#fff', fontSize: 20, fontWeight: '700' },
-  tabs: { flexDirection: 'row', backgroundColor: '#fff', paddingHorizontal: 12, paddingVertical: 8, gap: 6 },
-  tab: { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 20, backgroundColor: '#f1f5f9' },
-  tabActive: { backgroundColor: '#1e40af' },
-  tabText: { fontSize: 13, color: '#64748b' },
-  tabTextActive: { color: '#fff', fontWeight: '700' },
-  list: { padding: 16, gap: 12 },
+  container: { flex: 1, backgroundColor: Colors.background },
+  header: { backgroundColor: Colors.primary, padding: Spacing.lg, alignItems: 'center' },
+  headerTitle: { color: Colors.textInverse, fontSize: FontSize.xl, fontWeight: FontWeight.bold },
+  tabs: { flexDirection: 'row', backgroundColor: Colors.surface, paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, gap: Spacing.xs },
+  tab: { paddingHorizontal: Spacing.md, paddingVertical: Spacing.xs, borderRadius: Radius.full, backgroundColor: Colors.surfaceOffset },
+  tabActive: { backgroundColor: Colors.primary },
+  tabText: { fontSize: FontSize.sm, color: Colors.textSecondary },
+  tabTextActive: { color: Colors.textInverse, fontWeight: FontWeight.bold },
+  list: { padding: Spacing.md, gap: Spacing.md },
   card: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 16,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.sm,
   },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  statusPill: { borderRadius: 20, paddingHorizontal: 10, paddingVertical: 3 },
-  statusText: { fontSize: 12, fontWeight: '700' },
-  grade: { fontSize: 28, fontWeight: '800' },
-  facility: { fontSize: 15, fontWeight: '700', color: '#1e293b', textAlign: 'right', marginBottom: 4 },
-  meta: { fontSize: 12, color: '#64748b', textAlign: 'right', marginBottom: 2 },
-  returnedNote: { fontSize: 12, color: '#dc2626', backgroundColor: '#fee2e2', borderRadius: 6, padding: 8, marginTop: 6, textAlign: 'right' },
-  approvedNote: { fontSize: 12, color: '#16a34a', marginTop: 6, textAlign: 'right' },
-  actions: { flexDirection: 'row', gap: 8, marginTop: 12, justifyContent: 'flex-end' },
-  actionBtn: { borderRadius: 8, paddingVertical: 8, paddingHorizontal: 16, borderWidth: 1.5 },
-  approveBtn: { backgroundColor: '#dcfce7', borderColor: '#16a34a' },
-  returnBtn: { backgroundColor: '#fee2e2', borderColor: '#dc2626' },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.sm },
+  statusPill: { borderRadius: Radius.full, paddingHorizontal: Spacing.sm, paddingVertical: 3 },
+  statusText: { fontSize: FontSize.xs, fontWeight: FontWeight.bold },
+  grade: { fontSize: 28, fontWeight: FontWeight.bold },
+  facility: { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right', marginBottom: Spacing.xs },
+  meta: { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'right', marginBottom: 2 },
+  returnedNote: { fontSize: FontSize.xs, color: Colors.danger, backgroundColor: Colors.danger + '18', borderRadius: Radius.sm, padding: Spacing.sm, marginTop: Spacing.xs, textAlign: 'right' },
+  approvedNote: { fontSize: FontSize.xs, color: Colors.success, marginTop: Spacing.xs, textAlign: 'right' },
+  actions: { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.md, justifyContent: 'flex-end' },
+  actionBtn: { borderRadius: Radius.md, paddingVertical: Spacing.sm, paddingHorizontal: Spacing.md, borderWidth: 1.5 },
+  approveBtn: { backgroundColor: Colors.success + '18', borderColor: Colors.success },
+  returnBtn: { backgroundColor: Colors.danger + '18', borderColor: Colors.danger },
   escalateBtn: { backgroundColor: '#ede9fe', borderColor: '#7c3aed' },
-  actionBtnText: { fontSize: 13, fontWeight: '700', color: '#16a34a' },
+  actionBtnText: { fontSize: FontSize.sm, fontWeight: FontWeight.bold },
   empty: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  emptyText: { color: '#9ca3af', fontSize: 15 },
+  emptyText: { color: Colors.textFaint, fontSize: FontSize.md },
   modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  modalBox: { backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24 },
-  modalTitle: { fontSize: 17, fontWeight: '700', textAlign: 'right', marginBottom: 4 },
-  modalFacility: { fontSize: 13, color: '#64748b', textAlign: 'right', marginBottom: 12 },
-  textInput: { borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8, padding: 12, fontSize: 14, minHeight: 80, textAlignVertical: 'top', marginBottom: 6 },
-  errorText: { color: '#dc2626', fontSize: 12, textAlign: 'right', marginBottom: 6 },
-  modalActions: { flexDirection: 'row', gap: 10, justifyContent: 'flex-end' },
-  cancelBtn: { borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8, paddingVertical: 12, paddingHorizontal: 20 },
-  cancelBtnText: { color: '#64748b', fontSize: 14 },
-  submitBtn: { backgroundColor: '#1e40af', borderRadius: 8, paddingVertical: 12, paddingHorizontal: 20 },
-  submitBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  modalBox: { backgroundColor: Colors.surface, borderTopLeftRadius: Radius.xl, borderTopRightRadius: Radius.xl, padding: Spacing.lg },
+  modalTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, textAlign: 'right', marginBottom: Spacing.xs },
+  modalFacility: { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.md },
+  textInput: { borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: Spacing.md, fontSize: FontSize.base, minHeight: 80, textAlignVertical: 'top', marginBottom: Spacing.xs },
+  errorText: { color: Colors.danger, fontSize: FontSize.xs, textAlign: 'right', marginBottom: Spacing.xs },
+  modalActions: { flexDirection: 'row', gap: Spacing.sm, justifyContent: 'flex-end' },
+  cancelBtn: { borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg },
+  cancelBtnText: { color: Colors.textSecondary, fontSize: FontSize.base },
+  submitBtn: { backgroundColor: Colors.primary, borderRadius: Radius.md, paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg },
+  submitBtnText: { color: Colors.textInverse, fontSize: FontSize.base, fontWeight: FontWeight.bold },
 });

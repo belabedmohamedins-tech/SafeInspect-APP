@@ -12,27 +12,29 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
+import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { ApprovalRepository } from '../../src/repositories/ApprovalRepository';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { SavedInspection, InspectionItem } from '../../src/types';
 
-// ── Helpers ────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────────────
 function gradeColor(grade?: string) {
   switch (grade) {
-    case 'A': return '#27ae60';
-    case 'B': return '#2980b9';
-    case 'C': return '#f39c12';
-    case 'D': return '#e74c3c';
-    default:  return '#95a5a6';
+    case 'A': return Colors.success;
+    case 'B': return Colors.primary;
+    case 'C': return Colors.warning;
+    case 'D': return Colors.danger;
+    default:  return Colors.textSecondary;
   }
 }
 
 function statusLabel(status?: string) {
   switch (status) {
-    case 'approved':  return { text: 'معتمد ✓',        color: '#27ae60' };
-    case 'returned':  return { text: 'مُعاد للمراجعة', color: '#e67e22' };
+    case 'approved':  return { text: 'معتمد ✓',        color: Colors.success };
+    case 'returned':  return { text: 'مُعاد للمراجعة', color: Colors.warning };
     case 'escalated': return { text: 'مُصعَّد',         color: '#8e44ad' };
-    default:          return { text: 'بانتظار الاعتماد', color: '#7f8c8d' };
+    default:          return { text: 'بانتظار الاعتماد', color: Colors.textSecondary };
   }
 }
 
@@ -51,19 +53,19 @@ function severityLabel(s: string) {
 }
 
 function severityColor(s: string) {
-  return s === 'high' ? '#e74c3c' : s === 'medium' ? '#e67e22' : '#27ae60';
+  return s === 'high' ? Colors.danger : s === 'medium' ? Colors.warning : Colors.success;
 }
 
 function complianceLabel(c: string) {
   switch (c) {
-    case 'compliant':     return { text: 'مطابق',     color: '#27ae60' };
-    case 'non-compliant': return { text: 'غير مطابق', color: '#e74c3c' };
-    case 'na':            return { text: 'لا ينطبق',  color: '#95a5a6' };
-    default:              return { text: 'لم يُقيَّم', color: '#bdc3c7' };
+    case 'compliant':     return { text: 'مطابق',     color: Colors.success };
+    case 'non-compliant': return { text: 'غير مطابق', color: Colors.danger };
+    case 'na':            return { text: 'لا ينطبق',  color: Colors.textSecondary };
+    default:              return { text: 'لم يُقيَّم', color: Colors.textFaint };
   }
 }
 
-// ── Action Modal ───────────────────────────────────────────────────────────
+// ── Action Modal ─────────────────────────────────────────────────────────────────────
 type ActionType = 'approve' | 'return' | 'escalate';
 
 interface ActionModalProps {
@@ -82,6 +84,10 @@ function ActionModal({ visible, action, onClose, onSubmit }: ActionModalProps) {
     return:   'إعادة إلى المفتش',
     escalate: 'تصعيد التقرير',
   };
+
+  const actionColor = action === 'approve' ? Colors.success
+    : action === 'return' ? Colors.warning
+    : '#8e44ad';
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
@@ -120,10 +126,7 @@ function ActionModal({ visible, action, onClose, onSubmit }: ActionModalProps) {
               <Text style={modal.cancelText}>إلغاء</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              style={[modal.submitBtn,
-                action === 'approve'  ? { backgroundColor: '#27ae60' } :
-                action === 'return'   ? { backgroundColor: '#e67e22' } :
-                                       { backgroundColor: '#8e44ad' }]}
+              style={[modal.submitBtn, { backgroundColor: actionColor }]}
               onPress={() => {
                 if (action === 'return' && !reason.trim()) {
                   Alert.alert('خطأ', 'سبب الإعادة مطلوب');
@@ -144,7 +147,7 @@ function ActionModal({ visible, action, onClose, onSubmit }: ActionModalProps) {
   );
 }
 
-// ── Main Screen ─────────────────────────────────────────────────────────────
+// ── Main Screen ───────────────────────────────────────────────────────────────────────
 export default function ApprovalDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const router = useRouter();
@@ -152,12 +155,17 @@ export default function ApprovalDetailScreen() {
   const [loading, setLoading] = useState(true);
   const [actionModal, setActionModal] = useState<ActionType | null>(null);
   const [processing, setProcessing] = useState(false);
+  const [supervisorName, setSupervisorName] = useState('المشرف');
 
   const load = useCallback(async () => {
     if (!id) return;
-    const all = await InspectionRepository.getCompleted();
+    const [all, settings] = await Promise.all([
+      InspectionRepository.getCompleted(),
+      SettingsRepository.get(),
+    ]);
     const found = all.find(i => i.id === id) ?? null;
     setInspection(found);
+    if (settings?.inspectorName) setSupervisorName(settings.inspectorName);
     setLoading(false);
   }, [id]);
 
@@ -167,13 +175,12 @@ export default function ApprovalDetailScreen() {
     if (!inspection || !actionModal) return;
     setProcessing(true);
     setActionModal(null);
-    const supervisor = 'المشرف';
     if (actionModal === 'approve') {
-      await ApprovalRepository.approve(inspection.id, supervisor, note);
+      await ApprovalRepository.approve(inspection.id, supervisorName, note || undefined);
     } else if (actionModal === 'return') {
-      await ApprovalRepository.returnForRevision(inspection.id, supervisor, reason, note);
+      await ApprovalRepository.returnForRevision(inspection.id, supervisorName, reason);
     } else {
-      await ApprovalRepository.escalate(inspection.id, supervisor, note);
+      await ApprovalRepository.escalate(inspection.id, supervisorName, note || undefined);
     }
     setProcessing(false);
     Alert.alert('', 'تم تنفيذ الإجراء بنجاح', [{ text: 'حسناً', onPress: () => router.back() }]);
@@ -182,7 +189,7 @@ export default function ApprovalDetailScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#2c7a4b" />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -190,7 +197,7 @@ export default function ApprovalDetailScreen() {
   if (!inspection) {
     return (
       <View style={styles.center}>
-        <Text style={{ color: '#999' }}>التقرير غير موجود</Text>
+        <Text style={{ color: Colors.textSecondary }}>التقرير غير موجود</Text>
       </View>
     );
   }
@@ -243,7 +250,7 @@ export default function ApprovalDetailScreen() {
               <Text style={styles.scoreLabel}>مُقيَّم</Text>
             </View>
             <View style={styles.scoreBox}>
-              <Text style={[styles.scoreVal, nonCompliant.length > 0 && { color: '#e74c3c' }]}>
+              <Text style={[styles.scoreVal, nonCompliant.length > 0 && { color: Colors.danger }]}>
                 {nonCompliant.length}
               </Text>
               <Text style={styles.scoreLabel}>مخالفة</Text>
@@ -324,7 +331,7 @@ export default function ApprovalDetailScreen() {
       {!isLocked && !processing && (
         <View style={styles.actionBar}>
           <TouchableOpacity
-            style={[styles.actionBtn, { backgroundColor: '#e67e22' }]}
+            style={[styles.actionBtn, { backgroundColor: Colors.warning }]}
             onPress={() => setActionModal('return')}
           >
             <Text style={styles.actionBtnText}>إعادة</Text>
@@ -346,7 +353,7 @@ export default function ApprovalDetailScreen() {
 
       {processing && (
         <View style={styles.processingOverlay}>
-          <ActivityIndicator size="large" color="#fff" />
+          <ActivityIndicator size="large" color={Colors.textInverse} />
         </View>
       )}
 
@@ -360,7 +367,7 @@ export default function ApprovalDetailScreen() {
   );
 }
 
-// ── Row helper ───────────────────────────────────────────────────────────────
+// ── Row helper ────────────────────────────────────────────────────────────────────────────
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <View style={row.container}>
@@ -371,81 +378,77 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 const row = StyleSheet.create({
-  container: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 6,
-               borderBottomWidth: 1, borderBottomColor: '#f0f0f0' },
-  label:     { fontSize: 13, color: '#888', fontWeight: '600' },
-  value:     { fontSize: 13, color: '#1a1a2e', flex: 1, textAlign: 'right' },
+  container: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: Spacing.xs,
+               borderBottomWidth: 1, borderBottomColor: Colors.border },
+  label:     { fontSize: FontSize.sm, color: Colors.textSecondary, fontWeight: FontWeight.semibold },
+  value:     { fontSize: FontSize.sm, color: Colors.textPrimary, flex: 1, textAlign: 'right' },
 });
 
 const modal = StyleSheet.create({
   overlay:    { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-  sheet:      { backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20,
-                padding: 20, paddingBottom: 36 },
-  title:      { fontSize: 18, fontWeight: '700', textAlign: 'right', marginBottom: 16, color: '#1a1a2e' },
-  label:      { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 10 },
-  input:      { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
-                fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa',
+  sheet:      { backgroundColor: Colors.surface, borderTopLeftRadius: Radius.xl, borderTopRightRadius: Radius.xl,
+                padding: Spacing.lg, paddingBottom: Spacing.xxl },
+  title:      { fontSize: FontSize.lg, fontWeight: FontWeight.bold, textAlign: 'right', marginBottom: Spacing.md, color: Colors.textPrimary },
+  label:      { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.xs, marginTop: Spacing.sm },
+  input:      { borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md, padding: Spacing.sm,
+                fontSize: FontSize.base, color: Colors.textPrimary, backgroundColor: Colors.surfaceOffset,
                 textAlignVertical: 'top' },
-  btnRow:     { flexDirection: 'row', gap: 10, marginTop: 18 },
-  cancelBtn:  { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
-                paddingVertical: 12, alignItems: 'center' },
-  cancelText: { fontSize: 14, color: '#555', fontWeight: '600' },
-  submitBtn:  { flex: 2, borderRadius: 8, paddingVertical: 12, alignItems: 'center' },
-  submitText: { fontSize: 15, color: '#fff', fontWeight: '700' },
+  btnRow:     { flexDirection: 'row', gap: Spacing.sm, marginTop: Spacing.lg },
+  cancelBtn:  { flex: 1, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md,
+                paddingVertical: Spacing.md, alignItems: 'center' },
+  cancelText: { fontSize: FontSize.base, color: Colors.textSecondary, fontWeight: FontWeight.semibold },
+  submitBtn:  { flex: 2, borderRadius: Radius.md, paddingVertical: Spacing.md, alignItems: 'center' },
+  submitText: { fontSize: FontSize.md, color: Colors.textInverse, fontWeight: FontWeight.bold },
 });
 
 const styles = StyleSheet.create({
-  container:        { flex: 1, backgroundColor: '#f0f4f0' },
+  container:        { flex: 1, backgroundColor: Colors.background },
   center:           { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  backBtn:          { paddingHorizontal: 16, paddingTop: 52, paddingBottom: 8 },
-  backText:         { fontSize: 13, color: '#2c7a4b', fontWeight: '600' },
-  headerCard:       { backgroundColor: '#fff', margin: 12, borderRadius: 12, padding: 16,
-                      shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-                      shadowOpacity: 0.08, shadowRadius: 4, elevation: 3 },
-  headerRow:        { flexDirection: 'row', gap: 12, marginBottom: 12 },
-  gradeBadge:       { width: 52, height: 52, borderRadius: 26, alignItems: 'center',
-                      justifyContent: 'center' },
-  gradeText:        { fontSize: 22, fontWeight: '900', color: '#fff' },
-  facilityName:     { fontSize: 16, fontWeight: '700', color: '#1a1a2e', textAlign: 'right' },
-  facilityAddr:     { fontSize: 13, color: '#888', textAlign: 'right', marginTop: 2 },
-  meta:             { fontSize: 12, color: '#aaa', textAlign: 'right', marginTop: 2 },
-  statusPill:       { alignSelf: 'flex-end', borderRadius: 20, paddingHorizontal: 12,
-                      paddingVertical: 4, marginBottom: 12 },
-  statusPillText:   { fontSize: 13, fontWeight: '700' },
-  scoreRow:         { flexDirection: 'row', justifyContent: 'space-around', marginTop: 8 },
+  backBtn:          { paddingHorizontal: Spacing.md, paddingTop: 52, paddingBottom: Spacing.sm },
+  backText:         { fontSize: FontSize.sm, color: Colors.primary, fontWeight: FontWeight.semibold },
+  headerCard:       { backgroundColor: Colors.surface, margin: Spacing.sm, borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.sm },
+  headerRow:        { flexDirection: 'row', gap: Spacing.md, marginBottom: Spacing.md },
+  gradeBadge:       { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
+  gradeText:        { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textInverse },
+  facilityName:     { fontSize: FontSize.base, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right' },
+  facilityAddr:     { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginTop: Spacing.xs },
+  meta:             { fontSize: FontSize.xs, color: Colors.textFaint, textAlign: 'right', marginTop: Spacing.xs },
+  statusPill:       { alignSelf: 'flex-end', borderRadius: Radius.full, paddingHorizontal: Spacing.md,
+                      paddingVertical: Spacing.xs, marginBottom: Spacing.md },
+  statusPillText:   { fontSize: FontSize.sm, fontWeight: FontWeight.bold },
+  scoreRow:         { flexDirection: 'row', justifyContent: 'space-around', marginTop: Spacing.sm },
   scoreBox:         { alignItems: 'center' },
-  scoreVal:         { fontSize: 20, fontWeight: '800', color: '#2c7a4b' },
-  scoreLabel:       { fontSize: 11, color: '#aaa', marginTop: 2 },
-  integrityRow:     { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 10,
-                      backgroundColor: '#eaf6ef', borderRadius: 8, padding: 8 },
-  integrityIcon:    { fontSize: 16 },
-  integrityText:    { fontSize: 13, color: '#27ae60', fontWeight: '600' },
-  geoNote:          { marginTop: 8, backgroundColor: '#fef9e7', borderRadius: 8, padding: 8 },
-  geoNoteText:      { fontSize: 12, color: '#d35400', textAlign: 'right' },
-  section:          { backgroundColor: '#fff', margin: 12, marginTop: 0, borderRadius: 12,
-                      padding: 14, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-                      shadowOpacity: 0.05, shadowRadius: 2, elevation: 1 },
-  sectionTitle:     { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
-                      marginBottom: 10 },
-  axisTitle:        { fontSize: 14, fontWeight: '700', color: '#2c7a4b', textAlign: 'right',
-                      marginBottom: 10, borderBottomWidth: 1, borderBottomColor: '#e8f5e9',
-                      paddingBottom: 6 },
-  itemCard:         { backgroundColor: '#fafafa', borderRadius: 8, padding: 10, marginBottom: 8 },
-  itemHeader:       { flexDirection: 'row', justifyContent: 'flex-end', gap: 6, marginBottom: 6 },
-  compBadge:        { borderRadius: 12, paddingHorizontal: 8, paddingVertical: 2 },
-  compBadgeText:    { fontSize: 11, fontWeight: '700' },
-  sevBadge:         { borderRadius: 12, paddingHorizontal: 8, paddingVertical: 2 },
-  sevBadgeText:     { fontSize: 11, fontWeight: '600' },
-  itemCriteria:     { fontSize: 13, color: '#1a1a2e', textAlign: 'right', lineHeight: 19 },
-  itemComment:      { fontSize: 12, color: '#555', textAlign: 'right', marginTop: 4,
+  scoreVal:         { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.primary },
+  scoreLabel:       { fontSize: FontSize.xs, color: Colors.textFaint, marginTop: Spacing.xs },
+  integrityRow:     { flexDirection: 'row', alignItems: 'center', gap: Spacing.xs, marginTop: Spacing.sm,
+                      backgroundColor: Colors.success + '18', borderRadius: Radius.md, padding: Spacing.sm },
+  integrityIcon:    { fontSize: FontSize.base },
+  integrityText:    { fontSize: FontSize.sm, color: Colors.success, fontWeight: FontWeight.semibold },
+  geoNote:          { marginTop: Spacing.sm, backgroundColor: Colors.warning + '18', borderRadius: Radius.md, padding: Spacing.sm },
+  geoNoteText:      { fontSize: FontSize.xs, color: Colors.warning, textAlign: 'right' },
+  section:          { backgroundColor: Colors.surface, margin: Spacing.sm, marginTop: 0, borderRadius: Radius.lg,
+                      padding: Spacing.sm + 2, ...Shadow.sm },
+  sectionTitle:     { fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right',
+                      marginBottom: Spacing.sm },
+  axisTitle:        { fontSize: FontSize.base, fontWeight: FontWeight.bold, color: Colors.primary, textAlign: 'right',
+                      marginBottom: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border,
+                      paddingBottom: Spacing.xs },
+  itemCard:         { backgroundColor: Colors.surfaceOffset, borderRadius: Radius.md, padding: Spacing.sm, marginBottom: Spacing.sm },
+  itemHeader:       { flexDirection: 'row', justifyContent: 'flex-end', gap: Spacing.xs, marginBottom: Spacing.xs },
+  compBadge:        { borderRadius: Radius.full, paddingHorizontal: Spacing.sm, paddingVertical: 2 },
+  compBadgeText:    { fontSize: FontSize.xs, fontWeight: FontWeight.bold },
+  sevBadge:         { borderRadius: Radius.full, paddingHorizontal: Spacing.sm, paddingVertical: 2 },
+  sevBadgeText:     { fontSize: FontSize.xs, fontWeight: FontWeight.semibold },
+  itemCriteria:     { fontSize: FontSize.sm, color: Colors.textPrimary, textAlign: 'right', lineHeight: 19 },
+  itemComment:      { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'right', marginTop: Spacing.xs,
                       fontStyle: 'italic' },
-  itemRef:          { fontSize: 11, color: '#aaa', textAlign: 'right', marginTop: 4 },
+  itemRef:          { fontSize: FontSize.xs, color: Colors.textFaint, textAlign: 'right', marginTop: Spacing.xs },
   actionBar:        { position: 'absolute', bottom: 0, left: 0, right: 0,
-                      flexDirection: 'row', gap: 8, padding: 16, paddingBottom: 32,
-                      backgroundColor: '#fff', borderTopWidth: 1, borderTopColor: '#eee' },
-  actionBtn:        { flex: 1, borderRadius: 10, paddingVertical: 12, alignItems: 'center' },
-  approveBtn:       { backgroundColor: '#2c7a4b', flex: 2 },
-  actionBtnText:    { color: '#fff', fontSize: 14, fontWeight: '700' },
+                      flexDirection: 'row', gap: Spacing.sm, padding: Spacing.md, paddingBottom: Spacing.xxl,
+                      backgroundColor: Colors.surface, borderTopWidth: 1, borderTopColor: Colors.border },
+  actionBtn:        { flex: 1, borderRadius: Radius.md, paddingVertical: Spacing.md, alignItems: 'center' },
+  approveBtn:       { backgroundColor: Colors.success, flex: 2 },
+  actionBtnText:    { color: Colors.textInverse, fontSize: FontSize.base, fontWeight: FontWeight.bold },
   processingOverlay: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0,
                        backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'center',
                        alignItems: 'center' },
