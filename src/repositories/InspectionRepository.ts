@@ -51,11 +51,20 @@ export const InspectionRepository = {
       inspection.status === 'completed' &&
       (idx === -1 || all[idx]?.status !== 'completed');
 
-    // Auto-hash on completion — computeHash is async (SHA-256 via expo-crypto)
-    let toSave = inspection;
+    // Stamp updatedAt on every save so SyncService.enqueue() can use it
+    // for newest-wins dedup comparisons.
+    let toSave: SavedInspection = { ...inspection, updatedAt: new Date().toISOString() };
+
     if (isNewCompletion) {
-      const hash = await IntegrityService.computeHash(inspection);
-      toSave = { ...inspection, integrityHash: hash, approvalStatus: inspection.approvalStatus ?? 'pending' };
+      // hashAndStore() writes the hash to INSPECTION_HASHES so that
+      // IntegrityService.verifyInspection() can read and compare it later.
+      // (computeHash() only returned the value without persisting it.)
+      const hash = await IntegrityService.hashAndStore(toSave);
+      toSave = {
+        ...toSave,
+        integrityHash: hash,
+        approvalStatus: inspection.approvalStatus ?? 'pending',
+      };
     }
 
     if (idx === -1) {
@@ -67,12 +76,14 @@ export const InspectionRepository = {
 
     // Audit log + CAP + follow-up on first completion
     if (isNewCompletion) {
-      await AuditLogRepository.append({
-        action: 'INSPECTION_SAVED',
-        inspectionId: toSave.id,
-        facilityName: toSave.facilityName,
-        inspectorName: toSave.inspectorName,
-      });
+      await AuditLogRepository.append(
+        'INSPECTION_SAVED',
+        toSave.inspectorName,
+        {
+          inspectionId: toSave.id,
+          facilityName: toSave.facilityName,
+        },
+      );
       await CorrectiveActionRepository.createFromInspection(toSave);
 
       // Auto follow-up agenda (FR-025)
@@ -93,12 +104,14 @@ export const InspectionRepository = {
     const updated = all.filter(i => i.id !== id);
     await saveAll(updated);
     if (target) {
-      await AuditLogRepository.append({
-        action: 'INSPECTION_DELETED',
-        inspectionId: id,
-        facilityName: target.facilityName,
-        inspectorName: target.inspectorName,
-      });
+      await AuditLogRepository.append(
+        'INSPECTION_DELETED',
+        target.inspectorName,
+        {
+          inspectionId: id,
+          facilityName: target.facilityName,
+        },
+      );
     }
   },
 
@@ -106,10 +119,10 @@ export const InspectionRepository = {
     const all = await loadAll();
     const updated = all.filter(i => !ids.includes(i.id));
     await saveAll(updated);
-    await AuditLogRepository.append({
-      action: 'INSPECTION_BULK_DELETED',
-      inspectorName: 'system',
-      detail: `حذف ${ids.length} تقارير`,
-    });
+    await AuditLogRepository.append(
+      'INSPECTION_BULK_DELETED',
+      'system',
+      { detail: `حذف ${ids.length} تقارير` },
+    );
   },
 };
