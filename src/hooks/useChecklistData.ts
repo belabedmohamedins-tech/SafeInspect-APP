@@ -40,7 +40,10 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
 
   const [data, setData] = useState<InspectionItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [inspectionId, setInspectionId] = useState(params.draftId || '');
+  // FIX (P1): initialise directly from params.draftId so saveInspection's
+  // useCallback closure never captures an empty string before the async load
+  // resolves and calls setInspectionId.
+  const [inspectionId, setInspectionId] = useState(params.draftId ?? '');
   const [isFinishing, setIsFinishing] = useState(false);
 
   const paramsRef = useRef(params);
@@ -56,7 +59,23 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
         const draft = await InspectionRepository.getById(p.draftId);
         if (draft) {
           setData(draft.items);
-          setInspectionId(draft.id);
+          // Only update id if it somehow differs (defensive)
+          if (draft.id !== p.draftId) setInspectionId(draft.id);
+
+          // FIX (P2 – draft reopen): restore writer / committee / cause /
+          // reference from the stored draft so saveInspection does not
+          // overwrite those fields with empty strings on finish.
+          paramsRef.current = {
+            ...paramsRef.current,
+            writer:           draft.inspectorName  || paramsRef.current.writer,
+            committeeMembers: draft.committeeMembers?.length
+              ? draft.committeeMembers
+              : paramsRef.current.committeeMembers,
+            cause:     draft.inspectionCause     || paramsRef.current.cause,
+            reference: draft.referenceDocument   || paramsRef.current.reference,
+            lat: draft.coordinates?.latitude  ?? paramsRef.current.lat,
+            lng: draft.coordinates?.longitude ?? paramsRef.current.lng,
+          };
         }
       } else {
         const criteria =
@@ -84,7 +103,6 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       const p = paramsRef.current;
       const sig = signatureRef.current;
       try {
-        // Use get() here — we only need the core typed settings
         const settings = await SettingsRepository.get();
 
         const inspection: SavedInspection = {
