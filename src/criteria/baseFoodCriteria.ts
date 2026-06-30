@@ -33,6 +33,14 @@ export const baseFoodCriteria: InspectionItem[] = [
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: '°C',
+      labelAr: 'درجة حرارة الثلاجة (أغذية مبردة)',
+      min: 0,
+      max: 5,
+      warningMax: 7,
+      step: 0.1,
+    },
   },
   {
     id: 'BFD-05-03',
@@ -43,6 +51,15 @@ export const baseFoodCriteria: InspectionItem[] = [
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: '°C',
+      labelAr: 'درجة حرارة الفريزر (أغذية مجمدة)',
+      min: -100,
+      max: -18,
+      warningMax: -15,
+      step: 0.5,
+      upperLimit: true,
+    },
   },
   {
     id: 'BFD-05-04',

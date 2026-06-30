@@ -38,8 +38,17 @@ export const coldRoomSpecificCriteria: InspectionItem[] = [
     criteria: 'احترام درجات الحفظ الملائمة لكل نوع من المنتجات (0–5°م للأغذية المبردة، ≤ -18°م للأغذية المجمدة) حسب طبيعة السلع المخزنة.',
     legalReference: 'وثيقة المراجع القانونية للمعايير التي تستشهد بقرارات درجات الحرارة وطرق الحفظ بالتبريد والتجميد للمواد الغذائية.',
     severity: 'high',
-    controlType: 'test',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: '°C',
+      labelAr: 'درجة حرارة غرفة التبريد المقاسة',
+      min: -100,
+      max: 5,
+      warningMax: 7,
+      step: 0.1,
+      upperLimit: true,
+    },
   },
   {
     id: 'CLD-17-05',

@@ -1,6 +1,6 @@
 // src/types.ts
 export type Severity = 'low' | 'medium' | 'high';
-export type ControlType = 'visual' | 'doc' | 'test';
+export type ControlType = 'visual' | 'doc' | 'test' | 'measurement';
 
 /**
  * Compliance status for a single checklist item.
@@ -76,6 +76,41 @@ export interface NotificationItem {
   link?: { screen: string; params?: Record<string, string> };
 }
 
+// ── Phase 1.2: Numeric field specification ─────────────────────────────────────
+/**
+ * Specification for a quantitative criterion that requires a measured reading.
+ * Attach this to any InspectionItem that has controlType === 'measurement'
+ * (or any criterion where a numeric evidence value must be recorded).
+ *
+ * The UI will render a NumericInputField stepper/input when this is present,
+ * and will automatically derive a provisional complianceStatus suggestion:
+ *   - value in [min, max]                      → 'compliant'
+ *   - value outside [min, max] but inside      → 'observation-only' (warning zone)
+ *     [warningMin, warningMax]  (if defined)
+ *   - value outside [min, max] (and warning    → 'non-compliant'
+ *     zone not defined or also exceeded)
+ */
+export interface NumericFieldSpec {
+  /** Display unit shown next to the input (e.g. '°C', 'mg/L', 'dB'). */
+  unit: string;
+  /** Arabic label shown above the input on the checklist card. */
+  labelAr: string;
+  /** Minimum compliant value (inclusive). */
+  min?: number;
+  /** Maximum compliant value (inclusive). */
+  max?: number;
+  /** Lower bound of the warning zone (value below this is non-compliant). */
+  warningMin?: number;
+  /** Upper bound of the warning zone (value above this is non-compliant). */
+  warningMax?: number;
+  /** Stepper increment/decrement step. Defaults to 0.1 if not specified. */
+  step?: number;
+  /** True when only values ≤ max are acceptable (one-sided upper limit). */
+  upperLimit?: boolean;
+  /** True when only values ≥ min are acceptable (one-sided lower limit). */
+  lowerLimit?: boolean;
+}
+
 export interface InspectionItem {
   id: string;
   criteria: string;
@@ -98,6 +133,11 @@ export interface InspectionItem {
   numericValue?: number;
   /** Unit of the numeric value, e.g. '°C', 'mg/L', 'dB'. */
   numericUnit?: string;
+  /**
+   * Specification for the numeric field (ranges, step, label).
+   * When present the checklist card renders a NumericInputField.
+   */
+  numericField?: NumericFieldSpec;
 
   // ── Phase 1.3: Repeat-violation fields ──────────────────────────────────────
   /**
@@ -181,7 +221,7 @@ export interface SavedInspection {
 
   // ── Phase 1.9: Report sequence number ─────────────────────────────────────
   /**
-   * Sequential reference number tying this report to the commune’s
+   * Sequential reference number tying this report to the commune's
    * official inspection register. Format: COMMUNE-YEAR-NNNN.
    * Generated at report finalisation (Phase 8).
    */
@@ -205,7 +245,7 @@ export interface SavedInspection {
 
   // ── Decision support (Phase 6) ────────────────────────────────────────────
   /**
-   * If the inspector overrode the system’s suggested escalation action,
+   * If the inspector overrode the system's suggested escalation action,
    * this field stores their stated reason. Required on override.
    */
   escalationOverrideReason?: string;
