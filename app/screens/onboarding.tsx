@@ -60,7 +60,7 @@ export default function OnboardingScreen() {
 
   const finish = async () => {
     await SettingsRepository.set('onboardingDone', 'true');
-    router.replace('/(tabs)');
+    router.replace('/(tabs)/home');
   };
 
   const next = () => {
