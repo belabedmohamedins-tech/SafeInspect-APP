@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import { I18nProvider } from '../src/i18n';
+import { AuthRepository } from '../src/repositories/AuthRepository';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
 import { initializeDatabase } from '../src/db/schema';
 import { startSyncScheduler } from '../src/db/syncEngine';
@@ -10,7 +11,6 @@ import { startSyncScheduler } from '../src/db/syncEngine';
 export default function RootLayout() {
   const router = useRouter();
   const segments = useSegments();
-  const [checked, setChecked] = useState(false);
   const [dbReady, setDbReady] = useState(false);
 
   // ── 1. Initialize DB and sync scheduler on app start ──────────────────────
@@ -20,7 +20,6 @@ export default function RootLayout() {
     initializeDatabase()
       .then(() => {
         setDbReady(true);
-        // Start background sync — runs every 30 s and triggers immediately on reconnect
         stopSync = startSyncScheduler(30_000);
       })
       .catch((err) => {
@@ -32,7 +31,16 @@ export default function RootLayout() {
     };
   }, []);
 
-  // ── 2. Onboarding + PIN guard — only runs after DB is ready ──────────────
+  // ── 2. Single auth guard — runs once after DB is ready ────────────────────
+  //
+  // Decision tree:
+  //   a. onboardingDone not set → /screens/onboarding  (first-run)
+  //   b. PIN set in SecureStore → /pin-lock             (must authenticate)
+  //   c. otherwise             → /(tabs)/home           (straight in)
+  //
+  // Uses AuthRepository.getPin() for PIN (SecureStore) and
+  // SettingsRepository.getAll() for arbitrary string flags (AsyncStorage).
+  // These are the only two correct read paths — do NOT mix them.
   useEffect(() => {
     if (!dbReady) return;
 
@@ -40,26 +48,26 @@ export default function RootLayout() {
       const currentPath = segments.join('/');
 
       // ── 2a. Onboarding ────────────────────────────────────────────────────
-      const done = await SettingsRepository.get<string>('onboardingDone');
-      if (done !== 'true') {
+      const all = await SettingsRepository.getAll();
+      if (all['onboardingDone'] !== 'true') {
         if (!currentPath.includes('onboarding')) {
           router.replace('/screens/onboarding');
         }
-        setChecked(true);
         return;
       }
 
       // ── 2b. PIN guard ─────────────────────────────────────────────────────
-      // If the user has set a PIN, require authentication before reaching (tabs).
-      // Skip if already on pin-lock (prevents redirect loop).
-      const pin = await SettingsRepository.get<string>('pin');
+      // PIN lives in SecureStore — only AuthRepository.getPin() can read it.
+      const pin = await AuthRepository.getPin();
       if (pin && !currentPath.includes('pin-lock')) {
         router.replace('/pin-lock');
-        setChecked(true);
         return;
       }
 
-      setChecked(true);
+      // ── 2c. All clear ─────────────────────────────────────────────────────
+      if (!currentPath.includes('(tabs)')) {
+        router.replace('/(tabs)/home');
+      }
     })();
   }, [dbReady]);
 
