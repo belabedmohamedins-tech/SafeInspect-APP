@@ -1,13 +1,14 @@
 // app/screens/geofence-check.tsx
 // Geofencing gate (FR-047 / PRD § 13.5)
 // Requests location → computes haversine distance → allows override with justification.
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
-  TextInput, Alert, ScrollView, Modal, I18nManager,
+  TextInput, ScrollView, Modal, I18nManager,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as Location from 'expo-location';
+import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { checkProximity, ProximityResult } from '../../src/services/geofencingService';
 
 I18nManager.forceRTL(true);
@@ -108,7 +109,7 @@ export default function GeofenceCheckScreen() {
     if (locationState === 'idle' || locationState === 'requesting') {
       return (
         <View style={styles.resultBox}>
-          <ActivityIndicator size="large" color="#1e40af" />
+          <ActivityIndicator size="large" color={Colors.primary} />
           <Text style={styles.loadingText}>جارٍ تحديد موقعك…</Text>
         </View>
       );
@@ -124,7 +125,7 @@ export default function GeofenceCheckScreen() {
             <Text style={styles.retryBtnText}>إعادة المحاولة</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={[styles.primaryBtn, { marginTop: 10 }]}
+            style={[styles.primaryBtn, { marginTop: Spacing.sm }]}
             onPress={() => setShowOverrideModal(true)}
           >
             <Text style={styles.primaryBtnText}>المتابعة مع ذكر مبرر</Text>
@@ -137,10 +138,10 @@ export default function GeofenceCheckScreen() {
     const inRange = proximity?.withinRange ?? false;
     return (
       <View style={styles.resultBox}>
-        <View style={[styles.statusCircle, inRange ? styles.green : styles.red]}>
+        <View style={[styles.statusCircle, inRange ? styles.statusGreen : styles.statusRed]}>
           <Text style={styles.statusIcon}>{inRange ? '✓' : '✗'}</Text>
         </View>
-        <Text style={[styles.resultTitle, { color: inRange ? '#16a34a' : '#dc2626' }]}>
+        <Text style={[styles.resultTitle, { color: inRange ? Colors.success : Colors.danger }]}>
           {inRange ? 'داخل النطاق الجغرافي' : 'خارج النطاق الجغرافي'}
         </Text>
         <Text style={styles.distanceText}>
@@ -193,7 +194,7 @@ export default function GeofenceCheckScreen() {
               value={justification}
               onChangeText={t => { setJustification(t); setJustificationError(''); }}
               placeholder="مثال: المنشأة في موقع ثانٍ / الإحداثيات غير محدّثة"
-              placeholderTextColor="#9ca3af"
+              placeholderTextColor={Colors.textTertiary}
               multiline
               textAlign="right"
               textAlignVertical="top"
@@ -220,79 +221,98 @@ export default function GeofenceCheckScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { padding: 16, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: Colors.background },
+  content:   { padding: Spacing.md, paddingBottom: Spacing.xxl },
+
   header: {
-    backgroundColor: '#1e40af', borderRadius: 12,
-    padding: 20, marginBottom: 16, alignItems: 'center',
-  },
-  headerTitle: { color: '#fff', fontSize: 20, fontWeight: '700' },
-  headerSub: { color: '#bfdbfe', fontSize: 14, marginTop: 4 },
-  resultBox: {
-    backgroundColor: '#fff', borderRadius: 16, padding: 24,
+    backgroundColor: Colors.primary,
+    borderRadius: Radius.lg,
+    padding: Spacing.xl,
+    marginBottom: Spacing.md,
     alignItems: 'center',
-    shadowColor: '#000', shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07, shadowRadius: 6, elevation: 3,
   },
-  iconText: { fontSize: 48, marginBottom: 12 },
-  loadingText: { marginTop: 16, fontSize: 15, color: '#64748b' },
+  headerTitle: { color: Colors.textInverse, fontSize: FontSize.xl, fontWeight: FontWeight.bold },
+  headerSub:   { color: Colors.textInverse, fontSize: FontSize.sm, marginTop: Spacing.xs, opacity: 0.8 },
+
+  resultBox: {
+    backgroundColor: Colors.surface,
+    borderRadius: Radius.xl,
+    padding: Spacing.xl,
+    alignItems: 'center',
+    ...Shadow.md,
+  },
+  iconText:    { fontSize: 48, marginBottom: Spacing.md },
+  loadingText: { marginTop: Spacing.lg, fontSize: FontSize.base, color: Colors.textSecondary },
+
   statusCircle: {
-    width: 80, height: 80, borderRadius: 40,
-    alignItems: 'center', justifyContent: 'center', marginBottom: 16,
+    width: 80, height: 80, borderRadius: Radius.full,
+    alignItems: 'center', justifyContent: 'center', marginBottom: Spacing.md,
   },
-  green: { backgroundColor: '#dcfce7' },
-  red: { backgroundColor: '#fee2e2' },
-  statusIcon: { fontSize: 40, fontWeight: '800' },
-  resultTitle: { fontSize: 18, fontWeight: '700', marginBottom: 6, textAlign: 'center' },
-  resultSub: {
-    fontSize: 13, color: '#64748b', textAlign: 'center', marginBottom: 20, maxWidth: 280,
-  },
-  distanceText: { fontSize: 13, color: '#475569', marginBottom: 20 },
+  statusGreen: { backgroundColor: Colors.successLight },
+  statusRed:   { backgroundColor: Colors.dangerLight },
+  statusIcon:  { fontSize: 40, fontWeight: FontWeight.bold },
+
+  resultTitle:  { fontSize: FontSize.lg, fontWeight: FontWeight.bold, marginBottom: Spacing.xs, textAlign: 'center' },
+  resultSub:    { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'center', marginBottom: Spacing.xl, maxWidth: 280 },
+  distanceText: { fontSize: FontSize.sm, color: Colors.textSecondary, marginBottom: Spacing.xl },
+
   warningNote: {
-    fontSize: 13, color: '#92400e', backgroundColor: '#fef3c7',
-    borderRadius: 8, padding: 12, textAlign: 'right',
-    marginBottom: 16, lineHeight: 20,
+    fontSize: FontSize.sm,
+    color: Colors.warning,
+    backgroundColor: Colors.warningLight,
+    borderRadius: Radius.sm,
+    padding: Spacing.md,
+    textAlign: 'right',
+    marginBottom: Spacing.md,
+    lineHeight: 20,
   },
+
   primaryBtn: {
-    backgroundColor: '#1e40af', borderRadius: 10, paddingVertical: 14,
-    paddingHorizontal: 32, alignItems: 'center', marginTop: 8,
+    backgroundColor: Colors.primary,
+    borderRadius: Radius.md,
+    paddingVertical: Spacing.md,
+    paddingHorizontal: Spacing.xxl,
+    alignItems: 'center',
+    marginTop: Spacing.sm,
   },
-  primaryBtnText: { color: '#fff', fontSize: 15, fontWeight: '700' },
+  primaryBtnText: { color: Colors.textInverse, fontSize: FontSize.base, fontWeight: FontWeight.bold },
+
   retryBtn: {
-    borderWidth: 1.5, borderColor: '#1e40af', borderRadius: 10,
-    paddingVertical: 12, paddingHorizontal: 28, marginTop: 8,
+    borderWidth: 1.5, borderColor: Colors.primary, borderRadius: Radius.md,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.xl, marginTop: Spacing.sm,
   },
-  retryBtnText: { color: '#1e40af', fontSize: 15, fontWeight: '600' },
+  retryBtnText: { color: Colors.primary, fontSize: FontSize.base, fontWeight: FontWeight.semibold },
+
   overrideBtn: {
-    borderWidth: 1.5, borderColor: '#dc2626', borderRadius: 10,
-    paddingVertical: 12, paddingHorizontal: 28, marginTop: 8,
+    borderWidth: 1.5, borderColor: Colors.danger, borderRadius: Radius.md,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.xl, marginTop: Spacing.sm,
   },
-  overrideBtnText: { color: '#dc2626', fontSize: 15, fontWeight: '600' },
-  modalOverlay: {
-    flex: 1, backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end',
-  },
+  overrideBtnText: { color: Colors.danger, fontSize: FontSize.base, fontWeight: FontWeight.semibold },
+
+  // Modal
+  modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
   modalBox: {
-    backgroundColor: '#fff', borderTopLeftRadius: 20, borderTopRightRadius: 20,
-    padding: 24,
+    backgroundColor: Colors.surface,
+    borderTopLeftRadius: Radius.xl, borderTopRightRadius: Radius.xl,
+    padding: Spacing.xl,
   },
-  modalTitle: { fontSize: 17, fontWeight: '700', textAlign: 'right', marginBottom: 8 },
-  modalSub: { fontSize: 13, color: '#64748b', textAlign: 'right', marginBottom: 16, lineHeight: 20 },
+  modalTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, textAlign: 'right', marginBottom: Spacing.sm },
+  modalSub:   { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.lg, lineHeight: 20 },
   justificationInput: {
-    borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8,
-    padding: 12, fontSize: 14, color: '#1e293b',
-    minHeight: 100, textAlignVertical: 'top', marginBottom: 8,
+    borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
+    padding: Spacing.md, fontSize: FontSize.base, color: Colors.textPrimary,
+    minHeight: 100, textAlignVertical: 'top', marginBottom: Spacing.sm,
   },
-  errorText: { color: '#dc2626', fontSize: 12, textAlign: 'right', marginBottom: 8 },
-  modalActions: { flexDirection: 'row', gap: 10, justifyContent: 'flex-end' },
+  errorText: { color: Colors.danger, fontSize: FontSize.xs, textAlign: 'right', marginBottom: Spacing.sm },
+  modalActions: { flexDirection: 'row', gap: Spacing.sm, justifyContent: 'flex-end' },
   cancelBtn: {
-    borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8,
-    paddingVertical: 12, paddingHorizontal: 20,
+    borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg,
   },
-  cancelBtnText: { color: '#64748b', fontSize: 14 },
+  cancelBtnText: { color: Colors.textSecondary, fontSize: FontSize.sm },
   submitBtn: {
-    backgroundColor: '#1e40af', borderRadius: 8,
-    paddingVertical: 12, paddingHorizontal: 20,
+    backgroundColor: Colors.primary, borderRadius: Radius.sm,
+    paddingVertical: Spacing.md, paddingHorizontal: Spacing.lg,
   },
-  submitBtnText: { color: '#fff', fontSize: 14, fontWeight: '700' },
+  submitBtnText: { color: Colors.textInverse, fontSize: FontSize.sm, fontWeight: FontWeight.bold },
 });

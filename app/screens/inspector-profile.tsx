@@ -1,20 +1,14 @@
 // app/screens/inspector-profile.tsx — Inspector Profile Screen
 import React, { useCallback, useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
+  View, Text, TextInput, TouchableOpacity, ScrollView,
+  StyleSheet, Alert, KeyboardAvoidingView, Platform,
 } from 'react-native';
 import { useFocusEffect } from 'expo-router';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
+import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 
 interface ProfileData {
   fullName: string;
@@ -26,23 +20,12 @@ interface ProfileData {
 }
 
 const DEFAULT_PROFILE: ProfileData = {
-  fullName: '',
-  badgeNumber: '',
-  office: '',
-  phone: '',
-  email: '',
-  role: 'inspector',
+  fullName: '', badgeNumber: '', office: '', phone: '', email: '', role: 'inspector',
 };
 
 function AvatarInitials({ name }: { name: string }) {
-  const initials = name
-    .trim()
-    .split(' ')
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(w => w[0])
-    .join('')
-    .toUpperCase() || '؟';
+  const initials = name.trim().split(' ').filter(Boolean).slice(0, 2)
+    .map(w => w[0]).join('').toUpperCase() || '؟';
   return (
     <View style={styles.avatar}>
       <Text style={styles.avatarText}>{initials}</Text>
@@ -58,14 +41,12 @@ export default function InspectorProfileScreen() {
   useFocusEffect(
     useCallback(() => {
       let active = true;
-
       Promise.all([
         SettingsRepository.getAll(),
         InspectionRepository.getCompleted(),
         CorrectiveActionRepository.getOpen(),
       ]).then(([all, inspections, openCapsList]) => {
         if (!active) return;
-
         setProfile({
           fullName:    all['profile_fullName']    || '',
           badgeNumber: all['profile_badgeNumber'] || '',
@@ -74,26 +55,19 @@ export default function InspectorProfileScreen() {
           email:       all['profile_email']       || '',
           role:        (all['profile_role'] as 'inspector' | 'supervisor') || 'inspector',
         });
-
         const grades = inspections.map(i => i.score ?? 0).filter(s => s > 0);
         const avg = grades.length
-          ? Math.round(grades.reduce((a, b) => a + b, 0) / grades.length)
-          : null;
+          ? Math.round(grades.reduce((a, b) => a + b, 0) / grades.length) : null;
         const gradeLabel = avg !== null
-          ? avg >= 90 ? 'A' : avg >= 75 ? 'B' : avg >= 60 ? 'C' : 'D'
-          : '—';
+          ? avg >= 90 ? 'A' : avg >= 75 ? 'B' : avg >= 60 ? 'C' : 'D' : '—';
         setStats({ total: inspections.length, avgGrade: gradeLabel, openCaps: openCapsList.length });
       });
-
       return () => { active = false; };
     }, [])
   );
 
   const handleSave = async () => {
-    if (!profile.fullName.trim()) {
-      Alert.alert('خطأ', 'الاسم الكامل مطلوب');
-      return;
-    }
+    if (!profile.fullName.trim()) { Alert.alert('خطأ', 'الاسم الكامل مطلوب'); return; }
     setSaving(true);
     await SettingsRepository.set('profile_fullName',    profile.fullName);
     await SettingsRepository.set('profile_badgeNumber', profile.badgeNumber);
@@ -111,10 +85,7 @@ export default function InspectorProfileScreen() {
   });
 
   return (
-    <KeyboardAvoidingView
-      style={{ flex: 1 }}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
+    <KeyboardAvoidingView style={{ flex: 1 }} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
         {/* Header */}
         <View style={styles.headerBg}>
@@ -140,7 +111,7 @@ export default function InspectorProfileScreen() {
           </View>
           <View style={styles.statDivider} />
           <View style={styles.statBox}>
-            <Text style={[styles.statValue, stats.openCaps > 0 && { color: '#e74c3c' }]}>
+            <Text style={[styles.statValue, stats.openCaps > 0 && { color: Colors.danger }]}>
               {stats.openCaps}
             </Text>
             <Text style={styles.statLabel}>إجراءات مفتوحة</Text>
@@ -150,50 +121,16 @@ export default function InspectorProfileScreen() {
         {/* Form */}
         <View style={styles.card}>
           <Text style={styles.sectionTitle}>البيانات الشخصية</Text>
-
           <Text style={styles.label}>الاسم الكامل *</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="أدخل الاسم الكامل"
-            textAlign="right"
-            {...field('fullName')}
-          />
-
+          <TextInput style={styles.input} placeholder="أدخل الاسم الكامل" textAlign="right" {...field('fullName')} />
           <Text style={styles.label}>رقم الشارة</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="رقم الشارة الوظيفية"
-            textAlign="right"
-            keyboardType="numeric"
-            {...field('badgeNumber')}
-          />
-
+          <TextInput style={styles.input} placeholder="رقم الشارة الوظيفية" textAlign="right" keyboardType="numeric" {...field('badgeNumber')} />
           <Text style={styles.label}>المكتب / الوحدة</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="مكتب أو وحدة العمل"
-            textAlign="right"
-            {...field('office')}
-          />
-
+          <TextInput style={styles.input} placeholder="مكتب أو وحدة العمل" textAlign="right" {...field('office')} />
           <Text style={styles.label}>الهاتف</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="رقم الهاتف"
-            textAlign="right"
-            keyboardType="phone-pad"
-            {...field('phone')}
-          />
-
+          <TextInput style={styles.input} placeholder="رقم الهاتف" textAlign="right" keyboardType="phone-pad" {...field('phone')} />
           <Text style={styles.label}>البريد الإلكتروني</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="البريد الإلكتروني"
-            textAlign="right"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            {...field('email')}
-          />
+          <TextInput style={styles.input} placeholder="البريد الإلكتروني" textAlign="right" keyboardType="email-address" autoCapitalize="none" {...field('email')} />
         </View>
 
         {/* Role Selector */}
@@ -214,7 +151,6 @@ export default function InspectorProfileScreen() {
           </View>
         </View>
 
-        {/* Save */}
         <TouchableOpacity
           style={[styles.saveBtn, saving && { opacity: 0.6 }]}
           onPress={handleSave}
@@ -228,40 +164,38 @@ export default function InspectorProfileScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:   { flex: 1, backgroundColor: '#f0f4f0' },
-  headerBg:    { backgroundColor: '#2c7a4b', alignItems: 'center', paddingTop: 52,
-                 paddingBottom: 28, gap: 8 },
-  avatar:      { width: 80, height: 80, borderRadius: 40, backgroundColor: 'rgba(255,255,255,0.25)',
-                 alignItems: 'center', justifyContent: 'center', borderWidth: 2,
-                 borderColor: 'rgba(255,255,255,0.5)' },
-  avatarText:  { fontSize: 28, fontWeight: '800', color: '#fff' },
-  headerName:  { fontSize: 20, fontWeight: '700', color: '#fff' },
-  roleBadge:   { backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: 12,
-                 paddingHorizontal: 12, paddingVertical: 4 },
-  roleBadgeText: { color: '#fff', fontSize: 13, fontWeight: '600' },
-  statsRow:    { flexDirection: 'row', backgroundColor: '#fff', marginHorizontal: 16,
-                 marginTop: -16, borderRadius: 12, padding: 16, shadowColor: '#000',
-                 shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.08,
-                 shadowRadius: 4, elevation: 3, justifyContent: 'space-around' },
-  statBox:     { alignItems: 'center', flex: 1 },
-  statValue:   { fontSize: 22, fontWeight: '800', color: '#2c7a4b' },
-  statLabel:   { fontSize: 11, color: '#888', marginTop: 2 },
-  statDivider: { width: 1, backgroundColor: '#e0e0e0' },
-  card:        { backgroundColor: '#fff', margin: 16, marginTop: 12, borderRadius: 12,
-                 padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-                 shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
-                  marginBottom: 12 },
-  label:       { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 8 },
-  input:       { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
-                 fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa' },
-  roleRow:     { flexDirection: 'row', gap: 10 },
-  roleBtn:     { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
-                 paddingVertical: 10, alignItems: 'center', backgroundColor: '#fafafa' },
-  roleBtnActive: { borderColor: '#2c7a4b', backgroundColor: '#eaf6ef' },
-  roleBtnText: { fontSize: 14, color: '#555', fontWeight: '600' },
-  roleBtnTextActive: { color: '#2c7a4b' },
-  saveBtn:     { margin: 16, backgroundColor: '#2c7a4b', borderRadius: 10,
-                 paddingVertical: 14, alignItems: 'center' },
-  saveBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  container:    { flex: 1, backgroundColor: Colors.background },
+  headerBg:     { backgroundColor: Colors.primary, alignItems: 'center', paddingTop: 52, paddingBottom: Spacing.xl, gap: Spacing.sm },
+  avatar:       { width: 80, height: 80, borderRadius: Radius.full, backgroundColor: 'rgba(255,255,255,0.25)',
+                  alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: 'rgba(255,255,255,0.5)' },
+  avatarText:   { fontSize: 28, fontWeight: FontWeight.extrabold, color: Colors.textInverse },
+  headerName:   { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textInverse },
+  roleBadge:    { backgroundColor: 'rgba(255,255,255,0.2)', borderRadius: Radius.md,
+                  paddingHorizontal: Spacing.md, paddingVertical: Spacing.xs },
+  roleBadgeText:{ color: Colors.textInverse, fontSize: FontSize.sm, fontWeight: FontWeight.semibold },
+  statsRow:     { flexDirection: 'row', backgroundColor: Colors.surface, marginHorizontal: Spacing.md,
+                  marginTop: -Spacing.lg, borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.md,
+                  justifyContent: 'space-around' },
+  statBox:      { alignItems: 'center', flex: 1 },
+  statValue:    { fontSize: FontSize.xxl, fontWeight: FontWeight.extrabold, color: Colors.primary },
+  statLabel:    { fontSize: FontSize.xs, color: Colors.textSecondary, marginTop: Spacing.xs },
+  statDivider:  { width: 1, backgroundColor: Colors.border },
+  card:         { backgroundColor: Colors.surface, margin: Spacing.md, marginTop: Spacing.sm,
+                  borderRadius: Radius.lg, padding: Spacing.md, ...Shadow.sm },
+  sectionTitle: { fontSize: FontSize.base, fontWeight: FontWeight.bold, color: Colors.textPrimary,
+                  textAlign: 'right', marginBottom: Spacing.md },
+  label:        { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right',
+                  marginBottom: Spacing.xs, marginTop: Spacing.sm },
+  input:        { borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
+                  padding: Spacing.sm, fontSize: FontSize.base, color: Colors.textPrimary,
+                  backgroundColor: Colors.background },
+  roleRow:      { flexDirection: 'row', gap: Spacing.sm },
+  roleBtn:      { flex: 1, borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.sm,
+                  paddingVertical: Spacing.sm, alignItems: 'center', backgroundColor: Colors.background },
+  roleBtnActive:{ borderColor: Colors.primary, backgroundColor: Colors.primaryLight },
+  roleBtnText:  { fontSize: FontSize.base, color: Colors.textSecondary, fontWeight: FontWeight.semibold },
+  roleBtnTextActive: { color: Colors.primary },
+  saveBtn:      { margin: Spacing.md, backgroundColor: Colors.primary, borderRadius: Radius.md,
+                  paddingVertical: Spacing.md, alignItems: 'center' },
+  saveBtnText:  { color: Colors.textInverse, fontSize: FontSize.lg, fontWeight: FontWeight.bold },
 });
