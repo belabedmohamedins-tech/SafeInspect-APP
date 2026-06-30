@@ -1,0 +1,215 @@
+// server/prisma/schema.prisma
+//
+// Data model mirrors src/types.ts from the SafeInspect mobile app.
+// Run: npx prisma migrate dev --name init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inspector (app user)
+// ─────────────────────────────────────────────────────────────────────────────
+model Inspector {
+  id           String   @id @default(uuid())
+  matricule    String   @unique          // ministry employee ID
+  name         String
+  passwordHash String
+  officeName   String?
+  role         Role     @default(INSPECTOR)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  pushTokens   PushToken[]
+  inspections  Inspection[]
+  approvals    Approval[]    @relation("SupervisorApprovals")
+}
+
+enum Role {
+  INSPECTOR
+  SUPERVISOR
+  ADMIN
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Push tokens (one device can have one token; one inspector can have many devices)
+// ─────────────────────────────────────────────────────────────────────────────
+model PushToken {
+  id          String    @id @default(uuid())
+  token       String    @unique
+  inspectorId String
+  inspector   Inspector @relation(fields: [inspectorId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Facility
+// ─────────────────────────────────────────────────────────────────────────────
+model Facility {
+  id             String   @id @default(uuid())
+  projectName    String
+  ownerName      String
+  activity       String
+  address        String
+  lat            Float?
+  lng            Float?
+  licenseType    String?
+  licenseDetails String?
+  year           String?
+  category       String?
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  inspections    Inspection[]
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Inspection — mirrors SavedInspection from src/types.ts
+// ─────────────────────────────────────────────────────────────────────────────
+model Inspection {
+  id                     String    @id           // device-generated UUID kept as-is
+  facilityId             String
+  facility               Facility  @relation(fields: [facilityId], references: [id])
+  inspectorId            String
+  inspector              Inspector @relation(fields: [inspectorId], references: [id])
+
+  // Core fields
+  facilityName           String
+  facilityAddress        String
+  inspectionDate         DateTime?
+  inspectorName          String
+  status                 InspectionStatus  @default(IN_PROGRESS)
+  inspectionType         InspectionType    @default(ROUTINE)
+  priorInspectionId      String?
+
+  // Meeting gates
+  openingMeetingDone     Boolean   @default(false)
+  closingMeetingDone     Boolean   @default(false)
+
+  // Scoring
+  score                  Float?
+  grade                  String?
+  riskLevel              Int?
+  criticalOverride       Boolean   @default(false)
+  incomplete             Boolean   @default(false)
+  nextInspectionDays     Int?
+
+  // Violation summary (denormalised for fast listing)
+  violationsHigh         Int       @default(0)
+  violationsMedium       Int       @default(0)
+  violationsLow          Int       @default(0)
+  violationsTotal        Int       @default(0)
+
+  // Decision support
+  escalationOverrideReason String?
+
+  // Metadata
+  signature              String?
+  officeName             String?
+  inspectionCause        String?
+  referenceDocument      String?
+  committeeMembers       String[]  @default([])
+  latitude               Float?
+  longitude              Float?
+  integrityHash          String?
+  geofenceOverrideNote   String?
+  reportSequenceNumber   String?
+
+  // Approval
+  approvalStatus         ApprovalStatus @default(PENDING)
+  approvedBy             String?
+  approvedAt             DateTime?
+  returnedReason         String?
+  approvalNote           String?
+
+  // Full checklist items stored as JSON (avoids 100+ columns)
+  // Shape: InspectionItem[] from src/types.ts
+  items                  Json      @default("[]")
+
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
+  syncedAt               DateTime  @default(now())
+
+  // Relations
+  approval               Approval?
+}
+
+enum InspectionStatus {
+  COMPLETED
+  IN_PROGRESS
+  DRAFT
+}
+
+enum InspectionType {
+  ROUTINE
+  FOLLOW_UP
+  COMPLAINT
+  EXTRAORDINARY
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  RETURNED
+  ESCALATED
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Approval — supervisor review record for a completed inspection
+// ─────────────────────────────────────────────────────────────────────────────
+model Approval {
+  id            String         @id @default(uuid())
+  inspectionId  String         @unique
+  inspection    Inspection     @relation(fields: [inspectionId], references: [id], onDelete: Cascade)
+  supervisorId  String?
+  supervisor    Inspector?     @relation("SupervisorApprovals", fields: [supervisorId], references: [id])
+  status        ApprovalStatus @default(PENDING)
+  comment       String?        // returned reason
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CorrectiveAction — mirrors CorrectiveAction from src/types.ts
+// ─────────────────────────────────────────────────────────────────────────────
+model CorrectiveAction {
+  id                String   @id           // device-generated UUID
+  inspectionId      String
+  inspectionItemId  String
+  facilityId        String
+  facilityName      String
+  criteria          String
+  severity          String
+  deadline          DateTime
+  assignedTo        String
+  status            String   @default("open")
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  closedAt          DateTime?
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// AgendaItem — mirrors AgendaItem from src/types.ts
+// ─────────────────────────────────────────────────────────────────────────────
+model AgendaItem {
+  id               String   @id           // device-generated UUID
+  facilityId       String
+  facilityName     String
+  facilityAddress  String?
+  activity         String?
+  date             DateTime
+  notes            String
+  status           String   @default("pending")
+  inspectionId     String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
