@@ -1,9 +1,55 @@
 // src/types.ts
 export type Severity = 'low' | 'medium' | 'high';
 export type ControlType = 'visual' | 'doc' | 'test';
-export type ComplianceStatus = 'compliant' | 'non-compliant' | 'na' | 'not-evaluated';
+
+/**
+ * Compliance status for a single checklist item.
+ *
+ * - 'compliant'        — criterion met
+ * - 'non-compliant'    — criterion violated, counts toward score penalty
+ * - 'na'               — criterion not applicable to this facility
+ * - 'not-evaluated'    — inspector has not yet answered this item
+ * - 'observation-only' — noted for awareness, NOT a violation, no score penalty
+ * - 'unable-to-verify' — inspector could not establish the fact either way
+ *                        (e.g. document not available on site). NOT a violation.
+ *                        Auto-generates a follow-up task for next visit.
+ */
+export type ComplianceStatus =
+  | 'compliant'
+  | 'non-compliant'
+  | 'na'
+  | 'not-evaluated'
+  | 'observation-only'
+  | 'unable-to-verify';
+
 export type Category = 'تنظيمية' | 'بيئية' | 'صحيه' | 'سلامة' | 'نظافة' | 'عامة';
 export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
+
+/**
+ * Inspection type — determines workflow and differential view behaviour.
+ *
+ * - 'routine'   — standard scheduled inspection
+ * - 'follow-up' — verifies resolution of findings from a prior inspection;
+ *                 requires priorInspectionId to be set on SavedInspection
+ * - 'complaint' — triggered by a received complaint
+ */
+export type InspectionType = 'routine' | 'follow-up' | 'complaint';
+
+/**
+ * Administrative sanction tier for a criterion violation.
+ * Drives the escalation advisor (Phase 6).
+ *
+ * - 'warning'        — administrative warning (Décret 06-198 Art. 20)
+ * - 'wali-referral'  — refer to the Wali
+ * - 'court-referral' — refer to court / prosecutor
+ */
+export type SanctionTier = 'warning' | 'wali-referral' | 'court-referral';
+
+/**
+ * Root-cause classification for a non-conformity.
+ * Helps distinguish one-off lapses from structural problems.
+ */
+export type RootCause = 'lapse' | 'training' | 'structural' | 'unknown';
 
 /** Notification types surfaced in the Notification Centre. */
 export type NotificationType =
@@ -37,6 +83,41 @@ export interface InspectionItem {
   comment?: string;
   photoUri?: string;
   photos?: string[];
+
+  // ── Phase 1.2: Numeric evidence fields ───────────────────────────────────
+  /**
+   * Measured value for quantitative criteria (temperature, chlorine, noise…).
+   * Stored as a number for trend analysis — do NOT use free-text comments
+   * for measurable quantities.
+   */
+  numericValue?: number;
+  /** Unit of the numeric value, e.g. '°C', 'mg/L', 'dB'. */
+  numericUnit?: string;
+
+  // ── Phase 1.3: Repeat-violation fields ───────────────────────────────────
+  /**
+   * True when this exact criterion was also non-compliant in the immediately
+   * preceding inspection for the same facility.
+   * Populated automatically when inspectionType === 'follow-up'.
+   */
+  isRepeatViolation?: boolean;
+  /** The compliance status this criterion had in the prior inspection. */
+  priorInspectionStatus?: ComplianceStatus;
+
+  // ── Phase 1.4: Root-cause classification ─────────────────────────────────
+  /**
+   * Root cause of a non-conformity. Helps the inspector and supervisor
+   * prescribe the right corrective action type.
+   */
+  rootCause?: RootCause;
+
+  // ── Phase 1.5: Sanction tier ─────────────────────────────────────────────
+  /**
+   * The administrative escalation tier associated with a violation of this
+   * criterion. Shown to inspectors so they know the legal consequence before
+   * marking non-compliant.
+   */
+  sanctionTier?: SanctionTier;
 }
 
 /** Counts of non-compliant items by severity level. */
@@ -63,6 +144,44 @@ export interface SavedInspection {
    */
   status: 'completed' | 'in-progress' | 'draft';
 
+  // ── Phase 1.6: Inspection type ───────────────────────────────────────────
+  /**
+   * Type of this inspection run.
+   * Defaults to 'routine' when not set (backwards-compatible).
+   */
+  inspectionType?: InspectionType;
+
+  // ── Phase 1.7: Follow-up linkage ─────────────────────────────────────────
+  /**
+   * ID of the prior inspection this follow-up is verifying.
+   * Required when inspectionType === 'follow-up'.
+   * Used by the differential view (Phase 3) and repeat-violation
+   * detection (Phase 2).
+   */
+  priorInspectionId?: string;
+
+  // ── Phase 1.8: Meeting gate flags ────────────────────────────────────────
+  /**
+   * True once the inspector completes the formal opening-meeting step
+   * (permit check + representative ID + scope confirmation).
+   * Checklist cannot be started until this is true.
+   */
+  openingMeetingDone?: boolean;
+  /**
+   * True once the inspector confirms findings were verbally communicated
+   * to the facility representative before signatures.
+   * Report PDF cannot be generated until this is true.
+   */
+  closingMeetingDone?: boolean;
+
+  // ── Phase 1.9: Report sequence number ────────────────────────────────────
+  /**
+   * Sequential reference number tying this report to the commune's
+   * official inspection register. Format: COMMUNE-YEAR-NNNN.
+   * Generated at report finalisation (Phase 8).
+   */
+  reportSequenceNumber?: string;
+
   // ── Scoring ──────────────────────────────────────────────────────────────
   /** Severity-weighted compliance score, 0–100. */
   score?: number;
@@ -78,6 +197,13 @@ export interface SavedInspection {
   incomplete?: boolean;
   /** Recommended days to next inspection based on grade. */
   nextInspectionDays?: number;
+
+  // ── Decision support (Phase 6) ───────────────────────────────────────────
+  /**
+   * If the inspector overrode the system's suggested escalation action,
+   * this field stores their stated reason. Required on override.
+   */
+  escalationOverrideReason?: string;
 
   // ── Metadata ─────────────────────────────────────────────────────────────
   signature?: string;
