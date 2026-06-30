@@ -17,7 +17,10 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
-import { CapNotificationService } from '../../src/services/CapNotificationService';
+import {
+  cancelCapDigestNotification,
+  cancelCapNotification,
+} from '../../src/services/CapNotificationService';
 import { CapReportService } from '../../src/services/CapReportService';
 import { CorrectiveAction } from '../../src/types';
 
@@ -92,18 +95,41 @@ export default function CAPScreen() {
     }
   };
 
-  // ── Status update + notify assignees ──────────────────────────────────────
+  // ── Status update ──────────────────────────────────────────────────────────
+  //
+  // Phase 20: when an item is resolved (or manually moved out of a deadline-
+  // bearing status), cancel its per-item scheduled alert immediately so the
+  // user is never notified about a deadline they already closed.
+  //
+  // Additionally, if this resolve brings the total open+overdue count to zero,
+  // cancel the daily digest too — there is nothing left to remind about.
   const handleUpdateStatus = async (newStatus: CorrectiveAction['status']) => {
     if (!selected) return;
+
+    // 1. Persist the status change
     await repo.updateStatus(selected.id, newStatus);
-    // Notify the assignee that the status has changed
-    const updated: CorrectiveAction = { ...selected, status: newStatus };
-    try {
-      await CapNotificationService.notifyAssignees(updated);
-    } catch (err) {
-      // Notification failure must never block the UI update
-      console.warn('[CAP] notifyAssignees failed:', err);
+
+    // 2. Cancel the per-item deadline alert whenever the item is resolved
+    //    (or moved back to open/in-progress — the alert will be rescheduled
+    //    the next time scheduleCapDeadlineNotifications() runs at app start).
+    if (newStatus === 'resolved') {
+      try {
+        await cancelCapNotification(selected.id);
+      } catch (err) {
+        console.warn('[CAP] cancelCapNotification failed:', err);
+      }
     }
+
+    // 3. Check if all items are now resolved — cancel the digest if so
+    try {
+      const remaining = await repo.getOpen(); // returns open + in-progress + overdue
+      if (remaining.length === 0) {
+        await cancelCapDigestNotification();
+      }
+    } catch (err) {
+      console.warn('[CAP] post-resolve digest cancel check failed:', err);
+    }
+
     setSelected(null);
     load();
   };
@@ -116,7 +142,12 @@ export default function CAPScreen() {
         { text: 'إلغاء', style: 'cancel' },
         {
           text: 'حذف', style: 'destructive',
-          onPress: async () => { await repo.delete(item.id); load(); },
+          onPress: async () => {
+            // Also cancel any pending notification for the deleted item
+            try { await cancelCapNotification(item.id); } catch { /* ok */ }
+            await repo.delete(item.id);
+            load();
+          },
         },
       ],
     );
