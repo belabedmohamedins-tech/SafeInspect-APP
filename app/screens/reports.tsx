@@ -2,6 +2,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
 import {
+  ActivityIndicator,
   Alert,
   FlatList,
   StyleSheet,
@@ -27,16 +28,97 @@ import { getComplianceSummary } from '../../src/utils/statusUtils';
 type FilterStatus = 'all' | 'compliant' | 'non-compliant' | 'violations';
 
 const FILTER_LABELS: Record<FilterStatus, string> = {
-  all:            'الكل',
-  compliant:      'مطابق',
+  all:             'الكل',
+  compliant:       'مطابق',
   'non-compliant': 'غير مطابق',
-  violations:     '⚠️ مخالفات',
+  violations:      '⚠️ مخالفات',
 };
 
+// ── Phase-10: ViolationsSummaryBanner ─────────────────────────────────────
+interface BannerProps {
+  inspectionsWithViolations: SavedInspection[];
+  totalViolationCount: number;
+  onExportAll: () => void;
+  exporting: boolean;
+}
+
+function ViolationsSummaryBanner({
+  inspectionsWithViolations,
+  totalViolationCount,
+  onExportAll,
+  exporting,
+}: BannerProps) {
+  if (inspectionsWithViolations.length === 0) return null;
+  return (
+    <View style={bannerStyles.container}>
+      <View style={bannerStyles.left}>
+        <FontAwesome name="exclamation-triangle" size={18} color="#e65100" />
+        <View style={bannerStyles.textBlock}>
+          <Text style={bannerStyles.headline}>
+            {inspectionsWithViolations.length} تفتيشات تحتوي على مخالفات
+          </Text>
+          <Text style={bannerStyles.sub}>
+            {totalViolationCount} بند غير مطابق إجمالاً
+          </Text>
+        </View>
+      </View>
+      <TouchableOpacity
+        style={[bannerStyles.exportBtn, exporting && bannerStyles.exportBtnDisabled]}
+        onPress={onExportAll}
+        disabled={exporting}
+        accessibilityLabel="تصدير جميع محاضر المخالفة"
+      >
+        {exporting ? (
+          <ActivityIndicator size="small" color="#fff" />
+        ) : (
+          <>
+            <FontAwesome name="files-o" size={14} color="#fff" />
+            <Text style={bannerStyles.exportBtnText}>تصدير الكل</Text>
+          </>
+        )}
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const bannerStyles = StyleSheet.create({
+  container: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff3e0',
+    borderColor: '#e65100',
+    borderWidth: 1,
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    gap: 8,
+  },
+  left:      { flexDirection: 'row', alignItems: 'center', gap: 8, flex: 1 },
+  textBlock: { flex: 1 },
+  headline:  { fontSize: 13, fontWeight: '700', color: '#bf360c' },
+  sub:       { fontSize: 12, color: '#e65100', marginTop: 2 },
+  exportBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#e65100',
+    paddingHorizontal: 10,
+    paddingVertical: 7,
+    borderRadius: 8,
+  },
+  exportBtnDisabled: { opacity: 0.6 },
+  exportBtnText:     { color: '#fff', fontSize: 12, fontWeight: '700' },
+});
+
+// ────────────────────────────────────────────────────────────────────────────────
 export default function ReportsScreen() {
-  const [inspections, setInspections] = useState<SavedInspection[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>('all');
+  const [inspections,   setInspections]   = useState<SavedInspection[]>([]);
+  const [searchQuery,   setSearchQuery]   = useState('');
+  const [filterStatus,  setFilterStatus]  = useState<FilterStatus>('all');
+  const [batchExporting, setBatchExporting] = useState(false);  // Phase-10
   const router = useRouter();
 
   const loadInspections = async () => {
@@ -80,7 +162,7 @@ export default function ReportsScreen() {
     });
   };
 
-  // ── Phase-9: export notice with guard ────────────────────────────────────
+  // ── Phase-9: single-item export notice with guard ───────────────────────
   const handleExportNotice = (item: SavedInspection) => {
     const count = item.items.filter(i => i.complianceStatus === 'non-compliant').length;
     if (count === 0) {
@@ -90,21 +172,65 @@ export default function ReportsScreen() {
     exportNonConformityNoticePDF(item);
   };
 
-  const filteredInspections = useMemo(() => {
-    return inspections.filter(inspection => {
-      const matchesSearch = inspection.facilityName
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase());
-      if (!matchesSearch) return false;
-      if (filterStatus === 'all') return true;
-      const summary = getComplianceSummary(inspection.items);
-      if (filterStatus === 'compliant')      return summary.nonCompliant === 0;
-      if (filterStatus === 'non-compliant')  return summary.nonCompliant > 0;
-      // Phase-9: violations = same as non-compliant (shortcut to Notice-ready inspections)
-      if (filterStatus === 'violations')     return summary.nonCompliant > 0;
-      return true;
-    });
-  }, [inspections, searchQuery, filterStatus]);
+  // ── Phase-10: batch export all notices in the current filtered view ──────
+  const handleExportAllNotices = async (withViolations: SavedInspection[]) => {
+    if (withViolations.length === 0) return;
+    Alert.alert(
+      'تصدير جميع المحاضر',
+      `سيتم تصدير ${withViolations.length} محضراً تباعاً. هل تريد المتابعة؟`,
+      [
+        { text: 'إلغاء', style: 'cancel' },
+        {
+          text: 'تصدير',
+          onPress: async () => {
+            setBatchExporting(true);
+            try {
+              for (const ins of withViolations) {
+                await exportNonConformityNoticePDF(ins);
+                // small delay so the share sheet can dismiss before the next one appears
+                await new Promise(resolve => setTimeout(resolve, 600));
+              }
+            } finally {
+              setBatchExporting(false);
+            }
+          },
+        },
+      ]
+    );
+  };
+
+  // ── Derived data: filtered list + banner stats ───────────────────────────
+  const { filteredInspections, inspectionsWithViolations, totalViolationCount } =
+    useMemo(() => {
+      const filtered = inspections.filter(inspection => {
+        const matchesSearch = inspection.facilityName
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        if (!matchesSearch) return false;
+        if (filterStatus === 'all') return true;
+        const summary = getComplianceSummary(inspection.items);
+        if (filterStatus === 'compliant')      return summary.nonCompliant === 0;
+        if (filterStatus === 'non-compliant')  return summary.nonCompliant > 0;
+        if (filterStatus === 'violations')     return summary.nonCompliant > 0;
+        return true;
+      });
+
+      // Banner stats — always computed over the filtered view
+      const withViolations = filtered.filter(
+        ins => ins.items.some(i => i.complianceStatus === 'non-compliant'),
+      );
+      const totalViolations = withViolations.reduce(
+        (acc, ins) =>
+          acc + ins.items.filter(i => i.complianceStatus === 'non-compliant').length,
+        0,
+      );
+
+      return {
+        filteredInspections:       filtered,
+        inspectionsWithViolations: withViolations,
+        totalViolationCount:       totalViolations,
+      };
+    }, [inspections, searchQuery, filterStatus]);
 
   const renderRightActions = (id: string) => (
     <TouchableOpacity style={styles.deleteButton} onPress={() => deleteInspection(id)}>
@@ -115,7 +241,7 @@ export default function ReportsScreen() {
 
   const renderItem = ({ item }: { item: SavedInspection }) => {
     const summary = getComplianceSummary(item.items);
-    const isCompliant = summary.nonCompliant === 0;
+    const isCompliant   = summary.nonCompliant === 0;
     const hasViolations = summary.nonCompliant > 0;
     return (
       <Swipeable renderRightActions={() => renderRightActions(item.id)}>
@@ -179,6 +305,7 @@ export default function ReportsScreen() {
         onChangeText={setSearchQuery}
         textAlign="right"
       />
+
       {/* Phase-9: 4-chip filter row */}
       <View style={styles.filterRow}>
         {(Object.keys(FILTER_LABELS) as FilterStatus[]).map(f => (
@@ -186,19 +313,32 @@ export default function ReportsScreen() {
             key={f}
             style={[
               styles.filterBtn,
-              filterStatus === f && (f === 'violations' ? styles.filterBtnViolations : styles.filterBtnActive),
+              filterStatus === f && (f === 'violations'
+                ? styles.filterBtnViolations
+                : styles.filterBtnActive),
             ]}
             onPress={() => setFilterStatus(f)}
           >
             <Text style={[
               styles.filterBtnText,
-              filterStatus === f && (f === 'violations' ? styles.filterBtnTextViolations : styles.filterBtnTextActive),
+              filterStatus === f && (f === 'violations'
+                ? styles.filterBtnTextViolations
+                : styles.filterBtnTextActive),
             ]}>
               {FILTER_LABELS[f]}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
+
+      {/* Phase-10: Violations summary banner */}
+      <ViolationsSummaryBanner
+        inspectionsWithViolations={inspectionsWithViolations}
+        totalViolationCount={totalViolationCount}
+        onExportAll={() => handleExportAllNotices(inspectionsWithViolations)}
+        exporting={batchExporting}
+      />
+
       <FlatList
         data={filteredInspections}
         keyExtractor={item => item.id}
@@ -227,13 +367,13 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     color: Colors.dark,
   },
-  filterRow:              { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8, flexWrap: 'wrap' },
-  filterBtn:              { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: Colors.background },
-  filterBtnActive:        { backgroundColor: Colors.blue },
-  filterBtnViolations:    { backgroundColor: '#e65100' },
-  filterBtnText:          { fontSize: 13, color: Colors.mid },
-  filterBtnTextActive:    { color: Colors.white },
-  filterBtnTextViolations:{ color: Colors.white, fontWeight: '700' },
+  filterRow:               { flexDirection: 'row', paddingHorizontal: 10, marginBottom: 6, gap: 8, flexWrap: 'wrap' },
+  filterBtn:               { paddingHorizontal: 12, paddingVertical: 6, borderRadius: 16, backgroundColor: Colors.background },
+  filterBtnActive:         { backgroundColor: Colors.blue },
+  filterBtnViolations:     { backgroundColor: '#e65100' },
+  filterBtnText:           { fontSize: 13, color: Colors.mid },
+  filterBtnTextActive:     { color: Colors.white },
+  filterBtnTextViolations: { color: Colors.white, fontWeight: '700' },
   list: { padding: 10 },
   card: {
     backgroundColor: Colors.white, borderRadius: 10,
