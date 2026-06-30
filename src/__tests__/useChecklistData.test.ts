@@ -49,9 +49,14 @@ jest.mock('../repositories/AgendaRepository', () => ({
   },
 }));
 
+// SettingsRepository: the hook calls SettingsRepository.get() (not getAll)
+// inside saveInspection(). Mocking only getAll meant get() was undefined,
+// so settings.officeName threw TypeError, saveInspection caught it and
+// returned false, and handleFinish bailed before calling save().
 jest.mock('../repositories/SettingsRepository', () => ({
   SettingsRepository: {
-    getAll: jest.fn(),
+    get:    jest.fn(),
+    getAll: jest.fn(), // kept for completeness; not called by the hook
   },
 }));
 
@@ -67,7 +72,7 @@ import { InspectionItem } from '../types';
 const mockGetById              = InspectionRepository.getById              as jest.MockedFunction<any>;
 const mockSave                 = InspectionRepository.save                 as jest.MockedFunction<any>;
 const mockUpdateInspectionLink = AgendaRepository.updateInspectionLink     as jest.MockedFunction<any>;
-const mockSettingsGetAll       = SettingsRepository.getAll                 as jest.MockedFunction<any>;
+const mockSettingsGet          = SettingsRepository.get                    as jest.MockedFunction<any>;
 
 function Wrapper({ children }: { children: React.ReactNode }) {
   return React.createElement(React.Fragment, null, children);
@@ -89,7 +94,8 @@ beforeEach(() => {
   mockGetById.mockResolvedValue(null);
   mockSave.mockResolvedValue(undefined);
   mockUpdateInspectionLink.mockResolvedValue(undefined);
-  mockSettingsGetAll.mockResolvedValue({ officeName: 'HQ', inspectorName: 'Inspector A' });
+  // Hook calls SettingsRepository.get() — return a valid settings object.
+  mockSettingsGet.mockResolvedValue({ officeName: 'HQ', inspectorName: 'Inspector A' });
 });
 
 // Helper — wait for loading to finish

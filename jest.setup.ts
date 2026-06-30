@@ -66,7 +66,7 @@
 
 import React from 'react';
 
-// ─── expo-constants — force IS_EXPO_GO = false ───────────────────────────────
+// ─── expo-constants — force IS_EXPO_GO = false ──────────────────────────────
 // jest-expo preset sets Constants.appOwnership = 'expo' via its resolver.
 // We mutate the object here (post-preset) so every subsequent require() sees
 // appOwnership = 'standalone', making IS_EXPO_GO = false in NotificationService.
@@ -106,7 +106,7 @@ jest.mock('expo-router', () => {
   };
 });
 
-// ─── react-native-safe-area-context — global stub ────────────────────────────
+// ─── react-native-safe-area-context — global stub ───────────────────────────
 jest.mock('react-native-safe-area-context', () => ({
   useSafeAreaInsets:     jest.fn(() => ({ top: 0, bottom: 0, left: 0, right: 0 })),
   useSafeAreaFrame:      jest.fn(() => ({ x: 0, y: 0, width: 375, height: 812 })),
@@ -120,7 +120,7 @@ jest.mock('react-native-safe-area-context', () => ({
   },
 }));
 
-// ─── React Native — synthetic Platform mock ───────────────────────────────────
+// ─── React Native — synthetic Platform mock ──────────────────────────────────
 const PLATFORM = {
   OS:      'android' as const,
   select:  <T extends Record<string, unknown>>(spec: T): T[keyof T] =>
@@ -132,7 +132,7 @@ const PLATFORM = {
 
 jest.mock('react-native/Libraries/Utilities/Platform', () => PLATFORM);
 
-// ─── React reconciler internal keys ──────────────────────────────────────────
+// ─── React reconciler internal keys ─────────────────────────────────────────
 //
 // These are accessed on every object during React tree traversal.
 // They must return undefined/falsy silently — they are NOT RN API calls.
@@ -204,6 +204,15 @@ jest.mock('react-native', () => {
       install:       jest.fn(),
       uninstall:     jest.fn(),
     },
+    // AppRegistry: accessed by expo's Expo.fx.tsx:39 (AppRegistry.registerComponent)
+    // at module load time. expo-sqlite, expo-crypto, and any module that imports
+    // through expo trigger this access. Without the stub the strict Proxy throws for
+    // schema.test.ts, pdfService.test.ts, and useHomeData.test.ts.
+    AppRegistry: {
+      registerComponent: jest.fn(),
+      runApplication:    jest.fn(),
+      setWrapperComponentProvider: jest.fn(),
+    },
     View:           'View',
     Text:           'Text',
     Image:          'Image',
@@ -267,6 +276,7 @@ beforeAll(() => {
       'useInspectionList load error',
       'useHomeData load error',
       'Error saving inspection',
+      'Error updating agenda',
     ];
     if (suppressed.some(s => msg.includes(s))) return;
     _consoleError(...args);
