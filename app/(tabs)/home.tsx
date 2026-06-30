@@ -4,6 +4,7 @@ import React, { useEffect } from 'react';
 import { Alert, ScrollView, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AgendaSection from '../../components/home/AgendaSection';
+import CapStatsWidget from '../../components/home/CapStatsWidget';
 import HomeFAB from '../../components/home/HomeFAB';
 import HomeHeader from '../../components/home/HomeHeader';
 import InspectionSection from '../../components/home/InspectionSection';
@@ -20,7 +21,6 @@ export default function HomeScreen() {
     inProgressInspections, recentFacilities, stats, getFacilityForAgenda,
   } = useHomeData();
 
-  // Schedule CAP deadline notifications once per day when home mounts
   useEffect(() => {
     scheduleCapDeadlineNotifications();
   }, []);
@@ -69,6 +69,9 @@ export default function HomeScreen() {
           openCapCount={stats.openCapCount}
         />
 
+        {/* Phase-13: CAP status breakdown widget */}
+        <CapStatsWidget />
+
         <AgendaSection
           items={agendaItems}
           onItemPress={handleAgendaPress}
@@ -96,7 +99,6 @@ export default function HomeScreen() {
           onViewAll={() => router.push('/(tabs)/inspection')}
         />
 
-        {/* FIX #2: map Facility → SavedInspection shape with safe fallback fields */}
         {recentFacilities.length > 0 && (
           <InspectionSection
             title="آخر المنشآت المفتشة"
