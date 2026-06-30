@@ -14,6 +14,12 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { AuthRepository } from '../../src/repositories/AuthRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { useTranslation } from '../../src/i18n';
+import {
+  isEnabled  as isAgendaNotifEnabled,
+  setEnabled as setAgendaNotifEnabled,
+} from '../../src/services/NotificationService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { StorageKeys } from '../../src/repositories/keys';
 
 interface Settings {
   inspectorName:    string;
@@ -32,11 +38,14 @@ const DEFAULT: Settings = {
 export default function SettingsScreen() {
   const router = useRouter();
   const { language, setLanguage } = useTranslation();
-  const [settings,      setSettings]      = useState<Settings>(DEFAULT);
-  const [saving,        setSaving]        = useState(false);
-  const [bioAvailable,  setBioAvailable]  = useState(false);
+  const [settings,           setSettings]           = useState<Settings>(DEFAULT);
+  const [saving,             setSaving]             = useState(false);
+  const [bioAvailable,       setBioAvailable]       = useState(false);
+  // Notification toggles
+  const [agendaNotifOn,      setAgendaNotifOn]      = useState(true);
+  const [capNotifOn,         setCapNotifOn]         = useState(true);
 
-  // ── Load ─────────────────────────────────────────────────────────────────
+  // ── Load ──────────────────────────────────────────────────────────────────────
   useFocusEffect(
     useCallback(() => {
       let active = true;
@@ -45,28 +54,59 @@ export default function SettingsScreen() {
         AuthRepository.getPin(),
         AuthRepository.isBiometricEnabled(),
         AuthRepository.isBiometricAvailable(),
-      ]).then(([all, pin, bioEnabled, bioAvail]) => {
+        isAgendaNotifEnabled(),
+        AsyncStorage.getItem(StorageKeys.CAP_NOTIF_LAST_RUN).then(() =>
+          // CAP toggle uses its own key; default ON (null → true)
+          AsyncStorage.getItem('CAP_NOTIF_ENABLED').then(v => v === null ? true : v === 'true')
+        ),
+      ]).then(([all, pin, bioEnabled, bioAvail, agendaOn, capOn]) => {
         if (!active) return;
         setBioAvailable(bioAvail);
         setSettings({
           inspectorName:    all['inspectorName'] || '',
           officeName:       all['officeName']    || '',
-          // PIN is enabled when there is an actual PIN stored in SecureStore
           pinEnabled:       !!pin,
           biometricEnabled: bioEnabled,
         });
+        setAgendaNotifOn(agendaOn);
+        setCapNotifOn(capOn);
       });
       return () => { active = false; };
     }, [])
   );
 
-  // ── PIN toggle ───────────────────────────────────────────────────────────
+  // ── Notification toggle handlers ────────────────────────────────────────────
+  const handleAgendaNotifToggle = async (value: boolean) => {
+    setAgendaNotifOn(value);
+    await setAgendaNotifEnabled(value);
+    // setEnabled(false) calls cancelAllScheduledNotificationsAsync internally;
+    // on re-enable, notifications will be rescheduled on next app start.
+  };
+
+  const handleCapNotifToggle = async (value: boolean) => {
+    setCapNotifOn(value);
+    try {
+      await AsyncStorage.setItem('CAP_NOTIF_ENABLED', String(value));
+      if (!value) {
+        // Cancel all three CAP notification strategies immediately
+        const { cancelCapDigestNotification, cancelCapWeeklyDigestNotification } =
+          await import('../../src/services/CapNotificationService');
+        await cancelCapDigestNotification();
+        await cancelCapWeeklyDigestNotification();
+        // Per-item alerts share the expo-notifications schedule; we clear the
+        // daily-run guard so they are not rescheduled on next start.
+        await AsyncStorage.removeItem(StorageKeys.CAP_NOTIF_LAST_RUN);
+      }
+    } catch (err) {
+      console.warn('[Settings] handleCapNotifToggle error:', err);
+    }
+  };
+
+  // ── PIN toggle ───────────────────────────────────────────────────────────────────
   const handlePinToggle = async (value: boolean) => {
     if (value) {
-      // Turning ON → go to setup screen
       router.push('/screens/pin-setup');
     } else {
-      // Turning OFF → confirm then clear
       Alert.alert(
         'إلغاء قفل PIN',
         'سيتم إزالة رمز PIN الحالي. هل تريد المتابعة؟',
@@ -86,7 +126,7 @@ export default function SettingsScreen() {
     }
   };
 
-  // ── Biometric toggle ─────────────────────────────────────────────────────
+  // ── Biometric toggle ───────────────────────────────────────────────────────────
   const handleBiometricToggle = async (value: boolean) => {
     if (value && !settings.pinEnabled) {
       Alert.alert('', 'يجب تفعيل قفل PIN أولاً قبل تفعيل البصمة / الوجه.');
@@ -96,7 +136,7 @@ export default function SettingsScreen() {
     setSettings(s => ({ ...s, biometricEnabled: value }));
   };
 
-  // ── Save (text fields only) ───────────────────────────────────────────────
+  // ── Save (text fields only) ─────────────────────────────────────────────────
   const save = async () => {
     setSaving(true);
     await SettingsRepository.set('inspectorName', settings.inspectorName);
@@ -158,6 +198,39 @@ export default function SettingsScreen() {
         </View>
       </View>
 
+      {/* Notifications (Phase 21) */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>الإشعارات</Text>
+
+        {/* Agenda notifications */}
+        <View style={styles.switchRow}>
+          <Switch
+            value={agendaNotifOn}
+            onValueChange={handleAgendaNotifToggle}
+            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
+            thumbColor="#fff"
+          />
+          <View style={styles.switchLabelWrap}>
+            <Text style={styles.switchLabel}>تذكيرات الجدول الزمني</Text>
+            <Text style={styles.switchSub}>تنبيه قبل الزيارات التفتيشية</Text>
+          </View>
+        </View>
+
+        {/* CAP deadline notifications */}
+        <View style={[styles.switchRow, { borderBottomWidth: 0 }]}>
+          <Switch
+            value={capNotifOn}
+            onValueChange={handleCapNotifToggle}
+            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
+            thumbColor="#fff"
+          />
+          <View style={styles.switchLabelWrap}>
+            <Text style={styles.switchLabel}>إشعارات مواعيد الإجراءات التصحيحية</Text>
+            <Text style={styles.switchSub}>ملخص يومي وأسبوعي + تنبيهات بالمواعيد</Text>
+          </View>
+        </View>
+      </View>
+
       {/* Security */}
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>الأمان</Text>
@@ -182,7 +255,7 @@ export default function SettingsScreen() {
 
         {/* Biometric row — only shown if hardware exists */}
         {bioAvailable && (
-          <View style={styles.switchRow}>
+          <View style={[styles.switchRow, { borderBottomWidth: 0 }]}>
             <Switch
               value={settings.biometricEnabled}
               onValueChange={handleBiometricToggle}
@@ -247,9 +320,9 @@ const styles = StyleSheet.create({
   segBtnTextActive:{ color: '#2c7a4b' },
   switchRow:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
                      paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  switchLabelWrap: { flex: 1, flexDirection: 'row', justifyContent: 'space-between',
-                     alignItems: 'center', marginRight: 10 },
+  switchLabelWrap: { flex: 1, marginRight: 10, gap: 2 },
   switchLabel:     { fontSize: 14, color: '#1a1a2e', textAlign: 'right' },
+  switchSub:       { fontSize: 11, color: '#95a5a6', textAlign: 'right' },
   changePin:       { fontSize: 12, color: '#2c7a4b', textDecorationLine: 'underline' },
   linkRow:         { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
   linkText:        { fontSize: 14, color: '#2c7a4b', textAlign: 'right', fontWeight: '500' },

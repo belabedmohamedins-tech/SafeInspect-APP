@@ -9,7 +9,7 @@ import { startSyncScheduler } from '../src/db/syncEngine';
 import { I18nProvider } from '../src/i18n';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
 
-// ── Expo Go guard (mirrors CapNotificationService) ────────────────────────────
+// ── Expo Go guard (mirrors CapNotificationService) ───────────────────────────────
 const IS_EXPO_GO = Constants.appOwnership === 'expo';
 
 let Notifications: typeof import('expo-notifications') | null = null;
@@ -31,7 +31,7 @@ export default function RootLayout() {
     typeof import('expo-notifications')['addNotificationResponseReceivedListener']
   > | null>(null);
 
-  // ── 1. Initialize DB and sync scheduler on app start ──────────────────────
+  // ── 1. Initialize DB and sync scheduler on app start ────────────────────────
   useEffect(() => {
     let stopSync: (() => void) | undefined;
 
@@ -49,7 +49,7 @@ export default function RootLayout() {
     };
   }, []);
 
-  // ── 2. Single auth guard — runs once after DB is ready ────────────────────
+  // ── 2. Single auth guard — runs once after DB is ready ──────────────────────
   useEffect(() => {
     if (!dbReady) return;
 
@@ -79,13 +79,18 @@ export default function RootLayout() {
     })();
   }, [dbReady]);
 
-  // ── 3. Notification tap deep-link handler (Phase 15) ─────────────────────
+  // ── 3. Notification tap deep-link handler (Phase 15 + Phase 21) ──────────────
   //
-  // Listens for user taps on any scheduled notification whose `data` payload
-  // contains a `screen` key.  Supported payloads:
+  // Handles taps on any scheduled notification by reading its `data` payload.
   //
-  //   { screen: 'actions', filter: 'overdue' | 'all' }  — digest / per-item
-  //   { screen: 'actions', capId: '<id>' }               — per-item fallback
+  // Supported payloads:
+  //
+  //   CAP notifications (per-item / daily digest / weekly digest):
+  //     { screen: 'actions', filter: 'overdue' | 'all' }
+  //     { screen: 'actions', capId: '<id>' }  ← per-item fallback
+  //
+  //   Agenda notifications (1-hour-before / morning-of):
+  //     { agendaId: '<id>' }  ← navigates to the Agenda tab (Phase 21)
   //
   // No-op in Expo Go (Notifications is null there).
   useEffect(() => {
@@ -98,15 +103,30 @@ export default function RootLayout() {
           if (!data) return;
 
           const screen = data.screen;
+
+          // — CAP notifications —
           if (screen === 'actions') {
             const filter = data.filter as string | undefined;
             router.push({
               pathname: '/(tabs)/actions',
               params:   filter ? { filter } : {},
             });
+            return;
           }
+
+          // — Agenda notifications (Phase 21) —
+          // Identifier pattern: "agenda-<id>-pre" or "agenda-<id>-day"
+          // Payload: { agendaId: '<id>' }
+          if (data.agendaId) {
+            router.push({
+              pathname: '/(tabs)/agenda',
+              params:   { highlight: data.agendaId },
+            });
+            return;
+          }
+
           // Future screens can be added here:
-          // else if (screen === 'reports') { router.push('/screens/reports'); }
+          // if (screen === 'reports') { router.push('/screens/reports'); }
         } catch (err) {
           console.warn('[_layout] notification tap handler error:', err);
         }
