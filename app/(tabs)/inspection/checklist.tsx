@@ -1,12 +1,11 @@
 // app/(tabs)/inspection/checklist.tsx
-// Phase-5: opening-meeting gate safety-net + closing-meeting gate
-// before handleFinish is allowed to proceed.
-// Gate flags are threaded into checklistParams so saveInspection always
-// persists the current state on every auto-save and on finish.
+// Phase-5: opening-meeting gate safety-net + closing-meeting gate.
+// Phase-6: decision-support panel shown when all items are evaluated;
+//          escalationOverrideReason threaded into saveInspection.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -27,6 +26,7 @@ import InspectionItem from '../../../components/InspectionItem';
 import { Colors, Spacing } from '../../../constants';
 import { DifferentialBanner } from '../../../src/components/DifferentialBanner';
 import { DiffStatusIndicator } from '../../../src/components/DiffStatusIndicator';
+import { DecisionSupportPanel } from '../../../src/components/DecisionSupportPanel';
 import { useChecklistData } from '../../../src/hooks/useChecklistData';
 import { useCollapsibleSections } from '../../../src/hooks/useCollapsibleSections';
 import { useSignature } from '../../../src/hooks/useSignature';
@@ -34,6 +34,7 @@ import {
   buildDifferentialView,
   DifferentialView,
 } from '../../../src/services/differentialView';
+import { suggestDecision, SuggestedDecision } from '../../../src/services/decisionSupport';
 import { createCapItemsFromInspection } from '../../../src/services/capFactory';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../../src/types';
@@ -69,6 +70,9 @@ export default function ChecklistScreen() {
   const [showClosingGate, setShowClosingGate] = useState(false);
   const pendingFinish = useRef(false);
 
+  // ── Phase-6: decision support state ─────────────────────────────────────────
+  const [escalationOverrideReason, setEscalationOverrideReason] = useState<string | undefined>(undefined);
+
   const [diffView, setDiffView] = useState<DifferentialView | null>(null);
 
   // ── Build checklist params — gate flags are live state so paramsRef stays current ──
@@ -87,9 +91,11 @@ export default function ChecklistScreen() {
     lng:                 params.lng ? parseFloat(params.lng as string) : undefined,
     inspectionType,
     priorInspectionId,
-    // Phase-5: live flags — paramsRef.current always has the latest values
+    // Phase-5: live flags
     openingMeetingDone: openingDone,
     closingMeetingDone: closingDone,
+    // Phase-6: escalation override reason
+    escalationOverrideReason,
   };
 
   const {
@@ -128,11 +134,19 @@ export default function ChecklistScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
 
+  // ── Phase-6: compute suggested decision whenever items change ───────────────
+  const allEvaluated = !isLoading && data.length > 0 &&
+    data.every(i => i.complianceStatus !== 'not-evaluated');
+
+  const suggestedDecision = useMemo<SuggestedDecision | null>(() => {
+    if (!allEvaluated) return null;
+    return suggestDecision(data);
+  }, [allEvaluated, data]);
+
   // ── Phase-5: opening gate confirmed (safety-net path) ──────────────────────
   const handleOpeningConfirmed = () => {
     setShowOpeningGate(false);
     setOpeningDone(true);
-    // paramsRef is updated on next render automatically (checklistParams object is rebuilt)
   };
 
   const handleOpeningCancelled = () => {
@@ -140,8 +154,21 @@ export default function ChecklistScreen() {
     router.back();
   };
 
-  // ── Phase-5: handleFinish wraps the hook's _handleFinish with closing gate ──
+  // ── Phase-5/6: handleFinish wraps the hook's _handleFinish ──────────────────
   const handleFinish = () => {
+    // Phase-6 guard: if tier >= 3 and override is open but reason is empty, warn
+    if (
+      suggestedDecision &&
+      suggestedDecision.overrideRequired &&
+      escalationOverrideReason === '' // user opened override but left it blank
+    ) {
+      Alert.alert(
+        'سبب التجاوز مطلوب',
+        'الإجراء المقترح يستوجب إدخال سبب التجاوز قبل الإنهاء.',
+        [{ text: 'موافق' }],
+      );
+      return;
+    }
     if (!closingDone) {
       pendingFinish.current = true;
       setShowClosingGate(true);
@@ -155,8 +182,6 @@ export default function ChecklistScreen() {
     setClosingDone(true);
     if (pendingFinish.current) {
       pendingFinish.current = false;
-      // closingDone state update is async — call doFinish on next tick so
-      // paramsRef.current picks up closingMeetingDone: true before saveInspection runs
       setTimeout(doFinish, 0);
     }
   };
@@ -272,11 +297,20 @@ export default function ChecklistScreen() {
         )}
         contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
-          <ChecklistFooter
-            onCancel={handleCancel}
-            onSignature={() => setShowSignature(true)}
-            onFinish={handleFinish}
-          />
+          <>
+            {/* Phase-6: decision support panel — appears when all items are evaluated */}
+            {suggestedDecision && (
+              <DecisionSupportPanel
+                decision={suggestedDecision}
+                onOverrideReasonChange={setEscalationOverrideReason}
+              />
+            )}
+            <ChecklistFooter
+              onCancel={handleCancel}
+              onSignature={() => setShowSignature(true)}
+              onFinish={handleFinish}
+            />
+          </>
         }
       />
 
