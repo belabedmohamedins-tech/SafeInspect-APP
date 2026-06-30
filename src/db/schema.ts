@@ -48,6 +48,14 @@ export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   return _db;
 }
 
+/**
+ * initializeDatabase — convenience wrapper called by app/_layout.tsx on startup.
+ * Opens the database and runs all pending migrations.
+ */
+export async function initializeDatabase(): Promise<void> {
+  await getDb();
+}
+
 // ─── Migration runner ────────────────────────────────────────────────────────
 
 interface Migration {
