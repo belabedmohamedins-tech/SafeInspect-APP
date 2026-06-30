@@ -25,6 +25,15 @@ export const StorageKeys = {
   OFFICE_NAME:             'OFFICE_NAME',
   INSPECTOR_NAME:          'INSPECTOR_NAME',
   INSPECTION_CAUSE:        'INSPECTION_CAUSE',
+  // Phase-1 additions
+  /** Stores the current AsyncStorage schema version number (integer string). */
+  SCHEMA_VERSION:          '@schema_version',
+  /**
+   * Stores the last-used report sequence counter (integer string).
+   * Format when used: COMMUNE-YEAR-{padded counter}.
+   * Incremented by ReportSequenceService (Phase 8).
+   */
+  REPORT_SEQUENCE:         '@report_sequence',
 } as const;
 
 /** @deprecated use StorageKeys */
