@@ -12,6 +12,7 @@ import { computeScoreAndGrade } from '../utils/scoringUtils';
 import { getStatusText } from '../utils/statusUtils';
 import { InspectionRepository } from '../repositories/InspectionRepository';
 import { buildDifferentialViewSync, DifferentialView } from './differentialView';
+import { suggestDecision } from './decisionSupport';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────────────────
 
@@ -55,16 +56,12 @@ function gradeBadgeColor(grade?: string): string {
 /**
  * Builds the HTML block for the "تقرير التحقق من الإجراءات التصحيحية"
  * section inserted into follow-up inspection reports.
- *
- * @param diff   Pre-computed differential view (sync version).
- * @param prior  The prior inspection (for its date label).
  */
 function buildDifferentialSectionHTML(diff: DifferentialView): string {
   if (!diff.priorInspection) return '';
 
   const priorDate = formatDateLong(diff.priorInspection.date);
 
-  // ── Resolved rows ────────────────────────────────────────────────────────
   const resolvedRows = diff.resolved
     .map(
       e => `
@@ -78,7 +75,6 @@ function buildDifferentialSectionHTML(diff: DifferentialView): string {
     )
     .join('');
 
-  // ── Still-failing rows ───────────────────────────────────────────────────
   const failingRows = diff.stillFailing
     .map(
       e => `
@@ -92,7 +88,6 @@ function buildDifferentialSectionHTML(diff: DifferentialView): string {
     )
     .join('');
 
-  // ── New violations ────────────────────────────────────────────────────────
   const newRows = diff.newViolations
     .map(
       e => `
@@ -106,7 +101,6 @@ function buildDifferentialSectionHTML(diff: DifferentialView): string {
     )
     .join('');
 
-  // ── Escalation suggestion (3.6) ──────────────────────────────────────────
   const escalationHTML = diff.hasUnresolvedPriorViolations
     ? `<div style="margin-top:12px;background:#fff3cd;border-right:4px solid #f39c12;
          border-radius:6px;padding:10px 14px;font-size:12px;color:#856404;font-weight:600">
@@ -136,6 +130,69 @@ function buildDifferentialSectionHTML(diff: DifferentialView): string {
       </tbody>
     </table>
     ${escalationHTML}`;
+}
+
+// ─── Phase-6: Decision support section HTML ──────────────────────────────────
+
+function buildDecisionSectionHTML(
+  inspection: SavedInspection,
+  diffView?: DifferentialView | null,
+): string {
+  const scoring = computeScoreAndGrade(inspection.items);
+  const suggestion = suggestDecision(scoring, diffView);
+
+  const urgencyColors: Record<string, { bg: string; border: string; text: string }> = {
+    low:      { bg: '#f0faf4', border: '#a5d6a7', text: '#1b5e20' },
+    medium:   { bg: '#fffde7', border: '#ffe082', text: '#e65100' },
+    high:     { bg: '#fff3e0', border: '#ffcc80', text: '#e65100' },
+    critical: { bg: '#fce4ec', border: '#ef9a9a', text: '#b71c1c' },
+  };
+  const uc = urgencyColors[suggestion.urgency] ?? urgencyColors.medium;
+
+  const reasonsHTML = suggestion.reasons
+    .map(r => `<li style="margin-bottom:3px">${r}</li>`)
+    .join('');
+
+  const additionalRefsHTML = suggestion.additionalRefs.length > 0
+    ? suggestion.additionalRefs.map(r => `<span style="font-size:11px;color:#78909c"> — ${r}</span>`).join('')
+    : '';
+
+  const overrideHTML = inspection.escalationOverrideReason
+    ? `<div style="margin-top:10px;background:#fff9c4;border-right:3px solid #f9a825;
+           border-radius:6px;padding:8px 12px;font-size:12px;color:#f57f17">
+           <strong>سبب التجاوز:</strong> ${inspection.escalationOverrideReason}
+         </div>`
+    : '';
+
+  return `
+    <div class="section-title" style="margin-top:20px">القرار الإداري المقترح</div>
+    <div style="background:${uc.bg};border:1.5px solid ${uc.border};border-radius:10px;
+                padding:14px 18px;font-size:13px;color:${uc.text}">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong style="font-size:14px">${suggestion.actionLabel}</strong>
+        <span style="background:${uc.border};color:${uc.text};font-size:11px;font-weight:700;
+              padding:3px 10px;border-radius:12px">أولوية: ${urgencyLabelAr(suggestion.urgency)}</span>
+      </div>
+      <p style="margin-bottom:8px">${suggestion.rationale}</p>
+      <ul style="padding-right:18px;margin-bottom:8px">${reasonsHTML}</ul>
+      <p style="font-size:12px"><strong>الأساس القانوني:</strong> ${suggestion.legalBasis}${additionalRefsHTML}</p>
+      <p style="font-size:12px;margin-top:4px">📅 الزيارة القادمة المقترحة: خلال ${suggestion.nextVisitDays} يوم</p>
+      ${overrideHTML}
+      <p style="font-size:10px;color:#90a4ae;margin-top:10px;font-style:italic">
+        هذا الاقتراح أداة مساعدة فقط. القرار القانوني النهائي يعود للمفتش المختص
+        وفق أحكام القانون 03-10 والمرسوم التنفيذي 06-198.
+      </p>
+    </div>`;
+}
+
+function urgencyLabelAr(u: string): string {
+  switch (u) {
+    case 'low':      return 'منخفضة';
+    case 'medium':   return 'متوسطة';
+    case 'high':     return 'عالية';
+    case 'critical': return 'حرجة — تدخل فوري';
+    default:         return u;
+  }
 }
 
 // ─── HTML builder (full inspection report) ────────────────────────────────────────────────────
@@ -220,7 +277,6 @@ function buildReportHTML(
        </div>`
     : '';
 
-  // ── Phase-3: inspection type badge in header ──────────────────────────────
   const inspTypeMap: Record<string, string> = {
     routine:   'تفتيش روتيني',
     'follow-up': 'متابعة',
@@ -230,6 +286,22 @@ function buildReportHTML(
   const inspTypeBadgeColor = inspection.inspectionType === 'follow-up' ? '#2980b9'
     : inspection.inspectionType === 'complaint' ? '#e74c3c'
     : '#1a6b5a';
+
+  // ── Phase-6: decision support section ────────────────────────────────────
+  const decisionSectionHTML = buildDecisionSectionHTML(inspection, diffView);
+
+  // ── Phase-3: differential section ────────────────────────────────────────
+  const differentialSectionHTML =
+    inspection.inspectionType === 'follow-up' && diffView
+      ? buildDifferentialSectionHTML(diffView)
+      : '';
+
+  // ── Main checklist table — now with optional numericValue column ──────────
+  // Determine if ANY item in this inspection has a numericValue so we only
+  // add the extra column when there is data to show.
+  const hasNumericItems = inspection.items.some(
+    i => i.numericValue !== undefined && i.numericValue !== null,
+  );
 
   let rowIndex = 0;
   const groupsHTML = groups
@@ -241,7 +313,6 @@ function buildReportHTML(
           const even  = rowIndex++ % 2 === 0;
           const rowBg = even ? '#ffffff' : '#f9fafb';
 
-          // Phase-3: diff indicator inside main table cell
           const diffEntry = diffView?.all.find(e => e.item.id === item.id);
           let diffHTML = '';
           if (diffEntry && diffEntry.diffStatus !== 'unchanged' && diffEntry.diffStatus !== 'not-in-prior') {
@@ -258,6 +329,17 @@ function buildReportHTML(
             }
           }
 
+          // Phase-6: numeric value cell
+          const numericCell = hasNumericItems
+            ? `<td style="text-align:center;font-size:12px;color:#37474f;font-weight:600">${
+                item.numericValue !== undefined && item.numericValue !== null
+                  ? `${item.numericValue}${
+                      item.numericField?.unit ? ' ' + item.numericField.unit : ''
+                    }`
+                  : '—'
+              }</td>`
+            : '';
+
           return `
             <tr style="background:${rowBg}">
               <td>${item.criteria}${diffHTML}</td>
@@ -265,23 +347,24 @@ function buildReportHTML(
               <td class="status-cell" style="background:${bg};color:${color}">
                 ${getStatusText(item.complianceStatus)}
               </td>
+              ${numericCell}
               <td>${item.comment || ''}</td>
             </tr>`;
         })
         .join('');
+
+      const colspan = hasNumericItems ? 5 : 4;
       return `
         <tr class="axis-header-row">
-          <th colspan="4">${axis}</th>
+          <th colspan="${colspan}">${axis}</th>
         </tr>
         ${rows}`;
     })
     .join('');
 
-  // ── Phase-3: differential section HTML ─────────────────────────────────
-  const differentialSectionHTML =
-    inspection.inspectionType === 'follow-up' && diffView
-      ? buildDifferentialSectionHTML(diffView)
-      : '';
+  const numericColHeader = hasNumericItems
+    ? '<th style="width:80px;text-align:center">القيمة المقاسة</th>'
+    : '';
 
   const signatureHTML = inspection.signature
     ? `<div class="sig-section">
@@ -363,6 +446,7 @@ function buildReportHTML(
   ${scoreHTML}
   ${score !== undefined ? indicatorsTableHTML : ''}
   ${differentialSectionHTML}
+  ${decisionSectionHTML}
   <div class="checklist-title">بنود التفتيش</div>
   <table class="main-table">
     <thead>
@@ -370,6 +454,7 @@ function buildReportHTML(
         <th>المعيار</th>
         <th class="ref-col">المرجع القانوني</th>
         <th style="width:100px">النتيجة</th>
+        ${numericColHeader}
         <th>ملاحظات</th>
       </tr>
     </thead>
@@ -526,7 +611,6 @@ export async function exportInspectionPDF(inspection: SavedInspection): Promise<
   const settings = await SettingsRepository.get();
   const settingsInspector = settings.inspectorName ?? '';
 
-  // Phase-3: load prior inspection for follow-up diff
   let diffView: DifferentialView | null = null;
   if (inspection.inspectionType === 'follow-up') {
     try {
@@ -610,13 +694,16 @@ export async function exportInspectionCSV(inspection: SavedInspection): Promise<
     return;
   }
   try {
-    const headers = ['المحور', 'الفئة', 'المعيار', 'المرجع القانوني', 'النتيجة', 'ملاحظات'];
+    const headers = ['المحور', 'الفئة', 'المعيار', 'المرجع القانوني', 'النتيجة', 'القيمة المقاسة', 'ملاحظات'];
     const rows = inspection.items.map(item => [
       item.axis || '',
       item.category || '',
       item.criteria,
       item.legalReference || '-',
       getStatusText(item.complianceStatus),
+      item.numericValue !== undefined && item.numericValue !== null
+        ? `${item.numericValue}${item.numericField?.unit ? ' ' + item.numericField.unit : ''}`
+        : '',
       item.comment || '',
     ]);
 

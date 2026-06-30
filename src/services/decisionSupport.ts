@@ -1,171 +1,178 @@
 // src/services/decisionSupport.ts
-// Phase 6 — Decision Support / Suggested Next Step
 //
-// Pure logic: no React, no AsyncStorage, no side effects.
-// Input:  the finalised InspectionItem[] from a completed checklist session.
-// Output: a SuggestedDecision that the UI renders and the inspector may override.
+// DECISION SUPPORT — Phase 6
+// ─────────────────────────
+// Pure function that derives a structured DecisionSuggestion from a
+// ScoringResult and (optionally) a DifferentialView.  It never writes to
+// storage; the caller decides what to do with the suggestion.
+//
+// Legal framework: Algerian law 03-10 (environmental protection) and
+// Executive Decree 06-198 (inspection procedures).  All suggested actions
+// map to real articles — the inspector must confirm before acting.
 
-import { InspectionItem } from '../types';
+import { ScoringResult, Grade } from '../utils/scoringUtils';
+import { DifferentialView } from './differentialView';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Public types
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
 
-/**
- * Escalation tier derived from Décret Exécutif 06-198 (art. 20-24).
- *
- * | Tier | Arabic label            | Legal basis         |
- * |------|-------------------------|---------------------|
- * | 0    | لا إجراء                | —                   |
- * | 1    | ملاحظات كتابية          | art. 20 para. 1     |
- * | 2    | إنذار رسمي (إعذار)      | art. 20 para. 2     |
- * | 3    | إحالة على الوالي        | art. 22             |
- * | 4    | إحالة على النيابة العامة | art. 24             |
- */
-export type EscalationTier = 0 | 1 | 2 | 3 | 4;
+export type DecisionAction =
+  | 'close-file'          // Grade A — full compliance, file closed
+  | 'schedule-routine'   // Grade A/B — routine follow-up
+  | 'notice'             // Grade B/C — formal notice
+  | 'formal-warning'     // Grade C — formal warning (إنذار رسمي)
+  | 'partial-closure'    // Grade D or unresolved repeat violations
+  | 'immediate-closure'  // Grade D + ≥3 high violations (imminent danger)
+  | 'escalate-authority';// Unresolved prior + new violations → refer to wilaya
 
-export interface SuggestedDecision {
-  /** Computed escalation tier (0 = no action). */
-  tier: EscalationTier;
-  /** Short Arabic label for this tier. */
-  tierLabel: string;
-  /** Colour to represent the tier in the UI (hex). */
-  tierColour: string;
-  /** Article reference(s) from Décret 06-198 to surface in the UI. */
-  articleRef: string;
-  /** Count of non-compliant items. */
-  nonCompliantCount: number;
-  /** Count of non-compliant items flagged as repeat violations. */
-  repeatViolationCount: number;
-  /** True when at least one high-severity repeat violation was found. */
-  hasHighSeverityRepeat: boolean;
-  /** True when the inspector should be forced to enter an override reason
-   *  before they can deviate from this suggestion. */
-  overrideRequired: boolean;
-  /** Total evaluated items (excludes 'not-evaluated' and 'na'). */
-  evaluatedCount: number;
+export type Urgency = 'low' | 'medium' | 'high' | 'critical';
+
+export interface DecisionSuggestion {
+  /** Main recommended administrative action. */
+  action: DecisionAction;
+
+  /** Human-readable Arabic label for the action. */
+  actionLabel: string;
+
+  /** Urgency level — drives badge colour in the UI. */
+  urgency: Urgency;
+
+  /** Short Arabic rationale (1–2 sentences). */
+  rationale: string;
+
+  /** Ordered list of supporting reasons (Arabic). */
+  reasons: string[];
+
+  /** Primary legal basis (article citation). */
+  legalBasis: string;
+
+  /** Secondary legal references if applicable. */
+  additionalRefs: string[];
+
+  /** Recommended days until next visit (mirrors riskLevel). */
+  nextVisitDays: number;
+
+  /** True when a critical override was applied (grade worse than raw score). */
+  criticalOverride: boolean;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Tier meta
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Label maps ───────────────────────────────────────────────────────────────
 
-const TIER_META: Record<
-  EscalationTier,
-  { label: string; colour: string; article: string }
-> = {
-  0: {
-    label: 'لا إجراء',
-    colour: '#437a22',   // success green
-    article: '—',
-  },
-  1: {
-    label: 'ملاحظات كتابية',
-    colour: '#d19900',   // gold
-    article: 'المادة 20 الفقرة 1 من المرسوم 06-198',
-  },
-  2: {
-    label: 'إنذار رسمي (إعذار)',
-    colour: '#da7101',   // orange
-    article: 'المادة 20 الفقرة 2 من المرسوم 06-198',
-  },
-  3: {
-    label: 'إحالة على الوالي',
-    colour: '#a12c7b',   // error pink
-    article: 'المادة 22 من المرسوم 06-198',
-  },
-  4: {
-    label: 'إحالة على النيابة العامة',
-    colour: '#a13544',   // notification red
-    article: 'المادة 24 من المرسوم 06-198',
-  },
+const ACTION_LABELS: Record<DecisionAction, string> = {
+  'close-file':        'إغلاق الملف — مطابقة كاملة',
+  'schedule-routine':  'جدولة زيارة متابعة دورية',
+  'notice':            'توجيه ملاحظة رسمية',
+  'formal-warning':    'إصدار إنذار رسمي',
+  'partial-closure':   'إغلاق جزئي أو وقف نشاط',
+  'immediate-closure': 'إغلاق فوري (خطر داهم)',
+  'escalate-authority':'إحالة إلى السلطة الولائية',
 };
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Core logic
-// ─────────────────────────────────────────────────────────────────────────────
+// ─── Core logic ───────────────────────────────────────────────────────────────
 
-/**
- * Derives the suggested escalation decision from a set of inspection items.
- *
- * Rules (in order of priority — first match wins):
- *
- * Tier 4 — court referral
- *   • ≥ 2 high-severity repeat violations
- *
- * Tier 3 — Wali referral
- *   • 1 high-severity repeat violation
- *   OR
- *   • non-compliant items ≥ 40 % of evaluated items AND ≥ 1 repeat violation
- *
- * Tier 2 — formal notice (mise en demeure)
- *   • non-compliant items ≥ 30 % of evaluated items
- *   OR
- *   • ≥ 3 high-severity non-compliant items (no repeat required)
- *
- * Tier 1 — written observations
- *   • any non-compliant items (medium or low only, or < 30 %)
- *
- * Tier 0 — no action
- *   • zero non-compliant items among evaluated items
- */
-export function suggestDecision(items: InspectionItem[]): SuggestedDecision {
-  // --- count relevant items ---
-  const evaluated = items.filter(
-    (i) => i.complianceStatus !== 'not-evaluated' && i.complianceStatus !== 'na',
-  );
-  const nonCompliant = evaluated.filter(
-    (i) => i.complianceStatus === 'non-compliant',
-  );
-  const repeatViolations = nonCompliant.filter((i) => i.isRepeatViolation);
-  const highSeverityRepeats = repeatViolations.filter(
-    (i) => i.severity === 'high',
-  );
-  const highSeverityNonCompliant = nonCompliant.filter(
-    (i) => i.severity === 'high',
-  );
+export function suggestDecision(
+  scoring: ScoringResult,
+  diff?: DifferentialView | null,
+): DecisionSuggestion {
+  const { grade, violations, criticalOverride, nextInspectionDays, incomplete } = scoring;
 
-  const evaluatedCount = evaluated.length;
-  const nonCompliantCount = nonCompliant.length;
-  const repeatViolationCount = repeatViolations.length;
-  const hasHighSeverityRepeat = highSeverityRepeats.length > 0;
+  const reasons: string[] = [];
+  const additionalRefs: string[] = [];
+  let action: DecisionAction;
+  let urgency: Urgency;
+  let legalBasis: string;
+  let rationale: string;
 
-  const nonCompliantRatio =
-    evaluatedCount > 0 ? nonCompliantCount / evaluatedCount : 0;
-
-  // --- tier decision ---
-  let tier: EscalationTier;
-
-  if (highSeverityRepeats.length >= 2) {
-    tier = 4;
-  } else if (
-    highSeverityRepeats.length >= 1 ||
-    (nonCompliantRatio >= 0.4 && repeatViolationCount > 0)
-  ) {
-    tier = 3;
-  } else if (
-    nonCompliantRatio >= 0.3 ||
-    highSeverityNonCompliant.length >= 3
-  ) {
-    tier = 2;
-  } else if (nonCompliantCount > 0) {
-    tier = 1;
-  } else {
-    tier = 0;
+  // ── Collect contextual reasons ─────────────────────────────────────────────
+  if (incomplete) {
+    reasons.push('لم تكتمل نسبة التقييم المطلوبة (أقل من 60 ٪ من البنود المُقيَّمة)');
+  }
+  if (violations.high > 0) {
+    reasons.push(`${violations.high} مخالفة عالية الخطورة مسجّلة`);
+  }
+  if (violations.medium > 0) {
+    reasons.push(`${violations.medium} مخالفة متوسطة الخطورة`);
+  }
+  if (criticalOverride) {
+    reasons.push('تم تطبيق قاعدة التجاوز الحرج — التصنيف أسوأ من الدرجة الخام');
   }
 
-  const meta = TIER_META[tier];
+  const hasUnresolved = diff?.hasUnresolvedPriorViolations ?? false;
+  const hasNewOnTop   = diff ? diff.newViolations.length > 0 : false;
+  const resolvedCount = diff?.resolved.length ?? 0;
+
+  if (hasUnresolved) {
+    reasons.push('مخالفات من الزيارة السابقة لم تُعالج');
+  }
+  if (hasNewOnTop) {
+    reasons.push(`${diff!.newViolations.length} مخالفة جديدة ظهرت منذ الزيارة السابقة`);
+  }
+  if (resolvedCount > 0) {
+    reasons.push(`${resolvedCount} مخالفة تم تصحيحها منذ الزيارة السابقة`);
+  }
+
+  // ── Decision tree ──────────────────────────────────────────────────────────
+  // Priority: imminent danger → escalation → grade-based
+
+  if (grade === 'D' && violations.high >= 3) {
+    // Imminent danger — immediate closure
+    action    = 'immediate-closure';
+    urgency   = 'critical';
+    legalBasis = 'المادة 56 من القانون 03-10';
+    additionalRefs.push('المرسوم التنفيذي 06-198 المادة 22');
+    rationale = 'وجود 3 مخالفات أو أكثر عالية الخطورة يُشكّل خطراً داهماً يستوجب الإغلاق الفوري وفق المادة 56.';
+
+  } else if (hasUnresolved && hasNewOnTop) {
+    // Unresolved + new violations → escalate
+    action    = 'escalate-authority';
+    urgency   = 'critical';
+    legalBasis = 'المادة 60 من القانون 03-10';
+    additionalRefs.push('المرسوم التنفيذي 06-198 المادة 30');
+    rationale = 'مخالفات متكررة غير مُصحَّحة مع ظهور مخالفات جديدة — يُوجب الإحالة إلى السلطة الولائية.';
+
+  } else if (grade === 'D') {
+    action    = hasUnresolved ? 'partial-closure' : 'formal-warning';
+    urgency   = 'high';
+    legalBasis = 'المادة 54 من القانون 03-10';
+    additionalRefs.push('المرسوم التنفيذي 06-198 المادة 18');
+    rationale = hasUnresolved
+      ? 'درجة D مع مخالفات سابقة غير مُعالجة — يُقترح الإغلاق الجزئي أو وقف النشاط.'
+      : 'درجة D تستلزم إصدار إنذار رسمي وتحديد مهلة للتصحيح.';
+
+  } else if (grade === 'C') {
+    action    = hasUnresolved ? 'formal-warning' : 'notice';
+    urgency   = hasUnresolved ? 'high' : 'medium';
+    legalBasis = 'المادة 48 من القانون 03-10';
+    rationale = hasUnresolved
+      ? 'درجة C مع مخالفات سابقة غير مُعالجة — الإنذار الرسمي هو الإجراء المناسب.'
+      : 'درجة C — توجيه ملاحظة رسمية مع تحديد إجراءات تصحيحية.';
+
+  } else if (grade === 'B') {
+    action    = 'schedule-routine';
+    urgency   = 'low';
+    legalBasis = 'المادة 44 من القانون 03-10';
+    rationale = 'درجة B — مستوى امتثال مقبول. يُكتفى بجدولة زيارة متابعة دورية.';
+
+  } else {
+    // Grade A
+    action    = 'close-file';
+    urgency   = 'low';
+    legalBasis = 'المادة 44 من القانون 03-10';
+    rationale = 'درجة A — مطابقة كاملة. يمكن إغلاق الملف أو جدولة زيارة روتينية بعد 24 شهراً.';
+  }
+
+  if (reasons.length === 0) {
+    reasons.push('لا توجد ملاحظات إضافية');
+  }
 
   return {
-    tier,
-    tierLabel: meta.label,
-    tierColour: meta.colour,
-    articleRef: meta.article,
-    nonCompliantCount,
-    repeatViolationCount,
-    hasHighSeverityRepeat,
-    // Override is required (must enter reason) for tier ≥ 3
-    overrideRequired: tier >= 3,
-    evaluatedCount,
+    action,
+    actionLabel: ACTION_LABELS[action],
+    urgency,
+    rationale,
+    reasons,
+    legalBasis,
+    additionalRefs,
+    nextVisitDays: nextInspectionDays,
+    criticalOverride,
   };
 }
