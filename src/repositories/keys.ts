@@ -2,7 +2,7 @@
 
 export const StorageKeys = {
   FACILITIES:              'FACILITIES',
-  USER_FACILITIES:         'FACILITIES',
+  USER_FACILITIES:         'USER_FACILITIES',
   INSPECTIONS:             'INSPECTIONS',
   AGENDA:                  'AGENDA',
   SETTINGS:                'SETTINGS',

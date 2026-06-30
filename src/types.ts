@@ -53,6 +53,8 @@ export interface SavedInspection {
   facilityName: string;
   facilityAddress: string;
   date: string;
+  /** ISO datetime — stamped on every save(); used by SyncService for newest-wins dedup. */
+  updatedAt?: string;
   /** The name of the inspector / writer who conducted the inspection. */
   inspectorName: string;
   items: InspectionItem[];
