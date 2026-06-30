@@ -38,14 +38,14 @@
     "react": "19.2.3",
     "react-native": "0.85.3",
     "react-native-collapsible": "^1.6.1",
-    "react-native-gesture-handler": "~2.31.1",
+    "react-native-gesture-handler": "~2.21.2",
     "react-native-modal-datetime-picker": "^17.1.0",
-    "react-native-reanimated": "~3.17.4",
-    "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "4.25.2",
+    "react-native-reanimated": "~3.16.7",
+    "react-native-safe-area-context": "~5.0.0",
+    "react-native-screens": "~4.4.0",
     "react-native-signature-canvas": "^4.7.2",
-    "react-native-svg": "15.15.4",
-    "react-native-webview": "13.16.1"
+    "react-native-svg": "15.8.0",
+    "react-native-webview": "13.12.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
