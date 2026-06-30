@@ -2,7 +2,8 @@
 // Phase-5: opening-meeting gate safety-net + closing-meeting gate.
 // Phase-6: decision-support panel shown when all items are evaluated;
 //          escalationOverrideReason threaded into saveInspection.
-// Phase-1.2: NumericInputField wired — handleNumericChange threaded into InspectionItem.
+// Phase-7: suggestDecision call site fixed — passes ScoringResult (from
+//          computeScoreAndGrade) + diffView rather than the raw items array.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -35,10 +36,11 @@ import {
   buildDifferentialView,
   DifferentialView,
 } from '../../../src/services/differentialView';
-import { suggestDecision, SuggestedDecision } from '../../../src/services/decisionSupport';
+import { suggestDecision, DecisionSuggestion } from '../../../src/services/decisionSupport';
 import { createCapItemsFromInspection } from '../../../src/services/capFactory';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../../src/types';
+import { computeScoreAndGrade } from '../../../src/utils/scoringUtils';
 
 /** Safely parse a JSON string that is expected to be a string[]. */
 function parseStringArray(raw: string | string[] | undefined): string[] {
@@ -136,14 +138,17 @@ export default function ChecklistScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
 
-  // ── Phase-6: compute suggested decision whenever items change ─────────────
+  // ── Phase-6/7: compute suggested decision whenever items change ──────────
+  // suggestDecision requires a ScoringResult, so we compute the score first.
+  // This is cheap (pure function, no I/O).
   const allEvaluated = !isLoading && data.length > 0 &&
     data.every(i => i.complianceStatus !== 'not-evaluated');
 
-  const suggestedDecision = useMemo<SuggestedDecision | null>(() => {
+  const suggestedDecision = useMemo<DecisionSuggestion | null>(() => {
     if (!allEvaluated) return null;
-    return suggestDecision(data);
-  }, [allEvaluated, data]);
+    const scoring = computeScoreAndGrade(data);
+    return suggestDecision(scoring, diffView);
+  }, [allEvaluated, data, diffView]);
 
   // ── Phase-5: opening gate confirmed (safety-net path) ────────────────────
   const handleOpeningConfirmed = () => {
@@ -160,8 +165,8 @@ export default function ChecklistScreen() {
   const handleFinish = () => {
     if (
       suggestedDecision &&
-      suggestedDecision.overrideRequired &&
-      escalationOverrideReason === ''
+      suggestedDecision.urgency === 'critical' &&
+      !escalationOverrideReason
     ) {
       Alert.alert(
         'سبب التجاوز مطلوب',
@@ -300,7 +305,7 @@ export default function ChecklistScreen() {
         contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
           <>
-            {/* Phase-6: decision support panel */}
+            {/* Phase-6/7: decision support panel */}
             {suggestedDecision && (
               <DecisionSupportPanel
                 decision={suggestedDecision}

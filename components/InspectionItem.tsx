@@ -1,4 +1,11 @@
 // components/InspectionItem.tsx
+// Phase-7:
+//   • NumericInputField shown for measurement items BEFORE status is set
+//     (entering a reading drives complianceStatus automatically via the hook).
+//   • All 5 ComplianceStatus values available as buttons:
+//     compliant / non-compliant / na / observation-only / unable-to-verify.
+//   • STATUS_BUTTONS split into primary row (3) + secondary row (2 extras).
+
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
 import React, { memo, useState } from 'react';
@@ -26,11 +33,18 @@ interface Props {
   onStatusChange:  (id: string, status: ComplianceStatus) => void;
   onCommentChange: (id: string, comment: string) => void;
   onPhotoTake:     (id: string, uri: string | undefined) => void;
-  /** Phase-1.2: called whenever the inspector changes a numeric measurement. */
+  /** Phase-1.2 / Phase-7: called whenever the inspector changes a numeric measurement. */
   onNumericChange?: (id: string, value: number | undefined) => void;
 }
 
-const STATUS_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
+/** Primary buttons — always visible. */
+const PRIMARY_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
+
+/**
+ * Secondary buttons — shown in a smaller row beneath.
+ * Phase 4 statuses: observation-only (no penalty) and unable-to-verify.
+ */
+const SECONDARY_BUTTONS: ComplianceStatus[] = ['observation-only', 'unable-to-verify'];
 
 /** Map ControlType value → Arabic display label */
 function controlTypeLabel(ct: string): string {
@@ -159,7 +173,7 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
     );
   };
 
-  const isEvaluated = item.complianceStatus !== 'not-evaluated';
+  const isEvaluated   = item.complianceStatus !== 'not-evaluated';
   const hasMeasurement = !!item.numericField;
 
   return (
@@ -192,6 +206,12 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
               </Text>
             </View>
           )}
+          {/* Phase-7: show repeat-violation badge */}
+          {item.isRepeatViolation && (
+            <View style={styles.repeatBadge}>
+              <Text style={styles.repeatBadgeText}>تكرار</Text>
+            </View>
+          )}
         </View>
         <TouchableOpacity onPress={() => setLegalModalVisible(true)} style={styles.infoButton}>
           <FontAwesome name="info-circle" size={20} color={Colors.primary} />
@@ -202,9 +222,19 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
       <Text style={styles.criteria}>{item.criteria}</Text>
       <Text style={styles.reference}>{item.legalReference}</Text>
 
-      {/* ── Status buttons + camera button ── */}
-      <View style={styles.buttonsRow}>
-        {STATUS_BUTTONS.map((status) => {
+      {/* ── Phase-7: Numeric field shown BEFORE status for measurement items ── */}
+      {hasMeasurement && item.numericField && (
+        <NumericInputField
+          spec={item.numericField}
+          value={item.numericValue}
+          onChange={(v) => onNumericChange?.(item.id, v)}
+          disabled={false}
+        />
+      )}
+
+      {/* ── Primary status buttons (compliant / non-compliant / na) + camera ── */}
+      <View style={[styles.buttonsRow, hasMeasurement && styles.buttonsRowTopMargin]}>
+        {PRIMARY_BUTTONS.map((status) => {
           const active = item.complianceStatus === status;
           return (
             <TouchableOpacity
@@ -241,19 +271,35 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
         </TouchableOpacity>
       </View>
 
+      {/* ── Secondary status buttons (observation-only / unable-to-verify) ── */}
+      <View style={styles.secondaryRow}>
+        {SECONDARY_BUTTONS.map((status) => {
+          const active = item.complianceStatus === status;
+          return (
+            <TouchableOpacity
+              key={status}
+              style={[
+                styles.secondaryButton,
+                active && { backgroundColor: getStatusColor(status) + 'ee', borderColor: getStatusColor(status) },
+              ]}
+              onPress={() => handleStatusPress(status)}
+              accessibilityLabel={getStatusText(status)}
+              accessibilityState={{ selected: active }}>
+              <Text
+                style={[
+                  styles.secondaryButtonText,
+                  active && { color: '#fff', fontWeight: '700' },
+                ]}>
+                {getStatusText(status)}
+              </Text>
+            </TouchableOpacity>
+          );
+        })}
+      </View>
+
       {/* ── Reset hint ── */}
       {isEvaluated && (
         <Text style={styles.resetHint}>اضغط على الزر المحدد مرة أخرى لإلغاء التقييم</Text>
-      )}
-
-      {/* ── Phase-1.2: Numeric measurement field ── */}
-      {isEvaluated && hasMeasurement && item.numericField && (
-        <NumericInputField
-          spec={item.numericField}
-          value={item.numericValue}
-          onChange={(v) => onNumericChange?.(item.id, v)}
-          disabled={false}
-        />
       )}
 
       {/* ── Comment field ── */}
@@ -395,6 +441,18 @@ const styles = StyleSheet.create({
   controlMeasurement: { backgroundColor: '#007AFF20' },
   controlText:        { fontSize: 11, fontWeight: '500', color: Colors.textPrimary },
 
+  repeatBadge: {
+    backgroundColor: '#ff6b6b22',
+    borderWidth: 1,
+    borderColor: '#ff6b6b',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: 2,
+    borderRadius: Radius.sm,
+    marginRight: Spacing.xs,
+    marginBottom: Spacing.xs,
+  },
+  repeatBadgeText: { fontSize: 11, fontWeight: '700', color: '#c0392b' },
+
   infoButton: { padding: Spacing.xs },
 
   criteria:  { fontSize: 15, fontWeight: '600', color: Colors.textPrimary, marginBottom: Spacing.xs },
@@ -404,8 +462,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: Spacing.sm,
+    marginBottom: Spacing.xs,
   },
+  buttonsRowTopMargin: { marginTop: Spacing.sm },
+
   statusButton: {
     flex: 1,
     paddingVertical: Spacing.sm,
@@ -423,6 +483,31 @@ const styles = StyleSheet.create({
   },
   statusButtonText:       { fontSize: 12, fontWeight: '500', color: Colors.textPrimary },
   statusButtonTextActive: { color: Colors.textInverse },
+
+  // ── Secondary row (observation-only / unable-to-verify) ──
+  secondaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: Spacing.sm,
+  },
+  secondaryButton: {
+    flex: 1,
+    paddingVertical: 5,
+    marginHorizontal: 2,
+    borderRadius: Radius.md - 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: Colors.surfaceOffset,
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
+  secondaryButtonText: {
+    fontSize: 11,
+    fontWeight: '500',
+    color: Colors.textSecondary,
+  },
 
   cameraButton: {
     padding: Spacing.sm,

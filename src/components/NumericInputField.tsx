@@ -4,15 +4,19 @@
  * Renders a stepper (− / +) with a manual TextInput for quantitative criteria.
  * Appears on checklist cards when item.numericField is defined.
  *
+ * Phase 7: deriveNumericCompliance and NumericComplianceState are now
+ * imported from src/utils/numericUtils.ts (shared location).
+ *
  * Props:
  *   spec       — NumericFieldSpec from the criterion definition
  *   value      — current numericValue on the InspectionItem (undefined = not set)
  *   onChange   — callback(value: number) — parent merges into item state
+ *   disabled   — greys out the control when true
  *
  * Live badge logic:
  *   compliant        — value within [min, max]
  *   warning          — value outside [min, max] but within warning zone
- *   non-compliant    — value outside all zones (or warning zone also exceeded)
+ *   non-compliant    — value outside all zones
  *   not-measured     — value is undefined
  */
 import React, { useState, useCallback } from 'react';
@@ -25,39 +29,19 @@ import {
   Platform,
 } from 'react-native';
 import { NumericFieldSpec } from '../types';
+import {
+  deriveNumericCompliance,
+  NumericComplianceState,
+} from '../utils/numericUtils';
 
-// ─── Compliance derivation ─────────────────────────────────────────────────────
-export type NumericComplianceState =
-  | 'compliant'
-  | 'warning'
-  | 'non-compliant'
-  | 'not-measured';
-
-export function deriveNumericCompliance(
-  value: number | undefined,
-  spec: NumericFieldSpec,
-): NumericComplianceState {
-  if (value === undefined || value === null || isNaN(value)) return 'not-measured';
-
-  const { min, max, warningMin, warningMax } = spec;
-
-  const aboveMin = min === undefined || value >= min;
-  const belowMax = max === undefined || value <= max;
-
-  if (aboveMin && belowMax) return 'compliant';
-
-  // Check warning zone
-  const aboveWarnMin = warningMin === undefined || value >= warningMin;
-  const belowWarnMax = warningMax === undefined || value <= warningMax;
-  if (aboveWarnMin && belowWarnMax) return 'warning';
-
-  return 'non-compliant';
-}
+// ─── Re-export so existing callers that import from this file continue to work ─
+export type { NumericComplianceState };
+export { deriveNumericCompliance };
 
 // ─── Badge colours ─────────────────────────────────────────────────────────────
 const BADGE_COLORS: Record<NumericComplianceState, { bg: string; text: string; border: string }> = {
-  compliant:     { bg: '#e8f5e9', text: '#2e7d32', border: '#a5d6a7' },
-  warning:       { bg: '#fff8e1', text: '#f57f17', border: '#ffe082' },
+  compliant:       { bg: '#e8f5e9', text: '#2e7d32', border: '#a5d6a7' },
+  warning:         { bg: '#fff8e1', text: '#f57f17', border: '#ffe082' },
   'non-compliant': { bg: '#fce4ec', text: '#c62828', border: '#ef9a9a' },
   'not-measured':  { bg: '#f5f5f5', text: '#757575', border: '#e0e0e0' },
 };
@@ -80,7 +64,6 @@ interface Props {
 export const NumericInputField: React.FC<Props> = ({ spec, value, onChange, disabled = false }) => {
   const step = spec.step ?? 0.1;
 
-  // Local text state so the user can type freely; we parse on blur
   const [text, setText] = useState<string>(
     value !== undefined ? String(value) : '',
   );
@@ -95,7 +78,6 @@ export const NumericInputField: React.FC<Props> = ({ spec, value, onChange, disa
         onChange(parsed);
         setText(String(parsed));
       } else {
-        // Revert to last valid value
         setText(value !== undefined ? String(value) : '');
       }
     },
@@ -123,7 +105,6 @@ export const NumericInputField: React.FC<Props> = ({ spec, value, onChange, disa
 
       {/* Stepper row */}
       <View style={styles.row}>
-        {/* Decrement */}
         <TouchableOpacity
           onPress={handleDecrement}
           disabled={disabled}
@@ -134,7 +115,6 @@ export const NumericInputField: React.FC<Props> = ({ spec, value, onChange, disa
           <Text style={styles.stepBtnText}>−</Text>
         </TouchableOpacity>
 
-        {/* Text input */}
         <TextInput
           style={[
             styles.input,
@@ -153,10 +133,8 @@ export const NumericInputField: React.FC<Props> = ({ spec, value, onChange, disa
           testID={`numeric-input-${spec.unit}`}
         />
 
-        {/* Unit */}
         <Text style={styles.unit}>{spec.unit}</Text>
 
-        {/* Increment */}
         <TouchableOpacity
           onPress={handleIncrement}
           disabled={disabled}

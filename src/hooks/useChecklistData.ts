@@ -1,4 +1,10 @@
 // src/hooks/useChecklistData.ts
+// Phase-5: opening-meeting gate flags passed into saved inspection.
+// Phase-6: escalationOverrideReason persisted on save.
+// Phase-7: handleNumericChange auto-derives complianceStatus from the
+//          measured value via numericStateToComplianceStatus so scoring is
+//          always in sync with the numeric reading.
+
 import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -15,6 +21,10 @@ import {
 } from '../types';
 import { getEvaluatedCount, groupByAxis } from '../utils/inspectionUtils';
 import { computeScoreAndGrade } from '../utils/scoringUtils';
+import {
+  deriveNumericCompliance,
+  numericStateToComplianceStatus,
+} from '../utils/numericUtils';
 
 /** Minimum fraction of applicable items that must be evaluated before finish. */
 const COMPLETION_GATE = 0.85;
@@ -175,10 +185,13 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  const handlePhotoTake = useCallback((id: string, uri: string) => {
+  const handlePhotoTake = useCallback((id: string, uri: string | undefined) => {
     setData(prev =>
       prev.map(item => {
         if (item.id !== id) return item;
+        if (uri === undefined) {
+          return { ...item, photoUri: undefined, photos: [] };
+        }
         const existingPhotos = item.photos ?? (item.photoUri ? [item.photoUri] : []);
         return {
           ...item,
@@ -190,21 +203,33 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   }, []);
 
   /**
-   * Phase-1.2: numeric measurement handler.
-   * Stores the raw numeric value (or undefined to clear) and the unit
-   * on the item so it is persisted with every save.
+   * Phase-7: numeric measurement handler.
+   * 1. Stores numericValue + numericUnit on the item.
+   * 2. If the item has a numericField spec, automatically derives the
+   *    complianceStatus from the reading so the score always reflects the
+   *    measured value — the inspector can still manually override afterwards.
    */
   const handleNumericChange = useCallback(
     (id: string, value: number | undefined) => {
       setData(prev =>
         prev.map(item => {
           if (item.id !== id) return item;
-          return {
-            ...item,
+
+          const updates: Partial<InspectionItem> = {
             numericValue: value,
-            // keep the unit from the spec; safe to read item.numericField here
             numericUnit: item.numericField?.unit ?? item.numericUnit,
           };
+
+          // Auto-derive compliance if a spec is present
+          if (item.numericField && value !== undefined) {
+            const numState = deriveNumericCompliance(value, item.numericField);
+            const derived  = numericStateToComplianceStatus(numState);
+            if (derived !== undefined) {
+              updates.complianceStatus = derived;
+            }
+          }
+
+          return { ...item, ...updates };
         })
       );
     },
