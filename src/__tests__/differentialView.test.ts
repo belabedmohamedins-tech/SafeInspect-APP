@@ -1,4 +1,9 @@
 // src/__tests__/differentialView.test.ts
+//
+// buildDifferentialViewSync is pure (no I/O) — test directly.
+// buildDifferentialView is async and calls InspectionRepository.getById —
+// spy on the real object so differentialView.ts is fully instrumented.
+
 import {
   buildDifferentialViewSync,
   buildDifferentialView,
@@ -6,20 +11,16 @@ import {
 import { InspectionRepository } from '../repositories/InspectionRepository';
 import { InspectionItem, SavedInspection } from '../types';
 
-jest.mock('../repositories/InspectionRepository');
-
-const mockGetById = InspectionRepository.getById as jest.Mock;
-
 function makeItem(
   id: string,
   complianceStatus: InspectionItem['complianceStatus'],
 ): InspectionItem {
   return {
     id,
-    criteria: `Criterion ${id}`,
+    criteria:         `Criterion ${id}`,
     complianceStatus,
-    severity: 'medium',
-    category: 'general',
+    severity:         'medium',
+    category:         'general',
   } as unknown as InspectionItem;
 }
 
@@ -30,19 +31,27 @@ function makeInspection(
 ): SavedInspection {
   return {
     id,
-    facilityId: 'fac-1',
-    facilityName: 'Test',
+    facilityId:      'fac-1',
+    facilityName:    'Test',
     facilityAddress: '',
-    date: '2024-01-01',
-    status: 'completed',
+    date:            '2024-01-01',
+    status:          'completed',
     items,
     priorInspectionId,
   } as unknown as SavedInspection;
 }
 
-beforeEach(() => jest.clearAllMocks());
+let spyGetById: jest.SpyInstance;
 
-// ─── buildDifferentialViewSync ────────────────────────────────────────────────
+beforeEach(() => {
+  spyGetById = jest
+    .spyOn(InspectionRepository, 'getById')
+    .mockResolvedValue(null);
+});
+
+afterEach(() => jest.restoreAllMocks());
+
+// ─── buildDifferentialViewSync (pure) ─────────────────────────────────────────
 
 describe('buildDifferentialViewSync', () => {
   it('marks all entries as not-in-prior when prior is null', () => {
@@ -87,28 +96,27 @@ describe('buildDifferentialViewSync', () => {
     expect(view.all[0].diffStatus).toBe('unchanged');
   });
 
-  it('marks a new criterion (not in prior) as not-in-prior', () => {
+  it('marks a new criterion not in prior as not-in-prior', () => {
     const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
     const current = makeInspection('c1', [
       makeItem('i1', 'compliant'),
-      makeItem('i2', 'non-compliant'), // new criterion
+      makeItem('i2', 'non-compliant'),
     ]);
     const view = buildDifferentialViewSync(current, prior);
-    const i2entry = view.all.find(e => e.item.id === 'i2')!;
-    expect(i2entry.diffStatus).toBe('not-in-prior');
+    expect(view.all.find(e => e.item.id === 'i2')!.diffStatus).toBe('not-in-prior');
   });
 
-  it('handles mixed scenario correctly', () => {
+  it('handles a mixed scenario correctly', () => {
     const prior = makeInspection('p1', [
-      makeItem('r1', 'non-compliant'), // will be resolved
-      makeItem('s1', 'non-compliant'), // still failing
-      makeItem('u1', 'compliant'),     // unchanged
+      makeItem('r1', 'non-compliant'),
+      makeItem('s1', 'non-compliant'),
+      makeItem('u1', 'compliant'),
     ]);
     const current = makeInspection('c1', [
       makeItem('r1', 'compliant'),
       makeItem('s1', 'non-compliant'),
       makeItem('u1', 'compliant'),
-      makeItem('n1', 'non-compliant'), // new
+      makeItem('n1', 'non-compliant'),
     ]);
     const view = buildDifferentialViewSync(current, prior);
     expect(view.resolved).toHaveLength(1);
@@ -117,7 +125,7 @@ describe('buildDifferentialViewSync', () => {
     expect(view.hasUnresolvedPriorViolations).toBe(true);
   });
 
-  it('attaches the prior inspection to the view', () => {
+  it('attaches the prior inspection to the returned view', () => {
     const prior   = makeInspection('p1', []);
     const current = makeInspection('c1', []);
     const view = buildDifferentialViewSync(current, prior);
@@ -128,23 +136,22 @@ describe('buildDifferentialViewSync', () => {
 // ─── buildDifferentialView (async) ───────────────────────────────────────────
 
 describe('buildDifferentialView', () => {
-  it('returns a no-op diff when priorInspectionId is undefined', async () => {
+  it('returns a no-op diff when priorInspectionId is absent', async () => {
     const current = makeInspection('c1', [makeItem('i1', 'non-compliant')]);
     const view = await buildDifferentialView(current);
     expect(view.priorInspection).toBeNull();
     expect(view.all[0].diffStatus).toBe('not-in-prior');
   });
 
-  it('returns a no-op diff when prior is not found in repository', async () => {
-    mockGetById.mockResolvedValue(null);
+  it('returns a no-op diff when getById returns null', async () => {
     const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], 'p1');
     const view = await buildDifferentialView(current);
     expect(view.priorInspection).toBeNull();
   });
 
-  it('builds correct diff when prior is found', async () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'non-compliant')]);
-    mockGetById.mockResolvedValue(prior);
+  it('builds correct diff when prior is found via getById', async () => {
+    const prior = makeInspection('p1', [makeItem('i1', 'non-compliant')]);
+    spyGetById.mockResolvedValue(prior);
     const current = makeInspection('c1', [makeItem('i1', 'compliant')], 'p1');
     const view = await buildDifferentialView(current);
     expect(view.resolved).toHaveLength(1);

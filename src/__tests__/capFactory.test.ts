@@ -1,12 +1,12 @@
 // src/__tests__/capFactory.test.ts
+//
+// Uses jest.spyOn() on the real repository object so that capFactory.ts
+// is fully executed and instrumented by Jest's coverage collector.
+// (jest.mock() auto-mocks prevent the source file from running at all.)
+
 import { createCapItemsFromInspection } from '../services/capFactory';
 import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
 import { SavedInspection, InspectionItem } from '../types';
-
-jest.mock('../repositories/CorrectiveActionRepository');
-
-const mockGetByInspection = CorrectiveActionRepository.getByInspection as jest.Mock;
-const mockSave           = CorrectiveActionRepository.save as jest.Mock;
 
 function makeItem(
   id: string,
@@ -16,122 +16,107 @@ function makeItem(
 ): InspectionItem {
   return {
     id,
-    criteria: `Criterion ${id}`,
+    criteria:         `Criterion ${id}`,
     complianceStatus,
     severity,
     sanctionTier,
-    category: 'general',
+    category:         'general',
+    comment:          '',
   } as unknown as InspectionItem;
 }
 
 function makeInspection(items: InspectionItem[]): SavedInspection {
   return {
-    id: 'insp-1',
-    facilityId: 'fac-1',
-    facilityName: 'Test Facility',
+    id:              'insp-1',
+    facilityId:      'fac-1',
+    facilityName:    'Test Facility',
     facilityAddress: '123 Main St',
-    date: '2024-01-01',
-    status: 'completed',
+    date:            '2024-01-01',
+    status:          'completed',
     items,
   } as unknown as SavedInspection;
 }
 
+let spyGetByInspection: jest.SpyInstance;
+let spySave:            jest.SpyInstance;
+
 beforeEach(() => {
-  jest.clearAllMocks();
-  mockGetByInspection.mockResolvedValue([]);
-  mockSave.mockResolvedValue(undefined);
+  spyGetByInspection = jest
+    .spyOn(CorrectiveActionRepository, 'getByInspection')
+    .mockResolvedValue([]);
+  spySave = jest
+    .spyOn(CorrectiveActionRepository, 'save')
+    .mockResolvedValue({} as any);
 });
+
+afterEach(() => jest.restoreAllMocks());
 
 describe('createCapItemsFromInspection', () => {
   it('does not call save when there are no non-compliant items', async () => {
-    const inspection = makeInspection([makeItem('1', 'compliant')]);
-    await createCapItemsFromInspection(inspection);
-    expect(mockSave).not.toHaveBeenCalled();
+    await createCapItemsFromInspection(makeInspection([makeItem('1', 'compliant')]));
+    expect(spySave).not.toHaveBeenCalled();
   });
 
   it('creates one CAP entry per non-compliant item', async () => {
-    const inspection = makeInspection([
+    await createCapItemsFromInspection(makeInspection([
       makeItem('1', 'non-compliant'),
       makeItem('2', 'non-compliant'),
       makeItem('3', 'compliant'),
-    ]);
-    await createCapItemsFromInspection(inspection);
-    expect(mockSave).toHaveBeenCalledTimes(2);
+    ]));
+    expect(spySave).toHaveBeenCalledTimes(2);
   });
 
   it('skips items that already have an active (non-resolved) CAP', async () => {
-    mockGetByInspection.mockResolvedValue([
+    spyGetByInspection.mockResolvedValue([
       { inspectionItemId: 'item-1', status: 'open' },
     ]);
-    const inspection = makeInspection([
+    await createCapItemsFromInspection(makeInspection([
       makeItem('item-1', 'non-compliant'),
       makeItem('item-2', 'non-compliant'),
-    ]);
-    await createCapItemsFromInspection(inspection);
-    expect(mockSave).toHaveBeenCalledTimes(1);
-    const savedArg = mockSave.mock.calls[0][0];
-    expect(savedArg.inspectionItemId).toBe('item-2');
+    ]));
+    expect(spySave).toHaveBeenCalledTimes(1);
+    expect(spySave.mock.calls[0][0].inspectionItemId).toBe('item-2');
   });
 
   it('does NOT skip items whose existing CAP is resolved', async () => {
-    mockGetByInspection.mockResolvedValue([
+    spyGetByInspection.mockResolvedValue([
       { inspectionItemId: 'item-1', status: 'resolved' },
     ]);
-    const inspection = makeInspection([makeItem('item-1', 'non-compliant')]);
-    await createCapItemsFromInspection(inspection);
-    expect(mockSave).toHaveBeenCalledTimes(1);
+    await createCapItemsFromInspection(makeInspection([makeItem('item-1', 'non-compliant')]));
+    expect(spySave).toHaveBeenCalledTimes(1);
   });
 
   describe('deadline calculation by severity', () => {
-    const today = new Date();
     function daysFromToday(isoDate: string) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
       return Math.round(
-        (new Date(isoDate).getTime() - today.setHours(0,0,0,0)) / 86_400_000,
+        (new Date(isoDate).getTime() - today.getTime()) / 86_400_000,
       );
     }
 
-    it('sets 7-day deadline for critical severity', async () => {
-      const inspection = makeInspection([makeItem('1', 'non-compliant', 'critical')]);
-      await createCapItemsFromInspection(inspection);
-      const { deadline } = mockSave.mock.calls[0][0];
-      expect(daysFromToday(deadline)).toBe(7);
-    });
-
-    it('sets 14-day deadline for high severity', async () => {
-      const inspection = makeInspection([makeItem('1', 'non-compliant', 'high')]);
-      await createCapItemsFromInspection(inspection);
-      const { deadline } = mockSave.mock.calls[0][0];
-      expect(daysFromToday(deadline)).toBe(14);
-    });
-
-    it('sets 30-day deadline for medium severity', async () => {
-      const inspection = makeInspection([makeItem('1', 'non-compliant', 'medium')]);
-      await createCapItemsFromInspection(inspection);
-      const { deadline } = mockSave.mock.calls[0][0];
-      expect(daysFromToday(deadline)).toBe(30);
-    });
-
-    it('sets 45-day deadline for low severity', async () => {
-      const inspection = makeInspection([makeItem('1', 'non-compliant', 'low')]);
-      await createCapItemsFromInspection(inspection);
-      const { deadline } = mockSave.mock.calls[0][0];
-      expect(daysFromToday(deadline)).toBe(45);
+    it.each([
+      ['critical' as const, 7],
+      ['high'     as const, 14],
+      ['medium'   as const, 30],
+      ['low'      as const, 45],
+    ])('sets %s-day deadline for %s severity', async (severity, expectedDays) => {
+      await createCapItemsFromInspection(makeInspection([makeItem('1', 'non-compliant', severity)]));
+      const { deadline } = spySave.mock.calls[0][0];
+      expect(daysFromToday(deadline)).toBe(expectedDays);
     });
   });
 
   it('maps court-referral sanctionTier to critical CAP severity', async () => {
-    const inspection = makeInspection([
-      makeItem('1', 'non-compliant', 'low', 'court-referral'),
-    ]);
-    await createCapItemsFromInspection(inspection);
-    const { severity } = mockSave.mock.calls[0][0];
-    expect(severity).toBe('critical');
+    await createCapItemsFromInspection(
+      makeInspection([makeItem('1', 'non-compliant', 'low', 'court-referral')]),
+    );
+    expect(spySave.mock.calls[0][0].severity).toBe('critical');
   });
 
-  it('saves with status open and correct facilityId', async () => {
-    const inspection = makeInspection([makeItem('1', 'non-compliant')]);
-    await createCapItemsFromInspection(inspection);
-    const saved = mockSave.mock.calls[0][0];
+  it('saves with status open and correct facilityId/name', async () => {
+    await createCapItemsFromInspection(makeInspection([makeItem('1', 'non-compliant')]));
+    const saved = spySave.mock.calls[0][0];
     expect(saved.status).toBe('open');
     expect(saved.facilityId).toBe('fac-1');
     expect(saved.facilityName).toBe('Test Facility');
