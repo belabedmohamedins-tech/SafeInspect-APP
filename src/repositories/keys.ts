@@ -32,12 +32,13 @@ export const StorageKeys = {
   INSPECTOR_NAME:          'INSPECTOR_NAME',
   INSPECTION_CAUSE:        'INSPECTION_CAUSE',
   // Phase-1 additions
-  SCHEMA_VERSION:          '@schema_version',
-  REPORT_SEQUENCE:         '@report_sequence',
+  // NOTE: @ prefix replaced with _ prefix — SecureStore only allows alphanumeric, ".", "-", "_"
+  SCHEMA_VERSION:          '_schema_version',
+  REPORT_SEQUENCE:         '_report_sequence',
   // Tier-2: server JWT tokens (stored in SecureStore on native)
-  JWT_ACCESS_TOKEN:        '@jwt_access_token',
-  JWT_REFRESH_TOKEN:       '@jwt_refresh_token',
-  SERVER_USER_ID:          '@server_user_id',
+  JWT_ACCESS_TOKEN:        'jwt_access_token',
+  JWT_REFRESH_TOKEN:       'jwt_refresh_token',
+  SERVER_USER_ID:          'server_user_id',
 } as const;
 
 /** @deprecated use StorageKeys */
