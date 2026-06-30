@@ -11,13 +11,14 @@ import {
   Switch,
 } from 'react-native';
 import { useFocusEffect, useRouter } from 'expo-router';
+import { AuthRepository } from '../../src/repositories/AuthRepository';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { useTranslation } from '../../src/i18n';
 
 interface Settings {
-  inspectorName: string;
-  officeName: string;
-  pinEnabled: boolean;
+  inspectorName:    string;
+  officeName:       string;
+  pinEnabled:       boolean;
   biometricEnabled: boolean;
 }
 
@@ -31,32 +32,75 @@ const DEFAULT: Settings = {
 export default function SettingsScreen() {
   const router = useRouter();
   const { language, setLanguage } = useTranslation();
-  const [settings, setSettings] = useState<Settings>(DEFAULT);
-  const [saving, setSaving] = useState(false);
+  const [settings,      setSettings]      = useState<Settings>(DEFAULT);
+  const [saving,        setSaving]        = useState(false);
+  const [bioAvailable,  setBioAvailable]  = useState(false);
 
+  // ── Load ─────────────────────────────────────────────────────────────────
   useFocusEffect(
     useCallback(() => {
       let active = true;
-      SettingsRepository.getAll().then(all => {
+      Promise.all([
+        SettingsRepository.getAll(),
+        AuthRepository.getPin(),
+        AuthRepository.isBiometricEnabled(),
+        AuthRepository.isBiometricAvailable(),
+      ]).then(([all, pin, bioEnabled, bioAvail]) => {
         if (!active) return;
+        setBioAvailable(bioAvail);
         setSettings({
-          inspectorName:    all['inspectorName']    || '',
-          officeName:       all['officeName']       || '',
-          // stored as the string 'true' / 'false'
-          pinEnabled:       all['pinEnabled']       === 'true',
-          biometricEnabled: all['biometricEnabled'] === 'true',
+          inspectorName:    all['inspectorName'] || '',
+          officeName:       all['officeName']    || '',
+          // PIN is enabled when there is an actual PIN stored in SecureStore
+          pinEnabled:       !!pin,
+          biometricEnabled: bioEnabled,
         });
       });
       return () => { active = false; };
     }, [])
   );
 
+  // ── PIN toggle ───────────────────────────────────────────────────────────
+  const handlePinToggle = async (value: boolean) => {
+    if (value) {
+      // Turning ON → go to setup screen
+      router.push('/screens/pin-setup');
+    } else {
+      // Turning OFF → confirm then clear
+      Alert.alert(
+        'إلغاء قفل PIN',
+        'سيتم إزالة رمز PIN الحالي. هل تريد المتابعة؟',
+        [
+          { text: 'إلغاء', style: 'cancel' },
+          {
+            text: 'إزالة',
+            style: 'destructive',
+            onPress: async () => {
+              await AuthRepository.setPin(null);
+              await AuthRepository.setBiometricEnabled(false);
+              setSettings(s => ({ ...s, pinEnabled: false, biometricEnabled: false }));
+            },
+          },
+        ]
+      );
+    }
+  };
+
+  // ── Biometric toggle ─────────────────────────────────────────────────────
+  const handleBiometricToggle = async (value: boolean) => {
+    if (value && !settings.pinEnabled) {
+      Alert.alert('', 'يجب تفعيل قفل PIN أولاً قبل تفعيل البصمة / الوجه.');
+      return;
+    }
+    await AuthRepository.setBiometricEnabled(value);
+    setSettings(s => ({ ...s, biometricEnabled: value }));
+  };
+
+  // ── Save (text fields only) ───────────────────────────────────────────────
   const save = async () => {
     setSaving(true);
-    await SettingsRepository.set('inspectorName',    settings.inspectorName);
-    await SettingsRepository.set('officeName',       settings.officeName);
-    await SettingsRepository.set('pinEnabled',       String(settings.pinEnabled));
-    await SettingsRepository.set('biometricEnabled', String(settings.biometricEnabled));
+    await SettingsRepository.set('inspectorName', settings.inspectorName);
+    await SettingsRepository.set('officeName',    settings.officeName);
     setSaving(false);
     Alert.alert('', 'تم حفظ الإعدادات بنجاح ✓');
   };
@@ -118,25 +162,42 @@ export default function SettingsScreen() {
       <View style={styles.card}>
         <Text style={styles.sectionTitle}>الأمان</Text>
 
+        {/* PIN row */}
         <View style={styles.switchRow}>
           <Switch
             value={settings.pinEnabled}
-            onValueChange={v => setSettings(s => ({ ...s, pinEnabled: v }))}
+            onValueChange={handlePinToggle}
             trackColor={{ false: '#ddd', true: '#2c7a4b' }}
             thumbColor="#fff"
           />
-          <Text style={styles.switchLabel}>تفعيل قفل PIN</Text>
+          <View style={styles.switchLabelWrap}>
+            <Text style={styles.switchLabel}>تفعيل قفل PIN</Text>
+            {settings.pinEnabled && (
+              <TouchableOpacity onPress={() => router.push('/screens/pin-setup')}>
+                <Text style={styles.changePin}>تغيير الرمز</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
 
-        <View style={styles.switchRow}>
-          <Switch
-            value={settings.biometricEnabled}
-            onValueChange={v => setSettings(s => ({ ...s, biometricEnabled: v }))}
-            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
-            thumbColor="#fff"
-          />
-          <Text style={styles.switchLabel}>المصادقة البيومترية (بصمة / وجه)</Text>
-        </View>
+        {/* Biometric row — only shown if hardware exists */}
+        {bioAvailable && (
+          <View style={styles.switchRow}>
+            <Switch
+              value={settings.biometricEnabled}
+              onValueChange={handleBiometricToggle}
+              trackColor={{ false: '#ddd', true: '#2c7a4b' }}
+              thumbColor="#fff"
+              disabled={!settings.pinEnabled}
+            />
+            <Text style={[
+              styles.switchLabel,
+              !settings.pinEnabled && { color: '#aaa' },
+            ]}>
+              المصادقة البيومترية (بصمة / وجه)
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* Navigation Shortcuts */}
@@ -166,30 +227,33 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  container:    { flex: 1, backgroundColor: '#f0f4f0' },
-  header:       { backgroundColor: '#2c7a4b', paddingHorizontal: 16,
-                  paddingTop: 52, paddingBottom: 18 },
-  headerTitle:  { fontSize: 22, fontWeight: '800', color: '#fff', textAlign: 'right' },
-  card:         { backgroundColor: '#fff', margin: 16, marginTop: 12, borderRadius: 12,
-                  padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-                  shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
-  sectionTitle: { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
-                  marginBottom: 12 },
-  label:        { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 8 },
-  input:        { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
-                  fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa' },
-  segControl:   { flexDirection: 'row', gap: 10 },
-  segBtn:       { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
-                  paddingVertical: 10, alignItems: 'center', backgroundColor: '#fafafa' },
-  segBtnActive: { borderColor: '#2c7a4b', backgroundColor: '#eaf6ef' },
-  segBtnText:   { fontSize: 14, color: '#555', fontWeight: '600' },
-  segBtnTextActive: { color: '#2c7a4b' },
-  switchRow:    { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                  paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  switchLabel:  { fontSize: 14, color: '#1a1a2e', flex: 1, textAlign: 'right', marginRight: 10 },
-  linkRow:      { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  linkText:     { fontSize: 14, color: '#2c7a4b', textAlign: 'right', fontWeight: '500' },
-  saveBtn:      { margin: 16, backgroundColor: '#2c7a4b', borderRadius: 10,
-                  paddingVertical: 14, alignItems: 'center' },
-  saveBtnText:  { color: '#fff', fontSize: 16, fontWeight: '700' },
+  container:       { flex: 1, backgroundColor: '#f0f4f0' },
+  header:          { backgroundColor: '#2c7a4b', paddingHorizontal: 16,
+                     paddingTop: 52, paddingBottom: 18 },
+  headerTitle:     { fontSize: 22, fontWeight: '800', color: '#fff', textAlign: 'right' },
+  card:            { backgroundColor: '#fff', margin: 16, marginTop: 12, borderRadius: 12,
+                     padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+                     shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
+  sectionTitle:    { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
+                     marginBottom: 12 },
+  label:           { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 8 },
+  input:           { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
+                     fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa' },
+  segControl:      { flexDirection: 'row', gap: 10 },
+  segBtn:          { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
+                     paddingVertical: 10, alignItems: 'center', backgroundColor: '#fafafa' },
+  segBtnActive:    { borderColor: '#2c7a4b', backgroundColor: '#eaf6ef' },
+  segBtnText:      { fontSize: 14, color: '#555', fontWeight: '600' },
+  segBtnTextActive:{ color: '#2c7a4b' },
+  switchRow:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
+                     paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
+  switchLabelWrap: { flex: 1, flexDirection: 'row', justifyContent: 'space-between',
+                     alignItems: 'center', marginRight: 10 },
+  switchLabel:     { fontSize: 14, color: '#1a1a2e', textAlign: 'right' },
+  changePin:       { fontSize: 12, color: '#2c7a4b', textDecorationLine: 'underline' },
+  linkRow:         { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
+  linkText:        { fontSize: 14, color: '#2c7a4b', textAlign: 'right', fontWeight: '500' },
+  saveBtn:         { margin: 16, backgroundColor: '#2c7a4b', borderRadius: 10,
+                     paddingVertical: 14, alignItems: 'center' },
+  saveBtnText:     { color: '#fff', fontSize: 16, fontWeight: '700' },
 });
