@@ -9,7 +9,8 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "dz.mouzaia.safeinspect"
+      "bundleIdentifier": "dz.mouzaia.safeinspect",
+      "newArchEnabled": false
     },
     "android": {
       "adaptiveIcon": {
@@ -23,7 +24,8 @@
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE"
       ],
-      "predictiveBackGestureEnabled": false
+      "predictiveBackGestureEnabled": false,
+      "newArchEnabled": false
     },
     "web": {
       "output": "static",
