@@ -56,11 +56,15 @@ export const InspectionRepository = {
 
     if (isNewCompletion) {
       // ── Phase 2: Annotate repeat violations before hashing ──────────────
-      // Run for every completed inspection (not just follow-ups) so that
-      // priorInspectionStatus is always populated — this makes the
-      // differential view (Phase 3) work even for routine inspections.
+      // Inject accessors directly — avoids the circular import that previously
+      // existed when violationHistory imported InspectionRepository.
       try {
+        const accessors = {
+          getAll: () => InspectionRepository.getAll(),
+          getById: (id: string) => InspectionRepository.getById(id),
+        };
         const annotatedItems = await annotateRepeatViolations(
+          accessors,
           inspection.items,
           inspection.facilityId,
           inspection.id,
@@ -69,7 +73,6 @@ export const InspectionRepository = {
         toSave = { ...inspection, items: annotatedItems };
       } catch {
         // Non-fatal — annotation failure must not block save.
-        // The inspection persists without repeat-violation flags.
       }
 
       // ── Integrity hash (computed AFTER annotation so hash covers flags) ─
@@ -98,12 +101,10 @@ export const InspectionRepository = {
       });
       await CorrectiveActionRepository.createFromInspection(toSave);
 
-      // Auto follow-up agenda (FR-025)
       try {
         await createFollowUpIfNeeded(toSave);
       } catch { /* non-fatal */ }
 
-      // Enqueue for supervisor approval (FR-069)
       try {
         await ApprovalRepository.enqueue(toSave);
       } catch { /* non-fatal */ }
