@@ -725,3 +725,421 @@ export async function exportInspectionCSV(inspection: SavedInspection): Promise<
     Alert.alert('خطأ', 'حدث خطأ أثناء تصدير Excel');
   }
 }
+
+// ─── Phase-7: Non-Conformity Notice (محضر المخالفة) ─────────────────────────────────────────────
+
+/**
+ * Builds a formal, RTL Arabic non-conformity notice HTML document from the
+ * non-compliant items of a completed inspection.
+ *
+ * Structure:
+ *  1. Official letterhead with office name & notice serial placeholder
+ *  2. Preamble — legal basis (القانون 03-10, المرسوم التنفيذي 06-198)
+ *  3. Party identification — facility, address, responsible manager
+ *  4. Violations table — each non-compliant item with severity, legal ref, comment
+ *  5. Decision-support recommendation block (reuses buildDecisionSectionHTML)
+ *  6. Corrective-action deadlines table — auto-calculated from severity
+ *  7. Triple signature block — inspector · facility manager · official stamp
+ *  8. Footer with generation date and legal disclaimer
+ */
+function buildNoticeHTML(
+  inspection: SavedInspection,
+  inspector: string,
+  officeName: string,
+  diffView?: DifferentialView | null,
+): string {
+  const violations = inspection.items.filter(i => i.complianceStatus === 'non-compliant');
+
+  // ── deadline per severity ────────────────────────────────────────────────
+  function deadlineDays(sev?: string): number {
+    switch (sev) {
+      case 'high':   return 15;
+      case 'medium': return 30;
+      case 'low':    return 60;
+      default:       return 30;
+    }
+  }
+
+  function addDays(dateStr: string, days: number): string {
+    const d = new Date(dateStr);
+    d.setDate(d.getDate() + days);
+    return d.toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' });
+  }
+
+  // ── violation rows ───────────────────────────────────────────────────────
+  let rowIdx = 0;
+  const violationRows = violations
+    .map(item => {
+      const even  = rowIdx++ % 2 === 0;
+      const rowBg = even ? '#ffffff' : '#fef9f9';
+      const sevColor =
+        item.severity === 'high'   ? '#c0392b' :
+        item.severity === 'medium' ? '#e67e22' :
+                                     '#27ae60';
+      return `
+        <tr style="background:${rowBg}">
+          <td style="text-align:center;color:#7f8c8d;font-size:11px">${rowIdx}</td>
+          <td>${item.criteria}</td>
+          <td style="font-size:11px;color:#7f8c8d">${item.legalReference || '—'}</td>
+          <td style="text-align:center;font-weight:700;color:${sevColor}">${severityLabel(item.severity)}</td>
+          <td>${item.comment || '—'}</td>
+        </tr>`;
+    })
+    .join('');
+
+  // ── deadline rows ────────────────────────────────────────────────────────
+  const deadlineRows = violations
+    .map((item, idx) => {
+      const days     = deadlineDays(item.severity);
+      const deadline = addDays(inspection.date, days);
+      const sevColor =
+        item.severity === 'high'   ? '#c0392b' :
+        item.severity === 'medium' ? '#e67e22' :
+                                     '#27ae60';
+      return `
+        <tr>
+          <td style="text-align:center;color:#7f8c8d;font-size:11px">${idx + 1}</td>
+          <td style="font-size:12px">${item.criteria}</td>
+          <td style="text-align:center;font-weight:700;color:${sevColor}">${severityLabel(item.severity)}</td>
+          <td style="text-align:center;font-size:12px;color:#2c3e50;font-weight:600">${days} يوم</td>
+          <td style="text-align:center;font-size:12px;color:#c0392b;font-weight:700">${deadline}</td>
+        </tr>`;
+    })
+    .join('');
+
+  // ── decision block ───────────────────────────────────────────────────────
+  const decisionHTML = buildDecisionSectionHTML(inspection, diffView);
+
+  // ── signature block ──────────────────────────────────────────────────────
+  const signatureHTML = inspection.signature
+    ? `<img src="${inspection.signature}" alt="توقيع المفتش"
+         style="max-width:180px;max-height:80px;border:1px solid #ccc;
+                border-radius:4px;background:#f9fafb;display:block;margin:6px auto 0" />`
+    : '<div style="height:60px;border-bottom:1px dashed #aaa;margin-bottom:4px"></div>';
+
+  const causeMap: Record<string, string> = {
+    routine:       'تفتيش روتيني',
+    complaint:     'بعد شكوى',
+    followup:      'متابعة بعد إنذار',
+    extraordinary: 'تفتيش استثنائي',
+  };
+  const causeLabel = causeMap[inspection.inspectionCause ?? ''] ?? inspection.inspectionCause ?? 'غير محدد';
+  const noticeDate = formatDateLong(inspection.date);
+
+  return `
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Cairo', Arial, sans-serif;
+      font-size: 13px;
+      color: #2c3e50;
+      background: #fff;
+      padding: 28px 36px;
+      direction: rtl;
+    }
+
+    /* ── letterhead ── */
+    .lh-wrap {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      border-bottom: 3px double #c0392b;
+      padding-bottom: 14px;
+      margin-bottom: 20px;
+    }
+    .lh-office { font-size: 20px; font-weight: 900; color: #c0392b; }
+    .lh-sub    { font-size: 12px; color: #7f8c8d; margin-top: 3px; }
+    .lh-right  { text-align: left; }
+    .lh-title  {
+      font-size: 17px; font-weight: 900; color: #c0392b;
+      border: 2px solid #c0392b; border-radius: 6px;
+      padding: 6px 18px; display: inline-block;
+    }
+    .lh-serial { font-size: 11px; color: #7f8c8d; margin-top: 5px; text-align: left; }
+
+    /* ── preamble ── */
+    .preamble {
+      background: #fef9f9;
+      border-right: 4px solid #c0392b;
+      border-radius: 0 6px 6px 0;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #555;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    /* ── party grid ── */
+    .party-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 20px;
+      background: #f4f7f6;
+      border: 1px solid #dce8e5;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+    .party-grid p { font-size: 13px; line-height: 1.8; }
+    .party-grid strong { color: #1a6b5a; }
+
+    /* ── section titles ── */
+    .sec-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #c0392b;
+      border-right: 4px solid #c0392b;
+      padding-right: 10px;
+      margin-bottom: 10px;
+      margin-top: 18px;
+    }
+
+    /* ── tables ── */
+    table.vio-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    table.vio-table th,
+    table.vio-table td {
+      border: 1px solid #e0c8c8;
+      padding: 6px 8px;
+      vertical-align: top;
+      text-align: right;
+    }
+    table.vio-table thead th {
+      background: #c0392b;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    /* ── decision block inherits pdfService green style ── */
+    .section-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1a6b5a;
+      border-right: 4px solid #1a6b5a;
+      padding-right: 10px;
+      margin-bottom: 10px;
+      margin-top: 6px;
+    }
+
+    /* ── signature block ── */
+    .sig-wrap {
+      margin-top: 28px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+    }
+    .sig-box {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      padding: 10px;
+      text-align: center;
+      font-size: 12px;
+      color: #555;
+    }
+    .sig-box .sig-role {
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 36px;
+    }
+    .sig-box .sig-name {
+      border-top: 1px solid #aaa;
+      padding-top: 4px;
+      font-size: 11px;
+      color: #7f8c8d;
+    }
+
+    /* ── footer ── */
+    .doc-footer {
+      margin-top: 20px;
+      border-top: 1px dashed #bdc3c7;
+      padding-top: 10px;
+      font-size: 10px;
+      color: #95a5a6;
+      text-align: center;
+      line-height: 1.6;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ① Letterhead -->
+  <div class="lh-wrap">
+    <div>
+      <div class="lh-office">${officeName || 'مديرية البيئة'}</div>
+      <div class="lh-sub">الجمهورية الجزائرية الديمقراطية الشعبية — وزارة البيئة</div>
+      <div class="lh-sub">SafeInspect — نظام التفتيش الميداني</div>
+    </div>
+    <div class="lh-right">
+      <div class="lh-title">محضر مخالفة</div>
+      <div class="lh-serial">رقم المحضر: _____ / ${new Date().getFullYear()}</div>
+    </div>
+  </div>
+
+  <!-- ② Preamble -->
+  <div class="preamble">
+    نحن المفتش المُكلَّف، المذكور أدناه، تصرفاً بموجب أحكام
+    <strong>القانون رقم 03-10 المؤرخ في 19 يوليو 2003</strong> المتعلق بحماية البيئة في إطار التنمية المستدامة،
+    و<strong>المرسوم التنفيذي رقم 06-198 المؤرخ في 31 مايو 2006</strong> المحدد لشروط تسيير الرقابة البيئية،
+    قمنا بزيارة تفتيشية للمنشأة المشار إليها بتاريخ <strong>${noticeDate}</strong>
+    بسبب: <strong>${causeLabel}</strong>،
+    وتبيّن وجود المخالفات التالية المُوجِبة لاتخاذ الإجراءات اللازمة:
+  </div>
+
+  <!-- ③ Party identification -->
+  <div class="sec-title">بيانات الأطراف</div>
+  <div class="party-grid">
+    <p><strong>اسم المنشأة:</strong> ${inspection.facilityName}</p>
+    <p><strong>العنوان:</strong> ${inspection.facilityAddress || 'غير محدد'}</p>
+    <p><strong>المفتش المحرر:</strong> ${inspector}</p>
+    <p><strong>تاريخ المعاينة:</strong> ${noticeDate}</p>
+    ${inspection.referenceDocument
+      ? `<p><strong>رقم الوثيقة المرجعية:</strong> ${inspection.referenceDocument}</p>`
+      : '<p></p>'}
+    ${inspection.coordinates
+      ? `<p><strong>الموقع الجغرافي:</strong>
+           ${inspection.coordinates.latitude.toFixed(5)}° ش،
+           ${inspection.coordinates.longitude.toFixed(5)}° ط</p>`
+      : '<p></p>'}
+  </div>
+
+  <!-- ④ Violations table -->
+  <div class="sec-title">المخالفات المُثبَتة (${violations.length} مخالفة)</div>
+  ${violations.length === 0
+    ? `<p style="color:#27ae60;font-weight:700;margin-bottom:16px">
+         ✓ لم تُرصد أي مخالفات — المنشأة مطابقة للمتطلبات.
+       </p>`
+    : `<table class="vio-table">
+         <thead>
+           <tr>
+             <th style="width:28px;text-align:center">#</th>
+             <th>البند / المعيار</th>
+             <th style="width:100px">المرجع القانوني</th>
+             <th style="width:70px;text-align:center">درجة الخطورة</th>
+             <th>ملاحظات المفتش</th>
+           </tr>
+         </thead>
+         <tbody>${violationRows}</tbody>
+       </table>`}
+
+  <!-- ⑤ Decision-support recommendation -->
+  ${decisionHTML}
+
+  <!-- ⑥ Corrective-action deadlines -->
+  ${violations.length > 0 ? `
+  <div class="sec-title" style="margin-top:20px">جدول مهل الإصلاح</div>
+  <table class="vio-table">
+    <thead>
+      <tr>
+        <th style="width:28px;text-align:center">#</th>
+        <th>البند</th>
+        <th style="width:70px;text-align:center">الخطورة</th>
+        <th style="width:70px;text-align:center">المهلة</th>
+        <th style="width:130px;text-align:center">أقصى تاريخ للتصحيح</th>
+      </tr>
+    </thead>
+    <tbody>${deadlineRows}</tbody>
+  </table>
+  <p style="font-size:11px;color:#7f8c8d;margin-top:6px">
+    * المهل المحددة أعلاه: 15 يوماً للمخالفات العالية الخطورة،
+    30 يوماً للمتوسطة، 60 يوماً للمنخفضة — وفق المرسوم التنفيذي 06-198.
+  </p>` : ''}
+
+  <!-- ⑦ Signature block -->
+  <div class="sig-wrap">
+    <div class="sig-box">
+      <div class="sig-role">توقيع المفتش</div>
+      ${signatureHTML}
+      <div class="sig-name">${inspector}</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-role">توقيع مسؤول المنشأة</div>
+      <div style="height:60px"></div>
+      <div class="sig-name">الاسم والصفة</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-role">ختم المنشأة</div>
+      <div style="height:60px"></div>
+      <div class="sig-name">الختم الرسمي</div>
+    </div>
+  </div>
+
+  <!-- ⑧ Footer -->
+  <div class="doc-footer">
+    حُرِّر هذا المحضر في ${noticeDate} بواسطة تطبيق SafeInspect.<br>
+    يُعدّ هذا المحضر وثيقة رسمية قابلة للطعن وفق الإجراءات القانونية المعمول بها.<br>
+    القانون 03-10 | المرسوم التنفيذي 06-198 | SafeInspect v${new Date().getFullYear()}
+  </div>
+
+</body>
+</html>`;
+}
+
+// ─── PDF export (non-conformity notice) ──────────────────────────────────────
+
+/**
+ * Generates and shares a PDF non-conformity notice (محضر المخالفة) for the
+ * given completed inspection. Only non-compliant items are included.
+ */
+export async function exportNonConformityNoticePDF(inspection: SavedInspection): Promise<void> {
+  const settings  = await SettingsRepository.get();
+  const inspector = inspection.inspectorName?.trim() || settings.inspectorName || 'غير محدد';
+  const office    = inspection.officeName?.trim() || settings.officeName || '';
+
+  let diffView: DifferentialView | null = null;
+  if (inspection.inspectionType === 'follow-up') {
+    try {
+      let prior: SavedInspection | null = null;
+      if (inspection.priorInspectionId) {
+        prior = await InspectionRepository.getById(inspection.priorInspectionId);
+      }
+      if (!prior) {
+        const all = await InspectionRepository.getAll();
+        const candidates = all
+          .filter(
+            i =>
+              i.facilityId === inspection.facilityId &&
+              i.status === 'completed' &&
+              i.id !== inspection.id,
+          )
+          .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        prior = candidates[0] ?? null;
+      }
+      diffView = buildDifferentialViewSync(inspection, prior);
+    } catch { /* non-fatal */ }
+  }
+
+  const html = buildNoticeHTML(inspection, inspector, office, diffView);
+
+  try {
+    if (Platform.OS === 'ios') {
+      const { uri } = await Print.printToFileAsync({ html });
+      const dest =
+        (FileSystem.documentDirectory ?? '') +
+        generateFileName(inspection.facilityName + '_notice', 'pdf');
+      await FileSystem.copyAsync({ from: uri, to: dest });
+      await FileSystem.deleteAsync(uri, { idempotent: true });
+      await Sharing.shareAsync(dest, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'مشاركة محضر المخالفة',
+        UTI: 'com.adobe.pdf',
+      });
+    } else {
+      await Print.printAsync({ html });
+    }
+  } catch (error) {
+    console.error('exportNonConformityNoticePDF error:', error);
+    Alert.alert('خطأ', 'حدث خطأ أثناء تصدير محضر المخالفة');
+  }
+}
