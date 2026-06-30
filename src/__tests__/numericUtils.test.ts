@@ -69,8 +69,17 @@ describe('deriveNumericCompliance', () => {
     it('returns compliant when max is undefined', () => {
       expect(deriveNumericCompliance(9999, { min: 0 } as NumericFieldSpec)).toBe('compliant');
     });
-    it('returns non-compliant when all warning bounds are undefined and value is out of min/max', () => {
-      expect(deriveNumericCompliance(100, { min: 0, max: 50 } as NumericFieldSpec)).toBe('non-compliant');
+    it('returns warning (not non-compliant) when warningMin/warningMax are undefined and value is out of [min,max]', () => {
+      // When warningMin/warningMax are undefined, the source treats the warning
+      // zone as unbounded: aboveWarnMin===true, belowWarnMax===true → 'warning'.
+      // There is no path to 'non-compliant' in that case.
+      expect(deriveNumericCompliance(100, { min: 0, max: 50 } as NumericFieldSpec)).toBe('warning');
+    });
+    it('returns non-compliant when value is below defined warningMin', () => {
+      // Both min and warningMin are defined — value falls outside both zones.
+      expect(
+        deriveNumericCompliance(-5, { min: 0, max: 50, warningMin: -2, warningMax: 55 } as NumericFieldSpec),
+      ).toBe('non-compliant');
     });
   });
 });

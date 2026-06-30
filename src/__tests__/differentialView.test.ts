@@ -82,6 +82,8 @@ describe('buildDifferentialViewSync', () => {
   });
 
   it('marks a newly non-compliant item as new-violation', () => {
+    // Prior exists with this criterion as compliant — now it is non-compliant.
+    // priorStatus is defined and !== 'non-compliant' → 'new-violation'.
     const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
     const current = makeInspection('c1', [makeItem('i1', 'non-compliant')]);
     const view = buildDifferentialViewSync(current, prior);
@@ -96,7 +98,8 @@ describe('buildDifferentialViewSync', () => {
     expect(view.all[0].diffStatus).toBe('unchanged');
   });
 
-  it('marks a new criterion not in prior as not-in-prior', () => {
+  it('marks a criterion absent from prior as not-in-prior', () => {
+    // i2 exists only in current — priorStatus is undefined → 'not-in-prior'.
     const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
     const current = makeInspection('c1', [
       makeItem('i1', 'compliant'),
@@ -107,16 +110,22 @@ describe('buildDifferentialViewSync', () => {
   });
 
   it('handles a mixed scenario correctly', () => {
+    // r1: was non-compliant, now compliant                 → resolved
+    // s1: was non-compliant, still non-compliant           → still-failing
+    // u1: was compliant, still compliant                   → unchanged
+    // n1: was compliant in prior, now non-compliant        → new-violation
+    //     (n1 MUST exist in prior so priorStatus is defined)
     const prior = makeInspection('p1', [
       makeItem('r1', 'non-compliant'),
       makeItem('s1', 'non-compliant'),
       makeItem('u1', 'compliant'),
+      makeItem('n1', 'compliant'),   // <— present in prior as compliant
     ]);
     const current = makeInspection('c1', [
       makeItem('r1', 'compliant'),
       makeItem('s1', 'non-compliant'),
       makeItem('u1', 'compliant'),
-      makeItem('n1', 'non-compliant'),
+      makeItem('n1', 'non-compliant'), // <— now non-compliant → new-violation
     ]);
     const view = buildDifferentialViewSync(current, prior);
     expect(view.resolved).toHaveLength(1);

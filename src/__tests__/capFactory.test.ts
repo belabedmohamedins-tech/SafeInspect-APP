@@ -2,7 +2,6 @@
 //
 // Uses jest.spyOn() on the real repository object so that capFactory.ts
 // is fully executed and instrumented by Jest's coverage collector.
-// (jest.mock() auto-mocks prevent the source file from running at all.)
 
 import { createCapItemsFromInspection } from '../services/capFactory';
 import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
@@ -87,11 +86,19 @@ describe('createCapItemsFromInspection', () => {
   });
 
   describe('deadline calculation by severity', () => {
-    function daysFromToday(isoDate: string) {
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
+    /**
+     * deadlineFromToday() in capFactory creates a Date with the current
+     * wall-clock time (e.g. 23:55) then adds N calendar days.
+     * daysFromToday() here floors today to midnight before diffing.
+     * Across a midnight boundary that produces a 1-day mismatch.
+     *
+     * Fix: accept either N or N+1 so the test is stable at any time of day.
+     */
+    function daysFromToday(isoDate: string): number {
+      const todayMidnight = new Date();
+      todayMidnight.setHours(0, 0, 0, 0);
       return Math.round(
-        (new Date(isoDate).getTime() - today.getTime()) / 86_400_000,
+        (new Date(isoDate).getTime() - todayMidnight.getTime()) / 86_400_000,
       );
     }
 
@@ -100,10 +107,14 @@ describe('createCapItemsFromInspection', () => {
       ['high'     as const, 14],
       ['medium'   as const, 30],
       ['low'      as const, 45],
-    ])('sets %s-day deadline for %s severity', async (severity, expectedDays) => {
-      await createCapItemsFromInspection(makeInspection([makeItem('1', 'non-compliant', severity)]));
+    ])('deadline for %s severity is within 1 day of %i', async (severity, expectedDays) => {
+      await createCapItemsFromInspection(
+        makeInspection([makeItem('1', 'non-compliant', severity)]),
+      );
       const { deadline } = spySave.mock.calls[0][0];
-      expect(daysFromToday(deadline)).toBe(expectedDays);
+      const actual = daysFromToday(deadline);
+      // Accept expectedDays OR expectedDays+1 to tolerate midnight boundary.
+      expect([expectedDays, expectedDays + 1]).toContain(actual);
     });
   });
 
