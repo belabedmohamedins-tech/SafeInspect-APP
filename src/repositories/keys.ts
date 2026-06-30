@@ -13,8 +13,12 @@ export const StorageKeys = {
   NOTIFICATIONS:           'NOTIFICATIONS',
   NOTIFICATIONS_ENABLED:   'NOTIFICATIONS_ENABLED',
   CAP_NOTIF_LAST_RUN:      'CAP_NOTIF_LAST_RUN',
-  /** Stores the identifier of the last scheduled grouped CAP digest notification */
+  /** Stores the identifier of the last scheduled grouped CAP daily digest notification */
   CAP_DIGEST_NOTIF_ID:     'CAP_DIGEST_NOTIF_ID',
+  /** Stores the identifier of the last scheduled weekly Monday CAP digest notification */
+  CAP_WEEKLY_DIGEST_NOTIF_ID:  'CAP_WEEKLY_DIGEST_NOTIF_ID',
+  /** ISO date (YYYY-MM-DD) of the Monday the weekly digest was last scheduled */
+  CAP_WEEKLY_DIGEST_LAST_RUN:  'CAP_WEEKLY_DIGEST_LAST_RUN',
   SYNC_QUEUE:              'SYNC_QUEUE',
   SYNC_LAST_RUN:           'SYNC_LAST_RUN',
   STATS_CACHE:             'STATS_CACHE',
