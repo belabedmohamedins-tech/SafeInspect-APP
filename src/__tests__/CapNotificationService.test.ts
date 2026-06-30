@@ -13,7 +13,13 @@ jest.mock('expo-notifications', () => ({
 }));
 
 jest.mock('../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: { getOpen: jest.fn() },
+  CorrectiveActionRepository: {
+    getOpen:                   jest.fn(),
+    // Required by CapNotificationService.persistOverdueEscalation (line 344).
+    // Without this the service throws TypeError before scheduleNotificationAsync
+    // is ever called, causing all schedule assertions to fail with 0 calls.
+    persistOverdueEscalation:  jest.fn().mockResolvedValue(undefined),
+  },
 }));
 
 jest.mock('../services/NotificationService', () => ({

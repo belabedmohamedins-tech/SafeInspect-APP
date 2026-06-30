@@ -52,7 +52,9 @@ beforeEach(async () => {
 
 async function seedStorage() {
   await AsyncStorage.multiSet([
-    ['inspections', JSON.stringify([{ id: 'i1', facilityName: 'منشأة أ' }])],
+    // items:[] is required — BackupService.buildPhotoUriMap() iterates
+    // inspection.items and throws TypeError if the field is missing.
+    ['inspections', JSON.stringify([{ id: 'i1', facilityName: 'منشأة أ', items: [] }])],
     ['agenda',      JSON.stringify([{ id: 'a1', status: 'pending', facilityName: 'منشأة ب', date: '2026-07-01', notes: '' }])],
     ['userFacilities', JSON.stringify([{ id: 'f1', name: 'منشأة ب' }])],
     ['officeName',  'مكتب الصحة'],

@@ -194,6 +194,16 @@ jest.mock('react-native', () => {
     // useColorScheme: accessed by expo-router's import chain (utils.ts → useNavigation →
     // Screen → Navigator → exports → index). Must return a valid colour scheme string.
     useColorScheme: jest.fn(() => 'light'),
+    // LogBox: accessed by expo's Expo.fx.tsx at module load time.
+    // expo-sqlite and expo-crypto both pull in expo which calls LogBox.ignoreLogs().
+    // Without this stub the strict Proxy throws for schema.test.ts, pdfService.test.ts
+    // and useHomeData.test.ts.
+    LogBox: {
+      ignoreLogs:    jest.fn(),
+      ignoreAllLogs: jest.fn(),
+      install:       jest.fn(),
+      uninstall:     jest.fn(),
+    },
     View:           'View',
     Text:           'Text',
     Image:          'Image',

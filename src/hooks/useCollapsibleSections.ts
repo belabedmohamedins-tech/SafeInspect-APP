@@ -2,12 +2,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  // All sections start COLLAPSED (true) so the SectionList only renders
-  // section headers on mount — items are rendered on demand when the user
-  // taps a header. This prevents mounting 30-60+ InspectionItem components
-  // simultaneously, which was causing the visible jank on checklist open.
+  // All sections start EXPANDED (collapsed = false).
+  // Individual sections collapse when the user taps the header.
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sectionTitles.map(t => [t, true]))
+    Object.fromEntries(sectionTitles.map(t => [t, false]))
   );
 
   const titlesKey = sectionTitles.join('||');
@@ -20,7 +18,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = true; // new sections also start collapsed
+          next[title] = false; // new sections also start expanded
           changed = true;
         }
       }
@@ -33,7 +31,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
   }, []);
 
   const isCollapsed = useCallback(
-    (title: string) => collapsed[title] ?? true,
+    (title: string) => collapsed[title] ?? false,
     [collapsed]
   );
 
