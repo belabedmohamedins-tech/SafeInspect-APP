@@ -16,36 +16,48 @@ import {
   View,
 } from 'react-native';
 import { Colors, Radius, Spacing } from '../constants';
+import { NumericInputField } from '../src/components/NumericInputField';
 import { copyToAppStorage, deletePhoto } from '../src/services/PhotoService';
 import { ComplianceStatus, InspectionItem } from '../src/types';
 import { getStatusColor, getStatusText } from '../src/utils/statusUtils';
 
 interface Props {
   item: InspectionItem;
-  onStatusChange: (id: string, status: ComplianceStatus) => void;
+  onStatusChange:  (id: string, status: ComplianceStatus) => void;
   onCommentChange: (id: string, comment: string) => void;
-  onPhotoTake: (id: string, uri: string | undefined) => void;
+  onPhotoTake:     (id: string, uri: string | undefined) => void;
+  /** Phase-1.2: called whenever the inspector changes a numeric measurement. */
+  onNumericChange?: (id: string, value: number | undefined) => void;
 }
 
 const STATUS_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
 
+/** Map ControlType value → Arabic display label */
+function controlTypeLabel(ct: string): string {
+  switch (ct) {
+    case 'visual':      return 'بصري';
+    case 'doc':         return 'مستندي';
+    case 'test':        return 'اختباري';
+    case 'measurement': return 'قياسي';
+    default:            return ct;
+  }
+}
+
 /**
  * Wrapped in React.memo so that tapping one item's status button only
  * re-renders THAT item — not every item in the list.
- *
- * The parent passes stable useCallback handlers, so the memo comparison
- * will correctly skip re-renders for unchanged rows.
  */
 const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemComponent({
   item,
   onStatusChange,
   onCommentChange,
   onPhotoTake,
+  onNumericChange,
 }) {
   const [legalModalVisible, setLegalModalVisible] = useState(false);
   const [photoModalVisible, setPhotoModalVisible] = useState(false);
 
-  // ─── Photo source picker ──────────────────────────────────────────
+  // ─── Photo source picker ─────────────────────────────────────────
   const handlePhotoPress = () => {
     if (Platform.OS === 'ios') {
       ActionSheetIOS.showActionSheetWithOptions(
@@ -119,7 +131,7 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
     }
   };
 
-  // ─── Delete photo ─────────────────────────────────────────────
+  // ─── Delete photo ────────────────────────────────────────────────
   const handleDeletePhoto = () => {
     Alert.alert(
       'حذف الصورة',
@@ -139,7 +151,7 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
     );
   };
 
-  // ─── Status button handler ──────────────────────────────────────
+  // ─── Status button handler ───────────────────────────────────────
   const handleStatusPress = (status: ComplianceStatus) => {
     onStatusChange(
       item.id,
@@ -148,6 +160,7 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
   };
 
   const isEvaluated = item.complianceStatus !== 'not-evaluated';
+  const hasMeasurement = !!item.numericField;
 
   return (
     <View style={styles.container}>
@@ -169,14 +182,13 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
             <View
               style={[
                 styles.controlBadge,
-                item.controlType === 'visual' && styles.controlVisual,
-                item.controlType === 'doc'    && styles.controlDoc,
-                item.controlType === 'test'   && styles.controlTest,
+                item.controlType === 'visual'      && styles.controlVisual,
+                item.controlType === 'doc'         && styles.controlDoc,
+                item.controlType === 'test'        && styles.controlTest,
+                item.controlType === 'measurement' && styles.controlMeasurement,
               ]}>
               <Text style={styles.controlText}>
-                {item.controlType === 'visual' ? 'بصري'
-                  : item.controlType === 'doc' ? 'مستندي'
-                  : 'اختباري'}
+                {controlTypeLabel(item.controlType)}
               </Text>
             </View>
           )}
@@ -232,6 +244,16 @@ const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemCom
       {/* ── Reset hint ── */}
       {isEvaluated && (
         <Text style={styles.resetHint}>اضغط على الزر المحدد مرة أخرى لإلغاء التقييم</Text>
+      )}
+
+      {/* ── Phase-1.2: Numeric measurement field ── */}
+      {isEvaluated && hasMeasurement && item.numericField && (
+        <NumericInputField
+          spec={item.numericField}
+          value={item.numericValue}
+          onChange={(v) => onNumericChange?.(item.id, v)}
+          disabled={false}
+        />
       )}
 
       {/* ── Comment field ── */}
@@ -367,10 +389,11 @@ const styles = StyleSheet.create({
     marginRight: Spacing.xs,
     marginBottom: Spacing.xs,
   },
-  controlVisual: { backgroundColor: Colors.success + '20' },
-  controlDoc:    { backgroundColor: Colors.warning + '20' },
-  controlTest:   { backgroundColor: Colors.danger  + '20' },
-  controlText:   { fontSize: 11, fontWeight: '500', color: Colors.textPrimary },
+  controlVisual:      { backgroundColor: Colors.success + '20' },
+  controlDoc:         { backgroundColor: Colors.warning + '20' },
+  controlTest:        { backgroundColor: Colors.danger  + '20' },
+  controlMeasurement: { backgroundColor: '#007AFF20' },
+  controlText:        { fontSize: 11, fontWeight: '500', color: Colors.textPrimary },
 
   infoButton: { padding: Spacing.xs },
 

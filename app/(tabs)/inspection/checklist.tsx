@@ -2,6 +2,7 @@
 // Phase-5: opening-meeting gate safety-net + closing-meeting gate.
 // Phase-6: decision-support panel shown when all items are evaluated;
 //          escalationOverrideReason threaded into saveInspection.
+// Phase-1.2: NumericInputField wired — handleNumericChange threaded into InspectionItem.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -62,7 +63,7 @@ export default function ChecklistScreen() {
   const priorInspectionId = params.priorInspectionId as string | undefined;
   const isFollowUp        = inspectionType === 'follow-up';
 
-  // ── Phase-5: meeting gate state ─────────────────────────────────────────────
+  // ── Phase-5: meeting gate state ──────────────────────────────────────────
   const openingFromParam = params.openingMeetingDone === 'true';
   const [openingDone,     setOpeningDone]     = useState(openingFromParam);
   const [closingDone,     setClosingDone]     = useState(false);
@@ -70,12 +71,12 @@ export default function ChecklistScreen() {
   const [showClosingGate, setShowClosingGate] = useState(false);
   const pendingFinish = useRef(false);
 
-  // ── Phase-6: decision support state ─────────────────────────────────────────
+  // ── Phase-6: decision support state ─────────────────────────────────────
   const [escalationOverrideReason, setEscalationOverrideReason] = useState<string | undefined>(undefined);
 
   const [diffView, setDiffView] = useState<DifferentialView | null>(null);
 
-  // ── Build checklist params — gate flags are live state so paramsRef stays current ──
+  // ── Build checklist params ───────────────────────────────────────────────
   const checklistParams = {
     draftId:             params.draftId as string | undefined,
     facilityId:          params.facilityId as string,
@@ -108,6 +109,7 @@ export default function ChecklistScreen() {
     handleStatusChange,
     handleCommentChange,
     handlePhotoTake,
+    handleNumericChange,
     handleFinish: _handleFinish,
   } = useChecklistData(checklistParams, signature);
 
@@ -134,7 +136,7 @@ export default function ChecklistScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
 
-  // ── Phase-6: compute suggested decision whenever items change ───────────────
+  // ── Phase-6: compute suggested decision whenever items change ─────────────
   const allEvaluated = !isLoading && data.length > 0 &&
     data.every(i => i.complianceStatus !== 'not-evaluated');
 
@@ -143,7 +145,7 @@ export default function ChecklistScreen() {
     return suggestDecision(data);
   }, [allEvaluated, data]);
 
-  // ── Phase-5: opening gate confirmed (safety-net path) ──────────────────────
+  // ── Phase-5: opening gate confirmed (safety-net path) ────────────────────
   const handleOpeningConfirmed = () => {
     setShowOpeningGate(false);
     setOpeningDone(true);
@@ -154,13 +156,12 @@ export default function ChecklistScreen() {
     router.back();
   };
 
-  // ── Phase-5/6: handleFinish wraps the hook's _handleFinish ──────────────────
+  // ── Phase-5/6: handleFinish ──────────────────────────────────────────────
   const handleFinish = () => {
-    // Phase-6 guard: if tier >= 3 and override is open but reason is empty, warn
     if (
       suggestedDecision &&
       suggestedDecision.overrideRequired &&
-      escalationOverrideReason === '' // user opened override but left it blank
+      escalationOverrideReason === ''
     ) {
       Alert.alert(
         'سبب التجاوز مطلوب',
@@ -273,6 +274,7 @@ export default function ChecklistScreen() {
                   onStatusChange={handleStatusChange}
                   onCommentChange={handleCommentChange}
                   onPhotoTake={handlePhotoTake}
+                  onNumericChange={handleNumericChange}
                 />
                 {diffEntry && (
                   <View style={styles.diffPipContainer}>
@@ -298,7 +300,7 @@ export default function ChecklistScreen() {
         contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
           <>
-            {/* Phase-6: decision support panel — appears when all items are evaluated */}
+            {/* Phase-6: decision support panel */}
             {suggestedDecision && (
               <DecisionSupportPanel
                 decision={suggestedDecision}
@@ -314,14 +316,12 @@ export default function ChecklistScreen() {
         }
       />
 
-      {/* Signature modal */}
       <SignatureModal
         visible={showSignature}
         onConfirm={handleSignature}
         onClose={() => setShowSignature(false)}
       />
 
-      {/* Phase-5: opening-meeting gate (safety-net for draft resume) */}
       <MeetingGateModal
         visible={showOpeningGate}
         type="opening"
@@ -330,7 +330,6 @@ export default function ChecklistScreen() {
         onCancel={handleOpeningCancelled}
       />
 
-      {/* Phase-5: closing-meeting gate (required before finish) */}
       <MeetingGateModal
         visible={showClosingGate}
         type="closing"

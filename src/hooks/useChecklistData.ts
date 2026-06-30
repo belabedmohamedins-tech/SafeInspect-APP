@@ -63,7 +63,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ───────────────────────────────────────────────────────────────────────────────────
+  // ─── Load ───────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -93,7 +93,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ───────────────────────────────────────────────────────────────────────────────────
+  // ─── Save ───────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
@@ -151,7 +151,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     [inspectionId, data]
   );
 
-  // ─── Auto-save on back ─────────────────────────────────────────────────────────────────────
+  // ─── Auto-save on back ──────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -162,7 +162,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ──────────────────────────────────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -189,7 +189,29 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  // ─── Finish (with completion gates) ─────────────────────────────────────────────────────────────────
+  /**
+   * Phase-1.2: numeric measurement handler.
+   * Stores the raw numeric value (or undefined to clear) and the unit
+   * on the item so it is persisted with every save.
+   */
+  const handleNumericChange = useCallback(
+    (id: string, value: number | undefined) => {
+      setData(prev =>
+        prev.map(item => {
+          if (item.id !== id) return item;
+          return {
+            ...item,
+            numericValue: value,
+            // keep the unit from the spec; safe to read item.numericField here
+            numericUnit: item.numericField?.unit ?? item.numericUnit,
+          };
+        })
+      );
+    },
+    []
+  );
+
+  // ─── Finish (with completion gates) ─────────────────────────────────────────
   const handleFinish = useCallback(async () => {
     const applicable = data.filter(item => item.complianceStatus !== 'na');
     const evaluated  = applicable.filter(
@@ -202,7 +224,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       const remaining = applicable.length - evaluated.length;
       Alert.alert(
         'لم يكتمل التفتيش',
-        `يجب تقييم 85؟ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيَّم.`,
+        `يجب تقييم 85٪ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيَّم.`,
         [{ text: 'حسناً' }]
       );
       return;
@@ -247,7 +269,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [data, saveInspection, inspectionId, router]);
 
-  // ─── Derived values ──────────────────────────────────────────────────────────────────────────────────
+  // ─── Derived values ─────────────────────────────────────────────────────────
   const sections        = useMemo(() => groupByAxis(data), [data]);
   const totalItems      = useMemo(() => data.length, [data]);
   const evaluatedItems  = useMemo(() => getEvaluatedCount(data), [data]);
@@ -266,6 +288,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     handleStatusChange,
     handleCommentChange,
     handlePhotoTake,
+    handleNumericChange,
     handleFinish,
   };
 }
