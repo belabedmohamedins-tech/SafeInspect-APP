@@ -8,6 +8,7 @@ import CapStatsWidget from '../../components/home/CapStatsWidget';
 import HomeFAB from '../../components/home/HomeFAB';
 import HomeHeader from '../../components/home/HomeHeader';
 import InspectionSection from '../../components/home/InspectionSection';
+import NearDeadlineWidget from '../../components/home/NearDeadlineWidget';
 import StatsBar from '../../components/home/StatsBar';
 import { Colors } from '../../constants';
 import { useHomeData } from '../../src/hooks/useHomeData';
@@ -69,8 +70,11 @@ export default function HomeScreen() {
           openCapCount={stats.openCapCount}
         />
 
-        {/* Phase-13: CAP status breakdown widget */}
+        {/* Phase-13: CAP status breakdown */}
         <CapStatsWidget />
+
+        {/* Phase-18: Near-deadline warning banner */}
+        <NearDeadlineWidget />
 
         <AgendaSection
           items={agendaItems}
