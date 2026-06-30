@@ -14,11 +14,14 @@ jest.mock('expo-notifications', () => ({
 
 jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: {
-    getOpen:                   jest.fn(),
+    getOpen:                  jest.fn(),
+    // getStats is used by scheduleCapDigestNotification (line 196) and
+    // scheduleCapWeeklyDigest (line 261). Without this mock the service throws
+    // "TypeError: getStats is not a function" and both functions are entirely
+    // uncovered.
+    getStats:                 jest.fn(),
     // Required by CapNotificationService.persistOverdueEscalation (line 344).
-    // Without this the service throws TypeError before scheduleNotificationAsync
-    // is ever called, causing all schedule assertions to fail with 0 calls.
-    persistOverdueEscalation:  jest.fn().mockResolvedValue(undefined),
+    persistOverdueEscalation: jest.fn().mockResolvedValue(undefined),
   },
 }));
 
@@ -33,15 +36,21 @@ import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepo
 import { isEnabled, requestPermission } from '../services/NotificationService';
 import {
   scheduleCapDeadlineNotifications,
+  scheduleCapDigestNotification,
+  scheduleCapWeeklyDigest,
   cancelCapNotification,
+  cancelCapDigestNotification,
+  cancelCapWeeklyDigestNotification,
 } from '../services/CapNotificationService';
 import { CorrectiveAction } from '../types';
+import type { CapStats } from '../repositories/CorrectiveActionRepository';
 
 // ─── Typed stubs ─────────────────────────────────────────────────────────────
 const mockSchedule   = jest.mocked(Notifications.scheduleNotificationAsync);
 const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
 const mockGetOpen    = jest.mocked(CorrectiveActionRepository.getOpen);
+const mockGetStats   = jest.mocked(CorrectiveActionRepository.getStats);
 const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
@@ -56,11 +65,23 @@ function makeCAP(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
     criteria: 'Safety rule',
     severity: 'high',
     status: 'open',
-    deadline: tomorrow.toISOString(),
+    deadline: tomorrow.toISOString().slice(0, 10),
     assignedTo: 'Inspector A',
     notes: '',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+function makeStats(overrides: Partial<CapStats> = {}): CapStats {
+  return {
+    open: 0,
+    inProgress: 0,
+    overdue: 0,
+    resolved: 0,
+    total: 0,
+    nearDeadlineCount: 0,
     ...overrides,
   };
 }
@@ -71,12 +92,14 @@ beforeEach(() => {
   mockIsEnabled.mockResolvedValue(true);
   mockReqPerm.mockResolvedValue(true);
   mockGetOpen.mockResolvedValue([]);
+  mockGetStats.mockResolvedValue(makeStats());
   mockSchedule.mockResolvedValue('notif-id');
   mockCancelOne.mockResolvedValue(undefined);
   mockSetChannel.mockResolvedValue(null as any);
 });
 
 describe('CapNotificationService', () => {
+  // ─── A) Per-item deadline alerts (via scheduleCapDeadlineNotifications) ────
   describe('scheduleCapDeadlineNotifications', () => {
     it('does nothing when notifications are disabled', async () => {
       mockIsEnabled.mockResolvedValueOnce(false);
@@ -97,7 +120,7 @@ describe('CapNotificationService', () => {
     });
 
     it('schedules a notification for a CAP item due tomorrow', async () => {
-      mockGetOpen.mockResolvedValueOnce([makeCAP()]);
+      mockGetOpen.mockResolvedValue([makeCAP()]);
       await scheduleCapDeadlineNotifications();
       expect(mockSchedule).toHaveBeenCalledWith(
         expect.objectContaining({ identifier: 'cap-cap-1-deadline' }),
@@ -107,7 +130,9 @@ describe('CapNotificationService', () => {
     it('skips items whose deadline is already past', async () => {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
-      mockGetOpen.mockResolvedValueOnce([makeCAP({ deadline: yesterday.toISOString() })]);
+      mockGetOpen.mockResolvedValueOnce([
+        makeCAP({ deadline: yesterday.toISOString().slice(0, 10) }),
+      ]);
       await scheduleCapDeadlineNotifications();
       expect(mockSchedule).not.toHaveBeenCalled();
     });
@@ -115,7 +140,9 @@ describe('CapNotificationService', () => {
     it('skips items whose deadline is more than 7 days away', async () => {
       const farFuture = new Date();
       farFuture.setDate(farFuture.getDate() + 10);
-      mockGetOpen.mockResolvedValueOnce([makeCAP({ deadline: farFuture.toISOString() })]);
+      mockGetOpen.mockResolvedValueOnce([
+        makeCAP({ deadline: farFuture.toISOString().slice(0, 10) }),
+      ]);
       await scheduleCapDeadlineNotifications();
       expect(mockSchedule).not.toHaveBeenCalled();
     });
@@ -127,13 +154,133 @@ describe('CapNotificationService', () => {
       mockIsEnabled.mockResolvedValue(true);
       mockReqPerm.mockResolvedValue(true);
       mockGetOpen.mockResolvedValue([makeCAP()]);
+      mockGetStats.mockResolvedValue(makeStats());
       mockSchedule.mockResolvedValue('notif-id');
       mockCancelOne.mockResolvedValue(undefined);
       await scheduleCapDeadlineNotifications();
+      // should NOT call getOpen again — already ran today
       expect(mockGetOpen).not.toHaveBeenCalled();
     });
   });
 
+  // ─── B) Daily grouped digest ───────────────────────────────────────────────
+  describe('scheduleCapDigestNotification', () => {
+    it('does nothing when there are no overdue, due-today, or due-week items', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 5, resolved: 5 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      expect(mockSchedule).not.toHaveBeenCalled();
+    });
+
+    it('schedules a digest when there are overdue items', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      expect(mockSchedule).toHaveBeenCalledWith(
+        expect.objectContaining({ identifier: expect.stringContaining('cap-digest-') }),
+      );
+    });
+
+    it('schedules a digest when there are due-today items', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      mockGetStats.mockResolvedValueOnce(makeStats({ nearDeadlineCount: 1 }));
+      mockGetOpen.mockResolvedValueOnce([
+        makeCAP({ deadline: today, status: 'open' }),
+      ]);
+      await scheduleCapDigestNotification();
+      expect(mockSchedule).toHaveBeenCalled();
+    });
+
+    it('schedules a digest when there are due-this-week items (no due-today)', async () => {
+      const nextWeek = new Date();
+      nextWeek.setDate(nextWeek.getDate() + 3);
+      mockGetStats.mockResolvedValueOnce(makeStats({ nearDeadlineCount: 2 }));
+      mockGetOpen.mockResolvedValueOnce([
+        makeCAP({ deadline: nextWeek.toISOString().slice(0, 10), status: 'open' }),
+      ]);
+      await scheduleCapDigestNotification();
+      expect(mockSchedule).toHaveBeenCalled();
+    });
+
+    it('cancels the previous digest before scheduling a new one', async () => {
+      // Pre-seed a previous digest id in AsyncStorage
+      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-old');
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      expect(mockCancelOne).toHaveBeenCalledWith('cap-digest-old');
+      expect(mockSchedule).toHaveBeenCalled();
+    });
+
+    it('swallows errors gracefully', async () => {
+      mockGetStats.mockRejectedValueOnce(new Error('db error'));
+      await expect(scheduleCapDigestNotification()).resolves.toBeUndefined();
+    });
+  });
+
+  // ─── C) Weekly Monday digest ───────────────────────────────────────────────
+  describe('scheduleCapWeeklyDigest', () => {
+    it('does nothing when stats.total is 0', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 0 }));
+      await scheduleCapWeeklyDigest();
+      expect(mockSchedule).not.toHaveBeenCalled();
+    });
+
+    it('schedules the weekly digest when there are open items', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 3, open: 2, overdue: 1 }),
+      );
+      await scheduleCapWeeklyDigest();
+      expect(mockSchedule).toHaveBeenCalledWith(
+        expect.objectContaining({ identifier: expect.stringContaining('cap-weekly-') }),
+      );
+    });
+
+    it('schedules with a green title when no overdue or near-deadline items', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 2, open: 2, overdue: 0, nearDeadlineCount: 0 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0];
+      expect((call as any).content.title).toContain('🟢');
+    });
+
+    it('schedules with a yellow title when items are near-deadline but not overdue', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 2, open: 2, overdue: 0, nearDeadlineCount: 1 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0];
+      expect((call as any).content.title).toContain('🟡');
+    });
+
+    it('schedules with a red title when items are overdue', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 2, open: 1, overdue: 1, nearDeadlineCount: 0 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0];
+      expect((call as any).content.title).toContain('🔴');
+    });
+
+    it('does not re-schedule if already ran this week', async () => {
+      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
+      // First run — marks the week
+      await scheduleCapWeeklyDigest();
+      mockSchedule.mockClear();
+      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
+      // Second run same week — should be skipped
+      await scheduleCapWeeklyDigest();
+      expect(mockSchedule).not.toHaveBeenCalled();
+    });
+
+    it('swallows errors gracefully', async () => {
+      mockGetStats.mockRejectedValueOnce(new Error('network error'));
+      await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
+    });
+  });
+
+  // ─── Cancel helpers ────────────────────────────────────────────────────────
   describe('cancelCapNotification', () => {
     it('cancels the correct notification identifier', async () => {
       await cancelCapNotification('cap-99');
@@ -143,6 +290,44 @@ describe('CapNotificationService', () => {
     it('does not throw when cancelScheduledNotificationAsync throws', async () => {
       mockCancelOne.mockRejectedValueOnce(new Error('not found'));
       await expect(cancelCapNotification('cap-99')).resolves.toBeUndefined();
+    });
+  });
+
+  describe('cancelCapDigestNotification', () => {
+    it('cancels stored digest notification id and removes it from storage', async () => {
+      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-2026-07-01');
+      await cancelCapDigestNotification();
+      expect(mockCancelOne).toHaveBeenCalledWith('cap-digest-2026-07-01');
+    });
+
+    it('does nothing when no digest id is stored', async () => {
+      await cancelCapDigestNotification();
+      expect(mockCancelOne).not.toHaveBeenCalled();
+    });
+
+    it('swallows errors gracefully', async () => {
+      mockCancelOne.mockRejectedValueOnce(new Error('gone'));
+      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-old');
+      await expect(cancelCapDigestNotification()).resolves.toBeUndefined();
+    });
+  });
+
+  describe('cancelCapWeeklyDigestNotification', () => {
+    it('cancels stored weekly notification id and removes it from storage', async () => {
+      await AsyncStorage.setItem('cap_weekly_digest_notif_id', 'cap-weekly-2026-07-07');
+      await cancelCapWeeklyDigestNotification();
+      expect(mockCancelOne).toHaveBeenCalledWith('cap-weekly-2026-07-07');
+    });
+
+    it('does nothing when no weekly id is stored', async () => {
+      await cancelCapWeeklyDigestNotification();
+      expect(mockCancelOne).not.toHaveBeenCalled();
+    });
+
+    it('swallows errors gracefully', async () => {
+      mockCancelOne.mockRejectedValueOnce(new Error('gone'));
+      await AsyncStorage.setItem('cap_weekly_digest_notif_id', 'cap-weekly-old');
+      await expect(cancelCapWeeklyDigestNotification()).resolves.toBeUndefined();
     });
   });
 });
