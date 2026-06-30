@@ -1,28 +1,38 @@
 // src/__tests__/schema.test.ts
 //
-// Jest hoists jest.mock() calls before any variable declarations.
-// Only variables whose names start with 'mock' (case-insensitive) may be
-// referenced inside a jest.mock() factory — all others trigger a
-// ReferenceError at build time. That is why every helper here is prefixed
-// with 'mock'.
+// WHY expo-sqlite IS MOCKED
+// In Jest there is no native filesystem. expo-sqlite's pathUtils reads
+// FileSystem.documentDirectory (a native constant = null in Jest) and throws
+// "Both provided directory and defaultDatabaseDirectory are null."
+// before any test logic runs. The mock replaces the entire module with a
+// lightweight in-memory stub.
+//
+// JEST HOISTING RULE
+// jest.mock() factories are hoisted before variable declarations, so only
+// variables whose names begin with 'mock' (case-insensitive) may be referenced
+// inside the factory.
+//
+// MODULE SINGLETON NOTE
+// schema.ts keeps a module-level `let _db` singleton. We must NOT call
+// jest.resetModules() in beforeEach because that would create a new module
+// instance in every test, disconnecting `mockOpenDatabase` (which points at
+// the original jest.fn()) from the version the fresh module calls.
+// Instead we share one module import for the whole file and only use
+// jest.isolateModules() in the one test that specifically needs a clean
+// singleton (the failure-path test).
 
-// Applied-migration tracker — reset in beforeEach.
 let mockAppliedMigrations: Set<string>;
-
-// Current db stub — set inside the factory so tests can inspect calls.
 let mockCurrentDbStub: ReturnType<typeof mockMakeDbStub>;
 
 function mockMakeDbStub() {
   return {
-    execAsync:            jest.fn().mockResolvedValue(undefined),
-    runAsync:             jest.fn().mockResolvedValue(undefined),
-    getFirstAsync:        jest.fn().mockImplementation(
-      (_sql: string, params: [string]) => {
-        const name = params[0];
-        return Promise.resolve(
-          mockAppliedMigrations.has(name) ? { name } : null,
-        );
-      },
+    execAsync: jest.fn().mockResolvedValue(undefined),
+    runAsync: jest.fn().mockResolvedValue(undefined),
+    getFirstAsync: jest.fn().mockImplementation(
+      (_sql: string, params: [string]) =>
+        Promise.resolve(
+          mockAppliedMigrations.has(params[0]) ? { name: params[0] } : null,
+        ),
     ),
     withTransactionAsync: jest.fn().mockImplementation(
       async (fn: () => Promise<void>) => fn(),
@@ -34,8 +44,6 @@ function mockMakeDbStub() {
 jest.mock('expo-sqlite', () => ({
   openDatabaseAsync: jest.fn().mockImplementation(() => {
     mockCurrentDbStub = mockMakeDbStub();
-    // Track INSERT INTO _migrations so getFirstAsync returns the right
-    // value when runMigrations is called a second time on the same stub.
     mockCurrentDbStub.runAsync.mockImplementation(
       (sql: string, params: [string]) => {
         if (sql.includes('_migrations') && sql.includes('INSERT') && params?.[0]) {
@@ -48,32 +56,44 @@ jest.mock('expo-sqlite', () => ({
   }),
 }));
 
+// ── Single shared import (keeps the _db singleton intact across tests) ────────
+import { initializeDatabase, runMigrations } from '../db/schema';
 import * as SQLite from 'expo-sqlite';
 
+// Captured once; stays in sync because jest.mock replaced the module object.
 const mockOpenDatabase = SQLite.openDatabaseAsync as jest.Mock;
 
 beforeEach(() => {
   mockAppliedMigrations = new Set();
-  jest.resetModules();
   jest.clearAllMocks();
+  // Restore the default resolved behaviour after any per-test override.
+  mockOpenDatabase.mockImplementation(() => {
+    mockCurrentDbStub = mockMakeDbStub();
+    mockCurrentDbStub.runAsync.mockImplementation(
+      (sql: string, params: [string]) => {
+        if (sql.includes('_migrations') && sql.includes('INSERT') && params?.[0]) {
+          mockAppliedMigrations.add(params[0]);
+        }
+        return Promise.resolve(undefined);
+      },
+    );
+    return Promise.resolve(mockCurrentDbStub);
+  });
 });
 
 // ─── Happy path ───────────────────────────────────────────────────────────────
 
 describe('initializeDatabase — happy path', () => {
   it('resolves without throwing', async () => {
-    const { initializeDatabase } = require('../db/schema');
     await expect(initializeDatabase()).resolves.toBeUndefined();
   });
 
   it('calls openDatabaseAsync with the correct filename', async () => {
-    const { initializeDatabase } = require('../db/schema');
     await initializeDatabase();
     expect(mockOpenDatabase).toHaveBeenCalledWith('safeinspect.db');
   });
 
   it('creates the _migrations tracking table', async () => {
-    const { initializeDatabase } = require('../db/schema');
     await initializeDatabase();
     expect(mockCurrentDbStub.execAsync).toHaveBeenCalledWith(
       expect.stringContaining('CREATE TABLE IF NOT EXISTS _migrations'),
@@ -81,13 +101,11 @@ describe('initializeDatabase — happy path', () => {
   });
 
   it('runs all 9 MIGRATIONS (withTransactionAsync called 9 times)', async () => {
-    const { initializeDatabase } = require('../db/schema');
     await initializeDatabase();
     expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(9);
   });
 
-  it('records each migration name via runAsync INSERT', async () => {
-    const { initializeDatabase } = require('../db/schema');
+  it('records each migration name via INSERT INTO _migrations', async () => {
     await initializeDatabase();
     const insertCalls = (mockCurrentDbStub.runAsync as jest.Mock).mock.calls.filter(
       ([sql]: [string]) => sql.includes('INSERT INTO _migrations'),
@@ -97,28 +115,28 @@ describe('initializeDatabase — happy path', () => {
 });
 
 // ─── Idempotency ──────────────────────────────────────────────────────────────
+// These tests rely on the _db singleton being populated from the happy-path
+// tests that ran first in this file. Because we share one import, _db is
+// already set and openDatabaseAsync should NOT be called again.
 
 describe('initializeDatabase — idempotency', () => {
-  it('opens the database only once when called twice (singleton _db)', async () => {
-    const { initializeDatabase } = require('../db/schema');
+  it('opens the database only once when called twice (singleton reused)', async () => {
+    // Call twice more; _db is already set from earlier tests.
     await initializeDatabase();
     await initializeDatabase();
-    expect(mockOpenDatabase).toHaveBeenCalledTimes(1);
+    // mockOpenDatabase must have 0 NEW calls (singleton prevents re-open).
+    expect(mockOpenDatabase).toHaveBeenCalledTimes(0);
   });
 
-  it('does not re-apply migrations on the second call', async () => {
-    const { initializeDatabase } = require('../db/schema');
+  it('does not re-apply migrations on repeated calls', async () => {
     await initializeDatabase();
-    const countAfterFirst =
-      (mockCurrentDbStub.withTransactionAsync as jest.Mock).mock.calls.length;
     await initializeDatabase();
-    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(
-      countAfterFirst,
-    );
+    // withTransactionAsync must not be called (no new migrations to apply).
+    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(0);
   });
 });
 
-// ─── runMigrations — skips already-applied ────────────────────────────────────
+// ─── runMigrations — skips already-applied ───────────────────────────────────
 
 describe('runMigrations — skips already-applied migrations', () => {
   it('does not call withTransactionAsync when all migrations are present', async () => {
@@ -135,7 +153,6 @@ describe('runMigrations — skips already-applied migrations', () => {
     ];
     allNames.forEach(n => mockAppliedMigrations.add(n));
 
-    const { runMigrations } = require('../db/schema');
     const db = await mockOpenDatabase('safeinspect.db');
     await runMigrations(db);
 
@@ -144,11 +161,16 @@ describe('runMigrations — skips already-applied migrations', () => {
 });
 
 // ─── Failure paths ────────────────────────────────────────────────────────────
+// Uses jest.isolateModules to get a FRESH schema module with _db = null,
+// so openDatabaseAsync is actually invoked and the rejection propagates.
 
 describe('initializeDatabase — failure paths', () => {
   it('rejects when openDatabaseAsync throws', async () => {
     mockOpenDatabase.mockRejectedValueOnce(new Error('disk full'));
-    const { initializeDatabase } = require('../db/schema');
-    await expect(initializeDatabase()).rejects.toThrow('disk full');
+
+    await jest.isolateModulesAsync(async () => {
+      const { initializeDatabase: freshInit } = require('../db/schema');
+      await expect(freshInit()).rejects.toThrow('disk full');
+    });
   });
 });
