@@ -28,6 +28,7 @@ import {
   buildDifferentialView,
   DifferentialView,
 } from '../../../src/services/differentialView';
+import { createCapItemsFromInspection } from '../../../src/services/capFactory';
 import { SavedInspection } from '../../../src/types';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 
@@ -85,7 +86,7 @@ export default function ChecklistScreen() {
     handleStatusChange,
     handleCommentChange,
     handlePhotoTake,
-    handleFinish,
+    handleFinish: _handleFinish,
   } = useChecklistData(checklistParams, signature);
 
   const { isCollapsed, toggleSection, getSectionProgress } = useCollapsibleSections(
@@ -96,9 +97,6 @@ export default function ChecklistScreen() {
   useEffect(() => {
     if (!isFollowUp || isLoading || data.length === 0) return;
 
-    // Build a synthetic SavedInspection shell to feed to buildDifferentialView.
-    // We only need facilityId, id, items, and priorInspectionId — the rest
-    // is irrelevant for the diff.
     const shell: SavedInspection = {
       id:             checklistParams.draftId ?? '__current__',
       facilityId:     checklistParams.facilityId,
@@ -115,6 +113,29 @@ export default function ChecklistScreen() {
     buildDifferentialView(shell).then(setDiffView).catch(console.error);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
+
+  // ── Phase-4: wrap handleFinish to auto-create CAP items ────────────────────
+  const handleFinish = async () => {
+    await _handleFinish();
+    // Retrieve the just-saved inspection to feed to capFactory.
+    // We use draftId if available; otherwise look up the latest completed
+    // inspection for this facility as a best-effort.
+    try {
+      let saved: SavedInspection | undefined;
+      if (checklistParams.draftId) {
+        saved = await InspectionRepository.getById(checklistParams.draftId);
+      } else {
+        const all = await InspectionRepository.getAll();
+        saved = all
+          .filter(i => i.facilityId === checklistParams.facilityId && i.status === 'completed')
+          .sort((a, b) => b.date.localeCompare(a.date))[0];
+      }
+      if (saved) await createCapItemsFromInspection(saved);
+    } catch (err) {
+      // Non-fatal — CAP creation is best-effort; the inspection was already saved.
+      console.warn('[CAP] Failed to auto-create corrective actions:', err);
+    }
+  };
 
   const handleCancel = () => {
     Alert.alert(
@@ -153,7 +174,6 @@ export default function ChecklistScreen() {
         sections={sections}
         keyExtractor={item => item.id}
         ListHeaderComponent={
-          // Phase-3: show diff banner only for follow-up inspections
           isFollowUp ? (
             <DifferentialBanner
               diff={diffView}
@@ -162,7 +182,6 @@ export default function ChecklistScreen() {
           ) : null
         }
         renderItem={({ item, section }) => {
-          // Phase-3: look up this item's diff entry (follow-up only)
           const diffEntry = isFollowUp
             ? diffView?.all.find(e => e.item.id === item.id)
             : undefined;
@@ -176,7 +195,6 @@ export default function ChecklistScreen() {
                   onCommentChange={handleCommentChange}
                   onPhotoTake={handlePhotoTake}
                 />
-                {/* Phase-3: inline diff status pip below the item */}
                 {diffEntry && (
                   <View style={styles.diffPipContainer}>
                     <DiffStatusIndicator diffStatus={diffEntry.diffStatus} />
