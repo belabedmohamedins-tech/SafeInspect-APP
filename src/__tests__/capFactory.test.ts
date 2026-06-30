@@ -88,11 +88,13 @@ describe('createCapItemsFromInspection', () => {
   describe('deadline calculation by severity', () => {
     /**
      * deadlineFromToday() in capFactory creates a Date with the current
-     * wall-clock time (e.g. 23:55) then adds N calendar days.
-     * daysFromToday() here floors today to midnight before diffing.
-     * Across a midnight boundary that produces a 1-day mismatch.
+     * wall-clock time (e.g. 12:24 AM) then adds N calendar days via
+     * setDate(getDate() + N).  The test's daysFromToday() floors today
+     * to midnight before diffing.  Because the source Date already has
+     * hours elapsed past midnight, the diff rounds to N-1 when the
+     * wall-clock time is before noon.
      *
-     * Fix: accept either N or N+1 so the test is stable at any time of day.
+     * Tolerance: accept [N-1, N] — covers both sides of noon.
      */
     function daysFromToday(isoDate: string): number {
       const todayMidnight = new Date();
@@ -107,14 +109,14 @@ describe('createCapItemsFromInspection', () => {
       ['high'     as const, 14],
       ['medium'   as const, 30],
       ['low'      as const, 45],
-    ])('deadline for %s severity is within 1 day of %i', async (severity, expectedDays) => {
+    ])('deadline for %s severity is N or N-1 days from today (%i)', async (severity, expectedDays) => {
       await createCapItemsFromInspection(
         makeInspection([makeItem('1', 'non-compliant', severity)]),
       );
       const { deadline } = spySave.mock.calls[0][0];
       const actual = daysFromToday(deadline);
-      // Accept expectedDays OR expectedDays+1 to tolerate midnight boundary.
-      expect([expectedDays, expectedDays + 1]).toContain(actual);
+      // actual is expectedDays-1 (before noon) or expectedDays (after noon).
+      expect([expectedDays - 1, expectedDays]).toContain(actual);
     });
   });
 
