@@ -1,101 +1,172 @@
 // src/__tests__/schema.test.ts
+//
+// WHAT IS TESTED:
+//   initializeDatabase() → getDb() → SQLite.openDatabaseAsync + runMigrations.
+//   The function does NOT touch AsyncStorage — those assertions were incorrect
+//   and have been removed.
+//
+// WHY expo-sqlite IS MOCKED:
+//   In the Jest environment there is no native filesystem. The real
+//   expo-sqlite pathUtils resolves the database directory from
+//   FileSystem.documentDirectory (a native constant). Without the mock it
+//   throws "Both provided directory and defaultDatabaseDirectory are null."
+//   before any test can run.
+//
+// MOCK DESIGN:
+//   The SQLite stub uses a simple in-memory Map as the _migrations table so
+//   that runMigrations() behaves correctly (skips already-applied migrations on
+//   repeated calls) without any real SQL engine.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from '../repositories/keys';
-import { initializeDatabase } from '../db/schema';
+// Applied-migration tracker shared across all calls within a test.
+let appliedMigrations: Set<string>;
 
-// ─── Setup ────────────────────────────────────────────────────────────────────
+// db stub factory — recreated for each openDatabaseAsync call
+function makeDbStub() {
+  return {
+    execAsync:           jest.fn().mockResolvedValue(undefined),
+    runAsync:            jest.fn().mockResolvedValue(undefined),
+    getFirstAsync:       jest.fn().mockImplementation(
+      (_sql: string, params: [string]) => {
+        const name = params[0];
+        return Promise.resolve(appliedMigrations.has(name) ? { name } : null);
+      }
+    ),
+    withTransactionAsync: jest.fn().mockImplementation(
+      async (fn: () => Promise<void>) => {
+        await fn();
+      }
+    ),
+    closeAsync: jest.fn().mockResolvedValue(undefined),
+  };
+}
 
-beforeEach(async () => {
+let currentDbStub: ReturnType<typeof makeDbStub>;
+
+jest.mock('expo-sqlite', () => ({
+  openDatabaseAsync: jest.fn().mockImplementation(() => {
+    currentDbStub = makeDbStub();
+    // Intercept runAsync to track applied migrations so getFirstAsync
+    // returns the right value on subsequent runMigrations() calls.
+    currentDbStub.runAsync.mockImplementation(
+      (_sql: string, params: [string]) => {
+        // INSERT INTO _migrations (name) VALUES (?)
+        if (_sql.includes('_migrations') && _sql.includes('INSERT') && params?.[0]) {
+          appliedMigrations.add(params[0]);
+        }
+        return Promise.resolve(undefined);
+      }
+    );
+    return Promise.resolve(currentDbStub);
+  }),
+}));
+
+import * as SQLite from 'expo-sqlite';
+import { initializeDatabase, getDb, runMigrations } from '../db/schema';
+
+const mockOpenDatabase = SQLite.openDatabaseAsync as jest.Mock;
+
+beforeEach(() => {
+  // Reset migration state and the db singleton between tests.
+  appliedMigrations = new Set();
+  jest.resetModules();
   jest.clearAllMocks();
-  await AsyncStorage.clear();
+  // Re-import after resetModules to get a fresh singleton (_db = null).
+  // This is handled by requiring lazily in each test — see note below.
 });
 
-// ─── Happy path ───────────────────────────────────────────────────────────────
+// ─── Happy path ───────────────────────────────────────────────────────────
 
 describe('initializeDatabase — happy path', () => {
-  it('resolves without throwing when AsyncStorage is healthy', async () => {
-    await expect(initializeDatabase()).resolves.toBeUndefined();
+  it('resolves without throwing', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await expect(init()).resolves.toBeUndefined();
   });
 
-  it('seeds STATS_CACHE with JSON null on a fresh install', async () => {
-    await initializeDatabase();
-    const raw = await AsyncStorage.getItem(StorageKeys.STATS_CACHE);
-    expect(raw).toBe(JSON.stringify(null));
+  it('calls openDatabaseAsync with the correct filename', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    expect(mockOpenDatabase).toHaveBeenCalledWith('safeinspect.db');
   });
 
-  it('does NOT overwrite STATS_CACHE when it already exists', async () => {
-    const existing = JSON.stringify({ total: 42 });
-    await AsyncStorage.setItem(StorageKeys.STATS_CACHE, existing);
-    await initializeDatabase();
-    const raw = await AsyncStorage.getItem(StorageKeys.STATS_CACHE);
-    expect(raw).toBe(existing);
-  });
-
-  it('performs the warm-up read against the INSPECTIONS key', async () => {
-    const spy = jest.spyOn(AsyncStorage, 'getItem');
-    await initializeDatabase();
-    expect(spy).toHaveBeenCalledWith(StorageKeys.INSPECTIONS);
-  });
-
-  it('logs a console.info message on success', async () => {
-    const spy = jest.spyOn(console, 'info').mockImplementation(() => {});
-    await initializeDatabase();
-    expect(spy).toHaveBeenCalledWith(
-      expect.stringContaining('[SafeInspect] Database initialised'),
-    );
-    spy.mockRestore();
-  });
-});
-
-// ─── Failure paths ────────────────────────────────────────────────────────────
-
-describe('initializeDatabase — failure paths', () => {
-  it('rejects with a descriptive Error when the warm-up read throws', async () => {
-    jest
-      .spyOn(AsyncStorage, 'getItem')
-      .mockRejectedValueOnce(new Error('storage unavailable'));
-
-    await expect(initializeDatabase()).rejects.toThrow(
-      /AsyncStorage warm-up failed/,
+  it('creates the _migrations tracking table', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    expect(currentDbStub.execAsync).toHaveBeenCalledWith(
+      expect.stringContaining('CREATE TABLE IF NOT EXISTS _migrations'),
     );
   });
 
-  it('resolves (non-fatal) when STATS_CACHE setItem throws after a successful warm-up', async () => {
-    // First getItem (INSPECTIONS warm-up) succeeds.
-    // Second getItem (STATS_CACHE existence check) returns null.
-    // setItem (seed) throws — must NOT propagate.
-    jest
-      .spyOn(AsyncStorage, 'getItem')
-      .mockResolvedValueOnce(null)   // INSPECTIONS warm-up → ok
-      .mockResolvedValueOnce(null);  // STATS_CACHE check → not present
-
-    jest
-      .spyOn(AsyncStorage, 'setItem')
-      .mockRejectedValueOnce(new Error('disk full'));
-
-    await expect(initializeDatabase()).resolves.toBeUndefined();
+  it('runs all 9 MIGRATIONS entries (withTransactionAsync called 9 times)', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    // 9 migrations defined in MIGRATIONS array.
+    expect(currentDbStub.withTransactionAsync).toHaveBeenCalledTimes(9);
   });
 
-  it('resolves (non-fatal) when the STATS_CACHE existence check throws', async () => {
-    // Warm-up succeeds, but the second getItem (STATS_CACHE) throws.
-    jest
-      .spyOn(AsyncStorage, 'getItem')
-      .mockResolvedValueOnce(null)                              // INSPECTIONS ok
-      .mockRejectedValueOnce(new Error('key read error'));      // STATS_CACHE check fails
-
-    await expect(initializeDatabase()).resolves.toBeUndefined();
+  it('records each migration name via runAsync INSERT', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    const insertCalls = (currentDbStub.runAsync as jest.Mock).mock.calls.filter(
+      ([sql]: [string]) => sql.includes('INSERT INTO _migrations'),
+    );
+    expect(insertCalls).toHaveLength(9);
   });
 });
 
-// ─── Idempotency ──────────────────────────────────────────────────────────────
+// ─── Idempotency ──────────────────────────────────────────────────────────
 
 describe('initializeDatabase — idempotency', () => {
-  it('can be called multiple times without error', async () => {
-    await initializeDatabase();
-    await initializeDatabase();
-    // STATS_CACHE should still hold the seeded value, not be overwritten.
-    const raw = await AsyncStorage.getItem(StorageKeys.STATS_CACHE);
-    expect(raw).toBe(JSON.stringify(null));
+  it('opens the database only once when called twice (singleton _db)', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    await init();
+    // openDatabaseAsync must be called exactly once — the singleton is reused.
+    expect(mockOpenDatabase).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not re-apply migrations on the second call', async () => {
+    const { initializeDatabase: init } = require('../db/schema');
+    await init();
+    const firstCallCount = (currentDbStub.withTransactionAsync as jest.Mock).mock.calls.length;
+    await init();
+    // withTransactionAsync call count must not increase on the second call.
+    expect(currentDbStub.withTransactionAsync).toHaveBeenCalledTimes(firstCallCount);
+  });
+});
+
+// ─── runMigrations — skips already-applied ─────────────────────────────────
+
+describe('runMigrations — skips already-applied migrations', () => {
+  it('skips migrations that are already in the _migrations table', async () => {
+    const { runMigrations: run } = require('../db/schema');
+    // Pre-populate all migration names so every getFirstAsync returns a hit.
+    const allNames = [
+      '001_create_inspections',
+      '001_create_facilities',
+      '001_create_agenda',
+      '001_create_corrective_actions',
+      '001_create_audit_log',
+      '001_create_notifications',
+      '002_inspections_add_index_facility',
+      '002_inspections_add_index_status',
+      '002_corrective_actions_add_index_inspection',
+    ];
+    allNames.forEach(n => appliedMigrations.add(n));
+
+    const db = await (SQLite.openDatabaseAsync as jest.Mock)('safeinspect.db');
+    await run(db);
+
+    // All migrations already applied — withTransactionAsync should not be called.
+    expect(currentDbStub.withTransactionAsync).not.toHaveBeenCalled();
+  });
+});
+
+// ─── openDatabaseAsync failure ────────────────────────────────────────────────
+
+describe('initializeDatabase — failure paths', () => {
+  it('rejects when openDatabaseAsync throws', async () => {
+    mockOpenDatabase.mockRejectedValueOnce(new Error('disk full'));
+    const { initializeDatabase: init } = require('../db/schema');
+    await expect(init()).rejects.toThrow('disk full');
   });
 });
