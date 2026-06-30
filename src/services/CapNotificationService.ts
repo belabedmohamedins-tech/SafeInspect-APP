@@ -2,17 +2,19 @@
 //
 // Two notification strategies:
 //
-//  A) Per-item alerts (existing) — one notification per CAP item whose
-//     deadline falls within the next 7 days, fired at 09:00 on deadline day.
+//  A) Per-item alerts — one notification per CAP item whose deadline falls
+//     within the next 7 days, fired at 09:00 on deadline day.
 //
-//  B) [Phase-14] Daily grouped digest — a single summary notification fired
-//     at 08:00 every morning that shows overdue + due-today + due-this-week
-//     counts.  Tapping it deep-links to the Actions tab (filtered to overdue).
+//  B) Daily grouped digest — a single summary notification fired at 08:00
+//     every morning showing overdue + due-today + due-this-week counts.
+//     Tapping it deep-links to the Actions tab (filtered to overdue).
+//
+// Phase-16: calls persistOverdueEscalation() before scheduling so stored
+// status values are accurate, and uses getStats() for the digest counts.
 //
 // ⚠️  expo-notifications Android remote push was removed from Expo Go in
-//     SDK 53.  Every Notifications call is guarded so the app works in
-//     Expo Go (notifications silently disabled) and works fully in
-//     development builds and production.
+//     SDK 53. Every Notifications call is guarded so the app works in Expo Go
+//     (notifications silently disabled) and works fully in dev builds / prod.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
@@ -34,34 +36,34 @@ try {
 }
 
 // ─── Constants ──────────────────────────────────────────────────────────────
-const CHANNEL_ID   = 'cap-deadlines';
+const CHANNEL_ID        = 'cap-deadlines';
 const DIGEST_CHANNEL_ID = 'cap-digest';
-const WARN_DAYS    = 7;
-const DIGEST_HOUR  = 8;  // 08:00 local time
-const DIGEST_ID_PREFIX = 'cap-digest-';
+const WARN_DAYS         = 7;
+const DIGEST_HOUR       = 8;   // 08:00 local time
+const DIGEST_ID_PREFIX  = 'cap-digest-';
 
 // ─── Channel helpers ────────────────────────────────────────────────────────
 async function ensureChannel(): Promise<void> {
   if (!Notifications || Platform.OS !== 'android') return;
   await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
-    name: 'مواعيد الإجراءات التصحيحية',
-    importance: Notifications.AndroidImportance.HIGH,
+    name:             'مواعيد الإجراءات التصحيحية',
+    importance:       Notifications.AndroidImportance.HIGH,
     vibrationPattern: [0, 250, 250, 250],
-    lightColor: '#da7101',
+    lightColor:       '#da7101',
   });
 }
 
 async function ensureDigestChannel(): Promise<void> {
   if (!Notifications || Platform.OS !== 'android') return;
   await Notifications.setNotificationChannelAsync(DIGEST_CHANNEL_ID, {
-    name: 'ملخص الإجراءات التصحيحية اليومي',
-    importance: Notifications.AndroidImportance.DEFAULT,
+    name:             'ملخص الإجراءات التصحيحية اليومي',
+    importance:       Notifications.AndroidImportance.DEFAULT,
     vibrationPattern: [0, 150],
-    lightColor: '#7b1fa2',
+    lightColor:       '#7b1fa2',
   });
 }
 
-// ─── Run-once-per-day guard ──────────────────────────────────────────────────
+// ─── Run-once-per-day guard ─────────────────────────────────────────────────
 async function shouldRun(): Promise<boolean> {
   try {
     const last  = await AsyncStorage.getItem(StorageKeys.CAP_NOTIF_LAST_RUN);
@@ -81,7 +83,7 @@ async function markRan(): Promise<void> {
   } catch { /* ignore */ }
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+// ─── Date helpers ───────────────────────────────────────────────────────────
 function startOfDay(d: Date): Date {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
@@ -92,8 +94,10 @@ function addDays(d: Date, n: number): Date {
   return r;
 }
 
-// ─── A) Per-item alerts (unchanged logic) ───────────────────────────────────
+// ─── A) Per-item alerts ────────────────────────────────────────────────────────
 async function schedulePerItemAlerts(): Promise<void> {
+  // getOpen() includes open + in-progress + overdue; after persistOverdueEscalation()
+  // already ran, this list has accurate status values.
   const openItems  = await CorrectiveActionRepository.getOpen();
   const now        = new Date();
   const today      = startOfDay(now);
@@ -105,6 +109,7 @@ async function schedulePerItemAlerts(): Promise<void> {
     } catch { /* might not exist */ }
 
     const deadline = startOfDay(new Date(item.deadline));
+    // Skip already-overdue items (they appear in the digest) and out-of-window items
     if (deadline < today || deadline > warnCutoff) continue;
 
     const fireAt = new Date(deadline);
@@ -140,38 +145,31 @@ async function schedulePerItemAlerts(): Promise<void> {
 export async function scheduleCapDigestNotification(): Promise<void> {
   if (!Notifications) return;
   try {
-    // Cancel previous digest (any day)
+    // Cancel any previously scheduled digest
     const prevId = await AsyncStorage.getItem(StorageKeys.CAP_DIGEST_NOTIF_ID);
     if (prevId) {
       try { await Notifications.cancelScheduledNotificationAsync(prevId); } catch { /* ok */ }
     }
 
-    const all    = await CorrectiveActionRepository.getAll();
-    const now    = new Date();
-    const today  = startOfDay(now);
-    const week   = addDays(today, 7);
+    // — Single-pass aggregation (Phase 16) —
+    const stats        = await CorrectiveActionRepository.getStats(WARN_DAYS);
+    const overdueCount = stats.overdue;
+    // nearDeadlineCount already excludes overdue items (deadline >= today in getStats)
+    // Split it into "today" vs "rest of week" for a richer body
+    const now      = new Date();
+    const today    = startOfDay(now);
+    const todayStr = today.toISOString().slice(0, 10);
 
-    const overdueCount  = all.filter(a => {
-      if (a.status === 'resolved') return false;
-      return startOfDay(new Date(a.deadline)) < today;
-    }).length;
+    // We only need a targeted pass for due-today since getStats gives near-window total
+    const allOpen      = await CorrectiveActionRepository.getOpen();
+    const dueTodayCount = allOpen.filter(
+      a => a.status !== 'overdue' && a.deadline === todayStr,
+    ).length;
+    const dueWeekCount = stats.nearDeadlineCount - dueTodayCount;
 
-    const dueTodayCount = all.filter(a => {
-      if (a.status === 'resolved') return false;
-      const d = startOfDay(new Date(a.deadline));
-      return d.getTime() === today.getTime();
-    }).length;
-
-    const dueWeekCount  = all.filter(a => {
-      if (a.status === 'resolved') return false;
-      const d = startOfDay(new Date(a.deadline));
-      return d > today && d <= week;
-    }).length;
-
-    // Nothing to report
     if (overdueCount === 0 && dueTodayCount === 0 && dueWeekCount === 0) return;
 
-    // Build Arabic summary body
+    // Build Arabic body
     const parts: string[] = [];
     if (overdueCount  > 0) parts.push(`${overdueCount} متأخر`);
     if (dueTodayCount > 0) parts.push(`${dueTodayCount} موعده اليوم`);
@@ -181,14 +179,10 @@ export async function scheduleCapDigestNotification(): Promise<void> {
       ? `🔴 ${overdueCount} إجراء${overdueCount > 1 ? 'ات' : ''} تصحيحي متأخر`
       : `🟡 ${dueTodayCount + dueWeekCount} إجراء تصحيحي قادم`;
 
-    const body = parts.join(' · ');
-
-    // Fire at 08:00 today; if already past, schedule for tomorrow 08:00
+    // Fire at 08:00 today; push to tomorrow if already past
     const fireAt = new Date(today);
     fireAt.setHours(DIGEST_HOUR, 0, 0, 0);
-    if (fireAt <= now) {
-      fireAt.setDate(fireAt.getDate() + 1);
-    }
+    if (fireAt <= now) fireAt.setDate(fireAt.getDate() + 1);
 
     const identifier = `${DIGEST_ID_PREFIX}${fireAt.toISOString().slice(0, 10)}`;
 
@@ -196,7 +190,7 @@ export async function scheduleCapDigestNotification(): Promise<void> {
       identifier,
       content: {
         title,
-        body,
+        body: parts.join(' · '),
         data: {
           screen: 'actions',
           filter: overdueCount > 0 ? 'overdue' : 'all',
@@ -209,7 +203,6 @@ export async function scheduleCapDigestNotification(): Promise<void> {
       },
     });
 
-    // Persist identifier so next run can cancel it
     await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, identifier);
   } catch (error) {
     console.warn('[CapNotificationService] scheduleCapDigestNotification error:', error);
@@ -226,6 +219,13 @@ export async function scheduleCapDeadlineNotifications(): Promise<void> {
 
     await ensureChannel();
     await ensureDigestChannel();
+
+    // Phase-16: flush overdue promotions to storage FIRST so all subsequent
+    // reads (per-item loop + digest stats) see accurate status values.
+    const promoted = await CorrectiveActionRepository.persistOverdueEscalation();
+    if (promoted > 0) {
+      console.log(`[CapNotificationService] ⚠️ Promoted ${promoted} item(s) to overdue.`);
+    }
 
     // A) Per-item alerts
     await schedulePerItemAlerts();
@@ -249,7 +249,7 @@ export async function cancelCapNotification(capId: string): Promise<void> {
   }
 }
 
-/** Cancel the pending digest (e.g. when all CAPs are resolved) */
+/** Cancel the pending digest (e.g. when all CAPs are resolved). */
 export async function cancelCapDigestNotification(): Promise<void> {
   if (!Notifications) return;
   try {
