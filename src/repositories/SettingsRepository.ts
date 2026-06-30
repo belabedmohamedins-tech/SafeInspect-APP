@@ -5,8 +5,8 @@
 //
 // The repository exposes a flexible API:
 //   get()              → typed Settings object (core 3 fields)
-//   getAll()           → Record<string,string> of ALL keys (for screens that
-//                         read arbitrary keys like profile_* or pinEnabled)
+//   getAll()           → Record<string,string> of known settings keys only
+//                         (scoped — never returns auth or inspection keys)
 //   set(partial)       → write multiple fields at once
 //   set(key, value)    → write a single key (any string key allowed)
 
@@ -35,6 +35,26 @@ const FIELD_KEYS: Record<string, string> = {
   inspectionCause: StorageKeys.INSPECTION_CAUSE ?? 'INSPECTION_CAUSE',
 };
 
+/**
+ * The complete set of keys that getAll() is allowed to return.
+ * This prevents auth/security keys (APP_PIN, BIOMETRIC_ENABLED,
+ * PIN_FAILED_ATTEMPTS) and data blobs (INSPECTIONS, AGENDA …)
+ * from leaking into settings screens.
+ */
+const SETTINGS_ALLOWED_KEYS: readonly string[] = [
+  StorageKeys.OFFICE_NAME,
+  StorageKeys.INSPECTOR_NAME,
+  StorageKeys.INSPECTION_CAUSE,
+  '@settings/organisation',
+  '@settings/department',
+  '@settings/showGrade',
+  'profile_name',
+  'profile_title',
+  'profile_phone',
+  'profile_email',
+  'onboardingDone',
+];
+
 // ─── Repository ────────────────────────────────────────────────────────
 
 export const SettingsRepository = {
@@ -57,17 +77,15 @@ export const SettingsRepository = {
   },
 
   /**
-   * Read ALL keys stored in AsyncStorage and return them as a flat
-   * Record<string, string>.  Unknown / future keys (profile_*, pinEnabled …)
-   * are returned as-is.  Missing keys default to ''.
+   * Read only the known settings keys and return them as a flat
+   * Record<string, string>.  Auth keys (APP_PIN, BIOMETRIC_ENABLED …)
+   * and data blobs (INSPECTIONS, AGENDA …) are never included.
    *
    * This is the method used by settings.tsx and inspector-profile.tsx.
    */
   async getAll(): Promise<Record<string, string>> {
     try {
-      const allKeys = await AsyncStorage.getAllKeys();
-      if (!allKeys || allKeys.length === 0) return {};
-      const pairs = await AsyncStorage.multiGet(allKeys);
+      const pairs = await AsyncStorage.multiGet([...SETTINGS_ALLOWED_KEYS]);
       const result: Record<string, string> = {};
       for (const [key, value] of pairs) {
         result[key] = value ?? '';

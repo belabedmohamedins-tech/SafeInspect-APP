@@ -9,7 +9,10 @@
 //     can also be triggered manually from the Backup screen.
 //   - Each item is POSTed to SYNC_API_URL.  On 2xx the item is dequeued.
 //     On network error or non-2xx the item stays in the queue for the next
-//     run.
+//     run, up to MAX_ATTEMPTS retries.
+//   - Items that have exceeded MAX_ATTEMPTS are dropped from the queue so
+//     that permanently-rejected records (4xx, malformed data) do not grow
+//     the queue unboundedly.
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
 //
@@ -37,6 +40,9 @@ import { StorageKeys } from '../repositories/keys';
 
 // Computed key — defeats babel-plugin-transform-inline-environment-variables.
 const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
+
+/** Max retry attempts before a queue item is permanently dropped. */
+const MAX_ATTEMPTS = 10;
 
 function getSyncApiUrl(): string | undefined {
   return (process.env[SYNC_API_URL_KEY] ?? '').trim() || undefined;
@@ -141,10 +147,17 @@ export async function flush(): Promise<number> {
       if (res.ok) {
         synced++;
       } else {
-        remaining.push({ ...item, attempts: item.attempts + 1 });
+        const nextAttempts = item.attempts + 1;
+        if (nextAttempts < MAX_ATTEMPTS) {
+          remaining.push({ ...item, attempts: nextAttempts });
+        }
+        // else: drop the item — it has permanently failed
       }
     } catch {
-      remaining.push({ ...item, attempts: item.attempts + 1 });
+      const nextAttempts = item.attempts + 1;
+      if (nextAttempts < MAX_ATTEMPTS) {
+        remaining.push({ ...item, attempts: nextAttempts });
+      }
     }
   }
 

@@ -97,11 +97,9 @@ export const ApprovalRepository = {
         approvalNote: note,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
+    await AuditLogRepository.append('INSPECTION_SAVED', supervisorName, {
       inspectionId,
       facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
       detail: `اعتمد المشرف ${supervisorName}`,
     });
   },
@@ -130,12 +128,10 @@ export const ApprovalRepository = {
         returnedReason: reason,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
+    await AuditLogRepository.append('INSPECTION_SAVED', supervisorName, {
       inspectionId,
       facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
-      detail: `أعيد المشرف: ${reason}`,
+      detail: `أعيد للمراجعة بواسطة ${supervisorName}: ${reason}`,
     });
   },
 
@@ -163,12 +159,10 @@ export const ApprovalRepository = {
         approvalNote: note,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
+    await AuditLogRepository.append('INSPECTION_SAVED', supervisorName, {
       inspectionId,
       facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
-      detail: `رفع المشرف للجهة الأعلى`,
+      detail: `رُفع للجهة الأعلى بواسطة ${supervisorName}`,
     });
   },
 };

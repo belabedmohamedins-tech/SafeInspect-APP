@@ -1,17 +1,45 @@
 // app/(tabs)/inspection/categories.tsx
 import { FontAwesome } from '@expo/vector-icons';
-import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
+import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants';
-import { facilities } from '../../../src/facilitiesData';
+import { facilities as builtInFacilities } from '../../../src/facilitiesData';
+import { Facility } from '../../../src/types';
+
+// Lazy import — UserFacilitiesRepository may not exist on older builds;
+// wrap in try/catch so the screen degrades gracefully.
+let UserFacilitiesRepository: { getAll: () => Promise<Facility[]> } | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  UserFacilitiesRepository = require('../../../src/repositories/UserFacilitiesRepository').UserFacilitiesRepository;
+} catch { /* not available — built-in facilities only */ }
 
 export default function CategoriesScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
 
-  const uniqueActivities = Array.from(new Set(facilities.map(f => f.activity))).sort();
+  // FIX (P2): merge user-added facilities so their activity types appear
+  // in the category list alongside the built-in ones.
+  const [userFacilities, setUserFacilities] = useState<Facility[]>([]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      if (UserFacilitiesRepository) {
+        UserFacilitiesRepository.getAll()
+          .then(result => { if (active) setUserFacilities(result); })
+          .catch(() => { /* non-fatal */ });
+      }
+      return () => { active = false; };
+    }, [])
+  );
+
+  const uniqueActivities = useMemo(() => {
+    const all = [...builtInFacilities, ...userFacilities];
+    return Array.from(new Set(all.map(f => f.activity).filter(Boolean))).sort() as string[];
+  }, [userFacilities]);
 
   const renderCategory = ({ item }: { item: string }) => (
     <TouchableOpacity

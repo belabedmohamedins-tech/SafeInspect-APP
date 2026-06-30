@@ -27,11 +27,17 @@ async function readAll(): Promise<CorrectiveAction[]> {
     const actions = JSON.parse(raw) as CorrectiveAction[];
     // Auto-escalate open/in-progress items past their deadline to 'overdue'
     const today = new Date().toISOString().slice(0, 10);
-    return actions.map(a =>
+    const updated = actions.map(a =>
       (a.status === 'open' || a.status === 'in-progress') && a.deadline < today
         ? { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() }
         : a,
     );
+    // Persist any escalations so status is durable across cold reads
+    const anyEscalated = updated.some((a, i) => a.status !== actions[i].status);
+    if (anyEscalated) {
+      await AsyncStorage.setItem(StorageKeys.CORRECTIVE_ACTIONS, JSON.stringify(updated));
+    }
+    return updated;
   } catch {
     return [];
   }
@@ -55,7 +61,7 @@ function defaultDeadline(): string {
 // ─── Public API ───────────────────────────────────────────────────────────────────
 
 export const CorrectiveActionRepository = {
-  /** Return all CAP items (with auto-overdue escalation applied). */
+  /** Return all CAP items (with auto-overdue escalation applied and persisted). */
   async getAll(): Promise<CorrectiveAction[]> {
     return readAll();
   },

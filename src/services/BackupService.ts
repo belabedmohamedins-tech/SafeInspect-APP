@@ -22,6 +22,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { AgendaItem, Facility, SavedInspection } from '../types';
+import { StorageKeys } from '../repositories/keys';
 import { rescheduleAll } from './NotificationService';
 
 export const BACKUP_VERSION = 1;
@@ -36,26 +37,11 @@ export interface BackupPayload {
     officeName: string;
     inspectorName: string;
     inspectionCause: string;
-    // settings.tsx keys
     organisation: string;
     department: string;
     showGrade: string;
   };
 }
-
-// Storage keys used across the app
-const KEYS = {
-  inspections:   'inspections',
-  agenda:        'agenda',
-  userFacilities:'userFacilities',
-  officeName:    'officeName',
-  inspectorName: 'inspectorName',
-  inspectionCause: 'inspectionCause',
-  organisation:  '@settings/organisation',
-  department:    '@settings/department',
-  showGrade:     '@settings/showGrade',
-  lastBackupAt:  '@backup/lastExportedAt',
-} as const;
 
 // ─── Export ─────────────────────────────────────────────────────────────────
 
@@ -68,15 +54,15 @@ const KEYS = {
 export async function exportBackup(): Promise<BackupPayload> {
   // 1. Read all collections from AsyncStorage in one call
   const keys = [
-    KEYS.inspections,
-    KEYS.agenda,
-    KEYS.userFacilities,
-    KEYS.officeName,
-    KEYS.inspectorName,
-    KEYS.inspectionCause,
-    KEYS.organisation,
-    KEYS.department,
-    KEYS.showGrade,
+    StorageKeys.INSPECTIONS,
+    StorageKeys.AGENDA,
+    StorageKeys.USER_FACILITIES,
+    StorageKeys.OFFICE_NAME,
+    StorageKeys.INSPECTOR_NAME,
+    StorageKeys.INSPECTION_CAUSE,
+    '@settings/organisation',
+    '@settings/department',
+    '@settings/showGrade',
   ];
   const pairs = await AsyncStorage.multiGet(keys);
   const map = Object.fromEntries(pairs.map(([k, v]) => [k, v]));
@@ -84,16 +70,16 @@ export async function exportBackup(): Promise<BackupPayload> {
   const payload: BackupPayload = {
     version: BACKUP_VERSION,
     exportedAt: new Date().toISOString(),
-    inspections:    map[KEYS.inspections]    ? JSON.parse(map[KEYS.inspections]!)    : [],
-    agenda:         map[KEYS.agenda]         ? JSON.parse(map[KEYS.agenda]!)         : [],
-    userFacilities: map[KEYS.userFacilities] ? JSON.parse(map[KEYS.userFacilities]!) : [],
+    inspections:    map[StorageKeys.INSPECTIONS]    ? JSON.parse(map[StorageKeys.INSPECTIONS]!)    : [],
+    agenda:         map[StorageKeys.AGENDA]         ? JSON.parse(map[StorageKeys.AGENDA]!)         : [],
+    userFacilities: map[StorageKeys.USER_FACILITIES] ? JSON.parse(map[StorageKeys.USER_FACILITIES]!) : [],
     settings: {
-      officeName:      map[KEYS.officeName]      ?? '',
-      inspectorName:   map[KEYS.inspectorName]   ?? '',
-      inspectionCause: map[KEYS.inspectionCause] ?? '',
-      organisation:    map[KEYS.organisation]    ?? '',
-      department:      map[KEYS.department]      ?? '',
-      showGrade:       map[KEYS.showGrade]       ?? 'true',
+      officeName:      map[StorageKeys.OFFICE_NAME]      ?? '',
+      inspectorName:   map[StorageKeys.INSPECTOR_NAME]   ?? '',
+      inspectionCause: map[StorageKeys.INSPECTION_CAUSE] ?? '',
+      organisation:    map['@settings/organisation']     ?? '',
+      department:      map['@settings/department']       ?? '',
+      showGrade:       map['@settings/showGrade']        ?? 'true',
     },
   };
 
@@ -116,7 +102,7 @@ export async function exportBackup(): Promise<BackupPayload> {
   }
 
   // 4. Record timestamp
-  await AsyncStorage.setItem(KEYS.lastBackupAt, payload.exportedAt);
+  await AsyncStorage.setItem(StorageKeys.BACKUP_LAST_AT, payload.exportedAt);
 
   return payload;
 }
@@ -166,17 +152,17 @@ export async function importBackup(): Promise<ImportResult | null> {
     throw new Error('ملف النسخة الاحتياطية تالف');
   }
 
-  // 4. Write all collections back to AsyncStorage
+  // 4. Write all collections back to AsyncStorage using canonical StorageKeys
   await AsyncStorage.multiSet([
-    [KEYS.inspections,    JSON.stringify(payload.inspections)],
-    [KEYS.agenda,         JSON.stringify(payload.agenda)],
-    [KEYS.userFacilities, JSON.stringify(payload.userFacilities ?? [])],
-    [KEYS.officeName,      payload.settings?.officeName      ?? ''],
-    [KEYS.inspectorName,   payload.settings?.inspectorName   ?? ''],
-    [KEYS.inspectionCause, payload.settings?.inspectionCause ?? ''],
-    [KEYS.organisation,    payload.settings?.organisation    ?? ''],
-    [KEYS.department,      payload.settings?.department      ?? ''],
-    [KEYS.showGrade,       payload.settings?.showGrade       ?? 'true'],
+    [StorageKeys.INSPECTIONS,    JSON.stringify(payload.inspections)],
+    [StorageKeys.AGENDA,         JSON.stringify(payload.agenda)],
+    [StorageKeys.USER_FACILITIES, JSON.stringify(payload.userFacilities ?? [])],
+    [StorageKeys.OFFICE_NAME,     payload.settings?.officeName      ?? ''],
+    [StorageKeys.INSPECTOR_NAME,  payload.settings?.inspectorName   ?? ''],
+    [StorageKeys.INSPECTION_CAUSE, payload.settings?.inspectionCause ?? ''],
+    ['@settings/organisation',    payload.settings?.organisation    ?? ''],
+    ['@settings/department',      payload.settings?.department      ?? ''],
+    ['@settings/showGrade',       payload.settings?.showGrade       ?? 'true'],
   ]);
 
   // 5. Reschedule notifications for restored pending agenda items
@@ -196,7 +182,7 @@ export async function importBackup(): Promise<ImportResult | null> {
 
 export async function getLastBackupDate(): Promise<Date | null> {
   try {
-    const raw = await AsyncStorage.getItem(KEYS.lastBackupAt);
+    const raw = await AsyncStorage.getItem(StorageKeys.BACKUP_LAST_AT);
     return raw ? new Date(raw) : null;
   } catch {
     return null;

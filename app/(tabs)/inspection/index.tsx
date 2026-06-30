@@ -18,14 +18,25 @@ export default function InspectionIndexScreen() {
     activeFilter, setActiveFilter, deleteInspection,
   } = useInspectionList();
 
+  // FIX (P2): pass all stored draft metadata so useChecklistData can restore
+  // writer / committeeMembers / cause / reference via paramsRef on load.
+  // The hook reads these from paramsRef.current as a fallback only when the
+  // stored draft fields are empty, so passing them here is safe.
   const handleDraftPress = (draft: SavedInspection) => {
     router.push({
       pathname: '/(tabs)/inspection/checklist',
       params: {
-        draftId:         draft.id,
-        facilityId:      draft.facilityId,
-        facilityName:    draft.facilityName,
-        facilityAddress: draft.facilityAddress,
+        draftId:          draft.id,
+        facilityId:       draft.facilityId,
+        facilityName:     draft.facilityName,
+        facilityAddress:  draft.facilityAddress,
+        activity:         draft.facilityActivity ?? '',
+        cause:            draft.inspectionCause  ?? '',
+        reference:        draft.referenceDocument ?? '',
+        writer:           draft.inspectorName    ?? '',
+        committeeMembers: JSON.stringify(draft.committeeMembers ?? []),
+        lat: draft.coordinates?.latitude  != null ? String(draft.coordinates.latitude)  : '',
+        lng: draft.coordinates?.longitude != null ? String(draft.coordinates.longitude) : '',
       },
     });
   };

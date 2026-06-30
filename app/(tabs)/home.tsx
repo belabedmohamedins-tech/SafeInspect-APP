@@ -25,6 +25,10 @@ export default function HomeScreen() {
     scheduleCapDeadlineNotifications();
   }, []);
 
+  // FIX (P2): route through /inspection/start so the user fills in writer /
+  // committeeMembers / cause before reaching the checklist. Pass facilityId +
+  // agendaId as params so start.tsx can pre-select the facility and carry
+  // agendaId all the way through to checklist.
   const handleAgendaPress = (item: AgendaItem) => {
     const facility = getFacilityForAgenda(item);
     if (!facility) {
@@ -32,13 +36,13 @@ export default function HomeScreen() {
       return;
     }
     router.push({
-      pathname: '/(tabs)/inspection/checklist',
+      pathname: '/(tabs)/inspection/start',
       params: {
-        facilityId:      facility.id,
-        facilityName:    facility.projectName,
-        facilityAddress: facility.address,
-        activity:        facility.activity,
-        agendaId:        item.id,
+        prefillFacilityId:      facility.id,
+        prefillFacilityName:    facility.projectName,
+        prefillFacilityAddress: facility.address,
+        prefillActivity:        facility.activity,
+        agendaId:               item.id,
       },
     });
   };
@@ -96,7 +100,6 @@ export default function HomeScreen() {
           onViewAll={() => router.push('/(tabs)/inspection')}
         />
 
-        {/* FIX #2: map Facility → SavedInspection shape with safe fallback fields */}
         {recentFacilities.length > 0 && (
           <InspectionSection
             title="آخر المنشآت المفتشة"
