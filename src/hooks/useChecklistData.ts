@@ -32,10 +32,15 @@ interface ChecklistParams {
   writer: string;
   lat?: number;
   lng?: number;
-  /** Phase-3: 'routine' | 'follow-up' | 'complaint'. Defaults to 'routine'. */
+  /** Phase-3: 'routine' | 'follow-up' | 'complaint' | 'extraordinary'. Defaults to 'routine'. */
   inspectionType?: string;
   /** Phase-3: ID of the prior inspection to diff against (follow-up only). */
   priorInspectionId?: string;
+  // ── Phase-5: meeting gate flags ──────────────────────────────────────
+  /** Set by checklist.tsx once the opening-meeting modal is confirmed. */
+  openingMeetingDone?: boolean;
+  /** Set by checklist.tsx once the closing-meeting modal is confirmed. */
+  closingMeetingDone?: boolean;
 }
 
 export function useChecklistData(params: ChecklistParams, signature?: string) {
@@ -52,7 +57,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ───────────────────────────────────────────────────────────────────────
+  // ─── Load ─────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -82,7 +87,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ───────────────────────────────────────────────────────────────────────
+  // ─── Save ─────────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
@@ -108,8 +113,11 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
               ? { latitude: p.lat, longitude: p.lng }
               : undefined,
           // Phase-3: persist inspection type + prior link
-          inspectionType:     p.inspectionType ?? 'routine',
-          priorInspectionId:  p.priorInspectionId,
+          inspectionType:    (p.inspectionType ?? 'routine') as SavedInspection['inspectionType'],
+          priorInspectionId: p.priorInspectionId,
+          // Phase-5: persist meeting gate flags so they survive every save
+          openingMeetingDone: p.openingMeetingDone ?? false,
+          closingMeetingDone: p.closingMeetingDone ?? false,
         };
 
         if (status === 'completed') {
@@ -146,7 +154,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ───────────────────────────────────────────────────────────────────
+  // ─── Item handlers ────────────────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -173,7 +181,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  // ─── Finish (with completion gates) ────────────────────────────────────────────────────
+  // ─── Finish (with completion gates) ──────────────────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
     const applicable = data.filter(item => item.complianceStatus !== 'na');
     const evaluated  = applicable.filter(
@@ -186,7 +194,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
       const remaining = applicable.length - evaluated.length;
       Alert.alert(
         'لم يكتمل التفتيش',
-        `يجب تقييم 85٪ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيّم.`,
+        `يجب تقييم 85؀ على الأقل من البنود قبل الإنهاء.\nتبقى ${remaining} بند غير مقيّم.`,
         [{ text: 'حسناً' }]
       );
       return;
@@ -231,7 +239,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [data, saveInspection, inspectionId, router]);
 
-  // ─── Derived values ─────────────────────────────────────────────────────────────────
+  // ─── Derived values ────────────────────────────────────────────────────────────────────
   const sections        = useMemo(() => groupByAxis(data), [data]);
   const totalItems      = useMemo(() => data.length, [data]);
   const evaluatedItems  = useMemo(() => getEvaluatedCount(data), [data]);

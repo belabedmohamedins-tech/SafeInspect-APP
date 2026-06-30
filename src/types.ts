@@ -28,12 +28,17 @@ export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
 /**
  * Inspection type — determines workflow and differential view behaviour.
  *
- * - 'routine'   — standard scheduled inspection
- * - 'follow-up' — verifies resolution of findings from a prior inspection;
- *                 requires priorInspectionId to be set on SavedInspection
- * - 'complaint' — triggered by a received complaint
+ * - 'routine'       — standard scheduled inspection
+ * - 'follow-up'     — verifies resolution of findings from a prior inspection;
+ *                     requires priorInspectionId to be set on SavedInspection
+ * - 'complaint'     — triggered by a received complaint
+ * - 'extraordinary' — exceptional / unscheduled inspection ordered by authority
  */
-export type InspectionType = 'routine' | 'follow-up' | 'complaint';
+export type InspectionType =
+  | 'routine'
+  | 'follow-up'
+  | 'complaint'
+  | 'extraordinary';
 
 /**
  * Administrative sanction tier for a criterion violation.
@@ -84,7 +89,7 @@ export interface InspectionItem {
   photoUri?: string;
   photos?: string[];
 
-  // ── Phase 1.2: Numeric evidence fields ───────────────────────────────────
+  // ── Phase 1.2: Numeric evidence fields ──────────────────────────────────────
   /**
    * Measured value for quantitative criteria (temperature, chlorine, noise…).
    * Stored as a number for trend analysis — do NOT use free-text comments
@@ -94,7 +99,7 @@ export interface InspectionItem {
   /** Unit of the numeric value, e.g. '°C', 'mg/L', 'dB'. */
   numericUnit?: string;
 
-  // ── Phase 1.3: Repeat-violation fields ───────────────────────────────────
+  // ── Phase 1.3: Repeat-violation fields ──────────────────────────────────────
   /**
    * True when this exact criterion was also non-compliant in the immediately
    * preceding inspection for the same facility.
@@ -104,14 +109,14 @@ export interface InspectionItem {
   /** The compliance status this criterion had in the prior inspection. */
   priorInspectionStatus?: ComplianceStatus;
 
-  // ── Phase 1.4: Root-cause classification ─────────────────────────────────
+  // ── Phase 1.4: Root-cause classification ─────────────────────────────────────
   /**
    * Root cause of a non-conformity. Helps the inspector and supervisor
    * prescribe the right corrective action type.
    */
   rootCause?: RootCause;
 
-  // ── Phase 1.5: Sanction tier ─────────────────────────────────────────────
+  // ── Phase 1.5: Sanction tier ─────────────────────────────────────────────────
   /**
    * The administrative escalation tier associated with a violation of this
    * criterion. Shown to inspectors so they know the legal consequence before
@@ -144,14 +149,14 @@ export interface SavedInspection {
    */
   status: 'completed' | 'in-progress' | 'draft';
 
-  // ── Phase 1.6: Inspection type ───────────────────────────────────────────
+  // ── Phase 1.6: Inspection type ────────────────────────────────────────
   /**
    * Type of this inspection run.
    * Defaults to 'routine' when not set (backwards-compatible).
    */
   inspectionType?: InspectionType;
 
-  // ── Phase 1.7: Follow-up linkage ─────────────────────────────────────────
+  // ── Phase 1.7: Follow-up linkage ───────────────────────────────────────
   /**
    * ID of the prior inspection this follow-up is verifying.
    * Required when inspectionType === 'follow-up'.
@@ -174,15 +179,15 @@ export interface SavedInspection {
    */
   closingMeetingDone?: boolean;
 
-  // ── Phase 1.9: Report sequence number ────────────────────────────────────
+  // ── Phase 1.9: Report sequence number ─────────────────────────────────────
   /**
-   * Sequential reference number tying this report to the commune's
+   * Sequential reference number tying this report to the commune’s
    * official inspection register. Format: COMMUNE-YEAR-NNNN.
    * Generated at report finalisation (Phase 8).
    */
   reportSequenceNumber?: string;
 
-  // ── Scoring ──────────────────────────────────────────────────────────────
+  // ── Scoring ────────────────────────────────────────────────────────────────────
   /** Severity-weighted compliance score, 0–100. */
   score?: number;
   /** Prioritisation grade: A / B / C / D. */
@@ -198,14 +203,14 @@ export interface SavedInspection {
   /** Recommended days to next inspection based on grade. */
   nextInspectionDays?: number;
 
-  // ── Decision support (Phase 6) ───────────────────────────────────────────
+  // ── Decision support (Phase 6) ────────────────────────────────────────────
   /**
-   * If the inspector overrode the system's suggested escalation action,
+   * If the inspector overrode the system’s suggested escalation action,
    * this field stores their stated reason. Required on override.
    */
   escalationOverrideReason?: string;
 
-  // ── Metadata ─────────────────────────────────────────────────────────────
+  // ── Metadata ──────────────────────────────────────────────────────────────────
   signature?: string;
   officeName?: string;
   inspectionCause?: string;
