@@ -5,126 +5,274 @@
 // findings. Inspectors can also create CAP items manually.
 //
 // Each CorrectiveAction is linked to:
-//   - the source inspection (inspectionId)
-//   - the specific finding (inspectionItemId)
-//   - the facility (facilityId / facilityName)
+//   - the source inspection  (inspectionId)
+//   - the specific finding   (inspectionItemId)
+//   - the facility           (facilityId / facilityName)
 //
 // Status lifecycle:
 //   open → in-progress → resolved
-//            ↓ (if past deadline and not resolved)
+//            ↓ (auto-escalated on read when past deadline)
 //          overdue
+//
+// Phase-16 changes:
+//   - readAll() persists auto-escalations back to storage so callers always
+//     see consistent status without re-escalating on every single read.
+//   - getOverdue()   — shortcut for overdue items only.
+//   - getStats()     — single-pass aggregation used by widget + digest.
+//   - persistOverdueEscalation() — public flush called by notification service.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CorrectiveAction } from '../types';
 import { StorageKeys } from './keys';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────────
-
-async function readAll(): Promise<CorrectiveAction[]> {
-  try {
-    const raw = await AsyncStorage.getItem(StorageKeys.CORRECTIVE_ACTIONS);
-    if (!raw) return [];
-    const actions = JSON.parse(raw) as CorrectiveAction[];
-    // Auto-escalate open/in-progress items past their deadline to 'overdue'
-    const today = new Date().toISOString().slice(0, 10);
-    return actions.map(a =>
-      (a.status === 'open' || a.status === 'in-progress') && a.deadline < today
-        ? { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() }
-        : a,
-    );
-  } catch {
-    return [];
-  }
-}
+// ─── Internal helpers ─────────────────────────────────────────────────────────
 
 async function writeAll(actions: CorrectiveAction[]): Promise<void> {
-  await AsyncStorage.setItem(StorageKeys.CORRECTIVE_ACTIONS, JSON.stringify(actions));
+  await AsyncStorage.setItem(
+    StorageKeys.CORRECTIVE_ACTIONS,
+    JSON.stringify(actions),
+  );
 }
 
 function makeId(): string {
   return `cap-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
 }
 
-/** Default deadline: 30 days from today. */
+/** Default deadline: 30 days from today (ISO date string). */
 function defaultDeadline(): string {
   const d = new Date();
   d.setDate(d.getDate() + 30);
   return d.toISOString().slice(0, 10);
 }
 
-// ─── Public API ───────────────────────────────────────────────────────────────────
+/**
+ * Core read function.
+ *
+ * 1. Reads raw items from AsyncStorage.
+ * 2. Auto-escalates any open/in-progress item whose deadline has passed
+ *    to `overdue`, recording `updatedAt`.
+ * 3. If any item was escalated, persists the updated list back to storage
+ *    so subsequent reads are consistent and fast.
+ */
+async function readAll(): Promise<CorrectiveAction[]> {
+  try {
+    const raw = await AsyncStorage.getItem(StorageKeys.CORRECTIVE_ACTIONS);
+    if (!raw) return [];
+
+    const actions = JSON.parse(raw) as CorrectiveAction[];
+    const today   = new Date().toISOString().slice(0, 10);
+    let   dirty   = false;
+
+    const escalated = actions.map(a => {
+      if (
+        (a.status === 'open' || a.status === 'in-progress') &&
+        a.deadline < today
+      ) {
+        dirty = true;
+        return { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() };
+      }
+      return a;
+    });
+
+    // Persist promotions so callers get consistent data without re-escalating
+    if (dirty) {
+      await writeAll(escalated).catch(() => { /* non-fatal — will re-escalate next read */ });
+    }
+
+    return escalated;
+  } catch {
+    return [];
+  }
+}
+
+// ─── Public API ───────────────────────────────────────────────────────────────
+
+export interface CapStats {
+  open:              number;
+  inProgress:        number;
+  overdue:           number;
+  resolved:          number;
+  total:             number;
+  /** Items whose deadline falls within the next `withinDays` days (default 7). */
+  nearDeadlineCount: number;
+}
 
 export const CorrectiveActionRepository = {
-  /** Return all CAP items (with auto-overdue escalation applied). */
+  // ─── Read ────────────────────────────────────────────────────────────────
+
+  /** All CAP items with auto-overdue escalation applied and persisted. */
   async getAll(): Promise<CorrectiveAction[]> {
     return readAll();
   },
 
-  /** Return all CAP items for a specific inspection. */
+  /** All CAP items for a specific inspection. */
   async getByInspection(inspectionId: string): Promise<CorrectiveAction[]> {
     const all = await readAll();
     return all.filter(a => a.inspectionId === inspectionId);
   },
 
-  /** Return all CAP items for a specific facility. */
+  /** All CAP items for a specific facility. */
   async getByFacility(facilityId: string): Promise<CorrectiveAction[]> {
     const all = await readAll();
     return all.filter(a => a.facilityId === facilityId);
   },
 
-  /** Return all open or overdue CAP items (pending resolution). */
+  /**
+   * All pending CAP items (open + in-progress + overdue).
+   * Use this wherever "still needs action" is the filter criterion.
+   */
   async getOpen(): Promise<CorrectiveAction[]> {
     const all = await readAll();
-    return all.filter(a => a.status === 'open' || a.status === 'in-progress' || a.status === 'overdue');
+    return all.filter(
+      a => a.status === 'open' ||
+           a.status === 'in-progress' ||
+           a.status === 'overdue',
+    );
+  },
+
+  /** All items currently in `overdue` status. */
+  async getOverdue(): Promise<CorrectiveAction[]> {
+    const all = await readAll();
+    return all.filter(a => a.status === 'overdue');
   },
 
   /**
-   * Upsert a CAP item. If an item with the same id exists it is replaced;
-   * otherwise the item is appended. `createdAt` and `id` are auto-set for
-   * new items if not provided.
+   * Single-pass aggregation — avoids multiple `getAll()` calls in widgets
+   * and the notification digest.
+   *
+   * @param nearDays  Window for "near-deadline" count (default 7).
    */
-  async save(action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> & Partial<Pick<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>>): Promise<CorrectiveAction> {
+  async getStats(nearDays = 7): Promise<CapStats> {
+    const all   = await readAll();
+    const today = new Date().toISOString().slice(0, 10);
+
+    const cutoff = new Date();
+    cutoff.setDate(cutoff.getDate() + nearDays);
+    const cutoffStr = cutoff.toISOString().slice(0, 10);
+
+    const stats: CapStats = {
+      open:              0,
+      inProgress:        0,
+      overdue:           0,
+      resolved:          0,
+      total:             all.length,
+      nearDeadlineCount: 0,
+    };
+
+    for (const a of all) {
+      if      (a.status === 'open')        stats.open++;
+      else if (a.status === 'in-progress') stats.inProgress++;
+      else if (a.status === 'overdue')     stats.overdue++;
+      else if (a.status === 'resolved')    stats.resolved++;
+
+      if (
+        a.status !== 'resolved' &&
+        a.deadline >= today &&
+        a.deadline <= cutoffStr
+      ) {
+        stats.nearDeadlineCount++;
+      }
+    }
+
+    return stats;
+  },
+
+  /**
+   * Force a read-escalate-write cycle.
+   *
+   * Call this once per day from `CapNotificationService` before scheduling
+   * notifications so that stored status values are accurate.
+   * Returns the number of items that were promoted.
+   */
+  async persistOverdueEscalation(): Promise<number> {
+    try {
+      const raw = await AsyncStorage.getItem(StorageKeys.CORRECTIVE_ACTIONS);
+      if (!raw) return 0;
+
+      const actions = JSON.parse(raw) as CorrectiveAction[];
+      const today   = new Date().toISOString().slice(0, 10);
+      let   count   = 0;
+
+      const updated = actions.map(a => {
+        if (
+          (a.status === 'open' || a.status === 'in-progress') &&
+          a.deadline < today
+        ) {
+          count++;
+          return { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() };
+        }
+        return a;
+      });
+
+      if (count > 0) await writeAll(updated);
+      return count;
+    } catch {
+      return 0;
+    }
+  },
+
+  // ─── Write ────────────────────────────────────────────────────────────────
+
+  /**
+   * Upsert a CAP item.  If an item with the same `id` exists it is replaced;
+   * otherwise the item is appended.  `id` and `createdAt` are auto-generated
+   * for new items if not provided.
+   */
+  async save(
+    action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> &
+            Partial<Pick<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>>,
+  ): Promise<CorrectiveAction> {
     const all = await readAll();
     const now = new Date().toISOString();
-    const id = action.id ?? makeId();
+    const id  = action.id ?? makeId();
+
     const existing = all.findIndex(a => a.id === id);
     const record: CorrectiveAction = {
       ...action,
       id,
-      deadline: action.deadline || defaultDeadline(),
+      deadline:   action.deadline   || defaultDeadline(),
       assignedTo: action.assignedTo || '',
-      createdAt: action.createdAt ?? now,
-      updatedAt: now,
+      createdAt:  action.createdAt  ?? now,
+      updatedAt:  now,
     };
+
     if (existing >= 0) {
       all[existing] = record;
     } else {
       all.push(record);
     }
+
     await writeAll(all);
     return record;
   },
 
   /**
-   * Update only the status (and optional notes/closedAt) of a CAP item.
-   * Automatically sets closedAt when status becomes 'resolved'.
+   * Update the status (and optional notes) of a CAP item.
+   *
+   * - Setting `resolved` auto-fills `closedAt`.
+   * - Setting `in-progress` on an `overdue` item clears `overdue` —
+   *   the inspector has picked it back up.
    */
   async updateStatus(
-    id: string,
+    id:     string,
     status: CorrectiveAction['status'],
     notes?: string,
   ): Promise<void> {
-    const all = await readAll();
+    const all   = await readAll();
     const index = all.findIndex(a => a.id === id);
     if (index < 0) return;
-    const now = new Date().toISOString();
+
+    const now    = new Date().toISOString();
+    const prev   = all[index];
+
     all[index] = {
-      ...all[index],
+      ...prev,
       status,
-      notes: notes ?? all[index].notes,
+      notes:    notes ?? prev.notes,
       updatedAt: now,
-      closedAt: status === 'resolved' ? now : all[index].closedAt,
+      closedAt:  status === 'resolved' ? now : prev.closedAt,
     };
+
     await writeAll(all);
   },
 
@@ -134,7 +282,10 @@ export const CorrectiveActionRepository = {
     await writeAll(all.filter(a => a.id !== id));
   },
 
-  /** Delete all CAP items linked to a specific inspection (called when inspection is deleted). */
+  /**
+   * Delete all CAP items linked to a specific inspection.
+   * Called automatically when an inspection is deleted.
+   */
   async deleteByInspection(inspectionId: string): Promise<void> {
     const all = await readAll();
     await writeAll(all.filter(a => a.inspectionId !== inspectionId));
