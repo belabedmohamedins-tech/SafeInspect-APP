@@ -13,6 +13,12 @@
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
 //
+// Tier-2 change:
+//   - flush() now attaches the server JWT Bearer token via apiClient.
+//     The apiClient handles silent token refresh on 401 automatically.
+//     If no server session exists (offline / not logged in) the sync
+//     falls back gracefully — items remain in the queue.
+//
 // ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to `process.env.KEY`:
 //   babel-preset-expo ships babel-plugin-transform-inline-environment-variables
 //   which replaces the static form `process.env.EXPO_PUBLIC_*` with the
@@ -34,6 +40,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../types';
 import { StorageKeys } from '../repositories/keys';
+import { apiClient } from './apiClient';
 
 // Computed key — defeats babel-plugin-transform-inline-environment-variables.
 const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
@@ -54,7 +61,7 @@ export interface SyncStatus {
   isOnline: boolean;
 }
 
-// ── Queue helpers ──────────────────────────────────────────────────────────────
+// ── Queue helpers ─────────────────────────────────────────────────────────────────
 
 async function readQueue(): Promise<SyncQueueItem[]> {
   try {
@@ -69,7 +76,7 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(queue));
 }
 
-// ── Network check ──────────────────────────────────────────────────────────────
+// ── Network check ─────────────────────────────────────────────────────────────────
 
 async function checkOnline(): Promise<boolean> {
   try {
@@ -89,7 +96,7 @@ async function checkOnline(): Promise<boolean> {
   }
 }
 
-// ── Public API ────────────────────────────────────────────────────────────────
+// ── Public API ───────────────────────────────────────────────────────────────────
 
 export async function enqueue(inspection: SavedInspection): Promise<void> {
   const queue = await readQueue();
@@ -130,12 +137,13 @@ export async function flush(): Promise<number> {
 
   for (const item of queue) {
     try {
-      // globalThis.fetch — property lookup at call time so the jest mock is
-      // always visible (see FETCH NOTE in the file header).
-      const res = await globalThis.fetch(`${SYNC_API_URL}/inspections`, {
-        method:  'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body:    JSON.stringify(item.inspection),
+      // apiClient attaches the Bearer token and handles silent 401 refresh.
+      // Falls back to a plain unauthenticated POST if no server session exists
+      // (same behaviour as before Tier-2 — server will return 401 and the
+      // item stays in the queue until the user logs in).
+      const res = await apiClient('/sync/inspections', {
+        method: 'POST',
+        body:   JSON.stringify(item.inspection),
       });
 
       if (res.ok) {

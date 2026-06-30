@@ -23,7 +23,7 @@ export const StorageKeys = {
   SYNC_LAST_RUN:           'SYNC_LAST_RUN',
   STATS_CACHE:             'STATS_CACHE',
   BACKUP_LAST_AT:          'BACKUP_LAST_AT',
-  // Auth keys
+  // Auth keys (local PIN / biometric)
   APP_PIN:                 'APP_PIN',
   BIOMETRIC_ENABLED:       'BIOMETRIC_ENABLED',
   PIN_FAILED_ATTEMPTS:     'PIN_FAILED_ATTEMPTS',
@@ -34,6 +34,10 @@ export const StorageKeys = {
   // Phase-1 additions
   SCHEMA_VERSION:          '@schema_version',
   REPORT_SEQUENCE:         '@report_sequence',
+  // Tier-2: server JWT tokens (stored in SecureStore on native)
+  JWT_ACCESS_TOKEN:        '@jwt_access_token',
+  JWT_REFRESH_TOKEN:       '@jwt_refresh_token',
+  SERVER_USER_ID:          '@server_user_id',
 } as const;
 
 /** @deprecated use StorageKeys */
