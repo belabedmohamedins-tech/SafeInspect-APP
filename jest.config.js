@@ -22,11 +22,11 @@ module.exports = {
     '<rootDir>/src/__tests__/**/*.test.tsx',
   ],
 
-  // ─── Coverage ────────────────────────────────────────────────────────────────
+  // ─── Coverage ─────────────────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
 
-    // ── EXCLUSIONS ────────────────────────────────────────────────────────────
+    // ── EXCLUSIONS ─────────────────────────────────────────────────────────────────────
     '!src/**/*.d.ts',
     '!src/types.ts',
     '!src/criteria/**',
@@ -42,12 +42,12 @@ module.exports = {
     '!src/app/**',
   ],
 
-  // ─── Thresholds ──────────────────────────────────────────────────────────────
+  // ─── Thresholds ──────────────────────────────────────────────────────────────────────
   // Last passing run (after syncEngine fix, commit after beae141):
   //   statements ~94.32 / branches ~81.5 / lines ~95.36 / functions ~96.97
   // Thresholds = floor(actual) - 1 to block regressions with headroom.
-  // HOW TO RAISE: run `npx jest --coverage`, note actuals, set each
-  // threshold to floor(actual) - 1, update the comment above.
+  // HOW TO RAISE: run coverage, note actuals, set each threshold to
+  // floor(actual) - 1, update the comment above.
   coverageThreshold: {
     global: {
       branches:   81,
@@ -59,6 +59,13 @@ module.exports = {
 
   // LAYER 2 — module routing
   moduleNameMapper: {
+    // ── SDK 56 / jest-expo internal path fix ───────────────────────────────────────
+    // jest-expo ~56 setup.js still imports this path but SDK 56
+    // expo-modules-core no longer exposes it. Stub it out.
+    '^expo-modules-core/src/polyfill/dangerous-internal$':
+      '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
+
+    // ── existing mappings ────────────────────────────────────────────────────────────
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
@@ -69,14 +76,12 @@ module.exports = {
     '^expo-sharing$':                         '<rootDir>/__mocks__/expo-sharing.js',
     '^expo-notifications$':                   '<rootDir>/__mocks__/expo-notifications.js',
     '^@react-native-community/netinfo$':      '<rootDir>/__mocks__/@react-native-community/netinfo.js',
-    // Auth-related native modules — must be mapped BEFORE expo-modules-core
     '^expo-secure-store$':                    '<rootDir>/__mocks__/expo-secure-store.js',
     '^expo-local-authentication$':            '<rootDir>/__mocks__/expo-local-authentication.js',
-    // expo-constants: override jest-expo preset default so IS_EXPO_GO = false
     '^expo-constants$':                       '<rootDir>/__mocks__/expo-constants.js',
   },
 
-  // ⚠️ FRAGILE — Last audited: June 2026 (RN 0.76, Expo SDK 52)
+  // ⚠️ FRAGILE — Last audited: June 2026 (RN 0.85, Expo SDK 56)
   transformIgnorePatterns: [
     'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))',
   ],
