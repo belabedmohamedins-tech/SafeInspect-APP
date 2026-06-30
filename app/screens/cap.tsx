@@ -81,12 +81,13 @@ export default function CAPScreen() {
 
   const visible = filter === 'all' ? items : items.filter(i => i.status === filter);
 
-  // ── Export handler ─────────────────────────────────────────────────────────
+  // ── Export handler — uses the active filter so the PDF matches what the user sees
   const handleExport = async () => {
     if (exporting) return;
     setExporting(true);
     try {
-      await CapReportService.export('open');
+      // Pass the active filter; CapReportService treats 'all' as no filter
+      await CapReportService.export(filter);
     } finally {
       setExporting(false);
     }

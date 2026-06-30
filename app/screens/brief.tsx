@@ -8,6 +8,7 @@ import {
   ActivityIndicator, TextInput, Alert, I18nManager,
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { BriefData, buildBrief } from '../../src/services/briefService';
 
 I18nManager.forceRTL(true);
@@ -24,14 +25,17 @@ const EQUIPMENT_ITEMS = [
 ];
 
 const GRADE_COLOR: Record<string, string> = {
-  A: '#16a34a', B: '#2563eb', C: '#d97706', D: '#dc2626',
+  A: Colors.success,
+  B: Colors.primary,
+  C: Colors.warning,
+  D: Colors.danger,
 };
 
 const SEVERITY_LABEL: Record<string, string> = {
   high: 'حرج', medium: 'متوسط', low: 'منخفض',
 };
 const SEVERITY_COLOR: Record<string, string> = {
-  high: '#dc2626', medium: '#d97706', low: '#2563eb',
+  high: Colors.danger, medium: Colors.warning, low: Colors.primary,
 };
 
 export default function BriefScreen() {
@@ -100,7 +104,7 @@ export default function BriefScreen() {
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color="#1e40af" />
+        <ActivityIndicator size="large" color={Colors.primary} />
       </View>
     );
   }
@@ -121,7 +125,7 @@ export default function BriefScreen() {
             <View style={styles.gradeBox}>
               <Text style={[
                 styles.gradeLetter,
-                { color: GRADE_COLOR[brief.previousGrade ?? ''] ?? '#374151' }
+                { color: GRADE_COLOR[brief.previousGrade ?? ''] ?? Colors.textPrimary }
               ]}>
                 {brief.previousGrade ?? '—'}
               </Text>
@@ -201,7 +205,7 @@ export default function BriefScreen() {
           value={committee}
           onChangeText={setCommittee}
           placeholder="مثال: أحمد علي، محمد سعيد"
-          placeholderTextColor="#9ca3af"
+          placeholderTextColor={Colors.textFaint}
           multiline
           textAlign="right"
         />
@@ -216,63 +220,68 @@ export default function BriefScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: '#f8fafc' },
-  content: { padding: 16, paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: Colors.background },
+  content: { padding: Spacing.md, paddingBottom: Spacing.xxl },
   center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: {
-    backgroundColor: '#1e40af', borderRadius: 12,
-    padding: 20, marginBottom: 16, alignItems: 'center',
+    backgroundColor: Colors.primary,
+    borderRadius: Radius.lg,
+    padding: Spacing.xl,
+    marginBottom: Spacing.md,
+    alignItems: 'center',
   },
-  headerTitle: { color: '#fff', fontSize: 20, fontWeight: '700' },
-  headerSub: { color: '#bfdbfe', fontSize: 14, marginTop: 4 },
+  headerTitle: { color: Colors.textInverse, fontSize: FontSize.xl, fontWeight: FontWeight.bold },
+  headerSub: { color: Colors.textInverse + 'cc', fontSize: FontSize.sm, marginTop: Spacing.xs },
   card: {
-    backgroundColor: '#fff', borderRadius: 12, padding: 16,
-    marginBottom: 14,
-    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
+    backgroundColor: Colors.surface,
+    borderRadius: Radius.lg,
+    padding: Spacing.md,
+    marginBottom: Spacing.sm + 2,
+    ...Shadow.sm,
   },
   cardTitle: {
-    fontSize: 15, fontWeight: '700', color: '#1e293b',
-    marginBottom: 12, textAlign: 'right',
+    fontSize: FontSize.md, fontWeight: FontWeight.bold, color: Colors.textPrimary,
+    marginBottom: Spacing.md, textAlign: 'right',
   },
-  row: { flexDirection: 'row', alignItems: 'center', gap: 16 },
+  row: { flexDirection: 'row', alignItems: 'center', gap: Spacing.md },
   gradeBox: { alignItems: 'center', minWidth: 60 },
-  gradeLetter: { fontSize: 42, fontWeight: '800' },
-  gradeLabel: { fontSize: 12, color: '#64748b' },
+  gradeLetter: { fontSize: 42, fontWeight: FontWeight.bold },
+  gradeLabel: { fontSize: FontSize.xs, color: Colors.textSecondary },
   infoCol: { flex: 1 },
-  infoLine: { fontSize: 13, color: '#374151', marginBottom: 4, textAlign: 'right' },
-  noData: { color: '#9ca3af', fontSize: 13, textAlign: 'right' },
+  infoLine: { fontSize: FontSize.sm, color: Colors.textPrimary, marginBottom: Spacing.xs, textAlign: 'right' },
+  noData: { color: Colors.textFaint, fontSize: FontSize.sm, textAlign: 'right' },
   violationRow: {
     flexDirection: 'row', alignItems: 'flex-start',
-    gap: 8, marginBottom: 8, flexWrap: 'wrap',
+    gap: Spacing.sm, marginBottom: Spacing.sm, flexWrap: 'wrap',
   },
   severityPill: {
-    borderRadius: 20, paddingHorizontal: 8, paddingVertical: 2, alignSelf: 'flex-start',
+    borderRadius: Radius.full, paddingHorizontal: Spacing.sm, paddingVertical: 2, alignSelf: 'flex-start',
   },
-  severityText: { fontSize: 11, fontWeight: '700' },
-  violationCriteria: { flex: 1, fontSize: 13, color: '#374151', textAlign: 'right' },
+  severityText: { fontSize: FontSize.xs, fontWeight: FontWeight.bold },
+  violationCriteria: { flex: 1, fontSize: FontSize.sm, color: Colors.textPrimary, textAlign: 'right' },
   checkRow: {
     flexDirection: 'row', alignItems: 'center',
-    gap: 10, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#f1f5f9',
+    gap: Spacing.sm, paddingVertical: Spacing.sm,
+    borderBottomWidth: 1, borderBottomColor: Colors.border,
   },
   checkbox: {
-    width: 22, height: 22, borderRadius: 6,
-    borderWidth: 2, borderColor: '#cbd5e1',
+    width: 22, height: 22, borderRadius: Radius.sm,
+    borderWidth: 2, borderColor: Colors.border,
     alignItems: 'center', justifyContent: 'center',
   },
-  checkboxChecked: { backgroundColor: '#1e40af', borderColor: '#1e40af' },
-  checkMark: { color: '#fff', fontSize: 13, fontWeight: '700' },
-  checkLabel: { flex: 1, fontSize: 13, color: '#374151', textAlign: 'right' },
-  checkLabelChecked: { color: '#1e40af', textDecorationLine: 'line-through' },
-  inputHint: { fontSize: 12, color: '#94a3b8', textAlign: 'right', marginBottom: 8 },
+  checkboxChecked: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  checkMark: { color: Colors.textInverse, fontSize: FontSize.sm, fontWeight: FontWeight.bold },
+  checkLabel: { flex: 1, fontSize: FontSize.sm, color: Colors.textPrimary, textAlign: 'right' },
+  checkLabelChecked: { color: Colors.primary, textDecorationLine: 'line-through' },
+  inputHint: { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'right', marginBottom: Spacing.sm },
   textInput: {
-    borderWidth: 1, borderColor: '#e2e8f0', borderRadius: 8,
-    padding: 10, fontSize: 14, color: '#1e293b',
+    borderWidth: 1, borderColor: Colors.border, borderRadius: Radius.md,
+    padding: Spacing.sm, fontSize: FontSize.base, color: Colors.textPrimary,
     minHeight: 72, textAlignVertical: 'top',
   },
   confirmBtn: {
-    backgroundColor: '#1e40af', borderRadius: 12,
-    padding: 16, alignItems: 'center', marginTop: 8,
+    backgroundColor: Colors.primary, borderRadius: Radius.lg,
+    padding: Spacing.md, alignItems: 'center', marginTop: Spacing.sm,
   },
-  confirmBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  confirmBtnText: { color: Colors.textInverse, fontSize: FontSize.base, fontWeight: FontWeight.bold },
 });
