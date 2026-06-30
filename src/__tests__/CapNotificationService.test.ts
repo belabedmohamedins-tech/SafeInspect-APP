@@ -15,12 +15,11 @@ jest.mock('expo-notifications', () => ({
 jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: {
     getOpen:                  jest.fn(),
-    // getStats is used by scheduleCapDigestNotification (line 196) and
-    // scheduleCapWeeklyDigest (line 261). Without this mock the service throws
-    // "TypeError: getStats is not a function" and both functions are entirely
-    // uncovered.
+    // getStats is called by scheduleCapDigestNotification (line 196) and
+    // scheduleCapWeeklyDigest (line 261). Without this mock both functions
+    // throw "TypeError: getStats is not a function".
     getStats:                 jest.fn(),
-    // Required by CapNotificationService.persistOverdueEscalation (line 344).
+    // Required by scheduleCapDeadlineNotifications before per-item loop.
     persistOverdueEscalation: jest.fn().mockResolvedValue(undefined),
   },
 }));
@@ -33,6 +32,7 @@ jest.mock('../services/NotificationService', () => ({
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
 import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
+import { StorageKeys } from '../repositories/keys';
 import { isEnabled, requestPermission } from '../services/NotificationService';
 import {
   scheduleCapDeadlineNotifications,
@@ -203,8 +203,8 @@ describe('CapNotificationService', () => {
     });
 
     it('cancels the previous digest before scheduling a new one', async () => {
-      // Pre-seed a previous digest id in AsyncStorage
-      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-old');
+      // StorageKeys.CAP_DIGEST_NOTIF_ID = 'CAP_DIGEST_NOTIF_ID' (uppercase)
+      await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, 'cap-digest-old');
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
       mockGetOpen.mockResolvedValueOnce([]);
       await scheduleCapDigestNotification();
@@ -295,7 +295,8 @@ describe('CapNotificationService', () => {
 
   describe('cancelCapDigestNotification', () => {
     it('cancels stored digest notification id and removes it from storage', async () => {
-      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-2026-07-01');
+      // Must use the actual key the service reads: StorageKeys.CAP_DIGEST_NOTIF_ID
+      await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, 'cap-digest-2026-07-01');
       await cancelCapDigestNotification();
       expect(mockCancelOne).toHaveBeenCalledWith('cap-digest-2026-07-01');
     });
@@ -306,15 +307,16 @@ describe('CapNotificationService', () => {
     });
 
     it('swallows errors gracefully', async () => {
+      await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, 'cap-digest-old');
       mockCancelOne.mockRejectedValueOnce(new Error('gone'));
-      await AsyncStorage.setItem('cap_digest_notif_id', 'cap-digest-old');
       await expect(cancelCapDigestNotification()).resolves.toBeUndefined();
     });
   });
 
   describe('cancelCapWeeklyDigestNotification', () => {
     it('cancels stored weekly notification id and removes it from storage', async () => {
-      await AsyncStorage.setItem('cap_weekly_digest_notif_id', 'cap-weekly-2026-07-07');
+      // Must use the actual key the service reads: StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID
+      await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-2026-07-07');
       await cancelCapWeeklyDigestNotification();
       expect(mockCancelOne).toHaveBeenCalledWith('cap-weekly-2026-07-07');
     });
@@ -325,8 +327,8 @@ describe('CapNotificationService', () => {
     });
 
     it('swallows errors gracefully', async () => {
+      await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-old');
       mockCancelOne.mockRejectedValueOnce(new Error('gone'));
-      await AsyncStorage.setItem('cap_weekly_digest_notif_id', 'cap-weekly-old');
       await expect(cancelCapWeeklyDigestNotification()).resolves.toBeUndefined();
     });
   });
