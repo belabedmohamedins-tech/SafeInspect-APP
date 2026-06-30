@@ -7,6 +7,7 @@ import { AuditLogRepository } from './AuditLogRepository';
 import { CorrectiveActionRepository } from './CorrectiveActionRepository';
 import { createFollowUpIfNeeded } from '../services/followUpService';
 import { ApprovalRepository } from './ApprovalRepository';
+import { annotateRepeatViolations } from '../services/violationHistory';
 
 async function loadAll(): Promise<SavedInspection[]> {
   const raw = await AsyncStorage.getItem(StorageKeys.INSPECTIONS);
@@ -51,11 +52,33 @@ export const InspectionRepository = {
       inspection.status === 'completed' &&
       (idx === -1 || all[idx]?.status !== 'completed');
 
-    // Auto-hash on completion — computeHash is async (SHA-256 via expo-crypto)
     let toSave = inspection;
+
     if (isNewCompletion) {
-      const hash = await IntegrityService.computeHash(inspection);
-      toSave = { ...inspection, integrityHash: hash, approvalStatus: inspection.approvalStatus ?? 'pending' };
+      // ── Phase 2: Annotate repeat violations before hashing ──────────────
+      // Run for every completed inspection (not just follow-ups) so that
+      // priorInspectionStatus is always populated — this makes the
+      // differential view (Phase 3) work even for routine inspections.
+      try {
+        const annotatedItems = await annotateRepeatViolations(
+          inspection.items,
+          inspection.facilityId,
+          inspection.id,
+          inspection.priorInspectionId,
+        );
+        toSave = { ...inspection, items: annotatedItems };
+      } catch {
+        // Non-fatal — annotation failure must not block save.
+        // The inspection persists without repeat-violation flags.
+      }
+
+      // ── Integrity hash (computed AFTER annotation so hash covers flags) ─
+      const hash = await IntegrityService.computeHash(toSave);
+      toSave = {
+        ...toSave,
+        integrityHash: hash,
+        approvalStatus: toSave.approvalStatus ?? 'pending',
+      };
     }
 
     if (idx === -1) {
