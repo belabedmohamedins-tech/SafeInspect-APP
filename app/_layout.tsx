@@ -1,6 +1,8 @@
 // app/_layout.tsx
 import Constants from 'expo-constants';
+import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
 import { AuthRepository } from '../src/repositories/AuthRepository';
@@ -10,7 +12,10 @@ import { I18nProvider } from '../src/i18n';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
 import { isLoggedIn, registerPushToken } from '../src/services/serverAuth';
 
-// ── Expo Go guard (mirrors CapNotificationService) ───────────────────────────────
+// Keep splash screen visible until fonts + DB are ready
+SplashScreen.preventAutoHideAsync();
+
+// ── Expo Go guard (mirrors CapNotificationService) ──────────────────────────────────────
 const IS_EXPO_GO = Constants.appOwnership === 'expo';
 
 let Notifications: typeof import('expo-notifications') | null = null;
@@ -27,13 +32,28 @@ export default function RootLayout() {
   const segments = useSegments();
   const [dbReady, setDbReady] = useState(false);
 
+  // ── Load @expo/vector-icons fonts (FontAwesome, MaterialIcons, etc.) ──────────
+  // Without this, icon components render as blank squares on first load.
+  const [fontsLoaded, fontError] = useFonts({
+    ...require('@expo/vector-icons/FontAwesome').font,
+    ...require('@expo/vector-icons/MaterialIcons').font,
+    ...require('@expo/vector-icons/Ionicons').font,
+  });
+
+  // Hide splash screen once both fonts and DB are ready
+  useEffect(() => {
+    if ((fontsLoaded || fontError) && dbReady) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded, fontError, dbReady]);
+
   // Sub ref so we can remove the listener on unmount
   const notifSubRef = useRef<ReturnType<
     typeof import('expo-notifications')['addNotificationResponseReceivedListener']
   > | null>(null);
 
-  // ── 1. Initialize DB and sync scheduler on app start ────────────────────────
-  useEffect(() => {
+  // ── 1. Initialize DB and sync scheduler on app start ────────────────────────────
+useEffect(() => {
     let stopSync: (() => void) | undefined;
 
     initializeDatabase()
@@ -43,6 +63,8 @@ export default function RootLayout() {
       })
       .catch((err) => {
         console.error('[RAQIB] Database initialization failed:', err);
+        // Still mark ready so app doesn’t hang forever on a DB error
+        setDbReady(true);
       });
 
     return () => {
@@ -50,7 +72,7 @@ export default function RootLayout() {
     };
   }, []);
 
-  // ── 2. Single auth guard — runs once after DB is ready ──────────────────────
+  // ── 2. Single auth guard — runs once after DB is ready ────────────────────────
   useEffect(() => {
     if (!dbReady) return;
 
@@ -74,7 +96,6 @@ export default function RootLayout() {
       }
 
       // 2c. Server login — prompt once if never logged in to the server
-      //     (non-blocking: user can always skip and use offline mode)
       const serverSession = await isLoggedIn();
       if (!serverSession && !currentPath.includes('server-login')) {
         router.replace('/screens/server-login');
@@ -89,9 +110,6 @@ export default function RootLayout() {
   }, [dbReady]);
 
   // ── 3. Register device push token with the server ───────────────────────────
-  //
-  // Runs once after DB is ready. Safe in Expo Go (skipped via IS_EXPO_GO guard).
-  // Non-fatal: push token registration failure never breaks the app.
   useEffect(() => {
     if (!dbReady || IS_EXPO_GO || !Notifications) return;
 
@@ -118,23 +136,7 @@ export default function RootLayout() {
     })();
   }, [dbReady]);
 
-  // ── 4. Notification tap deep-link handler (Phase 15 + Phase 21 + Tier-2) ────
-  //
-  // Handles taps on any scheduled or server-pushed notification.
-  //
-  // Supported payloads:
-  //
-  //   CAP notifications (per-item / daily digest / weekly digest):
-  //     { screen: 'actions', filter: 'overdue' | 'all' }
-  //     { screen: 'actions', capId: '<id>' }  ← per-item fallback
-  //
-  //   Agenda notifications (Phase 21):
-  //     { agendaId: '<id>' }  ← navigates to the Agenda tab
-  //
-  //   Server approval notifications (Tier-2):
-  //     { type: 'APPROVAL_ACTION', inspectionId: '<id>', action: 'approved'|'returned' }
-  //
-  // No-op in Expo Go (Notifications is null there).
+  // ── 4. Notification tap deep-link handler ───────────────────────────────────
   useEffect(() => {
     if (!Notifications) return;
 
@@ -146,7 +148,6 @@ export default function RootLayout() {
 
           const screen = data.screen;
 
-          // — CAP notifications —
           if (screen === 'actions') {
             const filter = data.filter as string | undefined;
             router.push({
@@ -156,7 +157,6 @@ export default function RootLayout() {
             return;
           }
 
-          // — Agenda notifications (Phase 21) —
           if (data.agendaId) {
             router.push({
               pathname: '/(tabs)/agenda',
@@ -165,8 +165,6 @@ export default function RootLayout() {
             return;
           }
 
-          // — Server approval notifications (Tier-2) —
-          // Sent by the backend when a supervisor approves or returns an inspection.
           if (data.type === 'APPROVAL_ACTION' && data.inspectionId) {
             router.push({
               pathname: '/screens/approval-queue',
@@ -175,7 +173,6 @@ export default function RootLayout() {
             return;
           }
 
-          // — Supervisor: new inspection pending approval —
           if (data.type === 'NEW_APPROVAL_PENDING') {
             router.push('/screens/supervisor-approvals');
             return;
@@ -191,16 +188,17 @@ export default function RootLayout() {
     };
   }, []);
 
+  // Don’t render anything until fonts are loaded (avoids blank-icon flash)
+  if (!fontsLoaded && !fontError) return null;
+
   return (
     <I18nProvider>
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        {/* Auth screens — gesture swipe-back disabled so users cannot bypass */}
         <Stack.Screen name="pin-lock"              options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="screens/onboarding"    options={{ headerShown: false, gestureEnabled: false }} />
         <Stack.Screen name="screens/server-login"  options={{ headerShown: false, gestureEnabled: false }} />
-        {/* App screens */}
         <Stack.Screen name="screens/notifications"         options={{ headerShown: false }} />
         <Stack.Screen name="screens/inspector-profile"     options={{ headerShown: false }} />
         <Stack.Screen name="screens/approval-queue"        options={{ headerShown: false }} />
@@ -218,7 +216,6 @@ export default function RootLayout() {
         <Stack.Screen name="screens/legal"                 options={{ headerShown: false }} />
         <Stack.Screen name="screens/checklists"            options={{ headerShown: false }} />
         <Stack.Screen name="screens/reports"               options={{ headerShown: false }} />
-        {/* reports/[id] is auto-registered by expo-router file system */}
       </Stack>
     </I18nProvider>
   );

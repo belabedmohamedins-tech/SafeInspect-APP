@@ -31,7 +31,6 @@ const badge = StyleSheet.create({
 export default function TabLayout() {
   const [overdueCount, setOverdueCount] = useState(0);
 
-  // Refresh overdue count on every render cycle (lightweight: just count)
   useEffect(() => {
     let active = true;
     const refresh = async () => {
@@ -45,7 +44,7 @@ export default function TabLayout() {
       } catch { /* ignore */ }
     };
     refresh();
-    const interval = setInterval(refresh, 60_000); // refresh every minute
+    const interval = setInterval(refresh, 60_000);
     return () => { active = false; clearInterval(interval); };
   }, []);
 
@@ -125,6 +124,14 @@ export default function TabLayout() {
             headerShown: true,
           }}
         />
+
+        {/*
+          Hidden screens — these files exist in (tabs)/ so Expo Router
+          registers them as routes, but they must NOT appear in the tab bar.
+          href: null removes them from the bar while keeping them navigable
+          via router.push('/(tabs)/actions').
+        */}
+        <Tabs.Screen name="actions" options={{ href: null }} />
       </Tabs>
     </View>
   );
