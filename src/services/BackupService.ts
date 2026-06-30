@@ -2,29 +2,91 @@
 //
 // Handles full application data export (JSON) and import (restore).
 //
-// Backup file format:
+// Backup file format (v2):
 // {
-//   version: 1,
+//   version: 2,
 //   exportedAt: ISO string,
-//   inspections: SavedInspection[],
+//   inspections: SavedInspection[],         // items_json embedded
 //   agenda: AgendaItem[],
 //   userFacilities: Facility[],
-//   settings: { officeName, inspectorName, inspectionCause }
+//   settings: { officeName, inspectorName, inspectionCause, … },
+//   photoUriMap: Record<inspectionItemId, uri>  // NEW in v2 (1C)
 // }
 //
-// Photos are NOT included in the JSON backup (they are binary files).
-// Photo URIs in inspection items are preserved as-is; if the user moves
-// to a new device the URIs will 404 gracefully (the app already handles
-// missing photoUri by simply not rendering the thumbnail).
+// Photos (1C)
+// ───────────
+// Binary photo files are NOT embedded — they remain too large for a JSON
+// backup.  Instead, we collect every photoUri / photos[] entry across all
+// inspection items into a flat map keyed by item id:
+//
+//   photoUriMap: { "<itemId>": "file:///…/photo.jpg", … }
+//
+// On import the map is used to re-link URIs back into items, so that:
+//   • Photos that still exist on the device are reconnected automatically.
+//   • Photos that are gone (new device / deleted) gracefully produce
+//     undefined photoUri — the app already handles this via the
+//     "missing photo" fallback in the checklist card.
+//
+// v1 backup files are still accepted on import (no photoUriMap field).
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
-import { AgendaItem, Facility, SavedInspection } from '../types';
+import { AgendaItem, Facility, InspectionItem, SavedInspection } from '../types';
 import { rescheduleAll } from './NotificationService';
 
-export const BACKUP_VERSION = 1;
+export const BACKUP_VERSION = 2;
+
+// ─── Photo URI map helpers ────────────────────────────────────────────────────
+
+/** Flattens all photo URIs from all items into a map keyed by item id. */
+function buildPhotoUriMap(
+  inspections: SavedInspection[],
+): Record<string, string | string[]> {
+  const map: Record<string, string | string[]> = {};
+  for (const inspection of inspections) {
+    for (const item of inspection.items) {
+      if (item.photoUri) {
+        map[item.id] = item.photoUri;
+      }
+      if (item.photos && item.photos.length > 0) {
+        // Store array alongside single URI when both are present
+        map[`${item.id}__photos`] = item.photos;
+      }
+    }
+  }
+  return map;
+}
+
+/**
+ * Re-links photo URIs from the map back into inspection items.
+ * Items whose ids are not in the map are left unchanged (photoUri stays
+ * as-is from the JSON payload — may be a stale URI, which is acceptable).
+ */
+function applyPhotoUriMap(
+  inspections: SavedInspection[],
+  map: Record<string, string | string[]>,
+): SavedInspection[] {
+  if (!map || Object.keys(map).length === 0) return inspections;
+
+  return inspections.map(inspection => ({
+    ...inspection,
+    items: inspection.items.map((item: InspectionItem) => {
+      const single = map[item.id];
+      const multi  = map[`${item.id}__photos`];
+      return {
+        ...item,
+        ...(single !== undefined && typeof single === 'string'
+          ? { photoUri: single }
+          : {}),
+        ...(Array.isArray(multi) ? { photos: multi as string[] } : {}),
+      };
+    }),
+  }));
+}
+
+// ─── Payload type ─────────────────────────────────────────────────────────────
 
 export interface BackupPayload {
   version: number;
@@ -36,14 +98,16 @@ export interface BackupPayload {
     officeName: string;
     inspectorName: string;
     inspectionCause: string;
-    // settings.tsx keys
     organisation: string;
     department: string;
     showGrade: string;
   };
+  /** v2+: flat map of item photo URIs, keyed by item id (and itemId__photos for arrays). */
+  photoUriMap?: Record<string, string | string[]>;
 }
 
-// Storage keys used across the app
+// ─── Storage keys ─────────────────────────────────────────────────────────────
+
 const KEYS = {
   inspections:   'inspections',
   agenda:        'agenda',
@@ -57,7 +121,7 @@ const KEYS = {
   lastBackupAt:  '@backup/lastExportedAt',
 } as const;
 
-// ─── Export ─────────────────────────────────────────────────────────────────
+// ─── Export ───────────────────────────────────────────────────────────────────
 
 /**
  * Collect all app data, write to a JSON file in documentDirectory,
@@ -81,10 +145,14 @@ export async function exportBackup(): Promise<BackupPayload> {
   const pairs = await AsyncStorage.multiGet(keys);
   const map = Object.fromEntries(pairs.map(([k, v]) => [k, v]));
 
+  const inspections: SavedInspection[] = map[KEYS.inspections]
+    ? JSON.parse(map[KEYS.inspections]!)
+    : [];
+
   const payload: BackupPayload = {
     version: BACKUP_VERSION,
     exportedAt: new Date().toISOString(),
-    inspections:    map[KEYS.inspections]    ? JSON.parse(map[KEYS.inspections]!)    : [],
+    inspections,
     agenda:         map[KEYS.agenda]         ? JSON.parse(map[KEYS.agenda]!)         : [],
     userFacilities: map[KEYS.userFacilities] ? JSON.parse(map[KEYS.userFacilities]!) : [],
     settings: {
@@ -95,6 +163,8 @@ export async function exportBackup(): Promise<BackupPayload> {
       department:      map[KEYS.department]      ?? '',
       showGrade:       map[KEYS.showGrade]       ?? 'true',
     },
+    // 1C: build photo URI map from all inspection items
+    photoUriMap: buildPhotoUriMap(inspections),
   };
 
   // 2. Write to file
@@ -121,7 +191,7 @@ export async function exportBackup(): Promise<BackupPayload> {
   return payload;
 }
 
-// ─── Import ─────────────────────────────────────────────────────────────────
+// ─── Import ───────────────────────────────────────────────────────────────────
 
 export interface ImportResult {
   inspections: number;
@@ -131,6 +201,7 @@ export interface ImportResult {
 
 /**
  * Let the user pick a .json backup file, validate it, and restore all data.
+ * Accepts both v1 (no photoUriMap) and v2 backups.
  * Returns item counts on success, or null if the user cancelled.
  * Throws on validation or write error.
  */
@@ -158,17 +229,25 @@ export async function importBackup(): Promise<ImportResult | null> {
     throw new Error('ملف غير صالح — تأكد من أنه ملف JSON من SafeInspect');
   }
 
-  // 3. Validate schema
-  if (payload.version !== BACKUP_VERSION) {
-    throw new Error(`إصدار غير متوافق (${payload.version}). الإصدار المدعوم: ${BACKUP_VERSION}`);
+  // 3. Validate schema (accept v1 and v2)
+  if (payload.version !== 1 && payload.version !== BACKUP_VERSION) {
+    throw new Error(
+      `إصدار غير متوافق (${payload.version}). الإصدارات المدعومة: 1, ${BACKUP_VERSION}`,
+    );
   }
   if (!Array.isArray(payload.inspections) || !Array.isArray(payload.agenda)) {
     throw new Error('ملف النسخة الاحتياطية تالف');
   }
 
-  // 4. Write all collections back to AsyncStorage
+  // 4. Re-link photo URIs (v2 only; v1 files have no photoUriMap so items
+  //    keep whatever URIs were serialised into the JSON)
+  const restoredInspections = payload.photoUriMap
+    ? applyPhotoUriMap(payload.inspections, payload.photoUriMap)
+    : payload.inspections;
+
+  // 5. Write all collections back to AsyncStorage
   await AsyncStorage.multiSet([
-    [KEYS.inspections,    JSON.stringify(payload.inspections)],
+    [KEYS.inspections,    JSON.stringify(restoredInspections)],
     [KEYS.agenda,         JSON.stringify(payload.agenda)],
     [KEYS.userFacilities, JSON.stringify(payload.userFacilities ?? [])],
     [KEYS.officeName,      payload.settings?.officeName      ?? ''],
@@ -179,20 +258,20 @@ export async function importBackup(): Promise<ImportResult | null> {
     [KEYS.showGrade,       payload.settings?.showGrade       ?? 'true'],
   ]);
 
-  // 5. Reschedule notifications for restored pending agenda items
+  // 6. Reschedule notifications for restored pending agenda items
   const pendingAgenda = payload.agenda
     .filter(a => a.status === 'pending')
     .map(a => ({ id: a.id, facilityName: a.facilityName, date: a.date, notes: a.notes }));
   await rescheduleAll(pendingAgenda);
 
   return {
-    inspections:    payload.inspections.length,
+    inspections:    restoredInspections.length,
     agenda:         payload.agenda.length,
     userFacilities: (payload.userFacilities ?? []).length,
   };
 }
 
-// ─── Last backup timestamp ───────────────────────────────────────────────────
+// ─── Last backup timestamp ────────────────────────────────────────────────────
 
 export async function getLastBackupDate(): Promise<Date | null> {
   try {
