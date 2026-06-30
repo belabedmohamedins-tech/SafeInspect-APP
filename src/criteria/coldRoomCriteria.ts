@@ -70,4 +70,14 @@ export const coldRoomSpecificCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    id: 'CLD-17-07',
+    axis: 'هوية المنشأة والوثائق',
+    category: 'تنظيمية',
+    criteria: 'توفر سجلات إدخال وإخراج المنتجات تتضمن اسم المورد، تاريخ الاستلام، طبيعة المنتج وكميته، ورقم الدفعة أو الوثيقة المرفقة، بما يضمن التتبعية الكاملة.',
+    legalReference: 'المادة 8 من القانون 09-03 المؤرخ في 25 فبراير 2009 المتعلق بحماية المستهلك وقمع الغش، التي تُلزم المتدخلين في سلسلة التوزيع بالاحتفاظ بوثائق التتبعية، مدعومة بالمادة 5 من المرسوم 17-140 حول وجوب توثيق مصادر المواد الأولية.',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

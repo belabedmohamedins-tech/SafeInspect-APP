@@ -149,3 +149,33 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'وحدة تخزين الزيتون والخضر': produceStorageChecklist,
   'تعبئة مواد شبه صيدلانية': semiPharmaChecklist,
 };
+
+// ─── Safe checklist lookup with unknown-activity guard ───────────────────────
+//
+// Always use this function instead of criteriaByActivity[activity] directly.
+// If the activity key has no mapping, it logs a warning and returns the generic
+// baseGeneralCriteria so the inspector is never silently evaluated against
+// wrong criteria.
+
+export function getChecklistForActivity(activity: string | undefined | null): InspectionItem[] {
+  if (!activity) {
+    if (__DEV__) {
+      console.warn(
+        '[criteriaData] getChecklistForActivity called with empty activity. Falling back to baseGeneralCriteria.',
+      );
+    }
+    return baseGeneralCriteria;
+  }
+
+  const checklist = criteriaByActivity[activity];
+
+  if (!checklist) {
+    console.warn(
+      `[criteriaData] Unknown activity key: "${activity}". No specific checklist found. ` +
+        'Falling back to baseGeneralCriteria. Add this activity to criteriaByActivity to silence this warning.',
+    );
+    return baseGeneralCriteria;
+  }
+
+  return checklist;
+}

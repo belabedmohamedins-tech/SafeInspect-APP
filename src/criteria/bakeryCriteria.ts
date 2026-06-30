@@ -91,4 +91,14 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    id: 'BAK-10-10',
+    axis: 'هوية المنشأة والوثائق',
+    category: 'تنظيمية',
+    criteria: 'توفر خطة تحليل المخاطر ونقاط التحكم الحرجة (HACCP) موثقة ومطبقة في المخبزة، تشمل تحديد نقاط التحكم الحرجة (CCP) وإجراءات المراقبة والتصحيح.',
+    legalReference: 'المادة 4 من المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017 الذي يُلزم المنشآت الغذائية بتطبيق نظام HACCP وتوثيق إجراءاته.',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];
