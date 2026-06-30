@@ -44,7 +44,7 @@ function gradeBadgeColor(grade?: string): string {
   }
 }
 
-// ─── HTML builder ─────────────────────────────────────────────────────────────
+// ─── HTML builder (full inspection report) ────────────────────────────────────
 
 function buildReportHTML(
   inspection: SavedInspection,
@@ -58,9 +58,6 @@ function buildReportHTML(
   const score      = inspection.score ?? scoring.score;
   const grade      = inspection.grade ?? scoring.grade;
 
-  // Build per-severity indicator rows from violations profile.
-  // ScoringResult has no `indicators` map — we derive a simple display
-  // from the violations count and evaluated totals instead.
   const { violations } = scoring;
   const nonCompliant = inspection.items.filter(i => i.complianceStatus === 'non-compliant');
   const compliant    = inspection.items.filter(i => i.complianceStatus === 'compliant');
@@ -256,10 +253,163 @@ function buildReportHTML(
 </html>`;
 }
 
-// ─── PDF export ───────────────────────────────────────────────────────────────
+// ─── HTML builder (blank printable checklist) ─────────────────────────────────
+
+function buildBlankChecklistHTML(
+  activityName: string,
+  items: InspectionItem[],
+  officeName: string,
+): string {
+  const groups = groupByAxisRaw(items);
+  let rowIndex = 0;
+
+  const groupsHTML = groups
+    .map(([axis, axisItems]) => {
+      const rows = axisItems
+        .map(item => {
+          const even  = rowIndex++ % 2 === 0;
+          const rowBg = even ? '#ffffff' : '#f9fafb';
+          // Three empty tick boxes: مطابق / غير مطابق / لا ينطبق
+          return `
+            <tr style="background:${rowBg}">
+              <td class="num-col">${rowIndex}</td>
+              <td>${item.criteria}</td>
+              <td class="ref-col">${item.legalReference || '-'}</td>
+              <td class="sev-col">${severityLabel(item.severity)}</td>
+              <td class="tick-col">☐</td>
+              <td class="tick-col">☐</td>
+              <td class="tick-col">☐</td>
+              <td class="notes-col"></td>
+            </tr>`;
+        })
+        .join('');
+      return `
+        <tr class="axis-header-row">
+          <th colspan="8">${axis}</th>
+        </tr>
+        ${rows}`;
+    })
+    .join('');
+
+  return `
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+    @media print { body { padding: 10px 16px; } }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Cairo', Arial, sans-serif; font-size: 12px; color: #1a1a1a; background: #fff; padding: 20px 28px; direction: rtl; }
+
+    /* Header */
+    .letterhead { display: flex; align-items: center; justify-content: space-between; border-bottom: 3px solid #1a6b5a; padding-bottom: 12px; margin-bottom: 14px; }
+    .letterhead-title { font-size: 20px; font-weight: 900; color: #1a6b5a; }
+    .letterhead-subtitle { font-size: 12px; color: #7f8c8d; margin-top: 2px; }
+    .blank-badge { background: #fff; color: #1a6b5a; font-size: 12px; font-weight: 700; padding: 5px 14px; border-radius: 20px; border: 2px solid #1a6b5a; }
+
+    /* Meta fields */
+    .meta-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; background: #f4f7f6; border: 1px solid #dce8e5; border-radius: 8px; padding: 12px 16px; margin-bottom: 14px; }
+    .meta-grid .field { display: flex; align-items: center; gap: 6px; font-size: 12px; }
+    .meta-grid .field-label { color: #1a6b5a; font-weight: 700; white-space: nowrap; }
+    .meta-grid .field-line { flex: 1; border-bottom: 1px solid #aaa; min-width: 60px; height: 18px; }
+
+    /* Summary row */
+    .summary-row { display: flex; gap: 12px; margin-bottom: 14px; }
+    .summary-box { flex: 1; border: 1px solid #d5e0dd; border-radius: 6px; padding: 8px 12px; text-align: center; }
+    .summary-box .sb-label { font-size: 11px; color: #7f8c8d; margin-bottom: 4px; }
+    .summary-box .sb-val { font-size: 18px; font-weight: 900; color: #1a6b5a; }
+
+    /* Table */
+    .checklist-title { font-size: 14px; font-weight: 700; color: #1a6b5a; border-right: 4px solid #1a6b5a; padding-right: 10px; margin-bottom: 10px; }
+    table.main-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+    table.main-table th, table.main-table td { border: 1px solid #c8d8d4; padding: 5px 6px; vertical-align: middle; text-align: right; }
+    table.main-table thead tr th { background: #1a6b5a; color: #fff; font-size: 12px; font-weight: 700; text-align: center; }
+    tr.axis-header-row th { background: #d4ebe5; color: #1a6b5a; font-size: 12px; font-weight: 700; text-align: right; padding: 6px 10px; }
+    .num-col  { text-align: center; width: 28px; color: #7f8c8d; font-size: 10px; }
+    .ref-col  { font-size: 10px; color: #7f8c8d; width: 90px; }
+    .sev-col  { text-align: center; width: 60px; font-size: 10px; }
+    .tick-col { text-align: center; width: 38px; font-size: 16px; line-height: 1; }
+    .notes-col { width: 120px; }
+
+    /* Signature section */
+    .sig-section { margin-top: 22px; display: flex; justify-content: space-between; gap: 20px; }
+    .sig-box { flex: 1; border-top: 1px solid #aaa; padding-top: 6px; text-align: center; font-size: 11px; color: #555; }
+
+    /* Footer */
+    .footer { margin-top: 16px; border-top: 1px solid #d5e0dd; padding-top: 8px; font-size: 10px; color: #95a5a6; text-align: center; }
+  </style>
+</head>
+<body>
+  <div class="letterhead">
+    <div>
+      <div class="letterhead-title">${officeName || 'SafeInspect'}</div>
+      <div class="letterhead-subtitle">قائمة تفتيش — ${activityName}</div>
+    </div>
+    <div class="blank-badge">نموذج ورقي للطباعة</div>
+  </div>
+
+  <div class="meta-grid">
+    <div class="field"><span class="field-label">اسم المنشأة:</span><span class="field-line"></span></div>
+    <div class="field"><span class="field-label">العنوان:</span><span class="field-line"></span></div>
+    <div class="field"><span class="field-label">تاريخ التفتيش:</span><span class="field-line"></span></div>
+    <div class="field"><span class="field-label">اسم المفتش:</span><span class="field-line"></span></div>
+    <div class="field"><span class="field-label">سبب التفتيش:</span><span class="field-line"></span></div>
+    <div class="field"><span class="field-label">رقم المحضر:</span><span class="field-line"></span></div>
+  </div>
+
+  <div class="summary-row">
+    <div class="summary-box"><div class="sb-label">إجمالي البنود</div><div class="sb-val">${items.length}</div></div>
+    <div class="summary-box"><div class="sb-label">مطابق ✔</div><div class="sb-val sb-empty">___</div></div>
+    <div class="summary-box"><div class="sb-label">غير مطابق ✘</div><div class="sb-val sb-empty">___</div></div>
+    <div class="summary-box"><div class="sb-label">لا ينطبق —</div><div class="sb-val sb-empty">___</div></div>
+    <div class="summary-box"><div class="sb-label">التقييم النهائي</div><div class="sb-val sb-empty">___</div></div>
+  </div>
+
+  <div class="checklist-title">بنود التفتيش</div>
+  <table class="main-table">
+    <thead>
+      <tr>
+        <th class="num-col">#</th>
+        <th>المعيار / البند</th>
+        <th class="ref-col">المرجع القانوني</th>
+        <th class="sev-col">الخطورة</th>
+        <th class="tick-col">✔ مطابق</th>
+        <th class="tick-col">✘ غير مطابق</th>
+        <th class="tick-col">— لا ينطبق</th>
+        <th class="notes-col">ملاحظات</th>
+      </tr>
+    </thead>
+    <tbody>${groupsHTML}</tbody>
+  </table>
+
+  <div class="sig-section">
+    <div class="sig-box">توقيع المفتش</div>
+    <div class="sig-box">توقيع مدير المنشأة</div>
+    <div class="sig-box">ختم المنشأة</div>
+  </div>
+
+  <div class="footer">
+    SafeInspect — نظام التفتيش الميداني &nbsp;|&nbsp;
+    ${new Date().toLocaleDateString('ar-DZ', { year: 'numeric', month: 'long', day: 'numeric' })}
+  </div>
+</body>
+</html>`;
+}
+
+function severityLabel(sev?: string): string {
+  switch (sev) {
+    case 'high':   return 'عالية';
+    case 'medium': return 'متوسطة';
+    case 'low':    return 'منخفضة';
+    default:       return '-';
+  }
+}
+
+// ─── PDF export (full report) ─────────────────────────────────────────────────
 
 export async function exportInspectionPDF(inspection: SavedInspection): Promise<void> {
-  // Get full settings object then extract the inspectorName string
   const settings = await SettingsRepository.get();
   const settingsInspector = settings.inspectorName ?? '';
   const html = buildReportHTML(inspection, settingsInspector);
@@ -286,6 +436,38 @@ export async function exportInspectionPDF(inspection: SavedInspection): Promise<
   }
 }
 
+// ─── PDF export (blank printable checklist) ───────────────────────────────────
+
+export async function exportBlankChecklistPDF(
+  activityName: string,
+  items: InspectionItem[],
+): Promise<void> {
+  try {
+    const settings  = await SettingsRepository.get();
+    const officeName = settings.officeName ?? '';
+    const html = buildBlankChecklistHTML(activityName, items, officeName);
+
+    if (Platform.OS === 'ios') {
+      const { uri } = await Print.printToFileAsync({ html });
+      const dest =
+        (FileSystem.documentDirectory ?? '') +
+        generateFileName(activityName + '_blank', 'pdf');
+      await FileSystem.copyAsync({ from: uri, to: dest });
+      await FileSystem.deleteAsync(uri, { idempotent: true });
+      await Sharing.shareAsync(dest, {
+        mimeType: 'application/pdf',
+        dialogTitle: 'مشاركة قائمة التفتيش',
+        UTI: 'com.adobe.pdf',
+      });
+    } else {
+      await Print.printAsync({ html });
+    }
+  } catch (error) {
+    console.error('exportBlankChecklistPDF error:', error);
+    Alert.alert('خطأ', 'حدث خطأ أثناء تصدير قائمة التفتيش');
+  }
+}
+
 // ─── CSV export ───────────────────────────────────────────────────────────────
 
 export async function exportInspectionCSV(inspection: SavedInspection): Promise<void> {
@@ -305,8 +487,6 @@ export async function exportInspectionCSV(inspection: SavedInspection): Promise<
       item.comment || '',
     ]);
 
-    // \uFEFF = UTF-8 BOM — required for Excel to recognise Arabic (UTF-8) text.
-    // Without it Excel defaults to Windows-1252 and Arabic shows as mojibake.
     const BOM = '\uFEFF';
     const csv = BOM + [headers, ...rows]
       .map(row => row.map(f => `"${String(f).replace(/"/g, '""')}"`).join(','))

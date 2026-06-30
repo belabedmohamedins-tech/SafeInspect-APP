@@ -15,7 +15,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../constants';
 import { criteriaByActivity } from '../../src/criteriaData';
-import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
+import { exportBlankChecklistPDF, exportInspectionCSV } from '../../src/services/pdfService';
 import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
 import { SavedInspection } from '../../src/types';
 
@@ -33,7 +33,7 @@ export default function ChecklistsScreen() {
     a.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  /** Build a fake SavedInspection from raw criteria so preview & export work. */
+  /** Build a fake SavedInspection from raw criteria so preview & CSV export work. */
   const buildPayload = (): SavedInspection | null => {
     if (!selectedActivity) return null;
     const criteria = criteriaByActivity[selectedActivity] || [];
@@ -63,8 +63,6 @@ export default function ChecklistsScreen() {
     const payload = buildPayload();
     if (!payload) return;
 
-    // Store the fake inspection so preview/index.tsx can load it without
-    // hitting InspectionRepository (which would return null -> not found).
     CriteriaPreviewStore.setInspection(payload);
 
     router.push({
@@ -73,10 +71,20 @@ export default function ChecklistsScreen() {
     });
   };
 
+  // PDF → blank printable checklist (no scores, no statuses, ready for offline filling)
   const handlePDF = async () => {
-    const payload = buildPayload();
-    if (!payload) { Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة'); return; }
-    await exportInspectionPDF(payload);
+    if (!selectedActivity) {
+      Alert.alert('تنبيه', 'الرجاء اختيار نوع المنشأة');
+      return;
+    }
+    const criteria = criteriaByActivity[selectedActivity] || [];
+    const items = criteria.map((item, idx) => ({
+      ...item,
+      id: `${selectedActivity}-${idx}`,
+      complianceStatus: 'not-evaluated' as const,
+      comment: '',
+    }));
+    await exportBlankChecklistPDF(selectedActivity, items);
   };
 
   const handleExcel = async () => {
@@ -116,7 +124,7 @@ export default function ChecklistsScreen() {
         <View style={styles.buttonsRow}>
           <TouchableOpacity style={[styles.actionButton, styles.pdfButton]} onPress={handlePDF}>
             <FontAwesome name="file-pdf-o" size={20} color={Colors.white} />
-            <Text style={styles.actionButtonText}>PDF</Text>
+            <Text style={styles.actionButtonText}>PDF للطباعة</Text>
           </TouchableOpacity>
           <TouchableOpacity style={[styles.actionButton, styles.excelButton]} onPress={handleExcel}>
             <FontAwesome name="file-excel-o" size={20} color={Colors.white} />
@@ -125,7 +133,7 @@ export default function ChecklistsScreen() {
         </View>
 
         <Text style={styles.note}>
-          يمكنك معاينة القائمة أولاً، ثم تصديرها بصيغة PDF أو Excel، ومشاركتها أو حفظها.
+          زر PDF يُصدر نموذجاً فارغاً جاهزاً للطباعة والتعبئة اليدوية.
         </Text>
       </View>
 
