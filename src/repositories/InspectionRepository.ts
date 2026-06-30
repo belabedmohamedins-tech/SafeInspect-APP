@@ -51,10 +51,10 @@ export const InspectionRepository = {
       inspection.status === 'completed' &&
       (idx === -1 || all[idx]?.status !== 'completed');
 
-    // Auto-hash on completion
+    // Auto-hash on completion — computeHash is async (SHA-256 via expo-crypto)
     let toSave = inspection;
     if (isNewCompletion) {
-      const hash = IntegrityService.computeHash(inspection);
+      const hash = await IntegrityService.computeHash(inspection);
       toSave = { ...inspection, integrityHash: hash, approvalStatus: inspection.approvalStatus ?? 'pending' };
     }
 

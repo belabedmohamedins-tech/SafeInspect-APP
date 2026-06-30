@@ -8,6 +8,24 @@ import {
 } from '../services/IntegrityService';
 import { SavedInspection } from '../types';
 
+// Mock expo-crypto so tests run without a native module.
+// digestStringAsync returns a deterministic hex string based on the input.
+jest.mock('expo-crypto', () => ({
+  digestStringAsync: jest.fn(async (_alg: unknown, input: string) => {
+    // Deterministic fake hex derived from input length + char codes
+    // This is NOT a real SHA-256 — it exists only to make tests fast and
+    // hermetic. The real SHA-256 is exercised by integration/device tests.
+    let h = 0x811c9dc5;
+    for (let i = 0; i < input.length; i++) {
+      h ^= input.charCodeAt(i);
+      h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    return h.toString(16).padStart(8, '0').repeat(8); // 64-char hex
+  }),
+  CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
+  CryptoEncoding: { HEX: 'hex' },
+}));
+
 beforeEach(async () => {
   await AsyncStorage.clear();
   jest.clearAllMocks();
@@ -41,39 +59,49 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 // ─── computeHash ─────────────────────────────────────────────────────────────
 
 describe('computeHash', () => {
-  it('returns a non-empty string', () => {
-    expect(typeof computeHash(makeInspection())).toBe('string');
-    expect(computeHash(makeInspection()).length).toBeGreaterThan(0);
-  });
-
-  it('is deterministic', () => {
-    const insp = makeInspection();
-    expect(computeHash(insp)).toBe(computeHash(insp));
-  });
-
-  it('is field-order-independent', () => {
-    const a = makeInspection({ id: 'x', facilityName: 'A' });
-    const b = { ...a };
-    expect(computeHash(a)).toBe(computeHash(b));
-  });
-
-  it('produces different hashes for different values', () => {
-    expect(computeHash(makeInspection({ score: 90 }))).not.toBe(computeHash(makeInspection({ score: 50 })));
-  });
-
-  it('produces different hashes when facilityName changes', () => {
-    expect(computeHash(makeInspection({ facilityName: 'Alpha' }))).not.toBe(computeHash(makeInspection({ facilityName: 'Beta' })));
-  });
-
-  it('handles empty items array', () => {
-    const hash = computeHash(makeInspection({ items: [] }));
+  it('returns a non-empty string', async () => {
+    const hash = await computeHash(makeInspection());
+    expect(typeof hash).toBe('string');
     expect(hash.length).toBeGreaterThan(0);
   });
 
-  it('ignores the integrityHash field itself (no circular hash)', () => {
+  it('is deterministic', async () => {
+    const insp = makeInspection();
+    expect(await computeHash(insp)).toBe(await computeHash(insp));
+  });
+
+  it('is field-order-independent', async () => {
+    const a = makeInspection({ id: 'x', facilityName: 'A' });
+    const b = { ...a };
+    expect(await computeHash(a)).toBe(await computeHash(b));
+  });
+
+  it('produces different hashes for different values', async () => {
+    const h90 = await computeHash(makeInspection({ score: 90 }));
+    const h50 = await computeHash(makeInspection({ score: 50 }));
+    expect(h90).not.toBe(h50);
+  });
+
+  it('produces different hashes when facilityName changes', async () => {
+    const hA = await computeHash(makeInspection({ facilityName: 'Alpha' }));
+    const hB = await computeHash(makeInspection({ facilityName: 'Beta' }));
+    expect(hA).not.toBe(hB);
+  });
+
+  it('handles empty items array', async () => {
+    const hash = await computeHash(makeInspection({ items: [] }));
+    expect(hash.length).toBeGreaterThan(0);
+  });
+
+  it('ignores the integrityHash field itself (no circular hash)', async () => {
     const a = makeInspection();
     const b = { ...a, integrityHash: 'someoldhash' };
-    expect(computeHash(a)).toBe(computeHash(b as SavedInspection));
+    expect(await computeHash(a)).toBe(await computeHash(b as SavedInspection));
+  });
+
+  it('returns a 64-character hex string', async () => {
+    const hash = await computeHash(makeInspection());
+    expect(hash).toMatch(/^[0-9a-f]{64}$/);
   });
 });
 
@@ -82,7 +110,7 @@ describe('computeHash', () => {
 describe('verifyInspection', () => {
   it('returns ok=true after storing the correct hash', async () => {
     const insp = makeInspection();
-    const hash = computeHash(insp);
+    const hash = await computeHash(insp);
     await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [insp.id]: hash }));
     const result = await verifyInspection(insp);
     expect(result.ok).toBe(true);
@@ -91,7 +119,8 @@ describe('verifyInspection', () => {
 
   it('returns ok=false when a field is tampered', async () => {
     const original = makeInspection();
-    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [original.id]: computeHash(original) }));
+    const hash = await computeHash(original);
+    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [original.id]: hash }));
     const result = await verifyInspection({ ...original, grade: 'B' as const });
     expect(result.ok).toBe(false);
   });
@@ -104,7 +133,8 @@ describe('verifyInspection', () => {
 
   it('returns ok=true for inspection with empty items', async () => {
     const insp = makeInspection({ items: [] });
-    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [insp.id]: computeHash(insp) }));
+    const hash = await computeHash(insp);
+    await AsyncStorage.setItem('INSPECTION_HASHES', JSON.stringify({ [insp.id]: hash }));
     expect((await verifyInspection(insp)).ok).toBe(true);
   });
 });
@@ -115,7 +145,7 @@ describe('IntegrityService.hashAndStore', () => {
   it('returns the hash of the inspection', async () => {
     const insp = makeInspection();
     const returned = await IntegrityService.hashAndStore(insp);
-    expect(returned).toBe(computeHash(insp));
+    expect(returned).toBe(await computeHash(insp));
   });
 
   it('persists the hash so verifyInspection returns ok=true', async () => {
