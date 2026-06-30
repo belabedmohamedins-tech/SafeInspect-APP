@@ -2,19 +2,27 @@
 //
 // Stub for expo-modules-core/src/polyfill/dangerous-internal
 //
-// jest-expo ~56.0.0 setup.js still requires this internal path but
-// expo-modules-core in SDK 56 no longer exposes it at that location.
-// This stub satisfies the import so all 38 test suites can run.
+// jest-expo ~56.0.0 setup.js (line 319) calls:
+//   require('expo-modules-core/src/polyfill/dangerous-internal')
+//     .installExpoGlobalPolyfill()
 //
-// The two exports jest-expo's setup.js accesses from this module:
-//   1. default export  — object with polyfill helpers (stubbed as {})
-//   2. installGlobals  — called to patch global.fetch etc. (no-op here
-//      because our jest.polyfill.js already sets up any globals we need)
+// SDK 56 expo-modules-core no longer exposes this path, so we stub it.
+// The function only needs to set up globalThis.expo polyfills; since
+// jest.polyfill.js already handles our globals, this is safely a no-op.
 
 module.exports = {
-  // Named export used by jest-expo setup
+  installExpoGlobalPolyfill: function installExpoGlobalPolyfill() {
+    // Ensure globalThis.expo exists so code that reads it doesn't throw
+    if (typeof globalThis.expo === 'undefined') {
+      globalThis.expo = { modules: {} };
+    }
+    if (typeof globalThis.expo.modules === 'undefined') {
+      globalThis.expo.modules = {};
+    }
+  },
+
+  // Legacy alias kept for any other callers
   installGlobals: function installGlobals() {},
 
-  // Some versions access .default
   default: {},
 };
