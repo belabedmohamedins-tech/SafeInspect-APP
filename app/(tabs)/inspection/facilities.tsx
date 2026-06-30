@@ -1,6 +1,6 @@
 // app/(tabs)/inspection/facilities.tsx
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Alert, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants';
@@ -14,18 +14,16 @@ export default function FacilitiesByCategoryScreen() {
 
   const [facilities, setFacilities] = useState<Facility[]>([]);
 
-  const loadFacilities = useCallback(async () => {
-    try {
-      const result = await filterByActivity(decodedCategory);
-      setFacilities(result);
-    } catch (e) {
-      console.error('Failed to load facilities', e);
-    }
-  }, [decodedCategory]);
-
-  // Reload on first render and every time the screen comes into focus
-  // (e.g. after the user adds a new facility and navigates back).
-  useFocusEffect(loadFacilities);
+  // useFocusEffect callback must be synchronous — async logic runs inside
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      filterByActivity(decodedCategory)
+        .then(result => { if (active) setFacilities(result); })
+        .catch(e => console.error('Failed to load facilities', e));
+      return () => { active = false; };
+    }, [decodedCategory])
+  );
 
   const handleFacilityPress = (facility: Facility) => {
     Alert.alert(

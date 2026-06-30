@@ -2,13 +2,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  // collapsed map: false = expanded (visible), true = collapsed (hidden)
-  // Tests expect initial value to be false (expanded) for all sections.
+  // All sections start COLLAPSED (true) so the SectionList only renders
+  // section headers on mount — items are rendered on demand when the user
+  // taps a header. This prevents mounting 30-60+ InspectionItem components
+  // simultaneously, which was causing the visible jank on checklist open.
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sectionTitles.map(t => [t, false]))
+    Object.fromEntries(sectionTitles.map(t => [t, true]))
   );
 
-  // Stable string dep — only changes when titles actually change
   const titlesKey = sectionTitles.join('||');
   const titlesRef = useRef(sectionTitles);
   titlesRef.current = sectionTitles;
@@ -19,7 +20,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = false;
+          next[title] = true; // new sections also start collapsed
           changed = true;
         }
       }
@@ -31,9 +32,8 @@ export function useCollapsibleSections(sectionTitles: string[]) {
     setCollapsed(prev => ({ ...prev, [title]: !prev[title] }));
   }, []);
 
-  // isCollapsed() kept for backward compatibility with existing screen components
   const isCollapsed = useCallback(
-    (title: string) => collapsed[title] ?? false,
+    (title: string) => collapsed[title] ?? true,
     [collapsed]
   );
 

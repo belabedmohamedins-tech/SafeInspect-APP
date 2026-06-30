@@ -1,7 +1,7 @@
 // components/InspectionItem.tsx
 import { FontAwesome } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useState } from 'react';
+import React, { memo, useState } from 'react';
 import {
   ActionSheetIOS,
   Alert,
@@ -29,12 +29,19 @@ interface Props {
 
 const STATUS_BUTTONS: ComplianceStatus[] = ['compliant', 'non-compliant', 'na'];
 
-const InspectionItemComponent: React.FC<Props> = ({
+/**
+ * Wrapped in React.memo so that tapping one item's status button only
+ * re-renders THAT item — not every item in the list.
+ *
+ * The parent passes stable useCallback handlers, so the memo comparison
+ * will correctly skip re-renders for unchanged rows.
+ */
+const InspectionItemComponent: React.FC<Props> = memo(function InspectionItemComponent({
   item,
   onStatusChange,
   onCommentChange,
   onPhotoTake,
-}) => {
+}) {
   const [legalModalVisible, setLegalModalVisible] = useState(false);
   const [photoModalVisible, setPhotoModalVisible] = useState(false);
 
@@ -95,13 +102,8 @@ const InspectionItemComponent: React.FC<Props> = ({
     }
   };
 
-  /**
-   * Copy the temp URI to permanent app storage, then notify the parent.
-   * If the item already has a photo, delete the old file first.
-   */
   const persistPhoto = async (tempUri: string) => {
     try {
-      // Remove previous photo file if one exists
       if (item.photoUri) {
         await deletePhoto(item.photoUri);
       }
@@ -210,7 +212,6 @@ const InspectionItemComponent: React.FC<Props> = ({
           );
         })}
 
-        {/* Camera/Gallery button — indicator dot when photo exists */}
         <TouchableOpacity
           style={[
             styles.cameraButton,
@@ -220,7 +221,7 @@ const InspectionItemComponent: React.FC<Props> = ({
           accessibilityLabel="إضافة صورة"
         >
           <FontAwesome
-            name={item.photoUri ? 'camera' : 'camera'}
+            name="camera"
             size={18}
             color={item.photoUri ? Colors.textInverse : Colors.primary}
           />
@@ -246,7 +247,7 @@ const InspectionItemComponent: React.FC<Props> = ({
         />
       )}
 
-      {/* ── Photo thumbnail — tap to open full-screen viewer ── */}
+      {/* ── Photo thumbnail ── */}
       {item.photoUri && (
         <Pressable onPress={() => setPhotoModalVisible(true)} style={styles.thumbnailWrapper}>
           <Image
@@ -260,9 +261,7 @@ const InspectionItemComponent: React.FC<Props> = ({
         </Pressable>
       )}
 
-      {/* ──────────────────────────────────────────────────────
-          Full-screen photo viewer modal
-         ────────────────────────────────────────────────────── */}
+      {/* Full-screen photo viewer */}
       <Modal
         animationType="fade"
         transparent
@@ -271,7 +270,6 @@ const InspectionItemComponent: React.FC<Props> = ({
         statusBarTranslucent
       >
         <View style={styles.photoModalOverlay}>
-          {/* Top bar */}
           <View style={styles.photoModalBar}>
             <TouchableOpacity
               onPress={handleDeletePhoto}
@@ -288,8 +286,6 @@ const InspectionItemComponent: React.FC<Props> = ({
               <FontAwesome name="times" size={22} color="#fff" />
             </TouchableOpacity>
           </View>
-
-          {/* Full-screen image */}
           {item.photoUri && (
             <Image
               source={{ uri: item.photoUri }}
@@ -297,8 +293,6 @@ const InspectionItemComponent: React.FC<Props> = ({
               resizeMode="contain"
             />
           )}
-
-          {/* Criteria label at bottom */}
           <View style={styles.photoModalCaption}>
             <Text style={styles.photoModalCaptionText} numberOfLines={2}>
               {item.criteria}
@@ -307,9 +301,7 @@ const InspectionItemComponent: React.FC<Props> = ({
         </View>
       </Modal>
 
-      {/* ──────────────────────────────────────────────────────
-          Legal reference modal
-         ────────────────────────────────────────────────────── */}
+      {/* Legal reference modal */}
       <Modal
         animationType="slide"
         transparent
@@ -331,7 +323,7 @@ const InspectionItemComponent: React.FC<Props> = ({
       </Modal>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -409,7 +401,6 @@ const styles = StyleSheet.create({
   statusButtonText:       { fontSize: 12, fontWeight: '500', color: Colors.textPrimary },
   statusButtonTextActive: { color: Colors.textInverse },
 
-  // Camera button: neutral when no photo, filled primary when photo exists
   cameraButton: {
     padding: Spacing.sm,
     backgroundColor: Colors.primary + '18',
@@ -455,7 +446,6 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.background,
   },
 
-  // Photo thumbnail
   thumbnailWrapper: {
     marginTop: Spacing.sm,
     alignSelf: 'flex-start',
@@ -477,7 +467,6 @@ const styles = StyleSheet.create({
     padding: 4,
   },
 
-  // Full-screen photo viewer
   photoModalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.94)',
@@ -518,7 +507,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // Legal reference modal
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
