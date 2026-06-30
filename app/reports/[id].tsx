@@ -16,7 +16,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, Radius, Shadow, Spacing } from '../../constants';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { exportInspectionCSV, exportInspectionPDF } from '../../src/services/pdfService';
-import { InspectionItem, SavedInspection } from '../../src/types';
+import { InspectionItem, InspectionType, SavedInspection } from '../../src/types';
 import { formatDateLong } from '../../src/utils/dateUtils';
 import { computeScoreAndGrade } from '../../src/utils/scoringUtils';
 import { getStatusColor, getStatusText } from '../../src/utils/statusUtils';
@@ -28,11 +28,37 @@ const GRADE_COLORS: Record<string, string> = {
   C: Colors.gradeC,
   D: Colors.gradeD,
 };
-const getGradeColor = (grade?: string) => (grade ? GRADE_COLORS[grade] : undefined) ?? Colors.textTertiary;
+const getGradeColor = (grade?: string) =>
+  (grade ? GRADE_COLORS[grade] : undefined) ?? Colors.textTertiary;
+
+// ── Phase-3: inspection type → Arabic label + badge colour ───────────────────
+const TYPE_META: Record<
+  InspectionType,
+  { label: string; bg: string; fg: string }
+> = {
+  routine:       { label: 'روتيني',    bg: '#e8f5e9', fg: '#2e7d32' },
+  'follow-up':   { label: 'متابعة',    bg: '#e3f2fd', fg: '#1565c0' },
+  complaint:     { label: 'شكوى',      bg: '#fff3e0', fg: '#e65100' },
+};
+
+function InspectionTypeBadge({ type }: { type?: InspectionType | string }) {
+  if (!type) return null;
+  const meta = TYPE_META[type as InspectionType];
+  if (!meta) return null;
+  return (
+    <View style={[typeBadgeStyles.badge, { backgroundColor: meta.bg }]}>
+      <Text style={[typeBadgeStyles.text, { color: meta.fg }]}>{meta.label}</Text>
+    </View>
+  );
+}
+const typeBadgeStyles = StyleSheet.create({
+  badge: { alignSelf: 'flex-start', borderRadius: Radius.sm, paddingHorizontal: Spacing.sm, paddingVertical: 2, marginTop: 4 },
+  text:  { fontSize: FontSize.xs + 1, fontWeight: '700' },
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
 
 export default function ReportDetailScreen() {
-  // `id` comes from the file-system route segment `[id]`.
-  // useLocalSearchParams can return a string or string[] — always normalise.
   const params = useLocalSearchParams<{ id: string }>();
   const router  = useRouter();
 
@@ -79,7 +105,6 @@ export default function ReportDetailScreen() {
 
   const reopenInspection = () => {
     if (!inspection) return;
-    // lat / lng must be strings for Expo Router params; guard against undefined.
     const lat = inspection.coordinates?.latitude  != null
       ? String(inspection.coordinates.latitude)
       : '';
@@ -100,6 +125,9 @@ export default function ReportDetailScreen() {
         writer:           inspection.inspectorName ?? '',
         lat,
         lng,
+        // ── Phase-3: forward type + prior link so checklist loads the diff ──
+        inspectionType:   inspection.inspectionType   ?? 'routine',
+        priorInspectionId: inspection.priorInspectionId ?? '',
       },
     });
   };
@@ -183,6 +211,10 @@ export default function ReportDetailScreen() {
         <Text style={styles.date}>{formatDateLong(inspection.date)}</Text>
         <Text style={styles.inspector}>المحرر: {inspection.inspectorName}</Text>
         <Text style={styles.metaLine}>سبب التفتيش: {inspection.inspectionCause || 'غير محدد'}</Text>
+
+        {/* Phase-3: inspection type badge */}
+        <InspectionTypeBadge type={inspection.inspectionType} />
+
         {inspection.referenceDocument && (
           <Text style={styles.metaLine}>مرجع المستند: {inspection.referenceDocument}</Text>
         )}
@@ -216,7 +248,7 @@ export default function ReportDetailScreen() {
         )}
       </View>
 
-      {/* ── IntegrityBadge: shown just below the header card, above the items list ── */}
+      {/* IntegrityBadge: shown just below the header card, above the items list */}
       <IntegrityBadge inspection={inspection} />
 
       <SectionList
