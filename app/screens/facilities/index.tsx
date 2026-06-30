@@ -25,14 +25,28 @@ export default function FacilitiesScreen() {
   const [search,     setSearch]     = useState('');
   const [loading,    setLoading]    = useState(true);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    const all = await FacilityRepository.getAll();
-    setFacilities(all);
-    setLoading(false);
-  }, []);
+  // useFocusEffect callback must be synchronous — run async logic inside
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      setLoading(true);
+      FacilityRepository.getAll().then(all => {
+        if (active) {
+          setFacilities(all);
+          setLoading(false);
+        }
+      });
+      return () => { active = false; };
+    }, [])
+  );
 
-  useFocusEffect(load);
+  const load = useCallback(() => {
+    setLoading(true);
+    FacilityRepository.getAll().then(all => {
+      setFacilities(all);
+      setLoading(false);
+    });
+  }, []);
 
   const filtered = search.trim()
     ? facilities.filter(f =>

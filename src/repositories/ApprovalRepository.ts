@@ -1,9 +1,14 @@
 // src/repositories/ApprovalRepository.ts
 // Supervisor approval workflow (FR-069→075)
+//
+// NOTE: InspectionRepository is required lazily (inside methods) to break the
+// circular dependency:
+//   InspectionRepository → ApprovalRepository → InspectionRepository
+// Using a top-level import would cause one module to see an uninitialised
+// value during startup.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from './keys';
 import { ApprovalStatus, SavedInspection } from '../types';
-import { InspectionRepository } from './InspectionRepository';
 import { AuditLogRepository } from './AuditLogRepository';
 
 export interface ApprovalRecord {
@@ -27,6 +32,15 @@ async function loadQueue(): Promise<ApprovalRecord[]> {
 
 async function saveQueue(queue: ApprovalRecord[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.APPROVAL_QUEUE, JSON.stringify(queue));
+}
+
+/**
+ * Lazily resolves InspectionRepository to avoid circular import.
+ * Safe because this is only called at runtime, never at module-load time.
+ */
+function getInspectionRepository() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  return require('./InspectionRepository').InspectionRepository as typeof import('./InspectionRepository').InspectionRepository;
 }
 
 export const ApprovalRepository = {
@@ -68,11 +82,11 @@ export const ApprovalRepository = {
     const q = await loadQueue();
     const idx = q.findIndex(r => r.inspectionId === inspectionId);
     if (idx === -1) throw new Error('Record not found');
-    if (q[idx].status === 'approved') return; // already approved — immutable
+    if (q[idx].status === 'approved') return;
     const now = new Date().toISOString();
     q[idx] = { ...q[idx], status: 'approved', approvedBy: supervisorName, approvedAt: now, approvalNote: note };
     await saveQueue(q);
-    // Patch the inspection record itself
+    const InspectionRepository = getInspectionRepository();
     const inspection = await InspectionRepository.getById(inspectionId);
     if (inspection) {
       await InspectionRepository.save({
@@ -105,6 +119,7 @@ export const ApprovalRepository = {
     const now = new Date().toISOString();
     q[idx] = { ...q[idx], status: 'returned', approvedBy: supervisorName, approvedAt: now, returnedReason: reason };
     await saveQueue(q);
+    const InspectionRepository = getInspectionRepository();
     const inspection = await InspectionRepository.getById(inspectionId);
     if (inspection) {
       await InspectionRepository.save({
@@ -137,6 +152,7 @@ export const ApprovalRepository = {
     const now = new Date().toISOString();
     q[idx] = { ...q[idx], status: 'escalated', approvedBy: supervisorName, approvedAt: now, approvalNote: note };
     await saveQueue(q);
+    const InspectionRepository = getInspectionRepository();
     const inspection = await InspectionRepository.getById(inspectionId);
     if (inspection) {
       await InspectionRepository.save({
