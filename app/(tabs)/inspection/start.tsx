@@ -17,14 +17,33 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Radius, Spacing } from '../../../constants';
 
+// ─── Types ───────────────────────────────────────────────────────────────────────────────────
+
+/**
+ * inspectionType  – used for Phase-3 diff logic and PDF type badge.
+ * inspectionCause – legacy field that drives the cause label in PDFs and DB.
+ *
+ * They intentionally overlap for 'follow-up': the type is 'follow-up' while
+ * the cause is 'followup' (matches pre-existing causeMap in pdfService.ts).
+ */
+type InspectionType = 'routine' | 'follow-up' | 'complaint' | 'extraordinary';
+
+const INSPECTION_TYPE_OPTIONS: { label: string; value: InspectionType; cause: string }[] = [
+  { label: 'تفتيش روتيني',       value: 'routine',       cause: 'routine'       },
+  { label: 'متابعة (follow-up)',     value: 'follow-up',     cause: 'followup'      },
+  { label: 'بعد شكوى',           value: 'complaint',     cause: 'complaint'     },
+  { label: 'تفتيش استثنائي',   value: 'extraordinary', cause: 'extraordinary' },
+];
+
 export default function InspectionStartScreen() {
   const router = useRouter();
-  const [cause, setCause]                     = useState('routine');
-  const [reference, setReference]             = useState('');
+
+  const [inspectionType, setInspectionType] = useState<InspectionType>('routine');
+  const [reference, setReference]           = useState('');
   const [committeeMembers, setCommitteeMembers] = useState<string[]>([]);
-  const [newMember, setNewMember]             = useState('');
-  const [writer, setWriter]                   = useState('');
-  const [coordinates, setCoordinates]         = useState<{ lat: number; lng: number } | null>(null);
+  const [newMember, setNewMember]           = useState('');
+  const [writer, setWriter]                 = useState('');
+  const [coordinates, setCoordinates]       = useState<{ lat: number; lng: number } | null>(null);
   const [locationLoading, setLocationLoading] = useState(true);
 
   useEffect(() => {
@@ -36,7 +55,6 @@ export default function InspectionStartScreen() {
           if (!cancelled) setLocationLoading(false);
           return;
         }
-        // 10-second timeout so the form never hangs indefinitely
         const loc = await Promise.race([
           Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.Balanced }),
           new Promise<never>((_, reject) =>
@@ -47,7 +65,7 @@ export default function InspectionStartScreen() {
           setCoordinates({ lat: loc.coords.latitude, lng: loc.coords.longitude });
         }
       } catch {
-        // Silent fallback — GPS is optional, form still works without it
+        // Silent fallback
       } finally {
         if (!cancelled) setLocationLoading(false);
       }
@@ -77,15 +95,21 @@ export default function InspectionStartScreen() {
       Alert.alert('تنبيه', 'الرجاء إضافة عضو واحد على الأقل في اللجنة');
       return;
     }
+
+    const selected = INSPECTION_TYPE_OPTIONS.find(o => o.value === inspectionType)!;
+
     router.push({
       pathname: '/(tabs)/inspection/categories',
       params: {
-        cause,
+        // Legacy cause field (keeps pdfService causeMap working)
+        cause:             selected.cause,
+        // Phase-3: explicit type for diff logic and PDF badge
+        inspectionType:    selected.value,
         reference,
-        committeeMembers: JSON.stringify(committeeMembers),
+        committeeMembers:  JSON.stringify(committeeMembers),
         writer,
-        lat: coordinates?.lat,
-        lng: coordinates?.lng,
+        lat:  coordinates?.lat,
+        lng:  coordinates?.lng,
       },
     });
   };
@@ -95,16 +119,31 @@ export default function InspectionStartScreen() {
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <Text style={styles.title}>بيانات التفتيش الأولية</Text>
 
-        <Text style={styles.label}>سبب التفتيش</Text>
+        {/* ── Inspection type ───────────────────────────────────────────────── */}
+        <Text style={styles.label}>نوع التفتيش</Text>
         <View style={styles.pickerContainer}>
-          <Picker selectedValue={cause} onValueChange={setCause} style={styles.picker}>
-            <Picker.Item label="تفتيش روتيني"   value="routine" />
-            <Picker.Item label="بعد شكوى"       value="complaint" />
-            <Picker.Item label="متابعة بعد إنذار" value="followup" />
-            <Picker.Item label="تفتيش استثنائي" value="extraordinary" />
+          <Picker
+            selectedValue={inspectionType}
+            onValueChange={v => setInspectionType(v as InspectionType)}
+            style={styles.picker}
+          >
+            {INSPECTION_TYPE_OPTIONS.map(opt => (
+              <Picker.Item key={opt.value} label={opt.label} value={opt.value} />
+            ))}
           </Picker>
         </View>
 
+        {/* Phase-3: Follow-up hint */}
+        {inspectionType === 'follow-up' && (
+          <View style={styles.followUpHint}>
+            <FontAwesome name="info-circle" size={14} color="#2980b9" />
+            <Text style={styles.followUpHintText}>
+              سيتم عرض مقارنة تلقائية مع آخر تفتيش مكتمل لنفس المنشأة خلال التفتيش.
+            </Text>
+          </View>
+        )}
+
+        {/* ── Reference document ──────────────────────────────────────────── */}
         <Text style={styles.label}>مرجع المستند (اختياري)</Text>
         <TextInput
           style={styles.input}
@@ -115,6 +154,7 @@ export default function InspectionStartScreen() {
           textAlign="right"
         />
 
+        {/* ── Writer ───────────────────────────────────────────────────────── */}
         <Text style={styles.label}>المحرر (حامل الجهاز)</Text>
         <TextInput
           style={styles.input}
@@ -125,6 +165,7 @@ export default function InspectionStartScreen() {
           textAlign="right"
         />
 
+        {/* ── Committee members ──────────────────────────────────────────── */}
         <Text style={styles.label}>أعضاء اللجنة</Text>
         <View style={styles.memberInputRow}>
           <TextInput
@@ -151,6 +192,7 @@ export default function InspectionStartScreen() {
           </View>
         ))}
 
+        {/* ── Location ──────────────────────────────────────────────────── */}
         <Text style={styles.label}>الموقع الجغرافي</Text>
         {locationLoading ? (
           <View style={styles.locationRow}>
@@ -173,6 +215,7 @@ export default function InspectionStartScreen() {
           </View>
         )}
 
+        {/* ── Next button ───────────────────────────────────────────────── */}
         <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
           <Text style={styles.nextButtonText}>التالي →</Text>
         </TouchableOpacity>
@@ -219,6 +262,24 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   picker: { height: 50, width: '100%', color: Colors.textPrimary },
+  followUpHint: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.xs,
+    backgroundColor: '#e8f4fd',
+    borderRadius: Radius.md - 2,
+    padding: Spacing.md,
+    marginBottom: Spacing.sm,
+    borderRightWidth: 3,
+    borderRightColor: '#2980b9',
+  },
+  followUpHintText: {
+    flex: 1,
+    fontSize: 12,
+    color: '#1a5276',
+    textAlign: 'right',
+    lineHeight: 18,
+  },
   memberInputRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.xs },
   memberInput:   { flex: 1, marginBottom: 0 },
   addButton: {

@@ -32,6 +32,10 @@ interface ChecklistParams {
   writer: string;
   lat?: number;
   lng?: number;
+  /** Phase-3: 'routine' | 'follow-up' | 'complaint'. Defaults to 'routine'. */
+  inspectionType?: string;
+  /** Phase-3: ID of the prior inspection to diff against (follow-up only). */
+  priorInspectionId?: string;
 }
 
 export function useChecklistData(params: ChecklistParams, signature?: string) {
@@ -48,7 +52,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const signatureRef = useRef(signature);
   signatureRef.current = signature;
 
-  // ─── Load ───────────────────────────────────────────────────────────────
+  // ─── Load ───────────────────────────────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       const p = paramsRef.current;
@@ -78,32 +82,34 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     load();
   }, []); // intentionally empty — runs once on mount
 
-  // ─── Save ───────────────────────────────────────────────────────────────
+  // ─── Save ───────────────────────────────────────────────────────────────────────
   const saveInspection = useCallback(
     async (status: 'completed' | 'in-progress') => {
       const p = paramsRef.current;
       const sig = signatureRef.current;
       try {
-        // Use get() here — we only need the core typed settings
         const settings = await SettingsRepository.get();
 
         const inspection: SavedInspection = {
-          id: inspectionId,
-          facilityId: p.facilityId,
-          facilityName: p.facilityName,
-          facilityAddress: p.facilityAddress,
-          date: new Date().toISOString(),
-          inspectorName: p.writer || settings.inspectorName || 'المفتش',
-          items: data,
+          id:               inspectionId,
+          facilityId:       p.facilityId,
+          facilityName:     p.facilityName,
+          facilityAddress:  p.facilityAddress,
+          date:             new Date().toISOString(),
+          inspectorName:    p.writer || settings.inspectorName || 'المفتش',
+          items:            data,
           status,
-          officeName: settings.officeName,
-          inspectionCause: p.cause,
+          officeName:       settings.officeName,
+          inspectionCause:  p.cause,
           referenceDocument: p.reference,
           committeeMembers: p.committeeMembers,
           coordinates:
             p.lat && p.lng
               ? { latitude: p.lat, longitude: p.lng }
               : undefined,
+          // Phase-3: persist inspection type + prior link
+          inspectionType:     p.inspectionType ?? 'routine',
+          priorInspectionId:  p.priorInspectionId,
         };
 
         if (status === 'completed') {
@@ -129,7 +135,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     [inspectionId, data]
   );
 
-  // ─── Auto-save on back ────────────────────────────────────────────────────
+  // ─── Auto-save on back ───────────────────────────────────────────────────────────
   useEffect(() => {
     const unsubscribe = navigation.addListener('beforeRemove', async (e: any) => {
       if (isFinishing) return;
@@ -140,7 +146,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
 
-  // ─── Item handlers ───────────────────────────────────────────────────────────
+  // ─── Item handlers ───────────────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
     setData(prev =>
       prev.map(item => (item.id === id ? { ...item, complianceStatus: status } : item))
@@ -167,7 +173,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     );
   }, []);
 
-  // ─── Finish (with completion gates) ──────────────────────────────────────────
+  // ─── Finish (with completion gates) ────────────────────────────────────────────────────
   const handleFinish = useCallback(async () => {
     const applicable = data.filter(item => item.complianceStatus !== 'na');
     const evaluated  = applicable.filter(
@@ -225,7 +231,7 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     router.replace('/(tabs)/inspection');
   }, [data, saveInspection, inspectionId, router]);
 
-  // ─── Derived values ───────────────────────────────────────────────────────────
+  // ─── Derived values ─────────────────────────────────────────────────────────────────
   const sections        = useMemo(() => groupByAxis(data), [data]);
   const totalItems      = useMemo(() => data.length, [data]);
   const evaluatedItems  = useMemo(() => getEvaluatedCount(data), [data]);
