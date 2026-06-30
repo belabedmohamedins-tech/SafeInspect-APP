@@ -15,20 +15,16 @@
 import React, { useState } from 'react';
 import {
   LayoutAnimation,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
-  UIManager,
   View,
 } from 'react-native';
 import { DifferentialView } from '../services/differentialView';
 import { formatDateLong } from '../utils/dateUtils';
 
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android') {
-  UIManager.setLayoutAnimationEnabledExperimental?.(true);
-}
+// NOTE: setLayoutAnimationEnabledExperimental is a no-op in the New Architecture.
+// LayoutAnimation works natively without any UIManager bootstrap call.
 
 interface Props {
   diff: DifferentialView | null;

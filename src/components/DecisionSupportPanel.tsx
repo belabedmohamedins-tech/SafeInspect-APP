@@ -10,6 +10,9 @@
  *   overrideReason        — current value of escalationOverrideReason
  *   onOverrideReasonChange — callback to update parent state
  *   disabled              — hides override input (e.g. on a saved/locked report)
+ *
+ * NOTE: setLayoutAnimationEnabledExperimental is a no-op in the New Architecture.
+ * LayoutAnimation works natively without any UIManager bootstrap call.
  */
 import React, { useState } from 'react';
 import {
@@ -20,14 +23,8 @@ import {
   StyleSheet,
   LayoutAnimation,
   Platform,
-  UIManager,
 } from 'react-native';
 import { DecisionSuggestion, Urgency } from '../services/decisionSupport';
-
-// Enable LayoutAnimation on Android
-if (Platform.OS === 'android' && UIManager.setLayoutAnimationEnabledExperimental) {
-  UIManager.setLayoutAnimationEnabledExperimental(true);
-}
 
 // ─── Urgency theme ────────────────────────────────────────────────────────────
 const URGENCY_THEME: Record<Urgency, { bg: string; border: string; text: string; chip: string; chipText: string }> = {
