@@ -31,6 +31,30 @@ const base = (overrides: Partial<CorrectiveAction> = {}): Omit<CorrectiveAction,
   ...overrides,
 });
 
+/**
+ * Write raw fixture records directly to AsyncStorage, bypassing save() and
+ * its internal readAll() call which would auto-escalate past-deadline items
+ * before they reach storage.  This lets persistOverdueEscalation() find
+ * genuinely un-promoted items to work on.
+ */
+async function seedRaw(items: CorrectiveAction[]): Promise<void> {
+  await AsyncStorage.setItem('corrective_actions', JSON.stringify(items));
+}
+
+function makeRaw(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
+  const now = new Date().toISOString();
+  return {
+    id: `cap-test-${Math.random().toString(36).slice(2, 7)}`,
+    inspectionId: 'ins-1', inspectionItemId: 'item-1',
+    facilityId: 'fac-1', facilityName: 'Test Facility',
+    title: 'Fix Issue', description: 'desc',
+    status: 'open', severity: 'medium',
+    deadline: tomorrow(), assignedTo: '',
+    createdAt: now, updatedAt: now,
+    ...overrides,
+  };
+}
+
 // ─── getOverdue ───────────────────────────────────────────────────────────────
 
 describe('getOverdue', () => {
@@ -119,23 +143,28 @@ describe('persistOverdueEscalation', () => {
   });
 
   it('promotes overdue items and returns promoted count', async () => {
-    await CorrectiveActionRepository.save(base({ status: 'open', deadline: yesterday() }));
-    await CorrectiveActionRepository.save(base({ status: 'in-progress', deadline: yesterday() }));
-    await CorrectiveActionRepository.save(base({ status: 'open' })); // not overdue
+    // Seed raw so items reach storage with status 'open'/'in-progress' intact —
+    // using save() would trigger readAll() which pre-escalates past-deadline
+    // items before writing, leaving nothing for persistOverdueEscalation to do.
+    await seedRaw([
+      makeRaw({ status: 'open',        deadline: yesterday() }),
+      makeRaw({ status: 'in-progress', deadline: yesterday() }),
+      makeRaw({ status: 'open',        deadline: tomorrow()  }), // not overdue
+    ]);
 
     const promoted = await CorrectiveActionRepository.persistOverdueEscalation();
     expect(promoted).toBe(2);
   });
 
   it('persists the promoted status so getAll() reflects it', async () => {
-    await CorrectiveActionRepository.save(base({ status: 'open', deadline: yesterday() }));
+    await seedRaw([makeRaw({ status: 'open', deadline: yesterday() })]);
     await CorrectiveActionRepository.persistOverdueEscalation();
     const all = await CorrectiveActionRepository.getAll();
     expect(all[0].status).toBe('overdue');
   });
 
   it('does not change already-resolved or already-overdue items', async () => {
-    await CorrectiveActionRepository.save(base({ status: 'resolved', deadline: yesterday() }));
+    await seedRaw([makeRaw({ status: 'resolved', deadline: yesterday() })]);
     const count = await CorrectiveActionRepository.persistOverdueEscalation();
     expect(count).toBe(0);
     expect((await CorrectiveActionRepository.getAll())[0].status).toBe('resolved');
