@@ -32,13 +32,15 @@ const base = (overrides: Partial<CorrectiveAction> = {}): Omit<CorrectiveAction,
 });
 
 /**
- * Write raw fixture records directly to AsyncStorage, bypassing save() and
- * its internal readAll() call which would auto-escalate past-deadline items
- * before they reach storage.  This lets persistOverdueEscalation() find
- * genuinely un-promoted items to work on.
+ * Write raw fixture records directly to AsyncStorage using the exact same key
+ * that CorrectiveActionRepository uses (StorageKeys.CORRECTIVE_ACTIONS = 'CORRECTIVE_ACTIONS').
+ *
+ * This bypasses save() and its internal readAll() call, which would
+ * auto-escalate past-deadline items before writing them, leaving nothing
+ * for persistOverdueEscalation() to promote.
  */
 async function seedRaw(items: CorrectiveAction[]): Promise<void> {
-  await AsyncStorage.setItem('corrective_actions', JSON.stringify(items));
+  await AsyncStorage.setItem('CORRECTIVE_ACTIONS', JSON.stringify(items));
 }
 
 function makeRaw(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
@@ -143,9 +145,9 @@ describe('persistOverdueEscalation', () => {
   });
 
   it('promotes overdue items and returns promoted count', async () => {
-    // Seed raw so items reach storage with status 'open'/'in-progress' intact —
-    // using save() would trigger readAll() which pre-escalates past-deadline
-    // items before writing, leaving nothing for persistOverdueEscalation to do.
+    // Use seedRaw (writes directly to 'CORRECTIVE_ACTIONS' key) so items reach
+    // storage with status 'open'/'in-progress' intact — save() would call
+    // readAll() which pre-escalates past-deadline items, leaving count = 0.
     await seedRaw([
       makeRaw({ status: 'open',        deadline: yesterday() }),
       makeRaw({ status: 'in-progress', deadline: yesterday() }),
@@ -181,7 +183,7 @@ describe('persistOverdueEscalation', () => {
 
 describe('getAll — error path', () => {
   it('returns [] when stored JSON is corrupt', async () => {
-    await (AsyncStorage as any).setItem('corrective_actions', 'NOT_JSON');
+    await (AsyncStorage as any).setItem('CORRECTIVE_ACTIONS', 'NOT_JSON');
     expect(await CorrectiveActionRepository.getAll()).toEqual([]);
   });
 });
