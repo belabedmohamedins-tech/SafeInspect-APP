@@ -98,5 +98,30 @@ describe('buildBrief', () => {
       const result = await buildBrief('fac-1');
       expect(result.previousInspectorName).toBe('Ahmed');
     });
+
+    // ── Branch: grade/score are null (lines ~42-43) ──────────────────────────
+    // Covers the `?? null` branches on last.grade and last.score
+    it('returns null previousGrade and previousScore when inspection has no grade or score', async () => {
+      const noGradeInspection = makeInspection({ grade: undefined, score: undefined });
+      mockGetCompleted.mockResolvedValue([noGradeInspection]);
+      const result = await buildBrief('fac-1');
+      expect(result.previousGrade).toBeNull();
+      expect(result.previousScore).toBeNull();
+    });
+
+    // ── Branch: unknown severity fallback (?? 3) (lines 36-38) ──────────────
+    // An item with a severity value not in {high, medium, low} gets order 3
+    // (sorted to the end). This covers the `?? 3` branch in the sort comparator.
+    it('sorts items with unknown severity to the end', async () => {
+      const items = [
+        makeItem({ id: 'unknown-sev', complianceStatus: 'non-compliant', severity: 'critical' as any }),
+        makeItem({ id: 'high-1',     complianceStatus: 'non-compliant', severity: 'high' }),
+      ];
+      mockGetCompleted.mockResolvedValue([makeInspection({ items })]);
+      const result = await buildBrief('fac-1');
+      // 'high' should come before unknown severity
+      expect(result.topViolations[0].id).toBe('high-1');
+      expect(result.topViolations[1].id).toBe('unknown-sev');
+    });
   });
 });

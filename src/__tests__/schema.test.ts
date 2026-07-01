@@ -191,3 +191,99 @@ describe('initializeDatabase — failure paths', () => {
     });
   });
 });
+
+// ─── migrateAsyncStorageToSQLite — lines 273-363 ─────────────────────────────
+
+describe('migrateAsyncStorageToSQLite', () => {
+  // AsyncStorage is globally mocked via moduleNameMapper.
+  // We need to seed it with data so the migration function has something to read.
+
+  beforeEach(async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+    (AsyncStorage as any).__resetStore();
+  });
+
+  it('completes without throwing when storage is empty', async () => {
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      await expect(migrateAsyncStorageToSQLite()).resolves.toBeUndefined();
+    });
+  });
+
+  it('calls onProgress("done") even when all keys are absent', async () => {
+    const onProgress = jest.fn();
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      await migrateAsyncStorageToSQLite(onProgress);
+    });
+    expect(onProgress).toHaveBeenCalledWith('done');
+  });
+
+  it('migrates inspections and calls onProgress("inspections")', async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+    await AsyncStorage.setItem('inspections', JSON.stringify([
+      {
+        id: 'i1', facilityId: 'f1', facilityName: 'Test', facilityAddress: '123 St',
+        date: '2026-01-01', inspectorName: 'Ali', status: 'completed',
+        items: [], score: 85, grade: 'B', riskLevel: 2,
+        openingMeetingDone: true, closingMeetingDone: false,
+        coordinates: { latitude: 36.7, longitude: 3.0 },
+        committeeMembers: ['Ahmed', 'Sara'],
+      },
+    ]));
+    const onProgress = jest.fn();
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      await migrateAsyncStorageToSQLite(onProgress);
+    });
+    expect(onProgress).toHaveBeenCalledWith('inspections');
+    expect(mockCurrentDbStub.runAsync).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT OR IGNORE INTO inspections'),
+      expect.arrayContaining(['i1', 'f1', 'Test']),
+    );
+  });
+
+  it('migrates facilities and calls onProgress("facilities")', async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+    await AsyncStorage.setItem('userFacilities', JSON.stringify([
+      { id: 'f1', projectName: 'Proj A', ownerName: 'Owner', activity: 'Food', address: 'Addr', lat: 36.7, lng: 3.0 },
+    ]));
+    const onProgress = jest.fn();
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      await migrateAsyncStorageToSQLite(onProgress);
+    });
+    expect(onProgress).toHaveBeenCalledWith('facilities');
+    expect(mockCurrentDbStub.runAsync).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT OR IGNORE INTO facilities'),
+      expect.arrayContaining(['f1', 'Proj A']),
+    );
+  });
+
+  it('migrates agenda and calls onProgress("agenda")', async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+    await AsyncStorage.setItem('agenda', JSON.stringify([
+      { id: 'a1', facilityId: 'f1', facilityName: 'Fac', date: '2026-06-01', notes: '', status: 'pending' },
+    ]));
+    const onProgress = jest.fn();
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      await migrateAsyncStorageToSQLite(onProgress);
+    });
+    expect(onProgress).toHaveBeenCalledWith('agenda');
+    expect(mockCurrentDbStub.runAsync).toHaveBeenCalledWith(
+      expect.stringContaining('INSERT OR IGNORE INTO agenda'),
+      expect.arrayContaining(['a1', 'f1']),
+    );
+  });
+
+  it('works when onProgress callback is not provided', async () => {
+    const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+    await AsyncStorage.setItem('inspections', JSON.stringify([{ id: 'i2', facilityId: 'f2', facilityName: 'F2', facilityAddress: '', date: '2026-02-01', status: 'draft', items: [] }]));
+    await jest.isolateModulesAsync(async () => {
+      const { migrateAsyncStorageToSQLite } = require('../db/schema');
+      // Should not throw even without the callback
+      await expect(migrateAsyncStorageToSQLite()).resolves.toBeUndefined();
+    });
+  });
+});

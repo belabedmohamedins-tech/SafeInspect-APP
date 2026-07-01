@@ -36,6 +36,7 @@ jest.mock('../services/NotificationService', () => ({
 
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
 import { rescheduleAll } from '../services/NotificationService';
 
 const mockGetDocumentAsync = DocumentPicker.getDocumentAsync as jest.Mock;
@@ -46,6 +47,9 @@ beforeEach(async () => {
   //   2. AsyncStorage.clear() second: implementation must still be intact
   jest.clearAllMocks();
   await AsyncStorage.clear();
+  // Restore default sharing behaviour
+  (Sharing.isAvailableAsync as jest.Mock).mockResolvedValue(true);
+  (Sharing.shareAsync as jest.Mock).mockResolvedValue(undefined);
 });
 
 // ─── Seed AsyncStorage with realistic data ────────────────────────────────────
@@ -114,6 +118,39 @@ describe('exportBackup', () => {
     expect(payload.settings.officeName).toBe('مكتب الصحة');
     expect(payload.settings.inspectorName).toBe('أحمد');
   });
+
+  // ── Branch: canShare = false (line 50-55) ──────────────────────────────────
+  it('skips shareAsync when sharing is not available', async () => {
+    (Sharing.isAvailableAsync as jest.Mock).mockResolvedValueOnce(false);
+    const payload = await exportBackup();
+    expect(Sharing.shareAsync).not.toHaveBeenCalled();
+    // Should still return a valid payload and write the file
+    expect(payload.version).toBe(BACKUP_VERSION);
+    expect(FileSystem.writeAsStringAsync).toHaveBeenCalled();
+  });
+
+  // ── Branch: inspections/agenda/userFacilities keys missing from storage ───
+  it('defaults to empty arrays when storage keys are absent', async () => {
+    // Clear storage so none of the collection keys exist
+    await AsyncStorage.clear();
+    const payload = await exportBackup();
+    expect(payload.inspections).toEqual([]);
+    expect(payload.agenda).toEqual([]);
+    expect(payload.userFacilities).toEqual([]);
+  });
+
+  // ── Branch: photoUriMap built from items with photos ─────────────────────
+  it('builds photoUriMap from items that have photoUri', async () => {
+    await AsyncStorage.clear();
+    const itemWithPhoto = { id: 'item-photo', title: 'T', photoUri: 'file:///photo.jpg', photos: [] };
+    const itemWithPhotos = { id: 'item-photos', title: 'T2', photos: ['file:///a.jpg', 'file:///b.jpg'] };
+    await AsyncStorage.setItem('inspections', JSON.stringify([
+      { id: 'i1', facilityName: 'F', items: [itemWithPhoto, itemWithPhotos] },
+    ]));
+    const payload = await exportBackup();
+    expect(payload.photoUriMap!['item-photo']).toBe('file:///photo.jpg');
+    expect(payload.photoUriMap!['item-photos__photos']).toEqual(['file:///a.jpg', 'file:///b.jpg']);
+  });
 });
 
 // ─── importBackup ─────────────────────────────────────────────────────────────
@@ -122,7 +159,7 @@ describe('importBackup', () => {
   const validPayload = {
     version: BACKUP_VERSION,
     exportedAt: '2026-06-27T10:00:00.000Z',
-    inspections:    [{ id: 'i1' }],
+    inspections:    [{ id: 'i1', items: [] }],
     agenda:         [{ id: 'a1', status: 'pending', facilityName: 'F', date: '2026-07-01', notes: '' }],
     userFacilities: [{ id: 'f1' }],
     settings: {
@@ -209,6 +246,63 @@ describe('importBackup', () => {
       ]),
     );
   });
+
+  // ── Branch: asset uri missing (lines 71-78) ───────────────────────────────
+  it('throws when asset uri is missing', async () => {
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: '' }],
+    });
+    await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
+  });
+
+  // ── Branch: v1 backup accepted (version === 1) ────────────────────────────
+  it('accepts v1 backup (no photoUriMap)', async () => {
+    const v1Payload = { ...validPayload, version: 1 };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v1.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(v1Payload),
+    );
+    const result = await importBackup();
+    expect(result).toEqual({ inspections: 1, agenda: 1, userFacilities: 1 });
+  });
+
+  // ── Branch: photoUriMap present — applyPhotoUriMap is called ──────────────
+  it('re-links photoUriMap back into inspection items on v2 restore', async () => {
+    const payloadWithMap = {
+      ...validPayload,
+      inspections: [{ id: 'i1', items: [{ id: 'item-1', title: 'T' }] }],
+      photoUriMap: { 'item-1': 'file:///photo.jpg' },
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadWithMap),
+    );
+    await importBackup();
+    const raw = await AsyncStorage.getItem('inspections');
+    const restored = JSON.parse(raw!);
+    expect(restored[0].items[0].photoUri).toBe('file:///photo.jpg');
+  });
+
+  // ── Branch: userFacilities missing from payload (defaults to []) ──────────
+  it('handles missing userFacilities field gracefully', async () => {
+    const { userFacilities: _omit, ...payloadNoFacilities } = validPayload;
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///nofac.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadNoFacilities),
+    );
+    const result = await importBackup();
+    expect(result!.userFacilities).toBe(0);
+  });
 });
 
 // ─── getLastBackupDate ────────────────────────────────────────────────────────
@@ -224,5 +318,14 @@ describe('getLastBackupDate', () => {
     await AsyncStorage.setItem('@backup/lastExportedAt', ts);
     const result = await getLastBackupDate();
     expect(result).toEqual(new Date(ts));
+  });
+
+  // ── Branch: catch block (line 281) ───────────────────────────────────────
+  it('returns null when AsyncStorage.getItem throws', async () => {
+    const original = AsyncStorage.getItem;
+    (AsyncStorage as any).getItem = jest.fn().mockRejectedValueOnce(new Error('storage error'));
+    const result = await getLastBackupDate();
+    expect(result).toBeNull();
+    (AsyncStorage as any).getItem = original;
   });
 });
