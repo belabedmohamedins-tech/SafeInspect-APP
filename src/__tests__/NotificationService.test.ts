@@ -5,6 +5,9 @@
 // mock for expo-constants is always in effect by the time any test runs.
 // Our __mocks__/expo-constants.js sets appOwnership: 'standalone', so
 // getNotifications() returns the expo-notifications mock (not null).
+//
+// The Expo Go (null) path is tested by temporarily replacing the
+// expo-constants mock to return appOwnership: 'expo'.
 
 import { Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -45,6 +48,22 @@ beforeEach(() => {
   mockCancelAll.mockResolvedValue(undefined);
 });
 
+// Helper: temporarily make getNotifications() return null (simulate Expo Go)
+function withExpoGo(fn: () => Promise<void>) {
+  return async () => {
+    const constants = require('expo-constants');
+    const original = constants.default?.appOwnership ?? constants.appOwnership;
+    if (constants.default) constants.default.appOwnership = 'expo';
+    else constants.appOwnership = 'expo';
+    try {
+      await fn();
+    } finally {
+      if (constants.default) constants.default.appOwnership = original;
+      else constants.appOwnership = original;
+    }
+  };
+}
+
 describe('NotificationService', () => {
   describe('requestPermission', () => {
     it('returns true when already granted', async () => {
@@ -80,6 +99,12 @@ describe('NotificationService', () => {
       mockGetPerms.mockRejectedValueOnce(new Error('hw error'));
       expect(await requestPermission()).toBe(false);
     });
+
+    // Line 34: getNotifications() returns null in Expo Go → return false immediately
+    it('returns false in Expo Go environment (getNotifications returns null)', withExpoGo(async () => {
+      expect(await requestPermission()).toBe(false);
+      expect(mockGetPerms).not.toHaveBeenCalled();
+    }));
   });
 
   describe('isEnabled / setEnabled', () => {
@@ -102,6 +127,12 @@ describe('NotificationService', () => {
     it('does not cancel notifications when enabled', async () => {
       await setEnabled(true);
       expect(mockCancelAll).not.toHaveBeenCalled();
+    });
+
+    // Line 96: isEnabled storage catch → returns false
+    it('returns false when AsyncStorage.getItem throws', async () => {
+      jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('storage error'));
+      expect(await isEnabled()).toBe(false);
     });
   });
 
@@ -134,6 +165,12 @@ describe('NotificationService', () => {
       expect(mockCancelOne).toHaveBeenCalledWith('agenda-item-1-pre');
       expect(mockCancelOne).toHaveBeenCalledWith('agenda-item-1-day');
     });
+
+    // Line 161: Notifications is null (Expo Go) → scheduleForAgendaItem returns early
+    it('does nothing in Expo Go environment', withExpoGo(async () => {
+      await scheduleForAgendaItem(makeItem());
+      expect(mockSchedule).not.toHaveBeenCalled();
+    }));
   });
 
   describe('cancelForAgendaItem', () => {
@@ -142,6 +179,18 @@ describe('NotificationService', () => {
       expect(mockCancelOne).toHaveBeenCalledWith('agenda-abc-pre');
       expect(mockCancelOne).toHaveBeenCalledWith('agenda-abc-day');
     });
+
+    // Line 174: cancelForAgendaItem error catch
+    it('swallows errors when cancelScheduledNotificationAsync throws', async () => {
+      mockCancelOne.mockRejectedValueOnce(new Error('cancel failed'));
+      await expect(cancelForAgendaItem('abc')).resolves.toBeUndefined();
+    });
+
+    // Line 161: Notifications null in Expo Go → cancelForAgendaItem returns early
+    it('does nothing in Expo Go environment', withExpoGo(async () => {
+      await cancelForAgendaItem('abc');
+      expect(mockCancelOne).not.toHaveBeenCalled();
+    }));
   });
 
   describe('rescheduleAll', () => {
@@ -158,6 +207,32 @@ describe('NotificationService', () => {
       await rescheduleAll([makeItem()]);
       expect(mockCancelAll).toHaveBeenCalledTimes(1);
       expect(mockSchedule).not.toHaveBeenCalled();
+    });
+
+    // Line 161: rescheduleAll Notifications null guard
+    it('does nothing in Expo Go environment', withExpoGo(async () => {
+      await rescheduleAll([makeItem()]);
+      expect(mockCancelAll).not.toHaveBeenCalled();
+    }));
+
+    // Line 189: rescheduleAll error catch
+    it('swallows errors when cancelAllScheduledNotificationsAsync throws', async () => {
+      mockCancelAll.mockRejectedValueOnce(new Error('bulk cancel failed'));
+      await expect(rescheduleAll([makeItem()])).resolves.toBeUndefined();
+    });
+  });
+
+  // Line 44: handler-already-installed guard — second call to getNotificationsWithHandler
+  // must not call setNotificationHandler again (flag is module-level)
+  describe('handler installation guard (line 44)', () => {
+    it('only installs the notification handler once across multiple calls', async () => {
+      const mockSetHandler = jest.mocked(Notifications.setNotificationHandler);
+      mockSetHandler.mockClear();
+      // Two sequential calls — handler should only be set once per module lifetime
+      await requestPermission();
+      await requestPermission();
+      // The handler is installed at most once (the guard prevents re-installation)
+      expect(mockSetHandler.mock.calls.length).toBeLessThanOrEqual(1);
     });
   });
 });
