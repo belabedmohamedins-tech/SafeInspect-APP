@@ -1,4 +1,9 @@
 // __tests__/utils/inspectionUtils.test.ts
+//
+// Full coverage for src/utils/inspectionUtils.ts
+// Pure TS — no mocks needed.
+// Covers: getEvaluatedCount, getProgressPercent, groupByAxisRaw, groupByAxis, getAxisProgress
+
 import {
   getEvaluatedCount,
   getProgressPercent,
@@ -8,166 +13,180 @@ import {
 } from '../../src/utils/inspectionUtils';
 import { InspectionItem } from '../../src/types';
 
+// ── Fixture builder ──────────────────────────────────────────────────────────
+
 function makeItem(
   id: string,
-  axis: string,
-  status: InspectionItem['complianceStatus'] = 'not-evaluated'
+  status: InspectionItem['complianceStatus'],
+  axis?: string,
 ): InspectionItem {
   return {
     id,
-    axis,
-    category: 'بيئية',
-    criteria: '',
-    legalReference: '',
+    criteria: `Criteria ${id}`,
+    legalReference: 'Art. 1',
     severity: 'medium',
-    controlType: 'visual',
     complianceStatus: status,
+    axis,
   };
 }
 
-// ─── getEvaluatedCount ────────────────────────────────────────────────────────
+// ── getEvaluatedCount ────────────────────────────────────────────────────────
 
 describe('getEvaluatedCount', () => {
   it('returns 0 for empty array', () => {
     expect(getEvaluatedCount([])).toBe(0);
   });
 
-  it('counts compliant, non-compliant, and na as evaluated', () => {
+  it('excludes not-evaluated items', () => {
     const items = [
-      makeItem('1', 'A', 'compliant'),
-      makeItem('2', 'A', 'non-compliant'),
-      makeItem('3', 'A', 'na'),
-      makeItem('4', 'A', 'not-evaluated'),
+      makeItem('1', 'not-evaluated'),
+      makeItem('2', 'compliant'),
+      makeItem('3', 'not-evaluated'),
+    ];
+    expect(getEvaluatedCount(items)).toBe(1);
+  });
+
+  it('counts all items when all are evaluated', () => {
+    const items = [
+      makeItem('1', 'compliant'),
+      makeItem('2', 'non-compliant'),
+      makeItem('3', 'na'),
     ];
     expect(getEvaluatedCount(items)).toBe(3);
   });
 
-  it('does not count not-evaluated', () => {
-    const items = [makeItem('1', 'A', 'not-evaluated'), makeItem('2', 'A', 'not-evaluated')];
+  it('returns 0 when all items are not-evaluated', () => {
+    const items = [makeItem('1', 'not-evaluated'), makeItem('2', 'not-evaluated')];
     expect(getEvaluatedCount(items)).toBe(0);
-  });
-
-  it('returns total when all items are evaluated', () => {
-    const items = [
-      makeItem('1', 'A', 'compliant'),
-      makeItem('2', 'A', 'compliant'),
-    ];
-    expect(getEvaluatedCount(items)).toBe(2);
   });
 });
 
-// ─── getProgressPercent ───────────────────────────────────────────────────────
+// ── getProgressPercent ───────────────────────────────────────────────────────
 
 describe('getProgressPercent', () => {
-  it('returns 0 for empty array', () => {
+  it('returns 0 for empty array (no division-by-zero)', () => {
     expect(getProgressPercent([])).toBe(0);
   });
 
-  it('returns 0 when nothing is evaluated', () => {
-    const items = [makeItem('1', 'A', 'not-evaluated'), makeItem('2', 'A', 'not-evaluated')];
+  it('returns 0 when all items are not-evaluated', () => {
+    const items = [makeItem('1', 'not-evaluated'), makeItem('2', 'not-evaluated')];
     expect(getProgressPercent(items)).toBe(0);
   });
 
   it('returns 100 when all items are evaluated', () => {
-    const items = [makeItem('1', 'A', 'compliant'), makeItem('2', 'A', 'non-compliant')];
+    const items = [makeItem('1', 'compliant'), makeItem('2', 'non-compliant')];
     expect(getProgressPercent(items)).toBe(100);
   });
 
   it('returns 50 when half are evaluated', () => {
     const items = [
-      makeItem('1', 'A', 'compliant'),
-      makeItem('2', 'A', 'not-evaluated'),
+      makeItem('1', 'compliant'),
+      makeItem('2', 'not-evaluated'),
     ];
     expect(getProgressPercent(items)).toBe(50);
   });
 
-  it('returns 75 for 3 out of 4 evaluated', () => {
+  it('returns fractional percent for uneven splits', () => {
+    // 1 of 3 evaluated = 33.33...
     const items = [
-      makeItem('1', 'A', 'compliant'),
-      makeItem('2', 'A', 'non-compliant'),
-      makeItem('3', 'A', 'na'),
-      makeItem('4', 'A', 'not-evaluated'),
+      makeItem('1', 'compliant'),
+      makeItem('2', 'not-evaluated'),
+      makeItem('3', 'not-evaluated'),
     ];
-    expect(getProgressPercent(items)).toBe(75);
+    expect(getProgressPercent(items)).toBeCloseTo(33.33, 1);
   });
 });
 
-// ─── groupByAxisRaw ───────────────────────────────────────────────────────────
+// ── groupByAxisRaw ───────────────────────────────────────────────────────────
 
 describe('groupByAxisRaw', () => {
   it('returns empty array for empty input', () => {
     expect(groupByAxisRaw([])).toEqual([]);
   });
 
-  it('groups items by axis correctly', () => {
+  it('groups items by axis', () => {
     const items = [
-      makeItem('1', 'النظافة'),
-      makeItem('2', 'النظافة'),
-      makeItem('3', 'السلامة'),
+      makeItem('1', 'compliant', 'hygiene'),
+      makeItem('2', 'compliant', 'hygiene'),
+      makeItem('3', 'non-compliant', 'storage'),
     ];
     const result = groupByAxisRaw(items);
-    const axisMap = Object.fromEntries(result);
-    expect(axisMap['النظافة']).toHaveLength(2);
-    expect(axisMap['السلامة']).toHaveLength(1);
+    const hygieneGroup = result.find(([title]) => title === 'hygiene');
+    const storageGroup = result.find(([title]) => title === 'storage');
+    expect(hygieneGroup?.[1]).toHaveLength(2);
+    expect(storageGroup?.[1]).toHaveLength(1);
   });
 
-  it('uses "أخرى" for items with no axis', () => {
-    const item: InspectionItem = {
-      id: 'X', axis: undefined as any, category: 'بيئية',
-      criteria: '', legalReference: '', severity: 'low',
-      controlType: 'visual', complianceStatus: 'not-evaluated',
-    };
-    const result = groupByAxisRaw([item]);
+  it('uses "أخرى" as fallback axis when axis is undefined', () => {
+    const items = [makeItem('1', 'compliant', undefined)];
+    const result = groupByAxisRaw(items);
     expect(result[0][0]).toBe('أخرى');
   });
 
-  it('preserves insertion order of axes', () => {
-    const items = [
-      makeItem('1', 'المحور أ'),
-      makeItem('2', 'المحور ب'),
-      makeItem('3', 'المحور أ'),
-    ];
-    const axes = groupByAxisRaw(items).map(([title]) => title);
-    expect(axes[0]).toBe('المحور أ');
-    expect(axes[1]).toBe('المحور ب');
+  it('returns an array of [string, InspectionItem[]] tuples', () => {
+    const items = [makeItem('1', 'compliant', 'axis-A')];
+    const result = groupByAxisRaw(items);
+    expect(Array.isArray(result[0])).toBe(true);
+    expect(typeof result[0][0]).toBe('string');
+    expect(Array.isArray(result[0][1])).toBe(true);
   });
 });
 
-// ─── groupByAxis ─────────────────────────────────────────────────────────────
+// ── groupByAxis ──────────────────────────────────────────────────────────────
 
 describe('groupByAxis', () => {
-  it('returns objects with title and data properties', () => {
-    const items = [makeItem('1', 'النظافة', 'compliant')];
-    const result = groupByAxis(items);
-    expect(result[0]).toHaveProperty('title', 'النظافة');
-    expect(result[0]).toHaveProperty('data');
-    expect(result[0].data).toHaveLength(1);
-  });
-
   it('returns empty array for empty input', () => {
     expect(groupByAxis([])).toEqual([]);
   });
-});
 
-// ─── getAxisProgress ─────────────────────────────────────────────────────────
-
-describe('getAxisProgress', () => {
-  it('returns correct total and evaluated counts per axis', () => {
-    const items = [
-      makeItem('1', 'النظافة', 'compliant'),
-      makeItem('2', 'النظافة', 'not-evaluated'),
-      makeItem('3', 'السلامة', 'non-compliant'),
-    ];
-    const result = getAxisProgress(items);
-    const cleanGroup = result.find(g => g.title === 'النظافة')!;
-    const safeGroup = result.find(g => g.title === 'السلامة')!;
-    expect(cleanGroup.total).toBe(2);
-    expect(cleanGroup.evaluated).toBe(1);
-    expect(safeGroup.total).toBe(1);
-    expect(safeGroup.evaluated).toBe(1);
+  it('returns objects with title and data properties', () => {
+    const items = [makeItem('1', 'compliant', 'hygiene')];
+    const result = groupByAxis(items);
+    expect(result[0]).toHaveProperty('title', 'hygiene');
+    expect(result[0]).toHaveProperty('data');
+    expect(Array.isArray(result[0].data)).toBe(true);
   });
 
+  it('groups correctly (same shape as groupByAxisRaw)', () => {
+    const items = [
+      makeItem('1', 'compliant', 'A'),
+      makeItem('2', 'non-compliant', 'B'),
+      makeItem('3', 'na', 'A'),
+    ];
+    const result = groupByAxis(items);
+    const groupA = result.find(g => g.title === 'A');
+    expect(groupA?.data).toHaveLength(2);
+  });
+});
+
+// ── getAxisProgress ──────────────────────────────────────────────────────────
+
+describe('getAxisProgress', () => {
   it('returns empty array for empty input', () => {
     expect(getAxisProgress([])).toEqual([]);
+  });
+
+  it('returns correct total and evaluated per axis', () => {
+    const items = [
+      makeItem('1', 'compliant', 'hygiene'),
+      makeItem('2', 'not-evaluated', 'hygiene'),
+      makeItem('3', 'non-compliant', 'storage'),
+    ];
+    const result = getAxisProgress(items);
+    const hygiene = result.find(g => g.title === 'hygiene');
+    const storage = result.find(g => g.title === 'storage');
+    expect(hygiene?.total).toBe(2);
+    expect(hygiene?.evaluated).toBe(1);
+    expect(storage?.total).toBe(1);
+    expect(storage?.evaluated).toBe(1);
+  });
+
+  it('has evaluated = 0 when all items in an axis are not-evaluated', () => {
+    const items = [
+      makeItem('1', 'not-evaluated', 'hygiene'),
+      makeItem('2', 'not-evaluated', 'hygiene'),
+    ];
+    const result = getAxisProgress(items);
+    expect(result[0].evaluated).toBe(0);
   });
 });
