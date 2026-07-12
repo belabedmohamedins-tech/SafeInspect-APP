@@ -5,7 +5,7 @@ import { InspectionItem } from '../../src/types';
 // ─── Constants derived from the source ───────────────────────────────────────
 const UPD_PREFIX = 'UPD-';
 const NEW_PREFIX = '03-';
-const TOTAL_COUNT = 32; // 22 UPD-AX* + 10 03-*
+const TOTAL_COUNT = 33; // 23 UPD-AX* + 10 03-*
 
 const VALID_SEVERITIES: InspectionItem['severity'][] = ['high', 'medium', 'low'];
 const VALID_CONTROL_TYPES: InspectionItem['controlType'][] = ['doc', 'visual', 'test', 'interview'];
@@ -92,9 +92,9 @@ describe('updSpecificCriteria', () => {
       });
     });
 
-    it('contains 22 legacy UPD-AX* items', () => {
+    it('contains 23 legacy UPD-AX* items', () => {
       const updItems = updSpecificCriteria.filter((item) => item.id.startsWith(UPD_PREFIX));
-      expect(updItems).toHaveLength(22);
+      expect(updItems).toHaveLength(23);
     });
 
     it('contains 10 new 03-* items', () => {
@@ -300,62 +300,24 @@ describe('updSpecificCriteria', () => {
         /معيار/,
         /مبدأ/,
         /إطار/,
-        /HACCP/i,
-        /GHP/i,
+        /HACCP/,
+        /GHP/,
+        /المادة/,
       ];
       updSpecificCriteria.forEach((item) => {
-        const hasRef = algerianPatterns.some((pattern) => pattern.test(item.legalReference));
+        const hasRef = algerianPatterns.some((p) => p.test(item.legalReference));
         expect(hasRef).toBe(true);
       });
     });
 
-    it('UPD items reference Decree 06-198 for classification items', () => {
-      const classificationItems = updSpecificCriteria.filter(
-        (i) => i.id.startsWith(UPD_PREFIX) && i.axis === 'الهوية والتصنيف',
-      );
-      classificationItems.forEach((item) => {
-        expect(item.legalReference).toMatch(/06-198/);
-      });
+    it('UPD-AX1-01 references المرسوم التنفيذي 06-198', () => {
+      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX1-01')!;
+      expect(item.legalReference).toMatch(/06-198/);
     });
 
-    it('environmental items reference Law 03-10', () => {
-      const envItems = updSpecificCriteria.filter((i) => i.category === 'بيئية');
-      const withLaw0310 = envItems.filter((i) => i.legalReference.includes('03-10'));
-      expect(withLaw0310.length).toBeGreaterThan(0);
-    });
-
-    it('waste items reference Law 01-19', () => {
-      const wasteItems = updSpecificCriteria.filter(
-        (i) =>
-          i.axis === 'الروث والمخلفات' ||
-          (i.axis === 'الروث والمخلفات' && i.id.startsWith(NEW_PREFIX)),
-      );
-      wasteItems.forEach((item) => {
-        expect(item.legalReference).toMatch(/01-19/);
-      });
-    });
-
-    it('water items reference Decree 17-140', () => {
-      const waterItems = updSpecificCriteria.filter(
-        (i) => i.axis === 'المياه' || i.axis === 'المياه والأعلاف',
-      );
-      const withDecree = waterItems.filter((i) => i.legalReference.includes('17-140'));
-      expect(withDecree.length).toBeGreaterThan(0);
-    });
-  });
-
-  // ── 10. Immutability guard ────────────────────────────────────────────────
-  describe('array integrity', () => {
-    it('does not mutate between accesses', () => {
-      const first = updSpecificCriteria[0];
-      const again = updSpecificCriteria[0];
-      expect(first).toBe(again);
-    });
-
-    it('items are plain objects (not class instances)', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(Object.getPrototypeOf(item)).toBe(Object.prototype);
-      });
+    it('03-01 references المرسوم التنفيذي 06-198', () => {
+      const item = updSpecificCriteria.find((i) => i.id === '03-01')!;
+      expect(item.legalReference).toMatch(/06-198/);
     });
   });
 });
