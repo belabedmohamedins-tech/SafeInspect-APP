@@ -120,7 +120,6 @@ describe('useChecklistData \u2014 load', () => {
       useChecklistData({ ...BASE_PARAMS, draftId: 'missing-draft' })
     );
     await act(async () => {});
-    // draft not found — data stays empty, loading done
     expect(result.current.isLoading).toBe(false);
     expect(result.current.totalItems).toBe(0);
   });
@@ -200,9 +199,10 @@ describe('useChecklistData \u2014 derived values', () => {
   it('sections groups items by axis', async () => {
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
     await act(async () => {});
-    const axes = Object.keys(result.current.sections);
-    expect(axes).toContain('Axis A');
-    expect(axes).toContain('Axis B');
+    // sections is an array of { title, data } objects
+    const titles = result.current.sections.map((s: { title: string }) => s.title);
+    expect(titles).toContain('Axis A');
+    expect(titles).toContain('Axis B');
   });
 });
 
@@ -213,7 +213,6 @@ describe('useChecklistData \u2014 handleFinish gates', () => {
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
     await act(async () => {});
-    // only 1 of 3 evaluated => 33%
     act(() => { result.current.handleStatusChange('c1', 'compliant'); });
     await act(async () => { await result.current.handleFinish(); });
     expect(alertSpy).toHaveBeenCalledWith(
@@ -228,7 +227,6 @@ describe('useChecklistData \u2014 handleFinish gates', () => {
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
     await act(async () => {});
-    // evaluate all items to pass completion gate
     act(() => {
       result.current.handleStatusChange('c1', 'compliant');
       result.current.handleStatusChange('c2', 'non-compliant'); // high severity, no photo
@@ -247,7 +245,6 @@ describe('useChecklistData \u2014 handleFinish gates', () => {
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation(() => {});
     const { result } = renderHook(() => useChecklistData(BASE_PARAMS));
     await act(async () => {});
-    // all compliant — passes both gates
     act(() => {
       result.current.handleStatusChange('c1', 'compliant');
       result.current.handleStatusChange('c2', 'compliant');
@@ -272,7 +269,11 @@ describe('useChecklistData \u2014 handleFinish gates', () => {
     });
     await act(async () => { await result.current.handleFinish(); });
     expect(mockUpdateLink).toHaveBeenCalled();
-    expect(alertSpy).toHaveBeenCalledWith('\u0646\u062c\u0627\u062d', expect.stringContaining('\u0645\u0647\u0645\u0629'), undefined);
+    // actual message from source: 'تم حفظ التفتيش وتحديث المهمة كمكتملة'
+    expect(alertSpy).toHaveBeenCalledWith(
+      '\u0646\u062c\u0627\u062d',
+      '\u062a\u0645 \u062d\u0641\u0638 \u0627\u0644\u062a\u0641\u062a\u064a\u0634 \u0648\u062a\u062d\u062f\u064a\u062b \u0627\u0644\u0645\u0647\u0645\u0629 \u0643\u0645\u0643\u062a\u0645\u0644\u0629',
+    );
     alertSpy.mockRestore();
   });
 
