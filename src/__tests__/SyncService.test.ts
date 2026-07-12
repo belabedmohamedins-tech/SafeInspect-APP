@@ -10,9 +10,13 @@ import {
 } from '../services/SyncService';
 import { SavedInspection } from '../types';
 
-// ─── Mock fetch globally ───────────────────────────────────────────────────────────
-const mockFetch = jest.fn();
-global.fetch = mockFetch;
+// ─── Mock apiClient ─────────────────────────────────────────────────────────────────────
+jest.mock('../services/apiClient', () => ({
+  apiClient: jest.fn(),
+}));
+
+import { apiClient } from '../services/apiClient';
+const mockApiClient = apiClient as jest.Mock;
 
 // ─── NetInfo ─────────────────────────────────────────────────────────────────────────
 const NetInfoMock = require('@react-native-community/netinfo').default as {
@@ -23,8 +27,8 @@ const NetInfoMock = require('@react-native-community/netinfo').default as {
 beforeEach(async () => {
   jest.clearAllMocks();
   NetInfoMock.__reset();
-  global.fetch = mockFetch;
   await AsyncStorage.clear();
+  mockApiClient.mockResolvedValue({ ok: true, status: 200 });
 });
 
 // ─── Helpers ───────────────────────────────────────────────────────────────────────
@@ -33,9 +37,9 @@ function makeInspection(id: string, updatedAt?: string): SavedInspection {
   return {
     id,
     facilityId:    'fac-1',
-    facilityName:  '\u0645\u0646\u0634\u0623\u0629',
-    inspectorName: '\u0645\u0641\u062a\u0634',
-    officeName:    '\u0645\u0643\u062a\u0628',
+    facilityName:  'منشأة',
+    inspectorName: 'مفتش',
+    officeName:    'مكتب',
     date:          '2026-06-27',
     updatedAt:     updatedAt ?? '2026-06-27T10:00:00Z',
     status:        'completed',
@@ -97,17 +101,17 @@ describe('enqueue', () => {
 // ─── flush — no API URL ───────────────────────────────────────────────────────────────────
 
 describe('flush — no API URL configured', () => {
-  it('returns 0 without calling fetch', async () => {
+  it('returns 0 without calling apiClient', async () => {
     await enqueue(makeInspection('i1'));
     const synced = await flush();
     expect(synced).toBe(0);
-    expect(mockFetch).not.toHaveBeenCalled();
+    expect(mockApiClient).not.toHaveBeenCalled();
   });
 });
 
 // ─── flush — with API URL ───────────────────────────────────────────────────────────────
 
-describe('flush — with API URL (mocked via env)', () => {
+describe('flush — with API URL', () => {
   beforeEach(() => {
     process.env.EXPO_PUBLIC_SYNC_API_URL = 'https://api.test';
   });
@@ -116,25 +120,25 @@ describe('flush — with API URL (mocked via env)', () => {
     delete process.env.EXPO_PUBLIC_SYNC_API_URL;
   });
 
-  it('returns 0 immediately when queue is empty (line 71 early return)', async () => {
-    // Queue is empty — flush should short-circuit before calling fetch
+  // ── Line 71: queue.length === 0 early return ───────────────────────────────
+  it('returns 0 immediately when queue is empty (line 71)', async () => {
+    // URL set, device online, but queue is empty — should early-return 0
     const synced = await flush();
     expect(synced).toBe(0);
-    expect(mockFetch).not.toHaveBeenCalled();
+    expect(mockApiClient).not.toHaveBeenCalled();
   });
 
-  it('returns 0 when device is offline (line 95 isOnline check)', async () => {
+  it('returns 0 when device is offline', async () => {
     await enqueue(makeInspection('i1'));
-    // Override NetInfo to report offline
     NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: false, isInternetReachable: false });
     const synced = await flush();
     expect(synced).toBe(0);
-    expect(mockFetch).not.toHaveBeenCalled();
+    expect(mockApiClient).not.toHaveBeenCalled();
   });
 
   it('removes item from queue on 2xx response', async () => {
     await enqueue(makeInspection('i1'));
-    mockFetch.mockResolvedValueOnce({ ok: true, status: 200 });
+    mockApiClient.mockResolvedValueOnce({ ok: true, status: 200 });
     const synced = await flush();
     expect(synced).toBe(1);
     const q = await readQueue();
@@ -143,16 +147,16 @@ describe('flush — with API URL (mocked via env)', () => {
 
   it('keeps item in queue on 4xx response', async () => {
     await enqueue(makeInspection('i1'));
-    mockFetch.mockResolvedValueOnce({ ok: false, status: 422 });
+    mockApiClient.mockResolvedValueOnce({ ok: false, status: 422 });
     const synced = await flush();
     expect(synced).toBe(0);
     const q = await readQueue();
     expect(q).toHaveLength(1);
   });
 
-  it('keeps item in queue when fetch throws (network error)', async () => {
+  it('keeps item in queue when apiClient throws (network error)', async () => {
     await enqueue(makeInspection('i1'));
-    mockFetch.mockRejectedValueOnce(new Error('Network request failed'));
+    mockApiClient.mockRejectedValueOnce(new Error('Network request failed'));
     const synced = await flush();
     expect(synced).toBe(0);
     const q = await readQueue();
@@ -161,7 +165,7 @@ describe('flush — with API URL (mocked via env)', () => {
 
   it('updates SYNC_LAST_RUN only when at least one item is synced', async () => {
     await enqueue(makeInspection('i1'));
-    mockFetch.mockResolvedValueOnce({ ok: true, status: 200 });
+    mockApiClient.mockResolvedValueOnce({ ok: true, status: 200 });
     await flush();
     const lastRun = await AsyncStorage.getItem(StorageKeys.SYNC_LAST_RUN);
     expect(lastRun).not.toBeNull();
@@ -171,7 +175,7 @@ describe('flush — with API URL (mocked via env)', () => {
     await enqueue(makeInspection('i1'));
     await enqueue(makeInspection('i2'));
     await enqueue(makeInspection('i3'));
-    mockFetch
+    mockApiClient
       .mockResolvedValueOnce({ ok: true,  status: 200 })
       .mockResolvedValueOnce({ ok: false, status: 500 })
       .mockResolvedValueOnce({ ok: true,  status: 201 });
