@@ -1,222 +1,208 @@
 // src/__tests__/differentialView.test.ts
-//
-// buildDifferentialViewSync is pure (no I/O) — test directly.
-// buildDifferentialView is async and calls InspectionRepository.getById —
-// spy on the real object so differentialView.ts is fully instrumented.
+// L4 — domain-specific mocks only
+// Covers:
+//   buildDifferentialViewSync — all 5 DiffStatus values
+//   buildDifferentialView     — async, using mocked InspectionRepository
+//     • priorInspectionId path (specific record found + not found/not completed)
+//     • fallback getAll path (facility match + exclusion)
+//     • no prior -> all 'not-in-prior'
+
+jest.mock('../../src/repositories/InspectionRepository', () => ({
+  InspectionRepository: {
+    getById: jest.fn(),
+    getAll: jest.fn(),
+  },
+}));
 
 import {
-  buildDifferentialViewSync,
   buildDifferentialView,
-} from '../services/differentialView';
-import { InspectionRepository } from '../repositories/InspectionRepository';
-import { InspectionItem, SavedInspection } from '../types';
+  buildDifferentialViewSync,
+  DifferentialView,
+} from '../../src/services/differentialView';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { SavedInspection, InspectionItem } from '../../src/types';
 
-function makeItem(
-  id: string,
-  complianceStatus: InspectionItem['complianceStatus'],
-): InspectionItem {
-  return {
-    id,
-    criteria:         `Criterion ${id}`,
-    complianceStatus,
-    severity:         'medium',
-    category:         'general',
-  } as unknown as InspectionItem;
+const mockGetById = InspectionRepository.getById as jest.Mock;
+const mockGetAll  = InspectionRepository.getAll as jest.Mock;
+
+// ─── Factories ────────────────────────────────────────────────────────────────
+
+function makeItem(id: string, status: 'compliant' | 'non-compliant' | 'not-applicable'): InspectionItem {
+  return { id, complianceStatus: status } as InspectionItem;
 }
 
 function makeInspection(
   id: string,
+  facilityId: string,
   items: InspectionItem[],
+  status: 'completed' | 'in-progress' = 'completed',
+  date = '2025-01-01',
   priorInspectionId?: string,
-  facilityId = 'fac-1',
 ): SavedInspection {
-  return {
-    id,
-    facilityId,
-    facilityName:    'Test',
-    facilityAddress: '',
-    date:            '2024-01-01',
-    status:          'completed',
-    items,
-    priorInspectionId,
-  } as unknown as SavedInspection;
+  return { id, facilityId, items, status, date, priorInspectionId } as SavedInspection;
 }
 
-let spyGetById: jest.SpyInstance;
-let spyGetAll: jest.SpyInstance;
-
-beforeEach(() => {
-  spyGetById = jest
-    .spyOn(InspectionRepository, 'getById')
-    .mockResolvedValue(null);
-  spyGetAll = jest
-    .spyOn(InspectionRepository, 'getAll')
-    .mockResolvedValue([]);
-});
-
-afterEach(() => jest.restoreAllMocks());
-
-// ─── buildDifferentialViewSync (pure) ─────────────────────────────────────────
+// ─── buildDifferentialViewSync ────────────────────────────────────────────────
 
 describe('buildDifferentialViewSync', () => {
-  it('marks all entries as not-in-prior when prior is null', () => {
-    const current = makeInspection('c1', [
-      makeItem('i1', 'non-compliant'),
-      makeItem('i2', 'compliant'),
-    ]);
-    const view = buildDifferentialViewSync(current, null);
-    expect(view.all.every(e => e.diffStatus === 'not-in-prior')).toBe(true);
-    expect(view.priorInspection).toBeNull();
+  const prior = makeInspection('prior1', 'F1', [
+    makeItem('c1', 'non-compliant'),
+    makeItem('c2', 'non-compliant'),
+    makeItem('c3', 'compliant'),
+    makeItem('c4', 'compliant'),
+  ]);
+
+  const current = makeInspection('cur1', 'F1', [
+    makeItem('c1', 'compliant'),      // resolved
+    makeItem('c2', 'non-compliant'),  // still-failing
+    makeItem('c3', 'non-compliant'),  // new-violation
+    makeItem('c4', 'compliant'),      // unchanged
+    makeItem('c5', 'non-compliant'),  // not-in-prior (new criterion)
+  ]);
+
+  let view: DifferentialView;
+
+  beforeAll(() => {
+    view = buildDifferentialViewSync(current, prior);
   });
 
-  it('marks a fixed item as resolved', () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'non-compliant')]);
-    const current = makeInspection('c1', [makeItem('i1', 'compliant')]);
-    const view = buildDifferentialViewSync(current, prior);
+  it('resolved: c1 was non-compliant, now compliant', () => {
     expect(view.resolved).toHaveLength(1);
+    expect(view.resolved[0].item.id).toBe('c1');
     expect(view.resolved[0].diffStatus).toBe('resolved');
-    expect(view.hasUnresolvedPriorViolations).toBe(false);
+    expect(view.resolved[0].priorStatus).toBe('non-compliant');
   });
 
-  it('marks a persisting violation as still-failing', () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'non-compliant')]);
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')]);
-    const view = buildDifferentialViewSync(current, prior);
+  it('stillFailing: c2 still non-compliant', () => {
     expect(view.stillFailing).toHaveLength(1);
-    expect(view.hasUnresolvedPriorViolations).toBe(true);
+    expect(view.stillFailing[0].item.id).toBe('c2');
+    expect(view.stillFailing[0].diffStatus).toBe('still-failing');
   });
 
-  it('marks a newly non-compliant item as new-violation', () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')]);
-    const view = buildDifferentialViewSync(current, prior);
+  it('newViolations: c3 was compliant, now non-compliant', () => {
     expect(view.newViolations).toHaveLength(1);
+    expect(view.newViolations[0].item.id).toBe('c3');
     expect(view.newViolations[0].diffStatus).toBe('new-violation');
   });
 
-  it('marks a compliant-then-compliant item as unchanged', () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
-    const current = makeInspection('c1', [makeItem('i1', 'compliant')]);
-    const view = buildDifferentialViewSync(current, prior);
-    expect(view.all[0].diffStatus).toBe('unchanged');
+  it('unchanged: c4', () => {
+    const c4 = view.all.find(e => e.item.id === 'c4');
+    expect(c4?.diffStatus).toBe('unchanged');
   });
 
-  it('marks a criterion absent from prior as not-in-prior', () => {
-    const prior   = makeInspection('p1', [makeItem('i1', 'compliant')]);
-    const current = makeInspection('c1', [
-      makeItem('i1', 'compliant'),
-      makeItem('i2', 'non-compliant'),
-    ]);
-    const view = buildDifferentialViewSync(current, prior);
-    expect(view.all.find(e => e.item.id === 'i2')!.diffStatus).toBe('not-in-prior');
+  it('not-in-prior: c5 (new criterion)', () => {
+    const c5 = view.all.find(e => e.item.id === 'c5');
+    expect(c5?.diffStatus).toBe('not-in-prior');
+    expect(c5?.priorStatus).toBeUndefined();
   });
 
-  it('handles a mixed scenario correctly', () => {
-    const prior = makeInspection('p1', [
-      makeItem('r1', 'non-compliant'),
-      makeItem('s1', 'non-compliant'),
-      makeItem('u1', 'compliant'),
-      makeItem('n1', 'compliant'),
-    ]);
-    const current = makeInspection('c1', [
-      makeItem('r1', 'compliant'),
-      makeItem('s1', 'non-compliant'),
-      makeItem('u1', 'compliant'),
-      makeItem('n1', 'non-compliant'),
-    ]);
-    const view = buildDifferentialViewSync(current, prior);
-    expect(view.resolved).toHaveLength(1);
-    expect(view.stillFailing).toHaveLength(1);
-    expect(view.newViolations).toHaveLength(1);
+  it('hasUnresolvedPriorViolations is true', () => {
     expect(view.hasUnresolvedPriorViolations).toBe(true);
   });
 
-  it('attaches the prior inspection to the returned view', () => {
-    const prior   = makeInspection('p1', []);
-    const current = makeInspection('c1', []);
-    const view = buildDifferentialViewSync(current, prior);
+  it('priorInspection set correctly', () => {
     expect(view.priorInspection).toBe(prior);
+  });
+
+  it('all contains 5 entries in order', () => {
+    expect(view.all).toHaveLength(5);
+    expect(view.all.map(e => e.item.id)).toEqual(['c1', 'c2', 'c3', 'c4', 'c5']);
+  });
+
+  it('null prior -> all entries not-in-prior', () => {
+    const v = buildDifferentialViewSync(current, null);
+    expect(v.all.every(e => e.diffStatus === 'not-in-prior')).toBe(true);
+    expect(v.hasUnresolvedPriorViolations).toBe(false);
+    expect(v.priorInspection).toBeNull();
   });
 });
 
-// ─── buildDifferentialView (async) ───────────────────────────────────────────
+// ─── buildDifferentialView (async) ────────────────────────────────────────────
 
-describe('buildDifferentialView', () => {
-  it('returns a no-op diff when priorInspectionId is absent', async () => {
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')]);
-    const view = await buildDifferentialView(current);
-    expect(view.priorInspection).toBeNull();
-    expect(view.all[0].diffStatus).toBe('not-in-prior');
+describe('buildDifferentialView — async', () => {
+  beforeEach(() => {
+    mockGetById.mockReset();
+    mockGetAll.mockReset();
   });
 
-  it('returns a no-op diff when getById returns null', async () => {
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], 'p1');
-    const view = await buildDifferentialView(current);
-    expect(view.priorInspection).toBeNull();
-  });
+  const currentItems = [
+    makeItem('c1', 'compliant'),
+    makeItem('c2', 'non-compliant'),
+  ];
 
-  it('builds correct diff when prior is found via getById', async () => {
-    const prior = makeInspection('p1', [makeItem('i1', 'non-compliant')]);
-    spyGetById.mockResolvedValue(prior);
-    const current = makeInspection('c1', [makeItem('i1', 'compliant')], 'p1');
+  const priorItems = [
+    makeItem('c1', 'non-compliant'),
+    makeItem('c2', 'non-compliant'),
+  ];
+
+  it('uses priorInspectionId when set and completed', async () => {
+    const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'prior1');
+    const prior   = makeInspection('prior1', 'F1', priorItems, 'completed', '2025-01-01');
+    mockGetById.mockResolvedValue(prior);
+
     const view = await buildDifferentialView(current);
-    expect(view.resolved).toHaveLength(1);
+
+    expect(mockGetById).toHaveBeenCalledWith('prior1');
     expect(view.priorInspection).toBe(prior);
+    expect(view.resolved).toHaveLength(1);
+    expect(view.stillFailing).toHaveLength(1);
   });
 
-  // ── Lines 91-95, 115-120: getAll() fallback path ──────────────────────────
+  it('falls back to getAll when priorInspectionId not completed', async () => {
+    const current  = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'prior1');
+    const prior    = makeInspection('prior1', 'F1', priorItems, 'in-progress');
+    const fallback = makeInspection('prior2', 'F1', priorItems, 'completed', '2025-02-01');
+    mockGetById.mockResolvedValue(prior);
+    mockGetAll.mockResolvedValue([fallback, current]);
 
-  it('falls back to getAll when no priorInspectionId and picks the most recent completed inspection for the same facility', async () => {
-    const older = makeInspection('p-old', [makeItem('i1', 'non-compliant')], undefined, 'fac-1');
-    (older as any).date = '2023-06-01';
-    const newer = makeInspection('p-new', [makeItem('i1', 'compliant')], undefined, 'fac-1');
-    (newer as any).date = '2024-01-01';
-    // Also include an inspection for a different facility — must be ignored.
-    const other = makeInspection('p-other', [makeItem('i1', 'non-compliant')], undefined, 'fac-2');
-    (other as any).date = '2025-01-01';
-    spyGetAll.mockResolvedValue([older, newer, other]);
-
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], undefined, 'fac-1');
     const view = await buildDifferentialView(current);
-    // "newer" is the most-recent completed inspection for fac-1
-    expect(view.priorInspection).toBe(newer);
-    // i1 was compliant in prior and is non-compliant now → new-violation
-    expect(view.newViolations).toHaveLength(1);
+    expect(view.priorInspection?.id).toBe('prior2');
   });
 
-  it('falls back to getAll and returns null prior when no completed inspection exists for the facility', async () => {
-    const otherFacility = makeInspection('p-other', [makeItem('i1', 'non-compliant')], undefined, 'fac-9');
-    spyGetAll.mockResolvedValue([otherFacility]);
+  it('falls back to getAll when no priorInspectionId', async () => {
+    const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    const prior   = makeInspection('old', 'F1', priorItems, 'completed', '2025-01-01');
+    mockGetAll.mockResolvedValue([prior, current]);
 
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], undefined, 'fac-1');
     const view = await buildDifferentialView(current);
-    expect(view.priorInspection).toBeNull();
-    expect(view.all[0].diffStatus).toBe('not-in-prior');
+    expect(mockGetById).not.toHaveBeenCalled();
+    expect(view.priorInspection?.id).toBe('old');
   });
 
-  it('excludes current inspection id from getAll candidates', async () => {
-    // The current inspection shows up in getAll — it must not pick itself as prior.
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], undefined, 'fac-1');
-    spyGetAll.mockResolvedValue([current]);
+  it('returns all not-in-prior when no prior found', async () => {
+    const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    mockGetAll.mockResolvedValue([current]);
 
     const view = await buildDifferentialView(current);
     expect(view.priorInspection).toBeNull();
+    expect(view.all.every(e => e.diffStatus === 'not-in-prior')).toBe(true);
+    expect(view.hasUnresolvedPriorViolations).toBe(false);
   });
 
-  it('uses getAll fallback when priorInspectionId is set but the retrieved inspection is not completed', async () => {
-    // getById returns an in-progress inspection — status !== 'completed' → skip it
-    // then fall through to getAll which also returns nothing useful
-    const inProgressPrior = {
-      ...makeInspection('p1', [makeItem('i1', 'non-compliant')]),
-      status: 'in-progress',
-    } as unknown as SavedInspection;
-    spyGetById.mockResolvedValue(inProgressPrior);
-    spyGetAll.mockResolvedValue([]);
+  it('excludes current inspection from getAll candidates', async () => {
+    const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    mockGetAll.mockResolvedValue([current]);
 
-    const current = makeInspection('c1', [makeItem('i1', 'non-compliant')], 'p1');
     const view = await buildDifferentialView(current);
-    // getById result rejected (not completed), getAll has nothing → null prior
     expect(view.priorInspection).toBeNull();
-    expect(spyGetAll).toHaveBeenCalled();
+  });
+
+  it('picks most-recent by date from multiple candidates', async () => {
+    const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    const older   = makeInspection('old1', 'F1', priorItems, 'completed', '2024-01-01');
+    const newer   = makeInspection('old2', 'F1', priorItems, 'completed', '2025-03-01');
+    mockGetAll.mockResolvedValue([older, newer, current]);
+
+    const view = await buildDifferentialView(current);
+    expect(view.priorInspection?.id).toBe('old2');
+  });
+
+  it('ignores inspections from a different facility', async () => {
+    const current      = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    const otherFacility = makeInspection('other', 'F2', priorItems, 'completed', '2025-04-01');
+    mockGetAll.mockResolvedValue([otherFacility, current]);
+
+    const view = await buildDifferentialView(current);
+    expect(view.priorInspection).toBeNull();
   });
 });
