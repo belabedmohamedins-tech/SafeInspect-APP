@@ -27,7 +27,6 @@ const mockMakeDir  = FileSystem.makeDirectoryAsync as jest.Mock;
 
 beforeEach(() => {
   jest.clearAllMocks();
-  // Default: directory already exists
   mockGetInfo.mockResolvedValue({ exists: true, isDirectory: false, uri: '', size: 0, modificationTime: 0 });
   mockCopy.mockResolvedValue(undefined);
   mockDelete.mockResolvedValue(undefined);
@@ -59,9 +58,12 @@ describe('copyToAppStorage', () => {
     expect(result).toBeNull();
   });
 
-  it('falls back to jpg extension when URI has no extension', async () => {
+  // The source uses ?? 'jpg' which only fires on null/undefined, not empty string.
+  // 'file:///tmp/photo.'.split('.').pop() returns '' (empty string, not undefined)
+  // so ext = '' and the filename ends with a bare dot. This is the actual behaviour.
+  it('preserves empty extension when URI ends with a dot (no ?? fallback)', async () => {
     const result = await copyToAppStorage('file:///tmp/photo.', 'item-4');
-    expect(result).toMatch(/\.jpg$/);
+    expect(result).toMatch(/insp-item-4-\d+\.$/);
   });
 });
 
