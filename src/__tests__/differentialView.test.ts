@@ -3,10 +3,12 @@
 // Covers:
 //   buildDifferentialViewSync — all 5 DiffStatus values
 //   buildDifferentialView     — async, using mocked InspectionRepository
-//     • priorInspectionId path (specific record found + not found/not completed)
-//     • priorInspectionId set but getById returns null -> fallback getAll (lines 117-120)
-//     • fallback getAll path (facility match + exclusion)
-//     • no prior -> all 'not-in-prior'
+//     • priorInspectionId path (found + not found/not completed)
+//     • getById null → fallback getAll
+//     • fallback getAll (facility match + exclusion + date sort)
+//     • no prior → all 'not-in-prior'
+//     • lines 117-118: new-violation branch in async diff map
+//     • lines 119-120: unchanged branch in async diff map
 
 jest.mock('../../src/repositories/InspectionRepository', () => ({
   InspectionRepository: {
@@ -126,17 +128,28 @@ describe('buildDifferentialView — async', () => {
     mockGetAll.mockReset();
   });
 
-  const currentItems = [
-    makeItem('c1', 'compliant'),
-    makeItem('c2', 'non-compliant'),
-  ];
-
+  // Items that exercise ALL 4 diff branches (lines 111-120) inside the async path:
+  //   c1: prior=non-compliant, current=compliant     → resolved
+  //   c2: prior=non-compliant, current=non-compliant → still-failing
+  //   c3: prior=compliant,     current=non-compliant → new-violation  (line 117-118)
+  //   c4: prior=compliant,     current=compliant     → unchanged      (line 119-120)
+  //   c5: not in prior                               → not-in-prior   (line 111-112)
   const priorItems = [
     makeItem('c1', 'non-compliant'),
     makeItem('c2', 'non-compliant'),
+    makeItem('c3', 'compliant'),
+    makeItem('c4', 'compliant'),
   ];
 
-  it('uses priorInspectionId when set and completed', async () => {
+  const currentItems = [
+    makeItem('c1', 'compliant'),
+    makeItem('c2', 'non-compliant'),
+    makeItem('c3', 'non-compliant'),  // new-violation — covers line 117-118
+    makeItem('c4', 'compliant'),      // unchanged     — covers line 119-120
+    makeItem('c5', 'non-compliant'),  // not-in-prior  — covers line 111-112
+  ];
+
+  it('uses priorInspectionId when set and completed — covers all 5 diff branches', async () => {
     const current = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'prior1');
     const prior   = makeInspection('prior1', 'F1', priorItems, 'completed', '2025-01-01');
     mockGetById.mockResolvedValue(prior);
@@ -145,22 +158,30 @@ describe('buildDifferentialView — async', () => {
 
     expect(mockGetById).toHaveBeenCalledWith('prior1');
     expect(view.priorInspection).toBe(prior);
-    expect(view.resolved).toHaveLength(1);
-    expect(view.stillFailing).toHaveLength(1);
+    expect(view.resolved).toHaveLength(1);       // c1
+    expect(view.stillFailing).toHaveLength(1);   // c2
+    expect(view.newViolations).toHaveLength(1);  // c3  ← line 117-118
+    const c4 = view.all.find(e => e.item.id === 'c4');
+    expect(c4?.diffStatus).toBe('unchanged');    // c4  ← line 119-120
+    const c5 = view.all.find(e => e.item.id === 'c5');
+    expect(c5?.diffStatus).toBe('not-in-prior'); // c5  ← line 111-112
   });
 
-  // ── Lines 117-120: getById returns null → must enter the if(!prior) block ──
   it('falls back to getAll when priorInspectionId set but getById returns null', async () => {
     const current  = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'missing-id');
     const fallback = makeInspection('prior2', 'F1', priorItems, 'completed', '2025-02-01');
-    mockGetById.mockResolvedValue(null);          // record does not exist in DB
+    mockGetById.mockResolvedValue(null);
     mockGetAll.mockResolvedValue([fallback, current]);
 
     const view = await buildDifferentialView(current);
 
     expect(mockGetById).toHaveBeenCalledWith('missing-id');
-    expect(mockGetAll).toHaveBeenCalled();        // must have entered the fallback block
+    expect(mockGetAll).toHaveBeenCalled();
     expect(view.priorInspection?.id).toBe('prior2');
+    // also verify all branches covered via getAll path
+    expect(view.newViolations).toHaveLength(1);  // c3
+    const c4 = view.all.find(e => e.item.id === 'c4');
+    expect(c4?.diffStatus).toBe('unchanged');    // c4
   });
 
   it('falls back to getAll when priorInspectionId not completed', async () => {
@@ -219,5 +240,19 @@ describe('buildDifferentialView — async', () => {
 
     const view = await buildDifferentialView(current);
     expect(view.priorInspection).toBeNull();
+  });
+
+  it('hasUnresolvedPriorViolations false when no still-failing', async () => {
+    const current = makeInspection('cur', 'F1', [
+      makeItem('c1', 'compliant'),
+    ], 'completed', '2025-06-01');
+    const prior   = makeInspection('old', 'F1', [
+      makeItem('c1', 'non-compliant'),
+    ], 'completed', '2025-01-01');
+    mockGetAll.mockResolvedValue([prior, current]);
+
+    const view = await buildDifferentialView(current);
+    expect(view.hasUnresolvedPriorViolations).toBe(false);
+    expect(view.resolved).toHaveLength(1);
   });
 });
