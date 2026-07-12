@@ -16,7 +16,7 @@ jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: {
     getOpen:                  jest.fn(),
     getStats:                 jest.fn(),
-    persistOverdueEscalation: jest.fn().mockResolvedValue(undefined),
+    persistOverdueEscalation: jest.fn().mockResolvedValue(0),
   },
 }));
 
@@ -48,9 +48,21 @@ const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsyn
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
 const mockGetOpen    = jest.mocked(CorrectiveActionRepository.getOpen);
 const mockGetStats   = jest.mocked(CorrectiveActionRepository.getStats);
+const mockPersist    = jest.mocked(CorrectiveActionRepository.persistOverdueEscalation);
 const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
+
+// Suppress the scheduled-time confirmation log — it is expected output, not a failure.
+const _consoleLog = console.log.bind(console);
+beforeAll(() => {
+  jest.spyOn(console, 'log').mockImplementation((...args) => {
+    const msg = typeof args[0] === 'string' ? args[0] : '';
+    if (msg.includes('[CapNotificationService]')) return;
+    _consoleLog(...args);
+  });
+});
+afterAll(() => { (console.log as jest.Mock).mockRestore?.(); });
 
 /** Seed CAP_NOTIF_LAST_RUN to yesterday so shouldRun() always returns true. */
 async function bypassDailyGuard(): Promise<void> {
@@ -100,6 +112,7 @@ beforeEach(async () => {
   mockReqPerm.mockResolvedValue(true);
   mockGetOpen.mockResolvedValue([]);
   mockGetStats.mockResolvedValue(makeStats());
+  mockPersist.mockResolvedValue(0);
   mockSchedule.mockResolvedValue('notif-id');
   mockCancelOne.mockResolvedValue(undefined);
   mockSetChannel.mockResolvedValue(null as any);
@@ -162,15 +175,14 @@ describe('CapNotificationService', () => {
       mockReqPerm.mockResolvedValue(true);
       mockGetOpen.mockResolvedValue([makeCAP()]);
       mockGetStats.mockResolvedValue(makeStats());
+      mockPersist.mockResolvedValue(0);
       mockSchedule.mockResolvedValue('notif-id');
       mockCancelOne.mockResolvedValue(undefined);
       await scheduleCapDeadlineNotifications();
       expect(mockGetOpen).not.toHaveBeenCalled();
     });
 
-    // ── Branch: ensureDigestChannel on Android (line 122) ───────────────────
     it('calls setNotificationChannelAsync on Android (ensureDigestChannel)', async () => {
-      // Must bypass shouldRun() guard — seed yesterday so the run proceeds
       await bypassDailyGuard();
       const originalOS = Platform.OS;
       (Platform as any).OS = 'android';
@@ -179,6 +191,19 @@ describe('CapNotificationService', () => {
       await scheduleCapDeadlineNotifications();
       expect(mockSetChannel).toHaveBeenCalled();
       (Platform as any).OS = originalOS;
+    });
+
+    // ── Line 122: promoted > 0 branch ────────────────────────────────────────
+    it('logs promoted count when persistOverdueEscalation returns > 0', async () => {
+      await bypassDailyGuard();
+      mockPersist.mockResolvedValueOnce(3);
+      mockGetOpen.mockResolvedValue([makeCAP()]);
+      mockGetStats.mockResolvedValue(makeStats({ overdue: 1, nearDeadlineCount: 1, total: 1 }));
+      const logSpy = jest.spyOn(console, 'log');
+      await scheduleCapDeadlineNotifications();
+      expect(logSpy).toHaveBeenCalledWith(
+        expect.stringContaining('Promoted 3 item(s) to overdue'),
+      );
     });
   });
 
@@ -235,7 +260,7 @@ describe('CapNotificationService', () => {
       await expect(scheduleCapDigestNotification()).resolves.toBeUndefined();
     });
 
-    // ── Branch: digest title when only due-today (no overdue) (line 257) ────
+    // ── Line 257: yellow title branch (overdueCount === 0) ───────────────────
     it('uses yellow title when only due-today (no overdue)', async () => {
       const today = new Date().toISOString().slice(0, 10);
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 0, nearDeadlineCount: 1 }));
@@ -243,8 +268,17 @@ describe('CapNotificationService', () => {
         makeCAP({ deadline: today, status: 'open' }),
       ]);
       await scheduleCapDigestNotification();
+      expect(mockSchedule).toHaveBeenCalled();
       const call = mockSchedule.mock.calls[0][0] as any;
       expect(call.content.title).toContain('🟡');
+    });
+
+    it('uses red title when there are overdue items', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.title).toContain('🔴');
     });
   });
 
@@ -307,7 +341,7 @@ describe('CapNotificationService', () => {
       await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
     });
 
-    // ── Branch: body includes inProgress count (line 346) ───────────────────
+    // ── Line 346: body includes inProgress count ─────────────────────────────
     it('includes inProgress count in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(
         makeStats({ total: 3, open: 1, inProgress: 2, overdue: 0, nearDeadlineCount: 0 }),
@@ -317,13 +351,24 @@ describe('CapNotificationService', () => {
       expect(call.content.body).toContain('جارٍ: 2');
     });
 
-    // ── Branch: body includes nearDeadlineCount when > 0 (line 360) ─────────
+    // ── Line 360: body includes nearDeadlineCount ─────────────────────────────
     it('includes nearDeadlineCount in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(
         makeStats({ total: 3, open: 2, overdue: 0, nearDeadlineCount: 2 }),
       );
       await scheduleCapWeeklyDigest();
       const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.body).toContain('يستحق خلال 3 أيام: 2');
+    });
+
+    // ── Both inProgress and nearDeadlineCount together ────────────────────────
+    it('includes both inProgress and nearDeadlineCount in body when both > 0', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 5, open: 1, inProgress: 2, overdue: 0, nearDeadlineCount: 2 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.body).toContain('جارٍ: 2');
       expect(call.content.body).toContain('يستحق خلال 3 أيام: 2');
     });
   });
@@ -378,7 +423,6 @@ describe('CapNotificationService', () => {
       await expect(cancelCapWeeklyDigestNotification()).resolves.toBeUndefined();
     });
 
-    // ── Branch: also removes CAP_WEEKLY_DIGEST_LAST_RUN on cancel ───────────
     it('removes CAP_WEEKLY_DIGEST_LAST_RUN from storage when cancelling', async () => {
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-2026-07-07');
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN, '2026-07-07');
