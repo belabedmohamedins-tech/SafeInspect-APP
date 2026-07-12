@@ -5,7 +5,7 @@ jest.mock('expo-crypto', () => ({
   CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
   CryptoEncoding: { HEX: 'hex' },
   digestStringAsync: jest.fn((_alg: string, str: string) =>
-    Promise.resolve(Buffer.from(str).toString('hex').slice(0, 64).padEnd(64, '0'))
+    Promise.resolve(Buffer.from(str).toString('hex'))
   ),
 }));
 
