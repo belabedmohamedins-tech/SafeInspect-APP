@@ -109,7 +109,7 @@ describe('dateUtils', () => {
   });
 
   it('formatDateTimeShort returns YYYY-MM-DD HH:MM format', () => {
-    // Build expected dynamically from the same Date object
+    // Build expected dynamically from the same Date object (CI-timezone-safe)
     const d = new Date(iso);
     const pad = (n: number) => n.toString().padStart(2, '0');
     const expected = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
@@ -141,7 +141,6 @@ describe('fileUtils — generateFileName', () => {
 
   it('strips illegal characters from baseName', () => {
     const name = generateFileName('Test!@#$%^&*()', 'csv');
-    // Should not contain any special chars except underscore and hyphen
     expect(name).toMatch(/^[\u0600-\u06FF\w\s_\-\.]+$/);
   });
 
@@ -161,8 +160,8 @@ describe('fileUtils — generateFileName', () => {
   });
 
   it('handles Arabic baseName without stripping', () => {
-    const name = generateFileName('\u0645نشأة التصريد', 'pdf');
-    expect(name).toContain('\u0645نشأة');
+    const name = generateFileName('\u0645\u0646\u0634\u0623\u0629 \u0627\u0644\u062a\u0635\u0631\u064a\u062f', 'pdf');
+    expect(name).toContain('\u0645\u0646\u0634\u0623\u0629');
   });
 });
 
@@ -221,7 +220,7 @@ describe('formatViolationGroupSummary', () => {
     expect(result).toContain('\u0645\u062a\u0643\u0631\u0631');
   });
 
-  it('uses plural متكررة when repeat count > 1', () => {
+  it('uses plural \u0645\u062a\u0643\u0631\u0631\u0629 when repeat count > 1', () => {
     const repeat = [
       makeItem('c1', 'non-compliant', 'low', undefined, true),
       makeItem('c2', 'non-compliant', 'low', undefined, true),
@@ -248,7 +247,7 @@ describe('inspectionUtils', () => {
     makeItem('c2', 'non-compliant', 'high', 'Axis A'),
     makeItem('c3', 'not-evaluated', 'low',  'Axis B'),
     makeItem('c4', 'na',            'low',  'Axis B'),
-    makeItem('c5', 'compliant',     'low'),  // no axis → 'أخرى'
+    makeItem('c5', 'compliant',     'low'),  // no axis → '\u0623\u062e\u0631\u0649'
   ];
 
   it('getEvaluatedCount excludes not-evaluated', () => {
@@ -271,7 +270,7 @@ describe('inspectionUtils', () => {
     expect(axisB?.[1]).toHaveLength(2);
   });
 
-  it('groupByAxisRaw uses أخرى when axis is undefined', () => {
+  it('groupByAxisRaw uses \u0623\u062e\u0631\u0649 when axis is undefined', () => {
     const groups = groupByAxisRaw(items);
     const other = groups.find(([title]) => title === '\u0623\u062e\u0631\u0649');
     expect(other?.[1]).toHaveLength(1);
@@ -287,10 +286,10 @@ describe('inspectionUtils', () => {
     const progress = getAxisProgress(items);
     const axisA = progress.find(g => g.title === 'Axis A');
     expect(axisA?.total).toBe(2);
-    expect(axisA?.evaluated).toBe(2); // both are compliant/non-compliant
+    expect(axisA?.evaluated).toBe(2);
     const axisB = progress.find(g => g.title === 'Axis B');
     expect(axisB?.total).toBe(2);
-    expect(axisB?.evaluated).toBe(1); // c3=not-evaluated is excluded
+    expect(axisB?.evaluated).toBe(1); // c3=not-evaluated excluded
   });
 });
 
@@ -357,7 +356,6 @@ describe('numericStateToComplianceStatus', () => {
 // ─── scoringUtils ────────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade', () => {
-  // Helper: build N items all of given status+severity
   function items(
     compliantCount: number,
     nonCompliantCount: number,
@@ -385,7 +383,6 @@ describe('computeScoreAndGrade', () => {
   });
 
   it('grade B range (score in [GRADE_B_MIN, GRADE_A_MIN))', () => {
-    // 7 compliant, 3 non-compliant, all low: score = 70
     const r = computeScoreAndGrade(items(7, 3));
     expect(r.score).toBeGreaterThanOrEqual(GRADE_B_MIN);
     expect(r.score).toBeLessThan(GRADE_A_MIN);
@@ -393,13 +390,12 @@ describe('computeScoreAndGrade', () => {
   });
 
   it('grade C range (score in [GRADE_C_MIN, GRADE_B_MIN))', () => {
-    // 5 compliant, 5 non-compliant: score = 50
     const r = computeScoreAndGrade(items(5, 5));
     expect(r.grade).toBe('C');
   });
 
   it('forced D override when high violations >= FORCED_D_THRESHOLD', () => {
-    // 9 compliant low + FORCED_D_THRESHOLD non-compliant high → raw grade A, forced D
+    // 9 compliant-low + FORCED_D_THRESHOLD nc-high → rawGrade A (high weight), forced D
     const arr = [
       ...items(9, 0, 'low'),
       ...items(0, FORCED_D_THRESHOLD, 'high'),
@@ -410,16 +406,53 @@ describe('computeScoreAndGrade', () => {
     expect(r.violations.high).toBe(FORCED_D_THRESHOLD);
   });
 
-  it('ceiling C override when high violations in [CEILING_C, FORCED_D) and rawGrade would be A', () => {
-    // many compliant low + exactly CEILING_C_THRESHOLD non-compliant high
+  it('ceiling C override: rawGrade=A capped to C (1 high violation)', () => {
+    // 17 compliant-low + 1 nc-high:
+    //   compliant weight = 17, total weight = 17+3 = 20, score = 85.0 → rawGrade=A
+    //   1 high violation ≥ CEILING_C_THRESHOLD → grade capped to C
     const arr = [
-      ...items(20, 0, 'low'),
-      ...items(0, CEILING_C_THRESHOLD, 'high'),
+      ...items(17, 0, 'low'),
+      ...items(0, 1, 'high'),
     ];
     const r = computeScoreAndGrade(arr);
-    expect(r.rawGrade === 'A' || r.rawGrade === 'B').toBe(true);
+    expect(r.rawGrade).toBe('A');
     expect(r.grade).toBe('C');
     expect(r.criticalOverride).toBe(true);
+    expect(r.violations.high).toBe(1);
+  });
+
+  it('ceiling C override: rawGrade=B capped to C (1 high violation)', () => {
+    // 10 compliant-low + 1 nc-high:
+    //   compliant weight = 10, total weight = 10+3 = 13, score ≈ 76.9 → rawGrade=B
+    //   1 high violation ≥ CEILING_C_THRESHOLD → grade capped to C
+    // This covers the `rawGrade === 'B'` branch in the ceiling-C block (line 119)
+    const arr = [
+      ...items(10, 0, 'low'),
+      ...items(0, 1, 'high'),
+    ];
+    const r = computeScoreAndGrade(arr);
+    expect(r.rawGrade).toBe('B');
+    expect(r.grade).toBe('C');
+    expect(r.criticalOverride).toBe(true);
+  });
+
+  it('no ceiling C when rawGrade already C with 1 high violation', () => {
+    // score in [50, 70) with 1 high violation → rawGrade=C, no override needed
+    // 5 compliant-low + 1 nc-high + 4 nc-low:
+    //   compliant=5 (wt 5), total wt=5+3+4=12, score=41.7 → rawGrade=D (just verifying no criticalOverride)
+    // Use simple: 4 compliant-low + 4 nc-low + 1 nc-high: wt(c)=4, wt(total)=4+4+3=11, score=36.4→D
+    // For rawGrade=C with 1 high: need score in [50,70)
+    // 6 compliant-low + 3 nc-low + 1 nc-high: wt(c)=6, wt(total)=6+3+3=12, score=50 → rawGrade=C
+    const arr = [
+      ...items(6, 0, 'low'),
+      ...items(0, 3, 'low'),
+      ...items(0, 1, 'high'),
+    ];
+    const r = computeScoreAndGrade(arr);
+    expect(r.rawGrade).toBe('C');
+    // ceiling-C rule only fires if rawGrade is A or B
+    expect(r.grade).toBe('C');
+    expect(r.criticalOverride).toBe(false);
   });
 
   it('no override when high violations = 0', () => {
@@ -429,7 +462,6 @@ describe('computeScoreAndGrade', () => {
   });
 
   it('incomplete flag when evaluatedCount / applicable < MIN_COMPLETION_RATE', () => {
-    // 1 evaluated + 10 not-evaluated → rate = 1/11 < 0.60
     const arr = [
       makeItem('c1', 'compliant', 'low'),
       ...Array.from({ length: 10 }, (_, i) => makeItem(`ne${i}`, 'not-evaluated')),
@@ -470,18 +502,13 @@ describe('computeScoreAndGrade', () => {
   });
 
   it('severity weights affect score — high violations hurt more than low', () => {
-    const allHighNc  = computeScoreAndGrade(items(5, 5, 'high'));
-    const allLowNc   = computeScoreAndGrade(items(5, 5, 'low'));
-    // Same counts but different severity — with all same severity, scores are equal
-    // Verify weighting: 5 high compliant vs 5 high nc = 50%, 5 low compliant vs 5 low nc = 50%
-    // Mixed: 5 high compliant + 5 low non-compliant < 5 high non-compliant + 5 low compliant
     const mixedA = computeScoreAndGrade([
-      ...items(5, 0, 'high'), // 5 compliant high = weight 15
-      ...items(0, 5, 'low'),  // 5 nc low = weight 5 (total 20, compliant 15) = 75%
+      ...items(5, 0, 'high'), // compliant wt=15
+      ...items(0, 5, 'low'),  // nc wt=5 → score=15/20=75%
     ]);
     const mixedB = computeScoreAndGrade([
-      ...items(0, 5, 'high'), // 5 nc high = weight 15
-      ...items(5, 0, 'low'),  // 5 compliant low = weight 5 (total 20, compliant 5) = 25%
+      ...items(0, 5, 'high'), // nc wt=15
+      ...items(5, 0, 'low'),  // compliant wt=5 → score=5/20=25%
     ]);
     expect(mixedA.score).toBeGreaterThan(mixedB.score);
   });
@@ -493,11 +520,10 @@ describe('computeScoreAndGrade', () => {
   });
 
   it('criticalOverride false when high=FORCED_D but rawGrade already D', () => {
-    // All items are high non-compliant → score=0 → rawGrade=D → forced D but no *change*
+    // score=0 → rawGrade=D → forced to D but grade===rawGrade → criticalOverride=false
     const arr = items(0, FORCED_D_THRESHOLD, 'high');
     const r = computeScoreAndGrade(arr);
     expect(r.grade).toBe('D');
-    // criticalOverride = (grade !== rawGrade) = false because both are D
     expect(r.criticalOverride).toBe(false);
   });
 });
@@ -573,11 +599,11 @@ describe('computeStats', () => {
 // ─── statusUtils ────────────────────────────────────────────────────────────
 
 describe('getStatusText', () => {
-  it('compliant → مطابق', () => expect(getStatusText('compliant')).toBe('\u0645\u0637\u0627\u0628\u0642'));
-  it('non-compliant → غير مطابق', () => expect(getStatusText('non-compliant')).toBe('\u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642'));
-  it('na → غير معني', () => expect(getStatusText('na')).toBe('\u063a\u064a\u0631 \u0645\u0639\u0646\u064a'));
-  it('partial → جزئي', () => expect(getStatusText('partial')).toBe('\u062c\u0632\u0626\u064a'));
-  it('default (not-evaluated) → لم يقيم', () => expect(getStatusText('not-evaluated' as any)).toBe('\u0644\u0645 \u064a\u0642\u064a\u0645'));
+  it('compliant → \u0645\u0637\u0627\u0628\u0642', () => expect(getStatusText('compliant')).toBe('\u0645\u0637\u0627\u0628\u0642'));
+  it('non-compliant → \u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642', () => expect(getStatusText('non-compliant')).toBe('\u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642'));
+  it('na → \u063a\u064a\u0631 \u0645\u0639\u0646\u064a', () => expect(getStatusText('na')).toBe('\u063a\u064a\u0631 \u0645\u0639\u0646\u064a'));
+  it('partial → \u062c\u0632\u0626\u064a', () => expect(getStatusText('partial')).toBe('\u062c\u0632\u0626\u064a'));
+  it('default (not-evaluated) → \u0644\u0645 \u064a\u0642\u064a\u0645', () => expect(getStatusText('not-evaluated' as any)).toBe('\u0644\u0645 \u064a\u0642\u064a\u0645'));
 });
 
 describe('getStatusColor', () => {
@@ -589,14 +615,14 @@ describe('getStatusColor', () => {
 
 describe('getComplianceSummary', () => {
   it('returns correct counts', () => {
-    const items = [
+    const itemsArr = [
       { complianceStatus: 'compliant' },
       { complianceStatus: 'compliant' },
       { complianceStatus: 'non-compliant' },
       { complianceStatus: 'na' },
       { complianceStatus: 'not-evaluated' },
     ];
-    const s = getComplianceSummary(items);
+    const s = getComplianceSummary(itemsArr);
     expect(s.total).toBe(5);
     expect(s.compliant).toBe(2);
     expect(s.nonCompliant).toBe(1);
