@@ -46,19 +46,21 @@ module.exports = {
   ],
 
   // ─── Thresholds ────────────────────────────────────────────────────────────────────────
+  // Last updated: July 2026 — reflects 123 suites / 2636 tests passing.
+  // Raise these numbers only when new coverage is confirmed by a green run.
+  // Never lower them — a drop means untested code was shipped.
   coverageThreshold: {
     global: {
-      branches:   68,
-      functions:  90,
-      lines:      84,
-      statements: 84,
+      statements: 98,
+      branches:   91,
+      functions:  99,
+      lines:      98,
     },
   },
 
   // LAYER 2 — module routing
   // ⚠️ ORDER MATTERS: more-specific patterns must come before less-specific ones.
   moduleNameMapper: {
-    // expo top-level — must come first to prevent installGlobal lazy getter chain
     '^expo$': '<rootDir>/__mocks__/expo.js',
     '^expo-modules-core/src/polyfill/dangerous-internal$':
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
