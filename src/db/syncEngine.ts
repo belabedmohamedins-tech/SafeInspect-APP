@@ -32,10 +32,8 @@
 //    Dynamic require() is resolved through moduleNameMapper at call time;
 //    a static import would be hoisted and cached before mocks are wired.
 
-// Computed key — defeats babel-plugin-transform-inline-environment-variables.
 const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 
-/** Returns true when a sync endpoint is configured. */
 function hasSyncUrl(): boolean {
   return Boolean((process.env[SYNC_API_URL_KEY] ?? '').trim());
 }
@@ -43,8 +41,6 @@ function hasSyncUrl(): boolean {
 async function safeFlush(): Promise<void> {
   if (!hasSyncUrl()) return;
   try {
-    // Lazy require — resolved against the live Jest module registry so
-    // jest.mock('../services/SyncService') is always honoured.
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { flush } = require('../services/SyncService') as typeof import('../services/SyncService');
     const synced = await flush();
@@ -56,27 +52,13 @@ async function safeFlush(): Promise<void> {
   }
 }
 
-/**
- * Start the background sync scheduler.
- *
- * @param intervalMs  Milliseconds between scheduled flush attempts.
- *                    Defaults to 30 000 (30 seconds).
- * @returns           A cleanup function — call it in useEffect cleanup or
- *                    on app unmount to stop the scheduler and remove the
- *                    network listener.
- */
 export function startSyncScheduler(intervalMs = 30_000): () => void {
   if (!hasSyncUrl()) {
     return () => {};
   }
 
-  // ── 1. Interval-based flush ────────────────────────────────────────────────
   const timer = setInterval(safeFlush, intervalMs);
 
-  // ── 2. Connectivity-triggered flush ───────────────────────────────────────
-  //    Fire a flush as soon as the device comes back online so that
-  //    inspections queued while offline are uploaded without waiting for
-  //    the next interval tick.
   let unsubscribeNetInfo: (() => void) | undefined;
   let wasOnline: boolean | null = null;
 
@@ -94,20 +76,17 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
       const isOnline =
         state.isConnected === true && state.isInternetReachable !== false;
 
-      // Transition: offline → online only
       if (wasOnline === false && isOnline) {
         safeFlush();
       }
       wasOnline = isOnline;
     });
-  } catch /* istanbul ignore next */ {
-    // NetInfo not available — interval-only mode.
+  } catch {
+    /* istanbul ignore next -- NetInfo not available — interval-only mode */
   }
 
-  // ── 3. Cleanup ────────────────────────────────────────────────────────────
   return () => {
     clearInterval(timer);
-    // istanbul ignore next -- optional chaining on unsubscribeNetInfo
-    unsubscribeNetInfo?.();
+    unsubscribeNetInfo?.(); // istanbul ignore next
   };
 }

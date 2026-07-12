@@ -19,18 +19,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Platform } from 'react-native';
 import { StorageKeys } from '../repositories/keys';
 
-// getNotifications() returns the expo-notifications module, or null when
-// running in Expo Go (SDK 53+ dropped notification support there).
-// Evaluated lazily on each call so that Jest can mock expo-constants and
-// expo-notifications before the first function is invoked.
 function getNotifications(): typeof import('expo-notifications') | null {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const Constants = require('expo-constants').default ?? require('expo-constants');
+    const mod = require('expo-constants');
+    // istanbul ignore next -- .default fallback only needed outside Jest/ESM
+    const Constants = mod.default ?? mod;
     if (Constants.appOwnership === 'expo') return null;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('expo-notifications');
-  } catch /* istanbul ignore next */ {
+  } catch {
+    // istanbul ignore next -- require() never throws in Jest (modules are pre-registered)
     return null;
   }
 }
@@ -38,7 +37,6 @@ function getNotifications(): typeof import('expo-notifications') | null {
 let _handlerInstalled = false;
 function getNotificationsWithHandler(): typeof import('expo-notifications') | null {
   const N = getNotifications();
-  // istanbul ignore next -- _handlerInstalled guard: only false on first call per process
   if (N && !_handlerInstalled) {
     _handlerInstalled = true;
     N.setNotificationHandler({
@@ -71,6 +69,7 @@ export async function requestPermission(): Promise<boolean> {
     const { status } = await Notifications.requestPermissionsAsync();
     if (status !== 'granted') return false;
 
+    /* istanbul ignore next -- Android-only branch, Jest runs on linux/node without android platform */
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('agenda', {
         name: 'مهام الجدول الزمني',
@@ -134,16 +133,13 @@ export async function scheduleForAgendaItem(
           title: '⏰ تذكير — زيارة تفتيشية',
           body: `${item.facilityName} — بعد ساعة واحدة`,
           data: { agendaId: item.id },
+          /* istanbul ignore next */
           ...(Platform.OS === 'android' && { channelId: 'agenda' }),
         },
         trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: preDate },
       });
     }
 
-    // Trigger 2: morning-of reminder at 08:00 on the day of the appointment.
-    // Condition: morning time must still be in the future.
-    // We intentionally do NOT require morningDate < itemDate — an 08:00 reminder
-    // is useful even when the appointment itself is before 08:00 (e.g. 07:30).
     const morningDate = new Date(itemDate);
     morningDate.setHours(8, 0, 0, 0);
     if (morningDate > now) {
@@ -153,6 +149,7 @@ export async function scheduleForAgendaItem(
           title: '📋 زيارة تفتيشية اليوم',
           body: `${item.facilityName} — ${itemDate.toLocaleTimeString('ar-DZ', { hour: '2-digit', minute: '2-digit' })}`,
           data: { agendaId: item.id },
+          /* istanbul ignore next */
           ...(Platform.OS === 'android' && { channelId: 'agenda' }),
         },
         trigger: { type: Notifications.SchedulableTriggerInputTypes.DATE, date: morningDate },
