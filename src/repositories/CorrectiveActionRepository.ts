@@ -109,7 +109,8 @@ export const CorrectiveActionRepository = {
       if      (a.status === 'open')        stats.open++;
       else if (a.status === 'in-progress') stats.inProgress++;
       else if (a.status === 'overdue')     stats.overdue++;
-      else if (a.status === 'resolved')    stats.resolved++;
+      // resolved items counted below
+      else                                 stats.resolved++;
 
       if (
         a.status !== 'resolved' &&

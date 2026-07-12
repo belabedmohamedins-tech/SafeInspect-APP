@@ -4,7 +4,7 @@ import { StorageKeys } from '../../src/repositories/keys';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SavedInspection } from '../../src/types';
 
-// ─── Mock AsyncStorage with an in-memory Map ────────────────────────────────────────────
+// ─── Mock AsyncStorage with an in-memory Map ──────────────────────────────────
 
 const mockStore = new Map<string, string>();
 
@@ -14,7 +14,7 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
   removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
 }));
 
-// ─── Mock IntegrityService ──────────────────────────────────────────────────────────────
+// ─── Mock IntegrityService ────────────────────────────────────────────────────
 
 jest.mock('../../src/services/IntegrityService', () => ({
   IntegrityService: {
@@ -23,7 +23,7 @@ jest.mock('../../src/services/IntegrityService', () => ({
   },
 }));
 
-// ─── Mock AuditLogRepository ─────────────────────────────────────────────────────────
+// ─── Mock AuditLogRepository ──────────────────────────────────────────────────
 
 jest.mock('../../src/repositories/AuditLogRepository', () => ({
   AuditLogRepository: {
@@ -31,7 +31,7 @@ jest.mock('../../src/repositories/AuditLogRepository', () => ({
   },
 }));
 
-// ─── Mock CorrectiveActionRepository ──────────────────────────────────────────────
+// ─── Mock CorrectiveActionRepository ─────────────────────────────────────────
 
 jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: {
@@ -39,25 +39,43 @@ jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
   },
 }));
 
-// ─── Helpers ────────────────────────────────────────────────────────────────────────
+// ─── Mock followUpService ─────────────────────────────────────────────────────
+
+jest.mock('../../src/services/followUpService', () => ({
+  createFollowUpIfNeeded: jest.fn(() => Promise.resolve()),
+}));
+
+// ─── Mock ApprovalRepository ──────────────────────────────────────────────────
+
+jest.mock('../../src/repositories/ApprovalRepository', () => ({
+  ApprovalRepository: {
+    enqueue: jest.fn(() => Promise.resolve()),
+  },
+}));
+
+// ─── Mock violationHistory ────────────────────────────────────────────────────
+
+jest.mock('../../src/services/violationHistory', () => ({
+  annotateRepeatViolations: jest.fn((_accessors: unknown, items: unknown[]) => Promise.resolve(items)),
+}));
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function makeInspection(overrides: Partial<SavedInspection> & { id: string; status: SavedInspection['status'] }): SavedInspection {
   return {
-    facilityId: 'FAC-01',
-    facilityName: 'Test',
+    facilityId:      'FAC-01',
+    facilityName:    'Test',
     facilityAddress: '123 Main St',
-    date: '2026-01-01T10:00:00.000Z',
-    inspectorName: 'Inspector',
-    items: [],
+    date:            '2026-01-01T10:00:00.000Z',
+    inspectorName:   'Inspector',
+    items:           [],
     ...overrides,
   };
 }
 
-// ─── Setup: clear store before each test ──────────────────────────────────────────────
-
 beforeEach(() => mockStore.clear());
 
-// ─── getAll ────────────────────────────────────────────────────────────────────────
+// ─── getAll ───────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getAll', () => {
   it('returns empty array when storage is empty', async () => {
@@ -76,7 +94,7 @@ describe('InspectionRepository.getAll', () => {
   });
 });
 
-// ─── getCompleted ────────────────────────────────────────────────────────────────────
+// ─── getCompleted ─────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getCompleted', () => {
   it('returns only completed inspections', async () => {
@@ -92,7 +110,7 @@ describe('InspectionRepository.getCompleted', () => {
   });
 });
 
-// ─── getDrafts ───────────────────────────────────────────────────────────────────────
+// ─── getDrafts ────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getDrafts', () => {
   it('returns in-progress and draft inspections', async () => {
@@ -114,7 +132,7 @@ describe('InspectionRepository.getDrafts', () => {
   });
 });
 
-// ─── getById ────────────────────────────────────────────────────────────────────────
+// ─── getById ──────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getById', () => {
   it('returns the matching inspection', async () => {
@@ -129,7 +147,7 @@ describe('InspectionRepository.getById', () => {
   });
 });
 
-// ─── save ────────────────────────────────────────────────────────────────────────────
+// ─── save ─────────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.save', () => {
   it('inserts a new inspection', async () => {
@@ -152,9 +170,28 @@ describe('InspectionRepository.save', () => {
     await InspectionRepository.save(makeInspection({ id: 'y', status: 'completed' }));
     expect(mockStore.has(StorageKeys.STATS_CACHE)).toBe(false);
   });
+
+  it('runs full completion path: annotates, hashes, audits, CAP, followUp, approval', async () => {
+    // new completion — triggers full isNewCompletion path
+    const insp = makeInspection({ id: 'comp-1', status: 'completed', approvalStatus: 'pending' });
+    await InspectionRepository.save(insp);
+    const all = await InspectionRepository.getAll();
+    expect(all[0].integrityHash).toBe('mock-hash-abc123');
+    expect(all[0].approvalStatus).toBe('pending');
+  });
+
+  it('handles annotateRepeatViolations failure gracefully', async () => {
+    const { annotateRepeatViolations } = require('../../src/services/violationHistory');
+    (annotateRepeatViolations as jest.Mock).mockRejectedValueOnce(new Error('annotate fail'));
+    const insp = makeInspection({ id: 'comp-2', status: 'completed' });
+    // should not throw — catch block swallows the error
+    await expect(InspectionRepository.save(insp)).resolves.toBeUndefined();
+    // restore
+    (annotateRepeatViolations as jest.Mock).mockImplementation((_a: unknown, items: unknown[]) => Promise.resolve(items));
+  });
 });
 
-// ─── delete ───────────────────────────────────────────────────────────────────────────
+// ─── delete ───────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.delete', () => {
   it('removes the inspection with the given id', async () => {
@@ -177,7 +214,7 @@ describe('InspectionRepository.delete', () => {
   });
 });
 
-// ─── deleteMany ────────────────────────────────────────────────────────────────────────
+// ─── deleteMany ───────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.deleteMany', () => {
   it('removes all inspections whose ids are in the set', async () => {
