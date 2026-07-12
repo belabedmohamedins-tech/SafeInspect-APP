@@ -18,8 +18,12 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   testMatch: [
+    // legacy location
     '<rootDir>/src/__tests__/**/*.test.ts',
     '<rootDir>/src/__tests__/**/*.test.tsx',
+    // root-level __tests__/ (utils, hooks, repositories, services, …)
+    '<rootDir>/__tests__/**/*.test.ts',
+    '<rootDir>/__tests__/**/*.test.tsx',
   ],
 
   // ─── Coverage ─────────────────────────────────────────────────────────────────────────
@@ -42,25 +46,12 @@ module.exports = {
     '!src/app/**',
 
     // ── UI/integration-only files — no unit-testable surface ───────────────────────────
-    // These files require a running React Native renderer or a real device
-    // (PDF printing engine, OAuth flows, native component trees). They are
-    // excluded from coverage so threshold failures reflect logic regressions,
-    // not the absence of integration-test infrastructure.
     '!src/components/**',
     '!src/services/pdfService.ts',
     '!src/services/serverAuth.ts',
   ],
 
   // ─── Thresholds ──────────────────────────────────────────────────────────────────────
-  // Measured after:
-  //   - fixing getStats mock in CapNotificationService.test.ts
-  //   - excluding components/*, pdfService, serverAuth from collection
-  // Remaining branch gaps: schema.ts DB migration (3.84%), decisionSupport.ts
-  // conditional branches (60.86%), BackupService.ts error paths (47.05%).
-  // These are tracked as tech debt; raise thresholds as tests are added.
-  //
-  // HOW TO RAISE: run `npm run test:coverage`, note actuals, set each threshold
-  // to floor(actual) - 1, and update the comment above.
   coverageThreshold: {
     global: {
       branches:   68,
@@ -72,13 +63,8 @@ module.exports = {
 
   // LAYER 2 — module routing
   moduleNameMapper: {
-    // ── SDK 56 / jest-expo internal path fix ───────────────────────────────────────
-    // jest-expo ~56 setup.js still imports this path but SDK 56
-    // expo-modules-core no longer exposes it. Stub it out.
     '^expo-modules-core/src/polyfill/dangerous-internal$':
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
-
-    // ── existing mappings ────────────────────────────────────────────────────────────
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
