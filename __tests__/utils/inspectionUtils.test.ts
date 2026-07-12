@@ -8,73 +8,83 @@ import {
 } from '../../src/utils/inspectionUtils';
 import { InspectionItem } from '../../src/types';
 
-function item(id: string, status: string, axis?: string): InspectionItem {
-  return { id, complianceStatus: status, axis } as InspectionItem;
+function makeItem(id: string, status: string, axis?: string): InspectionItem {
+  return { id, complianceStatus: status, axis } as unknown as InspectionItem;
 }
 
 describe('getEvaluatedCount', () => {
-  it('empty → 0', () => expect(getEvaluatedCount([])).toBe(0));
-  it('counts non-"not-evaluated" items', () => {
-    const items = [
-      item('a', 'compliant'),
-      item('b', 'non-compliant'),
-      item('c', 'not-evaluated'),
-      item('d', 'na'),
-    ];
-    expect(getEvaluatedCount(items)).toBe(3);
+  it('returns 0 for empty array', () => {
+    expect(getEvaluatedCount([])).toBe(0);
+  });
+  it('excludes not-evaluated items', () => {
+    const items = [makeItem('a', 'compliant'), makeItem('b', 'not-evaluated'), makeItem('c', 'na')];
+    expect(getEvaluatedCount(items)).toBe(2);
+  });
+  it('counts all when none are not-evaluated', () => {
+    const items = [makeItem('a', 'compliant'), makeItem('b', 'non-compliant')];
+    expect(getEvaluatedCount(items)).toBe(2);
   });
 });
 
 describe('getProgressPercent', () => {
-  it('empty → 0', () => expect(getProgressPercent([])).toBe(0));
-  it('all evaluated → 100', () => {
-    expect(getProgressPercent([item('a', 'compliant'), item('b', 'non-compliant')])).toBe(100);
+  it('returns 0 for empty array', () => {
+    expect(getProgressPercent([])).toBe(0);
   });
-  it('half evaluated → 50', () => {
-    expect(getProgressPercent([item('a', 'compliant'), item('b', 'not-evaluated')])).toBe(50);
+  it('returns 100 when all are evaluated', () => {
+    const items = [makeItem('a', 'compliant'), makeItem('b', 'non-compliant')];
+    expect(getProgressPercent(items)).toBe(100);
+  });
+  it('returns correct percent for partial evaluation', () => {
+    const items = [makeItem('a', 'compliant'), makeItem('b', 'not-evaluated')];
+    expect(getProgressPercent(items)).toBe(50);
   });
 });
 
 describe('groupByAxisRaw', () => {
-  it('groups by axis field', () => {
+  it('returns empty array for empty input', () => {
+    expect(groupByAxisRaw([])).toEqual([]);
+  });
+  it('groups items by axis', () => {
     const items = [
-      item('a', 'compliant', 'النظافة'),
-      item('b', 'compliant', 'النظافة'),
-      item('c', 'non-compliant', 'السلامة'),
+      makeItem('a', 'compliant', 'Safety'),
+      makeItem('b', 'compliant', 'Safety'),
+      makeItem('c', 'compliant', 'Hygiene'),
     ];
     const r = groupByAxisRaw(items);
     expect(r).toHaveLength(2);
-    const axes = Object.fromEntries(r);
-    expect(axes['النظافة']).toHaveLength(2);
-    expect(axes['السلامة']).toHaveLength(1);
+    const safety = r.find(([k]) => k === 'Safety');
+    expect(safety![1]).toHaveLength(2);
   });
-
-  it('no axis → falls back to أخرى', () => {
-    const r = groupByAxisRaw([item('a', 'compliant')]);
+  it('uses أخرى as fallback for missing axis', () => {
+    const items = [makeItem('a', 'compliant', undefined)];
+    const r = groupByAxisRaw(items);
     expect(r[0][0]).toBe('أخرى');
   });
 });
 
 describe('groupByAxis', () => {
-  it('returns {title, data} objects', () => {
-    const r = groupByAxis([item('a', 'compliant', 'محور1')]);
-    expect(r[0]).toHaveProperty('title', 'محور1');
+  it('returns objects with title and data', () => {
+    const items = [makeItem('a', 'compliant', 'Safety')];
+    const r = groupByAxis(items);
+    expect(r[0]).toHaveProperty('title', 'Safety');
     expect(r[0]).toHaveProperty('data');
     expect(Array.isArray(r[0].data)).toBe(true);
   });
 });
 
 describe('getAxisProgress', () => {
-  it('returns title, total, evaluated per axis', () => {
+  it('returns progress per axis', () => {
     const items = [
-      item('a', 'compliant', 'محور'),
-      item('b', 'not-evaluated', 'محور'),
-      item('c', 'non-compliant', 'محور'),
+      makeItem('a', 'compliant', 'Safety'),
+      makeItem('b', 'not-evaluated', 'Safety'),
+      makeItem('c', 'compliant', 'Hygiene'),
     ];
     const r = getAxisProgress(items);
-    expect(r).toHaveLength(1);
-    expect(r[0].title).toBe('محور');
-    expect(r[0].total).toBe(3);
-    expect(r[0].evaluated).toBe(2);
+    const safety = r.find(x => x.title === 'Safety')!;
+    expect(safety.total).toBe(2);
+    expect(safety.evaluated).toBe(1);
+    const hygiene = r.find(x => x.title === 'Hygiene')!;
+    expect(hygiene.total).toBe(1);
+    expect(hygiene.evaluated).toBe(1);
   });
 });

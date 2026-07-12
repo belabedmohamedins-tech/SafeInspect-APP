@@ -2,66 +2,89 @@
 import { computeStats } from '../../src/utils/statsUtils';
 import { SavedInspection } from '../../src/types';
 
-function ins(overrides: Partial<SavedInspection>): SavedInspection {
-  return { id: 'i', facilityId: 'f', date: '2026-01-01', items: [], ...overrides } as SavedInspection;
+function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id: 'i1',
+    grade: 'A',
+    score: 90,
+    violations: { high: 0 },
+    criticalOverride: false,
+    ...overrides,
+  } as unknown as SavedInspection;
 }
 
 describe('computeStats', () => {
-  it('empty array → zeros and N/A', () => {
+  it('returns zeros for empty array', () => {
     const r = computeStats([]);
     expect(r.total).toBe(0);
+    expect(r.gradeCounts).toEqual({ A: 0, B: 0, C: 0, D: 0 });
     expect(r.averageScore).toBe('N/A');
     expect(r.totalHighViolations).toBe(0);
     expect(r.criticalOverrideCount).toBe(0);
-    expect(r.gradeCounts).toEqual({ A: 0, B: 0, C: 0, D: 0 });
   });
 
   it('counts grades correctly', () => {
-    const r = computeStats([
-      ins({ grade: 'A' }), ins({ grade: 'A' }),
-      ins({ grade: 'B' }),
-      ins({ grade: 'C' }),
-      ins({ grade: 'D' }),
-    ]);
+    const inspections = [
+      makeInspection({ grade: 'A' }),
+      makeInspection({ grade: 'A' }),
+      makeInspection({ grade: 'B' }),
+      makeInspection({ grade: 'C' }),
+      makeInspection({ grade: 'D' }),
+    ];
+    const r = computeStats(inspections);
     expect(r.gradeCounts).toEqual({ A: 2, B: 1, C: 1, D: 1 });
     expect(r.total).toBe(5);
   });
 
-  it('averageScore computed correctly', () => {
-    const r = computeStats([ins({ score: 80 }), ins({ score: 60 })]);
-    expect(r.averageScore).toBe('70.0');
+  it('computes average score correctly', () => {
+    const inspections = [
+      makeInspection({ score: 80 }),
+      makeInspection({ score: 100 }),
+    ];
+    const r = computeStats(inspections);
+    expect(r.averageScore).toBe('90.0');
   });
 
-  it('score of 0 shows 0.0 not N/A', () => {
-    const r = computeStats([ins({ score: 0 })]);
-    expect(r.averageScore).toBe('0.0');
-  });
-
-  it('skips non-numeric scores', () => {
-    const r = computeStats([ins({ score: undefined as any })]);
+  it('returns averageScore=N/A when no inspections have numeric score', () => {
+    const r = computeStats([makeInspection({ score: undefined as any })]);
     expect(r.averageScore).toBe('N/A');
   });
 
-  it('totalHighViolations summed across inspections', () => {
-    const r = computeStats([
-      ins({ violations: { high: 2 } as any }),
-      ins({ violations: { high: 3 } as any }),
-    ]);
+  it('returns averageScore=0.0 when all scores are 0', () => {
+    const r = computeStats([makeInspection({ score: 0 })]);
+    expect(r.averageScore).toBe('0.0');
+  });
+
+  it('sums totalHighViolations across inspections', () => {
+    const inspections = [
+      makeInspection({ violations: { high: 2 } as any }),
+      makeInspection({ violations: { high: 3 } as any }),
+      makeInspection({ violations: undefined as any }),
+    ];
+    const r = computeStats(inspections);
     expect(r.totalHighViolations).toBe(5);
   });
 
-  it('criticalOverrideCount counts truthy override flag', () => {
-    const r = computeStats([
-      ins({ criticalOverride: true } as any),
-      ins({ criticalOverride: false } as any),
-      ins({ criticalOverride: true } as any),
-    ]);
+  it('counts criticalOverrides', () => {
+    const inspections = [
+      makeInspection({ criticalOverride: true }),
+      makeInspection({ criticalOverride: false }),
+      makeInspection({ criticalOverride: true }),
+    ];
+    const r = computeStats(inspections);
     expect(r.criticalOverrideCount).toBe(2);
   });
 
-  it('lastUpdated is a recent timestamp', () => {
+  it('sets lastUpdated as a recent timestamp', () => {
     const before = Date.now();
-    const r = computeStats([ins({ grade: 'A' })]);
+    const r = computeStats([makeInspection()]);
+    const after = Date.now();
     expect(r.lastUpdated).toBeGreaterThanOrEqual(before);
+    expect(r.lastUpdated).toBeLessThanOrEqual(after);
+  });
+
+  it('ignores unknown grade values in grade counts', () => {
+    const r = computeStats([makeInspection({ grade: 'X' as any })]);
+    expect(r.gradeCounts).toEqual({ A: 0, B: 0, C: 0, D: 0 });
   });
 });
