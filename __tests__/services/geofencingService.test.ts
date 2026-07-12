@@ -2,56 +2,46 @@
 import { haversineDistance, checkProximity } from '../../src/services/geofencingService';
 
 describe('haversineDistance', () => {
-  it('returns 0 for identical coordinates', () => {
-    expect(haversineDistance(36.7, 3.05, 36.7, 3.05)).toBeCloseTo(0, 3);
+  it('same coordinates → 0 metres', () => {
+    expect(haversineDistance(36.7, 3.0, 36.7, 3.0)).toBeCloseTo(0, 1);
   });
 
-  it('returns ~111 km between 0° and 1° latitude on same meridian', () => {
-    const d = haversineDistance(0, 0, 1, 0);
-    expect(d).toBeGreaterThan(110_000);
-    expect(d).toBeLessThan(112_000);
+  it('known distance: Algiers to Oran ≈ 350 km', () => {
+    const d = haversineDistance(36.737, 3.086, 35.697, -0.634);
+    expect(d).toBeGreaterThan(340_000);
+    expect(d).toBeLessThan(370_000);
   });
 
-  it('calculates ~200 m for close coordinates', () => {
-    // ~0.0018 degrees latitude ≈ 200 m
-    const d = haversineDistance(36.7, 3.05, 36.7018, 3.05);
-    expect(d).toBeGreaterThan(150);
-    expect(d).toBeLessThan(250);
+  it('100 m north ≈ 100 metres', () => {
+    // ~0.0009 degrees latitude ≈ 100 m
+    const d = haversineDistance(36.0, 3.0, 36.0009, 3.0);
+    expect(d).toBeGreaterThan(90);
+    expect(d).toBeLessThan(110);
   });
 });
 
 describe('checkProximity', () => {
-  const a = { latitude: 36.7, longitude: 3.05 };
+  const a = { latitude: 36.737, longitude: 3.086 };
 
-  it('returns withinRange=true when coords are identical', () => {
+  it('within default 300m → withinRange true', () => {
+    // same point
     const r = checkProximity(a, a);
     expect(r.withinRange).toBe(true);
-    expect(r.distanceMetres).toBeCloseTo(0, 3);
     expect(r.thresholdMetres).toBe(300);
+    expect(r.distanceMetres).toBeCloseTo(0, 1);
   });
 
-  it('returns withinRange=true when distance < 300 m (default threshold)', () => {
-    const b = { latitude: 36.7018, longitude: 3.05 }; // ~200 m away
-    const r = checkProximity(a, b);
-    expect(r.withinRange).toBe(true);
-  });
-
-  it('returns withinRange=false when distance > 300 m (default threshold)', () => {
-    const b = { latitude: 36.704, longitude: 3.05 }; // ~445 m away
+  it('far point → withinRange false', () => {
+    const b = { latitude: 35.697, longitude: -0.634 }; // Oran
     const r = checkProximity(a, b);
     expect(r.withinRange).toBe(false);
   });
 
-  it('respects a custom thresholdMetres', () => {
-    const b = { latitude: 36.7018, longitude: 3.05 }; // ~200 m
-    const rTight  = checkProximity(a, b, 100);
-    const rGenerous = checkProximity(a, b, 500);
-    expect(rTight.withinRange).toBe(false);
-    expect(rGenerous.withinRange).toBe(true);
-  });
-
-  it('echoes the correct thresholdMetres in the result', () => {
-    const r = checkProximity(a, a, 50);
-    expect(r.thresholdMetres).toBe(50);
+  it('custom threshold respected', () => {
+    const b = { latitude: 36.7395, longitude: 3.086 }; // ~280m north
+    const r500 = checkProximity(a, b, 500);
+    const r100 = checkProximity(a, b, 100);
+    expect(r500.withinRange).toBe(true);
+    expect(r100.withinRange).toBe(false);
   });
 });

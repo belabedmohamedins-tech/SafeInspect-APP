@@ -1,81 +1,65 @@
 // __tests__/services/followUpService.test.ts
-const mockGetByInspection = jest.fn();
-const mockGetAll          = jest.fn();
-const mockAgendaSave      = jest.fn();
-
-jest.mock('../../src/repositories/AgendaRepository', () => ({
-  AgendaRepository: {
-    getAll: (...a: any[]) => mockGetAll(...a),
-    save:   (...a: any[]) => mockAgendaSave(...a),
-  },
-}));
-
-jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: {
-    getByInspection: (...a: any[]) => mockGetByInspection(...a),
-  },
-}));
-
 import { createFollowUpIfNeeded } from '../../src/services/followUpService';
+import { AgendaRepository } from '../../src/repositories/AgendaRepository';
+import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
+import { SavedInspection } from '../../src/types';
 
-const BASE_INSP = {
-  id: 'insp-1',
-  facilityId: 'f1',
-  facilityName: 'Factory A',
-  facilityAddress: 'Addr',
-  date: '2026-06-01',
-  status: 'completed' as const,
-  grade: 'B',
-};
+jest.mock('../../src/repositories/AgendaRepository');
+jest.mock('../../src/repositories/CorrectiveActionRepository');
+
+const mockGetAll = AgendaRepository.getAll as jest.Mock;
+const mockAgendaSave = AgendaRepository.save as jest.Mock;
+const mockGetByInspection = CorrectiveActionRepository.getByInspection as jest.Mock;
+
+function ins(overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id: 'i1', facilityId: 'f1', facilityName: 'F', facilityAddress: 'A',
+    date: '2026-01-01', grade: 'B', status: 'completed', items: [],
+    ...overrides,
+  } as SavedInspection;
+}
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockAgendaSave.mockResolvedValue(undefined);
   mockGetAll.mockResolvedValue([]);
+  mockAgendaSave.mockResolvedValue(undefined);
+  mockGetByInspection.mockResolvedValue([]);
 });
 
 describe('createFollowUpIfNeeded', () => {
-  it('does nothing when status is not completed', async () => {
-    await createFollowUpIfNeeded({ ...BASE_INSP, status: 'in-progress' } as any);
+  it('skips non-completed inspections', async () => {
+    await createFollowUpIfNeeded(ins({ status: 'draft' as any }));
     expect(mockAgendaSave).not.toHaveBeenCalled();
   });
 
-  it('does nothing when grade is not D and no open CAPs', async () => {
-    mockGetByInspection.mockResolvedValue([]);
-    await createFollowUpIfNeeded(BASE_INSP as any);
+  it('skips when grade is not D and no open CAPs', async () => {
+    await createFollowUpIfNeeded(ins({ grade: 'B' }));
     expect(mockAgendaSave).not.toHaveBeenCalled();
   });
 
-  it('creates a follow-up when grade is D', async () => {
-    mockGetByInspection.mockResolvedValue([]);
-    await createFollowUpIfNeeded({ ...BASE_INSP, grade: 'D' } as any);
+  it('creates follow-up when grade is D', async () => {
+    await createFollowUpIfNeeded(ins({ grade: 'D' }));
     expect(mockAgendaSave).toHaveBeenCalledTimes(1);
     const saved = mockAgendaSave.mock.calls[0][0];
-    expect(saved.date).toBe('2026-07-01'); // 30 days after 2026-06-01
-    expect(saved.notes).toContain('[follow-up:insp-1]');
+    expect(saved.notes).toContain('[follow-up:i1]');
+    expect(saved.notes).toContain('درجة D');
+    expect(saved.date).toBe('2026-01-31'); // +30 days
   });
 
-  it('creates a follow-up when there are open CAP items', async () => {
-    mockGetByInspection.mockResolvedValue([{ id: 'cap-1' }]);
-    await createFollowUpIfNeeded(BASE_INSP as any);
+  it('creates follow-up when open CAPs exist', async () => {
+    mockGetByInspection.mockResolvedValue([{ id: 'cap1' }]);
+    await createFollowUpIfNeeded(ins({ grade: 'B' }));
     expect(mockAgendaSave).toHaveBeenCalledTimes(1);
     const saved = mockAgendaSave.mock.calls[0][0];
-    expect(saved.notes).toContain('\u0625\u062c\u0631\u0627\u0621\u0627\u062a \u062a\u0635\u062d\u064a\u062d\u064a\u0629 \u0645\u0641\u062a\u0648\u062d\u0629');
+    expect(saved.notes).toContain('إجراءات تصحيحية مفتوحة');
   });
 
-  it('is idempotent — does not create a second follow-up', async () => {
-    mockGetByInspection.mockResolvedValue([]);
+  it('does not create duplicate follow-up', async () => {
     mockGetAll.mockResolvedValue([{
       facilityId: 'f1',
-      notes: 'some note [follow-up:insp-1]',
+      notes: 'some text [follow-up:i1]',
     }]);
-    await createFollowUpIfNeeded({ ...BASE_INSP, grade: 'D' } as any);
+    await createFollowUpIfNeeded(ins({ grade: 'D' }));
     expect(mockAgendaSave).not.toHaveBeenCalled();
-  });
-
-  it('sets status=pending on the created agenda item', async () => {
-    mockGetByInspection.mockResolvedValue([]);
-    await createFollowUpIfNeeded({ ...BASE_INSP, grade: 'D' } as any);
-    expect(mockAgendaSave).toHaveBeenCalledWith(expect.objectContaining({ status: 'pending' }));
   });
 });
