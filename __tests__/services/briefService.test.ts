@@ -1,5 +1,4 @@
 // __tests__/services/briefService.test.ts
-// Use factory mocks to avoid triggering expo's import chain via InspectionRepository
 jest.mock('../../src/repositories/InspectionRepository', () => ({
   InspectionRepository: {
     getCompleted: jest.fn(),
@@ -33,6 +32,7 @@ describe('buildBrief', () => {
     expect(r.lastInspection).toBeNull();
     expect(r.topViolations).toHaveLength(0);
     expect(r.previousGrade).toBeNull();
+    expect(r.previousScore).toBeNull();
   });
 
   it('returns latest inspection sorted by date desc', async () => {
@@ -65,7 +65,7 @@ describe('buildBrief', () => {
     expect(r.topViolations[1].severity).toBe('medium');
   });
 
-  it('exposes grade/score/inspectorName from last inspection', async () => {
+  it('exposes grade/score/inspectorName', async () => {
     mockGetCompleted.mockResolvedValue([
       makeInspection({ grade: 'A', score: 95, inspectorName: 'Omar', facilityId: 'f1' }),
     ]);
@@ -73,5 +73,22 @@ describe('buildBrief', () => {
     expect(r.previousGrade).toBe('A');
     expect(r.previousScore).toBe(95);
     expect(r.previousInspectorName).toBe('Omar');
+  });
+
+  // Cover the ?? null branches on lines 36-43
+  it('previousGrade is null when grade is undefined', async () => {
+    const ins = makeInspection({ facilityId: 'f1' });
+    delete (ins as any).grade;
+    mockGetCompleted.mockResolvedValue([ins]);
+    const r = await buildBrief('f1');
+    expect(r.previousGrade).toBeNull();
+  });
+
+  it('previousScore is null when score is undefined', async () => {
+    const ins = makeInspection({ facilityId: 'f1' });
+    delete (ins as any).score;
+    mockGetCompleted.mockResolvedValue([ins]);
+    const r = await buildBrief('f1');
+    expect(r.previousScore).toBeNull();
   });
 });
