@@ -33,6 +33,9 @@ import {
   AgendaNotificationPayload,
 } from '../../src/services/NotificationService';
 
+// StorageKeys.NOTIFICATIONS_ENABLED = 'NOTIFICATIONS_ENABLED'
+const NOTIF_KEY = 'NOTIFICATIONS_ENABLED';
+
 const future = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(); // 4 hours from now
 
 const item: AgendaNotificationPayload = {
@@ -82,7 +85,7 @@ describe('isEnabled', () => {
   });
 
   it('returns stored value', async () => {
-    await AsyncStorage.setItem('notifications_enabled', 'false');
+    await AsyncStorage.setItem(NOTIF_KEY, 'false');
     expect(await isEnabled()).toBe(false);
   });
 
@@ -95,13 +98,13 @@ describe('isEnabled', () => {
 describe('setEnabled', () => {
   it('persists true', async () => {
     await setEnabled(true);
-    expect(await AsyncStorage.getItem('notifications_enabled')).toBe('true');
+    expect(await AsyncStorage.getItem(NOTIF_KEY)).toBe('true');
     expect(mockCancelAllScheduledNotificationsAsync).not.toHaveBeenCalled();
   });
 
   it('persists false and cancels all', async () => {
     await setEnabled(false);
-    expect(await AsyncStorage.getItem('notifications_enabled')).toBe('false');
+    expect(await AsyncStorage.getItem(NOTIF_KEY)).toBe('false');
     expect(mockCancelAllScheduledNotificationsAsync).toHaveBeenCalled();
   });
 });
@@ -116,7 +119,7 @@ describe('scheduleForAgendaItem', () => {
   });
 
   it('skips scheduling when notifications disabled', async () => {
-    await AsyncStorage.setItem('notifications_enabled', 'false');
+    await AsyncStorage.setItem(NOTIF_KEY, 'false');
     await scheduleForAgendaItem(item);
     expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();
   });
@@ -167,7 +170,7 @@ describe('rescheduleAll', () => {
   });
 
   it('does not reschedule when disabled', async () => {
-    await AsyncStorage.setItem('notifications_enabled', 'false');
+    await AsyncStorage.setItem(NOTIF_KEY, 'false');
     await rescheduleAll([item]);
     expect(mockCancelAllScheduledNotificationsAsync).toHaveBeenCalled();
     expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();

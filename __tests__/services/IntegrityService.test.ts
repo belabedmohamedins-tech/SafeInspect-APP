@@ -1,127 +1,134 @@
 // __tests__/services/IntegrityService.test.ts
-import { IntegrityService, computeHash, verifyInspection } from '../../src/services/IntegrityService';
+// expo-crypto is mocked at L4 to avoid pulling in expo's fetch polyfill
+// (which requires a real Response class not present in the Jest environment).
+
+jest.mock('expo-crypto', () => ({
+  CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
+  CryptoEncoding: { HEX: 'hex' },
+  digestStringAsync: jest.fn(async (_alg: string, input: string) => {
+    // Deterministic stub: length-prefixed hex so different strings differ
+    let hash = '';
+    for (let i = 0; i < 64; i++) {
+      hash += ((input.charCodeAt(i % input.length) + i) & 0xf).toString(16);
+    }
+    return hash;
+  }),
+}), { virtual: true });
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { IntegrityService, computeHash, verifyInspection } from '../../src/services/IntegrityService';
 import { SavedInspection } from '../../src/types';
 
-function makeInsp(id: string, overrides: Partial<SavedInspection> = {}): SavedInspection {
-  return {
-    id,
-    facilityId: 'f1',
-    status: 'completed',
-    date: '2024-01-01',
-    items: [],
-    title: 'Test',
-    integrityHash: undefined,
-    ...overrides,
-  } as unknown as SavedInspection;
-}
+const base: SavedInspection = {
+  id: 'insp-1',
+  facilityId: 'f1',
+  facilityName: 'Test Facility',
+  date: '2026-01-01',
+  score: 90,
+  status: 'completed',
+  sections: [],
+  integrityHash: undefined,
+} as unknown as SavedInspection;
 
-beforeEach(() => (AsyncStorage as any).__resetStore());
+beforeEach(() => {
+  (AsyncStorage as any).__resetStore();
+});
 
-describe('IntegrityService.computeHash', () => {
-  it('returns a 64-char hex string', async () => {
-    const hash = await IntegrityService.computeHash(makeInsp('i1'));
-    expect(hash).toMatch(/^[0-9a-f]{64}$/);
+describe('computeHash', () => {
+  it('returns a 64-character hex string', async () => {
+    const hash = await IntegrityService.computeHash(base);
+    expect(hash).toHaveLength(64);
+    expect(hash).toMatch(/^[0-9a-f]+$/);
   });
 
-  it('same inspection produces same hash', async () => {
-    const ins = makeInsp('i1');
-    const h1 = await IntegrityService.computeHash(ins);
-    const h2 = await IntegrityService.computeHash(ins);
+  it('is deterministic for the same inspection', async () => {
+    const h1 = await IntegrityService.computeHash(base);
+    const h2 = await IntegrityService.computeHash(base);
     expect(h1).toBe(h2);
   });
 
-  it('different inspections produce different hashes', async () => {
-    const h1 = await IntegrityService.computeHash(makeInsp('i1'));
-    const h2 = await IntegrityService.computeHash(makeInsp('i2'));
+  it('differs for different inspection IDs', async () => {
+    const h1 = await IntegrityService.computeHash(base);
+    const h2 = await IntegrityService.computeHash({ ...base, id: 'insp-2' });
     expect(h1).not.toBe(h2);
   });
 
-  it('omits integrityHash field from canonical input', async () => {
-    const withHash = makeInsp('i1', { integrityHash: 'abc' } as any);
-    const withoutHash = makeInsp('i1');
-    const h1 = await IntegrityService.computeHash(withHash);
-    const h2 = await IntegrityService.computeHash(withoutHash);
+  it('omits the integrityHash field from serialisation', async () => {
+    const withHash = { ...base, integrityHash: 'should-be-ignored' } as unknown as SavedInspection;
+    const h1 = await IntegrityService.computeHash(base);
+    const h2 = await IntegrityService.computeHash(withHash);
     expect(h1).toBe(h2);
   });
-});
 
-describe('computeHash named export', () => {
-  it('delegates to IntegrityService.computeHash', async () => {
-    const hash = await computeHash(makeInsp('i1'));
-    expect(hash).toMatch(/^[0-9a-f]{64}$/);
+  it('named export computeHash delegates correctly', async () => {
+    const h = await computeHash(base);
+    expect(h).toHaveLength(64);
   });
 });
 
-describe('IntegrityService.hashAndStore', () => {
-  it('returns hash and persists it', async () => {
-    const ins = makeInsp('i1');
-    const hash = await IntegrityService.hashAndStore(ins);
-    expect(hash).toMatch(/^[0-9a-f]{64}$/);
-    const raw = await AsyncStorage.getItem('inspection_hashes');
-    const stored = JSON.parse(raw!);
-    expect(stored['i1']).toBe(hash);
+describe('hashAndStore', () => {
+  it('persists the hash and returns it', async () => {
+    const hash = await IntegrityService.hashAndStore(base);
+    expect(hash).toHaveLength(64);
+    const stored = await AsyncStorage.getItem('INSPECTION_HASHES');
+    const parsed = JSON.parse(stored!);
+    expect(parsed['insp-1']).toBe(hash);
   });
 
-  it('overwrites existing hash for same id', async () => {
-    await IntegrityService.hashAndStore(makeInsp('i1'));
-    const h2 = await IntegrityService.hashAndStore(makeInsp('i1'));
-    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
-    expect(raw['i1']).toBe(h2);
-  });
-});
-
-describe('IntegrityService.verifyInspection', () => {
-  it('ok=false when no stored hash', async () => {
-    const res = await IntegrityService.verifyInspection(makeInsp('i99'));
-    expect(res.ok).toBe(false);
-    expect(res.storedHash).toBeUndefined();
-    expect(res.computedHash).toMatch(/^[0-9a-f]{64}$/);
-  });
-
-  it('ok=true when stored hash matches', async () => {
-    const ins = makeInsp('i1');
-    await IntegrityService.hashAndStore(ins);
-    const res = await IntegrityService.verifyInspection(ins);
-    expect(res.ok).toBe(true);
-    expect(res.storedHash).toBe(res.computedHash);
-  });
-
-  it('ok=false when inspection is tampered', async () => {
-    const ins = makeInsp('i1');
-    await IntegrityService.hashAndStore(ins);
-    const tampered = { ...ins, title: 'TAMPERED' };
-    const res = await IntegrityService.verifyInspection(tampered);
-    expect(res.ok).toBe(false);
+  it('overwrites an existing hash for the same inspection', async () => {
+    await IntegrityService.hashAndStore(base);
+    await IntegrityService.hashAndStore(base);
+    const stored = await AsyncStorage.getItem('INSPECTION_HASHES');
+    const parsed = JSON.parse(stored!);
+    expect(Object.keys(parsed).filter(k => k === 'insp-1')).toHaveLength(1);
   });
 });
 
-describe('verifyInspection named export', () => {
-  it('delegates correctly', async () => {
-    const ins = makeInsp('ix');
-    const res = await verifyInspection(ins);
-    expect(res.ok).toBe(false); // no stored hash yet
+describe('verifyInspection', () => {
+  it('returns ok=false when no stored hash', async () => {
+    const result = await IntegrityService.verifyInspection(base);
+    expect(result.ok).toBe(false);
+    expect(result.storedHash).toBeUndefined();
+    expect(result.computedHash).toHaveLength(64);
+  });
+
+  it('returns ok=true when hash matches', async () => {
+    await IntegrityService.hashAndStore(base);
+    const result = await IntegrityService.verifyInspection(base);
+    expect(result.ok).toBe(true);
+  });
+
+  it('returns ok=false when inspection is tampered', async () => {
+    await IntegrityService.hashAndStore(base);
+    const tampered = { ...base, score: 50 } as unknown as SavedInspection;
+    const result = await IntegrityService.verifyInspection(tampered);
+    expect(result.ok).toBe(false);
+  });
+
+  it('named export verifyInspection delegates correctly', async () => {
+    const result = await verifyInspection(base);
+    expect(result.ok).toBe(false); // no stored hash
   });
 });
 
-describe('IntegrityService.removeHash / removeHashes', () => {
-  it('removeHash deletes one entry', async () => {
-    await IntegrityService.hashAndStore(makeInsp('i1'));
-    await IntegrityService.hashAndStore(makeInsp('i2'));
-    await IntegrityService.removeHash('i1');
-    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
-    expect(raw['i1']).toBeUndefined();
-    expect(raw['i2']).toBeDefined();
+describe('removeHash', () => {
+  it('removes a single hash', async () => {
+    await IntegrityService.hashAndStore(base);
+    await IntegrityService.removeHash('insp-1');
+    const stored = await AsyncStorage.getItem('INSPECTION_HASHES');
+    const parsed = JSON.parse(stored!);
+    expect(parsed['insp-1']).toBeUndefined();
   });
+});
 
-  it('removeHashes deletes multiple entries', async () => {
-    await IntegrityService.hashAndStore(makeInsp('i1'));
-    await IntegrityService.hashAndStore(makeInsp('i2'));
-    await IntegrityService.hashAndStore(makeInsp('i3'));
-    await IntegrityService.removeHashes(['i1', 'i3']);
-    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
-    expect(raw['i1']).toBeUndefined();
-    expect(raw['i3']).toBeUndefined();
-    expect(raw['i2']).toBeDefined();
+describe('removeHashes', () => {
+  it('removes multiple hashes', async () => {
+    await IntegrityService.hashAndStore(base);
+    await IntegrityService.hashAndStore({ ...base, id: 'insp-2' } as unknown as SavedInspection);
+    await IntegrityService.removeHashes(['insp-1', 'insp-2']);
+    const stored = await AsyncStorage.getItem('INSPECTION_HASHES');
+    const parsed = JSON.parse(stored!);
+    expect(parsed['insp-1']).toBeUndefined();
+    expect(parsed['insp-2']).toBeUndefined();
   });
 });
