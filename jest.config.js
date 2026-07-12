@@ -26,11 +26,11 @@ module.exports = {
     '<rootDir>/__tests__/**/*.test.tsx',
   ],
 
-  // ─── Coverage ─────────────────────────────────────────────────────────────────────────
+  // ─── Coverage ──────────────────────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
 
-    // ── EXCLUSIONS ─────────────────────────────────────────────────────────────────────
+    // ── EXCLUSIONS ──────────────────────────────────────────────────────────────────────
     '!src/**/*.d.ts',
     '!src/types.ts',
     '!src/criteria/**',
@@ -45,13 +45,13 @@ module.exports = {
     '!src/__mocks__/**',
     '!src/app/**',
 
-    // ── UI/integration-only files — no unit-testable surface ───────────────────────────
+    // ── UI/integration-only files — no unit-testable surface ────────────────────────
     '!src/components/**',
     '!src/services/pdfService.ts',
     '!src/services/serverAuth.ts',
   ],
 
-  // ─── Thresholds ──────────────────────────────────────────────────────────────────────
+  // ─── Thresholds ────────────────────────────────────────────────────────────────────────
   coverageThreshold: {
     global: {
       branches:   68,
@@ -64,6 +64,14 @@ module.exports = {
   // LAYER 2 — module routing
   // ⚠️ ORDER MATTERS: more-specific patterns must come before less-specific ones.
   moduleNameMapper: {
+    // ── expo top-level — intercept before the package loads winter/installGlobal
+    //    installGlobal.ts installs lazy getters on globalThis for fetch/*.
+    //    Those getters evaluate FetchResponse.ts which does
+    //    `class FetchResponse extends Response` — if Response is undefined
+    //    at that point Babel throws "Super expression must be null or a function".
+    //    Mocking the top-level expo package prevents any application code from
+    //    triggering the getter chain through the Jest module resolver.
+    '^expo$': '<rootDir>/__mocks__/expo.js',
     '^expo-modules-core/src/polyfill/dangerous-internal$':
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
