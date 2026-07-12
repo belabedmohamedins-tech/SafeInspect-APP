@@ -97,8 +97,8 @@ describe('computeScoreAndGrade — basic scoring', () => {
     expect(r.nextInspectionDays).toBe(180);
   });
 
-  it('grade B boundary — score exactly at GRADE_B_MIN', () => {
-    // Need score = 70. Use 7 low compliant, 3 low non-compliant → 7/10 = 70
+  it('grade B boundary — score exactly at GRADE_B_MIN (no high violations)', () => {
+    // 7 low compliant, 3 low non-compliant → 7/10 = 70 → B (no high violations → no override)
     const items = [
       ...Array.from({ length: 7 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
       ...Array.from({ length: 3 }, (_, i) => item(`n${i}`, 'low', 'non-compliant')),
@@ -157,35 +157,6 @@ describe('computeScoreAndGrade — NA items', () => {
 });
 
 describe('computeScoreAndGrade — completion rate', () => {
-  it('below MIN_COMPLETION_RATE → incomplete flag', () => {
-    // 5 applicable, only 2 evaluated (rate = 0.4 < 0.6)
-    const items = [
-      item('a', 'low', 'compliant'),
-      item('b', 'low', 'compliant'),
-      item('c', 'low', 'non-compliant'),  // not-evaluated is treated as applicable
-      item('d', 'low', 'non-compliant'),
-      item('e', 'low', 'non-compliant'),
-    ];
-    // Make 3 of the 5 "not evaluated" by simulating missing evaluation
-    // Actually all 5 are evaluated here; use a mix where some are unevaluated
-    // Simplest: 1 compliant, 4 non-compliant → 5 evaluated, rate=1.0
-    // For incomplete: applicableCount must be large relative to evaluatedCount
-    // Use a helper that creates items that remain in applicableCount but not evaluated
-    // In this model, only na is excluded. "not-evaluated" doesn't exist as a status.
-    // So make only 2 out of 5 evaluated (compliant/non-compliant), rest... not possible without na.
-    // Re-test: 2 compliant + 3 na → applicable=2, evaluated=2 → rate=1. No.
-    // The model: applicable = non-na items. Evaluated = compliant + non-compliant.
-    // So to get incompleteness: need some items that are neither na nor compliant nor non-compliant.
-    // That doesn't exist. Instead: set many non-compliant to get evaluated < applicable
-    // Actually re-reading source: applicableItems = items.filter(i => i.complianceStatus !== 'na')
-    // evaluatedItems = compliant + non-compliant = ALL non-na
-    // So completionRate is always 1.0 for non-na items. Incomplete only when 0 applicable.
-    // Let me verify: can completionRate < MIN_COMPLETION_RATE? Only if some non-na items
-    // are neither compliant nor non-compliant — but those are the only two non-na statuses.
-    // So the only way to get incomplete=true is applicableCount=0 (all na or empty).
-    expect(true).toBe(true); // model note: incomplete only when no applicable items
-  });
-
   it('all items NA → completionRate 0 → incomplete', () => {
     const r = computeScoreAndGrade([item('a', 'high', 'na')]);
     expect(r.incomplete).toBe(true);
@@ -194,61 +165,97 @@ describe('computeScoreAndGrade — completion rate', () => {
 });
 
 describe('computeScoreAndGrade — critical override', () => {
+  // For ceiling tests we need rawGrade A or B without any high violations already
+  // changing the score. Use only high-severity compliant items + 1 high non-compliant
+  // so the weight ratio is still high.
+  //
+  // Caps A→C: 19 high(3) compliant + 1 high(3) non-compliant
+  //   compliantWeight=57, evaluatedWeight=60 → 95% → rawGrade A → override to C
   it('1 high violation (CEILING_C_THRESHOLD) caps A→C', () => {
-    // High score but 1 high violation
     const items = [
-      ...Array.from({ length: 9 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
+      ...Array.from({ length: 19 }, (_, i) => item(`c${i}`, 'high', 'compliant')),
       item('h1', 'high', 'non-compliant'),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.violations.high).toBe(1);
-    expect(r.criticalOverride).toBe(true);
-    expect(r.grade).toBe('C');
     expect(r.rawGrade).toBe('A');
-  });
-
-  it('1 high violation caps B→C', () => {
-    // Score in B range but 1 high violation
-    const items = [
-      ...Array.from({ length: 7 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
-      ...Array.from({ length: 2 }, (_, i) => item(`n${i}`, 'low', 'non-compliant')),
-      item('h1', 'high', 'non-compliant'),
-    ];
-    const r = computeScoreAndGrade(items);
-    expect(r.criticalOverride).toBe(true);
     expect(r.grade).toBe('C');
+    expect(r.criticalOverride).toBe(true);
   });
 
-  it('1 high violation does NOT override C (ceiling only applies to A/B)', () => {
-    // Score in C range + 1 high violation → still C, no override
+  // Caps B→C: score in B range (70-84) + 1 high violation
+  // 7 medium(2) compliant + 3 medium(2) non-compliant → score=70 → rawGrade B
+  // + 1 high non-compliant makes it CEILING: rawGrade recalc with high included:
+  // compliantWeight=14, evaluatedWeight=14+2+3*2=22 → 63.6 → C anyway
+  // Better approach: keep it simple — score without high items in B range, verify ceiling fires
+  // 23 low compliant + 7 low non-compliant → 76.7 → B; then add 1 high non-compliant
+  // score: compliantWeight=23, evaluatedWeight=23+7+3=33 → 23/33=69.7 → C by score alone
+  // That's C without override. We need rawGrade=B then ceiling kicks in.
+  // Trick: use medium items for score stability.
+  // 8 medium(2) compliant + 2 medium(2) non-compliant = 16/20 = 80 → B (no high)
+  // Now add 1 high non-compliant: compliantWeight=16, evaluatedWeight=20+3=23 → 69.6 → C
+  // rawGrade=C → ceiling doesn't fire (only A/B). Let's try differently:
+  // rawGrade must be B AFTER including the high violation in the score.
+  // 19 medium(2) compliant + 1 medium(2) non-compliant + 1 high(3) non-compliant
+  // compliantWeight=38, evaluatedWeight=38+2+3=43 → 88.4% → rawGrade A → ceiling fires
+  // That gives A→C. For B→C we need rawGrade exactly B after including high:
+  // X medium compliant + Y medium non-compliant + 1 high non-compliant where score ∈ [70,85)
+  // Try 7 medium(2) compliant + 1 medium(2) non-compliant + 1 high(3) non-compliant:
+  // compliantWeight=14, evaluatedWeight=14+2+3=19 → 73.7 → B → ceiling fires → C
+  it('1 high violation caps B→C', () => {
     const items = [
-      ...Array.from({ length: 5 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
-      ...Array.from({ length: 4 }, (_, i) => item(`n${i}`, 'low', 'non-compliant')),
+      ...Array.from({ length: 7 }, (_, i) => item(`c${i}`, 'medium', 'compliant')),
+      item('nm', 'medium', 'non-compliant'),
       item('h1', 'high', 'non-compliant'),
     ];
     const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('B');
+    expect(r.grade).toBe('C');
+    expect(r.criticalOverride).toBe(true);
+  });
+
+  // Covers line 119: rawGrade already C + 1 high violation → ceiling no-op (criticalOverride stays false)
+  // 5 low compliant + 4 low non-compliant + 1 high non-compliant
+  // compliantWeight=5, evaluatedWeight=5+4+3=12 → 41.7 → rawGrade D
+  // Need rawGrade C: score ∈ [50,70). Use medium items:
+  // 5 medium(2) compliant + 3 medium(2) non-compliant + 1 high(3) non-compliant
+  // compliantWeight=10, evaluatedWeight=10+6+3=19 → 52.6 → rawGrade C → no override
+  it('1 high violation does NOT override C (ceiling no-op, line 119)', () => {
+    const items = [
+      ...Array.from({ length: 5 }, (_, i) => item(`c${i}`, 'medium', 'compliant')),
+      ...Array.from({ length: 3 }, (_, i) => item(`n${i}`, 'medium', 'non-compliant')),
+      item('h1', 'high', 'non-compliant'),
+    ];
+    const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('C');
     expect(r.grade).toBe('C');
     expect(r.criticalOverride).toBe(false);
   });
 
+  // Forced D from A: 20 low(1) compliant + 3 high(3) non-compliant
+  // compliantWeight=20, evaluatedWeight=20+9=29 → 69% → rawGrade B
+  // Need rawGrade A: use more compliant items.
+  // 50 low compliant + 3 high non-compliant:
+  // compliantWeight=50, evaluatedWeight=50+9=59 → 84.7 → B (just under 85)
+  // Use 100 low compliant + 3 high non-compliant:
+  // compliantWeight=100, evaluatedWeight=109 → 91.7 → A → forced D
   it('3 high violations (FORCED_D_THRESHOLD) forces D from A', () => {
     const items = [
-      ...Array.from({ length: 20 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
+      ...Array.from({ length: 100 }, (_, i) => item(`c${i}`, 'low', 'compliant')),
       item('h1', 'high', 'non-compliant'),
       item('h2', 'high', 'non-compliant'),
       item('h3', 'high', 'non-compliant'),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.violations.high).toBe(3);
-    expect(r.grade).toBe('D');
     expect(r.rawGrade).toBe('A');
+    expect(r.grade).toBe('D');
     expect(r.criticalOverride).toBe(true);
     expect(r.riskLevel).toBe(4);
     expect(r.nextInspectionDays).toBe(30);
   });
 
   it('3 high violations forced D — criticalOverride false when raw is already D', () => {
-    // All non-compliant → rawGrade = D → forced D → criticalOverride = false
     const items = [
       item('h1', 'high', 'non-compliant'),
       item('h2', 'high', 'non-compliant'),
