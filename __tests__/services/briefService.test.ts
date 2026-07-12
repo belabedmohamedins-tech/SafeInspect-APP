@@ -1,94 +1,99 @@
 // __tests__/services/briefService.test.ts
 jest.mock('../../src/repositories/InspectionRepository', () => ({
-  InspectionRepository: {
-    getCompleted: jest.fn(),
-  },
+  InspectionRepository: { getCompleted: jest.fn() },
 }));
 
-import { buildBrief } from '../../src/services/briefService';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { buildBrief } from '../../src/services/briefService';
 import { SavedInspection, InspectionItem } from '../../src/types';
 
 const mockGetCompleted = InspectionRepository.getCompleted as jest.Mock;
 
-function makeItem(id: string, status: string, severity: string): InspectionItem {
-  return { id, complianceStatus: status, severity, criteria: id } as InspectionItem;
+function makeItem(id: string, status: 'compliant' | 'non-compliant', severity: string, sanctionTier?: string): InspectionItem {
+  return { id, complianceStatus: status, severity, sanctionTier, criteria: `c-${id}` } as unknown as InspectionItem;
 }
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
-    id: 'ins1', facilityId: 'f1', facilityName: 'F', date: '2026-01-01',
-    grade: 'B', score: 75, items: [], status: 'completed',
-    inspectorName: 'Ali', ...overrides,
-  } as SavedInspection;
+    id: 'insp-1',
+    facilityId: 'f1',
+    facilityName: 'Facility',
+    date: '2026-01-01',
+    score: 80,
+    grade: 'B',
+    status: 'completed',
+    items: [],
+    inspectorName: 'Inspector A',
+    ...overrides,
+  } as unknown as SavedInspection;
 }
 
 beforeEach(() => jest.clearAllMocks());
 
 describe('buildBrief', () => {
-  it('returns null brief when no inspections for facility', async () => {
+  it('returns nulls when no inspections exist for facility', async () => {
     mockGetCompleted.mockResolvedValue([]);
-    const r = await buildBrief('f1');
-    expect(r.lastInspection).toBeNull();
-    expect(r.topViolations).toHaveLength(0);
-    expect(r.previousGrade).toBeNull();
-    expect(r.previousScore).toBeNull();
+    const result = await buildBrief('f1');
+    expect(result.lastInspection).toBeNull();
+    expect(result.topViolations).toEqual([]);
+    expect(result.previousGrade).toBeNull();
+    expect(result.previousScore).toBeNull();
+    expect(result.previousDate).toBeNull();
+    expect(result.previousInspectorName).toBeNull();
   });
 
-  it('returns latest inspection sorted by date desc', async () => {
-    const old = makeInspection({ id: 'old', date: '2025-01-01', facilityId: 'f1' });
-    const latest = makeInspection({ id: 'new', date: '2026-06-01', facilityId: 'f1' });
-    mockGetCompleted.mockResolvedValue([old, latest]);
-    const r = await buildBrief('f1');
-    expect(r.lastInspection?.id).toBe('new');
-    expect(r.previousDate).toBe('2026-06-01');
+  it('returns nulls when inspections exist for a different facility', async () => {
+    mockGetCompleted.mockResolvedValue([makeInspection({ facilityId: 'f2' })]);
+    const result = await buildBrief('f1');
+    expect(result.lastInspection).toBeNull();
   });
 
-  it('filters out other facilities', async () => {
-    mockGetCompleted.mockResolvedValue([makeInspection({ facilityId: 'other' })]);
-    const r = await buildBrief('f1');
-    expect(r.lastInspection).toBeNull();
+  it('returns the most recent inspection as lastInspection', async () => {
+    const old = makeInspection({ id: 'insp-old', date: '2025-01-01' });
+    const recent = makeInspection({ id: 'insp-new', date: '2026-06-01' });
+    mockGetCompleted.mockResolvedValue([old, recent]);
+    const result = await buildBrief('f1');
+    expect(result.lastInspection!.id).toBe('insp-new');
   });
 
   it('returns top 3 non-compliant items sorted by severity', async () => {
     const items = [
-      makeItem('l1', 'non-compliant', 'low'),
-      makeItem('h1', 'non-compliant', 'high'),
-      makeItem('m1', 'non-compliant', 'medium'),
-      makeItem('l2', 'non-compliant', 'low'),
-      makeItem('ok', 'compliant', 'high'),
+      makeItem('i1', 'non-compliant', 'low'),
+      makeItem('i2', 'non-compliant', 'high'),
+      makeItem('i3', 'non-compliant', 'medium'),
+      makeItem('i4', 'non-compliant', 'low'),
+      makeItem('i5', 'compliant', 'high'),
     ];
-    mockGetCompleted.mockResolvedValue([makeInspection({ items, facilityId: 'f1' })]);
-    const r = await buildBrief('f1');
-    expect(r.topViolations).toHaveLength(3);
-    expect(r.topViolations[0].severity).toBe('high');
-    expect(r.topViolations[1].severity).toBe('medium');
+    mockGetCompleted.mockResolvedValue([makeInspection({ items })]);
+    const result = await buildBrief('f1');
+    expect(result.topViolations).toHaveLength(3);
+    expect(result.topViolations[0].id).toBe('i2'); // high first
+    expect(result.topViolations[1].id).toBe('i3'); // medium
   });
 
-  it('exposes grade/score/inspectorName', async () => {
-    mockGetCompleted.mockResolvedValue([
-      makeInspection({ grade: 'A', score: 95, inspectorName: 'Omar', facilityId: 'f1' }),
-    ]);
-    const r = await buildBrief('f1');
-    expect(r.previousGrade).toBe('A');
-    expect(r.previousScore).toBe(95);
-    expect(r.previousInspectorName).toBe('Omar');
+  it('excludes compliant items from topViolations', async () => {
+    const items = [makeItem('i1', 'compliant', 'high'), makeItem('i2', 'compliant', 'medium')];
+    mockGetCompleted.mockResolvedValue([makeInspection({ items })]);
+    const result = await buildBrief('f1');
+    expect(result.topViolations).toHaveLength(0);
   });
 
-  // Cover the ?? null branches on lines 36-43
-  it('previousGrade is null when grade is undefined', async () => {
-    const ins = makeInspection({ facilityId: 'f1' });
-    delete (ins as any).grade;
-    mockGetCompleted.mockResolvedValue([ins]);
-    const r = await buildBrief('f1');
-    expect(r.previousGrade).toBeNull();
+  it('maps previousGrade, previousScore, previousDate, previousInspectorName', async () => {
+    mockGetCompleted.mockResolvedValue([makeInspection({ grade: 'A', score: 95, date: '2026-03-01', inspectorName: 'Ahmed' })]);
+    const result = await buildBrief('f1');
+    expect(result.previousGrade).toBe('A');
+    expect(result.previousScore).toBe(95);
+    expect(result.previousDate).toBe('2026-03-01');
+    expect(result.previousInspectorName).toBe('Ahmed');
   });
 
-  it('previousScore is null when score is undefined', async () => {
-    const ins = makeInspection({ facilityId: 'f1' });
-    delete (ins as any).score;
-    mockGetCompleted.mockResolvedValue([ins]);
-    const r = await buildBrief('f1');
-    expect(r.previousScore).toBeNull();
+  it('returns null grade/score when undefined on inspection', async () => {
+    const insp = makeInspection();
+    delete (insp as any).grade;
+    delete (insp as any).score;
+    mockGetCompleted.mockResolvedValue([insp]);
+    const result = await buildBrief('f1');
+    expect(result.previousGrade).toBeNull();
+    expect(result.previousScore).toBeNull();
   });
 });
