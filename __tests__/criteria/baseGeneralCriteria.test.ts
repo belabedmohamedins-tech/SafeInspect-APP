@@ -5,8 +5,8 @@ describe('baseGeneralCriteria', () => {
     expect(Array.isArray(baseGeneralCriteria)).toBe(true);
   });
 
-  it('should contain exactly 26 items', () => {
-    expect(baseGeneralCriteria).toHaveLength(26);
+  it('should contain exactly 27 items', () => {
+    expect(baseGeneralCriteria).toHaveLength(27);
   });
 
   it('should have no duplicate IDs', () => {
@@ -61,6 +61,22 @@ describe('baseGeneralCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
+  it('BGN-08-02 should cover evacuation routes (safety axis)', () => {
+    const item = baseGeneralCriteria.find(i => i.id === 'BGN-08-02');
+    expect(item).toBeDefined();
+    expect(item!.axis).toBe('السلامة العامة والوقاية من الحوادث');
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('visual');
+  });
+
+  it('BGN-08-03 should cover chemical storage safety', () => {
+    const item = baseGeneralCriteria.find(i => i.id === 'BGN-08-03');
+    expect(item).toBeDefined();
+    expect(item!.axis).toBe('السلامة العامة والوقاية من الحوادث');
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('visual');
+  });
+
   it('BGN-03-06 should require ONA contract for septic tank', () => {
     const item = baseGeneralCriteria.find(i => i.id === 'BGN-03-06');
     expect(item).toBeDefined();
@@ -101,5 +117,15 @@ describe('baseGeneralCriteria', () => {
   it('safety axis should have 3 items', () => {
     const safetyItems = baseGeneralCriteria.filter(i => i.axis === 'السلامة العامة والوقاية من الحوادث');
     expect(safetyItems).toHaveLength(3);
+  });
+
+  it('pest control axis should have 5 items', () => {
+    const pestItems = baseGeneralCriteria.filter(i => i.axis === 'مكافحة النواقل');
+    expect(pestItems).toHaveLength(5);
+  });
+
+  it('general location axis should have 7 items', () => {
+    const locationItems = baseGeneralCriteria.filter(i => i.axis === 'الموقع والتهيئة العامة');
+    expect(locationItems).toHaveLength(7);
   });
 });
