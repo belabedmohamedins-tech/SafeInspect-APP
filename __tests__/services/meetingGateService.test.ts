@@ -1,6 +1,6 @@
 // __tests__/services/meetingGateService.test.ts
 const mockGetById = jest.fn();
-const mockSave    = jest.fn().mockResolvedValue(undefined);
+const mockSave    = jest.fn();
 
 jest.mock('../../src/repositories/InspectionRepository', () => ({
   InspectionRepository: {
@@ -9,43 +9,49 @@ jest.mock('../../src/repositories/InspectionRepository', () => ({
   },
 }));
 
-import { persistOpeningMeetingDone, persistClosingMeetingDone } from '../../src/services/meetingGateService';
+import {
+  persistOpeningMeetingDone,
+  persistClosingMeetingDone,
+} from '../../src/services/meetingGateService';
 
-const baseInspection = { id: 'i1', facilityName: 'FAC', openingMeetingDone: false, closingMeetingDone: false };
+const BASE = { id: 'insp-1', facilityId: 'f1', openingMeetingDone: false, closingMeetingDone: false };
 
 beforeEach(() => {
   jest.clearAllMocks();
-  mockGetById.mockResolvedValue({ ...baseInspection });
+  mockSave.mockResolvedValue(undefined);
 });
 
 describe('persistOpeningMeetingDone', () => {
-  it('saves inspection with openingMeetingDone=true', async () => {
-    await persistOpeningMeetingDone('i1');
+  it('sets openingMeetingDone=true and saves', async () => {
+    mockGetById.mockResolvedValue({ ...BASE });
+    await persistOpeningMeetingDone('insp-1');
     expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ openingMeetingDone: true }));
   });
 
-  it('is a no-op when inspection not found', async () => {
+  it('does nothing when inspection not found', async () => {
     mockGetById.mockResolvedValue(null);
-    await persistOpeningMeetingDone('NOPE');
+    await persistOpeningMeetingDone('missing');
     expect(mockSave).not.toHaveBeenCalled();
   });
 
-  it('is idempotent when already true', async () => {
-    mockGetById.mockResolvedValue({ ...baseInspection, openingMeetingDone: true });
-    await persistOpeningMeetingDone('i1');
-    expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ openingMeetingDone: true }));
+  it('is idempotent — calling twice still saves once per call', async () => {
+    mockGetById.mockResolvedValue({ ...BASE });
+    await persistOpeningMeetingDone('insp-1');
+    await persistOpeningMeetingDone('insp-1');
+    expect(mockSave).toHaveBeenCalledTimes(2);
   });
 });
 
 describe('persistClosingMeetingDone', () => {
-  it('saves inspection with closingMeetingDone=true', async () => {
-    await persistClosingMeetingDone('i1');
+  it('sets closingMeetingDone=true and saves', async () => {
+    mockGetById.mockResolvedValue({ ...BASE });
+    await persistClosingMeetingDone('insp-1');
     expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ closingMeetingDone: true }));
   });
 
-  it('is a no-op when inspection not found', async () => {
+  it('does nothing when inspection not found', async () => {
     mockGetById.mockResolvedValue(null);
-    await persistClosingMeetingDone('NOPE');
+    await persistClosingMeetingDone('missing');
     expect(mockSave).not.toHaveBeenCalled();
   });
 });

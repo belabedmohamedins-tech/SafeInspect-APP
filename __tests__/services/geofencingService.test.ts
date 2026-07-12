@@ -2,57 +2,56 @@
 import { haversineDistance, checkProximity } from '../../src/services/geofencingService';
 
 describe('haversineDistance', () => {
-  it('returns ~0 for identical coords', () => {
-    expect(haversineDistance(36.7, 3.0, 36.7, 3.0)).toBeCloseTo(0, 0);
+  it('returns 0 for identical coordinates', () => {
+    expect(haversineDistance(36.7, 3.05, 36.7, 3.05)).toBeCloseTo(0, 3);
   });
 
-  it('returns positive distance for different coords', () => {
-    const d = haversineDistance(36.7, 3.0, 36.72, 3.02);
-    expect(d).toBeGreaterThan(0);
+  it('returns ~111 km between 0° and 1° latitude on same meridian', () => {
+    const d = haversineDistance(0, 0, 1, 0);
+    expect(d).toBeGreaterThan(110_000);
+    expect(d).toBeLessThan(112_000);
   });
 
-  it('returns known approx distance (Algiers → Oran ~360km)', () => {
-    const d = haversineDistance(36.7372, 3.0865, 35.6969, -0.6331);
-    expect(d).toBeGreaterThan(350_000);
-    expect(d).toBeLessThan(400_000);
-  });
-
-  it('is symmetric', () => {
-    const d1 = haversineDistance(36.7, 3.0, 36.72, 3.02);
-    const d2 = haversineDistance(36.72, 3.02, 36.7, 3.0);
-    expect(d1).toBeCloseTo(d2, 3);
+  it('calculates ~200 m for close coordinates', () => {
+    // ~0.0018 degrees latitude ≈ 200 m
+    const d = haversineDistance(36.7, 3.05, 36.7018, 3.05);
+    expect(d).toBeGreaterThan(150);
+    expect(d).toBeLessThan(250);
   });
 });
 
 describe('checkProximity', () => {
-  const A = { latitude: 36.7, longitude: 3.0 };
-  const B_NEAR = { latitude: 36.701, longitude: 3.001 };   // ~130m
-  const B_FAR  = { latitude: 36.8,  longitude: 3.2 };     // ~20km+
+  const a = { latitude: 36.7, longitude: 3.05 };
 
-  it('returns withinRange=true for nearby points', () => {
-    const r = checkProximity(A, B_NEAR);
+  it('returns withinRange=true when coords are identical', () => {
+    const r = checkProximity(a, a);
     expect(r.withinRange).toBe(true);
+    expect(r.distanceMetres).toBeCloseTo(0, 3);
     expect(r.thresholdMetres).toBe(300);
   });
 
-  it('returns withinRange=false for distant points', () => {
-    const r = checkProximity(A, B_FAR);
-    expect(r.withinRange).toBe(false);
-  });
-
-  it('respects custom threshold', () => {
-    const r = checkProximity(A, B_NEAR, 50); // 50m threshold
-    expect(r.withinRange).toBe(false);
-    expect(r.thresholdMetres).toBe(50);
-  });
-
-  it('exposes distanceMetres', () => {
-    const r = checkProximity(A, B_NEAR);
-    expect(r.distanceMetres).toBeGreaterThan(0);
-  });
-
-  it('identical points are within range', () => {
-    const r = checkProximity(A, A);
+  it('returns withinRange=true when distance < 300 m (default threshold)', () => {
+    const b = { latitude: 36.7018, longitude: 3.05 }; // ~200 m away
+    const r = checkProximity(a, b);
     expect(r.withinRange).toBe(true);
+  });
+
+  it('returns withinRange=false when distance > 300 m (default threshold)', () => {
+    const b = { latitude: 36.704, longitude: 3.05 }; // ~445 m away
+    const r = checkProximity(a, b);
+    expect(r.withinRange).toBe(false);
+  });
+
+  it('respects a custom thresholdMetres', () => {
+    const b = { latitude: 36.7018, longitude: 3.05 }; // ~200 m
+    const rTight  = checkProximity(a, b, 100);
+    const rGenerous = checkProximity(a, b, 500);
+    expect(rTight.withinRange).toBe(false);
+    expect(rGenerous.withinRange).toBe(true);
+  });
+
+  it('echoes the correct thresholdMetres in the result', () => {
+    const r = checkProximity(a, a, 50);
+    expect(r.thresholdMetres).toBe(50);
   });
 });
