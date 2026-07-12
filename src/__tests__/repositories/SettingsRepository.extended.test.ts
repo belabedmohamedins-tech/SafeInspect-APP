@@ -1,9 +1,11 @@
 // src/__tests__/repositories/SettingsRepository.extended.test.ts
 //
 // Targets uncovered lines in SettingsRepository.ts:
+//   lines 33-35 — FIELD_KEYS nullish coalescing fallback (?? 'FALLBACK')
 //   lines 67-77 — getAll() path
 //   line  99    — set(key, value) single-key form
-//   line  111   — set error catch / empty pairs guard
+//   lines 103-104 — if (pairs.length === 0) early return
+//   line  111   — set error catch
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SettingsRepository } from '../../repositories/SettingsRepository';
@@ -116,5 +118,50 @@ describe('set — object form', () => {
     jest.spyOn(AsyncStorage, 'multiSet').mockRejectedValueOnce(new Error('write fail'));
     await expect(SettingsRepository.set({ officeName: 'X' })).resolves.not.toThrow();
     warnSpy.mockRestore();
+  });
+});
+
+// ─── FIELD_KEYS round-trip (lines 33-35 — nullish coalescing) ────────────────
+// StorageKeys constants are defined in keys.ts, so the ?? fallback strings
+// are never reached at runtime. This test exercises the FIELD_KEYS lookup
+// path and verifies that all three core fields round-trip correctly.
+
+describe('FIELD_KEYS round-trip — all three core fields (lines 33-35)', () => {
+  it('round-trips officeName via FIELD_KEYS lookup', async () => {
+    await SettingsRepository.set({ officeName: 'Tizi Ouzou' });
+    expect((await SettingsRepository.get()).officeName).toBe('Tizi Ouzou');
+  });
+
+  it('round-trips inspectorName via FIELD_KEYS lookup', async () => {
+    await SettingsRepository.set({ inspectorName: 'Karim' });
+    expect((await SettingsRepository.get()).inspectorName).toBe('Karim');
+  });
+
+  it('round-trips inspectionCause via FIELD_KEYS lookup', async () => {
+    await SettingsRepository.set({ inspectionCause: 'Periodic' });
+    expect((await SettingsRepository.get()).inspectionCause).toBe('Periodic');
+  });
+
+  it('stores arbitrary (non-FIELD_KEYS) key under its raw name', async () => {
+    // Key not in FIELD_KEYS — stored as-is (k itself, not a StorageKeys constant)
+    await SettingsRepository.set({ unknownArbitraryKey: 'some-value' });
+    const all = await SettingsRepository.getAll();
+    expect(all['unknownArbitraryKey']).toBe('some-value');
+  });
+});
+
+// ─── set — empty-pairs early exit (lines 103-104) ─────────────────────────────
+// An empty object resolves to zero pairs; the guard returns before multiSet.
+
+describe('set — empty-pairs early exit (lines 103-104)', () => {
+  it('does not call multiSet when passed an empty object', async () => {
+    const spy = jest.spyOn(AsyncStorage, 'multiSet');
+    await SettingsRepository.set({});
+    expect(spy).not.toHaveBeenCalled();
+    spy.mockRestore();
+  });
+
+  it('still resolves without error for empty object', async () => {
+    await expect(SettingsRepository.set({})).resolves.toBeUndefined();
   });
 });

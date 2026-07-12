@@ -4,6 +4,7 @@
 //   line  84  — getOverdue() filter
 //   lines 135–180 — getStats() aggregation + nearDeadlineCount
 //   lines 181–210 — persistOverdueEscalation()
+//   line  166 — catch { return 0; } in persistOverdueEscalation
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
@@ -172,9 +173,10 @@ describe('persistOverdueEscalation', () => {
     expect((await CorrectiveActionRepository.getAll())[0].status).toBe('resolved');
   });
 
-  it('returns 0 gracefully when AsyncStorage.getItem throws', async () => {
-    jest.spyOn(require('@react-native-async-storage/async-storage'), 'getItem')
-      .mockRejectedValueOnce(new Error('storage error'));
+  // Fix: use jest.spyOn on the imported instance, NOT require() which bypasses
+  // the module registry and fails to intercept the default export.
+  it('returns 0 gracefully when AsyncStorage.getItem throws (line 166)', async () => {
+    jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('storage error'));
     expect(await CorrectiveActionRepository.persistOverdueEscalation()).toBe(0);
   });
 });

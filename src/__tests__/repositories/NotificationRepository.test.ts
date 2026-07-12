@@ -126,6 +126,20 @@ describe('NotificationRepository', () => {
       await NotificationRepository.dismiss(notif.id);
       expect(await NotificationRepository.getUnread()).toHaveLength(0);
     });
+
+    // Covers line 64 branch: items whose id does NOT match are returned unchanged
+    it('does not affect other notifications when dismissing by id (line 64 branch)', async () => {
+      await NotificationRepository.append(makePayload({ title: 'A' }));
+      await NotificationRepository.append(makePayload({ title: 'B' }));
+      const all = await NotificationRepository.getAll();
+      const target = all.find(n => n.title === 'A')!;
+      const other  = all.find(n => n.title === 'B')!;
+      await NotificationRepository.dismiss(target.id);
+      const updated = await NotificationRepository.getAll();
+      expect(updated.find(n => n.id === target.id)?.dismissed).toBe(true);
+      // non-matching item must be returned as-is — dismissed must remain falsy
+      expect(updated.find(n => n.id === other.id)?.dismissed).toBeFalsy();
+    });
   });
 
   describe('clear', () => {
