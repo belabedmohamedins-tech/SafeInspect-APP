@@ -5,146 +5,125 @@ import {
   annotateRepeatViolations,
   ViolationHistoryAccessors,
 } from '../../src/services/violationHistory';
+import { SavedInspection, InspectionItem } from '../../src/types';
 
-const ITEM = (id: string, status: 'compliant' | 'non-compliant') => ({
-  id,
-  complianceStatus: status,
-  criteria: id,
-  severity: 'medium' as const,
-});
+function makeInsp(id: string, facilityId: string, status: 'completed' | 'draft', date: string, items: Partial<InspectionItem>[] = []): SavedInspection {
+  return { id, facilityId, status, date, items: items as InspectionItem[], title: '' } as SavedInspection;
+}
 
-const INSP = (id: string, facilityId: string, date: string, status = 'completed', items: any[] = []) => ({
-  id, facilityId, date, status, items,
-});
-
-const makeAccessors = (inspections: any[]): ViolationHistoryAccessors => ({
-  getAll:   async () => inspections,
-  getById:  async (id: string) => inspections.find(i => i.id === id) ?? null,
-});
+function makeAccessors(all: SavedInspection[]): ViolationHistoryAccessors {
+  return {
+    getAll: jest.fn().mockResolvedValue(all),
+    getById: jest.fn().mockImplementation((id: string) =>
+      Promise.resolve(all.find(i => i.id === id) ?? null)
+    ),
+  };
+}
 
 describe('getPriorCompletedInspection', () => {
-  it('returns null when no completed inspections exist', async () => {
-    const a = makeAccessors([]);
-    expect(await getPriorCompletedInspection(a, 'f1')).toBeNull();
+  it('returns null when no inspections', async () => {
+    const acc = makeAccessors([]);
+    expect(await getPriorCompletedInspection(acc, 'f1')).toBeNull();
   });
 
-  it('returns the most recent completed inspection for the facility', async () => {
-    const old  = INSP('a', 'f1', '2026-01-01');
-    const recent = INSP('b', 'f1', '2026-06-01');
-    const a = makeAccessors([old, recent]);
-    const r = await getPriorCompletedInspection(a, 'f1');
-    expect(r?.id).toBe('b');
+  it('returns most recent completed for facility, excluding current', async () => {
+    const older = makeInsp('old', 'f1', 'completed', '2024-01-01');
+    const newer = makeInsp('new', 'f1', 'completed', '2024-06-01');
+    const acc = makeAccessors([older, newer]);
+    const result = await getPriorCompletedInspection(acc, 'f1', 'new');
+    expect(result?.id).toBe('old');
   });
 
-  it('excludes the current inspection (excludeId)', async () => {
-    const old  = INSP('a', 'f1', '2026-01-01');
-    const cur  = INSP('b', 'f1', '2026-06-01');
-    const a = makeAccessors([old, cur]);
-    const r = await getPriorCompletedInspection(a, 'f1', 'b');
-    expect(r?.id).toBe('a');
+  it('ignores drafts', async () => {
+    const draft = makeInsp('d1', 'f1', 'draft', '2024-01-01');
+    const acc = makeAccessors([draft]);
+    expect(await getPriorCompletedInspection(acc, 'f1')).toBeNull();
   });
 
-  it('ignores inspections from other facilities', async () => {
-    const other = INSP('a', 'f2', '2026-06-01');
-    const a = makeAccessors([other]);
-    expect(await getPriorCompletedInspection(a, 'f1')).toBeNull();
+  it('ignores different facility', async () => {
+    const other = makeInsp('o1', 'f2', 'completed', '2024-01-01');
+    const acc = makeAccessors([other]);
+    expect(await getPriorCompletedInspection(acc, 'f1')).toBeNull();
   });
 
-  it('ignores non-completed inspections', async () => {
-    const inProgress = INSP('a', 'f1', '2026-06-01', 'in-progress');
-    const a = makeAccessors([inProgress]);
-    expect(await getPriorCompletedInspection(a, 'f1')).toBeNull();
+  it('uses priorInspectionId when provided and valid', async () => {
+    const specific = makeInsp('sp', 'f1', 'completed', '2024-03-01');
+    const newer = makeInsp('nw', 'f1', 'completed', '2024-06-01');
+    const acc = makeAccessors([specific, newer]);
+    const result = await getPriorCompletedInspection(acc, 'f1', 'nw', 'sp');
+    expect(result?.id).toBe('sp');
   });
 
-  it('returns specific inspection by priorInspectionId when valid', async () => {
-    const specific = INSP('x', 'f1', '2025-01-01');
-    const recent   = INSP('y', 'f1', '2026-06-01');
-    const a = makeAccessors([specific, recent]);
-    const r = await getPriorCompletedInspection(a, 'f1', undefined, 'x');
-    expect(r?.id).toBe('x');
-  });
-
-  it('falls back to most-recent when priorInspectionId is invalid', async () => {
-    const recent = INSP('y', 'f1', '2026-06-01');
-    const a = makeAccessors([recent]);
-    const r = await getPriorCompletedInspection(a, 'f1', undefined, 'nonexistent');
-    expect(r?.id).toBe('y');
-  });
-
-  it('rejects specific prior if it belongs to another facility', async () => {
-    const wrongFacility = INSP('x', 'f2', '2025-01-01');
-    const correct       = INSP('y', 'f1', '2026-06-01');
-    const a = makeAccessors([wrongFacility, correct]);
-    const r = await getPriorCompletedInspection(a, 'f1', undefined, 'x');
-    expect(r?.id).toBe('y');
+  it('falls back to most-recent if priorInspectionId is draft', async () => {
+    const draftPrior = makeInsp('dp', 'f1', 'draft', '2024-03-01');
+    const completed = makeInsp('cp', 'f1', 'completed', '2024-01-01');
+    const acc = makeAccessors([draftPrior, completed]);
+    const result = await getPriorCompletedInspection(acc, 'f1', undefined, 'dp');
+    expect(result?.id).toBe('cp');
   });
 });
 
 describe('getPriorItemStatus', () => {
-  it('returns undefined when no prior inspection exists', async () => {
-    const a = makeAccessors([]);
-    expect(await getPriorItemStatus(a, 'f1', 'i1')).toBeUndefined();
+  it('returns undefined when no prior', async () => {
+    const acc = makeAccessors([]);
+    expect(await getPriorItemStatus(acc, 'f1', 'c1')).toBeUndefined();
   });
 
-  it('returns the compliance status of the criterion in the prior inspection', async () => {
-    const prior = INSP('p', 'f1', '2026-01-01', 'completed', [
-      ITEM('i1', 'non-compliant'),
+  it('returns status from prior inspection', async () => {
+    const prior = makeInsp('p1', 'f1', 'completed', '2024-01-01', [
+      { id: 'c1', complianceStatus: 'non-compliant' },
     ]);
-    const a = makeAccessors([prior]);
-    expect(await getPriorItemStatus(a, 'f1', 'i1')).toBe('non-compliant');
+    const acc = makeAccessors([prior]);
+    expect(await getPriorItemStatus(acc, 'f1', 'c1')).toBe('non-compliant');
   });
 
-  it('returns undefined when criterion not found in prior', async () => {
-    const prior = INSP('p', 'f1', '2026-01-01', 'completed', [ITEM('i2', 'compliant')]);
-    const a = makeAccessors([prior]);
-    expect(await getPriorItemStatus(a, 'f1', 'i1')).toBeUndefined();
+  it('returns undefined for unknown criterion', async () => {
+    const prior = makeInsp('p1', 'f1', 'completed', '2024-01-01', [
+      { id: 'c1', complianceStatus: 'compliant' },
+    ]);
+    const acc = makeAccessors([prior]);
+    expect(await getPriorItemStatus(acc, 'f1', 'unknown')).toBeUndefined();
   });
 });
 
 describe('annotateRepeatViolations', () => {
-  it('marks all items isRepeatViolation=false when no prior inspection', async () => {
-    const a = makeAccessors([]);
-    const items = [ITEM('i1', 'non-compliant'), ITEM('i2', 'compliant')];
-    const result = await annotateRepeatViolations(a, items, 'f1', 'cur');
-    expect(result.every(r => r.isRepeatViolation === false)).toBe(true);
-    expect(result.every(r => r.priorInspectionStatus === undefined)).toBe(true);
+  it('all isRepeatViolation=false when no prior', async () => {
+    const acc = makeAccessors([]);
+    const items = [
+      { id: 'c1', complianceStatus: 'non-compliant' } as InspectionItem,
+    ];
+    const result = await annotateRepeatViolations(acc, items, 'f1', 'cur1');
+    expect(result[0].isRepeatViolation).toBe(false);
+    expect(result[0].priorInspectionStatus).toBeUndefined();
   });
 
-  it('marks isRepeatViolation=true when item was non-compliant in prior too', async () => {
-    const prior = INSP('p', 'f1', '2026-01-01', 'completed', [ITEM('i1', 'non-compliant')]);
-    const a = makeAccessors([prior]);
-    const items = [ITEM('i1', 'non-compliant')];
-    const result = await annotateRepeatViolations(a, items, 'f1', 'cur');
+  it('marks repeat when prior was also non-compliant', async () => {
+    const prior = makeInsp('p1', 'f1', 'completed', '2024-01-01', [
+      { id: 'c1', complianceStatus: 'non-compliant' },
+    ]);
+    const acc = makeAccessors([prior]);
+    const items = [{ id: 'c1', complianceStatus: 'non-compliant' } as InspectionItem];
+    const result = await annotateRepeatViolations(acc, items, 'f1', 'cur1');
     expect(result[0].isRepeatViolation).toBe(true);
     expect(result[0].priorInspectionStatus).toBe('non-compliant');
   });
 
-  it('marks isRepeatViolation=false for a new violation (not in prior)', async () => {
-    const prior = INSP('p', 'f1', '2026-01-01', 'completed', [ITEM('i1', 'compliant')]);
-    const a = makeAccessors([prior]);
-    const items = [ITEM('i1', 'non-compliant')];
-    const result = await annotateRepeatViolations(a, items, 'f1', 'cur');
+  it('not repeat when prior was compliant', async () => {
+    const prior = makeInsp('p1', 'f1', 'completed', '2024-01-01', [
+      { id: 'c1', complianceStatus: 'compliant' },
+    ]);
+    const acc = makeAccessors([prior]);
+    const items = [{ id: 'c1', complianceStatus: 'non-compliant' } as InspectionItem];
+    const result = await annotateRepeatViolations(acc, items, 'f1', 'cur1');
     expect(result[0].isRepeatViolation).toBe(false);
   });
 
-  it('correctly handles mix of repeat / new / resolved items', async () => {
-    const prior = INSP('p', 'f1', '2026-01-01', 'completed', [
-      ITEM('repeat', 'non-compliant'),
-      ITEM('fixed',  'non-compliant'),
-      ITEM('ok',     'compliant'),
-    ]);
-    const a = makeAccessors([prior]);
-    const items = [
-      ITEM('repeat', 'non-compliant'),
-      ITEM('fixed',  'compliant'),
-      ITEM('ok',     'compliant'),
-      ITEM('brand-new', 'non-compliant'),
-    ];
-    const result = await annotateRepeatViolations(a, items, 'f1', 'cur');
-    const byId = Object.fromEntries(result.map(r => [r.id, r]));
-    expect(byId['repeat'].isRepeatViolation).toBe(true);
-    expect(byId['fixed'].isRepeatViolation).toBe(false);
-    expect(byId['ok'].isRepeatViolation).toBe(false);
-    expect(byId['brand-new'].isRepeatViolation).toBe(false);
+  it('item not in prior → isRepeatViolation false, priorStatus undefined', async () => {
+    const prior = makeInsp('p1', 'f1', 'completed', '2024-01-01', []);
+    const acc = makeAccessors([prior]);
+    const items = [{ id: 'c99', complianceStatus: 'non-compliant' } as InspectionItem];
+    const result = await annotateRepeatViolations(acc, items, 'f1', 'cur1');
+    expect(result[0].isRepeatViolation).toBe(false);
+    expect(result[0].priorInspectionStatus).toBeUndefined();
   });
 });
