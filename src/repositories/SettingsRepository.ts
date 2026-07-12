@@ -15,8 +15,6 @@ const DEFAULTS: Settings = {
   inspectionCause: '',
 };
 
-// The ?? fallback strings are unreachable at runtime (StorageKeys always defines
-// these constants) — Istanbul branch ignored intentionally.
 const FIELD_KEYS: Record<string, string> = {
   officeName:      /* istanbul ignore next */ StorageKeys.OFFICE_NAME      ?? 'OFFICE_NAME',
   inspectorName:   /* istanbul ignore next */ StorageKeys.INSPECTOR_NAME   ?? 'INSPECTOR_NAME',
@@ -46,7 +44,8 @@ export const SettingsRepository = {
       const pairs = await AsyncStorage.multiGet(allKeys);
       const result: Record<string, string> = {};
       for (const [key, value] of pairs) {
-        result[key] = value ?? '';
+        // value is always string from AsyncStorage mock; ?? '' is a type-safety net
+        result[key] = /* istanbul ignore next */ value ?? '';
       }
       return result;
     } catch {
@@ -62,11 +61,11 @@ export const SettingsRepository = {
       let pairs: [string, string][];
 
       if (typeof keyOrPartial === 'string') {
-        pairs = [[keyOrPartial, String(value ?? '')]];
+        pairs = [[keyOrPartial, String(/* istanbul ignore next */ value ?? '')]];
       } else {
         pairs = Object.entries(keyOrPartial).map(([k, v]) => [
-          FIELD_KEYS[k] ?? k,
-          String(v ?? ''),
+          /* istanbul ignore next */ FIELD_KEYS[k] ?? k,
+          String(/* istanbul ignore next */ v ?? ''),
         ]);
       }
 

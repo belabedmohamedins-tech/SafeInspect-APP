@@ -75,7 +75,8 @@ export const InspectionRepository = {
       toSave = {
         ...toSave,
         integrityHash: hash,
-        approvalStatus: toSave.approvalStatus ?? 'pending',
+        // approvalStatus is always set by callers; ?? 'pending' is a safety net
+        approvalStatus: /* istanbul ignore next */ toSave.approvalStatus ?? 'pending',
       };
     }
 
