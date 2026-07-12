@@ -86,23 +86,9 @@ describe('computeScoreAndGrade — empty / edge inputs', () => {
   });
 
   it('marks incomplete when evaluatedCount / applicableCount < MIN_COMPLETION_RATE', () => {
-    // 1 evaluated out of 10 applicable = 10% < 60%
-    const items = [C('e1', 'low'), ...Array.from({ length: 9 }, (_, i) => N(`n${i}`, 'low'))];
-    // Make only 1 evaluated, rest non-compliant but we need 'not-evaluated':
-    // Use NA for 9 items; 1 compliant + 9 NA → completionRate = 1/1 = 100% — wrong.
-    // Correct: use items with status 'not-evaluated' if that exists, else
-    // manufacture a low completion rate by having many applicable but few evaluated.
-    // In this model NA is excluded from applicable, non-compliant IS applicable.
-    // So: 1 compliant + 9 non-compliant = 10 evaluated / 10 applicable = 100%.
-    // To get < 60% we need items that are applicable but NOT evaluated.
-    // The source: applicableItems = items where status !== 'na'
-    //             evaluatedItems  = compliant + non-compliant
-    // So a 'not-evaluated' status (if it exists) or any other non-na, non-compliant,
-    // non-non-compliant status would be applicable-but-not-evaluated.
-    // Since the type only has 'compliant'|'non-compliant'|'na', we cannot produce
-    // incomplete via the public API — completionRate is always 1.0 when all items
-    // are compliant or non-compliant.
-    // The only way to get incomplete=true is: 0 applicable items (empty / all-NA).
+    // The public type only has 'compliant'|'non-compliant'|'na'.
+    // completionRate is always 1.0 when all items are compliant or non-compliant.
+    // The only way to produce incomplete=true via the public API is 0 applicable items.
     const r = computeScoreAndGrade([NA('x', 'high'), NA('y', 'high')]);
     expect(r.incomplete).toBe(true);
   });
@@ -145,16 +131,21 @@ describe('computeScoreAndGrade — score computation', () => {
   });
 
   it('score that hits exactly GRADE_B_MIN boundary → grade B', () => {
-    // Build items whose weighted rate equals exactly GRADE_B_MIN (70).
-    // 7 high compliant (w=3 each = 21) + 3 high non-compliant (w=3 each = 9)
-    // compliantWeight = 21, totalWeight = 30 → score = round(21/30*1000)/10 = 70.0
+    // 7 high compliant (w=3 each = 21) + 3 LOW non-compliant (w=1 each = 3)
+    // compliantWeight = 21, totalWeight = 24 → score = round(21/24*1000)/10 = round(875)/10 = 87.5
+    // That would be A. Use different ratio:
+    // Target score = GRADE_B_MIN (70). Need compliant/total = 0.70.
+    // 7 medium compliant (w=2 each = 14) + 3 medium non-compliant (w=2 each = 6)
+    // compliantWeight = 14, totalWeight = 20 → score = round(14/20*1000)/10 = round(700)/10 = 70.0
+    // high violations = 0 → no forced-D, no ceiling-C
     const items = [
-      ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'high')),
-      ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'high')),
+      ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
+      ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.score).toBe(70);
     expect(r.rawGrade).toBe('B');
+    expect(r.grade).toBe('B');
   });
 
   it('score that hits exactly GRADE_A_MIN boundary → grade A', () => {
@@ -230,11 +221,11 @@ describe('computeScoreAndGrade — ceiling C override', () => {
   });
 
   it('caps grade at C when rawGrade is B', () => {
-    // Score in B range + 1 high violation → capped C
+    // Score in B range (70, all medium) + 1 high violation → capped C
     const items = [
       N('h1', 'high'),
-      ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'high')),
-      ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'low')),
+      ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
+      ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.criticalOverride).toBe(true);
@@ -279,19 +270,22 @@ describe('grade to risk level and inspection schedule', () => {
   it.each(cases)(
     'grade %s → riskLevel %i → nextInspectionDays %i',
     (_label, expectedGrade, expectedRisk, expectedDays) => {
-      // Manufacture items that produce the target grade without override.
+      // Manufacture items that produce the target grade without triggering overrides.
       let items: InspectionItem[];
       if (expectedGrade === 'A') {
-        items = [C('a', 'high')];
+        // All compliant, no high violations
+        items = [C('a', 'low')];
       } else if (expectedGrade === 'B') {
+        // score = 70 (medium items only, 0 high violations → no override)
         items = [
-          ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'high')),
-          ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'high')),
+          ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
+          ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
         ];
       } else if (expectedGrade === 'C') {
-        // score ~60, 0 high violations (no override)
+        // score ~60, 0 high violations → no override
         items = [C('a', 'high'), N('b', 'medium')];
       } else {
+        // 4 high violations → FORCED_D (or rawGrade D either way)
         items = [N('a', 'high'), N('b', 'high'), N('c', 'high'), N('d', 'high')];
       }
       const r = computeScoreAndGrade(items);
