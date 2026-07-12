@@ -65,7 +65,6 @@ describe('buildDifferentialViewSync', () => {
     expect(r.all[0].diffStatus).toBe('unchanged');
   });
 
-  // Covers lines 117-120: prior exists but item ID is not in prior map → not-in-prior
   it('marks item not-in-prior when criterion missing from prior (prior is non-null)', () => {
     const prior = INSP('p', 'f1', '2026-01-01', [ITEM('other', 'compliant')]);
     const cur   = INSP('c', 'f1', '2026-07-01', [ITEM('i1', 'non-compliant')]);
@@ -100,7 +99,6 @@ describe('buildDifferentialView (async)', () => {
     expect(r.stillFailing).toHaveLength(1);
   });
 
-  // Covers line 95: priorInspectionId set, getById returns record with wrong status → falls back to getAll
   it('falls back to getAll when getById returns non-completed record', async () => {
     const priorInProgress = INSP('p', 'f1', '2026-01-01', [ITEM('i1', 'non-compliant')]);
     priorInProgress.status = 'in-progress';
@@ -113,7 +111,6 @@ describe('buildDifferentialView (async)', () => {
     expect(r.resolved).toHaveLength(1);
   });
 
-  // Covers line 95: priorInspectionId set but getById returns null → falls back to getAll
   it('falls back to getAll when getById returns null', async () => {
     const prior = INSP('p', 'f1', '2026-01-01', [ITEM('i1', 'non-compliant')]);
     const cur   = INSP('c', 'f1', '2026-07-01', [ITEM('i1', 'non-compliant')], { priorInspectionId: 'missing' });
@@ -122,6 +119,17 @@ describe('buildDifferentialView (async)', () => {
     const r = await buildDifferentialView(cur as any);
     expect(r.priorInspection?.id).toBe('p');
     expect(r.stillFailing).toHaveLength(1);
+  });
+
+  // Covers async line 118: prior is non-null but current item ID not in prior map
+  it('marks item not-in-prior (async) when criterion missing from prior map', async () => {
+    const prior = INSP('p', 'f1', '2026-01-01', [ITEM('other', 'compliant')]);
+    const cur   = INSP('c', 'f1', '2026-07-01', [ITEM('new-item', 'non-compliant')]);
+    mockGetAll.mockResolvedValue([prior]);
+    const r = await buildDifferentialView(cur as any);
+    expect(r.all[0].diffStatus).toBe('not-in-prior');
+    expect(r.all[0].priorStatus).toBeUndefined();
+    expect(r.priorInspection?.id).toBe('p');
   });
 
   it('returns all not-in-prior when no prior exists', async () => {
