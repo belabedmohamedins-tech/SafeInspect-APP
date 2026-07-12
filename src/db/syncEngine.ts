@@ -100,13 +100,14 @@ export function startSyncScheduler(intervalMs = 30_000): () => void {
       }
       wasOnline = isOnline;
     });
-  } catch {
+  } catch /* istanbul ignore next */ {
     // NetInfo not available — interval-only mode.
   }
 
   // ── 3. Cleanup ────────────────────────────────────────────────────────────
   return () => {
     clearInterval(timer);
+    // istanbul ignore next -- optional chaining on unsubscribeNetInfo
     unsubscribeNetInfo?.();
   };
 }

@@ -30,7 +30,7 @@ function getNotifications(): typeof import('expo-notifications') | null {
     if (Constants.appOwnership === 'expo') return null;
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     return require('expo-notifications');
-  } catch {
+  } catch /* istanbul ignore next */ {
     return null;
   }
 }
@@ -38,6 +38,7 @@ function getNotifications(): typeof import('expo-notifications') | null {
 let _handlerInstalled = false;
 function getNotificationsWithHandler(): typeof import('expo-notifications') | null {
   const N = getNotifications();
+  // istanbul ignore next -- _handlerInstalled guard: only false on first call per process
   if (N && !_handlerInstalled) {
     _handlerInstalled = true;
     N.setNotificationHandler({

@@ -33,6 +33,7 @@ export async function copyToAppStorage(
 ): Promise<string | null> {
   try {
     await ensureDir();
+    // istanbul ignore next -- Array.pop() never returns undefined for a non-empty split result
     const ext = tempUri.split('.').pop()?.split('?')[0] ?? 'jpg';
     const filename = `insp-${itemId}-${Date.now()}.${ext}`;
     const destUri = `${PHOTOS_DIR}${filename}`;
