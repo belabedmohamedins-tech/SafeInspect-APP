@@ -12,8 +12,20 @@ jest.mock('../../src/repositories/InspectionRepository', () => ({
   },
 }));
 
+// Fire the callback only once per hook instance — prevents re-load on re-render
 jest.mock('expo-router', () => ({
-  useFocusEffect: (cb: () => () => void) => { cb(); },
+  useFocusEffect: (cb: () => () => void) => {
+    const { useRef, useEffect } = require('react');
+    const fired = useRef(false);
+    useEffect(() => {
+      if (!fired.current) {
+        fired.current = true;
+        const cleanup = cb();
+        return cleanup;
+      }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+  },
 }));
 
 import { useInspectionList } from '../../src/hooks/useInspectionList';
