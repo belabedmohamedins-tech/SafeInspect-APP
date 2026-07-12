@@ -57,10 +57,7 @@ import {
 import type { InspectionItem } from '../src/types';
 import type { NumericFieldSpec } from '../src/types';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Helpers
-// ─────────────────────────────────────────────────────────────────────────────
-
+// ───────────────────────────────────────────────────────────────────────────────
 function makeItem(
   overrides: Partial<InspectionItem> = {},
 ): InspectionItem {
@@ -68,7 +65,7 @@ function makeItem(
     id: 'item-1',
     criterionId: 'c-1',
     criterionText: 'Test criterion',
-    axis: 'محور 1',
+    axis: '\u0645\u062d\u0648\u0631 1',
     severity: 'medium',
     complianceStatus: 'not-evaluated',
     isRepeatViolation: false,
@@ -78,13 +75,11 @@ function makeItem(
   } as InspectionItem;
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // dateUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('dateUtils', () => {
-  // Use a fixed ISO string so the test is timezone-aware but deterministic.
-  // formatDateTimeShort is computed from the same Date object, so no hardcoding.
   const iso = '2026-03-15T14:30:00.000Z';
   const d   = new Date(iso);
 
@@ -120,13 +115,13 @@ describe('dateUtils', () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // fileUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('generateFileName', () => {
   test('returns a string with the given extension', () => {
-    const name = generateFileName('مطعم الكوكب', 'pdf');
+    const name = generateFileName('\u0645\u0637\u0639\u0645 \u0627\u0644\u0643\u0648\u0643\u0628', 'pdf');
     expect(name).toMatch(/\.pdf$/);
   });
 
@@ -151,14 +146,14 @@ describe('generateFileName', () => {
   });
 
   test('preserves Arabic characters', () => {
-    const name = generateFileName('مطعم', 'pdf');
-    expect(name).toMatch(/مطعم/);
+    const name = generateFileName('\u0645\u0637\u0639\u0645', 'pdf');
+    expect(name).toMatch(/\u0645\u0637\u0639\u0645/);
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // groupViolations
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('groupViolationsByRepeat', () => {
   test('returns empty arrays when no items', () => {
@@ -210,7 +205,7 @@ describe('groupViolationsByRepeat', () => {
 describe('formatViolationGroupSummary', () => {
   test('returns Arabic no-violation message when both arrays empty', () => {
     expect(formatViolationGroupSummary({ firstTime: [], repeat: [] }))
-      .toBe('لا توجد مخالفات');
+      .toBe('\u0644\u0627 \u062a\u0648\u062c\u062f \u0645\u062e\u0627\u0644\u0641\u0627\u062a');
   });
 
   test('only firstTime violations', () => {
@@ -219,8 +214,8 @@ describe('formatViolationGroupSummary', () => {
       repeat: [],
     });
     expect(summary).toContain('2');
-    expect(summary).toContain('لأول مرة');
-    expect(summary).not.toContain('متكرر');
+    expect(summary).toContain('\u0644\u0623\u0648\u0644 \u0645\u0631\u0629');
+    expect(summary).not.toContain('\u0645\u062a\u0643\u0631\u0631');
   });
 
   test('only repeat violations, singular', () => {
@@ -229,7 +224,7 @@ describe('formatViolationGroupSummary', () => {
       repeat: [makeItem()],
     });
     expect(summary).toContain('1');
-    expect(summary).toContain('متكرر');
+    expect(summary).toContain('\u0645\u062a\u0643\u0631\u0631');
   });
 
   test('plural repeat suffix for > 1', () => {
@@ -237,7 +232,7 @@ describe('formatViolationGroupSummary', () => {
       firstTime: [],
       repeat: [makeItem(), makeItem()],
     });
-    expect(summary).toContain('متكررة');
+    expect(summary).toContain('\u0645\u062a\u0643\u0631\u0631\u0629');
   });
 
   test('mixed: firstTime + repeat, total is sum', () => {
@@ -249,9 +244,9 @@ describe('formatViolationGroupSummary', () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // inspectionUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('inspectionUtils', () => {
   describe('getEvaluatedCount', () => {
@@ -302,30 +297,30 @@ describe('inspectionUtils', () => {
   describe('groupByAxisRaw', () => {
     test('groups items by axis', () => {
       const items = [
-        makeItem({ id: '1', axis: 'محور أ' }),
-        makeItem({ id: '2', axis: 'محور أ' }),
-        makeItem({ id: '3', axis: 'محور ب' }),
+        makeItem({ id: '1', axis: '\u0645\u062d\u0648\u0631 \u0623' }),
+        makeItem({ id: '2', axis: '\u0645\u062d\u0648\u0631 \u0623' }),
+        makeItem({ id: '3', axis: '\u0645\u062d\u0648\u0631 \u0628' }),
       ];
       const groups = groupByAxisRaw(items);
       expect(groups).toHaveLength(2);
-      const groupA = groups.find(([title]) => title === 'محور أ');
+      const groupA = groups.find(([title]) => title === '\u0645\u062d\u0648\u0631 \u0623');
       expect(groupA?.[1]).toHaveLength(2);
     });
 
-    test('uses "أخرى" when axis is missing', () => {
+    test('uses "\u0623\u062e\u0631\u0649" when axis is missing', () => {
       const item = makeItem({ axis: undefined as any });
       const groups = groupByAxisRaw([item]);
-      expect(groups[0][0]).toBe('أخرى');
+      expect(groups[0][0]).toBe('\u0623\u062e\u0631\u0649');
     });
   });
 
   describe('groupByAxis', () => {
     test('returns objects with title and data', () => {
       const items = [
-        makeItem({ id: '1', axis: 'محور ج' }),
+        makeItem({ id: '1', axis: '\u0645\u062d\u0648\u0631 \u062c' }),
       ];
       const result = groupByAxis(items);
-      expect(result[0]).toHaveProperty('title', 'محور ج');
+      expect(result[0]).toHaveProperty('title', '\u0645\u062d\u0648\u0631 \u062c');
       expect(result[0]).toHaveProperty('data');
     });
   });
@@ -343,9 +338,9 @@ describe('inspectionUtils', () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // numericUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('deriveNumericCompliance', () => {
   const spec: NumericFieldSpec = {
@@ -353,7 +348,7 @@ describe('deriveNumericCompliance', () => {
     max: 20,
     warningMin: 8,
     warningMax: 25,
-    unit: '°C',
+    unit: '\u00b0C',
     label: 'Temp',
   };
 
@@ -398,34 +393,34 @@ describe('deriveNumericCompliance', () => {
   });
 
   test('returns compliant when no min/max defined and value present', () => {
-    const openSpec: NumericFieldSpec = { unit: '°C', label: 'T' };
+    const openSpec: NumericFieldSpec = { unit: '\u00b0C', label: 'T' };
     expect(deriveNumericCompliance(100, openSpec)).toBe('compliant');
   });
 });
 
 describe('numericStateToComplianceStatus', () => {
-  test('compliant → compliant', () => {
+  test('compliant \u2192 compliant', () => {
     expect(numericStateToComplianceStatus('compliant')).toBe('compliant');
   });
 
-  test('warning → observation-only', () => {
+  test('warning \u2192 observation-only', () => {
     expect(numericStateToComplianceStatus('warning')).toBe('observation-only');
   });
 
-  test('non-compliant → non-compliant', () => {
+  test('non-compliant \u2192 non-compliant', () => {
     expect(numericStateToComplianceStatus('non-compliant')).toBe('non-compliant');
   });
 
-  test('not-measured → undefined', () => {
+  test('not-measured \u2192 undefined', () => {
     expect(numericStateToComplianceStatus('not-measured')).toBeUndefined();
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // scoringUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
-describe('scoringUtils — constants', () => {
+describe('scoringUtils \u2014 constants', () => {
   test('SEVERITY_WEIGHTS has correct values', () => {
     expect(SEVERITY_WEIGHTS.high).toBe(3);
     expect(SEVERITY_WEIGHTS.medium).toBe(2);
@@ -449,7 +444,6 @@ describe('scoringUtils — constants', () => {
 });
 
 describe('computeScoreAndGrade', () => {
-  // Build a batch of compliant items for grade A
   function allCompliant(n: number, severity: 'high' | 'medium' | 'low' = 'medium'): InspectionItem[] {
     return Array.from({ length: n }, (_, i) =>
       makeItem({ id: `c-${i}`, complianceStatus: 'compliant', severity }),
@@ -462,7 +456,7 @@ describe('computeScoreAndGrade', () => {
     );
   }
 
-  test('empty items → score 0, grade D, completionRate 0, incomplete true', () => {
+  test('empty items \u2192 score 0, grade D, completionRate 0, incomplete true', () => {
     const r = computeScoreAndGrade([]);
     expect(r.score).toBe(0);
     expect(r.grade).toBe('D');
@@ -470,7 +464,7 @@ describe('computeScoreAndGrade', () => {
     expect(r.completionRate).toBe(0);
   });
 
-  test('all compliant → score 100, grade A', () => {
+  test('all compliant \u2192 score 100, grade A', () => {
     const r = computeScoreAndGrade(allCompliant(10));
     expect(r.score).toBe(100);
     expect(r.grade).toBe('A');
@@ -478,13 +472,13 @@ describe('computeScoreAndGrade', () => {
     expect(r.criticalOverride).toBe(false);
   });
 
-  test('all non-compliant → score 0, grade D', () => {
+  test('all non-compliant \u2192 score 0, grade D', () => {
     const r = computeScoreAndGrade(allNonCompliant(5, 'low'));
     expect(r.score).toBe(0);
     expect(r.grade).toBe('D');
   });
 
-  test('grade B path — score ~75', () => {
+  test('grade B path \u2014 score 75', () => {
     // 3 compliant medium (weight 6) + 1 non-compliant medium (weight 2) = 6/8 = 75%
     const items = [
       ...allCompliant(3, 'medium'),
@@ -495,8 +489,7 @@ describe('computeScoreAndGrade', () => {
     expect(r.grade).toBe('B');
   });
 
-  test('grade C path — score ~55', () => {
-    // 11 compliant + 9 non-compliant medium → 22/40 = 55%
+  test('grade C path \u2014 score ~55', () => {
     const items = [
       ...allCompliant(11, 'medium'),
       ...allNonCompliant(9, 'medium'),
@@ -507,10 +500,10 @@ describe('computeScoreAndGrade', () => {
     expect(r.grade).toBe('C');
   });
 
-  test('ceiling-C override: 1 high violation caps grade from A→C', () => {
-    // All compliant except 1 high non-compliant → score=85.7 → rawGrade A → capped to C
+  test('ceiling-C override: 1 high violation caps grade from A\u2192C', () => {
+    // 17 compliant medium (wt=34) + 1 nc-high (wt=3) = 34/37 = 91.9% \u2192 rawGrade=A \u2192 capped to C
     const items = [
-      ...allCompliant(6, 'medium'),
+      ...allCompliant(17, 'medium'),
       makeItem({ id: 'high-nc', complianceStatus: 'non-compliant', severity: 'high' }),
     ];
     const r = computeScoreAndGrade(items);
@@ -520,7 +513,7 @@ describe('computeScoreAndGrade', () => {
     expect(r.violations.high).toBe(1);
   });
 
-  test('forced-D override: 3+ high violations → grade D', () => {
+  test('forced-D override: 3+ high violations \u2192 grade D', () => {
     const items = [
       ...allCompliant(10, 'low'),
       makeItem({ id: 'h1', complianceStatus: 'non-compliant', severity: 'high' }),
@@ -534,7 +527,6 @@ describe('computeScoreAndGrade', () => {
   });
 
   test('forced-D: criticalOverride false when rawGrade already D', () => {
-    // Many high violations → rawGrade would also be D → no override needed
     const items = allNonCompliant(5, 'high');
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('D');
@@ -561,17 +553,17 @@ describe('computeScoreAndGrade', () => {
     expect(r.incomplete).toBe(true);
   });
 
-  test('riskLevel maps correctly: A→1, B→2, C→3, D→4', () => {
+  test('riskLevel maps correctly: A\u21921, D\u21924', () => {
     expect(computeScoreAndGrade(allCompliant(10)).riskLevel).toBe(1);
     expect(computeScoreAndGrade(allNonCompliant(5, 'low')).riskLevel).toBe(4);
   });
 
-  test('nextInspectionDays: grade A → 730 days', () => {
+  test('nextInspectionDays: grade A \u2192 730 days', () => {
     const r = computeScoreAndGrade(allCompliant(10));
     expect(r.nextInspectionDays).toBe(730);
   });
 
-  test('nextInspectionDays: grade D → 30 days', () => {
+  test('nextInspectionDays: grade D \u2192 30 days', () => {
     const r = computeScoreAndGrade(allNonCompliant(5, 'low'));
     expect(r.nextInspectionDays).toBe(30);
   });
@@ -597,9 +589,9 @@ describe('computeScoreAndGrade', () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // statsUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('computeStats', () => {
   test('empty array returns zero totals and N/A average', () => {
@@ -681,29 +673,29 @@ describe('computeStats', () => {
   });
 });
 
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 // statusUtils
-// ─────────────────────────────────────────────────────────────────────────────
+// ───────────────────────────────────────────────────────────────────────────────
 
 describe('getStatusText', () => {
-  test('compliant → مطابق', () => {
-    expect(getStatusText('compliant')).toBe('مطابق');
+  test('compliant \u2192 \u0645\u0637\u0627\u0628\u0642', () => {
+    expect(getStatusText('compliant')).toBe('\u0645\u0637\u0627\u0628\u0642');
   });
 
-  test('non-compliant → غير مطابق', () => {
-    expect(getStatusText('non-compliant')).toBe('غير مطابق');
+  test('non-compliant \u2192 \u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642', () => {
+    expect(getStatusText('non-compliant')).toBe('\u063a\u064a\u0631 \u0645\u0637\u0627\u0628\u0642');
   });
 
-  test('na → غير معني', () => {
-    expect(getStatusText('na')).toBe('غير معني');
+  test('na \u2192 \u063a\u064a\u0631 \u0645\u0639\u0646\u064a', () => {
+    expect(getStatusText('na')).toBe('\u063a\u064a\u0631 \u0645\u0639\u0646\u064a');
   });
 
-  test('partial → جزئي', () => {
-    expect(getStatusText('partial')).toBe('جزئي');
+  test('partial \u2192 \u062c\u0632\u0626\u064a', () => {
+    expect(getStatusText('partial')).toBe('\u062c\u0632\u0626\u064a');
   });
 
-  test('unknown → لم يقيم', () => {
-    expect(getStatusText('not-evaluated' as any)).toBe('لم يقيم');
+  test('unknown \u2192 \u0644\u0645 \u064a\u0642\u064a\u0645', () => {
+    expect(getStatusText('not-evaluated' as any)).toBe('\u0644\u0645 \u064a\u0642\u064a\u0645');
   });
 });
 
@@ -718,7 +710,7 @@ describe('getStatusColor', () => {
     });
   });
 
-  test('na → #9e9e9e', () => {
+  test('na \u2192 #9e9e9e', () => {
     expect(getStatusColor('na')).toBe('#9e9e9e');
   });
 });
