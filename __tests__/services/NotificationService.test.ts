@@ -1,163 +1,180 @@
 // __tests__/services/NotificationService.test.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// Simulates a dev-build environment (not Expo Go) so getNotifications() returns the module.
+jest.mock('expo-constants', () => ({ default: { appOwnership: 'standalone' } }), { virtual: true });
 
-const mockSchedule = jest.fn().mockResolvedValue('id');
-const mockCancel   = jest.fn().mockResolvedValue(undefined);
-const mockCancelAll= jest.fn().mockResolvedValue(undefined);
-const mockGetPerms = jest.fn().mockResolvedValue({ status: 'granted' });
-const mockReqPerms = jest.fn().mockResolvedValue({ status: 'granted' });
-const mockSetChan  = jest.fn().mockResolvedValue(undefined);
-const mockSetHandler = jest.fn();
+const mockSetNotificationHandler               = jest.fn();
+const mockGetPermissionsAsync                  = jest.fn();
+const mockRequestPermissionsAsync              = jest.fn();
+const mockSetNotificationChannelAsync          = jest.fn();
+const mockScheduleNotificationAsync            = jest.fn();
+const mockCancelScheduledNotificationAsync     = jest.fn();
+const mockCancelAllScheduledNotificationsAsync = jest.fn();
 
 jest.mock('expo-notifications', () => ({
-  getPermissionsAsync:                   () => mockGetPerms(),
-  requestPermissionsAsync:               () => mockReqPerms(),
-  scheduleNotificationAsync:             (...a: any[]) => mockSchedule(...a),
-  cancelScheduledNotificationAsync:      (...a: any[]) => mockCancel(...a),
-  cancelAllScheduledNotificationsAsync:  () => mockCancelAll(),
-  setNotificationChannelAsync:           (...a: any[]) => mockSetChan(...a),
-  setNotificationHandler:                (...a: any[]) => mockSetHandler(...a),
+  setNotificationHandler: mockSetNotificationHandler,
+  getPermissionsAsync: mockGetPermissionsAsync,
+  requestPermissionsAsync: mockRequestPermissionsAsync,
+  setNotificationChannelAsync: mockSetNotificationChannelAsync,
+  scheduleNotificationAsync: mockScheduleNotificationAsync,
+  cancelScheduledNotificationAsync: mockCancelScheduledNotificationAsync,
+  cancelAllScheduledNotificationsAsync: mockCancelAllScheduledNotificationsAsync,
   AndroidImportance: { HIGH: 4 },
   SchedulableTriggerInputTypes: { DATE: 'date' },
-}));
+}), { virtual: true });
 
-jest.mock('expo-constants', () => ({ default: { appOwnership: 'standalone' } }));
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  requestPermission, isEnabled, setEnabled,
-  scheduleForAgendaItem, cancelForAgendaItem, rescheduleAll,
+  requestPermission,
+  isEnabled,
+  setEnabled,
+  scheduleForAgendaItem,
+  cancelForAgendaItem,
+  rescheduleAll,
+  AgendaNotificationPayload,
 } from '../../src/services/NotificationService';
 
-const futureItem = {
+const future = new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString(); // 4 hours from now
+
+const item: AgendaNotificationPayload = {
   id: 'a1',
-  facilityName: 'FAC',
-  date: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(), // 2h ahead
-  notes: '',
+  facilityName: 'Facility A',
+  date: future,
 };
 
 beforeEach(() => {
-  AsyncStorage.clear();
   jest.clearAllMocks();
-  mockGetPerms.mockResolvedValue({ status: 'granted' });
-  mockReqPerms.mockResolvedValue({ status: 'granted' });
+  (AsyncStorage as any).__resetStore();
+  mockGetPermissionsAsync.mockResolvedValue({ status: 'granted' });
+  mockRequestPermissionsAsync.mockResolvedValue({ status: 'granted' });
+  mockScheduleNotificationAsync.mockResolvedValue('notif-id');
+  mockCancelScheduledNotificationAsync.mockResolvedValue(undefined);
+  mockCancelAllScheduledNotificationsAsync.mockResolvedValue(undefined);
 });
 
 describe('requestPermission', () => {
   it('returns true when already granted', async () => {
-    mockGetPerms.mockResolvedValue({ status: 'granted' });
+    mockGetPermissionsAsync.mockResolvedValue({ status: 'granted' });
     expect(await requestPermission()).toBe(true);
+    expect(mockRequestPermissionsAsync).not.toHaveBeenCalled();
   });
 
-  it('requests permission when not granted and returns true', async () => {
-    mockGetPerms.mockResolvedValue({ status: 'undetermined' });
-    mockReqPerms.mockResolvedValue({ status: 'granted' });
+  it('requests and returns true when granted', async () => {
+    mockGetPermissionsAsync.mockResolvedValue({ status: 'undetermined' });
+    mockRequestPermissionsAsync.mockResolvedValue({ status: 'granted' });
     expect(await requestPermission()).toBe(true);
   });
 
   it('returns false when denied', async () => {
-    mockGetPerms.mockResolvedValue({ status: 'undetermined' });
-    mockReqPerms.mockResolvedValue({ status: 'denied' });
+    mockGetPermissionsAsync.mockResolvedValue({ status: 'undetermined' });
+    mockRequestPermissionsAsync.mockResolvedValue({ status: 'denied' });
     expect(await requestPermission()).toBe(false);
   });
 
-  it('returns false on exception', async () => {
-    mockGetPerms.mockRejectedValueOnce(new Error('HW'));
+  it('returns false on error', async () => {
+    mockGetPermissionsAsync.mockRejectedValue(new Error('perm error'));
     expect(await requestPermission()).toBe(false);
   });
 });
 
-describe('isEnabled / setEnabled', () => {
-  it('returns true by default (null key)', async () => {
+describe('isEnabled', () => {
+  it('returns true by default (no stored value)', async () => {
     expect(await isEnabled()).toBe(true);
   });
 
-  it('returns false when explicitly disabled', async () => {
-    await setEnabled(false);
+  it('returns stored value', async () => {
+    await AsyncStorage.setItem('notifications_enabled', 'false');
     expect(await isEnabled()).toBe(false);
   });
 
-  it('setEnabled(false) cancels all scheduled notifications', async () => {
-    await setEnabled(false);
-    expect(mockCancelAll).toHaveBeenCalled();
+  it('returns false on storage error', async () => {
+    jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('err'));
+    expect(await isEnabled()).toBe(false);
   });
+});
 
-  it('setEnabled(true) does not call cancelAll', async () => {
+describe('setEnabled', () => {
+  it('persists true', async () => {
     await setEnabled(true);
-    expect(mockCancelAll).not.toHaveBeenCalled();
+    expect(await AsyncStorage.getItem('notifications_enabled')).toBe('true');
+    expect(mockCancelAllScheduledNotificationsAsync).not.toHaveBeenCalled();
   });
 
-  it('returns false on AsyncStorage failure', async () => {
-    (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(new Error('fail'));
-    expect(await isEnabled()).toBe(false);
+  it('persists false and cancels all', async () => {
+    await setEnabled(false);
+    expect(await AsyncStorage.getItem('notifications_enabled')).toBe('false');
+    expect(mockCancelAllScheduledNotificationsAsync).toHaveBeenCalled();
   });
 });
 
 describe('scheduleForAgendaItem', () => {
-  it('schedules up to 2 notifications for future item', async () => {
-    await AsyncStorage.setItem('NOTIFICATIONS_ENABLED', 'true');
-    await scheduleForAgendaItem(futureItem);
-    expect(mockSchedule).toHaveBeenCalled();
+  it('schedules both pre and day notifications for future item', async () => {
+    await scheduleForAgendaItem(item);
+    expect(mockScheduleNotificationAsync).toHaveBeenCalledTimes(2);
+    const ids = mockScheduleNotificationAsync.mock.calls.map((c: any) => c[0].identifier);
+    expect(ids).toContain('agenda-a1-pre');
+    expect(ids).toContain('agenda-a1-day');
   });
 
   it('skips scheduling when notifications disabled', async () => {
-    await setEnabled(false);
-    await scheduleForAgendaItem(futureItem);
-    expect(mockSchedule).not.toHaveBeenCalled();
+    await AsyncStorage.setItem('notifications_enabled', 'false');
+    await scheduleForAgendaItem(item);
+    expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();
   });
 
   it('skips scheduling when permission denied', async () => {
-    await AsyncStorage.setItem('NOTIFICATIONS_ENABLED', 'true');
-    mockGetPerms.mockResolvedValue({ status: 'denied' });
-    mockReqPerms.mockResolvedValue({ status: 'denied' });
-    await scheduleForAgendaItem(futureItem);
-    expect(mockSchedule).not.toHaveBeenCalled();
+    mockGetPermissionsAsync.mockResolvedValue({ status: 'undetermined' });
+    mockRequestPermissionsAsync.mockResolvedValue({ status: 'denied' });
+    await scheduleForAgendaItem(item);
+    expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();
   });
 
-  it('does not schedule past items', async () => {
-    await AsyncStorage.setItem('NOTIFICATIONS_ENABLED', 'true');
-    const pastItem = { ...futureItem, date: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString() };
-    await scheduleForAgendaItem(pastItem);
-    // morningDate and preDate both in the past → no calls
-    expect(mockSchedule).not.toHaveBeenCalled();
+  it('does not schedule pre-notification for past time', async () => {
+    const soonItem: AgendaNotificationPayload = {
+      id: 'a2',
+      facilityName: 'Facility B',
+      date: new Date(Date.now() + 10 * 60 * 1000).toISOString(), // 10 min from now — pre is in past
+    };
+    await scheduleForAgendaItem(soonItem);
+    const ids = mockScheduleNotificationAsync.mock.calls.map((c: any) => c[0].identifier);
+    expect(ids).not.toContain('agenda-a2-pre');
   });
 
   it('swallows errors silently', async () => {
-    mockSchedule.mockRejectedValueOnce(new Error('HW'));
-    await AsyncStorage.setItem('NOTIFICATIONS_ENABLED', 'true');
-    await expect(scheduleForAgendaItem(futureItem)).resolves.not.toThrow();
+    mockCancelScheduledNotificationAsync.mockRejectedValue(new Error('cancel err'));
+    await expect(scheduleForAgendaItem(item)).resolves.toBeUndefined();
   });
 });
 
 describe('cancelForAgendaItem', () => {
-  it('cancels pre and day identifiers', async () => {
+  it('cancels both identifiers', async () => {
     await cancelForAgendaItem('a1');
-    expect(mockCancel).toHaveBeenCalledWith('agenda-a1-pre');
-    expect(mockCancel).toHaveBeenCalledWith('agenda-a1-day');
+    expect(mockCancelScheduledNotificationAsync).toHaveBeenCalledWith('agenda-a1-pre');
+    expect(mockCancelScheduledNotificationAsync).toHaveBeenCalledWith('agenda-a1-day');
   });
 
   it('swallows errors silently', async () => {
-    mockCancel.mockRejectedValueOnce(new Error('HW'));
-    await expect(cancelForAgendaItem('a1')).resolves.not.toThrow();
+    mockCancelScheduledNotificationAsync.mockRejectedValue(new Error('err'));
+    await expect(cancelForAgendaItem('a1')).resolves.toBeUndefined();
   });
 });
 
 describe('rescheduleAll', () => {
-  it('cancels all then reschedules enabled items', async () => {
-    await AsyncStorage.setItem('NOTIFICATIONS_ENABLED', 'true');
-    await rescheduleAll([futureItem]);
-    expect(mockCancelAll).toHaveBeenCalled();
+  it('cancels all then reschedules each item', async () => {
+    const items = [item, { ...item, id: 'a2', facilityName: 'Facility B' }];
+    await rescheduleAll(items);
+    expect(mockCancelAllScheduledNotificationsAsync).toHaveBeenCalled();
+    expect(mockScheduleNotificationAsync.mock.calls.length).toBeGreaterThan(0);
   });
 
-  it('cancels all but skips scheduling when disabled', async () => {
-    await setEnabled(false);
-    mockCancelAll.mockClear();
-    await rescheduleAll([futureItem]);
-    expect(mockCancelAll).toHaveBeenCalled();
-    expect(mockSchedule).not.toHaveBeenCalled();
+  it('does not reschedule when disabled', async () => {
+    await AsyncStorage.setItem('notifications_enabled', 'false');
+    await rescheduleAll([item]);
+    expect(mockCancelAllScheduledNotificationsAsync).toHaveBeenCalled();
+    expect(mockScheduleNotificationAsync).not.toHaveBeenCalled();
   });
 
   it('swallows errors silently', async () => {
-    mockCancelAll.mockRejectedValueOnce(new Error('HW'));
-    await expect(rescheduleAll([futureItem])).resolves.not.toThrow();
+    mockCancelAllScheduledNotificationsAsync.mockRejectedValue(new Error('err'));
+    await expect(rescheduleAll([item])).resolves.toBeUndefined();
   });
 });

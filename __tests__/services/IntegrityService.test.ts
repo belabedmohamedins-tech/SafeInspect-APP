@@ -1,110 +1,127 @@
 // __tests__/services/IntegrityService.test.ts
-const mockDigest = jest.fn();
-const mockGetItem = jest.fn();
-const mockSetItem = jest.fn();
+import { IntegrityService, computeHash, verifyInspection } from '../../src/services/IntegrityService';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SavedInspection } from '../../src/types';
 
-jest.mock('expo-crypto', () => ({
-  digestStringAsync: (...a: any[]) => mockDigest(...a),
-  CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
-  CryptoEncoding:        { HEX: 'hex' },
-}));
+function makeInsp(id: string, overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id,
+    facilityId: 'f1',
+    status: 'completed',
+    date: '2024-01-01',
+    items: [],
+    title: 'Test',
+    integrityHash: undefined,
+    ...overrides,
+  } as unknown as SavedInspection;
+}
 
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem: (...a: any[]) => mockGetItem(...a),
-  setItem: (...a: any[]) => mockSetItem(...a),
-}));
-
-jest.mock('../../src/repositories/keys', () => ({
-  StorageKeys: { INSPECTION_HASHES: '@inspection_hashes' },
-}));
-
-import { IntegrityService } from '../../src/services/IntegrityService';
-
-const INSP: any = { id: 'insp-1', facilityId: 'f1', date: '2026-07-12', items: [] };
-
-beforeEach(() => {
-  jest.clearAllMocks();
-  mockDigest.mockResolvedValue('abc123hash');
-  mockGetItem.mockResolvedValue(null);
-  mockSetItem.mockResolvedValue(undefined);
-});
+beforeEach(() => (AsyncStorage as any).__resetStore());
 
 describe('IntegrityService.computeHash', () => {
-  it('returns the hex hash from digestStringAsync', async () => {
-    const h = await IntegrityService.computeHash(INSP);
-    expect(h).toBe('abc123hash');
-    expect(mockDigest).toHaveBeenCalledWith('SHA-256', expect.any(String), { encoding: 'hex' });
+  it('returns a 64-char hex string', async () => {
+    const hash = await IntegrityService.computeHash(makeInsp('i1'));
+    expect(hash).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it('excludes integrityHash from the canonical string', async () => {
-    await IntegrityService.computeHash({ ...INSP, integrityHash: 'old-hash' });
-    const canonical: string = mockDigest.mock.calls[0][1];
-    expect(canonical).not.toContain('integrityHash');
+  it('same inspection produces same hash', async () => {
+    const ins = makeInsp('i1');
+    const h1 = await IntegrityService.computeHash(ins);
+    const h2 = await IntegrityService.computeHash(ins);
+    expect(h1).toBe(h2);
+  });
+
+  it('different inspections produce different hashes', async () => {
+    const h1 = await IntegrityService.computeHash(makeInsp('i1'));
+    const h2 = await IntegrityService.computeHash(makeInsp('i2'));
+    expect(h1).not.toBe(h2);
+  });
+
+  it('omits integrityHash field from canonical input', async () => {
+    const withHash = makeInsp('i1', { integrityHash: 'abc' } as any);
+    const withoutHash = makeInsp('i1');
+    const h1 = await IntegrityService.computeHash(withHash);
+    const h2 = await IntegrityService.computeHash(withoutHash);
+    expect(h1).toBe(h2);
+  });
+});
+
+describe('computeHash named export', () => {
+  it('delegates to IntegrityService.computeHash', async () => {
+    const hash = await computeHash(makeInsp('i1'));
+    expect(hash).toMatch(/^[0-9a-f]{64}$/);
   });
 });
 
 describe('IntegrityService.hashAndStore', () => {
-  it('stores the hash and returns it', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({ 'other': 'xyz' }));
-    const h = await IntegrityService.hashAndStore(INSP);
-    expect(h).toBe('abc123hash');
-    const stored = JSON.parse(mockSetItem.mock.calls[0][1]);
-    expect(stored['insp-1']).toBe('abc123hash');
-    expect(stored['other']).toBe('xyz'); // preserves existing entries
+  it('returns hash and persists it', async () => {
+    const ins = makeInsp('i1');
+    const hash = await IntegrityService.hashAndStore(ins);
+    expect(hash).toMatch(/^[0-9a-f]{64}$/);
+    const raw = await AsyncStorage.getItem('inspection_hashes');
+    const stored = JSON.parse(raw!);
+    expect(stored['i1']).toBe(hash);
   });
 
-  it('handles empty storage (getItem returns null)', async () => {
-    const h = await IntegrityService.hashAndStore(INSP);
-    expect(h).toBe('abc123hash');
-    const stored = JSON.parse(mockSetItem.mock.calls[0][1]);
-    expect(stored['insp-1']).toBe('abc123hash');
+  it('overwrites existing hash for same id', async () => {
+    await IntegrityService.hashAndStore(makeInsp('i1'));
+    const h2 = await IntegrityService.hashAndStore(makeInsp('i1'));
+    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
+    expect(raw['i1']).toBe(h2);
   });
 });
 
 describe('IntegrityService.verifyInspection', () => {
-  it('returns ok=true when stored hash matches computed hash', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({ 'insp-1': 'abc123hash' }));
-    const r = await IntegrityService.verifyInspection(INSP);
-    expect(r.ok).toBe(true);
-    expect(r.storedHash).toBe('abc123hash');
-    expect(r.computedHash).toBe('abc123hash');
+  it('ok=false when no stored hash', async () => {
+    const res = await IntegrityService.verifyInspection(makeInsp('i99'));
+    expect(res.ok).toBe(false);
+    expect(res.storedHash).toBeUndefined();
+    expect(res.computedHash).toMatch(/^[0-9a-f]{64}$/);
   });
 
-  it('returns ok=false when stored hash differs from computed hash', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({ 'insp-1': 'different-hash' }));
-    const r = await IntegrityService.verifyInspection(INSP);
-    expect(r.ok).toBe(false);
+  it('ok=true when stored hash matches', async () => {
+    const ins = makeInsp('i1');
+    await IntegrityService.hashAndStore(ins);
+    const res = await IntegrityService.verifyInspection(ins);
+    expect(res.ok).toBe(true);
+    expect(res.storedHash).toBe(res.computedHash);
   });
 
-  it('returns ok=false when no hash stored for the inspection', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({}));
-    const r = await IntegrityService.verifyInspection(INSP);
-    expect(r.ok).toBe(false);
-    expect(r.storedHash).toBeUndefined();
+  it('ok=false when inspection is tampered', async () => {
+    const ins = makeInsp('i1');
+    await IntegrityService.hashAndStore(ins);
+    const tampered = { ...ins, title: 'TAMPERED' };
+    const res = await IntegrityService.verifyInspection(tampered);
+    expect(res.ok).toBe(false);
   });
+});
 
-  it('returns ok=false when storage is empty', async () => {
-    mockGetItem.mockResolvedValue(null);
-    const r = await IntegrityService.verifyInspection(INSP);
-    expect(r.ok).toBe(false);
+describe('verifyInspection named export', () => {
+  it('delegates correctly', async () => {
+    const ins = makeInsp('ix');
+    const res = await verifyInspection(ins);
+    expect(res.ok).toBe(false); // no stored hash yet
   });
 });
 
 describe('IntegrityService.removeHash / removeHashes', () => {
-  it('removeHash deletes a single hash entry', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({ 'insp-1': 'h1', 'insp-2': 'h2' }));
-    await IntegrityService.removeHash('insp-1');
-    const stored = JSON.parse(mockSetItem.mock.calls[0][1]);
-    expect(stored['insp-1']).toBeUndefined();
-    expect(stored['insp-2']).toBe('h2');
+  it('removeHash deletes one entry', async () => {
+    await IntegrityService.hashAndStore(makeInsp('i1'));
+    await IntegrityService.hashAndStore(makeInsp('i2'));
+    await IntegrityService.removeHash('i1');
+    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
+    expect(raw['i1']).toBeUndefined();
+    expect(raw['i2']).toBeDefined();
   });
 
-  it('removeHashes deletes multiple hash entries', async () => {
-    mockGetItem.mockResolvedValue(JSON.stringify({ 'insp-1': 'h1', 'insp-2': 'h2', 'insp-3': 'h3' }));
-    await IntegrityService.removeHashes(['insp-1', 'insp-2']);
-    const stored = JSON.parse(mockSetItem.mock.calls[0][1]);
-    expect(stored['insp-1']).toBeUndefined();
-    expect(stored['insp-2']).toBeUndefined();
-    expect(stored['insp-3']).toBe('h3');
+  it('removeHashes deletes multiple entries', async () => {
+    await IntegrityService.hashAndStore(makeInsp('i1'));
+    await IntegrityService.hashAndStore(makeInsp('i2'));
+    await IntegrityService.hashAndStore(makeInsp('i3'));
+    await IntegrityService.removeHashes(['i1', 'i3']);
+    const raw = JSON.parse((await AsyncStorage.getItem('inspection_hashes'))!);
+    expect(raw['i1']).toBeUndefined();
+    expect(raw['i3']).toBeUndefined();
+    expect(raw['i2']).toBeDefined();
   });
 });
