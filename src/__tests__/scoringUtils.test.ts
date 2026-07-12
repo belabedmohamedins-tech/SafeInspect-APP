@@ -29,7 +29,6 @@ function item(
     id,
     severity,
     complianceStatus,
-    // remaining required fields — not used by scoringUtils
     criterionId: id,
     notes: '',
     photos: [],
@@ -86,9 +85,7 @@ describe('computeScoreAndGrade — empty / edge inputs', () => {
   });
 
   it('marks incomplete when evaluatedCount / applicableCount < MIN_COMPLETION_RATE', () => {
-    // The public type only has 'compliant'|'non-compliant'|'na'.
-    // completionRate is always 1.0 when all items are compliant or non-compliant.
-    // The only way to produce incomplete=true via the public API is 0 applicable items.
+    // Only way via public API: 0 applicable items (all NA)
     const r = computeScoreAndGrade([NA('x', 'high'), NA('y', 'high')]);
     expect(r.incomplete).toBe(true);
   });
@@ -115,8 +112,7 @@ describe('computeScoreAndGrade — score computation', () => {
 
   it('computes severity-weighted score correctly (mixed)', () => {
     // 1 high compliant (w=3) + 1 medium non-compliant (w=2)
-    // compliantWeight = 3, evaluatedWeight = 5
-    // score = round(3/5 * 1000) / 10 = round(600) / 10 = 60.0
+    // compliantWeight=3, evaluatedWeight=5 → score=round(3/5*1000)/10=60.0
     const r = computeScoreAndGrade([C('a', 'high'), N('b', 'medium')]);
     expect(r.score).toBe(60);
     expect(r.grade).toBe('C');
@@ -131,13 +127,8 @@ describe('computeScoreAndGrade — score computation', () => {
   });
 
   it('score that hits exactly GRADE_B_MIN boundary → grade B', () => {
-    // 7 high compliant (w=3 each = 21) + 3 LOW non-compliant (w=1 each = 3)
-    // compliantWeight = 21, totalWeight = 24 → score = round(21/24*1000)/10 = round(875)/10 = 87.5
-    // That would be A. Use different ratio:
-    // Target score = GRADE_B_MIN (70). Need compliant/total = 0.70.
-    // 7 medium compliant (w=2 each = 14) + 3 medium non-compliant (w=2 each = 6)
-    // compliantWeight = 14, totalWeight = 20 → score = round(14/20*1000)/10 = round(700)/10 = 70.0
-    // high violations = 0 → no forced-D, no ceiling-C
+    // 7 medium compliant (w=14) + 3 medium non-compliant (w=6)
+    // score = round(14/20*1000)/10 = 70.0; 0 high violations → no override
     const items = [
       ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
       ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
@@ -150,7 +141,7 @@ describe('computeScoreAndGrade — score computation', () => {
 
   it('score that hits exactly GRADE_A_MIN boundary → grade A', () => {
     // 17 high compliant + 3 high non-compliant
-    // score = round(17/20*1000)/10 = round(850)/10 = 85.0
+    // score = round(17/20*1000)/10 = 85.0
     const items = [
       ...Array.from({ length: 17 }, (_, i) => C(`c${i}`, 'high')),
       ...Array.from({ length: 3  }, (_, i) => N(`n${i}`, 'high')),
@@ -182,7 +173,6 @@ describe('computeScoreAndGrade — violation profile', () => {
 
 describe('computeScoreAndGrade — forced D override', () => {
   it('forces grade to D when high violations >= FORCED_D_THRESHOLD, even with high score', () => {
-    // 3 high violations (= FORCED_D_THRESHOLD) + many compliant → would be grade A without override
     const items = [
       N('h1', 'high'), N('h2', 'high'), N('h3', 'high'),
       ...Array.from({ length: 30 }, (_, i) => C(`c${i}`, 'high')),
@@ -196,7 +186,6 @@ describe('computeScoreAndGrade — forced D override', () => {
   });
 
   it('criticalOverride is false when forced D matches rawGrade D', () => {
-    // 3 high violations + 0 compliant → rawGrade = D, forced = D → no override flag
     const items = [N('h1', 'high'), N('h2', 'high'), N('h3', 'high')];
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('D');
@@ -209,7 +198,7 @@ describe('computeScoreAndGrade — forced D override', () => {
 
 describe('computeScoreAndGrade — ceiling C override', () => {
   it('caps grade at C when high violations >= CEILING_C_THRESHOLD and rawGrade is A', () => {
-    // 1 high violation (= CEILING_C_THRESHOLD) + many compliant → rawGrade A → capped C
+    // 1 high violation + 30 high compliant → rawGrade A → capped C
     const items = [
       N('h1', 'high'),
       ...Array.from({ length: 30 }, (_, i) => C(`c${i}`, 'high')),
@@ -221,13 +210,16 @@ describe('computeScoreAndGrade — ceiling C override', () => {
   });
 
   it('caps grade at C when rawGrade is B', () => {
-    // Score in B range (70, all medium) + 1 high violation → capped C
+    // 14 low compliant (w=14) + 3 low non-compliant (w=3) + 1 high non-compliant (w=3)
+    // compliantWeight=14, totalWeight=20 → score=round(14/20*1000)/10=70.0 → rawGrade B
+    // high violations=1 >= CEILING_C_THRESHOLD → capped C, criticalOverride=true
     const items = [
       N('h1', 'high'),
-      ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
-      ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
+      ...Array.from({ length: 14 }, (_, i) => C(`c${i}`, 'low')),
+      ...Array.from({ length: 3  }, (_, i) => N(`n${i}`, 'low')),
     ];
     const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('B');
     expect(r.criticalOverride).toBe(true);
     expect(r.grade).toBe('C');
   });
@@ -240,12 +232,11 @@ describe('computeScoreAndGrade — ceiling C override', () => {
       ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
     ];
     const r = computeScoreAndGrade(items);
-    expect(r.grade).toBe(r.rawGrade); // no change
+    expect(r.grade).toBe(r.rawGrade);
     expect(r.criticalOverride).toBe(false);
   });
 
   it('ceiling is no-op when rawGrade is D', () => {
-    // 1 high violation + score < GRADE_C_MIN → rawGrade D, ceiling is no-op
     const items = [
       N('h1', 'high'),
       N('n1', 'medium'),
@@ -270,22 +261,21 @@ describe('grade to risk level and inspection schedule', () => {
   it.each(cases)(
     'grade %s → riskLevel %i → nextInspectionDays %i',
     (_label, expectedGrade, expectedRisk, expectedDays) => {
-      // Manufacture items that produce the target grade without triggering overrides.
       let items: InspectionItem[];
       if (expectedGrade === 'A') {
         // All compliant, no high violations
         items = [C('a', 'low')];
       } else if (expectedGrade === 'B') {
-        // score = 70 (medium items only, 0 high violations → no override)
+        // score=70, 0 high violations → no override
         items = [
           ...Array.from({ length: 7 }, (_, i) => C(`c${i}`, 'medium')),
           ...Array.from({ length: 3 }, (_, i) => N(`n${i}`, 'medium')),
         ];
       } else if (expectedGrade === 'C') {
-        // score ~60, 0 high violations → no override
+        // score~60, 0 high violations → no override
         items = [C('a', 'high'), N('b', 'medium')];
       } else {
-        // 4 high violations → FORCED_D (or rawGrade D either way)
+        // 4 high violations → FORCED_D
         items = [N('a', 'high'), N('b', 'high'), N('c', 'high'), N('d', 'high')];
       }
       const r = computeScoreAndGrade(items);
