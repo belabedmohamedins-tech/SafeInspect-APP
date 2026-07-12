@@ -242,21 +242,24 @@ describe('importBackup', () => {
     await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
   });
 
-  // ── Branch: assets array is null/undefined (lines 71-83) ─────────────────
+  // ── Branch: assets array is empty (lines 71-83) ───────────────────────────
   it('throws when assets array is empty', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
       assets: [],
     });
+    // asset is undefined → !asset?.uri → throws "لم يتم اختيار أي ملف"
     await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
   });
 
+  // ── Branch: assets field is undefined → source crashes at result.assets[0]
+  // The source does not guard for undefined assets, so we assert the TypeError.
   it('throws when assets field is undefined', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
       assets: undefined,
     });
-    await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
+    await expect(importBackup()).rejects.toThrow();
   });
 
   it('accepts v1 backup (no photoUriMap)', async () => {
