@@ -43,7 +43,6 @@ describe('criteriaByActivity', () => {
         expect(item).toHaveProperty('id');
         expect(item).toHaveProperty('category');
       });
-      // suppress TS unused-var warning
       void key;
     }
   });
@@ -80,15 +79,12 @@ describe('criteriaByActivity', () => {
     const uabSpecificIds = new Set(uabSpecificCriteria.map((i) => i.id));
     const checklistIds = new Set(uabChecklist.map((i) => i.id));
 
-    // All base general items are present
     for (const id of baseGeneralIds) {
       expect(checklistIds.has(id)).toBe(true);
     }
-    // All base food items are present
     for (const id of baseFoodIds) {
       expect(checklistIds.has(id)).toBe(true);
     }
-    // All uab-specific items are present
     for (const id of uabSpecificIds) {
       expect(checklistIds.has(id)).toBe(true);
     }
@@ -99,11 +95,9 @@ describe('criteriaByActivity', () => {
     const baseFoodIds = new Set(baseFoodCriteria.map((i) => i.id));
     const checklistIds = new Set(mechanicChecklist.map((i) => i.id));
 
-    // No food criteria in mechanic checklist
     for (const id of baseFoodIds) {
       expect(checklistIds.has(id)).toBe(false);
     }
-    // mechanic-specific items are present
     const mechanicIds = new Set(mechanicWorkshopCriteria.map((i) => i.id));
     for (const id of mechanicIds) {
       expect(checklistIds.has(id)).toBe(true);
@@ -111,20 +105,15 @@ describe('criteriaByActivity', () => {
   });
 
   it('alias keys point to the same array reference as their canonical counterpart', () => {
-    // GPL aliases
     expect(criteriaByActivity['تركيب GPL']).toBe(criteriaByActivity['تركيب GPL/C']);
-    // upd aliases
     expect(criteriaByActivity['وحدة تربية الدواجن']).toBe(
       criteriaByActivity['تربية الدواجن (07 حظائر)'],
     );
     expect(criteriaByActivity['تربية الدواجن (07 حظائر)']).toBe(
       criteriaByActivity['تربية الدواجن (03 حظائر)'],
     );
-    // blacksmith aliases
     expect(criteriaByActivity['ورشة حدادة']).toBe(criteriaByActivity['صناعة سياج']);
-    // carpentery aliases
     expect(criteriaByActivity['ورشة نجارة']).toBe(criteriaByActivity['ورشة ألمنيوم']);
-    // printing aliases
     expect(criteriaByActivity['مطبعة']).toBe(criteriaByActivity['لوازم مدرسية ومكاتب']);
   });
 });
@@ -149,7 +138,6 @@ describe('getChecklistForActivity', () => {
     });
 
     it('logs a console.warn (DEV) for null/undefined/empty input', () => {
-      // __DEV__ is true in Jest environment
       getChecklistForActivity(null);
       expect(warnSpy).toHaveBeenCalledTimes(1);
       expect(warnSpy.mock.calls[0][0]).toContain('[criteriaData]');
@@ -217,12 +205,12 @@ describe('getChecklistForActivity', () => {
   });
 
   describe('result integrity', () => {
-    it('returned items all have id, category, and text properties', () => {
+    it('returned items all have id, category, and criteria properties', () => {
       const result = getChecklistForActivity('وحدة مذابح الغرب');
       for (const item of result) {
         expect(item).toHaveProperty('id');
         expect(item).toHaveProperty('category');
-        expect(item).toHaveProperty('text');
+        expect(item).toHaveProperty('criteria');
       }
     });
 

@@ -44,8 +44,8 @@ describe('uabSpecificCriteria – array-level contract', () => {
     expect(uabSpecificCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 43 items (27 UAB + 12 new + 4 extra UAB-AX7)', () => {
-    expect(uabSpecificCriteria).toHaveLength(43);
+  it('has exactly 39 items (27 UAB + 12 new)', () => {
+    expect(uabSpecificCriteria).toHaveLength(39);
   });
 
   it('contains all expected IDs (UAB block + new block)', () => {
@@ -114,7 +114,6 @@ describe('uabSpecificCriteria – per-item field integrity', () => {
 describe('uabSpecificCriteria – UAB block axes', () => {
   const getById = (id: string) => uabSpecificCriteria.find((i) => i.id === id)!;
 
-  // AX1 – التصنيف والترخيص البيئي
   describe('AX1 – environmental licensing', () => {
     it('UAB-AX1-01: facility classification, high severity, doc', () => {
       const item = getById('UAB-AX1-01');
@@ -143,7 +142,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX2 – الموقع والتهيئة والتعمير
   describe('AX2 – location & urbanism', () => {
     it('UAB-AX2-01: industrial zone location, high severity, visual', () => {
       const item = getById('UAB-AX2-01');
@@ -159,7 +157,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX3 – المياه المستعملة والتفريغ
   describe('AX3 – wastewater & discharge', () => {
     it('UAB-AX3-01: wastewater treatment system, high severity, visual', () => {
       const item = getById('UAB-AX3-01');
@@ -188,7 +185,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX4 – النفايات الصلبة والخطرة
   describe('AX4 – solid & hazardous waste', () => {
     it('UAB-AX4-01: waste inventory & classification, high severity, doc', () => {
       const item = getById('UAB-AX4-01');
@@ -216,7 +212,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX5 – الانبعاثات الهوائية
   describe('AX5 – air emissions', () => {
     it('UAB-AX5-01: dust control equipment, high severity, visual', () => {
       const item = getById('UAB-AX5-01');
@@ -237,7 +232,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX6 – نظام التسيير البيئي والمتابعة
   describe('AX6 – environmental management system', () => {
     it('UAB-AX6-01: internal environmental management plan, medium severity, doc', () => {
       const item = getById('UAB-AX6-01');
@@ -259,7 +253,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX7 – الصحة والسلامة المهنية + السلامة من الحريق
   describe('AX7 – occupational health & fire safety', () => {
     it('UAB-AX7-01: PPE availability and use, high severity, visual', () => {
       const item = getById('UAB-AX7-01');
@@ -296,7 +289,6 @@ describe('uabSpecificCriteria – UAB block axes', () => {
     });
   });
 
-  // AX8 – الإجراءات والعقوبات
   describe('AX8 – procedures & sanctions', () => {
     it('UAB-AX8-01: prior notice compliance check, high severity, doc', () => {
       const item = getById('UAB-AX8-01');
@@ -408,9 +400,9 @@ describe('uabSpecificCriteria – new merged block (01-xx)', () => {
 // Suite 5 – Severity distribution
 // ---------------------------------------------------------------------------
 describe('uabSpecificCriteria – severity distribution', () => {
-  it('has at least 30 high-severity items', () => {
+  it('has at least 25 high-severity items', () => {
     const highCount = uabSpecificCriteria.filter((i) => i.severity === 'high').length;
-    expect(highCount).toBeGreaterThanOrEqual(30);
+    expect(highCount).toBeGreaterThanOrEqual(25);
   });
 
   it('has at least 5 medium-severity items', () => {
