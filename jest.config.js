@@ -18,10 +18,8 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
 
   testMatch: [
-    // legacy location
     '<rootDir>/src/__tests__/**/*.test.ts',
     '<rootDir>/src/__tests__/**/*.test.tsx',
-    // root-level __tests__/ (utils, hooks, repositories, services, …)
     '<rootDir>/__tests__/**/*.test.ts',
     '<rootDir>/__tests__/**/*.test.tsx',
   ],
@@ -29,8 +27,6 @@ module.exports = {
   // ─── Coverage ──────────────────────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
-
-    // ── EXCLUSIONS ──────────────────────────────────────────────────────────────────────
     '!src/**/*.d.ts',
     '!src/types.ts',
     '!src/criteria/**',
@@ -44,8 +40,6 @@ module.exports = {
     '!src/__tests__/**',
     '!src/__mocks__/**',
     '!src/app/**',
-
-    // ── UI/integration-only files — no unit-testable surface ────────────────────────
     '!src/components/**',
     '!src/services/pdfService.ts',
     '!src/services/serverAuth.ts',
@@ -64,24 +58,16 @@ module.exports = {
   // LAYER 2 — module routing
   // ⚠️ ORDER MATTERS: more-specific patterns must come before less-specific ones.
   moduleNameMapper: {
-    // ── expo top-level — intercept before the package loads winter/installGlobal
-    //    installGlobal.ts installs lazy getters on globalThis for fetch/*.
-    //    Those getters evaluate FetchResponse.ts which does
-    //    `class FetchResponse extends Response` — if Response is undefined
-    //    at that point Babel throws "Super expression must be null or a function".
-    //    Mocking the top-level expo package prevents any application code from
-    //    triggering the getter chain through the Jest module resolver.
+    // expo top-level — must come first to prevent installGlobal lazy getter chain
     '^expo$': '<rootDir>/__mocks__/expo.js',
     '^expo-modules-core/src/polyfill/dangerous-internal$':
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
+    '^expo-crypto$':                          '<rootDir>/__mocks__/expo-crypto.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
-    // installGlobal sets up lazy getters that pull in FetchResponse at runtime.
-    // A dedicated no-op stub prevents the entire getter chain from firing.
     '^expo/src/winter/installGlobal(.*)$':    '<rootDir>/__mocks__/expoInstallGlobal.js',
     '^expo/src/winter/runtime(.*)$':          '<rootDir>/__mocks__/expoFetch.js',
-    // Catch-all for any remaining expo winter imports
     '^expo/src/winter(.*)$':                  '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
     '^@react-native-async-storage/async-storage$':
