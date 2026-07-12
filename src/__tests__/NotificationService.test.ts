@@ -86,11 +86,6 @@ describe('requestPermission', () => {
   });
 
   it('returns false and does not throw when Notifications throws (line 34 catch branch)', async () => {
-    // Force getNotifications() to throw inside the try block by making
-    // expo-constants throw, which is the catch → return null path (line 34).
-    // We simulate this by temporarily breaking the require inside getNotifications
-    // by setting a bad appOwnership that still goes through but then making
-    // getPermissionsAsync throw so the outer catch fires.
     Notifications.getPermissionsAsync.mockRejectedValueOnce(new Error('hw error'));
     const result = await requestPermission();
     expect(result).toBe(false);
@@ -123,13 +118,9 @@ describe('setEnabled', () => {
     expect(Notifications.cancelAllScheduledNotificationsAsync).not.toHaveBeenCalled();
   });
 
-  // Covers line 44: getNotificationsWithHandler called a second time —
-  // _handlerInstalled is already true so setNotificationHandler is NOT called again.
   it('does not call setNotificationHandler a second time (line 44 _handlerInstalled guard)', async () => {
-    // First call installs the handler
     await requestPermission();
     const firstCallCount = Notifications.setNotificationHandler.mock.calls.length;
-    // Second call — handler already installed, must NOT call again
     await requestPermission();
     expect(Notifications.setNotificationHandler.mock.calls.length).toBe(firstCallCount);
   });
@@ -140,7 +131,6 @@ describe('setEnabled', () => {
 describe('scheduleForAgendaItem', () => {
   it('schedules two notifications for a future item', async () => {
     await scheduleForAgendaItem(futureItem);
-    // cancelForAgendaItem fires first (2 cancels), then 2 schedules
     expect(Notifications.scheduleNotificationAsync).toHaveBeenCalledTimes(2);
   });
 
@@ -197,16 +187,14 @@ describe('rescheduleAll', () => {
 
   it('cancels all but skips scheduling when notifications are disabled', async () => {
     await setEnabled(false);
+    // setEnabled(false) calls cancelAll once; rescheduleAll calls it again
+    const callsBefore = Notifications.cancelAllScheduledNotificationsAsync.mock.calls.length;
     await rescheduleAll([futureItem]);
-    expect(Notifications.cancelAllScheduledNotificationsAsync).toHaveBeenCalledTimes(
-      // setEnabled(false) also calls cancelAll — count that one too
-      expect.any(Number)
-    );
+    expect(Notifications.cancelAllScheduledNotificationsAsync.mock.calls.length).toBeGreaterThan(callsBefore);
     expect(Notifications.scheduleNotificationAsync).not.toHaveBeenCalled();
     await setEnabled(true);
   });
 
-  // Covers line 161: rescheduleAll returns early when IS_EXPO_GO = true (no Notifications).
   it('returns early without any Notifications calls when IS_EXPO_GO is true (line 161)', async () => {
     setExpoGo(true);
     await rescheduleAll([futureItem]);
