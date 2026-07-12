@@ -309,12 +309,11 @@ jest.mock('react-native', () => {
 // 1. Framework noise — warnings from RN/Reanimated/AsyncStorage that are
 //    irrelevant to test correctness and would obscure real failures.
 //
-// 2. Intentional error-path output — hooks that call console.error() when
-//    they catch an exception (e.g. useInspectionList, useHomeData,
-//    useChecklistData). These tests deliberately trigger error paths to prove
-//    the hook handles failures gracefully. The console output is expected and
-//    correct; suppressing it keeps the test run output clean without hiding
-//    any real problem.
+// 2. Intentional error-path output — hooks/services that call console.warn()
+//    or console.error() when they catch an exception. These tests deliberately
+//    trigger error paths to prove the code handles failures gracefully.
+//    The console output is expected and correct; suppressing it keeps the
+//    test run output clean without hiding any real problem.
 const _consoleError = console.error.bind(console);
 const _consoleWarn  = console.warn.bind(console);
 
@@ -339,7 +338,14 @@ beforeAll(() => {
 
   jest.spyOn(console, 'warn').mockImplementation((...args) => {
     const msg = typeof args[0] === 'string' ? args[0] : '';
-    if (msg.includes('Warning:') || msg.includes('Reanimated')) return;
+    const suppressed = [
+      // 1. Framework noise
+      'Warning:',
+      'Reanimated',
+      // 2. Intentional error-path output from services under test
+      '[PhotoService]',
+    ];
+    if (suppressed.some(s => msg.includes(s))) return;
     _consoleWarn(...args);
   });
 });
