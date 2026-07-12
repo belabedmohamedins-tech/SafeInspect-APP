@@ -32,14 +32,6 @@ const base = (overrides: Partial<CorrectiveAction> = {}): Omit<CorrectiveAction,
   ...overrides,
 });
 
-/**
- * Write raw fixture records directly to AsyncStorage using the exact same key
- * that CorrectiveActionRepository uses (StorageKeys.CORRECTIVE_ACTIONS = 'CORRECTIVE_ACTIONS').
- *
- * This bypasses save() and its internal readAll() call, which would
- * auto-escalate past-deadline items before writing them, leaving nothing
- * for persistOverdueEscalation() to promote.
- */
 async function seedRaw(items: CorrectiveAction[]): Promise<void> {
   await AsyncStorage.setItem('CORRECTIVE_ACTIONS', JSON.stringify(items));
 }
@@ -97,7 +89,6 @@ describe('getStats', () => {
     await CorrectiveActionRepository.save(base({ status: 'open' }));
     await CorrectiveActionRepository.save(base({ status: 'in-progress' }));
     await CorrectiveActionRepository.save(base({ status: 'resolved' }));
-    // past-deadline open → auto-escalates to overdue inside getStats
     await CorrectiveActionRepository.save(base({ status: 'open', deadline: yesterday() }));
 
     const stats = await CorrectiveActionRepository.getStats();
@@ -109,11 +100,8 @@ describe('getStats', () => {
   });
 
   it('counts nearDeadlineCount for items due within 7 days (default)', async () => {
-    // deadline in 3 days → within window
     await CorrectiveActionRepository.save(base({ status: 'open', deadline: inDays(3) }));
-    // deadline in 10 days → outside window
     await CorrectiveActionRepository.save(base({ status: 'open', deadline: inDays(10) }));
-    // resolved item within window → must NOT count
     await CorrectiveActionRepository.save(base({ status: 'resolved', deadline: inDays(2) }));
 
     const stats = await CorrectiveActionRepository.getStats();
@@ -131,7 +119,6 @@ describe('getStats', () => {
   });
 
   it('does not count overdue items in nearDeadlineCount', async () => {
-    // deadline in the past → will be escalated to overdue; not near-deadline
     await CorrectiveActionRepository.save(base({ status: 'open', deadline: yesterday() }));
     const stats = await CorrectiveActionRepository.getStats();
     expect(stats.nearDeadlineCount).toBe(0);
@@ -146,13 +133,10 @@ describe('persistOverdueEscalation', () => {
   });
 
   it('promotes overdue items and returns promoted count', async () => {
-    // Use seedRaw (writes directly to 'CORRECTIVE_ACTIONS' key) so items reach
-    // storage with status 'open'/'in-progress' intact — save() would call
-    // readAll() which pre-escalates past-deadline items, leaving count = 0.
     await seedRaw([
       makeRaw({ status: 'open',        deadline: yesterday() }),
       makeRaw({ status: 'in-progress', deadline: yesterday() }),
-      makeRaw({ status: 'open',        deadline: tomorrow()  }), // not overdue
+      makeRaw({ status: 'open',        deadline: tomorrow()  }),
     ]);
 
     const promoted = await CorrectiveActionRepository.persistOverdueEscalation();
@@ -173,15 +157,17 @@ describe('persistOverdueEscalation', () => {
     expect((await CorrectiveActionRepository.getAll())[0].status).toBe('resolved');
   });
 
-  // Fix: use jest.spyOn on the imported instance, NOT require() which bypasses
-  // the module registry and fails to intercept the default export.
+  // getItem is called once inside persistOverdueEscalation — use mockRejectedValue
+  // (persistent) so the rejection is not consumed by any prior internal call.
   it('returns 0 gracefully when AsyncStorage.getItem throws (line 166)', async () => {
-    jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('storage error'));
-    expect(await CorrectiveActionRepository.persistOverdueEscalation()).toBe(0);
+    const spy = jest.spyOn(AsyncStorage, 'getItem').mockRejectedValue(new Error('storage error'));
+    const result = await CorrectiveActionRepository.persistOverdueEscalation();
+    spy.mockRestore();
+    expect(result).toBe(0);
   });
 });
 
-// ─── getAll error path (returns [] on corrupt JSON) ──────────────────────────
+// ─── getAll error path ────────────────────────────────────────────────────────
 
 describe('getAll — error path', () => {
   it('returns [] when stored JSON is corrupt', async () => {
