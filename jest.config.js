@@ -69,11 +69,11 @@ module.exports = {
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
-    // Explicit entries for runtime modules that load fetch lazily via getter
-    // (not caught by the fetch pattern above because they aren't fetch/* paths).
+    // installGlobal sets up lazy getters that pull in FetchResponse at runtime.
+    // A dedicated no-op stub prevents the entire getter chain from firing.
+    '^expo/src/winter/installGlobal(.*)$':    '<rootDir>/__mocks__/expoInstallGlobal.js',
     '^expo/src/winter/runtime(.*)$':          '<rootDir>/__mocks__/expoFetch.js',
-    '^expo/src/winter/installGlobal(.*)$':    '<rootDir>/__mocks__/expoFetch.js',
-    // Catch-all for any remaining expo winter runtime imports
+    // Catch-all for any remaining expo winter imports
     '^expo/src/winter(.*)$':                  '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
     '^@react-native-async-storage/async-storage$':
