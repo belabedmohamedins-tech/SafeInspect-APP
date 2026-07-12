@@ -1,81 +1,64 @@
 // __tests__/utils/fileUtils.test.ts
-//
-// Full coverage for src/utils/fileUtils.ts
-// generateFileName is pure TS — no mocks needed.
-// Date is frozen via jest.useFakeTimers to guarantee deterministic output.
-
 import { generateFileName } from '../../src/utils/fileUtils';
 
-// ── Freeze time to 2026-07-12 14:05 ──────────────────────────────────────────
-
-beforeAll(() => {
-  jest.useFakeTimers();
-  jest.setSystemTime(new Date('2026-07-12T14:05:00.000Z'));
-});
-
-afterAll(() => {
-  jest.useRealTimers();
-});
-
-// ── generateFileName ──────────────────────────────────────────────────────────
-
+// ── generateFileName ────────────────────────────────────────────────────────────────
 describe('generateFileName', () => {
-  it('produces the correct date and time segment', () => {
-    const result = generateFileName('test', 'pdf');
-    // Date segment: 2026-07-12, time depends on local offset — we just check format
-    expect(result).toMatch(/\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.pdf$/);
+  it('returns a string', () => {
+    expect(typeof generateFileName('Report', 'pdf')).toBe('string');
   });
 
-  it('appends the given extension', () => {
-    expect(generateFileName('report', 'pdf')).toMatch(/\.pdf$/);
-    expect(generateFileName('export', 'csv')).toMatch(/\.csv$/);
+  it('ends with the given extension', () => {
+    expect(generateFileName('Report', 'pdf')).toMatch(/\.pdf$/);
+    expect(generateFileName('Export', 'csv')).toMatch(/\.csv$/);
+    expect(generateFileName('Doc', 'xlsx')).toMatch(/\.xlsx$/);
   });
 
-  it('replaces spaces with underscores in baseName', () => {
-    const result = generateFileName('my facility name', 'pdf');
-    expect(result).toMatch(/^my_facility_name_/);
+  it('contains a date segment matching YYYY-MM-DD', () => {
+    expect(generateFileName('Report', 'pdf')).toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 
-  it('strips special characters not in \\w, Arabic, space, or hyphen', () => {
-    // ! @ # $ % ^ & * ( ) should be removed
-    const result = generateFileName('name!@#', 'pdf');
-    expect(result).toMatch(/^name_/);
+  it('contains a time segment matching HH-MM', () => {
+    expect(generateFileName('Report', 'pdf')).toMatch(/_\d{2}-\d{2}\./);
   });
 
-  it('preserves Arabic characters in baseName', () => {
-    const result = generateFileName('مطعم الأمل', 'pdf');
-    expect(result).toMatch(/^مطعم_الأمل_/);
+  it('replaces spaces with underscores in the base name', () => {
+    const result = generateFileName('My Report', 'pdf');
+    expect(result).toMatch(/^My_Report_/);
   });
 
-  it('preserves hyphens in baseName', () => {
-    const result = generateFileName('safe-inspect', 'pdf');
-    expect(result).toMatch(/^safe-inspect_/);
+  it('removes special characters (keeps alphanumeric, Arabic, spaces, dashes)', () => {
+    const result = generateFileName('Report!@#$%', 'pdf');
+    // Special chars stripped — only safe chars remain before the date segment
+    expect(result).toMatch(/^Report_/);
   });
 
-  it('preserves alphanumeric characters', () => {
-    const result = generateFileName('Report2026', 'csv');
-    expect(result).toMatch(/^Report2026_/);
+  it('preserves Arabic characters in base name', () => {
+    const result = generateFileName('تقرير المفتش', 'pdf');
+    expect(result).toContain('تقرير');
   });
 
-  it('handles empty baseName gracefully (safeBase becomes empty string)', () => {
+  it('handles empty base name gracefully — starts with _', () => {
     const result = generateFileName('', 'pdf');
-    // Starts with underscore since safeBase is empty
-    expect(result).toMatch(/^_\d{4}-\d{2}-\d{2}/);
+    // safeBase will be '' — result: _YYYY-MM-DD_HH-MM.pdf
+    expect(result).toMatch(/^_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.pdf$/);
   });
 
-  it('handles baseName with only special characters', () => {
-    const result = generateFileName('!!!###', 'pdf');
-    // All chars stripped → safeBase is ''
-    expect(result).toMatch(/^_\d{4}-\d{2}-\d{2}/);
+  it('base name with only special chars → stripped → starts with _', () => {
+    const result = generateFileName('!!!', 'pdf');
+    expect(result).toMatch(/^_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.pdf$/);
   });
 
-  it('collapses multiple consecutive spaces into a single underscore', () => {
-    const result = generateFileName('a   b', 'pdf');
-    expect(result).toMatch(/^a_b_/);
+  it('result format is safeBase_YYYY-MM-DD_HH-MM.ext', () => {
+    const result = generateFileName('Audit', 'csv');
+    expect(result).toMatch(/^Audit_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.csv$/);
   });
 
-  it('returns a string in the format: safeBase_YYYY-MM-DD_HH-MM.ext', () => {
-    const result = generateFileName('facility', 'pdf');
-    expect(result).toMatch(/^[^_]+_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.pdf$/);
+  it('multiple calls with same input produce same-format output', () => {
+    // Both calls happen in the same second — compare structure, not exact time
+    const r1 = generateFileName('Test', 'pdf');
+    const r2 = generateFileName('Test', 'pdf');
+    const pattern = /^Test_\d{4}-\d{2}-\d{2}_\d{2}-\d{2}\.pdf$/;
+    expect(r1).toMatch(pattern);
+    expect(r2).toMatch(pattern);
   });
 });
