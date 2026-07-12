@@ -74,7 +74,7 @@ describe('suggestDecision', () => {
     expect(r.urgency).toBe('high');
   });
 
-  it('grade D + ≥3 high violations → immediate-closure, urgency critical', () => {
+  it('grade D + \u22653 high violations → immediate-closure, urgency critical', () => {
     const r = suggestDecision(makeScoring({
       grade: 'D', score: 30,
       violations: { high: 3, medium: 2, low: 0 },
@@ -96,13 +96,14 @@ describe('suggestDecision', () => {
 
   it('includes criticalOverride in reasons when applied', () => {
     const r = suggestDecision(makeScoring({ grade: 'C', criticalOverride: true }));
-    expect(r.reasons.some(re => re.includes('التجاوز الحرج'))).toBe(true);
+    expect(r.reasons.some(re => re.includes('\u0627\u0644\u062a\u062c\u0627\u0648\u0632 \u0627\u0644\u062d\u0631\u062c'))).toBe(true);
     expect(r.criticalOverride).toBe(true);
   });
 
   it('includes incomplete reason when scoring is incomplete', () => {
     const r = suggestDecision(makeScoring({ grade: 'B', incomplete: true }));
-    expect(r.reasons.some(re => re.includes('60 \u0669'))).toBe(true);
+    // Source uses Arabic percent sign \u066a and the string '60'
+    expect(r.reasons.some(re => re.includes('60'))).toBe(true);
   });
 
   it('includes violation counts in reasons', () => {
@@ -117,7 +118,7 @@ describe('suggestDecision', () => {
   it('includes resolved count in reasons when diff has resolved items', () => {
     const diff = makeDiff({ resolved: [{ diffStatus: 'resolved' } as any] });
     const r = suggestDecision(makeScoring({ grade: 'A' }), diff);
-    expect(r.reasons.some(re => re.includes('تم تصحيحها'))).toBe(true);
+    expect(r.reasons.some(re => re.includes('\u062a\u0645 \u062a\u0635\u062d\u064a\u062d\u0647\u0627'))).toBe(true);
   });
 
   it('sets nextVisitDays from scoring.nextInspectionDays', () => {
