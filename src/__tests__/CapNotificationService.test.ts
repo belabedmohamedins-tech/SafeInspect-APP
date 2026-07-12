@@ -52,6 +52,16 @@ const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
+/** Seed CAP_NOTIF_LAST_RUN to yesterday so shouldRun() always returns true. */
+async function bypassDailyGuard(): Promise<void> {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  await AsyncStorage.setItem(
+    StorageKeys.CAP_NOTIF_LAST_RUN,
+    yesterday.toISOString().slice(0, 10),
+  );
+}
+
 function makeCAP(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -83,7 +93,7 @@ function makeStats(overrides: Partial<CapStats> = {}): CapStats {
   };
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   resetAsync();
   jest.clearAllMocks();
   mockIsEnabled.mockResolvedValue(true);
@@ -160,9 +170,12 @@ describe('CapNotificationService', () => {
 
     // ── Branch: ensureDigestChannel on Android (line 122) ───────────────────
     it('calls setNotificationChannelAsync on Android (ensureDigestChannel)', async () => {
+      // Must bypass shouldRun() guard — seed yesterday so the run proceeds
+      await bypassDailyGuard();
       const originalOS = Platform.OS;
       (Platform as any).OS = 'android';
       mockGetOpen.mockResolvedValue([makeCAP()]);
+      mockGetStats.mockResolvedValue(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
       await scheduleCapDeadlineNotifications();
       expect(mockSetChannel).toHaveBeenCalled();
       (Platform as any).OS = originalOS;
@@ -365,7 +378,7 @@ describe('CapNotificationService', () => {
       await expect(cancelCapWeeklyDigestNotification()).resolves.toBeUndefined();
     });
 
-    // ── Branch: also removes CAP_WEEKLY_DIGEST_LAST_RUN on cancel (line 360) ─
+    // ── Branch: also removes CAP_WEEKLY_DIGEST_LAST_RUN on cancel ───────────
     it('removes CAP_WEEKLY_DIGEST_LAST_RUN from storage when cancelling', async () => {
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-2026-07-07');
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN, '2026-07-07');
