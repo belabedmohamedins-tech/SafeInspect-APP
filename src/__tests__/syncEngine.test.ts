@@ -152,6 +152,21 @@ describe('startSyncScheduler — with API URL', () => {
     await expect(flushPromises()).resolves.toBeUndefined();
   });
 
+  // Covers syncEngine.ts line 52: the `if (synced > 0)` true branch.
+  it('logs sync count to console.info when flush returns > 0 inspections', async () => {
+    mockFlush.mockResolvedValueOnce(3);
+    const infoSpy = jest.spyOn(console, 'info').mockImplementation(() => {});
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { startSyncScheduler } = require('../db/syncEngine');
+    startSyncScheduler(1000);
+    jest.advanceTimersByTime(1000);
+    await flushPromises();
+    expect(infoSpy).toHaveBeenCalledWith(
+      expect.stringContaining('3 inspection(s) uploaded')
+    );
+    infoSpy.mockRestore();
+  });
+
   it('fires flush when device transitions offline → online', async () => {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { startSyncScheduler } = require('../db/syncEngine');
