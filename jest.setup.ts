@@ -57,6 +57,29 @@
  *   that appOwnership is 'standalone'. This makes IS_EXPO_GO = false and allows
  *   the lazy require('expo-notifications') branch to execute.
  *
+ * NOTE: fetch globals freeze — DO NOT REMOVE
+ *
+ *   jest-expo preset installs lazy getters for `fetch`, `Request`, `Response`,
+ *   `Headers`, and `FormData` on `global` via expo/src/winter/installGlobal.ts.
+ *   These getters fire on first access and execute:
+ *     runtime.native.ts → fetch/index.ts → fetch/FetchResponse.ts
+ *   which does `class FetchResponse extends Response { … }`. If `Response` is
+ *   undefined at that moment (e.g., in certain test suites where module
+ *   isolation clears globalThis), Babel's _inherits() throws:
+ *     TypeError: Super expression must either be null or a function
+ *
+ *   The fix: after the preset runs (Layer 3 = setupFilesAfterEnv), reassign
+ *   all five fetch globals with plain property assignments. A plain assignment
+ *   replaces the lazy getter with a concrete value — the getter can never fire
+ *   again, so FetchResponse.ts is never evaluated.
+ *
+ *   Values come from jest.polyfill.js (Layer 1), which loaded undici globals
+ *   before the preset touched anything. We just surface them here to replace
+ *   the getters the preset installed on top.
+ *
+ *   Do NOT use Object.defineProperty with writable:false — jest itself needs
+ *   to be able to override fetch in individual tests via jest.spyOn.
+ *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
@@ -65,6 +88,38 @@
  */
 
 import React from 'react';
+
+// ─── Freeze fetch globals — prevent expo winter lazy getter from firing ───────
+//
+// The jest-expo preset installs lazy getters on global for fetch/Request/
+// Response/Headers/FormData via installGlobal.ts.  Those getters chain into
+// FetchResponse.ts which does `class FetchResponse extends Response` — if
+// Response is undefined at that point the suite crashes before test #1 runs.
+//
+// Reassigning with a plain value (from our polyfill) replaces the getter
+// descriptor with a data descriptor, so the getter can never fire.
+// This affects only pdfService.test.ts and useHomeData.test.ts because those
+// are the suites whose import graph triggers the lazy getter first.
+;
+(function freezeFetchGlobals() {
+  // These were set by jest.polyfill.js (Layer 1) before the preset ran.
+  // We surface them here after the preset to stomp its lazy getters.
+  const g = global as any;
+  if (typeof g.Response !== 'undefined') {
+    // Plain assignment → replaces getter with value descriptor.
+    const _Response  = g.Response;
+    const _Request   = g.Request;
+    const _Headers   = g.Headers;
+    const _fetch     = g.fetch;
+    const _FormData  = g.FormData;
+
+    try { Object.defineProperty(g, 'Response',  { value: _Response,  writable: true, configurable: true }); } catch (_) { g.Response  = _Response; }
+    try { Object.defineProperty(g, 'Request',   { value: _Request,   writable: true, configurable: true }); } catch (_) { g.Request   = _Request; }
+    try { Object.defineProperty(g, 'Headers',   { value: _Headers,   writable: true, configurable: true }); } catch (_) { g.Headers   = _Headers; }
+    try { Object.defineProperty(g, 'fetch',     { value: _fetch,     writable: true, configurable: true }); } catch (_) { g.fetch     = _fetch; }
+    try { Object.defineProperty(g, 'FormData',  { value: _FormData,  writable: true, configurable: true }); } catch (_) { g.FormData  = _FormData; }
+  }
+})();
 
 // ─── expo-constants — force IS_EXPO_GO = false ──────────────────────────────
 // jest-expo preset sets Constants.appOwnership = 'expo' via its resolver.
