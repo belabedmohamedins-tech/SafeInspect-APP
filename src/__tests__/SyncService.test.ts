@@ -17,13 +17,12 @@ global.fetch = mockFetch;
 // ─── NetInfo ─────────────────────────────────────────────────────────────────────────
 const NetInfoMock = require('@react-native-community/netinfo').default as {
   __reset: () => void;
+  fetch:   jest.Mock;
 };
 
 beforeEach(async () => {
   jest.clearAllMocks();
-  // clearAllMocks() wipes NetInfo.fetch's mockResolvedValue — restore it.
   NetInfoMock.__reset();
-  // Re-assign global.fetch after clearAllMocks() wipes mockFetch's impl.
   global.fetch = mockFetch;
   await AsyncStorage.clear();
 });
@@ -107,9 +106,6 @@ describe('flush — no API URL configured', () => {
 });
 
 // ─── flush — with API URL ───────────────────────────────────────────────────────────────
-//
-// process.env is mutated IN-PLACE (not replaced) so every module that holds
-// a reference to the original process.env object sees the change immediately.
 
 describe('flush — with API URL (mocked via env)', () => {
   beforeEach(() => {
@@ -118,6 +114,22 @@ describe('flush — with API URL (mocked via env)', () => {
 
   afterEach(() => {
     delete process.env.EXPO_PUBLIC_SYNC_API_URL;
+  });
+
+  it('returns 0 immediately when queue is empty (line 71 early return)', async () => {
+    // Queue is empty — flush should short-circuit before calling fetch
+    const synced = await flush();
+    expect(synced).toBe(0);
+    expect(mockFetch).not.toHaveBeenCalled();
+  });
+
+  it('returns 0 when device is offline (line 95 isOnline check)', async () => {
+    await enqueue(makeInspection('i1'));
+    // Override NetInfo to report offline
+    NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: false, isInternetReachable: false });
+    const synced = await flush();
+    expect(synced).toBe(0);
+    expect(mockFetch).not.toHaveBeenCalled();
   });
 
   it('removes item from queue on 2xx response', async () => {
@@ -194,6 +206,12 @@ describe('getSyncStatus', () => {
   });
 
   it('isOnline reflects NetInfo result', async () => {
+    const status = await getSyncStatus();
+    expect(status.isOnline).toBe(true);
+  });
+
+  it('isOnline defaults to true when NetInfo.fetch throws (catch branch)', async () => {
+    NetInfoMock.fetch.mockRejectedValueOnce(new Error('NetInfo unavailable'));
     const status = await getSyncStatus();
     expect(status.isOnline).toBe(true);
   });

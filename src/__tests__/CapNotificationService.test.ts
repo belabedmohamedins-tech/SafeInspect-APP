@@ -15,11 +15,7 @@ jest.mock('expo-notifications', () => ({
 jest.mock('../repositories/CorrectiveActionRepository', () => ({
   CorrectiveActionRepository: {
     getOpen:                  jest.fn(),
-    // getStats is called by scheduleCapDigestNotification (line 196) and
-    // scheduleCapWeeklyDigest (line 261). Without this mock both functions
-    // throw "TypeError: getStats is not a function".
     getStats:                 jest.fn(),
-    // Required by scheduleCapDeadlineNotifications before per-item loop.
     persistOverdueEscalation: jest.fn().mockResolvedValue(undefined),
   },
 }));
@@ -31,6 +27,7 @@ jest.mock('../services/NotificationService', () => ({
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as Notifications from 'expo-notifications';
+import { Platform } from 'react-native';
 import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
 import { StorageKeys } from '../repositories/keys';
 import { isEnabled, requestPermission } from '../services/NotificationService';
@@ -99,7 +96,7 @@ beforeEach(() => {
 });
 
 describe('CapNotificationService', () => {
-  // ─── A) Per-item deadline alerts (via scheduleCapDeadlineNotifications) ────
+  // ─── A) Per-item deadline alerts ────────────────────────────────────────────
   describe('scheduleCapDeadlineNotifications', () => {
     it('does nothing when notifications are disabled', async () => {
       mockIsEnabled.mockResolvedValueOnce(false);
@@ -158,8 +155,17 @@ describe('CapNotificationService', () => {
       mockSchedule.mockResolvedValue('notif-id');
       mockCancelOne.mockResolvedValue(undefined);
       await scheduleCapDeadlineNotifications();
-      // should NOT call getOpen again — already ran today
       expect(mockGetOpen).not.toHaveBeenCalled();
+    });
+
+    // ── Branch: ensureDigestChannel on Android (line 122) ───────────────────
+    it('calls setNotificationChannelAsync on Android (ensureDigestChannel)', async () => {
+      const originalOS = Platform.OS;
+      (Platform as any).OS = 'android';
+      mockGetOpen.mockResolvedValue([makeCAP()]);
+      await scheduleCapDeadlineNotifications();
+      expect(mockSetChannel).toHaveBeenCalled();
+      (Platform as any).OS = originalOS;
     });
   });
 
@@ -203,7 +209,6 @@ describe('CapNotificationService', () => {
     });
 
     it('cancels the previous digest before scheduling a new one', async () => {
-      // StorageKeys.CAP_DIGEST_NOTIF_ID = 'CAP_DIGEST_NOTIF_ID' (uppercase)
       await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, 'cap-digest-old');
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
       mockGetOpen.mockResolvedValueOnce([]);
@@ -215,6 +220,18 @@ describe('CapNotificationService', () => {
     it('swallows errors gracefully', async () => {
       mockGetStats.mockRejectedValueOnce(new Error('db error'));
       await expect(scheduleCapDigestNotification()).resolves.toBeUndefined();
+    });
+
+    // ── Branch: digest title when only due-today (no overdue) (line 257) ────
+    it('uses yellow title when only due-today (no overdue)', async () => {
+      const today = new Date().toISOString().slice(0, 10);
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 0, nearDeadlineCount: 1 }));
+      mockGetOpen.mockResolvedValueOnce([
+        makeCAP({ deadline: today, status: 'open' }),
+      ]);
+      await scheduleCapDigestNotification();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.title).toContain('🟡');
     });
   });
 
@@ -265,11 +282,9 @@ describe('CapNotificationService', () => {
 
     it('does not re-schedule if already ran this week', async () => {
       mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
-      // First run — marks the week
       await scheduleCapWeeklyDigest();
       mockSchedule.mockClear();
       mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
-      // Second run same week — should be skipped
       await scheduleCapWeeklyDigest();
       expect(mockSchedule).not.toHaveBeenCalled();
     });
@@ -277,6 +292,26 @@ describe('CapNotificationService', () => {
     it('swallows errors gracefully', async () => {
       mockGetStats.mockRejectedValueOnce(new Error('network error'));
       await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
+    });
+
+    // ── Branch: body includes inProgress count (line 346) ───────────────────
+    it('includes inProgress count in body when > 0', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 3, open: 1, inProgress: 2, overdue: 0, nearDeadlineCount: 0 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.body).toContain('جارٍ: 2');
+    });
+
+    // ── Branch: body includes nearDeadlineCount when > 0 (line 360) ─────────
+    it('includes nearDeadlineCount in body when > 0', async () => {
+      mockGetStats.mockResolvedValueOnce(
+        makeStats({ total: 3, open: 2, overdue: 0, nearDeadlineCount: 2 }),
+      );
+      await scheduleCapWeeklyDigest();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.body).toContain('يستحق خلال 3 أيام: 2');
     });
   });
 
@@ -295,7 +330,6 @@ describe('CapNotificationService', () => {
 
   describe('cancelCapDigestNotification', () => {
     it('cancels stored digest notification id and removes it from storage', async () => {
-      // Must use the actual key the service reads: StorageKeys.CAP_DIGEST_NOTIF_ID
       await AsyncStorage.setItem(StorageKeys.CAP_DIGEST_NOTIF_ID, 'cap-digest-2026-07-01');
       await cancelCapDigestNotification();
       expect(mockCancelOne).toHaveBeenCalledWith('cap-digest-2026-07-01');
@@ -315,7 +349,6 @@ describe('CapNotificationService', () => {
 
   describe('cancelCapWeeklyDigestNotification', () => {
     it('cancels stored weekly notification id and removes it from storage', async () => {
-      // Must use the actual key the service reads: StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-2026-07-07');
       await cancelCapWeeklyDigestNotification();
       expect(mockCancelOne).toHaveBeenCalledWith('cap-weekly-2026-07-07');
@@ -330,6 +363,15 @@ describe('CapNotificationService', () => {
       await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-old');
       mockCancelOne.mockRejectedValueOnce(new Error('gone'));
       await expect(cancelCapWeeklyDigestNotification()).resolves.toBeUndefined();
+    });
+
+    // ── Branch: also removes CAP_WEEKLY_DIGEST_LAST_RUN on cancel (line 360) ─
+    it('removes CAP_WEEKLY_DIGEST_LAST_RUN from storage when cancelling', async () => {
+      await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-2026-07-07');
+      await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN, '2026-07-07');
+      await cancelCapWeeklyDigestNotification();
+      const lastRun = await AsyncStorage.getItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN);
+      expect(lastRun).toBeNull();
     });
   });
 });

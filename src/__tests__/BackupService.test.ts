@@ -23,8 +23,6 @@ jest.mock('expo-sharing', () => ({
 }));
 
 // ─── Mock expo-document-picker ────────────────────────────────────────────────
-// The mock factory must be self-contained — variables declared outside
-// jest.mock() are not in scope when Jest hoists the factory.
 jest.mock('expo-document-picker', () => ({
   getDocumentAsync: jest.fn(),
 }));
@@ -42,12 +40,8 @@ import { rescheduleAll } from '../services/NotificationService';
 const mockGetDocumentAsync = DocumentPicker.getDocumentAsync as jest.Mock;
 
 beforeEach(async () => {
-  // Order matters — same rule as SyncService.test.ts:
-  //   1. clearAllMocks() first: resets call counts without destroying implementations
-  //   2. AsyncStorage.clear() second: implementation must still be intact
   jest.clearAllMocks();
   await AsyncStorage.clear();
-  // Restore default sharing behaviour
   (Sharing.isAvailableAsync as jest.Mock).mockResolvedValue(true);
   (Sharing.shareAsync as jest.Mock).mockResolvedValue(undefined);
 });
@@ -56,8 +50,6 @@ beforeEach(async () => {
 
 async function seedStorage() {
   await AsyncStorage.multiSet([
-    // items:[] is required — BackupService.buildPhotoUriMap() iterates
-    // inspection.items and throws TypeError if the field is missing.
     ['inspections', JSON.stringify([{ id: 'i1', facilityName: 'منشأة أ', items: [] }])],
     ['agenda',      JSON.stringify([{ id: 'a1', status: 'pending', facilityName: 'منشأة ب', date: '2026-07-01', notes: '' }])],
     ['userFacilities', JSON.stringify([{ id: 'f1', name: 'منشأة ب' }])],
@@ -119,19 +111,15 @@ describe('exportBackup', () => {
     expect(payload.settings.inspectorName).toBe('أحمد');
   });
 
-  // ── Branch: canShare = false (line 50-55) ──────────────────────────────────
   it('skips shareAsync when sharing is not available', async () => {
     (Sharing.isAvailableAsync as jest.Mock).mockResolvedValueOnce(false);
     const payload = await exportBackup();
     expect(Sharing.shareAsync).not.toHaveBeenCalled();
-    // Should still return a valid payload and write the file
     expect(payload.version).toBe(BACKUP_VERSION);
     expect(FileSystem.writeAsStringAsync).toHaveBeenCalled();
   });
 
-  // ── Branch: inspections/agenda/userFacilities keys missing from storage ───
   it('defaults to empty arrays when storage keys are absent', async () => {
-    // Clear storage so none of the collection keys exist
     await AsyncStorage.clear();
     const payload = await exportBackup();
     expect(payload.inspections).toEqual([]);
@@ -139,7 +127,6 @@ describe('exportBackup', () => {
     expect(payload.userFacilities).toEqual([]);
   });
 
-  // ── Branch: photoUriMap built from items with photos ─────────────────────
   it('builds photoUriMap from items that have photoUri', async () => {
     await AsyncStorage.clear();
     const itemWithPhoto = { id: 'item-photo', title: 'T', photoUri: 'file:///photo.jpg', photos: [] };
@@ -247,7 +234,6 @@ describe('importBackup', () => {
     );
   });
 
-  // ── Branch: asset uri missing (lines 71-78) ───────────────────────────────
   it('throws when asset uri is missing', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
@@ -256,7 +242,23 @@ describe('importBackup', () => {
     await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
   });
 
-  // ── Branch: v1 backup accepted (version === 1) ────────────────────────────
+  // ── Branch: assets array is null/undefined (lines 71-83) ─────────────────
+  it('throws when assets array is empty', async () => {
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [],
+    });
+    await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
+  });
+
+  it('throws when assets field is undefined', async () => {
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: undefined,
+    });
+    await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
+  });
+
   it('accepts v1 backup (no photoUriMap)', async () => {
     const v1Payload = { ...validPayload, version: 1 };
     mockGetDocumentAsync.mockResolvedValueOnce({
@@ -270,7 +272,6 @@ describe('importBackup', () => {
     expect(result).toEqual({ inspections: 1, agenda: 1, userFacilities: 1 });
   });
 
-  // ── Branch: photoUriMap present — applyPhotoUriMap is called ──────────────
   it('re-links photoUriMap back into inspection items on v2 restore', async () => {
     const payloadWithMap = {
       ...validPayload,
@@ -290,7 +291,48 @@ describe('importBackup', () => {
     expect(restored[0].items[0].photoUri).toBe('file:///photo.jpg');
   });
 
-  // ── Branch: userFacilities missing from payload (defaults to []) ──────────
+  // ── Branch: applyPhotoUriMap re-links multi photos (lines 253-258) ────────
+  it('re-links multi-photo array from photoUriMap on v2 restore', async () => {
+    const payloadWithMulti = {
+      ...validPayload,
+      inspections: [{ id: 'i1', items: [{ id: 'item-1', title: 'T' }] }],
+      photoUriMap: {
+        'item-1': 'file:///single.jpg',
+        'item-1__photos': ['file:///a.jpg', 'file:///b.jpg'],
+      },
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2multi.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadWithMulti),
+    );
+    await importBackup();
+    const raw = await AsyncStorage.getItem('inspections');
+    const restored = JSON.parse(raw!);
+    expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
+    expect(restored[0].items[0].photos).toEqual(['file:///a.jpg', 'file:///b.jpg']);
+  });
+
+  // ── Branch: applyPhotoUriMap with empty map returns inspections unchanged ─
+  it('returns inspections unchanged when photoUriMap is empty', async () => {
+    const payloadEmptyMap = {
+      ...validPayload,
+      inspections: [{ id: 'i1', items: [{ id: 'item-1', title: 'T' }] }],
+      photoUriMap: {},
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2empty.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadEmptyMap),
+    );
+    const result = await importBackup();
+    expect(result!.inspections).toBe(1);
+  });
+
   it('handles missing userFacilities field gracefully', async () => {
     const { userFacilities: _omit, ...payloadNoFacilities } = validPayload;
     mockGetDocumentAsync.mockResolvedValueOnce({
@@ -320,7 +362,6 @@ describe('getLastBackupDate', () => {
     expect(result).toEqual(new Date(ts));
   });
 
-  // ── Branch: catch block (line 281) ───────────────────────────────────────
   it('returns null when AsyncStorage.getItem throws', async () => {
     const original = AsyncStorage.getItem;
     (AsyncStorage as any).getItem = jest.fn().mockRejectedValueOnce(new Error('storage error'));
