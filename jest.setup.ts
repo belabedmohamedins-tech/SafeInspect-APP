@@ -331,6 +331,8 @@ beforeAll(() => {
       'useHomeData load error',
       'Error saving inspection',
       'Error updating agenda',
+      // 3. Intentional error-path output from services under test
+      '[CapReportService]',
     ];
     if (suppressed.some(s => msg.includes(s))) return;
     _consoleError(...args);
@@ -344,6 +346,11 @@ beforeAll(() => {
       'Reanimated',
       // 2. Intentional error-path output from services under test
       '[PhotoService]',
+      '[CapNotificationService]',
+      '[NotificationService]',
+      '[SafeInspect] Sync flush error',
+      '[SettingsRepository]',
+      '[criteriaData]',
     ];
     if (suppressed.some(s => msg.includes(s))) return;
     _consoleWarn(...args);
