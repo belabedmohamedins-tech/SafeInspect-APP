@@ -66,8 +66,7 @@ export const InspectionRepository = {
           inspection.id,
           inspection.priorInspectionId,
         );
-        /* istanbul ignore next */
-        toSave = { ...inspection, items: annotatedItems };
+        toSave = { ...inspection, items: annotatedItems }; // istanbul ignore next
       } catch {
         // Non-fatal — annotation failure must not block save.
       }
