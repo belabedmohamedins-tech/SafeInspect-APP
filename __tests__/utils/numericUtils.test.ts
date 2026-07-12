@@ -55,7 +55,6 @@ describe('deriveNumericCompliance – compliant', () => {
 // ── deriveNumericCompliance – warning ─────────────────────────────────────────
 describe('deriveNumericCompliance – warning zone', () => {
   it('value outside [min,max] but inside warning zone → warning', () => {
-    // min=10, max=90; warningMin=5, warningMax=95
     expect(deriveNumericCompliance(7, spec(10, 90, 5, 95))).toBe('warning');
   });
 
@@ -66,11 +65,20 @@ describe('deriveNumericCompliance – warning zone', () => {
   it('value at warningMax edge → warning', () => {
     expect(deriveNumericCompliance(95, spec(10, 90, 5, 95))).toBe('warning');
   });
+
+  // Source behaviour: when warningMin/warningMax are undefined,
+  // aboveWarnMin and belowWarnMax both evaluate to true (undefined → no bound),
+  // so any out-of-range value without explicit warning bounds falls through to 'warning'.
+  // This is the canonical source behaviour documented here as a contract test.
+  it('no warning zone defined, value outside [min,max] → warning (source fallback)', () => {
+    expect(deriveNumericCompliance(150, spec(0, 100))).toBe('warning');
+    expect(deriveNumericCompliance(-1, spec(0, 100))).toBe('warning');
+  });
 });
 
 // ── deriveNumericCompliance – non-compliant ───────────────────────────────────
 describe('deriveNumericCompliance – non-compliant', () => {
-  it('value outside both [min,max] and warning zone → non-compliant', () => {
+  it('value outside both [min,max] and explicit warning zone → non-compliant', () => {
     expect(deriveNumericCompliance(200, spec(10, 90, 5, 95))).toBe('non-compliant');
   });
 
@@ -82,9 +90,9 @@ describe('deriveNumericCompliance – non-compliant', () => {
     expect(deriveNumericCompliance(100, spec(10, 90, 5, 95))).toBe('non-compliant');
   });
 
-  it('no warning zone defined, value outside [min,max] → non-compliant', () => {
-    expect(deriveNumericCompliance(150, spec(0, 100))).toBe('non-compliant');
-    expect(deriveNumericCompliance(-1, spec(0, 100))).toBe('non-compliant');
+  it('value far outside all zones → non-compliant', () => {
+    expect(deriveNumericCompliance(-100, spec(10, 90, 5, 95))).toBe('non-compliant');
+    expect(deriveNumericCompliance(1000, spec(10, 90, 5, 95))).toBe('non-compliant');
   });
 });
 
@@ -127,16 +135,23 @@ describe('numericUtils – round-trip integration', () => {
     expect(status).toBe('compliant');
   });
 
-  it('warning value → observation-only compliance status', () => {
+  it('warning zone value → observation-only compliance status', () => {
     const state = deriveNumericCompliance(7, spec(10, 90, 5, 95));
     const status = numericStateToComplianceStatus(state);
     expect(status).toBe('observation-only');
   });
 
-  it('out-of-range value → non-compliant compliance status', () => {
+  it('out-of-explicit-zone value → non-compliant compliance status', () => {
     const state = deriveNumericCompliance(200, spec(10, 90, 5, 95));
     const status = numericStateToComplianceStatus(state);
     expect(status).toBe('non-compliant');
+  });
+
+  it('out-of-range no warning zone → observation-only (warning fallback)', () => {
+    // No warning zone → source returns 'warning' → maps to 'observation-only'
+    const state = deriveNumericCompliance(150, spec(0, 100));
+    const status = numericStateToComplianceStatus(state);
+    expect(status).toBe('observation-only');
   });
 
   it('undefined value → undefined compliance status', () => {
