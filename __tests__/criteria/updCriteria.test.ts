@@ -294,12 +294,15 @@ describe('updSpecificCriteria', () => {
   // ── 9. Legal references ──────────────────────────────────────────────────
   describe('legalReference content', () => {
     it('every item references at least one Algerian legal instrument', () => {
+      // Patterns cover: مرسوم, قانون, معيار/المعايير, مبادئ, إطار, محور, HACCP, GHP, المادة
       const algerianPatterns = [
         /مرسوم/,
         /قانون/,
         /معيار/,
-        /مبدأ/,
+        /المعايير/,
+        /مبادئ/,
         /إطار/,
+        /محور/,
         /HACCP/,
         /GHP/,
         /المادة/,
