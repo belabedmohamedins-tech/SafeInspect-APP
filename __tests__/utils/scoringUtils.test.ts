@@ -68,7 +68,7 @@ describe('computeScoreAndGrade — empty / NA', () => {
   });
 });
 
-// ── grade A (score >= 85, no high violations) ────────────────────────────
+// ── grade A ─────────────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — grade A', () => {
   it('assigns grade A when all items are compliant (score 100)', () => {
@@ -82,8 +82,6 @@ describe('computeScoreAndGrade — grade A', () => {
   });
 
   it('assigns grade A at exactly GRADE_A_MIN score', () => {
-    // Build items so weighted compliance rate = 85%
-    // 17 compliant medium (weight 2) = 34, 3 non-compliant medium (weight 2) = 6 → 34/40 = 85%
     const items = [
       ...Array(17).fill(null).map(() => item('compliant', 'medium')),
       ...Array(3).fill(null).map(() => item('non-compliant', 'medium')),
@@ -94,11 +92,10 @@ describe('computeScoreAndGrade — grade A', () => {
   });
 });
 
-// ── grade B (70 <= score < 85) ─────────────────────────────────────────────
+// ── grade B ─────────────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — grade B', () => {
   it('assigns grade B when score is in [70, 85)', () => {
-    // 7 compliant, 3 non-compliant medium → 7/10 = 70%
     const items = [
       ...Array(7).fill(null).map(() => item('compliant', 'medium')),
       ...Array(3).fill(null).map(() => item('non-compliant', 'medium')),
@@ -112,11 +109,10 @@ describe('computeScoreAndGrade — grade B', () => {
   });
 });
 
-// ── grade C (50 <= score < 70) ─────────────────────────────────────────────
+// ── grade C ─────────────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — grade C', () => {
   it('assigns grade C when score is in [50, 70)', () => {
-    // 6 compliant, 6 non-compliant medium → 6/12 = 50%
     const items = [
       ...Array(6).fill(null).map(() => item('compliant', 'medium')),
       ...Array(6).fill(null).map(() => item('non-compliant', 'medium')),
@@ -130,11 +126,10 @@ describe('computeScoreAndGrade — grade C', () => {
   });
 });
 
-// ── grade D (score < 50) ─────────────────────────────────────────────────
+// ── grade D (score) ─────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — grade D (score)', () => {
   it('assigns grade D when score is below 50', () => {
-    // 1 compliant, 9 non-compliant → 10% score
     const items = [
       item('compliant', 'medium'),
       ...Array(9).fill(null).map(() => item('non-compliant', 'medium')),
@@ -147,11 +142,10 @@ describe('computeScoreAndGrade — grade D (score)', () => {
   });
 });
 
-// ── critical override ───────────────────────────────────────────────────────
+// ── critical override ────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — critical override', () => {
   it('ceiling C: caps A→C when high violations >= CEILING_C_THRESHOLD', () => {
-    // High score but exactly CEILING_C_THRESHOLD high-severity non-compliant
     const items = [
       ...Array(20).fill(null).map(() => item('compliant', 'medium')),
       ...Array(CEILING_C_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
@@ -164,11 +158,10 @@ describe('computeScoreAndGrade — critical override', () => {
   });
 
   it('ceiling C: caps B→C when high violations >= CEILING_C_THRESHOLD', () => {
-    // Score in B range + 1 high violation
     const items = [
       ...Array(7).fill(null).map(() => item('compliant', 'medium')),
       ...Array(2).fill(null).map(() => item('non-compliant', 'medium')),
-      item('non-compliant', 'high'),  // 1 high
+      item('non-compliant', 'high'),
     ];
     const r = computeScoreAndGrade(items);
     if (r.rawGrade === 'B') {
@@ -178,7 +171,6 @@ describe('computeScoreAndGrade — critical override', () => {
   });
 
   it('ceiling C does NOT override grade C (already at/below ceiling)', () => {
-    // Score gives raw grade C, 1 high violation — no change needed
     const items = [
       ...Array(6).fill(null).map(() => item('compliant', 'medium')),
       ...Array(5).fill(null).map(() => item('non-compliant', 'medium')),
@@ -191,20 +183,23 @@ describe('computeScoreAndGrade — critical override', () => {
     }
   });
 
-  it('forced D: overrides A to D when high violations >= FORCED_D_THRESHOLD', () => {
+  // ── line 119: forced D where rawGrade is NOT D (criticalOverride = true) ──
+  it('forced D: criticalOverride=true when rawGrade is A and forced to D', () => {
+    // Very high score (all compliant medium) + FORCED_D_THRESHOLD high violations
+    // The high-violation non-compliants add weight but compliant weight still dominates
+    // Use enough compliant items so rawGrade would be A without override
     const items = [
-      ...Array(30).fill(null).map(() => item('compliant', 'medium')),
+      ...Array(50).fill(null).map(() => item('compliant', 'medium')),
       ...Array(FORCED_D_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('D');
-    expect(r.violations.high).toBe(FORCED_D_THRESHOLD);
-    // criticalOverride = true only if rawGrade !== 'D'
-    expect(r.criticalOverride).toBe(r.rawGrade !== 'D');
+    expect(r.rawGrade).not.toBe('D');
+    expect(r.criticalOverride).toBe(true);  // line 119 true branch
   });
 
-  it('forced D when already raw D: criticalOverride is false', () => {
-    // Score < 50 AND >= FORCED_D_THRESHOLD high violations
+  // ── line 119: forced D where rawGrade IS D (criticalOverride = false) ──
+  it('forced D: criticalOverride=false when rawGrade is already D', () => {
     const items = [
       item('compliant', 'medium'),
       ...Array(FORCED_D_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
@@ -213,7 +208,7 @@ describe('computeScoreAndGrade — critical override', () => {
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('D');
     expect(r.rawGrade).toBe('D');
-    expect(r.criticalOverride).toBe(false);
+    expect(r.criticalOverride).toBe(false); // line 119 false branch
   });
 });
 
@@ -221,22 +216,13 @@ describe('computeScoreAndGrade — critical override', () => {
 
 describe('computeScoreAndGrade — severity weighting', () => {
   it('high-severity compliant items contribute more weight than low', () => {
-    // 1 high compliant vs 1 low non-compliant
-    const allHighCompliant = [
-      item('compliant', 'high'),
-      item('non-compliant', 'low'),
-    ];
-    // weights: 3 compliant, 1 non-compliant → 3/4 = 75%
-    const r = computeScoreAndGrade(allHighCompliant);
+    const items = [item('compliant', 'high'), item('non-compliant', 'low')];
+    const r = computeScoreAndGrade(items);
     expect(r.score).toBe(75);
   });
 
   it('low-severity compliant items contribute less weight', () => {
-    const items = [
-      item('compliant', 'low'),
-      item('non-compliant', 'high'),
-    ];
-    // weights: 1 compliant, 3 non-compliant → 1/4 = 25%
+    const items = [item('compliant', 'low'), item('non-compliant', 'high')];
     const r = computeScoreAndGrade(items);
     expect(r.score).toBe(25);
   });
@@ -257,17 +243,15 @@ describe('computeScoreAndGrade — severity weighting', () => {
       item('observation-only', 'medium'),
       item('na', 'high'),
     ];
-    // only compliant is in evaluatedItems; na excluded from applicable
     const r = computeScoreAndGrade(items);
     expect(r.score).toBe(100);
   });
 });
 
-// ── completionRate / incomplete ────────────────────────────────────────────────
+// ── completionRate / incomplete ──────────────────────────────────────────────
 
 describe('computeScoreAndGrade — completionRate', () => {
   it('marks incomplete when < 60% evaluated', () => {
-    // 5 applicable, only 2 evaluated (40%)
     const items = [
       item('compliant', 'medium'),
       item('compliant', 'medium'),
@@ -281,7 +265,6 @@ describe('computeScoreAndGrade — completionRate', () => {
   });
 
   it('marks complete when >= 60% evaluated', () => {
-    // 5 applicable, 3 evaluated (60%)
     const items = [
       item('compliant', 'medium'),
       item('compliant', 'medium'),
@@ -295,7 +278,7 @@ describe('computeScoreAndGrade — completionRate', () => {
   });
 });
 
-// ── violation profile ──────────────────────────────────────────────────────────
+// ── violation profile ────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — violations profile', () => {
   it('counts violations by severity correctly', () => {
@@ -320,7 +303,7 @@ describe('computeScoreAndGrade — violations profile', () => {
   });
 });
 
-// ── disclaimer ──────────────────────────────────────────────────────────────
+// ── disclaimer ───────────────────────────────────────────────────────────────
 
 describe('computeScoreAndGrade — disclaimer', () => {
   it('always returns a non-empty Arabic disclaimer string', () => {
