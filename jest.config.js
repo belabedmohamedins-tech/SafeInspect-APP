@@ -62,12 +62,15 @@ module.exports = {
   },
 
   // LAYER 2 — module routing
+  // ⚠️ ORDER MATTERS: more-specific patterns must come before less-specific ones.
   moduleNameMapper: {
     '^expo-modules-core/src/polyfill/dangerous-internal$':
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
+    // Catch-all for any remaining expo winter runtime imports (runtime.native, installGlobal, etc.)
+    '^expo/src/winter(.*)$':                  '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
     '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',

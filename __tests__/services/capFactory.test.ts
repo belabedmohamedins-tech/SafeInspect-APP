@@ -1,9 +1,14 @@
 // __tests__/services/capFactory.test.ts
+jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
+  CorrectiveActionRepository: {
+    getByInspection: jest.fn(),
+    save: jest.fn(),
+  },
+}));
+
 import { createCapItemsFromInspection } from '../../src/services/capFactory';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
-import { SavedInspection, InspectionItem, CorrectiveAction } from '../../src/types';
-
-jest.mock('../../src/repositories/CorrectiveActionRepository');
+import { SavedInspection, InspectionItem } from '../../src/types';
 
 const mockGetByInspection = CorrectiveActionRepository.getByInspection as jest.Mock;
 const mockSave = CorrectiveActionRepository.save as jest.Mock;
@@ -31,7 +36,7 @@ describe('createCapItemsFromInspection', () => {
     expect(mockSave).not.toHaveBeenCalled();
   });
 
-  it('creates CAP for non-compliant item', async () => {
+  it('creates CAP for non-compliant item (medium)', async () => {
     mockGetByInspection.mockResolvedValue([]);
     await createCapItemsFromInspection(makeInspection([makeItem('a', 'non-compliant', 'medium')]));
     expect(mockSave).toHaveBeenCalledTimes(1);
@@ -51,7 +56,7 @@ describe('createCapItemsFromInspection', () => {
     expect(mockSave).toHaveBeenCalledTimes(1);
   });
 
-  it('maps court-referral sanctionTier to critical severity', async () => {
+  it('court-referral sanctionTier maps to critical severity', async () => {
     mockGetByInspection.mockResolvedValue([]);
     await createCapItemsFromInspection(makeInspection([
       makeItem('a', 'non-compliant', 'high', 'court-referral'),
@@ -59,21 +64,37 @@ describe('createCapItemsFromInspection', () => {
     expect(mockSave.mock.calls[0][0].severity).toBe('critical');
   });
 
-  it('deadline for critical = 7 days from today', async () => {
+  it('critical deadline = 7 days from today', async () => {
     mockGetByInspection.mockResolvedValue([]);
-    const before = new Date(); before.setDate(before.getDate() + 7);
-    const expectedDate = before.toISOString().slice(0, 10);
+    const expected = new Date(); expected.setDate(expected.getDate() + 7);
+    const expectedDate = expected.toISOString().slice(0, 10);
     await createCapItemsFromInspection(makeInspection([
       makeItem('a', 'non-compliant', 'high', 'court-referral'),
     ]));
     expect(mockSave.mock.calls[0][0].deadline).toBe(expectedDate);
   });
 
-  it('default (low) severity deadline = 45 days', async () => {
+  it('low severity deadline = 45 days (default branch)', async () => {
     mockGetByInspection.mockResolvedValue([]);
-    const before = new Date(); before.setDate(before.getDate() + 45);
-    const expectedDate = before.toISOString().slice(0, 10);
+    const expected = new Date(); expected.setDate(expected.getDate() + 45);
+    const expectedDate = expected.toISOString().slice(0, 10);
     await createCapItemsFromInspection(makeInspection([makeItem('a', 'non-compliant', 'low')]));
+    expect(mockSave.mock.calls[0][0].deadline).toBe(expectedDate);
+  });
+
+  it('high severity deadline = 14 days', async () => {
+    mockGetByInspection.mockResolvedValue([]);
+    const expected = new Date(); expected.setDate(expected.getDate() + 14);
+    const expectedDate = expected.toISOString().slice(0, 10);
+    await createCapItemsFromInspection(makeInspection([makeItem('a', 'non-compliant', 'high')]));
+    expect(mockSave.mock.calls[0][0].deadline).toBe(expectedDate);
+  });
+
+  it('medium severity deadline = 30 days', async () => {
+    mockGetByInspection.mockResolvedValue([]);
+    const expected = new Date(); expected.setDate(expected.getDate() + 30);
+    const expectedDate = expected.toISOString().slice(0, 10);
+    await createCapItemsFromInspection(makeInspection([makeItem('a', 'non-compliant', 'medium')]));
     expect(mockSave.mock.calls[0][0].deadline).toBe(expectedDate);
   });
 });

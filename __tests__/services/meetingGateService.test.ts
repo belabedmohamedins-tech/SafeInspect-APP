@@ -1,8 +1,14 @@
 // __tests__/services/meetingGateService.test.ts
+// Use factory mock to avoid expo winter runtime explosion via InspectionRepository
+jest.mock('../../src/repositories/InspectionRepository', () => ({
+  InspectionRepository: {
+    getById: jest.fn(),
+    save: jest.fn(),
+  },
+}));
+
 import { persistOpeningMeetingDone, persistClosingMeetingDone } from '../../src/services/meetingGateService';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
-
-jest.mock('../../src/repositories/InspectionRepository');
 
 const mockGetById = InspectionRepository.getById as jest.Mock;
 const mockSave = InspectionRepository.save as jest.Mock;

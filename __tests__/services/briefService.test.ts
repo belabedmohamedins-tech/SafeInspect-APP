@@ -1,9 +1,14 @@
 // __tests__/services/briefService.test.ts
+// Use factory mocks to avoid triggering expo's import chain via InspectionRepository
+jest.mock('../../src/repositories/InspectionRepository', () => ({
+  InspectionRepository: {
+    getCompleted: jest.fn(),
+  },
+}));
+
 import { buildBrief } from '../../src/services/briefService';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SavedInspection, InspectionItem } from '../../src/types';
-
-jest.mock('../../src/repositories/InspectionRepository');
 
 const mockGetCompleted = InspectionRepository.getCompleted as jest.Mock;
 
@@ -30,7 +35,7 @@ describe('buildBrief', () => {
     expect(r.previousGrade).toBeNull();
   });
 
-  it('returns latest inspection for the facility (sorts by date desc)', async () => {
+  it('returns latest inspection sorted by date desc', async () => {
     const old = makeInspection({ id: 'old', date: '2025-01-01', facilityId: 'f1' });
     const latest = makeInspection({ id: 'new', date: '2026-06-01', facilityId: 'f1' });
     mockGetCompleted.mockResolvedValue([old, latest]);
@@ -40,9 +45,7 @@ describe('buildBrief', () => {
   });
 
   it('filters out other facilities', async () => {
-    mockGetCompleted.mockResolvedValue([
-      makeInspection({ facilityId: 'other' }),
-    ]);
+    mockGetCompleted.mockResolvedValue([makeInspection({ facilityId: 'other' })]);
     const r = await buildBrief('f1');
     expect(r.lastInspection).toBeNull();
   });
