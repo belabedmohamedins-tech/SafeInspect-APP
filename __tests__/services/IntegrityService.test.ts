@@ -1,17 +1,24 @@
 // __tests__/services/IntegrityService.test.ts
-// expo-crypto is mocked at L4 to avoid pulling in expo's fetch polyfill
-// (which requires a real Response class not present in the Jest environment).
+// expo-crypto is mocked at L4 to avoid pulling in expo's fetch polyfill.
 
 jest.mock('expo-crypto', () => ({
   CryptoDigestAlgorithm: { SHA256: 'SHA-256' },
   CryptoEncoding: { HEX: 'hex' },
   digestStringAsync: jest.fn(async (_alg: string, input: string) => {
-    // Deterministic stub: length-prefixed hex so different strings differ
-    let hash = '';
-    for (let i = 0; i < 64; i++) {
-      hash += ((input.charCodeAt(i % input.length) + i) & 0xf).toString(16);
+    // djb2-style hash — position-sensitive so different inputs produce different outputs
+    let h = 5381;
+    for (let i = 0; i < input.length; i++) {
+      h = ((h << 5) + h) ^ input.charCodeAt(i);
+      h = h >>> 0;
     }
-    return hash;
+    // Expand to 64 hex chars using 8 seeded rounds
+    let hex = '';
+    let seed = h;
+    for (let chunk = 0; chunk < 8; chunk++) {
+      seed = (((seed << 5) + seed) ^ (chunk * 2654435761)) >>> 0;
+      hex += seed.toString(16).padStart(8, '0');
+    }
+    return hex;
   }),
 }), { virtual: true });
 
@@ -49,7 +56,7 @@ describe('computeHash', () => {
 
   it('differs for different inspection IDs', async () => {
     const h1 = await IntegrityService.computeHash(base);
-    const h2 = await IntegrityService.computeHash({ ...base, id: 'insp-2' });
+    const h2 = await IntegrityService.computeHash({ ...base, id: 'insp-2' } as unknown as SavedInspection);
     expect(h1).not.toBe(h2);
   });
 
@@ -80,7 +87,7 @@ describe('hashAndStore', () => {
     await IntegrityService.hashAndStore(base);
     const stored = await AsyncStorage.getItem('INSPECTION_HASHES');
     const parsed = JSON.parse(stored!);
-    expect(Object.keys(parsed).filter(k => k === 'insp-1')).toHaveLength(1);
+    expect(Object.keys(parsed).filter((k: string) => k === 'insp-1')).toHaveLength(1);
   });
 });
 
