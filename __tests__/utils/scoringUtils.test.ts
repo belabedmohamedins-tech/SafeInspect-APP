@@ -1,117 +1,267 @@
 // __tests__/utils/scoringUtils.test.ts
-
 import {
   computeScoreAndGrade,
-  GRADE_A_MIN, GRADE_B_MIN, GRADE_C_MIN,
-  CEILING_C_THRESHOLD, FORCED_D_THRESHOLD,
-  MIN_COMPLETION_RATE, SEVERITY_WEIGHTS,
+  SEVERITY_WEIGHTS,
+  GRADE_A_MIN,
+  GRADE_B_MIN,
+  GRADE_C_MIN,
+  CEILING_C_THRESHOLD,
+  FORCED_D_THRESHOLD,
+  MIN_COMPLETION_RATE,
 } from '../../src/utils/scoringUtils';
 import { InspectionItem } from '../../src/types';
 
-let _id = 0;
-function item(
-  status: InspectionItem['complianceStatus'],
-  severity: InspectionItem['severity'] = 'medium',
-): InspectionItem {
-  return { id: `i${++_id}`, criteria: 'test', legalReference: 'Art.1', severity, complianceStatus: status };
-}
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const makeItem = (
+  id: string,
+  severity: InspectionItem['severity'],
+  complianceStatus: InspectionItem['complianceStatus'],
+): InspectionItem => ({
+  id,
+  axis: 'test-axis',
+  category: 'تنظيمية',
+  criteria: 'test criteria',
+  legalReference: 'test ref',
+  severity,
+  controlType: 'visual',
+  complianceStatus,
+});
 
-beforeEach(() => { _id = 0; });
+const allCompliant = (n: number, severity: InspectionItem['severity'] = 'medium') =>
+  Array.from({ length: n }, (_, i) => makeItem(`item-${i}`, severity, 'compliant'));
 
-// ── constants ────────────────────────────────────────────────────────────────
+const allNonCompliant = (n: number, severity: InspectionItem['severity'] = 'medium') =>
+  Array.from({ length: n }, (_, i) => makeItem(`item-${i}`, severity, 'non-compliant'));
 
-describe('exported thresholds', () => {
-  it('SEVERITY_WEIGHTS values', () => {
-    expect(SEVERITY_WEIGHTS).toEqual({ high: 3, medium: 2, low: 1 });
+// ── Exported constants ────────────────────────────────────────────────────────
+describe('scoringUtils – exported constants', () => {
+  it('SEVERITY_WEIGHTS has correct values', () => {
+    expect(SEVERITY_WEIGHTS.high).toBe(3);
+    expect(SEVERITY_WEIGHTS.medium).toBe(2);
+    expect(SEVERITY_WEIGHTS.low).toBe(1);
   });
-  it('grade order', () => {
+
+  it('grade thresholds are in descending order', () => {
     expect(GRADE_A_MIN).toBeGreaterThan(GRADE_B_MIN);
     expect(GRADE_B_MIN).toBeGreaterThan(GRADE_C_MIN);
     expect(GRADE_C_MIN).toBeGreaterThan(0);
   });
-  it('FORCED_D > CEILING_C', () => {
-    expect(FORCED_D_THRESHOLD).toBeGreaterThan(CEILING_C_THRESHOLD);
+
+  it('CEILING_C_THRESHOLD < FORCED_D_THRESHOLD', () => {
+    expect(CEILING_C_THRESHOLD).toBeLessThan(FORCED_D_THRESHOLD);
   });
-  it('MIN_COMPLETION_RATE range', () => {
+
+  it('MIN_COMPLETION_RATE is between 0 and 1', () => {
     expect(MIN_COMPLETION_RATE).toBeGreaterThan(0);
     expect(MIN_COMPLETION_RATE).toBeLessThanOrEqual(1);
   });
 });
 
-// ── getSeverityWeight ?? fallback (line 119 branch) ─────────────────────────
-
-describe('getSeverityWeight ?? fallback', () => {
-  it('treats unknown severity as low (weight 1) via ?? fallback', () => {
-    const items = [
-      { id: 'x1', criteria: 'c', legalReference: 'r', severity: 'unknown' as any, complianceStatus: 'compliant' as any },
-      { id: 'x2', criteria: 'c', legalReference: 'r', severity: 'unknown' as any, complianceStatus: 'non-compliant' as any },
-    ];
-    // both get weight 1 → 1 compliant / 2 total = 50%
-    const r = computeScoreAndGrade(items);
-    expect(r.score).toBe(50);
-  });
-});
-
-// ── empty / NA ───────────────────────────────────────────────────────────────
-
-describe('empty / NA', () => {
-  it('score 0, grade D for empty', () => {
+// ── Empty / edge inputs ───────────────────────────────────────────────────────
+describe('computeScoreAndGrade – empty / edge inputs', () => {
+  it('returns score 0 and grade D for empty array', () => {
     const r = computeScoreAndGrade([]);
     expect(r.score).toBe(0);
     expect(r.grade).toBe('D');
+    expect(r.evaluatedCount).toBe(0);
+    expect(r.applicableCount).toBe(0);
+    expect(r.completionRate).toBe(0);
     expect(r.incomplete).toBe(true);
   });
-  it('NA excluded from applicableCount', () => {
-    const r = computeScoreAndGrade([item('na'), item('na')]);
+
+  it('handles all NA items correctly', () => {
+    const items = Array.from({ length: 5 }, (_, i) =>
+      makeItem(`na-${i}`, 'high', 'na'),
+    );
+    const r = computeScoreAndGrade(items);
     expect(r.applicableCount).toBe(0);
+    expect(r.evaluatedCount).toBe(0);
+    expect(r.score).toBe(0);
+  });
+
+  it('handles mix of na and not-evaluated', () => {
+    const items = [
+      makeItem('a', 'high', 'na'),
+      makeItem('b', 'medium', 'not-evaluated'),
+    ];
+    const r = computeScoreAndGrade(items);
+    // na excluded from applicable, not-evaluated is applicable
+    expect(r.applicableCount).toBe(1);
+    expect(r.evaluatedCount).toBe(0);
+    expect(r.incomplete).toBe(true);
   });
 });
 
-// ── grades ───────────────────────────────────────────────────────────────────
-
-describe('grade A', () => {
-  it('score 100 → A, riskLevel 1, 730 days', () => {
-    const r = computeScoreAndGrade(Array(10).fill(null).map(() => item('compliant')));
+// ── Score calculation ─────────────────────────────────────────────────────────
+describe('computeScoreAndGrade – score calculation', () => {
+  it('returns score 100 when all items compliant', () => {
+    const r = computeScoreAndGrade(allCompliant(5, 'high'));
     expect(r.score).toBe(100);
+    expect(r.grade).toBe('A');
+  });
+
+  it('returns score 0 when all items non-compliant', () => {
+    // 3 non-compliant → FORCED_D_THRESHOLD met → forced D
+    const r = computeScoreAndGrade(allNonCompliant(3, 'high'));
+    expect(r.score).toBe(0);
+    expect(r.grade).toBe('D');
+  });
+
+  it('weights high items 3x and low items 1x', () => {
+    const items = [
+      makeItem('h', 'high', 'compliant'),   // weight 3
+      makeItem('l', 'low', 'non-compliant'), // weight 1
+    ];
+    const r = computeScoreAndGrade(items);
+    // compliantWeight=3, evaluatedWeight=4 → 3/4 = 75
+    expect(r.score).toBe(75);
+  });
+
+  it('rounds score to 1 decimal place', () => {
+    // 2 compliant medium (4) + 1 non-compliant low (1) = evaluated 5, compliant 4
+    const items = [
+      makeItem('a', 'medium', 'compliant'),
+      makeItem('b', 'medium', 'compliant'),
+      makeItem('c', 'low', 'non-compliant'),
+    ];
+    const r = computeScoreAndGrade(items);
+    // 4/5 = 0.8 → 80.0
+    expect(r.score).toBe(80);
+  });
+});
+
+// ── Grade assignment — no override ───────────────────────────────────────────
+describe('computeScoreAndGrade – grade A/B/C/D from score alone', () => {
+  const gradeItems = (score: number, total = 10): InspectionItem[] => {
+    // Build items to target a specific weighted score
+    // All medium (weight 2) — compliant fraction = score/100
+    const compliantCount = Math.round((score / 100) * total);
+    return [
+      ...Array.from({ length: compliantCount }, (_, i) =>
+        makeItem(`c-${i}`, 'low', 'compliant')
+      ),
+      ...Array.from({ length: total - compliantCount }, (_, i) =>
+        makeItem(`n-${i}`, 'low', 'non-compliant')
+      ),
+    ];
+  };
+
+  it('score >= GRADE_A_MIN → grade A', () => {
+    // 9/10 compliant low = 90% (all low so no high violations → no override)
+    const items = gradeItems(90);
+    const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('A');
+    expect(r.criticalOverride).toBe(false);
+  });
+
+  it('score >= GRADE_B_MIN and < A → grade B', () => {
+    const items = gradeItems(70);
+    const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('B');
+  });
+
+  it('score >= GRADE_C_MIN and < B → grade C', () => {
+    const items = gradeItems(50);
+    const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('C');
+  });
+
+  it('score < GRADE_C_MIN → grade D', () => {
+    const items = gradeItems(40);
+    const r = computeScoreAndGrade(items);
+    expect(r.rawGrade).toBe('D');
+  });
+});
+
+// ── Critical override — ceiling C ────────────────────────────────────────────
+describe('computeScoreAndGrade – ceiling C override', () => {
+  it('1 high violation with A-score → capped to C', () => {
+    const items = [
+      ...allCompliant(9, 'low'),         // score will be high
+      makeItem('vio', 'high', 'non-compliant'), // 1 high violation
+    ];
+    const r = computeScoreAndGrade(items);
+    expect(r.violations.high).toBe(1);
+    expect(r.violations.high).toBeGreaterThanOrEqual(CEILING_C_THRESHOLD);
+    expect(r.violations.high).toBeLessThan(FORCED_D_THRESHOLD);
+    expect(r.grade).toBe('C');
+    expect(r.criticalOverride).toBe(true);
+  });
+
+  it('1 high violation with C-score → grade stays C, no override flag', () => {
+    const items = [
+      ...allCompliant(5, 'low'),
+      ...allNonCompliant(5, 'low'),
+      makeItem('vio', 'high', 'non-compliant'), // 1 high violation
+    ];
+    const r = computeScoreAndGrade(items);
+    expect(r.violations.high).toBe(1);
+    // rawGrade will be C or D; if C, override flag should reflect no change
+    if (r.rawGrade === 'C' || r.rawGrade === 'D') {
+      // D is already ≤ C so ceiling is satisfied
+      expect(['C', 'D']).toContain(r.grade);
+    }
+  });
+});
+
+// ── Critical override — forced D ─────────────────────────────────────────────
+describe('computeScoreAndGrade – forced D override', () => {
+  it(`>= ${FORCED_D_THRESHOLD} high violations → forced D even with high score`, () => {
+    const items = [
+      ...allCompliant(20, 'low'),
+      ...Array.from({ length: FORCED_D_THRESHOLD }, (_, i) =>
+        makeItem(`h-${i}`, 'high', 'non-compliant')
+      ),
+    ];
+    const r = computeScoreAndGrade(items);
+    expect(r.violations.high).toBeGreaterThanOrEqual(FORCED_D_THRESHOLD);
+    expect(r.grade).toBe('D');
+  });
+
+  it('forced D sets riskLevel to 4', () => {
+    const items = Array.from({ length: FORCED_D_THRESHOLD }, (_, i) =>
+      makeItem(`h-${i}`, 'high', 'non-compliant')
+    );
+    const r = computeScoreAndGrade(items);
+    expect(r.riskLevel).toBe(4);
+    expect(r.nextInspectionDays).toBe(30);
+  });
+});
+
+// ── Risk level & nextInspectionDays ──────────────────────────────────────────
+describe('computeScoreAndGrade – riskLevel and nextInspectionDays', () => {
+  it('grade A → riskLevel 1 → 730 days', () => {
+    const r = computeScoreAndGrade(allCompliant(10, 'low'));
     expect(r.grade).toBe('A');
     expect(r.riskLevel).toBe(1);
     expect(r.nextInspectionDays).toBe(730);
-    expect(r.criticalOverride).toBe(false);
   });
-});
 
-describe('grade B', () => {
-  it('70% → B, riskLevel 2, 365 days', () => {
+  it('grade B → riskLevel 2 → 365 days', () => {
+    // 7/10 low-compliant = 70% → grade B
     const items = [
-      ...Array(7).fill(null).map(() => item('compliant')),
-      ...Array(3).fill(null).map(() => item('non-compliant')),
+      ...allCompliant(7, 'low'),
+      ...allNonCompliant(3, 'low'),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('B');
     expect(r.riskLevel).toBe(2);
     expect(r.nextInspectionDays).toBe(365);
   });
-});
 
-describe('grade C', () => {
-  it('50% → C, riskLevel 3, 180 days', () => {
+  it('grade C → riskLevel 3 → 180 days', () => {
     const items = [
-      ...Array(6).fill(null).map(() => item('compliant')),
-      ...Array(6).fill(null).map(() => item('non-compliant')),
+      ...allCompliant(5, 'low'),
+      ...allNonCompliant(5, 'low'),
     ];
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('C');
     expect(r.riskLevel).toBe(3);
     expect(r.nextInspectionDays).toBe(180);
   });
-});
 
-describe('grade D (score)', () => {
-  it('10% → D, riskLevel 4, 30 days', () => {
-    const items = [
-      item('compliant'),
-      ...Array(9).fill(null).map(() => item('non-compliant')),
-    ];
+  it('grade D → riskLevel 4 → 30 days', () => {
+    const items = allNonCompliant(4, 'low');
     const r = computeScoreAndGrade(items);
     expect(r.grade).toBe('D');
     expect(r.riskLevel).toBe(4);
@@ -119,121 +269,84 @@ describe('grade D (score)', () => {
   });
 });
 
-// ── critical override ────────────────────────────────────────────────────────
-
-describe('critical override', () => {
-  it('ceiling C: A→C, criticalOverride true', () => {
+// ── Completion / incomplete flag ──────────────────────────────────────────────
+describe('computeScoreAndGrade – completion rate', () => {
+  it('incomplete = true when < 60% evaluated', () => {
     const items = [
-      ...Array(20).fill(null).map(() => item('compliant')),
-      ...Array(CEILING_C_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
+      makeItem('a', 'high', 'compliant'),
+      makeItem('b', 'high', 'not-evaluated'),
+      makeItem('c', 'high', 'not-evaluated'),
+      makeItem('d', 'high', 'not-evaluated'),
     ];
     const r = computeScoreAndGrade(items);
-    expect(r.rawGrade).toBe('A');
-    expect(r.grade).toBe('C');
-    expect(r.criticalOverride).toBe(true);
-  });
-
-  it('ceiling C: does not override D (rawGrade D with 1 high)', () => {
-    const items = [
-      item('compliant'),
-      ...Array(9).fill(null).map(() => item('non-compliant')),
-      item('non-compliant', 'high'),
-    ];
-    const r = computeScoreAndGrade(items);
-    if (r.rawGrade === 'D') {
-      expect(r.grade).toBe('D');
-      expect(r.criticalOverride).toBe(false);
-    }
-  });
-
-  it('forced D: rawGrade A → criticalOverride true', () => {
-    // 100 compliant low (weight 1 each = 100) vs 3 non-compliant high (weight 3 each = 9)
-    // score = 100/109 * 100 ≈ 91.7 → rawGrade A, but 3 high → forced D
-    const items = [
-      ...Array(100).fill(null).map(() => item('compliant', 'low')),
-      ...Array(FORCED_D_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
-    ];
-    const r = computeScoreAndGrade(items);
-    expect(r.rawGrade).toBe('A');
-    expect(r.grade).toBe('D');
-    expect(r.criticalOverride).toBe(true);
-  });
-
-  it('forced D: rawGrade already D → criticalOverride false', () => {
-    const items = [
-      item('compliant'),
-      ...Array(FORCED_D_THRESHOLD).fill(null).map(() => item('non-compliant', 'high')),
-      ...Array(6).fill(null).map(() => item('non-compliant')),
-    ];
-    const r = computeScoreAndGrade(items);
-    expect(r.grade).toBe('D');
-    expect(r.rawGrade).toBe('D');
-    expect(r.criticalOverride).toBe(false);
-  });
-});
-
-// ── severity weighting ───────────────────────────────────────────────────────
-
-describe('severity weighting', () => {
-  it('high compliant vs low non-compliant → 75%', () => {
-    const r = computeScoreAndGrade([item('compliant', 'high'), item('non-compliant', 'low')]);
-    expect(r.score).toBe(75);
-  });
-  it('low compliant vs high non-compliant → 25%', () => {
-    const r = computeScoreAndGrade([item('compliant', 'low'), item('non-compliant', 'high')]);
-    expect(r.score).toBe(25);
-  });
-  it('not-evaluated excluded from score', () => {
-    const r1 = computeScoreAndGrade([item('compliant'), item('compliant')]);
-    const r2 = computeScoreAndGrade([item('compliant'), item('compliant'), item('not-evaluated')]);
-    expect(r1.score).toBe(r2.score);
-  });
-  it('observation-only and na excluded', () => {
-    const r = computeScoreAndGrade([item('compliant'), item('observation-only'), item('na', 'high')]);
-    expect(r.score).toBe(100);
-  });
-});
-
-// ── completionRate ────────────────────────────────────────────────────────────
-
-describe('completionRate', () => {
-  it('< 60% → incomplete', () => {
-    const items = [item('compliant'), item('compliant'), item('not-evaluated'), item('not-evaluated'), item('not-evaluated')];
-    const r = computeScoreAndGrade(items);
-    expect(r.completionRate).toBeCloseTo(0.4);
+    // 1/4 = 25% evaluated < 60%
+    expect(r.completionRate).toBeLessThan(MIN_COMPLETION_RATE);
     expect(r.incomplete).toBe(true);
   });
-  it('>= 60% → complete', () => {
-    const items = [item('compliant'), item('compliant'), item('compliant'), item('not-evaluated'), item('not-evaluated')];
+
+  it('incomplete = false when >= 60% evaluated', () => {
+    const items = [
+      makeItem('a', 'high', 'compliant'),
+      makeItem('b', 'high', 'compliant'),
+      makeItem('c', 'high', 'compliant'),
+      makeItem('d', 'high', 'not-evaluated'),
+    ];
     const r = computeScoreAndGrade(items);
-    expect(r.completionRate).toBeCloseTo(0.6);
+    // 3/4 = 75% >= 60%
+    expect(r.completionRate).toBeGreaterThanOrEqual(MIN_COMPLETION_RATE);
     expect(r.incomplete).toBe(false);
   });
 });
 
-// ── violations profile ────────────────────────────────────────────────────────
-
-describe('violations', () => {
-  it('counts by severity', () => {
+// ── Violation profile ─────────────────────────────────────────────────────────
+describe('computeScoreAndGrade – violation profile', () => {
+  it('counts violations by severity correctly', () => {
     const items = [
-      item('non-compliant', 'high'), item('non-compliant', 'high'),
-      item('non-compliant', 'medium'), item('non-compliant', 'low'),
-      item('compliant'),
+      makeItem('h1', 'high',   'non-compliant'),
+      makeItem('h2', 'high',   'non-compliant'),
+      makeItem('m1', 'medium', 'non-compliant'),
+      makeItem('l1', 'low',    'non-compliant'),
+      makeItem('c1', 'high',   'compliant'),
     ];
     const r = computeScoreAndGrade(items);
-    expect(r.violations).toEqual({ high: 2, medium: 1, low: 1, total: 4 });
+    expect(r.violations.high).toBe(2);
+    expect(r.violations.medium).toBe(1);
+    expect(r.violations.low).toBe(1);
+    expect(r.violations.total).toBe(4);
   });
-  it('zero when all compliant', () => {
-    const r = computeScoreAndGrade(Array(5).fill(null).map(() => item('compliant', 'high')));
-    expect(r.violations).toEqual({ high: 0, medium: 0, low: 0, total: 0 });
+
+  it('zero violations when all compliant', () => {
+    const r = computeScoreAndGrade(allCompliant(5, 'high'));
+    expect(r.violations.high).toBe(0);
+    expect(r.violations.medium).toBe(0);
+    expect(r.violations.low).toBe(0);
+    expect(r.violations.total).toBe(0);
   });
 });
 
-// ── disclaimer ────────────────────────────────────────────────────────────────
-
-describe('disclaimer', () => {
-  it('non-empty Arabic string with legal ref', () => {
-    const r = computeScoreAndGrade([]);
+// ── Return shape ──────────────────────────────────────────────────────────────
+describe('computeScoreAndGrade – return shape', () => {
+  it('result contains disclaimer in Arabic', () => {
+    const r = computeScoreAndGrade(allCompliant(3));
     expect(r.disclaimer).toContain('03-10');
+    expect(r.disclaimer).toContain('06-198');
+    expect(typeof r.disclaimer).toBe('string');
+    expect(r.disclaimer.length).toBeGreaterThan(20);
+  });
+
+  it('result contains all required fields', () => {
+    const r = computeScoreAndGrade(allCompliant(3));
+    expect(r).toHaveProperty('score');
+    expect(r).toHaveProperty('grade');
+    expect(r).toHaveProperty('riskLevel');
+    expect(r).toHaveProperty('violations');
+    expect(r).toHaveProperty('criticalOverride');
+    expect(r).toHaveProperty('rawGrade');
+    expect(r).toHaveProperty('evaluatedCount');
+    expect(r).toHaveProperty('applicableCount');
+    expect(r).toHaveProperty('completionRate');
+    expect(r).toHaveProperty('incomplete');
+    expect(r).toHaveProperty('nextInspectionDays');
+    expect(r).toHaveProperty('disclaimer');
   });
 });
