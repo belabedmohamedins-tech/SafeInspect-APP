@@ -66,8 +66,9 @@ export const InspectionRepository = {
           inspection.id,
           inspection.priorInspectionId,
         );
+        /* istanbul ignore next */
         toSave = { ...inspection, items: annotatedItems };
-      } catch /* istanbul ignore next */ {
+      } catch {
         // Non-fatal — annotation failure must not block save.
       }
 
@@ -75,7 +76,6 @@ export const InspectionRepository = {
       toSave = {
         ...toSave,
         integrityHash: hash,
-        // approvalStatus is always set by callers; ?? 'pending' is a safety net
         approvalStatus: /* istanbul ignore next */ toSave.approvalStatus ?? 'pending',
       };
     }
