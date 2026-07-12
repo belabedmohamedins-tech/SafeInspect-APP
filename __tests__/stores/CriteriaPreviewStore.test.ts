@@ -2,44 +2,48 @@
 import { CriteriaPreviewStore } from '../../src/stores/CriteriaPreviewStore';
 import { InspectionItem, SavedInspection } from '../../src/types';
 
-function item(id: string): InspectionItem {
-  return { id, complianceStatus: 'compliant' } as InspectionItem;
-}
+const item1 = { id: 'i1' } as InspectionItem;
+const item2 = { id: 'i2' } as InspectionItem;
+const mockInspection: SavedInspection = { id: 'ins1', items: [item1, item2] } as any;
 
-function insp(id: string, items: InspectionItem[] = []): SavedInspection {
-  return { id, items, facilityId: 'f1', status: 'completed', date: '', title: '' } as SavedInspection;
-}
-
-beforeEach(() => CriteriaPreviewStore.clear());
+beforeEach(() => {
+  CriteriaPreviewStore.clear();
+});
 
 describe('CriteriaPreviewStore', () => {
-  it('set/get items (legacy)', () => {
-    const items = [item('i1'), item('i2')];
-    CriteriaPreviewStore.set(items);
-    expect(CriteriaPreviewStore.get()).toEqual(items);
-  });
-
-  it('get returns empty array after clear', () => {
-    CriteriaPreviewStore.set([item('i1')]);
-    CriteriaPreviewStore.clear();
+  it('get() returns empty array by default', () => {
     expect(CriteriaPreviewStore.get()).toEqual([]);
   });
 
-  it('setInspection stores inspection and syncs items', () => {
-    const i = insp('ins1', [item('i1')]);
-    CriteriaPreviewStore.setInspection(i);
-    expect(CriteriaPreviewStore.getInspection()?.id).toBe('ins1');
-    expect(CriteriaPreviewStore.get()).toEqual([item('i1')]);
-  });
-
-  it('getInspection returns null before set', () => {
+  it('getInspection() returns null by default', () => {
     expect(CriteriaPreviewStore.getInspection()).toBeNull();
   });
 
-  it('clear resets both fields', () => {
-    CriteriaPreviewStore.setInspection(insp('ins1', [item('i1')]));
+  it('set() stores items and get() returns them', () => {
+    CriteriaPreviewStore.set([item1]);
+    expect(CriteriaPreviewStore.get()).toEqual([item1]);
+  });
+
+  it('setInspection() stores inspection and getInspection() returns it', () => {
+    CriteriaPreviewStore.setInspection(mockInspection);
+    expect(CriteriaPreviewStore.getInspection()).toBe(mockInspection);
+  });
+
+  it('setInspection() also syncs legacy get() field', () => {
+    CriteriaPreviewStore.setInspection(mockInspection);
+    expect(CriteriaPreviewStore.get()).toEqual([item1, item2]);
+  });
+
+  it('clear() resets both items and inspection', () => {
+    CriteriaPreviewStore.setInspection(mockInspection);
     CriteriaPreviewStore.clear();
     expect(CriteriaPreviewStore.get()).toEqual([]);
     expect(CriteriaPreviewStore.getInspection()).toBeNull();
+  });
+
+  it('set() overwrites previous items', () => {
+    CriteriaPreviewStore.set([item1]);
+    CriteriaPreviewStore.set([item2]);
+    expect(CriteriaPreviewStore.get()).toEqual([item2]);
   });
 });

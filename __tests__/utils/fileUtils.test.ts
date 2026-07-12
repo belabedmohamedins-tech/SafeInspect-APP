@@ -2,34 +2,40 @@
 import { generateFileName } from '../../src/utils/fileUtils';
 
 describe('generateFileName', () => {
-  it('returns string ending with .extension', () => {
-    const name = generateFileName('test', 'pdf');
-    expect(name).toMatch(/\.pdf$/);
+  it('returns a string', () => {
+    expect(typeof generateFileName('test', 'pdf')).toBe('string');
   });
 
-  it('includes YYYY-MM-DD date portion', () => {
-    const name = generateFileName('test', 'csv');
-    expect(name).toMatch(/\d{4}-\d{2}-\d{2}/);
+  it('ends with the given extension', () => {
+    expect(generateFileName('report', 'pdf')).toMatch(/\.pdf$/);
+    expect(generateFileName('data', 'csv')).toMatch(/\.csv$/);
   });
 
-  it('includes HH-MM time portion', () => {
-    const name = generateFileName('test', 'pdf');
-    expect(name).toMatch(/\d{2}-\d{2}/);
+  it('includes a date portion (YYYY-MM-DD)', () => {
+    expect(generateFileName('facility', 'pdf')).toMatch(/\d{4}-\d{2}-\d{2}/);
   });
 
-  it('replaces spaces with underscores', () => {
-    const name = generateFileName('my facility', 'pdf');
-    expect(name).toContain('my_facility');
+  it('includes a time portion (HH-MM)', () => {
+    expect(generateFileName('facility', 'pdf')).toMatch(/\d{2}-\d{2}/);
   });
 
-  it('strips special characters', () => {
-    const name = generateFileName('file/name:test', 'pdf');
-    expect(name).not.toContain('/');
-    expect(name).not.toContain(':');
+  it('replaces spaces with underscores in baseName', () => {
+    const result = generateFileName('my report', 'pdf');
+    expect(result).toContain('my_report');
   });
 
-  it('preserves Arabic characters', () => {
-    const name = generateFileName('منشأة', 'pdf');
-    expect(name).toContain('منشأة');
+  it('strips special characters (except arabic, word chars, spaces, hyphens)', () => {
+    const result = generateFileName('rep!@#$ort', 'pdf');
+    expect(result).not.toMatch(/[!@#$]/);
+  });
+
+  it('preserves Arabic characters in baseName', () => {
+    const result = generateFileName('\u0645\u0646\u0634\u0623\u0629', 'pdf');
+    expect(result).toContain('\u0645\u0646\u0634\u0623\u0629');
+  });
+
+  it('handles empty baseName gracefully', () => {
+    const result = generateFileName('', 'pdf');
+    expect(result).toMatch(/\.pdf$/);
   });
 });
