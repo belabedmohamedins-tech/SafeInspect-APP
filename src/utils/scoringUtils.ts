@@ -187,10 +187,13 @@ export function computeScoreAndGrade(items: InspectionItem[]): ScoringResult {
     grade = 'D';
     criticalOverride = grade !== rawGrade;
   } else if (violations.high >= CEILING_C_THRESHOLD) {
-    // Rule 1b: ceiling C
+    // Rule 1b: ceiling C — only applies when raw grade is above C
     if (rawGrade === 'A' || rawGrade === 'B') {
       grade = 'C';
       criticalOverride = true;
+    } else {
+      // rawGrade is already C or D — ceiling is a no-op
+      grade = rawGrade;
     }
   }
 
