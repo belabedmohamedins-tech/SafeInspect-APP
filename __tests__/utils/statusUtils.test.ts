@@ -1,34 +1,33 @@
 // __tests__/utils/statusUtils.test.ts
-// statusUtils imports Colors from constants — mock that path
-jest.mock('../../../constants', () => ({
+// Mock constants at the path statusUtils uses: '../../constants'
+jest.mock('../../constants', () => ({
   Colors: {
-    compliant: '#4caf50',
-    nonCompliant: '#f44336',
-    warning: '#ff9800',
+    compliant:    '#27ae60',
+    nonCompliant: '#e74c3c',
+    warning:      '#f39c12',
   },
 }), { virtual: true });
 
 import { getStatusText, getStatusColor, getComplianceSummary } from '../../src/utils/statusUtils';
 
 describe('getStatusText', () => {
-  it('compliant → مطابق', () => expect(getStatusText('compliant')).toBe('مطابق'));
-  it('non-compliant → غير مطابق', () => expect(getStatusText('non-compliant')).toBe('غير مطابق'));
-  it('na → غير معني', () => expect(getStatusText('na')).toBe('غير معني'));
-  it('partial → جزئي', () => expect(getStatusText('partial')).toBe('جزئي'));
-  it('unknown → لم يقيم', () => expect(getStatusText('unknown' as any)).toBe('لم يقيم'));
+  it('compliant', () => expect(getStatusText('compliant')).toBe('مطابق'));
+  it('non-compliant', () => expect(getStatusText('non-compliant')).toBe('غير مطابق'));
+  it('na', () => expect(getStatusText('na')).toBe('غير معني'));
+  it('partial', () => expect(getStatusText('partial')).toBe('جزئي'));
+  it('unknown default', () => expect(getStatusText('unknown' as any)).toBe('لم يقيم'));
 });
 
 describe('getStatusColor', () => {
-  it('compliant → Colors.compliant', () => expect(getStatusColor('compliant')).toBe('#4caf50'));
-  it('non-compliant → Colors.nonCompliant', () => expect(getStatusColor('non-compliant')).toBe('#f44336'));
-  it('na → #9e9e9e', () => expect(getStatusColor('na')).toBe('#9e9e9e'));
-  it('default (partial/unknown) → Colors.warning', () => expect(getStatusColor('partial')).toBe('#ff9800'));
+  it('compliant', () => expect(getStatusColor('compliant')).toBe('#27ae60'));
+  it('non-compliant', () => expect(getStatusColor('non-compliant')).toBe('#e74c3c'));
+  it('na', () => expect(getStatusColor('na')).toBe('#9e9e9e'));
+  it('default (partial)', () => expect(getStatusColor('partial')).toBe('#f39c12'));
 });
 
 describe('getComplianceSummary', () => {
-  it('empty array → all zeros', () => {
-    const r = getComplianceSummary([]);
-    expect(r).toEqual({ total: 0, compliant: 0, nonCompliant: 0, na: 0, notEvaluated: 0 });
+  it('empty array', () => {
+    expect(getComplianceSummary([])).toEqual({ total: 0, compliant: 0, nonCompliant: 0, na: 0, notEvaluated: 0 });
   });
 
   it('counts correctly', () => {

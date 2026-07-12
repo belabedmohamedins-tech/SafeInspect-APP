@@ -13,21 +13,23 @@ describe('deriveNumericCompliance', () => {
   it('null → not-measured', () => expect(deriveNumericCompliance(null as any, spec)).toBe('not-measured'));
   it('NaN → not-measured', () => expect(deriveNumericCompliance(NaN, spec)).toBe('not-measured'));
   it('within [min,max] → compliant', () => expect(deriveNumericCompliance(20, spec)).toBe('compliant'));
-  it('at min → compliant', () => expect(deriveNumericCompliance(10, spec)).toBe('compliant'));
-  it('at max → compliant', () => expect(deriveNumericCompliance(30, spec)).toBe('compliant'));
+  it('at min boundary → compliant', () => expect(deriveNumericCompliance(10, spec)).toBe('compliant'));
+  it('at max boundary → compliant', () => expect(deriveNumericCompliance(30, spec)).toBe('compliant'));
   it('in warning zone below min → warning', () => expect(deriveNumericCompliance(7, spec)).toBe('warning'));
   it('in warning zone above max → warning', () => expect(deriveNumericCompliance(35, spec)).toBe('warning'));
   it('outside all zones below → non-compliant', () => expect(deriveNumericCompliance(1, spec)).toBe('non-compliant'));
   it('outside all zones above → non-compliant', () => expect(deriveNumericCompliance(99, spec)).toBe('non-compliant'));
 
-  it('no min/max bounds → always compliant when in range', () => {
+  it('no min/max → always compliant for any value', () => {
     const open: NumericFieldSpec = { unit: 'ppm' } as NumericFieldSpec;
     expect(deriveNumericCompliance(999, open)).toBe('compliant');
   });
 
-  it('no warningMin/warningMax → goes straight to non-compliant', () => {
+  // When warningMin/warningMax are undefined, the warning-zone check always passes
+  // (aboveWarnMin=true, belowWarnMax=true) — so values outside [min,max] land in 'warning'
+  it('no warningMin/warningMax: value outside [min,max] → warning (not non-compliant)', () => {
     const noWarn: NumericFieldSpec = { min: 10, max: 30, unit: 'ppm' } as NumericFieldSpec;
-    expect(deriveNumericCompliance(5, noWarn)).toBe('non-compliant');
+    expect(deriveNumericCompliance(5, noWarn)).toBe('warning');
   });
 });
 
