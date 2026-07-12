@@ -22,21 +22,23 @@ const makeInspection = (overrides: Record<string, any> = {}) => ({
   id: 'i1',
   status: 'completed',
   date: '2026-07-10T10:00:00Z',
-  facilityName: 'مصنع الأمل',
-  facilityAddress: 'تلمسان',
+  facilityName: '\u0645\u0635\u0646\u0639 \u0627\u0644\u0623\u0645\u0644',
+  facilityAddress: '\u062a\u0644\u0645\u0633\u0627\u0646',
   ...overrides,
 });
 
+let consoleErrorSpy: jest.SpyInstance;
+
 beforeEach(() => {
   jest.clearAllMocks();
-  jest.spyOn(console, 'error').mockImplementation(() => {});
+  consoleErrorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 });
 
 afterEach(() => {
-  (console.error as jest.Mock).mockRestore();
+  consoleErrorSpy.mockRestore();
 });
 
-describe('useInspectionList — load', () => {
+describe('useInspectionList \u2014 load', () => {
   it('loads and exposes all inspections on mount', async () => {
     mockGetAll.mockResolvedValue([makeInspection({ id: 'i1' }), makeInspection({ id: 'i2', status: 'in-progress' })]);
     const { result } = renderHook(() => useInspectionList());
@@ -51,22 +53,22 @@ describe('useInspectionList — load', () => {
   });
 });
 
-describe('useInspectionList — load error path', () => {
+describe('useInspectionList \u2014 load error path', () => {
   it('logs error and keeps empty state when getAll rejects', async () => {
     const err = new Error('DB read failed');
     mockGetAll.mockRejectedValue(err);
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
-    expect(console.error).toHaveBeenCalledWith('useInspectionList load error:', err);
+    expect(consoleErrorSpy).toHaveBeenCalledWith('useInspectionList load error:', err);
     expect(result.current.totalCount).toBe(0);
   });
 });
 
-describe('useInspectionList — filtered', () => {
+describe('useInspectionList \u2014 filtered', () => {
   const data = [
-    makeInspection({ id: 'i1', status: 'completed',   date: '2026-07-10T10:00:00Z', facilityName: 'مصنع الأمل',    facilityAddress: 'تلمسان' }),
-    makeInspection({ id: 'i2', status: 'in-progress', date: '2026-07-11T10:00:00Z', facilityName: 'مستودع البركة', facilityAddress: 'وهران' }),
-    makeInspection({ id: 'i3', status: 'completed',   date: '2026-07-09T10:00:00Z', facilityName: 'مطعم الفاروق', facilityAddress: 'سيدي بلعباس' }),
+    makeInspection({ id: 'i1', status: 'completed',   date: '2026-07-10T10:00:00Z', facilityName: '\u0645\u0635\u0646\u0639 \u0627\u0644\u0623\u0645\u0644',    facilityAddress: '\u062a\u0644\u0645\u0633\u0627\u0646' }),
+    makeInspection({ id: 'i2', status: 'in-progress', date: '2026-07-11T10:00:00Z', facilityName: '\u0645\u0633\u062a\u0648\u062f\u0639 \u0627\u0644\u0628\u0631\u0643\u0629', facilityAddress: '\u0648\u0647\u0631\u0627\u0646' }),
+    makeInspection({ id: 'i3', status: 'completed',   date: '2026-07-09T10:00:00Z', facilityName: '\u0645\u0637\u0639\u0645 \u0627\u0644\u0641\u0627\u0631\u0648\u0642', facilityAddress: '\u0633\u064a\u062f\u064a \u0628\u0644\u0639\u0628\u0627\u0633' }),
   ];
 
   beforeEach(() => { mockGetAll.mockResolvedValue(data); });
@@ -96,7 +98,7 @@ describe('useInspectionList — filtered', () => {
   it('filters by facilityName search query', async () => {
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
-    act(() => { result.current.setSearchQuery('أمل'); });
+    act(() => { result.current.setSearchQuery('\u0623\u0645\u0644'); });
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.filtered[0].id).toBe('i1');
   });
@@ -104,7 +106,7 @@ describe('useInspectionList — filtered', () => {
   it('filters by facilityAddress search query', async () => {
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
-    act(() => { result.current.setSearchQuery('وهران'); });
+    act(() => { result.current.setSearchQuery('\u0648\u0647\u0631\u0627\u0646'); });
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.filtered[0].id).toBe('i2');
   });
@@ -124,7 +126,7 @@ describe('useInspectionList — filtered', () => {
   });
 });
 
-describe('useInspectionList — deleteInspection', () => {
+describe('useInspectionList \u2014 deleteInspection', () => {
   beforeEach(() => {
     mockGetAll.mockResolvedValue([makeInspection({ id: 'i1' })]);
   });
@@ -134,44 +136,54 @@ describe('useInspectionList — deleteInspection', () => {
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     act(() => { result.current.deleteInspection('i1'); });
-    expect(alertSpy).toHaveBeenCalledWith('تأكيد الحذف', 'هل أنت متأكد من حذف هذا التفتيش؟', expect.any(Array));
+    expect(alertSpy).toHaveBeenCalledWith(
+      '\u062a\u0623\u0643\u064a\u062f \u0627\u0644\u062d\u0630\u0641',
+      '\u0647\u0644 \u0623\u0646\u062a \u0645\u062a\u0623\u0643\u062f \u0645\u0646 \u062d\u0630\u0641 \u0647\u0630\u0627 \u0627\u0644\u062a\u0641\u062a\u064a\u0634\u061f',
+      expect.any(Array),
+    );
     alertSpy.mockRestore();
   });
 
   it('removes the inspection from state when onPress (destructive) is called', async () => {
     mockDelete.mockResolvedValue(undefined);
     let capturedButtons: any[];
-    jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => { capturedButtons = buttons!; });
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
+      capturedButtons = buttons!;
+    });
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     act(() => { result.current.deleteInspection('i1'); });
     await act(async () => { await capturedButtons[1].onPress(); });
     expect(mockDelete).toHaveBeenCalledWith('i1');
     expect(result.current.totalCount).toBe(0);
-    jest.restoreAllMocks();
+    alertSpy.mockRestore();
   });
 
   it('logs error when InspectionRepository.delete rejects', async () => {
     const err = new Error('delete failed');
     mockDelete.mockRejectedValue(err);
     let capturedButtons: any[];
-    jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => { capturedButtons = buttons!; });
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
+      capturedButtons = buttons!;
+    });
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     act(() => { result.current.deleteInspection('i1'); });
     await act(async () => { await capturedButtons[1].onPress(); });
-    expect(console.error).toHaveBeenCalledWith('Delete error:', err);
-    jest.restoreAllMocks();
+    expect(consoleErrorSpy).toHaveBeenCalledWith('Delete error:', err);
+    alertSpy.mockRestore();
   });
 
   it('does nothing on cancel button press', async () => {
     let capturedButtons: any[];
-    jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => { capturedButtons = buttons!; });
+    const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
+      capturedButtons = buttons!;
+    });
     const { result } = renderHook(() => useInspectionList());
     await act(async () => {});
     act(() => { result.current.deleteInspection('i1'); });
-    expect(capturedButtons[0].text).toBe('إلغاء');
+    expect(capturedButtons[0].text).toBe('\u0625\u0644\u063a\u0627\u0621');
     expect(capturedButtons[0].onPress).toBeUndefined();
-    jest.restoreAllMocks();
+    alertSpy.mockRestore();
   });
 });
