@@ -1,80 +1,71 @@
-import { getComplianceSummary, getStatusColor, getStatusText } from '../utils/statusUtils';
+// src/__tests__/statusUtils.test.ts
+// statusUtils imports Colors from '../../constants' — mock it at L4.
+jest.mock('../../constants', () => ({
+  Colors: {
+    compliant:    '#4caf50',
+    nonCompliant: '#f44336',
+    warning:      '#ff9800',
+  },
+}));
 
-// ─── getStatusText ────────────────────────────────────────────────────────────
+import {
+  getStatusText,
+  getStatusColor,
+  getComplianceSummary,
+} from '../../src/utils/statusUtils';
 
 describe('getStatusText', () => {
-  it('returns مطابق for compliant', () => {
+  it('returns Arabic text for compliant', () => {
     expect(getStatusText('compliant')).toBe('مطابق');
   });
-
-  it('returns غير مطابق for non-compliant', () => {
+  it('returns Arabic text for non-compliant', () => {
     expect(getStatusText('non-compliant')).toBe('غير مطابق');
   });
-
-  it('returns غير معني for na', () => {
+  it('returns Arabic text for na', () => {
     expect(getStatusText('na')).toBe('غير معني');
   });
-
-  it('returns لم يقيم for unknown/default', () => {
-    expect(getStatusText('not-evaluated' as any)).toBe('لم يقيم');
+  it('returns Arabic text for partial', () => {
+    expect(getStatusText('partial')).toBe('جزئي');
+  });
+  it('returns fallback for unknown status', () => {
+    expect(getStatusText('unknown' as any)).toBe('لم يقيم');
   });
 });
-
-// ─── getStatusColor ───────────────────────────────────────────────────────────
 
 describe('getStatusColor', () => {
-  it('returns green for compliant', () => {
-    expect(getStatusColor('compliant')).toBe('#27ae60');
+  it('returns compliant color', () => {
+    expect(getStatusColor('compliant')).toBe('#4caf50');
   });
-
-  it('returns red for non-compliant', () => {
-    expect(getStatusColor('non-compliant')).toBe('#e74c3c');
+  it('returns nonCompliant color', () => {
+    expect(getStatusColor('non-compliant')).toBe('#f44336');
   });
-
-  it('returns grey for na', () => {
+  it('returns gray for na', () => {
     expect(getStatusColor('na')).toBe('#9e9e9e');
   });
-
-  it('returns orange for default/not-evaluated', () => {
-    expect(getStatusColor('not-evaluated' as any)).toBe('#f39c12');
+  it('returns warning color for unknown', () => {
+    expect(getStatusColor('unknown' as any)).toBe('#ff9800');
   });
 });
 
-// ─── getComplianceSummary ─────────────────────────────────────────────────────
-
 describe('getComplianceSummary', () => {
-  const items = [
-    { complianceStatus: 'compliant' },
-    { complianceStatus: 'compliant' },
-    { complianceStatus: 'non-compliant' },
-    { complianceStatus: 'na' },
-    { complianceStatus: 'not-evaluated' },
-  ];
-
-  it('counts total correctly', () => {
-    expect(getComplianceSummary(items).total).toBe(5);
+  it('counts all statuses correctly', () => {
+    const items = [
+      { complianceStatus: 'compliant' },
+      { complianceStatus: 'compliant' },
+      { complianceStatus: 'non-compliant' },
+      { complianceStatus: 'na' },
+      { complianceStatus: 'not-evaluated' }, // counted in notEvaluated
+    ];
+    const r = getComplianceSummary(items);
+    expect(r.total).toBe(5);
+    expect(r.compliant).toBe(2);
+    expect(r.nonCompliant).toBe(1);
+    expect(r.na).toBe(1);
+    expect(r.notEvaluated).toBe(1);
   });
 
-  it('counts compliant correctly', () => {
-    expect(getComplianceSummary(items).compliant).toBe(2);
-  });
-
-  it('counts nonCompliant correctly', () => {
-    expect(getComplianceSummary(items).nonCompliant).toBe(1);
-  });
-
-  it('counts na correctly', () => {
-    expect(getComplianceSummary(items).na).toBe(1);
-  });
-
-  it('counts notEvaluated as remainder', () => {
-    expect(getComplianceSummary(items).notEvaluated).toBe(1);
-  });
-
-  it('handles empty array', () => {
-    const result = getComplianceSummary([]);
-    expect(result.total).toBe(0);
-    expect(result.compliant).toBe(0);
-    expect(result.notEvaluated).toBe(0);
+  it('returns all zeros for empty list', () => {
+    const r = getComplianceSummary([]);
+    expect(r).toEqual({ total: 0, compliant: 0, nonCompliant: 0, na: 0, notEvaluated: 0 });
   });
 });
