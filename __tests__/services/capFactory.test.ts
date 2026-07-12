@@ -20,6 +20,13 @@ const BASE_INSP = {
   items: [] as any[],
 };
 
+/** Compute expected YYYY-MM-DD by adding `days` to today (local time, same logic as capFactory). */
+function expectedDeadline(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().slice(0, 10);
+}
+
 beforeEach(() => {
   jest.clearAllMocks();
   mockSave.mockResolvedValue(undefined);
@@ -85,20 +92,19 @@ describe('createCapItemsFromInspection', () => {
       { id: 'c2', complianceStatus: 'non-compliant', severity: 'medium', criteria: 'M', comment: '' },
       { id: 'c3', complianceStatus: 'non-compliant', severity: 'low',    criteria: 'L', comment: '' },
     ]};
-    const before = new Date();
     await createCapItemsFromInspection(insp as any);
     const calls = mockSave.mock.calls.map((c: any) => c[0]);
+    expect(calls[0].deadline).toBe(expectedDeadline(14));
+    expect(calls[1].deadline).toBe(expectedDeadline(30));
+    expect(calls[2].deadline).toBe(expectedDeadline(45));
+  });
 
-    const highDeadline = new Date(calls[0].deadline);
-    const expected14 = new Date(before); expected14.setDate(expected14.getDate() + 14);
-    expect(Math.abs(highDeadline.getTime() - expected14.getTime())).toBeLessThan(60_000);
-
-    const medDeadline = new Date(calls[1].deadline);
-    const expected30 = new Date(before); expected30.setDate(expected30.getDate() + 30);
-    expect(Math.abs(medDeadline.getTime() - expected30.getTime())).toBeLessThan(60_000);
-
-    const lowDeadline = new Date(calls[2].deadline);
-    const expected45 = new Date(before); expected45.setDate(expected45.getDate() + 45);
-    expect(Math.abs(lowDeadline.getTime() - expected45.getTime())).toBeLessThan(60_000);
+  it('sets critical deadline to 7 days', async () => {
+    mockGetByInspection.mockResolvedValue([]);
+    const insp = { ...BASE_INSP, items: [
+      { id: 'c1', complianceStatus: 'non-compliant', severity: 'high', sanctionTier: 'court-referral', criteria: 'H', comment: '' },
+    ]};
+    await createCapItemsFromInspection(insp as any);
+    expect(mockSave.mock.calls[0][0].deadline).toBe(expectedDeadline(7));
   });
 });
