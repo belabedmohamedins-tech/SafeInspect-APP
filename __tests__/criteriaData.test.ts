@@ -16,7 +16,7 @@ import { baseFoodCriteria } from '../src/criteria/baseFoodCriteria';
 import { uabSpecificCriteria } from '../src/criteria/uabCriteria';
 import { mechanicWorkshopCriteria } from '../src/criteria/mechanicCriteria';
 
-// ─── Silence expected console.warn calls ─────────────────────────────────────
+// ─── Silence expected console.warn calls ─────────────────────────────────────────────────
 const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
 beforeEach(() => {
@@ -27,7 +27,7 @@ afterAll(() => {
   warnSpy.mockRestore();
 });
 
-// ─── criteriaByActivity ───────────────────────────────────────────────────────
+// ─── criteriaByActivity ──────────────────────────────────────────────────────────────
 
 describe('criteriaByActivity', () => {
   it('has a "default" key that maps to baseGeneralCriteria', () => {
@@ -118,7 +118,7 @@ describe('criteriaByActivity', () => {
   });
 });
 
-// ─── getChecklistForActivity ──────────────────────────────────────────────────
+// ─── getChecklistForActivity ──────────────────────────────────────────────────────
 
 describe('getChecklistForActivity', () => {
   describe('null / undefined / empty input', () => {
