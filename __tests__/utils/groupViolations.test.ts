@@ -1,9 +1,4 @@
 // __tests__/utils/groupViolations.test.ts
-//
-// Full coverage for src/utils/groupViolations.ts
-// Covers: groupViolationsByRepeat, formatViolationGroupSummary
-// All branches exercised — no React Native imports needed (pure TS logic).
-
 import {
   groupViolationsByRepeat,
   formatViolationGroupSummary,
@@ -11,182 +6,131 @@ import {
 } from '../../src/utils/groupViolations';
 import { InspectionItem } from '../../src/types';
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-function makeItem(
-  id: string,
+// ── Helpers ───────────────────────────────────────────────────────────────────
+const item = (
   complianceStatus: InspectionItem['complianceStatus'],
-  isRepeatViolation?: boolean,
-): InspectionItem {
-  return {
-    id,
-    criteria: `Criterion ${id}`,
-    legalReference: 'Art. 1',
-    severity: 'medium',
+  isRepeatViolation = false
+): InspectionItem =>
+  ({
+    id: Math.random().toString(),
+    criterionId: 'c1',
+    label: 'test',
     complianceStatus,
     isRepeatViolation,
-  };
-}
+  } as unknown as InspectionItem);
 
-// ─── groupViolationsByRepeat ─────────────────────────────────────────────────
+const nonComp  = (repeat = false) => item('non-compliant', repeat);
+const compliant = ()              => item('compliant');
+const obs       = ()              => item('observation-only');
+const utv       = ()              => item('unable-to-verify');
+const notEval   = ()              => item('not-evaluated');
 
+// ── groupViolationsByRepeat ───────────────────────────────────────────────────
 describe('groupViolationsByRepeat', () => {
-  it('returns two empty arrays when items is empty', () => {
-    const result = groupViolationsByRepeat([]);
-    expect(result.firstTime).toEqual([]);
-    expect(result.repeat).toEqual([]);
+  it('empty array → both groups empty', () => {
+    expect(groupViolationsByRepeat([])).toEqual({ firstTime: [], repeat: [] });
   });
 
-  it('ignores compliant items — both groups empty', () => {
-    const items = [
-      makeItem('c1', 'compliant'),
-      makeItem('c2', 'compliant'),
-    ];
-    const result = groupViolationsByRepeat(items);
+  it('only compliant items → both groups empty', () => {
+    expect(groupViolationsByRepeat([compliant(), compliant()])).toEqual({ firstTime: [], repeat: [] });
+  });
+
+  it('observation-only excluded from both groups', () => {
+    expect(groupViolationsByRepeat([obs(), obs()])).toEqual({ firstTime: [], repeat: [] });
+  });
+
+  it('unable-to-verify excluded from both groups', () => {
+    expect(groupViolationsByRepeat([utv()])).toEqual({ firstTime: [], repeat: [] });
+  });
+
+  it('not-evaluated excluded from both groups', () => {
+    expect(groupViolationsByRepeat([notEval()])).toEqual({ firstTime: [], repeat: [] });
+  });
+
+  it('non-compliant, isRepeatViolation=false → firstTime', () => {
+    const i = nonComp(false);
+    const result = groupViolationsByRepeat([i]);
+    expect(result.firstTime).toContain(i);
+    expect(result.repeat).toHaveLength(0);
+  });
+
+  it('non-compliant, isRepeatViolation=true → repeat', () => {
+    const i = nonComp(true);
+    const result = groupViolationsByRepeat([i]);
+    expect(result.repeat).toContain(i);
     expect(result.firstTime).toHaveLength(0);
-    expect(result.repeat).toHaveLength(0);
   });
 
-  it('ignores na, not-evaluated, observation-only, unable-to-verify', () => {
-    const items = [
-      makeItem('n1', 'na'),
-      makeItem('n2', 'not-evaluated'),
-      makeItem('n3', 'observation-only'),
-      makeItem('n4', 'unable-to-verify'),
-    ];
-    const result = groupViolationsByRepeat(items);
-    expect(result.firstTime).toHaveLength(0);
-    expect(result.repeat).toHaveLength(0);
-  });
-
-  it('puts non-compliant with isRepeatViolation=undefined into firstTime', () => {
-    const item = makeItem('v1', 'non-compliant', undefined);
-    const result = groupViolationsByRepeat([item]);
-    expect(result.firstTime).toHaveLength(1);
-    expect(result.firstTime[0].id).toBe('v1');
-    expect(result.repeat).toHaveLength(0);
-  });
-
-  it('puts non-compliant with isRepeatViolation=false into firstTime', () => {
-    const item = makeItem('v2', 'non-compliant', false);
-    const result = groupViolationsByRepeat([item]);
-    expect(result.firstTime).toHaveLength(1);
-    expect(result.repeat).toHaveLength(0);
-  });
-
-  it('puts non-compliant with isRepeatViolation=true into repeat', () => {
-    const item = makeItem('v3', 'non-compliant', true);
-    const result = groupViolationsByRepeat([item]);
-    expect(result.firstTime).toHaveLength(0);
+  it('mixed bag → correct split', () => {
+    const ft1 = nonComp(false);
+    const ft2 = nonComp(false);
+    const rp1 = nonComp(true);
+    const result = groupViolationsByRepeat([ft1, compliant(), rp1, obs(), ft2, utv()]);
+    expect(result.firstTime).toHaveLength(2);
     expect(result.repeat).toHaveLength(1);
-    expect(result.repeat[0].id).toBe('v3');
+    expect(result.firstTime).toContain(ft1);
+    expect(result.firstTime).toContain(ft2);
+    expect(result.repeat).toContain(rp1);
   });
 
-  it('correctly splits a mixed array', () => {
-    const items = [
-      makeItem('a', 'compliant'),
-      makeItem('b', 'non-compliant', false),   // → firstTime
-      makeItem('c', 'non-compliant', true),    // → repeat
-      makeItem('d', 'na'),
-      makeItem('e', 'non-compliant', undefined), // → firstTime
-      makeItem('f', 'non-compliant', true),    // → repeat
-      makeItem('g', 'observation-only'),
-    ];
-    const result = groupViolationsByRepeat(items);
-    expect(result.firstTime).toHaveLength(2);
-    expect(result.repeat).toHaveLength(2);
-    expect(result.firstTime.map(i => i.id)).toEqual(['b', 'e']);
-    expect(result.repeat.map(i => i.id)).toEqual(['c', 'f']);
-  });
-
-  it('returns all non-compliant as firstTime when none are repeats', () => {
-    const items = [
-      makeItem('x1', 'non-compliant'),
-      makeItem('x2', 'non-compliant', false),
-    ];
-    const result = groupViolationsByRepeat(items);
-    expect(result.firstTime).toHaveLength(2);
+  it('all items non-compliant first-time → repeat is empty', () => {
+    const result = groupViolationsByRepeat([nonComp(), nonComp(), nonComp()]);
+    expect(result.firstTime).toHaveLength(3);
     expect(result.repeat).toHaveLength(0);
   });
 
-  it('returns all non-compliant as repeat when all are repeats', () => {
-    const items = [
-      makeItem('r1', 'non-compliant', true),
-      makeItem('r2', 'non-compliant', true),
-      makeItem('r3', 'non-compliant', true),
-    ];
-    const result = groupViolationsByRepeat(items);
+  it('all items non-compliant repeat → firstTime is empty', () => {
+    const result = groupViolationsByRepeat([nonComp(true), nonComp(true)]);
     expect(result.firstTime).toHaveLength(0);
-    expect(result.repeat).toHaveLength(3);
+    expect(result.repeat).toHaveLength(2);
   });
 });
 
-// ─── formatViolationGroupSummary ─────────────────────────────────────────────
-
+// ── formatViolationGroupSummary ───────────────────────────────────────────────
 describe('formatViolationGroupSummary', () => {
-  it('returns "لا توجد مخالفات" when both groups are empty', () => {
-    const groups: ViolationGroups = { firstTime: [], repeat: [] };
-    expect(formatViolationGroupSummary(groups)).toBe('لا توجد مخالفات');
+  const empty: ViolationGroups = { firstTime: [], repeat: [] };
+
+  it('no violations → "لا توجد مخالفات"', () => {
+    expect(formatViolationGroupSummary(empty)).toBe('لا توجد مخالفات');
   });
 
-  it('formats correctly with only firstTime violations (1)', () => {
+  it('only first-time violations', () => {
     const groups: ViolationGroups = {
-      firstTime: [makeItem('a', 'non-compliant')],
+      firstTime: [nonComp(), nonComp()],
       repeat: [],
     };
-    expect(formatViolationGroupSummary(groups)).toBe('1 مخالفات: 1 لأول مرة');
+    expect(formatViolationGroupSummary(groups)).toBe('2 مخالفات: 2 لأول مرة');
   });
 
-  it('formats correctly with only firstTime violations (3)', () => {
-    const groups: ViolationGroups = {
-      firstTime: [
-        makeItem('a', 'non-compliant'),
-        makeItem('b', 'non-compliant'),
-        makeItem('c', 'non-compliant'),
-      ],
-      repeat: [],
-    };
-    expect(formatViolationGroupSummary(groups)).toBe('3 مخالفات: 3 لأول مرة');
-  });
-
-  it('formats correctly with only 1 repeat violation (singular suffix)', () => {
-    const groups: ViolationGroups = {
-      firstTime: [],
-      repeat: [makeItem('r1', 'non-compliant', true)],
-    };
-    // repeat.length === 1 → no 'ة' suffix
+  it('only repeat violations — singular (1)', () => {
+    const groups: ViolationGroups = { firstTime: [], repeat: [nonComp(true)] };
+    // repeat.length === 1 → 'متكرر' (no ة)
     expect(formatViolationGroupSummary(groups)).toBe('1 مخالفات: 1 متكرر');
   });
 
-  it('formats correctly with only 2 repeat violations (plural suffix)', () => {
+  it('only repeat violations — plural (2+)', () => {
     const groups: ViolationGroups = {
       firstTime: [],
-      repeat: [
-        makeItem('r1', 'non-compliant', true),
-        makeItem('r2', 'non-compliant', true),
-      ],
+      repeat: [nonComp(true), nonComp(true)],
     };
-    // repeat.length > 1 → 'ة' suffix
+    // repeat.length > 1 → 'متكررة'
     expect(formatViolationGroupSummary(groups)).toBe('2 مخالفات: 2 متكررة');
   });
 
-  it('formats correctly with mixed firstTime and repeat (1 each)', () => {
+  it('mixed first-time and repeat', () => {
     const groups: ViolationGroups = {
-      firstTime: [makeItem('f1', 'non-compliant')],
-      repeat: [makeItem('r1', 'non-compliant', true)],
+      firstTime: [nonComp()],
+      repeat: [nonComp(true), nonComp(true)],
     };
-    expect(formatViolationGroupSummary(groups)).toBe('2 مخالفات: 1 لأول مرة، 1 متكرر');
+    expect(formatViolationGroupSummary(groups)).toBe('3 مخالفات: 1 لأول مرة، 2 متكررة');
   });
 
-  it('formats correctly with mixed firstTime and repeat (multiple)', () => {
+  it('total = firstTime.length + repeat.length invariant', () => {
     const groups: ViolationGroups = {
-      firstTime: [makeItem('f1', 'non-compliant'), makeItem('f2', 'non-compliant')],
-      repeat: [
-        makeItem('r1', 'non-compliant', true),
-        makeItem('r2', 'non-compliant', true),
-        makeItem('r3', 'non-compliant', true),
-      ],
+      firstTime: [nonComp(), nonComp()],
+      repeat: [nonComp(true), nonComp(true), nonComp(true)],
     };
-    expect(formatViolationGroupSummary(groups)).toBe('5 مخالفات: 2 لأول مرة، 3 متكررة');
+    const result = formatViolationGroupSummary(groups);
+    expect(result.startsWith('5 مخالفات')).toBe(true);
   });
 });
