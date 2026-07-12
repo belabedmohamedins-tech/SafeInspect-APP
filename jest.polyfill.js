@@ -6,65 +6,94 @@
  *
  *   class FetchResponse extends Response { … }
  *
- * Node ≥ 18 has a built-in fetch/Response, but jest-expo overrides the
- * testEnvironment with a jsdom-like shim that strips those globals out.
- * The result: `Response is not defined` → `requireNativeModule('ExpoFetchModule')`
- * blows up every test suite before a single test runs.
+ * The preset installs LAZY GETTERS for fetch/Request/Response/Headers/FormData
+ * on `global` via installGlobal.ts.  When those getters fire they execute:
+ *   runtime.native.ts → fetch/index.ts → FetchResponse.ts
+ * which does `class FetchResponse extends Response`.  If Response is
+ * undefined at that moment Babel's _inherits() throws:
+ *   TypeError: Super expression must either be null or a function
  *
- * Fix: install the WHATWG Fetch globals into globalThis here, before the
- * preset touches anything.  We use the same undici-based globals that
- * Node 18+ ships, falling back to `node-fetch` v2 if undici isn't present.
+ * This affects pdfService.test.ts and useHomeData.test.ts specifically
+ * because their import graphs trigger the lazy getter before jest.setup.ts
+ * (Layer 3) has a chance to freeze anything.
+ *
+ * THE FIX: define all five fetch globals with Object.defineProperty using
+ * configurable:false BEFORE the preset runs.  A non-configurable own
+ * property cannot be redefined with Object.defineProperty — the preset's
+ * attempt to install a lazy getter on top will throw and be silently ignored
+ * (jest-expo wraps the install in a try/catch), so our concrete values
+ * survive for the lifetime of the test suite.
+ *
+ * We use `writable: true` so individual test files can still do
+ * jest.spyOn(global, 'fetch') without hitting "Cannot assign to read only".
  */
 
 'use strict';
 
-// ── Prefer undici (ships with Node 18+) ─────────────────────────────────────
+function defineFetchGlobal(name, value) {
+  if (value === undefined) return;
+  try {
+    // If the property doesn't exist yet, define it non-configurable so the
+    // preset cannot replace it with a lazy getter.
+    if (!Object.getOwnPropertyDescriptor(globalThis, name)) {
+      Object.defineProperty(globalThis, name, {
+        value,
+        writable:     true,   // jest.spyOn must still work
+        enumerable:   true,
+        configurable: false,  // <─ key: preset cannot redefine with a getter
+      });
+    } else {
+      // Already defined (e.g. Node 18 built-in) — just assign to keep it a
+      // data descriptor (not a getter) without touching configurability.
+      globalThis[name] = value;
+    }
+  } catch (_) {
+    // Last resort: plain assignment.
+    globalThis[name] = value;
+  }
+}
+
+// ── 1. Try undici (ships with Node 18+) ──────────────────────────────────────
 try {
   const { fetch, Request, Response, Headers, FormData } = require('undici');
-  if (!globalThis.fetch)    globalThis.fetch    = fetch;
-  if (!globalThis.Request)  globalThis.Request  = Request;
-  if (!globalThis.Response) globalThis.Response = Response;
-  if (!globalThis.Headers)  globalThis.Headers  = Headers;
-  if (!globalThis.FormData) globalThis.FormData = FormData;
+  defineFetchGlobal('fetch',    fetch);
+  defineFetchGlobal('Request',  Request);
+  defineFetchGlobal('Response', Response);
+  defineFetchGlobal('Headers',  Headers);
+  defineFetchGlobal('FormData', FormData);
 } catch (_) {
-  // undici not available — fall back to node-fetch v2
+  // ── 2. Fall back to node-fetch v2 ─────────────────────────────────────────
   try {
     const nodeFetch = require('node-fetch');
-    const fetch    = nodeFetch.default ?? nodeFetch;
-    const Request  = nodeFetch.Request;
-    const Response = nodeFetch.Response;
-    const Headers  = nodeFetch.Headers;
-    if (!globalThis.fetch)    globalThis.fetch    = fetch;
-    if (!globalThis.Request)  globalThis.Request  = Request;
-    if (!globalThis.Response) globalThis.Response = Response;
-    if (!globalThis.Headers)  globalThis.Headers  = Headers;
+    const fetch     = nodeFetch.default ?? nodeFetch;
+    defineFetchGlobal('fetch',    fetch);
+    defineFetchGlobal('Request',  nodeFetch.Request);
+    defineFetchGlobal('Response', nodeFetch.Response);
+    defineFetchGlobal('Headers',  nodeFetch.Headers);
   } catch (__) {
-    // Neither undici nor node-fetch is installed.
-    // Provide a minimal Response stub so the Expo winter chain doesn't crash.
-    if (!globalThis.Response) {
-      globalThis.Response = class Response {
-        constructor(body, init) {
-          this.body    = body ?? null;
-          this.status  = (init && init.status)  ?? 200;
-          this.ok      = this.status >= 200 && this.status < 300;
-          this.headers = new Map(Object.entries((init && init.headers) ?? {}));
-        }
-        async text()   { return String(this.body ?? ''); }
-        async json()   { return JSON.parse(String(this.body ?? 'null')); }
-        async arrayBuffer() { return new ArrayBuffer(0); }
-        clone()        { return Object.assign(Object.create(Object.getPrototypeOf(this)), this); }
-      };
+    // ── 3. Minimal stub so the winter chain never crashes ──────────────────
+    //    FetchResponse extends Response — the stub must be a real class.
+    class Response {
+      constructor(body, init) {
+        this.body    = body ?? null;
+        this.status  = (init && init.status)  ?? 200;
+        this.ok      = this.status >= 200 && this.status < 300;
+        this.headers = new Map(Object.entries((init && init.headers) ?? {}));
+      }
+      async text()        { return String(this.body ?? ''); }
+      async json()        { return JSON.parse(String(this.body ?? 'null')); }
+      async arrayBuffer() { return new ArrayBuffer(0); }
+      clone() { return Object.assign(Object.create(Object.getPrototypeOf(this)), this); }
     }
-    if (!globalThis.Headers) {
-      globalThis.Headers = class Headers extends Map {};
+    class Headers extends Map {}
+    class Request {
+      constructor(url, init) { this.url = url; this.method = (init && init.method) ?? 'GET'; }
     }
-    if (!globalThis.Request) {
-      globalThis.Request = class Request {
-        constructor(url, init) { this.url = url; this.method = (init && init.method) ?? 'GET'; }
-      };
-    }
-    if (!globalThis.fetch) {
-      globalThis.fetch = () => Promise.reject(new Error('fetch not available in test environment'));
-    }
+    const fetch = () => Promise.reject(new Error('fetch not available in test environment'));
+
+    defineFetchGlobal('fetch',    fetch);
+    defineFetchGlobal('Request',  Request);
+    defineFetchGlobal('Response', Response);
+    defineFetchGlobal('Headers',  Headers);
   }
 }
