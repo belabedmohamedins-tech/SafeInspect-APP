@@ -1,19 +1,6 @@
 // src/repositories/SettingsRepository.ts
-//
-// Settings are stored as individual keys in AsyncStorage so that
-// partial updates (set a single field) never risk corrupting other fields.
-//
-// The repository exposes a flexible API:
-//   get()              → typed Settings object (core 3 fields)
-//   getAll()           → Record<string,string> of ALL keys (for screens that
-//                         read arbitrary keys like profile_* or pinEnabled)
-//   set(partial)       → write multiple fields at once
-//   set(key, value)    → write a single key (any string key allowed)
-
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from './keys';
-
-// ─── Public types ─────────────────────────────────────────────────────
 
 export interface Settings {
   officeName:      string;
@@ -28,7 +15,6 @@ const DEFAULTS: Settings = {
   inspectionCause: '',
 };
 
-// Core keys that map to StorageKeys constants
 // The ?? fallback strings are unreachable at runtime (StorageKeys always defines
 // these constants) — Istanbul branch ignored intentionally.
 const FIELD_KEYS: Record<string, string> = {
@@ -37,12 +23,7 @@ const FIELD_KEYS: Record<string, string> = {
   inspectionCause: /* istanbul ignore next */ StorageKeys.INSPECTION_CAUSE ?? 'INSPECTION_CAUSE',
 };
 
-// ─── Repository ────────────────────────────────────────────────────────
-
 export const SettingsRepository = {
-  /**
-   * Read the core typed settings (officeName, inspectorName, inspectionCause).
-   */
   async get(): Promise<Settings> {
     try {
       const keys  = Object.values(FIELD_KEYS);
@@ -58,13 +39,6 @@ export const SettingsRepository = {
     }
   },
 
-  /**
-   * Read ALL keys stored in AsyncStorage and return them as a flat
-   * Record<string, string>.  Unknown / future keys (profile_*, pinEnabled …)
-   * are returned as-is.  Missing keys default to ''.
-   *
-   * This is the method used by settings.tsx and inspector-profile.tsx.
-   */
   async getAll(): Promise<Record<string, string>> {
     try {
       const allKeys = await AsyncStorage.getAllKeys();
@@ -80,15 +54,6 @@ export const SettingsRepository = {
     }
   },
 
-  /**
-   * Overloaded set:
-   *   set('key', 'value')        — write a single arbitrary key
-   *   set({ key: 'value', … })  — write multiple keys at once
-   *
-   * Values are coerced to strings before storage (booleans become '"true"' /
-   * '"false"' so callers can store boolean-looking settings without a separate
-   * boolean store).
-   */
   async set(
     keyOrPartial: string | Record<string, unknown>,
     value?: unknown
@@ -97,12 +62,10 @@ export const SettingsRepository = {
       let pairs: [string, string][];
 
       if (typeof keyOrPartial === 'string') {
-        // Single-key form: set('pinEnabled', true)
         pairs = [[keyOrPartial, String(value ?? '')]];
       } else {
-        // Object form: set({ inspectorName: 'Ahmed', officeName: 'Alger' })
         pairs = Object.entries(keyOrPartial).map(([k, v]) => [
-          FIELD_KEYS[k] ?? k,   // map core field names to their StorageKeys
+          FIELD_KEYS[k] ?? k,
           String(v ?? ''),
         ]);
       }

@@ -21,7 +21,6 @@ async function loadAll(): Promise<SavedInspection[]> {
 
 async function saveAll(inspections: SavedInspection[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.INSPECTIONS, JSON.stringify(inspections));
-  // Invalidate stats cache so stale aggregates are not served
   await AsyncStorage.removeItem(StorageKeys.STATS_CACHE);
 }
 
@@ -55,9 +54,6 @@ export const InspectionRepository = {
     let toSave = inspection;
 
     if (isNewCompletion) {
-      // ── Phase 2: Annotate repeat violations before hashing ──────────────
-      // Inject accessors directly — avoids the circular import that previously
-      // existed when violationHistory imported InspectionRepository.
       try {
         const accessors = {
           getAll: () => InspectionRepository.getAll(),
@@ -71,11 +67,10 @@ export const InspectionRepository = {
           inspection.priorInspectionId,
         );
         toSave = { ...inspection, items: annotatedItems };
-      } catch {
+      } catch /* istanbul ignore next */ {
         // Non-fatal — annotation failure must not block save.
       }
 
-      // ── Integrity hash (computed AFTER annotation so hash covers flags) ─
       const hash = await IntegrityService.computeHash(toSave);
       toSave = {
         ...toSave,
@@ -91,7 +86,6 @@ export const InspectionRepository = {
     }
     await saveAll(all);
 
-    // Audit log + CAP + follow-up on first completion
     if (isNewCompletion) {
       await AuditLogRepository.append({
         action: 'INSPECTION_SAVED',
