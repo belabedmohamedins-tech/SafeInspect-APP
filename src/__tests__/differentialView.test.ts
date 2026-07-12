@@ -4,6 +4,7 @@
 //   buildDifferentialViewSync — all 5 DiffStatus values
 //   buildDifferentialView     — async, using mocked InspectionRepository
 //     • priorInspectionId path (specific record found + not found/not completed)
+//     • priorInspectionId set but getById returns null -> fallback getAll (lines 117-120)
 //     • fallback getAll path (facility match + exclusion)
 //     • no prior -> all 'not-in-prior'
 
@@ -148,6 +149,20 @@ describe('buildDifferentialView — async', () => {
     expect(view.stillFailing).toHaveLength(1);
   });
 
+  // ── Lines 117-120: getById returns null → must enter the if(!prior) block ──
+  it('falls back to getAll when priorInspectionId set but getById returns null', async () => {
+    const current  = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'missing-id');
+    const fallback = makeInspection('prior2', 'F1', priorItems, 'completed', '2025-02-01');
+    mockGetById.mockResolvedValue(null);          // record does not exist in DB
+    mockGetAll.mockResolvedValue([fallback, current]);
+
+    const view = await buildDifferentialView(current);
+
+    expect(mockGetById).toHaveBeenCalledWith('missing-id');
+    expect(mockGetAll).toHaveBeenCalled();        // must have entered the fallback block
+    expect(view.priorInspection?.id).toBe('prior2');
+  });
+
   it('falls back to getAll when priorInspectionId not completed', async () => {
     const current  = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01', 'prior1');
     const prior    = makeInspection('prior1', 'F1', priorItems, 'in-progress');
@@ -198,7 +213,7 @@ describe('buildDifferentialView — async', () => {
   });
 
   it('ignores inspections from a different facility', async () => {
-    const current      = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
+    const current       = makeInspection('cur', 'F1', currentItems, 'completed', '2025-06-01');
     const otherFacility = makeInspection('other', 'F2', priorItems, 'completed', '2025-04-01');
     mockGetAll.mockResolvedValue([otherFacility, current]);
 
