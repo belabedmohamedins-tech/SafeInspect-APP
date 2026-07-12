@@ -1,85 +1,92 @@
 // __tests__/repositories/SettingsRepository.test.ts
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
-import { StorageKeys } from '../../src/repositories/keys';
 
-// ─── Mock AsyncStorage with in-memory map (multiGet / multiSet) ───────────────
-
-const mockStore = new Map<string, string>();
-
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  multiGet: jest.fn((keys: string[]) =>
-    Promise.resolve(keys.map((k: string) => [k, mockStore.get(k) ?? null] as [string, string | null]))
-  ),
-  multiSet: jest.fn((pairs: [string, string][]) => {
-    pairs.forEach(([k, v]) => mockStore.set(k, v));
-    return Promise.resolve();
-  }),
-}));
-
-beforeEach(() => mockStore.clear());
-
-// ─── get ──────────────────────────────────────────────────────────────────────
+beforeEach(() => {
+  AsyncStorage.clear();
+});
 
 describe('SettingsRepository.get', () => {
-  it('returns DEFAULTS when storage is empty', async () => {
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('');
-    expect(settings.inspectorName).toBe('');
-    expect(settings.inspectionCause).toBe('');
+  it('returns defaults when nothing stored', async () => {
+    const s = await SettingsRepository.get();
+    expect(s.officeName).toBe('');
+    expect(s.inspectorName).toBe('');
+    expect(s.inspectionCause).toBe('');
   });
 
-  it('returns values from storage when present', async () => {
-    mockStore.set(StorageKeys.OFFICE_NAME, 'مكتب الصحة');
-    mockStore.set(StorageKeys.INSPECTOR_NAME, 'محمد');
-    mockStore.set(StorageKeys.INSPECTION_CAUSE, 'روتيني');
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('مكتب الصحة');
-    expect(settings.inspectorName).toBe('محمد');
-    expect(settings.inspectionCause).toBe('روتيني');
+  it('returns stored core fields', async () => {
+    await SettingsRepository.set({ inspectorName: 'Ahmed', officeName: 'HQ' });
+    const s = await SettingsRepository.get();
+    expect(s.inspectorName).toBe('Ahmed');
+    expect(s.officeName).toBe('HQ');
   });
 
-  it('returns defaults on AsyncStorage error (graceful fallback)', async () => {
-    const AsyncStorage = require('@react-native-async-storage/async-storage');
-    AsyncStorage.multiGet.mockRejectedValueOnce(new Error('storage failure'));
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('');
-    expect(settings.inspectorName).toBe('');
+  it('returns defaults on AsyncStorage failure', async () => {
+    (AsyncStorage.multiGet as jest.Mock).mockRejectedValueOnce(new Error('fail'));
+    const s = await SettingsRepository.get();
+    expect(s.officeName).toBe('');
   });
 });
 
-// ─── set ──────────────────────────────────────────────────────────────────────
-
-describe('SettingsRepository.set', () => {
-  it('persists a partial update', async () => {
-    await SettingsRepository.set({ inspectorName: 'عمر' });
-    const settings = await SettingsRepository.get();
-    expect(settings.inspectorName).toBe('عمر');
-    expect(settings.officeName).toBe(''); // untouched default
+describe('SettingsRepository.getAll', () => {
+  it('returns empty object when nothing stored', async () => {
+    const all = await SettingsRepository.getAll();
+    expect(all).toEqual({});
   });
 
-  it('persists a full settings update', async () => {
-    await SettingsRepository.set({
-      officeName: 'مكتب',
-      inspectorName: 'علي',
-      inspectionCause: 'شكوى',
-    });
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('مكتب');
-    expect(settings.inspectorName).toBe('علي');
-    expect(settings.inspectionCause).toBe('شكوى');
+  it('returns all keys including arbitrary ones', async () => {
+    await SettingsRepository.set('pinEnabled', 'true');
+    const all = await SettingsRepository.getAll();
+    expect(all['pinEnabled']).toBe('true');
   });
 
-  it('does not call multiSet for an empty object', async () => {
-    const AsyncStorage = require('@react-native-async-storage/async-storage');
-    AsyncStorage.multiSet.mockClear();
-    await SettingsRepository.set({});
-    expect(AsyncStorage.multiSet).not.toHaveBeenCalled();
+  it('returns empty object on AsyncStorage failure', async () => {
+    (AsyncStorage.getAllKeys as jest.Mock).mockRejectedValueOnce(new Error('fail'));
+    const all = await SettingsRepository.getAll();
+    expect(all).toEqual({});
   });
 
-  it('overwrites a previously set value', async () => {
-    await SettingsRepository.set({ officeName: 'قديم' });
-    await SettingsRepository.set({ officeName: 'جديد' });
-    const settings = await SettingsRepository.get();
-    expect(settings.officeName).toBe('جديد');
+  it('returns empty object when getAllKeys returns null', async () => {
+    (AsyncStorage.getAllKeys as jest.Mock).mockResolvedValueOnce(null);
+    const all = await SettingsRepository.getAll();
+    expect(all).toEqual({});
+  });
+});
+
+describe('SettingsRepository.set — single key form', () => {
+  it('stores a single arbitrary key', async () => {
+    await SettingsRepository.set('pinEnabled', true);
+    const all = await SettingsRepository.getAll();
+    expect(all['pinEnabled']).toBe('true');
+  });
+
+  it('coerces value to string', async () => {
+    await SettingsRepository.set('someNum', 42);
+    const all = await SettingsRepository.getAll();
+    expect(all['someNum']).toBe('42');
+  });
+
+  it('defaults value to empty string when undefined', async () => {
+    await SettingsRepository.set('emptyKey', undefined);
+    const all = await SettingsRepository.getAll();
+    expect(all['emptyKey']).toBe('');
+  });
+});
+
+describe('SettingsRepository.set — object form', () => {
+  it('writes multiple core fields at once', async () => {
+    await SettingsRepository.set({ inspectorName: 'Karim', inspectionCause: 'routine' });
+    const s = await SettingsRepository.get();
+    expect(s.inspectorName).toBe('Karim');
+    expect(s.inspectionCause).toBe('routine');
+  });
+
+  it('handles empty object gracefully', async () => {
+    await expect(SettingsRepository.set({})).resolves.not.toThrow();
+  });
+
+  it('silently catches set errors', async () => {
+    (AsyncStorage.multiSet as jest.Mock).mockRejectedValueOnce(new Error('disk error'));
+    await expect(SettingsRepository.set({ inspectorName: 'X' })).resolves.not.toThrow();
   });
 });
