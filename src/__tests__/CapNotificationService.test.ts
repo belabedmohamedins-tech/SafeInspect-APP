@@ -275,24 +275,28 @@ describe('CapNotificationService', () => {
     });
 
     // ── Line 257: singular red title (overdue === 1) ─────────────────────────
+    // Source: `🔴 ${overdueCount} إجراء${overdueCount > 1 ? 'ات' : ''} تصحيحي متأخر`
+    // When overdue === 1: title = '🔴 1 إجراء تصحيحي متأخر'  (no 'ات' suffix)
     it('uses singular form in red title when exactly 1 overdue item', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
       mockGetOpen.mockResolvedValueOnce([]);
       await scheduleCapDigestNotification();
       const title = (mockSchedule.mock.calls[0][0] as any).content.title as string;
       expect(title).toContain('🔴');
-      // singular: title must NOT contain the Arabic plural suffix ات appended to إجراء
+      expect(title).toContain('1');
+      // singular: 'ات' suffix must NOT be present
       expect(title).not.toMatch(/إجراءات/);
     });
 
-    // ── Line 257: plural red title (overdue > 1) ─────────────────────────────
+    // ── Line 257: plural red title (overdue > 1) — hits the `? 'ات' : ''` true branch
     it('uses plural form in red title when more than 1 overdue item', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
       mockGetOpen.mockResolvedValueOnce([]);
       await scheduleCapDigestNotification();
       const title = (mockSchedule.mock.calls[0][0] as any).content.title as string;
       expect(title).toContain('🔴');
-      expect(title).toContain('ات'); // plural suffix present
+      // plural: 'ات' must appear (إجراءات)
+      expect(title).toMatch(/إجراءات/);
     });
 
     it('uses yellow title when only due-today (no overdue)', async () => {
@@ -339,32 +343,53 @@ describe('CapNotificationService', () => {
       expect((mockSchedule.mock.calls[0][0] as any).content.title).toContain('🔴');
     });
 
+    // ── Weekly title ternary: overdue > 1 hits `? 'ات' : ''` true branch ────
+    it('uses plural form in weekly red title when overdue > 1', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 3, open: 1, overdue: 2 }));
+      await scheduleCapWeeklyDigest();
+      const title = (mockSchedule.mock.calls[0][0] as any).content.title as string;
+      expect(title).toContain('🔴');
+      expect(title).toMatch(/إجراءات/);
+    });
+
+    // ── Weekly title ternary: nearDeadlineCount > 1 plural branch ────────────
+    it('uses plural form in weekly yellow title when nearDeadlineCount > 1', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 3, open: 2, nearDeadlineCount: 2 }));
+      await scheduleCapWeeklyDigest();
+      const title = (mockSchedule.mock.calls[0][0] as any).content.title as string;
+      expect(title).toContain('🟡');
+      expect(title).toMatch(/إجراءات/);
+    });
+
     // ── Line 297: shouldRunWeekly() catch branch ────────────────────────────
     it('proceeds (returns true) when AsyncStorage throws in shouldRunWeekly', async () => {
-      // Make the getItem for the weekly key throw; shouldRunWeekly catch returns true
+      // Force the very first getItem call (weekly guard) to throw
       jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('io'));
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
       await scheduleCapWeeklyDigest();
-      // scheduleNotificationAsync is called, proving execution continued past the guard
       expect(mockSchedule).toHaveBeenCalled();
     });
 
-    // ── Line 346: inProgress in body ───────────────────────────────────────────
+    // ── Line 346: inProgress > 0 in body ─────────────────────────────────────
+    // Source: `if (stats.inProgress > 0) bodyParts.push(`جارٍ: ${stats.inProgress}`)`
     it('includes inProgress count in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(
         makeStats({ total: 3, open: 1, inProgress: 2 }),
       );
       await scheduleCapWeeklyDigest();
-      expect((mockSchedule.mock.calls[0][0] as any).content.body).toContain('جارٍ: 2');
+      const body = (mockSchedule.mock.calls[0][0] as any).content.body as string;
+      expect(body).toContain('جارٍ: 2');
     });
 
-    // ── Line 360: nearDeadlineCount in body ───────────────────────────────────
+    // ── Line 360: nearDeadlineCount > 0 in body ───────────────────────────────
+    // Source: `if (stats.nearDeadlineCount > 0) bodyParts.push(`يستحق خلال 3 أيام: ${stats.nearDeadlineCount}`)`
     it('includes nearDeadlineCount in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(
         makeStats({ total: 3, open: 2, nearDeadlineCount: 2 }),
       );
       await scheduleCapWeeklyDigest();
-      expect((mockSchedule.mock.calls[0][0] as any).content.body).toContain('يستحق خلال 3 أيام: 2');
+      const body = (mockSchedule.mock.calls[0][0] as any).content.body as string;
+      expect(body).toContain('يستحق خلال 3 أيام: 2');
     });
 
     it('includes both inProgress and nearDeadlineCount in body', async () => {
