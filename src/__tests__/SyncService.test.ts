@@ -120,9 +120,7 @@ describe('flush — with API URL', () => {
     delete process.env.EXPO_PUBLIC_SYNC_API_URL;
   });
 
-  // ── Line 71: queue.length === 0 early return ───────────────────────────────
-  it('returns 0 immediately when queue is empty (line 71)', async () => {
-    // URL set, device online, but queue is empty — should early-return 0
+  it('returns 0 immediately when queue is empty', async () => {
     const synced = await flush();
     expect(synced).toBe(0);
     expect(mockApiClient).not.toHaveBeenCalled();
@@ -136,6 +134,22 @@ describe('flush — with API URL', () => {
     expect(mockApiClient).not.toHaveBeenCalled();
   });
 
+  // isInternetReachable: null means unknown — treated as online (branch: !== false)
+  it('treats isInternetReachable=null as online and proceeds to flush', async () => {
+    await enqueue(makeInspection('i1'));
+    NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: true, isInternetReachable: null });
+    const synced = await flush();
+    expect(synced).toBe(1);
+  });
+
+  // checkOnline catch branch — NetInfo.fetch throws inside flush
+  it('defaults to online and flushes when NetInfo.fetch throws', async () => {
+    await enqueue(makeInspection('i1'));
+    NetInfoMock.fetch.mockRejectedValueOnce(new Error('NetInfo unavailable'));
+    const synced = await flush();
+    expect(synced).toBe(1);
+  });
+
   it('removes item from queue on 2xx response', async () => {
     await enqueue(makeInspection('i1'));
     mockApiClient.mockResolvedValueOnce({ ok: true, status: 200 });
@@ -145,22 +159,32 @@ describe('flush — with API URL', () => {
     expect(q).toHaveLength(0);
   });
 
-  it('keeps item in queue on 4xx response', async () => {
+  it('keeps item in queue on 4xx response and increments attempts', async () => {
     await enqueue(makeInspection('i1'));
     mockApiClient.mockResolvedValueOnce({ ok: false, status: 422 });
     const synced = await flush();
     expect(synced).toBe(0);
     const q = await readQueue();
     expect(q).toHaveLength(1);
+    expect(q[0].attempts).toBe(1);
   });
 
-  it('keeps item in queue when apiClient throws (network error)', async () => {
+  it('keeps item in queue when apiClient throws and increments attempts', async () => {
     await enqueue(makeInspection('i1'));
     mockApiClient.mockRejectedValueOnce(new Error('Network request failed'));
     const synced = await flush();
     expect(synced).toBe(0);
     const q = await readQueue();
     expect(q).toHaveLength(1);
+    expect(q[0].attempts).toBe(1);
+  });
+
+  it('does not update SYNC_LAST_RUN when nothing is synced', async () => {
+    await enqueue(makeInspection('i1'));
+    mockApiClient.mockResolvedValueOnce({ ok: false, status: 500 });
+    await flush();
+    const lastRun = await AsyncStorage.getItem(StorageKeys.SYNC_LAST_RUN);
+    expect(lastRun).toBeNull();
   });
 
   it('updates SYNC_LAST_RUN only when at least one item is synced', async () => {
