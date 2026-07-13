@@ -35,6 +35,10 @@ const baseDiff = makeDiff({
   stillFailing: [makeEntry('f1', 'معيار فاشل 1', 'high')],
 });
 
+// helper: get the header toggle button
+const getToggleBtn = (getByRole: Function, expanded: boolean) =>
+  getByRole('button', { name: expanded ? 'طي قسم المتابعة' : 'توسيع قسم المتابعة' });
+
 // ─── null / empty renders nothing ────────────────────────────────────────────
 
 describe('DifferentialBanner — renders nothing', () => {
@@ -84,8 +88,8 @@ describe('DifferentialBanner — header', () => {
   });
 
   it('has correct accessibilityLabel when expanded', () => {
-    const { getByA11yLabel } = render(<DifferentialBanner diff={baseDiff} />);
-    expect(getByA11yLabel('طي قسم المتابعة')).toBeTruthy();
+    const { getByRole } = render(<DifferentialBanner diff={baseDiff} />);
+    expect(getByRole('button', { name: 'طي قسم المتابعة' })).toBeTruthy();
   });
 });
 
@@ -93,28 +97,28 @@ describe('DifferentialBanner — header', () => {
 
 describe('DifferentialBanner — toggle', () => {
   it('collapses body on press and shows ▼', () => {
-    const { getByA11yLabel, getByText, queryByText } = render(
+    const { getByRole, getByText, queryByText } = render(
       <DifferentialBanner diff={baseDiff} />
     );
-    fireEvent.press(getByA11yLabel('طي قسم المتابعة'));
+    fireEvent.press(getToggleBtn(getByRole, true));
     expect(getByText('▼')).toBeTruthy();
     expect(queryByText('✓ تم التصحيح')).toBeNull();
   });
 
   it('re-expands on second press', () => {
-    const { getByA11yLabel, getByText } = render(
+    const { getByRole, getByText } = render(
       <DifferentialBanner diff={baseDiff} />
     );
-    fireEvent.press(getByA11yLabel('طي قسم المتابعة'));
-    fireEvent.press(getByA11yLabel('توسيع قسم المتابعة'));
+    fireEvent.press(getToggleBtn(getByRole, true));
+    fireEvent.press(getToggleBtn(getByRole, false));
     expect(getByText('▲')).toBeTruthy();
     expect(getByText('✓ تم التصحيح')).toBeTruthy();
   });
 
   it('calls LayoutAnimation.configureNext on toggle', () => {
     const { LayoutAnimation } = require('react-native');
-    const { getByA11yLabel } = render(<DifferentialBanner diff={baseDiff} />);
-    fireEvent.press(getByA11yLabel('طي قسم المتابعة'));
+    const { getByRole } = render(<DifferentialBanner diff={baseDiff} />);
+    fireEvent.press(getToggleBtn(getByRole, true));
     expect(LayoutAnimation.configureNext).toHaveBeenCalled();
   });
 });
