@@ -318,8 +318,6 @@ describe('importBackup', () => {
 
   // ── Branch: applyPhotoUriMap — single entry is an array (not a string) ────
   // Covers the false arm of `typeof single === 'string'`.
-  // This happens when the map key for an item id holds an array value directly
-  // (edge case: caller stored a multi value under the plain id key by mistake).
   it('skips photoUri assignment when map value for item id is not a string', async () => {
     const payloadBadSingle = {
       ...validPayload,
@@ -338,7 +336,6 @@ describe('importBackup', () => {
     await importBackup();
     const raw = await AsyncStorage.getItem('inspections');
     const restored = JSON.parse(raw!);
-    // photoUri should NOT be set since the value was not a string
     expect(restored[0].items[0].photoUri).toBeUndefined();
   });
 
@@ -363,10 +360,44 @@ describe('importBackup', () => {
     await importBackup();
     const raw = await AsyncStorage.getItem('inspections');
     const restored = JSON.parse(raw!);
-    // photos should NOT be set since the value was not an array
     expect(restored[0].items[0].photos).toBeUndefined();
-    // but photoUri should still be linked (string single was valid)
     expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
+  });
+
+  // ── Branch: applyPhotoUriMap — item id absent from map (single === undefined)
+  // Covers the `single === undefined` path at lines 253-258: map is non-empty
+  // but has no entry for this specific item, so both single and multi are
+  // undefined and neither photoUri nor photos is spread onto the item.
+  it('leaves item unchanged when its id has no entry in a non-empty photoUriMap', async () => {
+    const payloadMissingEntry = {
+      ...validPayload,
+      inspections: [{
+        id: 'i1',
+        items: [
+          { id: 'item-known',   title: 'Has photo' },
+          { id: 'item-unknown', title: 'No photo in map' },
+        ],
+      }],
+      // Map only covers item-known; item-unknown has no entry at all
+      photoUriMap: {
+        'item-known': 'file:///known.jpg',
+      },
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2missing.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadMissingEntry),
+    );
+    await importBackup();
+    const raw = await AsyncStorage.getItem('inspections');
+    const restored = JSON.parse(raw!);
+    // item-known gets its URI re-linked
+    expect(restored[0].items[0].photoUri).toBe('file:///known.jpg');
+    // item-unknown is left as-is — no photoUri, no photos
+    expect(restored[0].items[1].photoUri).toBeUndefined();
+    expect(restored[0].items[1].photos).toBeUndefined();
   });
 
   // ── Branch: applyPhotoUriMap with empty map returns inspections unchanged ─
