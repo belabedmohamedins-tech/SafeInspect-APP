@@ -5,12 +5,14 @@ import { Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 import { AuthRepository } from '../src/repositories/AuthRepository';
 import { initializeDatabase } from '../src/db/schema';
 import { startSyncScheduler } from '../src/db/syncEngine';
 import { I18nProvider } from '../src/i18n';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
 import { isLoggedIn, registerPushToken } from '../src/services/serverAuth';
+import { SessionLockService } from '../src/services/SessionLockService';
 
 // Keep splash screen visible until fonts + DB are ready
 SplashScreen.preventAutoHideAsync();
@@ -53,7 +55,7 @@ export default function RootLayout() {
   > | null>(null);
 
   // ── 1. Initialize DB and sync scheduler on app start ────────────────────────────
-useEffect(() => {
+  useEffect(() => {
     let stopSync: (() => void) | undefined;
 
     initializeDatabase()
@@ -63,7 +65,7 @@ useEffect(() => {
       })
       .catch((err) => {
         console.error('[RAQIB] Database initialization failed:', err);
-        // Still mark ready so app doesn’t hang forever on a DB error
+        // Still mark ready so app doesn't hang forever on a DB error
         setDbReady(true);
       });
 
@@ -102,7 +104,8 @@ useEffect(() => {
         return;
       }
 
-      // 2d. All clear
+      // 2d. All clear — start tracking activity
+      SessionLockService.reset();
       if (!currentPath.includes('(tabs)')) {
         router.replace('/(tabs)/home');
       }
@@ -188,7 +191,57 @@ useEffect(() => {
     };
   }, []);
 
-  // Don’t render anything until fonts are loaded (avoids blank-icon flash)
+  // ── 5. Session auto-lock ────────────────────────────────────────────────────
+  //
+  // Two triggers:
+  //   a) AppState change: when app returns to foreground, immediately check
+  //      whether the inactivity timeout has elapsed while backgrounded.
+  //   b) Periodic poll: every 60 s while the app is active, check inactivity.
+  //      This catches cases where the user left the screen on without
+  //      backgrounding the app (e.g. device on a desk).
+  //
+  // We only lock when a PIN is configured AND the user is not already on
+  // pin-lock (avoids a redirect loop).
+  useEffect(() => {
+    if (!dbReady) return;
+
+    const tryLock = async () => {
+      const pin = await AuthRepository.getPin();
+      if (!pin) return; // no PIN configured — nothing to lock
+
+      const currentPath = segments.join('/');
+      if (currentPath.includes('pin-lock')) return; // already locked
+
+      const lock = await SessionLockService.shouldLock();
+      if (lock) {
+        SessionLockService.markLocked();
+        router.replace('/pin-lock');
+      }
+    };
+
+    // a) AppState listener — triggers on foreground resume
+    const handleAppStateChange = (next: AppStateStatus) => {
+      if (next === 'active') {
+        tryLock();
+      } else {
+        // Record activity when the user switches away so the timer
+        // starts from the moment the app was backgrounded.
+        SessionLockService.recordActivity();
+      }
+    };
+
+    const sub = AppState.addEventListener('change', handleAppStateChange);
+
+    // b) Periodic poll every 60 seconds
+    const poll = setInterval(tryLock, 60_000);
+
+    return () => {
+      sub.remove();
+      clearInterval(poll);
+    };
+  }, [dbReady]);
+
+  // Don't render anything until fonts are loaded (avoids blank-icon flash)
   if (!fontsLoaded && !fontError) return null;
 
   return (
