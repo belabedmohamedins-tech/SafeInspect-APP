@@ -59,16 +59,19 @@ const logImpl = (...args: unknown[]) => {
   process.stdout.write(args.join(' ') + '\n');
 };
 
-// Install once — never restore, just re-point after clearAllMocks
+// Install once — never restore, just re-point after clearAllMocks.
+// clearAllMocks clears .mock.calls but does NOT touch the implementation,
+// so we must NOT call jest.spyOn again in beforeEach.
 beforeAll(() => { jest.spyOn(console, 'log').mockImplementation(logImpl); });
-afterAll(()  => { jest.spyOn(console, 'log').mockRestore?.(); });
+afterAll(()  => { (console.log as jest.Mock).mockRestore?.(); });
 
 beforeEach(async () => {
   capturedLogs.length = 0;
   resetAsync();
   jest.clearAllMocks();
-  // clearAllMocks clears mock.calls but does NOT restore — re-apply the impl
-  jest.spyOn(console, 'log').mockImplementation(logImpl);
+  // Re-apply the implementation after clearAllMocks clears it.
+  // Use the existing spy (already installed by beforeAll) — do NOT call jest.spyOn again.
+  (console.log as jest.Mock).mockImplementation(logImpl);
   mockIsEnabled.mockResolvedValue(true);
   mockReqPerm.mockResolvedValue(true);
   mockGetOpen.mockResolvedValue([]);
@@ -145,7 +148,7 @@ describe('CapNotificationService', () => {
       mockGetOpen.mockResolvedValue([makeCAP()]);
       await scheduleCapDeadlineNotifications();
       jest.clearAllMocks();
-      jest.spyOn(console, 'log').mockImplementation(logImpl);
+      (console.log as jest.Mock).mockImplementation(logImpl);
       mockIsEnabled.mockResolvedValue(true); mockReqPerm.mockResolvedValue(true);
       mockGetOpen.mockResolvedValue([makeCAP()]); mockGetStats.mockResolvedValue(makeStats());
       mockPersist.mockResolvedValue(0); mockSchedule.mockResolvedValue('notif-id');
@@ -313,8 +316,13 @@ describe('CapNotificationService', () => {
         return realGetItem(key);
       });
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
-      await scheduleCapWeeklyDigest();
-      spy.mockRestore();
+      try {
+        await scheduleCapWeeklyDigest();
+      } finally {
+        spy.mockRestore();
+        // Re-apply console.log impl after spy.mockRestore may have affected it
+        (console.log as jest.Mock).mockImplementation?.(logImpl);
+      }
       expect(mockSchedule).toHaveBeenCalled();
     });
     it('includes inProgress count in body when > 0', async () => {
