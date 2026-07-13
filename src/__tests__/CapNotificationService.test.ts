@@ -263,6 +263,32 @@ describe('CapNotificationService', () => {
       const title = (mockSchedule.mock.calls[0][0] as any).content.title as string;
       expect(title).toContain('🟡');
     });
+    // Line 257: fireAt <= now branch — digest fire time already past, pushed to tomorrow
+    it('schedules digest for tomorrow when 08:00 today is already past', async () => {
+      // Simulate it being 23:00 — today's 08:00 is past
+      const lateNight = new Date();
+      lateNight.setHours(23, 0, 0, 0);
+      const OriginalDate = global.Date;
+      const MockDate = class extends OriginalDate {
+        constructor(...args: any[]) {
+          if (args.length === 0) { super(lateNight.getTime()); }
+          else { super(...(args as [any])); }
+        }
+        static now() { return lateNight.getTime(); }
+      } as unknown as typeof Date;
+      global.Date = MockDate;
+      try {
+        mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
+        mockGetOpen.mockResolvedValueOnce([]);
+        await scheduleCapDigestNotification();
+        const trigger = (mockSchedule.mock.calls[0][0] as any).trigger as { date: Date };
+        const tomorrow = new OriginalDate(lateNight);
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        expect(trigger.date.toISOString().slice(0, 10)).toBe(tomorrow.toISOString().slice(0, 10));
+      } finally {
+        global.Date = OriginalDate;
+      }
+    });
   });
 
   describe('scheduleCapWeeklyDigest', () => {
@@ -378,6 +404,20 @@ describe('CapNotificationService', () => {
     it('swallows errors gracefully', async () => {
       mockGetStats.mockRejectedValueOnce(new Error('network error'));
       await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
+    });
+    // Line 346: cancel previous weekly notification when prevId exists in storage
+    it('cancels stored previous weekly notification id before scheduling new one', async () => {
+      await AsyncStorage.setItem(StorageKeys.CAP_WEEKLY_DIGEST_NOTIF_ID, 'cap-weekly-prev');
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
+      await scheduleCapWeeklyDigest();
+      expect(mockCancelOne).toHaveBeenCalledWith('cap-weekly-prev');
+      expect(mockSchedule).toHaveBeenCalled();
+    });
+    // Line 360: console.log after successful weekly schedule
+    it('logs scheduled weekly digest message after successful scheduling', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
+      await scheduleCapWeeklyDigest();
+      expect(capturedLogs.some(m => m.includes('Weekly digest scheduled for'))).toBe(true);
     });
   });
 
