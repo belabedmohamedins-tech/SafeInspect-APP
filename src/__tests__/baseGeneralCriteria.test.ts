@@ -6,8 +6,8 @@ describe('baseGeneralCriteria', () => {
     expect(Array.isArray(baseGeneralCriteria)).toBe(true);
   });
 
-  it('contains exactly 28 criteria', () => {
-    expect(baseGeneralCriteria).toHaveLength(28);
+  it('contains exactly 30 criteria', () => {
+    expect(baseGeneralCriteria).toHaveLength(30);
   });
 
   it('has no duplicate IDs', () => {
