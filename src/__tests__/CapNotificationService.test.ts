@@ -53,15 +53,20 @@ const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
-// Suppress the scheduled-time confirmation log — it is expected output, not a failure.
-const _consoleLog = console.log.bind(console);
+// ─── Log capture — collect [CapNotificationService] logs without suppressing ──
+const capturedLogs: string[] = [];
 beforeAll(() => {
   jest.spyOn(console, 'log').mockImplementation((...args) => {
     const msg = typeof args[0] === 'string' ? args[0] : '';
-    if (msg.includes('[CapNotificationService]')) return;
-    _consoleLog(...args);
+    if (msg.includes('[CapNotificationService]')) {
+      capturedLogs.push(msg);
+      return; // suppress from test output only
+    }
+    // pass everything else through
+    process.stdout.write(args.join(' ') + '\n');
   });
 });
+beforeEach(() => { capturedLogs.length = 0; });
 afterAll(() => { (console.log as jest.Mock).mockRestore?.(); });
 
 /** Seed CAP_NOTIF_LAST_RUN to yesterday so shouldRun() always returns true. */
@@ -193,17 +198,25 @@ describe('CapNotificationService', () => {
       (Platform as any).OS = originalOS;
     });
 
+    // ── Line 89: shouldRun() catch branch ─────────────────────────────────────
+    it('proceeds (returns true) when AsyncStorage throws in shouldRun', async () => {
+      // Force getItem to throw once so the catch branch executes
+      jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('storage error'));
+      mockGetOpen.mockResolvedValue([makeCAP()]);
+      mockGetStats.mockResolvedValue(makeStats({ overdue: 1, nearDeadlineCount: 1, total: 1 }));
+      await scheduleCapDeadlineNotifications();
+      // If the catch branch returns true (proceed), schedulePerItemAlerts is called
+      expect(mockGetOpen).toHaveBeenCalled();
+    });
+
     // ── Line 122: promoted > 0 branch ────────────────────────────────────────
     it('logs promoted count when persistOverdueEscalation returns > 0', async () => {
       await bypassDailyGuard();
       mockPersist.mockResolvedValueOnce(3);
       mockGetOpen.mockResolvedValue([makeCAP()]);
       mockGetStats.mockResolvedValue(makeStats({ overdue: 1, nearDeadlineCount: 1, total: 1 }));
-      const logSpy = jest.spyOn(console, 'log');
       await scheduleCapDeadlineNotifications();
-      expect(logSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Promoted 3 item(s) to overdue'),
-      );
+      expect(capturedLogs.some(m => m.includes('Promoted 3 item(s) to overdue'))).toBe(true);
     });
   });
 
@@ -260,7 +273,28 @@ describe('CapNotificationService', () => {
       await expect(scheduleCapDigestNotification()).resolves.toBeUndefined();
     });
 
-    // ── Line 257: yellow title branch (overdueCount === 0) ───────────────────
+    // ── Line 257: red title singular (overdue === 1) ──────────────────────────
+    it('uses singular form in red title when exactly 1 item is overdue', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      // singular: no 'ات' suffix
+      expect(call.content.title).toContain('🔴');
+      expect(call.content.title).not.toMatch(/إجراءات/);
+    });
+
+    // ── Line 257: red title plural (overdue > 1) ──────────────────────────────
+    it('uses plural form in red title when more than 1 item is overdue', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
+      mockGetOpen.mockResolvedValueOnce([]);
+      await scheduleCapDigestNotification();
+      const call = mockSchedule.mock.calls[0][0] as any;
+      expect(call.content.title).toContain('🔴');
+      expect(call.content.title).toContain('ات');
+    });
+
+    // ── yellow title branch (overdueCount === 0) ──────────────────────────────
     it('uses yellow title when only due-today (no overdue)', async () => {
       const today = new Date().toISOString().slice(0, 10);
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 0, nearDeadlineCount: 1 }));
@@ -327,21 +361,7 @@ describe('CapNotificationService', () => {
       expect((call as any).content.title).toContain('🔴');
     });
 
-    it('does not re-schedule if already ran this week', async () => {
-      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
-      await scheduleCapWeeklyDigest();
-      mockSchedule.mockClear();
-      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
-      await scheduleCapWeeklyDigest();
-      expect(mockSchedule).not.toHaveBeenCalled();
-    });
-
-    it('swallows errors gracefully', async () => {
-      mockGetStats.mockRejectedValueOnce(new Error('network error'));
-      await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
-    });
-
-    // ── Line 346: body includes inProgress count ─────────────────────────────
+    // ── Line 346: body includes inProgress count ──────────────────────────────
     it('includes inProgress count in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(
         makeStats({ total: 3, open: 1, inProgress: 2, overdue: 0, nearDeadlineCount: 0 }),
@@ -370,6 +390,20 @@ describe('CapNotificationService', () => {
       const call = mockSchedule.mock.calls[0][0] as any;
       expect(call.content.body).toContain('جارٍ: 2');
       expect(call.content.body).toContain('يستحق خلال 3 أيام: 2');
+    });
+
+    it('does not re-schedule if already ran this week', async () => {
+      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
+      await scheduleCapWeeklyDigest();
+      mockSchedule.mockClear();
+      mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
+      await scheduleCapWeeklyDigest();
+      expect(mockSchedule).not.toHaveBeenCalled();
+    });
+
+    it('swallows errors gracefully', async () => {
+      mockGetStats.mockRejectedValueOnce(new Error('network error'));
+      await expect(scheduleCapWeeklyDigest()).resolves.toBeUndefined();
     });
   });
 
