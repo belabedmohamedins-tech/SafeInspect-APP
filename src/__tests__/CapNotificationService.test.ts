@@ -42,7 +42,6 @@ import {
 import { CorrectiveAction } from '../types';
 import type { CapStats } from '../repositories/CorrectiveActionRepository';
 
-// ─── Typed stubs ─────────────────────────────────────────────────────────────
 const mockSchedule   = jest.mocked(Notifications.scheduleNotificationAsync);
 const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
@@ -53,7 +52,6 @@ const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
-// ─── Log capture ─────────────────────────────────────────────────────────────
 const capturedLogs: string[] = [];
 const logImpl = (...args: unknown[]) => {
   const msg = typeof args[0] === 'string' ? args[0] : '';
@@ -61,14 +59,16 @@ const logImpl = (...args: unknown[]) => {
   process.stdout.write(args.join(' ') + '\n');
 };
 
+// Install once — never restore, just re-point after clearAllMocks
 beforeAll(() => { jest.spyOn(console, 'log').mockImplementation(logImpl); });
-afterAll(()  => { (console.log as jest.Mock).mockRestore?.(); });
+afterAll(()  => { jest.spyOn(console, 'log').mockRestore?.(); });
 
 beforeEach(async () => {
   capturedLogs.length = 0;
   resetAsync();
   jest.clearAllMocks();
-  (console.log as jest.Mock).mockImplementation(logImpl);
+  // clearAllMocks clears mock.calls but does NOT restore — re-apply the impl
+  jest.spyOn(console, 'log').mockImplementation(logImpl);
   mockIsEnabled.mockResolvedValue(true);
   mockReqPerm.mockResolvedValue(true);
   mockGetOpen.mockResolvedValue([]);
@@ -83,6 +83,10 @@ async function bypassDailyGuard(): Promise<void> {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   await AsyncStorage.setItem(StorageKeys.CAP_NOTIF_LAST_RUN, yesterday.toISOString().slice(0, 10));
+}
+
+async function clearWeeklyGuard(): Promise<void> {
+  await AsyncStorage.removeItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN);
 }
 
 function makeCAP(overrides: Partial<CorrectiveAction> = {}): CorrectiveAction {
@@ -102,14 +106,8 @@ function makeStats(overrides: Partial<CapStats> = {}): CapStats {
   return { open: 0, inProgress: 0, overdue: 0, resolved: 0, total: 0, nearDeadlineCount: 0, ...overrides };
 }
 
-// Ensure the weekly guard is NOT already set so scheduleCapWeeklyDigest will run.
-async function clearWeeklyGuard(): Promise<void> {
-  await AsyncStorage.removeItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN);
-}
-
 describe('CapNotificationService', () => {
 
-  // ─── A) Per-item deadline alerts ──────────────────────────────────────────
   describe('scheduleCapDeadlineNotifications', () => {
     it('does nothing when notifications are disabled', async () => {
       mockIsEnabled.mockResolvedValueOnce(false);
@@ -147,7 +145,7 @@ describe('CapNotificationService', () => {
       mockGetOpen.mockResolvedValue([makeCAP()]);
       await scheduleCapDeadlineNotifications();
       jest.clearAllMocks();
-      (console.log as jest.Mock).mockImplementation(logImpl);
+      jest.spyOn(console, 'log').mockImplementation(logImpl);
       mockIsEnabled.mockResolvedValue(true); mockReqPerm.mockResolvedValue(true);
       mockGetOpen.mockResolvedValue([makeCAP()]); mockGetStats.mockResolvedValue(makeStats());
       mockPersist.mockResolvedValue(0); mockSchedule.mockResolvedValue('notif-id');
@@ -181,7 +179,6 @@ describe('CapNotificationService', () => {
     });
   });
 
-  // ─── B) Daily grouped digest ───────────────────────────────────────────────
   describe('scheduleCapDigestNotification', () => {
     it('does nothing when there are no overdue, due-today, or due-week items', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 5, resolved: 5 }));
@@ -237,7 +234,6 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🔴');
       expect(title).toMatch(/إجراءات/);
     });
-    // ── Line 257: data.filter 'all' branch — schedule with no overdue ──
     it('uses filter=all in notification data when overdueCount is 0', async () => {
       const today = new Date().toISOString().slice(0, 10);
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 0, nearDeadlineCount: 1 }));
@@ -263,9 +259,7 @@ describe('CapNotificationService', () => {
     });
   });
 
-  // ─── C) Weekly Monday digest ───────────────────────────────────────────────
   describe('scheduleCapWeeklyDigest', () => {
-    // Each weekly test that schedules must start with a clean weekly guard.
     beforeEach(async () => { await clearWeeklyGuard(); });
 
     it('does nothing when stats.total is 0', async () => {
@@ -307,35 +301,22 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🟡');
       expect(title).toMatch(/إجراءات/);
     });
-
-    // ── Line 297: shouldRunWeekly() catch branch ──────────────────────────
-    // We need ALL getItem calls to throw so shouldRunWeekly's catch fires.
-    // BUT: after shouldRunWeekly returns true (from catch), the next getItem
-    // is for CAP_WEEKLY_DIGEST_NOTIF_ID (prevId). That must NOT throw.
-    // Solution: throw only once for shouldRunWeekly, then restore.
+    // Line 297: shouldRunWeekly catch — spy only throws on the weekly guard key
     it('proceeds when AsyncStorage.getItem throws in shouldRunWeekly', async () => {
-      const originalGetItem = AsyncStorage.getItem.bind(AsyncStorage);
-      let callCount = 0;
-      jest.spyOn(AsyncStorage, 'getItem').mockImplementation(async (key: string) => {
-        // First call is shouldRunWeekly → CAP_WEEKLY_DIGEST_LAST_RUN → throw
-        if (callCount === 0 && key === StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN) {
-          callCount++;
+      const realGetItem = AsyncStorage.getItem.bind(AsyncStorage);
+      let fired = false;
+      const spy = jest.spyOn(AsyncStorage, 'getItem').mockImplementation(async (key: string) => {
+        if (!fired && key === StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN) {
+          fired = true;
           throw new Error('storage failure');
         }
-        return originalGetItem(key);
+        return realGetItem(key);
       });
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
-      try {
-        await scheduleCapWeeklyDigest();
-      } finally {
-        jest.restoreAllMocks();
-        (console.log as jest.Mock).mockImplementation(logImpl);
-      }
+      await scheduleCapWeeklyDigest();
+      spy.mockRestore();
       expect(mockSchedule).toHaveBeenCalled();
     });
-
-    // ── Body content tests — read actual source body format ───────────────
-    // Body parts: مفتوح:{open} · جارٍ:{inProgress} · متأخر:{overdue} · يستحق خلال 3 أيام:{near} · نسبة الإنجاز:{pct}%
     it('includes inProgress count in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 3, open: 1, inProgress: 2 }));
       await scheduleCapWeeklyDigest();
@@ -355,9 +336,8 @@ describe('CapNotificationService', () => {
       expect(body).toContain('جارٍ: 2');
       expect(body).toContain('يستحق خلال 3 أيام: 2');
     });
-    // ── Line 360: mondayDate <= now — past-Monday pushes to next week ─────
+    // Line 360: mondayDate <= now triggers +7 days push
     it('pushes fire date to next week when computed Monday is already past', async () => {
-      // 2026-07-06 is a Monday. Mock Date so "now" = 09:00 (past 08:00 fire time).
       const pastMonday = new Date('2026-07-06T09:00:00.000Z');
       const OriginalDate = global.Date;
       const MockDate = class extends OriginalDate {
@@ -377,7 +357,6 @@ describe('CapNotificationService', () => {
         global.Date = OriginalDate;
       }
     });
-    // ── filter branches ───────────────────────────────────────────────────
     it('sets filter=all in weekly data when no overdue items', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
       await scheduleCapWeeklyDigest();
@@ -404,7 +383,6 @@ describe('CapNotificationService', () => {
     });
   });
 
-  // ─── Cancel helpers ────────────────────────────────────────────────────────
   describe('cancelCapNotification', () => {
     it('cancels the correct notification identifier', async () => {
       await cancelCapNotification('cap-99');
