@@ -96,6 +96,15 @@ describe('enqueue', () => {
     const q2 = await readQueue();
     expect(q2[0].attempts).toBe(0);
   });
+
+  // readQueue catch branch — corrupt JSON in storage returns empty array
+  it('returns empty queue and adds item when storage contains corrupt JSON', async () => {
+    await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, '{corrupt json');
+    await enqueue(makeInspection('i1'));
+    const q = await readQueue();
+    expect(q).toHaveLength(1);
+    expect(q[0].inspection.id).toBe('i1');
+  });
 });
 
 // ─── flush — no API URL ───────────────────────────────────────────────────────────────────
@@ -134,7 +143,7 @@ describe('flush — with API URL', () => {
     expect(mockApiClient).not.toHaveBeenCalled();
   });
 
-  // isInternetReachable: null means unknown — treated as online (branch: !== false)
+  // isInternetReachable: null — treated as online (branch: !== false)
   it('treats isInternetReachable=null as online and proceeds to flush', async () => {
     await enqueue(makeInspection('i1'));
     NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: true, isInternetReachable: null });
@@ -148,6 +157,14 @@ describe('flush — with API URL', () => {
     NetInfoMock.fetch.mockRejectedValueOnce(new Error('NetInfo unavailable'));
     const synced = await flush();
     expect(synced).toBe(1);
+  });
+
+  // readQueue catch branch inside flush — corrupt JSON treated as empty queue
+  it('returns 0 when queue storage is corrupt JSON', async () => {
+    await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, '{corrupt json');
+    const synced = await flush();
+    expect(synced).toBe(0);
+    expect(mockApiClient).not.toHaveBeenCalled();
   });
 
   it('removes item from queue on 2xx response', async () => {
@@ -242,6 +259,13 @@ describe('getSyncStatus', () => {
     NetInfoMock.fetch.mockRejectedValueOnce(new Error('NetInfo unavailable'));
     const status = await getSyncStatus();
     expect(status.isOnline).toBe(true);
+  });
+
+  // readQueue catch branch in getSyncStatus — corrupt storage returns pendingCount 0
+  it('returns pendingCount 0 when queue storage is corrupt JSON', async () => {
+    await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, '{corrupt json');
+    const status = await getSyncStatus();
+    expect(status.pendingCount).toBe(0);
   });
 });
 
