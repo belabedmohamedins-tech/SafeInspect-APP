@@ -1,5 +1,12 @@
 // src/__tests__/CapNotificationService.test.ts
 
+// Mock expo-constants FIRST so IS_EXPO_GO is false — otherwise Notifications stays null
+// and all cancel/schedule functions return immediately.
+jest.mock('expo-constants', () => ({
+  default: { appOwnership: 'standalone' },
+  appOwnership: 'standalone',
+}));
+
 jest.mock('expo-notifications', () => ({
   scheduleNotificationAsync:            jest.fn(),
   cancelScheduledNotificationAsync:     jest.fn(),
@@ -59,9 +66,6 @@ const logImpl = (...args: unknown[]) => {
   process.stdout.write(args.join(' ') + '\n');
 };
 
-// Install once — never restore, just re-point after clearAllMocks.
-// clearAllMocks clears .mock.calls but does NOT touch the implementation,
-// so we must NOT call jest.spyOn again in beforeEach.
 beforeAll(() => { jest.spyOn(console, 'log').mockImplementation(logImpl); });
 afterAll(()  => { (console.log as jest.Mock).mockRestore?.(); });
 
@@ -69,8 +73,6 @@ beforeEach(async () => {
   capturedLogs.length = 0;
   resetAsync();
   jest.clearAllMocks();
-  // Re-apply the implementation after clearAllMocks clears it.
-  // Use the existing spy (already installed by beforeAll) — do NOT call jest.spyOn again.
   (console.log as jest.Mock).mockImplementation(logImpl);
   mockIsEnabled.mockResolvedValue(true);
   mockReqPerm.mockResolvedValue(true);
@@ -166,6 +168,7 @@ describe('CapNotificationService', () => {
       (Platform as any).OS = originalOS;
     });
     it('proceeds when AsyncStorage throws in shouldRun', async () => {
+      // Use mockRejectedValueOnce so we don't restore/destroy the AsyncStorage mock store
       jest.spyOn(AsyncStorage, 'getItem').mockRejectedValueOnce(new Error('io'));
       mockGetOpen.mockResolvedValue([makeCAP()]);
       mockGetStats.mockResolvedValue(makeStats({ overdue: 1, total: 1 }));
@@ -304,25 +307,12 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🟡');
       expect(title).toMatch(/إجراءات/);
     });
-    // Line 297: shouldRunWeekly catch — spy only throws on the weekly guard key
+    // shouldRunWeekly catch branch — force throw via mockRejectedValueOnce, no spyOn/restore
     it('proceeds when AsyncStorage.getItem throws in shouldRunWeekly', async () => {
-      const realGetItem = AsyncStorage.getItem.bind(AsyncStorage);
-      let fired = false;
-      const spy = jest.spyOn(AsyncStorage, 'getItem').mockImplementation(async (key: string) => {
-        if (!fired && key === StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN) {
-          fired = true;
-          throw new Error('storage failure');
-        }
-        return realGetItem(key);
-      });
+      // mockRejectedValueOnce on the L2 mock — does not destroy the store
+      (AsyncStorage.getItem as jest.Mock).mockRejectedValueOnce(new Error('storage failure'));
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
-      try {
-        await scheduleCapWeeklyDigest();
-      } finally {
-        spy.mockRestore();
-        // Re-apply console.log impl after spy.mockRestore may have affected it
-        (console.log as jest.Mock).mockImplementation?.(logImpl);
-      }
+      await scheduleCapWeeklyDigest();
       expect(mockSchedule).toHaveBeenCalled();
     });
     it('includes inProgress count in body when > 0', async () => {
@@ -344,7 +334,7 @@ describe('CapNotificationService', () => {
       expect(body).toContain('جارٍ: 2');
       expect(body).toContain('يستحق خلال 3 أيام: 2');
     });
-    // Line 360: mondayDate <= now triggers +7 days push
+    // mondayDate <= now triggers +7 days push
     it('pushes fire date to next week when computed Monday is already past', async () => {
       const pastMonday = new Date('2026-07-06T09:00:00.000Z');
       const OriginalDate = global.Date;
