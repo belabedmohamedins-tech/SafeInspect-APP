@@ -42,7 +42,7 @@ import {
 import { CorrectiveAction } from '../types';
 import type { CapStats } from '../repositories/CorrectiveActionRepository';
 
-// ─── Typed stubs ────────────────────────────────────────────────────────────
+// ─── Typed stubs ─────────────────────────────────────────────────────────────
 const mockSchedule   = jest.mocked(Notifications.scheduleNotificationAsync);
 const mockCancelOne  = jest.mocked(Notifications.cancelScheduledNotificationAsync);
 const mockSetChannel = jest.mocked(Notifications.setNotificationChannelAsync);
@@ -53,7 +53,7 @@ const mockIsEnabled  = jest.mocked(isEnabled);
 const mockReqPerm    = jest.mocked(requestPermission);
 const { __resetStore: resetAsync } = AsyncStorage as any;
 
-// ─── Log capture ────────────────────────────────────────────────────────────────
+// ─── Log capture ─────────────────────────────────────────────────────────────
 const capturedLogs: string[] = [];
 const logImpl = (...args: unknown[]) => {
   const msg = typeof args[0] === 'string' ? args[0] : '';
@@ -102,9 +102,14 @@ function makeStats(overrides: Partial<CapStats> = {}): CapStats {
   return { open: 0, inProgress: 0, overdue: 0, resolved: 0, total: 0, nearDeadlineCount: 0, ...overrides };
 }
 
+// Ensure the weekly guard is NOT already set so scheduleCapWeeklyDigest will run.
+async function clearWeeklyGuard(): Promise<void> {
+  await AsyncStorage.removeItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN);
+}
+
 describe('CapNotificationService', () => {
 
-  // ─── A) Per-item deadline alerts ────────────────────────────────────────────
+  // ─── A) Per-item deadline alerts ──────────────────────────────────────────
   describe('scheduleCapDeadlineNotifications', () => {
     it('does nothing when notifications are disabled', async () => {
       mockIsEnabled.mockResolvedValueOnce(false);
@@ -216,7 +221,6 @@ describe('CapNotificationService', () => {
       mockGetStats.mockRejectedValueOnce(new Error('db error'));
       await expect(scheduleCapDigestNotification()).resolves.toBeUndefined();
     });
-    // ── Line 257 singular: overdueCount === 1, no 'ات' suffix ───────────────────────
     it('uses singular form in red title when exactly 1 overdue item', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 1, nearDeadlineCount: 1 }));
       mockGetOpen.mockResolvedValueOnce([]);
@@ -225,7 +229,6 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🔴');
       expect(title).not.toMatch(/إجراءات/);
     });
-    // ── Line 257 plural: overdueCount > 1, 'ات' suffix present ──────────────────────
     it('uses plural form in red title when more than 1 overdue item', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
       mockGetOpen.mockResolvedValueOnce([]);
@@ -234,7 +237,7 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🔴');
       expect(title).toMatch(/إجراءات/);
     });
-    // ── Line 257 data.filter: 'all' branch — schedule with no overdue (only near-deadline) ──
+    // ── Line 257: data.filter 'all' branch — schedule with no overdue ──
     it('uses filter=all in notification data when overdueCount is 0', async () => {
       const today = new Date().toISOString().slice(0, 10);
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 0, nearDeadlineCount: 1 }));
@@ -243,7 +246,6 @@ describe('CapNotificationService', () => {
       const data = (mockSchedule.mock.calls[0][0] as any).content.data;
       expect(data.filter).toBe('all');
     });
-    // ── Line 257 data.filter: 'overdue' branch ───────────────────────────────────
     it('uses filter=overdue in notification data when overdueCount > 0', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ overdue: 2, nearDeadlineCount: 2 }));
       mockGetOpen.mockResolvedValueOnce([]);
@@ -263,6 +265,9 @@ describe('CapNotificationService', () => {
 
   // ─── C) Weekly Monday digest ───────────────────────────────────────────────
   describe('scheduleCapWeeklyDigest', () => {
+    // Each weekly test that schedules must start with a clean weekly guard.
+    beforeEach(async () => { await clearWeeklyGuard(); });
+
     it('does nothing when stats.total is 0', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 0 }));
       await scheduleCapWeeklyDigest();
@@ -302,66 +307,40 @@ describe('CapNotificationService', () => {
       expect(title).toContain('🟡');
       expect(title).toMatch(/إجراءات/);
     });
-    // ── Line 297: shouldRunWeekly() catch branch ───────────────────────────────
-    // shouldRunWeekly() is the FIRST await in scheduleCapWeeklyDigest.
-    // Its getItem reads StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN.
-    // We make ALL getItem calls throw so the very first one (the guard) throws.
+
+    // ── Line 297: shouldRunWeekly() catch branch ──────────────────────────
+    // We need ALL getItem calls to throw so shouldRunWeekly's catch fires.
+    // BUT: after shouldRunWeekly returns true (from catch), the next getItem
+    // is for CAP_WEEKLY_DIGEST_NOTIF_ID (prevId). That must NOT throw.
+    // Solution: throw only once for shouldRunWeekly, then restore.
     it('proceeds when AsyncStorage.getItem throws in shouldRunWeekly', async () => {
-      const originalGetItem = AsyncStorage.getItem;
-      (AsyncStorage as any).getItem = jest.fn().mockRejectedValue(new Error('storage failure'));
+      const originalGetItem = AsyncStorage.getItem.bind(AsyncStorage);
+      let callCount = 0;
+      jest.spyOn(AsyncStorage, 'getItem').mockImplementation(async (key: string) => {
+        // First call is shouldRunWeekly → CAP_WEEKLY_DIGEST_LAST_RUN → throw
+        if (callCount === 0 && key === StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN) {
+          callCount++;
+          throw new Error('storage failure');
+        }
+        return originalGetItem(key);
+      });
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
       try {
         await scheduleCapWeeklyDigest();
       } finally {
-        (AsyncStorage as any).getItem = originalGetItem;
+        jest.restoreAllMocks();
+        (console.log as jest.Mock).mockImplementation(logImpl);
       }
       expect(mockSchedule).toHaveBeenCalled();
     });
-    // ── Line 346: inProgress > 0 body part ──────────────────────────────────────
+
+    // ── Body content tests — read actual source body format ───────────────
+    // Body parts: مفتوح:{open} · جارٍ:{inProgress} · متأخر:{overdue} · يستحق خلال 3 أيام:{near} · نسبة الإنجاز:{pct}%
     it('includes inProgress count in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 3, open: 1, inProgress: 2 }));
       await scheduleCapWeeklyDigest();
       const body = (mockSchedule.mock.calls[0][0] as any).content.body as string;
       expect(body).toContain('جارٍ: 2');
-    });
-    // ── Line 360: mondayDate <= now — past-Monday pushes date to next week ──────────
-    // Force this by mocking Date so "now" is a future Monday after 08:00,
-    // making the computed mondayDate fall in the past.
-    it('pushes fire date to next week when computed Monday is already past', async () => {
-      // Pick a specific past Monday (2026-07-06) and set "now" to be that
-      // Monday at 09:00 (past the 08:00 fire time) so mondayDate <= now.
-      const pastMonday = new Date('2026-07-06T09:00:00.000Z');
-      const OriginalDate = global.Date;
-      const MockDate = class extends OriginalDate {
-        constructor(...args: any[]) {
-          if (args.length === 0) { super(pastMonday.getTime()); }
-          else { super(...(args as [any])); }
-        }
-        static now() { return pastMonday.getTime(); }
-      } as unknown as typeof Date;
-      global.Date = MockDate;
-      try {
-        mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
-        await scheduleCapWeeklyDigest();
-        // The identifier date must be at least 7 days after the past Monday
-        const identifier = (mockSchedule.mock.calls[0][0] as any).identifier as string;
-        expect(identifier).toContain('cap-weekly-2026-07-13');
-      } finally {
-        global.Date = OriginalDate;
-      }
-    });
-    // ── Weekly data.filter: 'overdue' vs 'all' branch ──────────────────────────
-    it('sets filter=all in weekly data when no overdue items', async () => {
-      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
-      await scheduleCapWeeklyDigest();
-      const data = (mockSchedule.mock.calls[0][0] as any).content.data;
-      expect(data.filter).toBe('all');
-    });
-    it('sets filter=overdue in weekly data when overdue > 0', async () => {
-      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 1, overdue: 1 }));
-      await scheduleCapWeeklyDigest();
-      const data = (mockSchedule.mock.calls[0][0] as any).content.data;
-      expect(data.filter).toBe('overdue');
     });
     it('includes nearDeadlineCount in body when > 0', async () => {
       mockGetStats.mockResolvedValueOnce(makeStats({ total: 3, open: 2, nearDeadlineCount: 2 }));
@@ -375,6 +354,41 @@ describe('CapNotificationService', () => {
       const body = (mockSchedule.mock.calls[0][0] as any).content.body as string;
       expect(body).toContain('جارٍ: 2');
       expect(body).toContain('يستحق خلال 3 أيام: 2');
+    });
+    // ── Line 360: mondayDate <= now — past-Monday pushes to next week ─────
+    it('pushes fire date to next week when computed Monday is already past', async () => {
+      // 2026-07-06 is a Monday. Mock Date so "now" = 09:00 (past 08:00 fire time).
+      const pastMonday = new Date('2026-07-06T09:00:00.000Z');
+      const OriginalDate = global.Date;
+      const MockDate = class extends OriginalDate {
+        constructor(...args: any[]) {
+          if (args.length === 0) { super(pastMonday.getTime()); }
+          else { super(...(args as [any])); }
+        }
+        static now() { return pastMonday.getTime(); }
+      } as unknown as typeof Date;
+      global.Date = MockDate;
+      try {
+        mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
+        await scheduleCapWeeklyDigest();
+        const identifier = (mockSchedule.mock.calls[0][0] as any).identifier as string;
+        expect(identifier).toContain('cap-weekly-2026-07-13');
+      } finally {
+        global.Date = OriginalDate;
+      }
+    });
+    // ── filter branches ───────────────────────────────────────────────────
+    it('sets filter=all in weekly data when no overdue items', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 2 }));
+      await scheduleCapWeeklyDigest();
+      const data = (mockSchedule.mock.calls[0][0] as any).content.data;
+      expect(data.filter).toBe('all');
+    });
+    it('sets filter=overdue in weekly data when overdue > 0', async () => {
+      mockGetStats.mockResolvedValueOnce(makeStats({ total: 2, open: 1, overdue: 1 }));
+      await scheduleCapWeeklyDigest();
+      const data = (mockSchedule.mock.calls[0][0] as any).content.data;
+      expect(data.filter).toBe('overdue');
     });
     it('does not re-schedule if already ran this week', async () => {
       mockGetStats.mockResolvedValue(makeStats({ total: 2, open: 2 }));
