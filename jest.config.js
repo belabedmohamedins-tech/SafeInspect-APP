@@ -24,7 +24,7 @@ module.exports = {
     '<rootDir>/__tests__/**/*.test.tsx',
   ],
 
-  // ─── Coverage ──────────────────────────────────────────────────────────────────────────────
+  // ─── Coverage ──────────────────────────────────────────────────────────────
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',
     '!src/**/*.d.ts',
@@ -44,16 +44,17 @@ module.exports = {
     '!src/services/pdfService.ts',
   ],
 
-  // ─── Thresholds ─────────────────────────────────────────────────────────────────═──────────
-  // Last updated: July 2026 — serverAuth.ts added to coverage.
-  // Raise these numbers only when new coverage is confirmed by a green run.
+  // ─── Thresholds ────────────────────────────────────────────────────────────
+  // Last updated: July 2026 — raised to reflect full July coverage run.
+  // Actuals: stmts 97.98 | branches 91.55 | funcs 99.5 | lines 99.05
+  // Thresholds are set slightly below actuals to allow for minor fluctuation.
   // Never lower them — a drop means untested code was shipped.
   coverageThreshold: {
     global: {
       statements: 97,
-      branches:   87,
-      functions:  98,
-      lines:      97,
+      branches:   90,
+      functions:  99,
+      lines:      98,
     },
   },
 

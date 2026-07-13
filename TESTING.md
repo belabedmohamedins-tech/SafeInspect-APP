@@ -1,7 +1,7 @@
 # SafeInspect — Test Suite Reference
 
-> **Last updated:** commit `4591f1c` — `dateUtils.test.ts` + `inspectionUtils.test.ts` added  
-> **Total test files:** 28 · **Total tests:** ~320
+> **Last updated:** July 2026 — coverage raised to 97.98% stmts, RTL component tests added  
+> **Total test files:** 114 · **Total tests:** ~2468
 
 ---
 
@@ -9,10 +9,10 @@
 
 | Metric | Threshold (enforced) | Last measured actual |
 |---|---|---|
-| Branches | 83 | ~84 |
-| Functions | 97 | ~97 |
-| Lines | 96 | ~96 |
-| Statements | 95 | ~95 |
+| Statements | 97 | 97.98 |
+| Branches | 90 | 91.55 |
+| Functions | 99 | 99.5 |
+| Lines | 98 | 99.05 |
 
 **Rule:** when you raise a threshold, update both the `coverageThreshold` block in
 `jest.config.js` **and** the table above. Keep them in sync.
@@ -24,13 +24,13 @@ npx jest --coverage --coverageReporters=text-summary
 
 ---
 
-## Coverage Audit — All Gaps Closed
+## Coverage Audit — All Gaps Closed (July 2026)
 
-Full cross-check of `collectCoverageFrom` sources vs test inventory (June 2026):
+Full cross-check of `collectCoverageFrom` sources vs test inventory:
 
 | Directory | Source files measured | Test files | Status |
 |---|---|---|---|
-| `src/services/` | 11 | 11 | ✅ |
+| `src/services/` | 14 | 14 | ✅ |
 | `src/repositories/` | 9 | 9 | ✅ |
 | `src/hooks/` | 5 | 5 | ✅ |
 | `src/utils/` | 6 (index.ts excluded) | 6 | ✅ |
@@ -38,11 +38,48 @@ Full cross-check of `collectCoverageFrom` sources vs test inventory (June 2026):
 | `src/db/` | 2 | 2 | ✅ |
 | `src/` root | 1 (`facilitiesService.ts`) | 1 | ✅ |
 
-**No measurable source file is missing a test suite.**
-
-Exclusions (intentional, set in `jest.config.js`):
+**Excluded from coverage** (intentional, set in `jest.config.js`):
 `types.ts`, `criteria/**`, `criteriaData.ts`, `facilitiesData.ts`,
-`facilityCategories.ts`, `i18n/**`, barrel `index.ts` files, `app/**`, `__tests__/**`, `__mocks__/**`.
+`facilityCategories.ts`, `i18n/**`, barrel `index.ts` files, `app/**`,
+`__tests__/**`, `__mocks__/**`, `components/**`, `services/pdfService.ts`.
+
+> `components/**` is excluded from the *coverage threshold* but is tested via RTL
+> (see Component Tests section below). `pdfService.ts` is excluded due to expo-print
+> rendering complexity — it has a standalone smoke-test file.
+
+---
+
+## Component Tests (RTL)
+
+`src/components/` is excluded from the coverage threshold but every component
+should have an RTL test. Components are pure display — no async, no Layer 2 mocks needed.
+
+| Component | Test file | Tests | Status |
+|---|---|---|---|
+| `RepeatViolationBadge.tsx` | `src/__tests__/components/RepeatViolationBadge.test.tsx` | 5 | ✅ |
+| `DiffStatusIndicator.tsx` | `src/__tests__/components/DiffStatusIndicator.test.tsx` | 9 | ✅ |
+| `DifferentialBanner.tsx` | — | — | 🔲 |
+| `NumericInputField.tsx` | — | — | 🔲 |
+| `DecisionSupportPanel.tsx` | — | — | 🔲 |
+
+**Pattern for new component tests:**
+```tsx
+import React from 'react';
+import { render, screen } from '@testing-library/react-native';
+import { MyComponent } from '../../components/MyComponent';
+
+describe('MyComponent', () => {
+  it('renders nothing when not visible', () => {
+    const { toJSON } = render(<MyComponent visible={false} />);
+    expect(toJSON()).toBeNull();
+  });
+
+  it('renders content when visible', () => {
+    render(<MyComponent visible={true} label="Test" />);
+    expect(screen.getByText('Test')).toBeTruthy();
+  });
+});
+```
 
 ---
 
@@ -200,6 +237,9 @@ const { startSyncScheduler } = require('../db/syncEngine');
 
 ```
 src/__tests__/
+├── components/
+│   ├── RepeatViolationBadge.test.tsx  ← NEW: 5 RTL tests
+│   └── DiffStatusIndicator.test.tsx   ← NEW: 9 RTL tests
 ├── repositories/
 │   ├── AgendaRepository.test.ts
 │   ├── ApprovalRepository.test.ts
@@ -211,9 +251,9 @@ src/__tests__/
 │   ├── NotificationRepository.test.ts
 │   └── SettingsRepository.test.ts
 ├── utils/
-│   ├── dateUtils.test.ts        ← NEW: 18 tests
+│   ├── dateUtils.test.ts
 │   ├── fileUtils.test.ts
-│   └── inspectionUtils.test.ts  ← NEW: 22 tests
+│   └── inspectionUtils.test.ts
 ├── BackupService.test.ts
 ├── CapNotificationService.test.ts
 ├── CapReportService.test.ts
@@ -243,6 +283,16 @@ src/__tests__/
 
 ---
 
+## Historical Milestones
+
+| Date | Event |
+|---|---|
+| June 2026 | Layer 1 & 2 complete — 785 tests, thresholds locked at stmts 95 |
+| July 12 2026 | Coverage regression detected — new service files added without tests |
+| July 13 2026 | Regression closed — 2454 tests, thresholds raised to stmts 97 / branches 90 / funcs 99 / lines 98 |
+
+---
+
 ## Layer 1 Checklist (all ✅ complete)
 
 | Item | Status |
@@ -269,12 +319,14 @@ src/__tests__/
 | `syncEngine.test.ts` — 11 tests | ✅ |
 | Coverage thresholds raised to new baseline | ✅ |
 
-## Final Coverage Audit (all ✅ complete)
+## July 2026 Coverage Closure
 
 | Item | Status |
 |---|---|
-| `dateUtils.test.ts` — 18 tests | ✅ |
-| `inspectionUtils.test.ts` — 22 tests | ✅ |
-| Zero uncovered source files remaining | ✅ |
-| Thresholds locked at branches 83 / fn 97 / lines 96 / stmts 95 | ✅ |
-| TESTING.md fully reflects current file tree and all patterns | ✅ |
+| All service gaps closed | ✅ |
+| `serverAuth.ts` — 98.21% stmts | ✅ |
+| `decisionSupport.ts` — 100% | ✅ |
+| `violationHistory.ts` — 100% | ✅ |
+| Thresholds raised to stmts 97 / branches 90 / funcs 99 / lines 98 | ✅ |
+| RTL component tests introduced (`RepeatViolationBadge`, `DiffStatusIndicator`) | ✅ |
+| TESTING.md fully reflects current file tree and patterns | ✅ |
