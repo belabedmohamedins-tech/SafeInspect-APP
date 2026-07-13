@@ -73,15 +73,16 @@ function applyPhotoUriMap(
   return inspections.map(inspection => ({
     ...inspection,
     items: inspection.items.map((item: InspectionItem) => {
+      const result = { ...item };
       const single = map[item.id];
       const multi  = map[`${item.id}__photos`];
-      return {
-        ...item,
-        ...(single !== undefined && typeof single === 'string'
-          ? { photoUri: single }
-          : {}),
-        ...(Array.isArray(multi) ? { photos: multi as string[] } : {}),
-      };
+      if (single !== undefined && typeof single === 'string') {
+        result.photoUri = single;
+      }
+      if (Array.isArray(multi)) {
+        result.photos = multi as string[];
+      }
+      return result;
     }),
   }));
 }
