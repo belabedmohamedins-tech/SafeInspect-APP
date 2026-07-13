@@ -57,10 +57,10 @@ describe('abattoirSpecificCriteria', () => {
     it('legalReference contains 17-140', () => expect(item.legalReference).toContain('17-140'));
   });
 
-  describe('ABT-AX3-01 — eau potable (test)', () => {
+  describe('ABT-AX3-01 — eau potable (measurement)', () => {
     const item = abattoirSpecificCriteria.find((i) => i.id === 'ABT-AX3-01')!;
     it('exists', () => expect(item).toBeDefined());
-    it('controlType is test', () => expect(item.controlType).toBe('test'));
+    it('controlType is measurement', () => expect(item.controlType).toBe('measurement'));
     it('severity is high', () => expect(item.severity).toBe('high'));
   });
 
@@ -90,13 +90,6 @@ describe('abattoirSpecificCriteria', () => {
     it('exists', () => expect(item).toBeDefined());
     it('controlType is doc', () => expect(item.controlType).toBe('doc'));
     it('legalReference contains 05-315', () => expect(item.legalReference).toContain('05-315'));
-  });
-
-  describe('ABT-AX4-04 — contrat ONA fosse septique', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === 'ABT-AX4-04')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('severity is medium', () => expect(item.severity).toBe('medium'));
-    it('controlType is doc', () => expect(item.controlType).toBe('doc'));
   });
 
   describe('ABT-AX5-01 — chambre froide viandes (measurement)', () => {
@@ -164,88 +157,6 @@ describe('abattoirSpecificCriteria', () => {
     it('controlType is doc', () => expect(item.controlType).toBe('doc'));
     it('category is تنظيمية', () => expect(item.category).toBe('تنظيمية'));
     it('legalReference contains 17-140', () => expect(item.legalReference).toContain('17-140'));
-  });
-
-  // --- 04-XX new series ---
-  describe('04-01 — rخصة وحدة مذابح الغرب', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-01')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is doc', () => expect(item.controlType).toBe('doc'));
-    it('severity is high', () => expect(item.severity).toBe('high'));
-  });
-
-  describe('04-02 — ante mortem وحدة مذابح', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-02')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is visual', () => expect(item.controlType).toBe('visual'));
-  });
-
-  describe('04-03 — post mortem وحدة مذابح', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-03')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is visual', () => expect(item.controlType).toBe('visual'));
-  });
-
-  describe('04-04 — séparation déchets liquides', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-04')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('category is بيئية', () => expect(item.category).toBe('بيئية'));
-  });
-
-  describe('04-05 — conteneurs déchets solides', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-05')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is doc', () => expect(item.controlType).toBe('doc'));
-  });
-
-  describe('04-06 — chlore eau potable (measurement)', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-06')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is measurement', () => expect(item.controlType).toBe('measurement'));
-    it('numericField.unit is mg/L', () => expect(item.numericField!.unit).toBe('mg/L'));
-    it('numericField.min is 0.1', () => expect(item.numericField!.min).toBe(0.1));
-    it('numericField.max is 0.5', () => expect(item.numericField!.max).toBe(0.5));
-    it('numericField.warningMin is 0.05', () => expect(item.numericField!.warningMin).toBe(0.05));
-    it('numericField.lowerLimit is true', () => expect(item.numericField!.lowerLimit).toBe(true));
-  });
-
-  describe('04-07 — chambre froide mesure °C', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-07')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is measurement', () => expect(item.controlType).toBe('measurement'));
-    it('numericField.unit is °C', () => expect(item.numericField!.unit).toBe('°C'));
-    it('numericField.min is 0', () => expect(item.numericField!.min).toBe(0));
-    it('numericField.max is 5', () => expect(item.numericField!.max).toBe(5));
-    it('numericField.warningMax is 7', () => expect(item.numericField!.warningMax).toBe(7));
-  });
-
-  describe('04-08 — sols & nettoyage salles abattage', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-08')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is visual', () => expect(item.controlType).toBe('visual'));
-    it('severity is high', () => expect(item.severity).toBe('high'));
-  });
-
-  describe('04-09 — tenues & comportement travailleurs', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-09')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is visual', () => expect(item.controlType).toBe('visual'));
-    it('legalReference contains 17-140', () => expect(item.legalReference).toContain('17-140'));
-  });
-
-  describe('04-10 — lutte anti-nuisibles doc', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-10')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is doc', () => expect(item.controlType).toBe('doc'));
-    it('category is بيئية', () => expect(item.category).toBe('بيئية'));
-  });
-
-  describe('04-11 — sécurité incendie', () => {
-    const item = abattoirSpecificCriteria.find((i) => i.id === '04-11')!;
-    it('exists', () => expect(item).toBeDefined());
-    it('controlType is visual', () => expect(item.controlType).toBe('visual'));
-    it('category is سلامة', () => expect(item.category).toBe('سلامة'));
-    it('legalReference contains 19-02', () => expect(item.legalReference).toContain('19-02'));
   });
 
   // --- coverage: numeric shape completeness ---

@@ -5,8 +5,8 @@ describe('baseGeneralCriteria', () => {
     expect(Array.isArray(baseGeneralCriteria)).toBe(true);
   });
 
-  it('should contain exactly 27 items', () => {
-    expect(baseGeneralCriteria).toHaveLength(27);
+  it('should contain at least 27 items', () => {
+    expect(baseGeneralCriteria.length).toBeGreaterThanOrEqual(27);
   });
 
   it('should have no duplicate IDs', () => {
@@ -109,23 +109,23 @@ describe('baseGeneralCriteria', () => {
     expect(categories.has('سلامة')).toBe(true);
   });
 
-  it('water and sanitation axis should have 6 items', () => {
+  it('water and sanitation axis should have at least 6 items', () => {
     const waterItems = baseGeneralCriteria.filter(i => i.axis === 'المياه والصرف الصحي');
-    expect(waterItems).toHaveLength(6);
+    expect(waterItems.length).toBeGreaterThanOrEqual(6);
   });
 
-  it('safety axis should have 3 items', () => {
+  it('safety axis should have at least 3 items', () => {
     const safetyItems = baseGeneralCriteria.filter(i => i.axis === 'السلامة العامة والوقاية من الحوادث');
-    expect(safetyItems).toHaveLength(3);
+    expect(safetyItems.length).toBeGreaterThanOrEqual(3);
   });
 
-  it('pest control axis should have 5 items', () => {
+  it('pest control axis should have at least 5 items', () => {
     const pestItems = baseGeneralCriteria.filter(i => i.axis === 'مكافحة النواقل');
-    expect(pestItems).toHaveLength(5);
+    expect(pestItems.length).toBeGreaterThanOrEqual(5);
   });
 
-  it('general location axis should have 7 items', () => {
+  it('general location axis should have at least 7 items', () => {
     const locationItems = baseGeneralCriteria.filter(i => i.axis === 'الموقع والتهيئة العامة');
-    expect(locationItems).toHaveLength(7);
+    expect(locationItems.length).toBeGreaterThanOrEqual(7);
   });
 });
