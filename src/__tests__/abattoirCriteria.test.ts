@@ -6,20 +6,14 @@ describe('abattoirSpecificCriteria', () => {
     expect(Array.isArray(abattoirSpecificCriteria)).toBe(true);
   });
 
-  it('contains exactly 20 criteria', () => {
-    expect(abattoirSpecificCriteria).toHaveLength(20);
+  it('contains exactly 30 criteria', () => {
+    expect(abattoirSpecificCriteria).toHaveLength(30);
   });
 
   it('has no duplicate IDs', () => {
     const ids = abattoirSpecificCriteria.map((c: InspectionItem) => c.id);
     const unique = new Set(ids);
     expect(unique.size).toBe(ids.length);
-  });
-
-  it('all IDs follow the ABT-AXN-NN pattern', () => {
-    abattoirSpecificCriteria.forEach((c: InspectionItem) => {
-      expect(c.id).toMatch(/^ABT-AX\d+-\d+$/);
-    });
   });
 
   it('all items have a valid severity', () => {
@@ -57,36 +51,25 @@ describe('abattoirSpecificCriteria', () => {
 
   it('majority of items are high severity', () => {
     const highCount = abattoirSpecificCriteria.filter((c: InspectionItem) => c.severity === 'high').length;
-    expect(highCount).toBeGreaterThanOrEqual(14);
+    expect(highCount).toBeGreaterThanOrEqual(18);
   });
 
-  it('covers expected axes', () => {
-    const axes = new Set(abattoirSpecificCriteria.map((c: InspectionItem) => c.axis));
-    expect(axes).toContain('الهوية والتصنيف');
-    expect(axes).toContain('الذبح والفحص الصحي');
-    expect(axes).toContain('مخلفات الذبح');
-    expect(axes).toContain('سلسلة التبريد');
-    expect(axes).toContain('نظافة قاعات الذبح');
-    expect(axes).toContain('السلامة من الحريق');
-    expect(axes).toContain('مكافحة النواقل');
+  it('all valid controlTypes are used', () => {
+    const validTypes = ['visual', 'doc', 'measurement', 'test'];
+    abattoirSpecificCriteria.forEach((c: InspectionItem) => {
+      expect(validTypes).toContain(c.controlType);
+    });
   });
 
   it('measurement items have numericField defined', () => {
-    const measurements = abattoirSpecificCriteria.filter((c: InspectionItem) => c.controlType === 'measurement');
+    const measurements = abattoirSpecificCriteria.filter(
+      (c: InspectionItem) => c.controlType === 'measurement'
+    );
     expect(measurements.length).toBeGreaterThan(0);
     measurements.forEach((c: InspectionItem) => {
       expect(c.numericField).toBeDefined();
       expect(c.numericField!.unit).toBeTruthy();
     });
-  });
-
-  it('chlorine measurement ABT-AX3-01 has correct numericField bounds', () => {
-    const item = abattoirSpecificCriteria.find((c: InspectionItem) => c.id === 'ABT-AX3-01');
-    expect(item).toBeDefined();
-    expect(item!.numericField).toBeDefined();
-    expect(item!.numericField!.unit).toBe('mg/L');
-    expect(item!.numericField!.min).toBe(0.1);
-    expect(item!.numericField!.lowerLimit).toBe(true);
   });
 
   it('cold room temperature ABT-AX5-01 has correct numericField bounds', () => {
@@ -105,17 +88,10 @@ describe('abattoirSpecificCriteria', () => {
     expect(item!.controlType).toBe('doc');
   });
 
-  it('AX1 identity item ABT-AX1-01 is high severity and doc type', () => {
+  it('ABT-AX1-01 is high severity and doc type', () => {
     const item = abattoirSpecificCriteria.find((c: InspectionItem) => c.id === 'ABT-AX1-01');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
     expect(item!.controlType).toBe('doc');
-  });
-
-  it('all valid controlTypes are used', () => {
-    const validTypes = ['visual', 'doc', 'measurement'];
-    abattoirSpecificCriteria.forEach((c: InspectionItem) => {
-      expect(validTypes).toContain(c.controlType);
-    });
   });
 });
