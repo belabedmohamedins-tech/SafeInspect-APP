@@ -248,12 +248,10 @@ describe('importBackup', () => {
       canceled: false,
       assets: [],
     });
-    // asset is undefined → !asset?.uri → throws "لم يتم اختيار أي ملف"
     await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
   });
 
   // ── Branch: assets field is undefined → source crashes at result.assets[0]
-  // The source does not guard for undefined assets, so we assert the TypeError.
   it('throws when assets field is undefined', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
@@ -316,6 +314,59 @@ describe('importBackup', () => {
     const restored = JSON.parse(raw!);
     expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
     expect(restored[0].items[0].photos).toEqual(['file:///a.jpg', 'file:///b.jpg']);
+  });
+
+  // ── Branch: applyPhotoUriMap — single entry is an array (not a string) ────
+  // Covers the false arm of `typeof single === 'string'`.
+  // This happens when the map key for an item id holds an array value directly
+  // (edge case: caller stored a multi value under the plain id key by mistake).
+  it('skips photoUri assignment when map value for item id is not a string', async () => {
+    const payloadBadSingle = {
+      ...validPayload,
+      inspections: [{ id: 'i1', items: [{ id: 'item-1', title: 'T' }] }],
+      photoUriMap: {
+        'item-1': ['file:///a.jpg', 'file:///b.jpg'],  // array, not string
+      },
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2badsingle.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadBadSingle),
+    );
+    await importBackup();
+    const raw = await AsyncStorage.getItem('inspections');
+    const restored = JSON.parse(raw!);
+    // photoUri should NOT be set since the value was not a string
+    expect(restored[0].items[0].photoUri).toBeUndefined();
+  });
+
+  // ── Branch: applyPhotoUriMap — multi key is a string (not an array) ───────
+  // Covers the false arm of `Array.isArray(multi)`.
+  it('skips photos assignment when __photos map value is not an array', async () => {
+    const payloadBadMulti = {
+      ...validPayload,
+      inspections: [{ id: 'i1', items: [{ id: 'item-2', title: 'T' }] }],
+      photoUriMap: {
+        'item-2': 'file:///single.jpg',
+        'item-2__photos': 'not-an-array',  // string, not array
+      },
+    };
+    mockGetDocumentAsync.mockResolvedValueOnce({
+      canceled: false,
+      assets: [{ uri: 'file:///v2badmulti.json' }],
+    });
+    (FileSystem.readAsStringAsync as jest.Mock).mockResolvedValueOnce(
+      JSON.stringify(payloadBadMulti),
+    );
+    await importBackup();
+    const raw = await AsyncStorage.getItem('inspections');
+    const restored = JSON.parse(raw!);
+    // photos should NOT be set since the value was not an array
+    expect(restored[0].items[0].photos).toBeUndefined();
+    // but photoUri should still be linked (string single was valid)
+    expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
   });
 
   // ── Branch: applyPhotoUriMap with empty map returns inspections unchanged ─

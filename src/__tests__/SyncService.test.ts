@@ -49,6 +49,21 @@ function makeInspection(id: string, updatedAt?: string): SavedInspection {
   } as unknown as SavedInspection;
 }
 
+function makeInspectionNoTimestamps(id: string): SavedInspection {
+  // Both updatedAt and date are undefined — exercises the `?? ''` fallback
+  return {
+    id,
+    facilityId:    'fac-1',
+    facilityName:  'منشأة',
+    inspectorName: 'مفتش',
+    officeName:    'مكتب',
+    status:        'completed',
+    items:         [],
+    score:         80,
+    grade:         'B',
+  } as unknown as SavedInspection;
+}
+
 async function readQueue() {
   const raw = await AsyncStorage.getItem(StorageKeys.SYNC_QUEUE);
   return raw ? JSON.parse(raw) : [];
@@ -105,6 +120,36 @@ describe('enqueue', () => {
     expect(q).toHaveLength(1);
     expect(q[0].inspection.id).toBe('i1');
   });
+
+  // ── Branch: updatedAt undefined on both entries — falls back to date ?? '' (line 95) ──
+  it('keeps existing entry when neither existing nor incoming has timestamps (equal timestamps treated as not-newer)', async () => {
+    const noTs = makeInspectionNoTimestamps('i1');
+    await enqueue(noTs);
+    // Manually bump attempts so we can verify it was NOT replaced
+    const q1 = await readQueue();
+    q1[0].attempts = 5;
+    await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(q1));
+    await enqueue(noTs);
+    // incomingTs ('') >= existingTs ('') is true, so it IS replaced (attempts reset)
+    const q2 = await readQueue();
+    expect(q2).toHaveLength(1);
+    expect(q2[0].attempts).toBe(0);
+  });
+
+  // ── Branch: incoming has date but no updatedAt; existing has updatedAt (line 95) ─────
+  it('uses date as fallback for timestamp comparison when updatedAt is absent', async () => {
+    // Enqueue inspection with only a date field (no updatedAt)
+    const withDate = { ...makeInspectionNoTimestamps('i2'), date: '2026-07-01' } as unknown as SavedInspection;
+    await enqueue(withDate);
+    const q1 = await readQueue();
+    expect(q1[0].inspection.id).toBe('i2');
+    // Enqueue same id with an older date — should NOT replace
+    const olderDate = { ...makeInspectionNoTimestamps('i2'), date: '2026-06-01' } as unknown as SavedInspection;
+    await enqueue(olderDate);
+    const q2 = await readQueue();
+    expect(q2).toHaveLength(1);
+    expect(q2[0].inspection.date).toBe('2026-07-01');
+  });
 });
 
 // ─── flush — no API URL ───────────────────────────────────────────────────────────────────
@@ -138,6 +183,15 @@ describe('flush — with API URL', () => {
   it('returns 0 when device is offline', async () => {
     await enqueue(makeInspection('i1'));
     NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: false, isInternetReachable: false });
+    const synced = await flush();
+    expect(synced).toBe(0);
+    expect(mockApiClient).not.toHaveBeenCalled();
+  });
+
+  // ── Branch: isConnected is null → `=== true` is false → offline (line 71) ─────────
+  it('returns 0 when isConnected is null (treated as offline)', async () => {
+    await enqueue(makeInspection('i1'));
+    NetInfoMock.fetch.mockResolvedValueOnce({ isConnected: null, isInternetReachable: true });
     const synced = await flush();
     expect(synced).toBe(0);
     expect(mockApiClient).not.toHaveBeenCalled();
