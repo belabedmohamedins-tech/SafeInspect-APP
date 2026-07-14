@@ -22,8 +22,11 @@ describe('blacksmithCriteria', () => {
     });
   });
 
-  it('all IDs are BLS- prefix', () => {
-    blacksmithCriteria.forEach(item => expect(item.id).toMatch(/^BLS-/));
+  // blacksmithCriteria spreads baseCompressedGasCriteria (CGS- prefix) — both prefixes are valid
+  it('all IDs are BLS- or CGS- prefix', () => {
+    blacksmithCriteria.forEach(item =>
+      expect(item.id).toMatch(/^(BLS|CGS)-/)
+    );
   });
 
   it('severity values are valid', () => {

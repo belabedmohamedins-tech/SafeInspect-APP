@@ -1,13 +1,15 @@
 import { produceStorageCriteria } from '../criteria/produceStorageCriteria';
 import { InspectionItem } from '../types';
 
+// Phase 3 dedup: PRD-04-01/02 (pest control) moved to BGN-07-xx, PRD-05-02 (traceability) to BFD-08-01
+// Current array has 7 items: PRD-01-01, PRD-02-01/02/03, PRD-03-01/02, PRD-05-01
 describe('produceStorageCriteria', () => {
   it('exports an array', () => {
     expect(Array.isArray(produceStorageCriteria)).toBe(true);
   });
 
-  it('contains exactly 10 criteria', () => {
-    expect(produceStorageCriteria).toHaveLength(10);
+  it('contains exactly 7 criteria (post Phase-3 dedup)', () => {
+    expect(produceStorageCriteria).toHaveLength(7);
   });
 
   it('has no duplicate IDs', () => {
@@ -55,11 +57,12 @@ describe('produceStorageCriteria', () => {
     });
   });
 
-  it('majority of items are high or medium severity (food safety)', () => {
+  it('majority of items are high or medium severity', () => {
     const nonLow = produceStorageCriteria.filter(
       (c: InspectionItem) => c.severity === 'high' || c.severity === 'medium'
     ).length;
-    expect(nonLow).toBeGreaterThanOrEqual(8);
+    // 7 items total, all are high or medium
+    expect(nonLow).toBeGreaterThanOrEqual(6);
   });
 
   it('covers expected axes', () => {
@@ -67,8 +70,7 @@ describe('produceStorageCriteria', () => {
     expect(axes).toContain('هوية المنشأة والوثائق');
     expect(axes).toContain('شروط التخزين');
     expect(axes).toContain('نظافة فضاءات التخزين');
-    expect(axes).toContain('مكافحة الآفات');
-    expect(axes).toContain('التتبعية');
+    // مكافحة الآفات and التتبعية are now in BGN/BFD shared criteria (Phase 3 dedup)
   });
 
   it('temperature storage criterion PRD-02-01 is measurement controlType', () => {
@@ -78,14 +80,8 @@ describe('produceStorageCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
-  it('traceability criterion PRD-05-02 is doc controlType', () => {
-    const item = produceStorageCriteria.find((c: InspectionItem) => c.id === 'PRD-05-02');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-  });
-
-  it('pest control program PRD-04-01 is high severity', () => {
-    const item = produceStorageCriteria.find((c: InspectionItem) => c.id === 'PRD-04-01');
+  it('waste removal criterion PRD-05-01 exists and is high severity', () => {
+    const item = produceStorageCriteria.find((c: InspectionItem) => c.id === 'PRD-05-01');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
   });
