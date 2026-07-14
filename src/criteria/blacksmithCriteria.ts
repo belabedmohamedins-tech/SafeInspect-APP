@@ -82,6 +82,16 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    id: 'BLS-04-05',
+    axis: 'السلامة المهنية',
+    category: 'سلامة',
+    criteria: 'توفر حمايات ميكانيكية (واقيات) على أجهزة القطع والجلخ الدوارة (جلخة، مقطع معدني) لمنع التماس مع الأجزاء المتحركة، مع وجود أزرار إيقاف طارئ في متناول المشغّل.',
+    legalReference: 'القانون 90-11 + المرسوم 93-120 (اشتراطات حماية الآلات الدوارة وأزرار الإيقاف الطارئ).',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
     id: 'BLS-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
