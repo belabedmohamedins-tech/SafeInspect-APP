@@ -5,8 +5,8 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(Array.isArray(slaughterhouseSmallCriteria)).toBe(true);
   });
 
-  it('should contain exactly 10 items', () => {
-    expect(slaughterhouseSmallCriteria).toHaveLength(10);
+  it('should contain exactly 11 items', () => {
+    expect(slaughterhouseSmallCriteria).toHaveLength(11);
   });
 
   it('should have no duplicate IDs', () => {
@@ -42,7 +42,7 @@ describe('slaughterhouseSmallCriteria', () => {
 
   it('all items should be high severity (critical activity)', () => {
     const high = slaughterhouseSmallCriteria.filter(i => i.severity === 'high');
-    expect(high.length).toBe(10);
+    expect(high.length).toBe(11);
   });
 
   it('SLH-05-01 should be doc controlType for exploitation licence', () => {
