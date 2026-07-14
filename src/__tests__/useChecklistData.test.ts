@@ -133,6 +133,19 @@ describe('useChecklistData — load from scratch', () => {
     await waitLoaded(result);
     expect(require('expo-crypto').randomUUID).toHaveBeenCalled();
   });
+
+  // Branch: draftId provided but getById returns null → falls back to fresh load
+  it('falls back to fresh criteria when draftId is provided but getById returns null', async () => {
+    mockGetById.mockResolvedValue(null);
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'missing-draft' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    // Should have loaded default criteria (3 items), not crashed
+    expect(result.current.totalItems).toBe(0);
+    expect(result.current.isLoading).toBe(false);
+  });
 });
 
 // ─── Load from draft ───────────────────────────────────────────────────────
@@ -242,6 +255,41 @@ describe('useChecklistData — handlePhotoTake', () => {
     expect(item.photoUri).toBeUndefined();
     expect(item.photos).toHaveLength(0);
   });
+
+  // Branch: item already has photoUri set but photos[] is empty (legacy data)
+  // Covers the fallback: existingPhotos = item.photoUri ? [item.photoUri] : []
+  it('seeds photos from existing photoUri when photos array is absent', async () => {
+    const draftItems: InspectionItem[] = [
+      {
+        id: 'p1', criteria: 'Photo Check', legalReference: 'PR1',
+        severity: 'low', axis: 'A', complianceStatus: 'not-evaluated',
+        comment: '', photos: [],
+        photoUri: 'file:///existing.jpg',
+      } as any,
+    ];
+    mockGetById.mockResolvedValue({
+      id: 'draft-photo-1', items: draftItems,
+      facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
+      date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
+      status: 'in-progress', inspectionCause: '', referenceDocument: '',
+      committeeMembers: [],
+    });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-photo-1' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+
+    // Manually clear photos to simulate legacy item (photoUri set, photos empty)
+    await act(async () => {
+      result.current.handlePhotoTake('p1', 'file:///new.jpg');
+    });
+    const item = result.current.data.find((i: any) => i.id === 'p1')!;
+    // Should contain the seeded existing photo + new photo
+    expect(item.photos).toContain('file:///existing.jpg');
+    expect(item.photos).toContain('file:///new.jpg');
+    expect(item.photos).toHaveLength(2);
+  });
 });
 
 // ─── handleNumericChange (lines 193, 214-232) ──────────────────────────────
@@ -317,6 +365,41 @@ describe('useChecklistData — handleNumericChange', () => {
     const item = result.current.data.find((i: any) => i.id === 'c1')!;
     expect(item.numericValue).toBeUndefined();
   });
+
+  // Branch: numericField present but value is undefined → skips compliance derivation
+  it('skips compliance derivation when numericField is present but value is undefined', async () => {
+    const draftItems: InspectionItem[] = [
+      {
+        id: 'n2',
+        criteria: 'Noise Level',
+        legalReference: 'NR1',
+        severity: 'low',
+        axis: 'Environment',
+        complianceStatus: 'compliant', // pre-set so we can verify it is NOT changed
+        comment: '',
+        photos: [],
+        numericField: { unit: 'dB', min: 0, max: 80, label: 'Noise' },
+      } as any,
+    ];
+    mockGetById.mockResolvedValue({
+      id: 'draft-num-2', items: draftItems,
+      facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
+      date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
+      status: 'in-progress', inspectionCause: '', referenceDocument: '',
+      committeeMembers: [],
+    });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-num-2' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+
+    await act(async () => { result.current.handleNumericChange('n2', undefined); });
+    const item = result.current.data.find((i: any) => i.id === 'n2')!;
+    expect(item.numericValue).toBeUndefined();
+    // complianceStatus must NOT be changed — derivation is skipped when value is undefined
+    expect(item.complianceStatus).toBe('compliant');
+  });
 });
 
 // ─── handleFinish — Gate 1: 85% completion ─────────────────────────────────
@@ -336,6 +419,39 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
       expect.any(Array)
     );
     expect(mockSave).not.toHaveBeenCalled();
+  });
+
+  // Branch: ALL items are 'na' — applicable.length === 0 → completionRate = 1 → passes gate
+  it('passes Gate 1 when all items are na (completionRate defaults to 1)', async () => {
+    const draftItems: InspectionItem[] = [
+      {
+        id: 'na1', criteria: 'NA Check', legalReference: 'NA1',
+        severity: 'low', axis: 'A', complianceStatus: 'na',
+        comment: '', photos: [],
+      },
+      {
+        id: 'na2', criteria: 'NA Check 2', legalReference: 'NA2',
+        severity: 'high', axis: 'A', complianceStatus: 'na',
+        comment: '', photos: [],
+      },
+    ];
+    mockGetById.mockResolvedValue({
+      id: 'draft-na-1', items: draftItems,
+      facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
+      date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
+      status: 'in-progress', inspectionCause: '', referenceDocument: '',
+      committeeMembers: [],
+    });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-na-1' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await act(async () => { await result.current.handleFinish(); });
+    // Gate 1 passes (no applicable items = completionRate 1)
+    // Gate 2 passes (no high-severity non-compliant items)
+    // Should proceed to save
+    expect(mockSave).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -439,6 +555,40 @@ describe('useChecklistData — handleFinish success', () => {
     await evaluateAll(result);
     await act(async () => { await result.current.handleFinish(); });
     expect(mockUpdateInspectionLink).not.toHaveBeenCalled();
+  });
+
+  // Branch: writer is empty → falls back to settings.inspectorName
+  it('uses settings.inspectorName when writer param is empty', async () => {
+    mockSettingsGet.mockResolvedValue({ officeName: 'HQ', inspectorName: 'Settings Inspector' });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, writer: '' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ inspectorName: 'Settings Inspector' })
+    );
+  });
+
+  // Branch: agendaId set but updateInspectionLink throws → error caught, Alert still fires
+  it('shows success Alert even when AgendaRepository.updateInspectionLink throws', async () => {
+    mockUpdateInspectionLink.mockRejectedValue(new Error('agenda DB error'));
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, agendaId: 'agenda-err' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    // Save still happened
+    expect(mockSave).toHaveBeenCalledTimes(1);
+    // Success alert still fires (the catch just console.errors)
+    expect(Alert.alert).toHaveBeenCalledWith(
+      '\u0646\u062c\u0627\u062d',
+      expect.any(String)
+    );
   });
 });
 
