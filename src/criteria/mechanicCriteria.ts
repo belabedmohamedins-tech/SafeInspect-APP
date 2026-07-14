@@ -18,7 +18,7 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
     criteria: 'عدم تسبب الورشة في إزعاج مفرط للجوار (ضجيج، تراكم سيارات في الطريق العام، انسكاب زيوت على الرصيف أو الطريق).',
     legalReference: 'القانون 03-10 الخاص بحماية البيئة والإطار المعيشي، الذي يلزم بتفادي الإضرار براحة الجوار والتلوث المرئي والضجيج.',
     severity: 'medium',
-    controlType: 'visual',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
   },
   {
