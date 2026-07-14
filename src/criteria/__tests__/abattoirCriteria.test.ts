@@ -7,8 +7,8 @@ describe('abattoirSpecificCriteria', () => {
     expect(abattoirSpecificCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 24 items', () => {
-    expect(abattoirSpecificCriteria).toHaveLength(24);
+  it('has exactly 25 items', () => {
+    expect(abattoirSpecificCriteria).toHaveLength(25);
   });
 
   it('all items have required InspectionItem fields', () => {
@@ -194,11 +194,13 @@ describe('abattoirSpecificCriteria', () => {
   });
 
   // AX8
-  it('contains ABT-AX8-01 (HACCP plan)', () => {
+  it('contains ABT-AX8-01 (HACCP plan) with Décret 17-140 citation', () => {
     const item = abattoirSpecificCriteria.find((i) => i.id === 'ABT-AX8-01');
     expect(item).toBeDefined();
     expect(item!.category).toBe('تنظيمية');
     expect(item!.controlType).toBe('doc');
+    expect(item!.legalReference).toContain('17-140');
+    expect(item!.legalReference).not.toContain('2020');
   });
 
   it('contains ABT-AX8-02 (admin compliance)', () => {
@@ -224,6 +226,16 @@ describe('abattoirSpecificCriteria', () => {
     expect(item!.controlType).toBe('doc');
   });
 
+  it('contains ABT-AX10-02 (veterinary waste three-stream)', () => {
+    const item = abattoirSpecificCriteria.find((i) => i.id === 'ABT-AX10-02');
+    expect(item).toBeDefined();
+    expect(item!.axis).toBe('النفايات البيطرية والطبية');
+    expect(item!.category).toBe('بيئية');
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.legalReference).toContain('03-478');
+  });
+
   // AX11
   it('contains ABT-AX11-01 (EIA)', () => {
     const item = abattoirSpecificCriteria.find((i) => i.id === 'ABT-AX11-01');
@@ -234,7 +246,7 @@ describe('abattoirSpecificCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
-  it('covers all 11 axes', () => {
+  it('covers all 12 axes', () => {
     const axes = new Set(abattoirSpecificCriteria.map((i) => i.axis));
     expect(axes.has('الهوية والتصنيف')).toBe(true);
     expect(axes.has('الذبح والفحص الصحي')).toBe(true);
@@ -244,8 +256,10 @@ describe('abattoirSpecificCriteria', () => {
     expect(axes.has('نظافة قاعات الذبح')).toBe(true);
     expect(axes.has('صحة العمال في المذابح')).toBe(true);
     expect(axes.has('HACCP في المذبح')).toBe(true);
+    expect(axes.has('الامتثال للقرارات الإدارية')).toBe(true);
     expect(axes.has('السلامة من الحريق')).toBe(true);
     expect(axes.has('مكافحة النواقل')).toBe(true);
+    expect(axes.has('النفايات البيطرية والطبية')).toBe(true);
     expect(axes.has('دراسة التأثير البيئي')).toBe(true);
   });
 
