@@ -17,7 +17,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX2-01',
     axis: 'الذبح والفحص الصحي',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'وجود تنظيم لمرحلة ما قبل الذبح (المعانة ante mortem) للتأكد من الحالة الصحية للحيوانات قبل الذبح، مع إبعاد الحالات المشتبه فيها.',
     legalReference: 'المرسوم التنفيذي 17-140 المتعلق بالنظافة الصحية للمواد الغذائية (مراقبة حالة الذبائح قبل الذبح كجزء من ضمان سلامة الأغذية). المرسوم التنفيذي 04-82 (الاعتماد الصحي للمنشآت الحيوانية).',
     severity: 'high',
@@ -27,7 +27,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX2-02',
     axis: 'الذبح والفحص الصحي',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'إجراء فحص بعدي للذبائح (post mortem) لاستبعاد الأجزاء أو الذبائح غير الصالحة للاستهلاك، مع وجود مسار واضح للتخلص منها.',
     legalReference: 'المرسوم التنفيذي 17-140 (سلامة المنتجات ذات الأصل الحيواني بعد الذبح). المرسوم التنفيذي 04-82.',
     severity: 'high',
@@ -37,7 +37,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX2-03',
     axis: 'الذبح والفحص الصحي',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'وجود فصل مادي وتنظيمي بين مسار الحيوانات الحية ومسار الذبائح واللحوم لمنع أي تلوث عكسي.',
     legalReference: 'المرسوم التنفيذي 17-140 (منع التلوث المتبادل بين المراحل القذرة والنظيفة في السلسلة الغذائية) ومبادئ GHP/HACCP.',
     severity: 'high',
@@ -68,7 +68,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX3-02',
     axis: 'مياه الغسل والتطهير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'وجود نقاط غسل للأدوات والآلات مزودة بالماء الساخن ومواد التنظيف/التطهير المعتمدة، مع تنظيم لوتيرة التنظيف بين الذبائح أو الدورات.',
     legalReference: 'المرسوم التنفيذي 17-140 (المواد والتجهيزات الملامسة للأغذية وبرامج التنظيف والتطهير).',
     severity: 'medium',
@@ -144,7 +144,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX5-01',
     axis: 'سلسلة التبريد',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'توفر غرف تبريد مخصصة للحوم والذبائح بدرجة حرارة ملائمة (0–5°م) مزودة بميزان حرارة داخلي واضح القراءة.',
     legalReference: 'المرسوم التنفيذي 17-140 والمعايير الأساسية لحفظ الأغذية المبردة.',
     severity: 'high',
@@ -162,7 +162,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX5-02',
     axis: 'سلسلة التبريد',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'تسجيل درجات حرارة غرف التبريد بشكل دوري في سجل مخصص، مع وجود إجراءات عند الخروج عن الحدود المسموح بها.',
     legalReference: 'المرسوم 17-140 وأدلة الممارسات الصحية الجيدة (GHP) — توثيق درجات الحرارة كنقطة مراقبة حرجة في إطار HACCP.',
     severity: 'high',
@@ -172,7 +172,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX5-03',
     axis: 'سلسلة التبريد',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'فصل تخزين اللحوم النيئة عن المنتجات الجاهزة للاستهلاك وعن المواد غير الغذائية داخل غرف التبريد والمخازن.',
     legalReference: 'المرسوم التنفيذي 17-140 (منع التلوث المتبادل والفصل بين المادة الأولية والمنتج النهائي).',
     severity: 'high',
@@ -216,7 +216,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX7-01',
     axis: 'صحة العمال في المذابح',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'خضوع عمال المذبح لفحوص طبية دورية للكشف عن الأمراض المعدية والأمراض الجلدية والتنفسية المرتبطة بالتعامل مع منتجات حيوانية.',
     legalReference: 'القانون 18-11 المتعلق بالصحة (المتابعة الطبية الدورية للعمال). المرسوم التنفيذي 93-120 (15 مايو 1993) المتعلق بطب العمل والفحوص الدورية للعمال.',
     severity: 'high',
@@ -226,7 +226,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'ABT-AX7-02',
     axis: 'صحة العمال في المذابح',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'ارتداء عمال الذبح لملابس عمل خاصة (بلوزات فاتحة اللون، مآزر ضد السوائل، أحذية مقاومة للانزلاق، أغطية رأس، وفي الحالات اللازمة قفازات) مع الحفاظ على نظافتها.',
     legalReference: 'المرسوم التنفيذي 17-140 (ملابس العمل ونظافة المستخدمين في المؤسسات الغذائية).',
     severity: 'medium',

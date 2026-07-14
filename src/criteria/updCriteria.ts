@@ -235,6 +235,7 @@ export const updSpecificCriteria: InspectionItem[] = [
 
   // ===== AX10 — دراسة التأثير البيئي =====
   {
+    // S4-8 / S7-3: EIA criterion for classified installations
     id: 'UPD-AX10-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
