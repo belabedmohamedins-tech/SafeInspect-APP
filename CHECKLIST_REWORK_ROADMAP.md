@@ -73,7 +73,7 @@ Each session audited one thematic category across all 18 criteria files.
 
 ---
 
-### Session 4 — Fire Safety / Hazardous Substances ✅ Audited
+### Session 4 — Fire Safety / Hazardous Substances ✅ Audited ✅ Partially Reworked
 **Key findings:**
 - `Décret 04-409` mis-cited in **8 of 10** `gplCriteria.ts` criteria — should be `Décret 21-430`
 - `Décret 09-410` mis-cited in `GPL-03-03` and `UAB-AX1-04` — should be `Décret 09-335`
@@ -84,10 +84,12 @@ Each session audited one thematic category across all 18 criteria files.
 - UAB risk-study and physical fire-prevention measures never cross-verified against each other
 
 **Rework tasks:**
-- [ ] Fix `gplCriteria.ts`: replace `04-409` with `Décret 21-430` (Art.3,4,5,6,10) in GPL-01-01, GPL-01-02, GPL-02-01, GPL-02-02, GPL-03-01, GPL-03-02, GPL-04-01, GPL-04-02
-- [ ] Fix `gplCriteria.ts` GPL-03-03 and `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
+- [x] Fix `gplCriteria.ts`: replace `04-409` with `Décret 21-430` in GPL-01-01, GPL-01-02, GPL-02-01, GPL-02-02, GPL-03-01, GPL-03-02, GPL-04-01, GPL-04-02
+- [x] Fix `gplCriteria.ts` GPL-03-03: replace `09-410` with `Décret 09-335`
+- [x] Add service-tag date requirement to `GPL-03-02` extinguisher criterion
+- [ ] Fix `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
 - [ ] Split bundled extinguisher+housekeeping criteria into two separate items: `BLS-04-03`, `CWS-05-01`, `MCH-29-06`, `CAR-04-03`, `PRT-05-02`
-- [ ] Add service-tag date requirement to all extinguisher criteria (everywhere an extinguisher criterion exists)
+- [ ] Add service-tag date requirement to all remaining extinguisher criteria (BGN-08-01, UAB-AX7-04, BLS-04-03, CWS-05-01, MCH-29-06, CAR-04-03, PNT-04-03, PRT-05-02)
 - [ ] Merge blacksmith compressed-gas criterion `BLS-04-02` into a shared module with GPL-02-01, adding full/empty separation and stock-ceiling requirement
 - [ ] Add electrical-safety module to `baseGeneralCriteria.ts`: grounding, panel condition, no exposed/spliced wiring (new criteria — zero currently exist)
 - [ ] Add fire-alarm/detection criterion to `baseGeneralCriteria.ts` (new — zero currently exist)
@@ -200,7 +202,7 @@ These fixes span the whole library and should be done last, when content is stab
 | All 18 criteria files | `__tests__/criteria/*.test.ts` | [x] All passing |
 | `baseFoodCriteria.ts` (post-rework) | `baseFoodCriteria.test.ts` | [ ] Needs update after Phase 2 Session 5 tasks |
 | `baseGeneralCriteria.ts` (post-rework) | `baseGeneralCriteria.test.ts` | [ ] Needs update after Phase 2 Session 7 tasks |
-| `gplCriteria.ts` (post-rework) | `gplCriteria.test.ts` | [ ] Needs update after Phase 2 Session 4 tasks |
+| `gplCriteria.ts` (post-rework) | `gplCriteria.test.ts` | [ ] Needs update after remaining Session 4 tasks |
 | All other files touched in Phase 2 | Corresponding test files | [ ] Update after each file is finalized |
 
 ---
@@ -223,16 +225,13 @@ These fixes span the whole library and should be done last, when content is stab
 
 ## Current Status (July 14, 2026)
 
-**All audits for sessions 1–7 are complete. No source files have been reworked yet.**
+**Session 4 — gplCriteria.ts decree fixes: DONE** (commit b2df8db)
 
-**Next action:** Start Phase 2 rework, beginning with the highest-impact, lowest-risk tasks:
+**Next actions (Session 4 remaining):**
+1. Fix `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
+2. Split bundled extinguisher+housekeeping in `BLS-04-03`, `CWS-05-01`, `MCH-29-06`, `CAR-04-03`, `PRT-05-02`
+3. Add service-tag date to all remaining extinguisher criteria
+4. Add electrical-safety + fire-alarm module to `baseGeneralCriteria.ts`
+5. Add UAB risk-study cross-verification criterion
 
-1. **Session 4 first** — Fix the mis-cited decrees in `gplCriteria.ts` (9 wrong citations, clear correct instrument `21-430`)
-2. **Session 7 second** — Remove 11 duplicate license criteria (mechanical, structural, no judgment calls)
-3. **Session 6 third** — Add machine-guard to blacksmith, add `Décret 93-120` to medical-exam citations
-4. **Session 3 fourth** — Fix `PRT-03-03` citation, add waste classification step
-5. **Session 5 fifth** — Remove bakery/cold-room redundant criteria, extend HACCP to abattoir/slaughterhouse
-6. **Session 2 sixth** — Add wastewater shared module, numeric threshold fields
-7. **Sessions 8–9** — Run remaining audits
-8. **Phase 4** — Schema structural fixes
-9. **Phase 5** — Update tests for all modified files
+**Then: Session 7 — Remove 11 duplicate license criteria**
