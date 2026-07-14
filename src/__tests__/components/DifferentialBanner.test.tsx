@@ -5,12 +5,9 @@ import { render, fireEvent } from '@testing-library/react-native';
 import { DifferentialBanner } from '../../components/DifferentialBanner';
 import { DifferentialView, DiffEntry } from '../../services/differentialView';
 
-// LayoutAnimation is a no-op in test env — silence it
-jest.mock('react-native', () => {
-  const RN = jest.requireActual('react-native');
-  RN.LayoutAnimation.configureNext = jest.fn();
-  return RN;
-});
+// LayoutAnimation.configureNext is already a jest.fn() in the L3 RN stub.
+// We just grab a reference so we can assert on it.
+import { LayoutAnimation } from 'react-native';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
 
@@ -96,6 +93,10 @@ describe('DifferentialBanner — header', () => {
 // ─── Toggle collapse / expand ────────────────────────────────────────────────
 
 describe('DifferentialBanner — toggle', () => {
+  beforeEach(() => {
+    (LayoutAnimation.configureNext as jest.Mock).mockClear();
+  });
+
   it('collapses body on press and shows ▼', () => {
     const { getByRole, getByText, queryByText } = render(
       <DifferentialBanner diff={baseDiff} />
@@ -116,7 +117,6 @@ describe('DifferentialBanner — toggle', () => {
   });
 
   it('calls LayoutAnimation.configureNext on toggle', () => {
-    const { LayoutAnimation } = require('react-native');
     const { getByRole } = render(<DifferentialBanner diff={baseDiff} />);
     fireEvent.press(getToggleBtn(getByRole, true));
     expect(LayoutAnimation.configureNext).toHaveBeenCalled();

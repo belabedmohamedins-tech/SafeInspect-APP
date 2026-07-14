@@ -84,7 +84,7 @@
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
  *   3. THIS FILE (Layer 3)       — behavioral overrides
- *   4. each test file (Layer 4)  — domain-specific mocks
+ *   4. each test file (Layer 4)  — domain-specific mocks only
  */
 
 import React from 'react';
@@ -233,6 +233,20 @@ jest.mock('react-native', () => {
       createAnimatedComponent: jest.fn((c: unknown) => c),
       event: jest.fn(),
       add: jest.fn(),
+    },
+    // LayoutAnimation — used by DifferentialBanner and other components.
+    // configureNext is the only method called in production code; the Presets
+    // object is referenced for its easeInEaseOut preset name.
+    LayoutAnimation: {
+      configureNext: jest.fn(),
+      Presets: {
+        easeInEaseOut: {},
+        linear:        {},
+        spring:        {},
+      },
+      Properties: { opacity: 2, scaleX: 4, scaleY: 5, scaleXY: 6 },
+      Types:      { spring: 0, linear: 1, easeInEaseOut: 2, keyboard: 3 },
+      create:     jest.fn(),
     },
     NativeModules: {},
     NativeEventEmitter: jest.fn(() => ({ addListener: jest.fn(), removeAllListeners: jest.fn() })),
