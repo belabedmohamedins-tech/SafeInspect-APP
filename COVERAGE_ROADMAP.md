@@ -6,6 +6,15 @@
 
 ---
 
+## ⚠️ Current Priority
+
+**Checklist rework is in progress (`CHECKLIST_REWORK_ROADMAP.md`).**  
+Criteria files (`src/criteria/*.ts`) are actively being modified — adding, removing, and renaming criteria.  
+**Do NOT write tests for criteria files until the rework is complete.**  
+Priorities 1, 2, and 3 below are intentionally parked. Start at Priority 4.
+
+---
+
 ## Coverage Thresholds (locked in `jest.config.js`)
 
 | Metric | Threshold |
@@ -92,50 +101,54 @@ All files below have a test file in `src/__tests__/`. Coverage is assumed for th
 
 ---
 
-## 🔴 REMAINING — Files Without Tests (Coverage Gap)
+## 🚫 PARKED — Criteria File Tests (Do Not Start Yet)
 
-These are the files that caused the regression. Work through them **top-to-bottom**.
+> These tests are intentionally deferred. The criteria files below are actively being reworked
+> (criteria added, removed, renamed across all phases of `CHECKLIST_REWORK_ROADMAP.md`).
+> Writing tests now would mean rewriting them after every rework commit.
+> **Unlock this section only after the checklist rework is fully complete.**
 
 ### Priority 1 — New Criteria Files (10 files from Checklist Audit)
 
-All 10 were created during the June 2026 checklist audit. Zero tests exist for them.
 Each needs: structure export test + criteria count test + no-duplicate-id test + legal-reference format test.
 
 | Source file | Test file to create | Status |
 |---|---|---|
-| `src/criteria/carWashCriteria.ts` | `src/__tests__/carWashCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/blacksmithCriteria.ts` | `src/__tests__/blacksmithCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/carpenteryCriteria.ts` | `src/__tests__/carpenteryCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/paintShopCriteria.ts` | `src/__tests__/paintShopCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/marbleCriteria.ts` | `src/__tests__/marbleCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/gplCriteria.ts` | `src/__tests__/gplCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/printingCriteria.ts` | `src/__tests__/printingCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/semiPharmaCriteria.ts` | `src/__tests__/semiPharmaCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/produceStorageCriteria.ts` | `src/__tests__/produceStorageCriteria.test.ts` | 🔴 TODO |
-| `src/criteria/mediumSlaughterhouseCriteria.ts` | `src/__tests__/mediumSlaughterhouseCriteria.test.ts` | 🔴 TODO |
+| `src/criteria/carWashCriteria.ts` | `src/__tests__/carWashCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/blacksmithCriteria.ts` | `src/__tests__/blacksmithCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/carpenteryCriteria.ts` | `src/__tests__/carpenteryCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/paintShopCriteria.ts` | `src/__tests__/paintShopCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/marbleCriteria.ts` | `src/__tests__/marbleCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/gplCriteria.ts` | `src/__tests__/gplCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/printingCriteria.ts` | `src/__tests__/printingCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/semiPharmaCriteria.ts` | `src/__tests__/semiPharmaCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/produceStorageCriteria.ts` | `src/__tests__/produceStorageCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/mediumSlaughterhouseCriteria.ts` | `src/__tests__/mediumSlaughterhouseCriteria.test.ts` | ⏸ PARKED |
 
 ### Priority 2 — Rewritten / Fixed Criteria Files (4 files)
 
-These existing files were rewritten during the audit (duplicates removed, baseFoodCriteria removed).
-Existing tests (if any) need to be updated to match new counts.
+These files are still being modified. Existing test count assertions will break on every rework commit.
 
 | Source file | Test file | Status |
 |---|---|---|
-| `src/criteria/abattoirCriteria.ts` | `src/__tests__/abattoirCriteria.test.ts` | 🟡 NEEDS UPDATE (count: 30 → 19) |
-| `src/criteria/couvoirCriteria.ts` | `src/__tests__/couvoirCriteria.test.ts` | 🟡 NEEDS UPDATE (count: 35 → 24) |
-| `src/criteria/updCriteria.ts` | `src/__tests__/updCriteria.test.ts` | 🟡 NEEDS UPDATE (count: 33 → 23) |
-| `src/criteria/uabCriteria.ts` | `src/__tests__/uabCriteria.test.ts` | 🟡 NEEDS UPDATE (count: 41 → 29) |
+| `src/criteria/abattoirCriteria.ts` | `src/__tests__/abattoirCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/couvoirCriteria.ts` | `src/__tests__/couvoirCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/updCriteria.ts` | `src/__tests__/updCriteria.test.ts` | ⏸ PARKED |
+| `src/criteria/uabCriteria.ts` | `src/__tests__/uabCriteria.test.ts` | ⏸ PARKED |
 
 ### Priority 3 — criteriaData.ts Mapping Gaps
 
-The mapping file now covers all 26 activities. The existing `criteriaData.test.ts` may be missing
-tests for the 10 newly-mapped activities (previously they fell to `default`).
+Defer until criteria files are stable — the mapping depends on the final criteria content.
 
 | Concern | Status |
 |---|---|
-| All 26 activity strings resolve to a non-default checklist | 🔴 TODO — verify in criteriaData.test.ts |
-| No activity silently falls to `default` unexpectedly | 🔴 TODO |
-| `ميكانيك السيارات` resolves same as `ميكانيك` (mechanicChecklist) | 🔴 TODO |
+| All 26 activity strings resolve to a non-default checklist | ⏸ PARKED |
+| No activity silently falls to `default` unexpectedly | ⏸ PARKED |
+| `ميكانيك السيارات` resolves same as `ميكانيك` (mechanicChecklist) | ⏸ PARKED |
+
+---
+
+## 🔴 REMAINING — Active Gap (Start Here)
 
 ### Priority 4 — Repositories (sub-folder)
 
@@ -160,6 +173,7 @@ tests for the 10 newly-mapped activities (previously they fell to `default`).
 | Date | Session | Files completed | Notes |
 |---|---|---|---|
 | 2026-07-12 | Handover + Roadmap | 0 new tests | Roadmap created, audit analysed |
+| 2026-07-14 | Criteria tests parked | — | Deferred until checklist rework complete |
 
 ---
 
@@ -176,3 +190,4 @@ tests for the 10 newly-mapped activities (previously they fell to `default`).
    - All items have a non-empty `legalReference`
 5. **Do not add tests for `app/` screen components** — UI layer is out of scope for this effort.
 6. **Branch**: push to `main` unless instructed otherwise.
+7. **Criteria files are PARKED** — do not write or update any `src/__tests__/*Criteria.test.ts` or `criteriaData.test.ts` while `CHECKLIST_REWORK_ROADMAP.md` has open tasks.
