@@ -1,6 +1,6 @@
 # Checklist Rework Roadmap
 
-> 🔴 **Active work** — This is the current focus. Coverage tests come **after** this is done.
+> 🔴 **Active work** — This is the current focus. Tests come after this is done.
 
 ---
 
@@ -25,7 +25,3 @@ Complete restructuring of the inspection criteria system:
 ## Remaining Work
 
 See `Perplexity_Implementation_Spec.md` for the full spec and remaining checklist items.
-
----
-
-> ⏭️ After all checklist rework is confirmed complete, proceed to `COVERAGE_ROADMAP.md`.
