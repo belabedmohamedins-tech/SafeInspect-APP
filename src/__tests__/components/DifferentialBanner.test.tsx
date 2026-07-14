@@ -4,9 +4,6 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { DifferentialBanner } from '../../components/DifferentialBanner';
 import { DifferentialView, DiffEntry } from '../../services/differentialView';
-
-// LayoutAnimation.configureNext is already a jest.fn() in the L3 RN stub.
-// We just grab a reference so we can assert on it.
 import { LayoutAnimation } from 'react-native';
 
 // ─── Fixtures ────────────────────────────────────────────────────────────────
@@ -31,10 +28,6 @@ const baseDiff = makeDiff({
   resolved: [makeEntry('r1', 'معيار محلول 1')],
   stillFailing: [makeEntry('f1', 'معيار فاشل 1', 'high')],
 });
-
-// helper: get the header toggle button
-const getToggleBtn = (getByRole: Function, expanded: boolean) =>
-  getByRole('button', { name: expanded ? 'طي قسم المتابعة' : 'توسيع قسم المتابعة' });
 
 // ─── null / empty renders nothing ────────────────────────────────────────────
 
@@ -64,7 +57,7 @@ describe('DifferentialBanner — renders nothing', () => {
   });
 });
 
-// ─── Header ──────────────────────────────────────────────────────────────────
+// ─── Header ───────────────────────────────────────────────────────────────────
 
 describe('DifferentialBanner — header', () => {
   it('shows fallback date label when priorDate is omitted', () => {
@@ -85,12 +78,12 @@ describe('DifferentialBanner — header', () => {
   });
 
   it('has correct accessibilityLabel when expanded', () => {
-    const { getByRole } = render(<DifferentialBanner diff={baseDiff} />);
-    expect(getByRole('button', { name: 'طي قسم المتابعة' })).toBeTruthy();
+    const { getByLabelText } = render(<DifferentialBanner diff={baseDiff} />);
+    expect(getByLabelText('طي قسم المتابعة')).toBeTruthy();
   });
 });
 
-// ─── Toggle collapse / expand ────────────────────────────────────────────────
+// ─── Toggle collapse / expand ─────────────────────────────────────────────────
 
 describe('DifferentialBanner — toggle', () => {
   beforeEach(() => {
@@ -98,32 +91,32 @@ describe('DifferentialBanner — toggle', () => {
   });
 
   it('collapses body on press and shows ▼', () => {
-    const { getByRole, getByText, queryByText } = render(
+    const { getByLabelText, getByText, queryByText } = render(
       <DifferentialBanner diff={baseDiff} />
     );
-    fireEvent.press(getToggleBtn(getByRole, true));
+    fireEvent.press(getByLabelText('طي قسم المتابعة'));
     expect(getByText('▼')).toBeTruthy();
     expect(queryByText('✓ تم التصحيح')).toBeNull();
   });
 
   it('re-expands on second press', () => {
-    const { getByRole, getByText } = render(
+    const { getByLabelText, getByText } = render(
       <DifferentialBanner diff={baseDiff} />
     );
-    fireEvent.press(getToggleBtn(getByRole, true));
-    fireEvent.press(getToggleBtn(getByRole, false));
+    fireEvent.press(getByLabelText('طي قسم المتابعة'));
+    fireEvent.press(getByLabelText('توسيع قسم المتابعة'));
     expect(getByText('▲')).toBeTruthy();
     expect(getByText('✓ تم التصحيح')).toBeTruthy();
   });
 
   it('calls LayoutAnimation.configureNext on toggle', () => {
-    const { getByRole } = render(<DifferentialBanner diff={baseDiff} />);
-    fireEvent.press(getToggleBtn(getByRole, true));
+    const { getByLabelText } = render(<DifferentialBanner diff={baseDiff} />);
+    fireEvent.press(getByLabelText('طي قسم المتابعة'));
     expect(LayoutAnimation.configureNext).toHaveBeenCalled();
   });
 });
 
-// ─── Counter pills ───────────────────────────────────────────────────────────
+// ─── Counter pills ────────────────────────────────────────────────────────────
 
 describe('DifferentialBanner — pills', () => {
   it('shows resolved count pill', () => {
@@ -165,7 +158,7 @@ describe('DifferentialBanner — pills', () => {
   });
 });
 
-// ─── Still-failing list ──────────────────────────────────────────────────────
+// ─── Still-failing list ───────────────────────────────────────────────────────
 
 describe('DifferentialBanner — stillFailing section', () => {
   it('renders the section title', () => {
@@ -192,7 +185,7 @@ describe('DifferentialBanner — stillFailing section', () => {
   });
 });
 
-// ─── severityLabel ───────────────────────────────────────────────────────────
+// ─── severityLabel ────────────────────────────────────────────────────────────
 
 describe('DifferentialBanner — severity badges', () => {
   const cases: Array<[string, string]> = [
@@ -220,13 +213,12 @@ describe('DifferentialBanner — severity badges', () => {
   });
 });
 
-// ─── Resolved list ───────────────────────────────────────────────────────────
+// ─── Resolved list ────────────────────────────────────────────────────────────
 
 describe('DifferentialBanner — resolved section', () => {
   it('renders the section title', () => {
-    const { getAllByText } = render(<DifferentialBanner diff={baseDiff} />);
-    const matches = getAllByText(/تم التصحيح/);
-    expect(matches.length).toBeGreaterThanOrEqual(1);
+    const { getByText } = render(<DifferentialBanner diff={baseDiff} />);
+    expect(getByText('✓ تم التصحيح')).toBeTruthy();
   });
 
   it('renders each resolved item criteria', () => {
@@ -245,7 +237,7 @@ describe('DifferentialBanner — resolved section', () => {
   });
 });
 
-// ─── Escalation hint ─────────────────────────────────────────────────────────
+// ─── Escalation hint ──────────────────────────────────────────────────────────
 
 describe('DifferentialBanner — escalation hint', () => {
   it('shows hint when hasUnresolvedPriorViolations is true', () => {
