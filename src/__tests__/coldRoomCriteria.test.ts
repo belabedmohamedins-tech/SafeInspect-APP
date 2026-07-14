@@ -16,9 +16,10 @@ describe('coldRoomSpecificCriteria', () => {
     expect(unique.size).toBe(ids.length);
   });
 
-  it('all IDs follow the CLD-17-XX pattern', () => {
+  it('all IDs follow the CLD-1X-XX pattern', () => {
+    // IDs use CLD-17-XX and CLD-18-XX (HACCP axis added in Phase 3)
     coldRoomSpecificCriteria.forEach((c: InspectionItem) => {
-      expect(c.id).toMatch(/^CLD-17-\d{2}$/);
+      expect(c.id).toMatch(/^CLD-1\d-\d{2}$/);
     });
   });
 
@@ -56,7 +57,9 @@ describe('coldRoomSpecificCriteria', () => {
   });
 
   it('majority of items are high severity (cold chain critical)', () => {
-    const highCount = coldRoomSpecificCriteria.filter((c: InspectionItem) => c.severity === 'high').length;
+    const highCount = coldRoomSpecificCriteria.filter(
+      (c: InspectionItem) => c.severity === 'high'
+    ).length;
     expect(highCount).toBeGreaterThanOrEqual(5);
   });
 
@@ -69,7 +72,9 @@ describe('coldRoomSpecificCriteria', () => {
   });
 
   it('temperature measurement criterion CLD-17-04 has numericField', () => {
-    const item = coldRoomSpecificCriteria.find((c: InspectionItem) => c.id === 'CLD-17-04');
+    const item = coldRoomSpecificCriteria.find(
+      (c: InspectionItem) => c.id === 'CLD-17-04'
+    );
     expect(item).toBeDefined();
     expect(item!.numericField).toBeDefined();
     expect(item!.numericField!.unit).toBe('°C');
@@ -78,8 +83,18 @@ describe('coldRoomSpecificCriteria', () => {
     expect(item!.numericField!.warningMax).toBe(7);
   });
 
-  it('traceability criterion CLD-17-07 is a doc controlType', () => {
-    const item = coldRoomSpecificCriteria.find((c: InspectionItem) => c.id === 'CLD-17-07');
+  // CLD-17-07 was removed in Phase 3 (traceability moved to baseFoodCriteria BFD-08-01)
+  it('CLD-17-07 is removed (deduped to baseFoodCriteria)', () => {
+    const item = coldRoomSpecificCriteria.find(
+      (c: InspectionItem) => c.id === 'CLD-17-07'
+    );
+    expect(item).toBeUndefined();
+  });
+
+  it('HACCP criterion CLD-18-01 exists and is a doc', () => {
+    const item = coldRoomSpecificCriteria.find(
+      (c: InspectionItem) => c.id === 'CLD-18-01'
+    );
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');

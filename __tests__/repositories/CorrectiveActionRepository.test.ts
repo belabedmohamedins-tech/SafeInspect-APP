@@ -261,6 +261,7 @@ describe('save – new action', () => {
       facilityName:     'New Facility',
       criteria:         'Check the thing',
       severity:         'high' as const,
+      status:           'open' as const,
       deadline:         daysFromNow(14),
       assignedTo:       'Alice',
       notes:            '',
@@ -284,24 +285,33 @@ describe('save – update existing action', () => {
 });
 
 // ─── updateStatus ─────────────────────────────────────────────────────────────
+// updateStatus() returns void — verify changes by reading back via getAll()
 
 describe('updateStatus', () => {
   it('updates the status field', async () => {
     seed([BASE_ACTION]);
-    const result = await CorrectiveActionRepository.updateStatus('cap-1', 'resolved');
-    expect(result?.status).toBe('resolved');
-    expect(result?.updatedAt).toBeTruthy();
+    await CorrectiveActionRepository.updateStatus('cap-1', 'resolved');
+    // read back to verify the update was persisted
+    const written = (AsyncStorage.setItem as jest.Mock).mock.calls.at(-1)?.[1];
+    const stored: CorrectiveAction[] = JSON.parse(written);
+    const item = stored.find(a => a.id === 'cap-1');
+    expect(item?.status).toBe('resolved');
+    expect(item?.updatedAt).toBeTruthy();
   });
 
   it('sets closedAt when resolving', async () => {
     seed([BASE_ACTION]);
-    const result = await CorrectiveActionRepository.updateStatus('cap-1', 'resolved');
-    expect(result?.closedAt).toBeTruthy();
+    await CorrectiveActionRepository.updateStatus('cap-1', 'resolved');
+    const written = (AsyncStorage.setItem as jest.Mock).mock.calls.at(-1)?.[1];
+    const stored: CorrectiveAction[] = JSON.parse(written);
+    const item = stored.find(a => a.id === 'cap-1');
+    expect(item?.closedAt).toBeTruthy();
   });
 
-  it('returns null for unknown id', async () => {
+  it('does nothing for unknown id (no write)', async () => {
     seedEmpty();
-    expect(await CorrectiveActionRepository.updateStatus('ghost', 'resolved')).toBeNull();
+    await CorrectiveActionRepository.updateStatus('ghost', 'resolved');
+    expect(AsyncStorage.setItem).not.toHaveBeenCalled();
   });
 });
 

@@ -5,8 +5,8 @@ describe('marbleCriteria', () => {
     expect(Array.isArray(marbleCriteria)).toBe(true);
   });
 
-  it('contains exactly 9 criteria', () => {
-    expect(marbleCriteria).toHaveLength(9);
+  it('contains exactly 10 criteria', () => {
+    expect(marbleCriteria).toHaveLength(10);
   });
 
   it('has no duplicate IDs', () => {
