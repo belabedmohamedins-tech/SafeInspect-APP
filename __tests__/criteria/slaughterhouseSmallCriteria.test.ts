@@ -14,9 +14,9 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('all IDs should match SLH-05-XX pattern', () => {
+  it('all IDs should match SLH-XX-XX pattern', () => {
     slaughterhouseSmallCriteria.forEach(item => {
-      expect(item.id).toMatch(/^SLH-05-\d{2}$/);
+      expect(item.id).toMatch(/^SLH-\d{2}-\d{2}$/);
     });
   });
 
@@ -72,11 +72,16 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(item!.axis).toBe('غرف التبريد');
   });
 
-  it('SLH-05-10 should require pest control documentation', () => {
-    const item = slaughterhouseSmallCriteria.find(i => i.id === 'SLH-05-10');
+  it('SLH-05-10 removed — pest control deduped to BGN', () => {
+    expect(slaughterhouseSmallCriteria.find(i => i.id === 'SLH-05-10')).toBeUndefined();
+  });
+
+  it('SLH-06-01 should be HACCP doc high', () => {
+    const item = slaughterhouseSmallCriteria.find(i => i.id === 'SLH-06-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
-    expect(item!.axis).toBe('مكافحة النواقل');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('نظام HACCP وسلامة الغذاء');
   });
 
   it('should cover all expected axes', () => {
@@ -88,6 +93,6 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(axes.has('غرف التبريد')).toBe(true);
     expect(axes.has('نظافة قاعة الذبح')).toBe(true);
     expect(axes.has('صحة وسلوك العمال')).toBe(true);
-    expect(axes.has('مكافحة النواقل')).toBe(true);
+    expect(axes.has('نظام HACCP وسلامة الغذاء')).toBe(true);
   });
 });

@@ -5,8 +5,8 @@ describe('bakerySpecificCriteria', () => {
     expect(Array.isArray(bakerySpecificCriteria)).toBe(true);
   });
 
-  it('should contain exactly 13 items', () => {
-    expect(bakerySpecificCriteria).toHaveLength(13);
+  it('should contain exactly 12 items', () => {
+    expect(bakerySpecificCriteria).toHaveLength(12);
   });
 
   it('should have no duplicate IDs', () => {
@@ -60,10 +60,30 @@ describe('bakerySpecificCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
+  it('BAK-10-09 removed — pest control deduped to BGN', () => {
+    expect(bakerySpecificCriteria.find(i => i.id === 'BAK-10-09')).toBeUndefined();
+  });
+
+  it('BAK-10-12 fire safety should be visual high', () => {
+    const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-12');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('visual');
+    expect(item!.severity).toBe('high');
+  });
+
+  it('BAK-10-13 EIA should be doc medium', () => {
+    const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-13');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('medium');
+  });
+
   it('should cover key axes', () => {
     const axes = new Set(bakerySpecificCriteria.map(i => i.axis));
     expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
     expect(axes.has('المياه والصرف')).toBe(true);
     expect(axes.has('صحة وسلوك العمال')).toBe(true);
+    expect(axes.has('HACCP وإدارة الجودة')).toBe(true);
+    expect(axes.has('السلامة من الحريق')).toBe(true);
   });
 });
