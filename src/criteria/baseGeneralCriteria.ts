@@ -1,4 +1,4 @@
-// src/baseGeneralCriteria.ts
+// src/criteria/baseGeneralCriteria.ts
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -7,8 +7,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-01-01',
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
-    criteria: 'توفر رخصة أو تصريح استغلال ساري المفعول ومطابق لنوع النشاط ضمن المؤسسات المصنفة، أو معاينة كون المنشأة تشتغل دون أي ترخيص مع الإشارة الصريحة إلى مخالفة تنظيم المؤسسات المصنفة.',
-    legalReference: 'المرسوم التنفيذي 06-198 المتعلق بالمؤسسات المصنفة (شروط وكيفيات الاستغلال) + القانون 03-10 الذي يُجرّم استغلال منشأة مصنفة دون ترخيص (المواد الجزائية).',
+    // S7-1 (merge): Universal operating-licence check — covers all classified facilities.
+    // Facility-specific licence criteria (BLS-01-01, CAR-01-01, CWS-01-01, MRB-01-01,
+    // PNT-01-01, PRT-01-01, MCH-29-01, GPL-01-01, SPH-01-01, BAK-10-01, CLD-17-01,
+    // PRD-01-01) are superseded by this single universal criterion.
+    criteria: 'توفر رخصة أو تصريح استغلال ساري المفعول ومطابق لنوع النشاط ضمن المؤسسات المصنفة، أو معاينة كون المنشأة تشتغل دون أي ترخيص مع الإشارة الصريحة إلى مخالفة تنظيم المؤسسات المصنفة. يشمل الفحص التحقق من: تطابق العنوان ونوع النشاط المرخص، انتفاء أي تعديل جوهري غير مرخص، وتحديد الجهة الإدارية المصدِرة للقرار.',
+    legalReference: 'المرسوم التنفيذي 06-198 المادة 5 (رخصة الاستغلال للمؤسسات المصنفة) + القانون 03-10 المادة 50 (التجريم الصريح لاستغلال منشأة مصنفة دون ترخيص).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -17,7 +21,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-01-02',
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
-    criteria: 'وجود سجلات للتطهير، مراقبة درجات الحرارة (عند الاقتضاء)، نتائج التحاليل، والإعذارات السابقة محفوظة ومتاحة للمراقبة.',
+    criteria: 'وجود سجلات التطهير، مراقبة درجات الحرارة (عند الاقتضاء)، نتائج التحاليل، والإعذارات السابقة محفوظة ومتاحة للمراقبة.',
     legalReference: 'القانون 03-10 (حماية البيئة) + القانون 09-03 (حماية المستهلك وقمع الغش) والتشريعات التطبيقية.',
     severity: 'high',
     controlType: 'doc',
@@ -68,8 +72,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-02-05',
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
+    // CE-9: added Décret 17-140 + Loi 88-07 citations (S2-fix BGN-02-05)
     criteria: 'أرضيات وجدران قابلة للتنظيف (حسب طبيعة النشاط)، ويُفضّل أن تكون ملساء وغير منفذة في الأنشطة التي تتطلب ذلك.',
-    legalReference: 'المعايير العامة للنظافة في المنشآت الصناعية والخدماتية.',
+    legalReference: 'المرسوم التنفيذي 17-140 (شروط النظافة في المؤسسات الغذائية — قابلية التنظيف) + القانون 88-07 المتعلق بالصحة وحمايتها وترقيتها (المادة 47 — اشتراطات النظافة في أماكن العمل والإنتاج).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -79,7 +84,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'تهوية طبيعية أو ميكانيكية كافية حسب طبيعة النشاط.',
-    legalReference: 'القانون 03-10 (جودة الهواء في أماكن العمل).',
+    legalReference: 'القانون 03-10 (جودة الهواء في أماكن العمل) + المرسوم التنفيذي 93-120 (اشتراطات التهوية في أماكن العمل الصناعية).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -88,8 +93,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-02-07',
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
+    // CE-9: added Loi 88-07 + Décret 17-140 citations (S2-fix BGN-02-07)
     criteria: 'إضاءة طبيعية أو اصطناعية كافية في أماكن العمل.',
-    legalReference: 'مقتضيات الصحة والسلامة المهنية.',
+    legalReference: 'القانون 88-07 المتعلق بالصحة وحمايتها وترقيتها (المادة 47 — إضاءة أماكن العمل) + المرسوم التنفيذي 17-140 (الإضاءة في المؤسسات الغذائية) + المرسوم التنفيذي 93-120 (مقتضيات الصحة والسلامة المهنية).',
     severity: 'low',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -120,7 +126,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'صرف مياه الغسل إلى شبكة الصرف الصحي أو محطة معالجة، وعدم طرحها مباشرة في الساحة أو التربة.',
-    legalReference: 'القانون 01-19 + التزامات رخصة التفريغ.',
+    legalReference: 'القانون 01-19 + التزامات رخصة التفريغ (المرسوم التنفيذي 06-141).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -149,7 +155,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
-    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد مع الديوان الوطني للتطهير ONA ومعالجة المواد المستخرجة.',
+    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد مع الديوان الوطني للتطهير ONA ومعالجة المواد المستخرجة، مع التحقق من وتيرة الشفط بما تكفي لمنع الفيضان.',
     legalReference: 'القانون 01-19 + المرسوم 01-102.',
     severity: 'high',
     controlType: 'doc',
@@ -200,17 +206,30 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-04-05',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
+    // NEW S3-1: General open-air incineration ban
     criteria: 'حظر حرق النفايات غير الخطرة في الهواء الطلق داخل أو خارج المنشأة، ووجوب تحويل المخلفات إلى جهات جمع معتمدة أو مرافق عمومية.',
     legalReference: 'القانون 01-19 المادة 29 (حظر حرق النفايات غير الخطرة في الهواء الطلق).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // المحور 7: مكافحة النواقل (عام)
+  {
+    id: 'BGN-04-06',
+    axis: 'النظافة العامة وتسيير النفايات',
+    category: 'تنظيمية',
+    // NEW S3-2: Waste transfer manifest / receipt requirement
+    criteria: 'الاحتفاظ بوثيقة نقل النفايات (bon de transfer) أو إيصال استلام يثبت تسليم النفايات الخاصة والخطرة لمتعامل مرخص، وحفظها لمدة لا تقل عن خمس سنوات.',
+    legalReference: 'القانون 01-19 المادة 22 (التزامات إثبات التخلص القانوني) + المرسوم التنفيذي 09-19 (اشتراط وثيقة التتبع لنقل النفايات الخاصة).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  // المحور 7: مكافحة النواقل (عام) — consolidated pest module
   {
     id: 'BGN-07-01',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
+    // S9-1: consolidated from BGN-07-*, BFD-07-* redundancies
     criteria: 'عدم ظهور دلائل إصابة بقوارض أو حشرات (فضلات، أثر قرض، مسارات، روائح، حشرات حية أو ميتة) داخل أو خارج المؤسسة.',
     legalReference: 'القانون 03-10 (حماية البيئة والصحة العمومية).',
     severity: 'high',
@@ -221,7 +240,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-07-02',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
-    criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق).',
+    criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق) مع خريطة مراقبة محدّثة.',
     legalReference: 'القانون 03-10.',
     severity: 'high',
     controlType: 'doc',
@@ -257,12 +276,24 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
+  {
+    id: 'BGN-07-06',
+    axis: 'مكافحة النواقل',
+    category: 'نظافة',
+    // NEW S9-2: Insect screens — food-adjacent add-on (included here for all food facilities via baseFoodCriteria BFD-07-01)
+    // For non-food facilities: recommend but severity = low
+    criteria: 'تركيب شبكات معدنية (شباك واقية) على النوافذ والفتحات المطلة على الخارج في الأنشطة الحساسة (غذائية، صيدلانية، صحية)، مع سهولة نزعها وتنظيفها.',
+    legalReference: 'المرسوم التنفيذي 17-140 (اشتراط شبكات الحماية في المنشآت الغذائية) + مبادئ مكافحة الآفات.',
+    severity: 'medium',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
   // المحور 8: السلامة العامة والوقاية من الحوادث (عام)
   {
     id: 'BGN-08-01',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
-    criteria: 'توفر تجهيزات مكافحة الحريق (مطفآت، صنابير حريق...) في حالة عمل، بعدد ومواقع مناسبة لطبيعة المنشأة، مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية).',
+    criteria: 'توفر تجهيزات مكافحة الحريق (مطفآت، صنابير حريق...) في حالة عمل، بعدد ومواقع مناسبة لطبيعة المنشأة.',
     legalReference: 'القانون 19-02 المتعلق بالقواعد العامة للوقاية من أخطار الحريق والفزع + النصوص التطبيقية.',
     severity: 'high',
     controlType: 'visual',
@@ -272,6 +303,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-08-02',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
+    // NEW S4-1: Fire extinguisher service-tag / date check (split from BGN-08-01)
+    criteria: 'التحقق من بطاقة الصيانة السنوية لكل مطفأة: يجب أن يكون تاريخ آخر فحص ضمن الـ 12 شهرًا الأخيرة وأن تاريخ انتهاء الصلاحية لم يبلغ بعد.',
+    legalReference: 'القانون 19-02 (إلزامية الصيانة الدورية لتجهيزات مكافحة الحريق).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    id: 'BGN-08-03',
+    axis: 'السلامة العامة والوقاية من الحوادث',
+    category: 'سلامة',
     criteria: 'مسارات الإخلاء خالية من العوائق ومخارج الطوارئ تفتح نحو الخارج ومشار إليها بوضوح.',
     legalReference: 'القانون 19-02 (مخارج الطوارئ ومسارات الإخلاء).',
     severity: 'high',
@@ -279,33 +321,48 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'BGN-08-03',
-    axis: 'السلامة العامة والوقاية من الحوادث',
-    category: 'سلامة',
-    criteria: 'سلامة التركيبات الكهربائية: أسلاك سليمة، لوحات توزيع مغلقة، لا توجد أسلاك عارية أو تركيبات خطرة ظاهرة، وتأريض مناسب للأجهزة الحساسة.',
-    legalReference: 'المرسوم التنفيذي 76-35 (اشتراطات حماية العمال الكهربائية) + القانون 90-11 المتعلق بعلاقات العمل (السلامة المهنية).',
-    severity: 'high',
-    controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
-  {
     id: 'BGN-08-04',
     axis: 'السلامة العامة والوقاية من الحوادث',
-    category: 'تنظيمية',
-    criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فورًا عند الطلب.',
-    legalReference: 'القانون 03-10 المادة 71 (حق الدخول والتفتيش للمفتشين) + المادة 73 (تجريم عرقلة المفتش أو التهديد، عقوبة جزائية).',
+    category: 'سلامة',
+    // NEW S4-2: Basic electrical safety criterion
+    criteria: 'سلامة التركيبات الكهربائية: لا توجد أسلاك عارية أو غير معزولة، لوحة التوزيع الكهربائي مغلقة وموسومة، والتأريض متصل وفعال في جميع الأجهزة والمعدات.',
+    legalReference: 'المرسوم التنفيذي 76-35 المؤرخ في 20 أبريل 1976 المتعلق بحماية العمال من المخاطر الكهربائية + القانون 90-11 (السلامة في أماكن العمل).',
     severity: 'high',
-    controlType: 'doc',
+    controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
     id: 'BGN-08-05',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
-    criteria: 'وجود نظام إنذار من الحريق أو أجهزة كشف الدخان في حالة عمل في المناطق ذات الخطورة المرتفعة (مخازن المواد القابلة للاشتعال، قاعات الإنتاج الكبيرة)، وفق درجة خطورة المنشأة.',
-    legalReference: 'القانون 19-02 المتعلق بالقواعد العامة للوقاية من أخطار الحريق والفزع (المادة 5 — الاشتراطات التقنية للإنذار والكشف).',
+    // NEW S4-3: Fire alarm / smoke detection check
+    criteria: 'التحقق من وجود نظام إنذار من الحريق أو كواشف الدخان في المنشآت التي تشترطه، وتشغيلها بصفة منتظمة مع توثيق آخر اختبار دوري.',
+    legalReference: 'القانون 19-02 المادة 8 (اشتراط أنظمة الإنذار المبكر من الحريق في المنشآت المصنفة ذات الخطورة المرتفعة).',
     severity: 'medium',
-    controlType: 'visual',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  // المحور 9: الوثائق البيئية الإجبارية (عام)
+  {
+    id: 'BGN-09-01',
+    axis: 'الوثائق البيئية الإجبارية',
+    category: 'تنظيمية',
+    // NEW S7-3: Universal anti-obstruction / illegal-operation criterion (modelled on UAB-AX8-02)
+    criteria: 'غياب أي نشاط أو تجهيز غير مرخص يمارَس بالتوازي مع النشاط الرئيسي، ومطابقة الواقع الميداني للمعلومات الواردة في ملف رخصة الاستغلال دون أي توسع أو تعديل غير مصرح.',
+    legalReference: 'المرسوم التنفيذي 06-198 المادة 14 (إلزامية إخطار الجهة الإدارية بأي تعديل أو توسع) + القانون 03-10 (التعامل المطابق مع شروط الرخصة).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    id: 'BGN-09-02',
+    axis: 'الوثائق البيئية الإجبارية',
+    category: 'تنظيمية',
+    // NEW S7-4: EIA / environmental summary study trigger (extended beyond UAB)
+    criteria: 'توفر دراسة التأثير على البيئة (EIE) أو الموجز البيئي المعتمد لدى المنشآت المصنفة من الفئة الأولى أو الثانية، أو عند الإجراء توسعات أو تغييرات جوهرية — مع التحقق من تجديده عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المواد 15–22 (إلزامية دراسة التأثير على البيئة) + المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة) + المرسوم التنفيذي 06-198.',
+    severity: 'medium',
+    controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
 ];
