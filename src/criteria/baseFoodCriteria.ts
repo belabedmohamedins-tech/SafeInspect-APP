@@ -17,7 +17,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-01',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     // CE-5: replaced undated "القرار الوزاري المشترك 2020 المتعلق بـ HACCP" with the verifiable instrument
     criteria: 'توفر ثلاجات وغرف تبريد مزودة بميزان حرارة داخلي مقروء.',
     legalReference: 'المرسوم 17-140 + أدلة GHP (الممارسات الجيدة للنظافة) المعتمدة بموجب القرار الوزاري المشترك المتعلق بشروط النظافة الصحية في مناطق تحضير وتداول المواد الغذائية — ملاحظة: رقم القرار الوزاري المحدد بحاجة تحقق قبل النشر (OQ-7).',
@@ -28,7 +28,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-02',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'حفظ الأغذية المبردة في درجة حرارة بين 0 و 5°م حسب طبيعة المنتوج.',
     legalReference: 'المرسوم 17-140 + القرارات الوزارية الخاصة بالتخزين البارد.',
     severity: 'high',
@@ -46,7 +46,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-03',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'حفظ الأغذية المجمدة في درجة حرارة -18°م أو أقل.',
     legalReference: 'القراراد الوزارية المتعلقة بالتجميد.',
     severity: 'high',
@@ -65,7 +65,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-04',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'فصل واضح بين المواد الأولية والمنتجات الجاهزة في التحضير والتخزين لتجنب التلوث المتبادل.',
     legalReference: 'المرسوم 17-140 + مبادئ HACCP.',
     severity: 'high',
@@ -75,7 +75,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-05',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'أسطح تحضير ملساء، غير منفذة، غير سامة، سهلة التطهير.',
     legalReference: 'المرسوم 17-140.',
     severity: 'high',
@@ -85,7 +85,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-06',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'توفر الماء الساخن للغسل في مناطق التحضير والتنظيف.',
     legalReference: 'المرسوم 17-140.',
     severity: 'medium',
@@ -95,7 +95,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-05-07',
     axis: 'تجهيزات الحفظ والتحضير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'تنظيف المعدات وفق تسلسل: غسل – شطف – تعقيم – تجفيف، مع توثيق عند الاقتضاء.',
     legalReference: 'المرسوم 17-140 + أدلة GHP.',
     severity: 'medium',
@@ -106,7 +106,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-06-01',
     axis: 'صحة وسلوك العمال',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'ارتداء لباس عمل نظيف، وأغطية رأس، ووسائل وقاية شخصية حسب طبيعة المهام.',
     legalReference: 'المرسوم 17-140.',
     severity: 'high',
@@ -116,7 +116,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-06-02',
     axis: 'صحة وسلوك العمال',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'توفر أحواض غسل اليدين بالصابون والماء الدافئ ومناشف أحادية الاستعمال قرب مناطق العمل.',
     legalReference: 'المرسوم 17-140.',
     severity: 'high',
@@ -126,7 +126,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-06-03',
     axis: 'صحة وسلوك العمال',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'إخضاع العمال لفحص طبي قبل التوظيف وفحوصات طبية دورية (كل 6 أشهر في قطاع الأغذية).',
     legalReference: 'القانون 18-11 + المرسوم التنفيذي 93-120 (طب العمل والفحوص الدورية).',
     severity: 'high',
@@ -136,7 +136,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   {
     id: 'BFD-06-04',
     axis: 'صحة وسلوك العمال',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'منع الأكل والشرب والتدخين والبصق في أماكن تداول الأغذية والعمل الإنتاجي.',
     legalReference: 'المرسوم 17-140.',
     severity: 'medium',
