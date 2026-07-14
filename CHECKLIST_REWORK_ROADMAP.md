@@ -73,7 +73,7 @@ Each session audited one thematic category across all criteria files.
 - [ ] Add `numericField` schema to pH / oils-greases criteria (reuse pattern from `baseFoodCriteria` temperature fields)
 - [ ] Add discharge permit criterion to: mechanic, car wash, paint shop, printing, marble, abattoir, couvoir, coldRoom
 - [ ] Correct citation to `Décret 06-141` Art.3,4 in all liquid-discharge criteria
-- [ ] Add volume/load-triggered permit + lab-analysis chain (extend UAB's model beyond UAB)
+- [ ] Add volume/load-triggered permit + lab-analysis chain (extend UAB’s model beyond UAB)
 - [ ] Add septic-pit pumping-frequency adequacy check (contract existence ≠ adequate service frequency)
 
 ---
@@ -82,20 +82,20 @@ Each session audited one thematic category across all criteria files.
 **Key findings:**
 - `PRT-03-03` (printing) cites `Décret 04-409` (hazardous-waste transport) for SDS/chemical-storage requirement — **wrong decree**
 - No facility type except UAB verifies waste is inventoried/classified *before* checking storage/disposal
-- 9 facility types have "contract with approved operator" but none cite `Décret 09-19` (collector accreditation)
+- 9 facility types have “contract with approved operator” but none cite `Décret 09-19` (collector accreditation)
 - None ask for a transfer manifest/receipt — a signed-but-unused contract currently passes inspection
 
 **Rework tasks:**
 - [ ] Fix `PRT-03-03` citation: replace `04-409` with correct decree for SDS/chemical storage
 - [ ] Add waste classification/inventory step to all facility types that have waste-disposal criteria (model on UAB)
-- [ ] Add `Décret 09-19` citation to all "contract with approved operator" criteria
+- [ ] Add `Décret 09-19` citation to all “contract with approved operator” criteria
 - [ ] Add transfer manifest/receipt as required evidence for all waste-disposal criteria
 - [ ] Add on-site incineration ban to `baseGeneralCriteria.ts` (general, not wood-scrap-only — currently zero coverage outside one carpentry criterion)
 - [ ] Add waste transfer manifest/receipt requirement to all waste-disposal criteria
 
 ---
 
-### Session 4 — Fire Safety / Hazardous Substances ✅ Audited ✅ REWORK COMPLETE (1 task remaining)
+### Session 4 — Fire Safety / Hazardous Substances ✅ Audited ✅ REWORK COMPLETE
 **Key findings:**
 - `Décret 04-409` mis-cited in **8 of 10** `gplCriteria.ts` criteria — should be `Décret 21-430`
 - `Décret 09-410` mis-cited in `GPL-03-03` and `UAB-AX1-04` — should be `Décret 09-335`
@@ -114,7 +114,7 @@ Each session audited one thematic category across all criteria files.
 - [x] Add electrical-safety module to `baseGeneralCriteria.ts` (BGN-08-03)
 - [x] Add fire-alarm/detection criterion to `baseGeneralCriteria.ts` (BGN-08-05)
 - [x] Add cross-verification criterion to `uabCriteria.ts`: physical fire-prevention measures must match risk study
-- [ ] Merge blacksmith compressed-gas criterion `BLS-04-02` into a shared module with GPL-02-01, adding full/empty separation and stock-ceiling requirement
+- [x] Create `baseCompressedGasCriteria.ts` shared module (CGS-01-01/02/03) and replace `BLS-04-02` with spread of shared module in `blacksmithCriteria.ts`
 
 ---
 
@@ -126,16 +126,16 @@ Each session audited one thematic category across all criteria files.
 - HACCP plan required only for bakery — **not** for abattoir or slaughterhouse (backwards)
 - Pest control has **3 independent unreconciled lineages**: `BGN-07-`, `BFD-07-`, `PRD-04-`
 - Traceability exists in 2 independently-written facility versions; absent from abattoir/slaughterhouse/couvoir/UAB
-- HACCP legal citation uses undated "2020 joint ministerial order" — no instrument number
+- HACCP legal citation uses undated “2020 joint ministerial order” — no instrument number
 
 **Rework tasks:**
 - [ ] Remove `BAK-10-07`, `BAK-10-08` (partial), `BAK-10-09` from `bakeryCriteria.ts`
 - [ ] Remove `CLD-17-02`, `CLD-17-03`, `CLD-17-04`, `CLD-17-05` from `coldRoomCriteria.ts`
-- [ ] Add `applicableFacilityTypes` flags to `BFD-05-02` and `BFD-05-03` so couvoir/UPD/UAB don't see chilled/frozen criteria
+- [ ] Add `applicableFacilityTypes` flags to `BFD-05-02` and `BFD-05-03` so couvoir/UPD/UAB don’t see chilled/frozen criteria
 - [ ] Extend HACCP-plan requirement (model on `BAK-10-10`) to `abattoirCriteria.ts` and `slaughterhouseSmallCriteria.ts`
 - [ ] Merge pest-control lineages: one shared module (`BGN-07-*` as primary — best-designed of the three), merge food add-on from `BFD-07-01/02`, remove `PRD-04-` duplication (see also Session 9 below)
 - [ ] Add shared traceability criterion to `baseFoodCriteria.ts`; extend to abattoir, slaughterhouse, couvoir, UAB
-- [ ] Fix HACCP legal citation in `BFD-05-01` and `BAK-10-10`: resolve "2020 joint ministerial order" to a specific numbered instrument
+- [ ] Fix HACCP legal citation in `BFD-05-01` and `BAK-10-10`: resolve “2020 joint ministerial order” to a specific numbered instrument
 
 ---
 
@@ -161,12 +161,12 @@ Each session audited one thematic category across all criteria files.
 - **Every facility type checks operating license TWICE** — `BGN-01-01` + a facility-specific duplicate (11 files)
 - Anti-obstruction/illegal-operation criterion (`UAB-AX8-02`) exists in **1 of 18** facility types
 - EIA/impact-study requirement scoped to UAB only — but `Décret 06-198` trigger is impact *category*, not facility *type*
-- Mechanic checklist `MCH-29-01` is the only one phrased to catch "operating with no license at all" — best practice not replicated
+- Mechanic checklist `MCH-29-01` is the only one phrased to catch “operating with no license at all” — best practice not replicated
 - `UAB-AX2-02` (building permit) duplicates `BGN-02-04`
 
 **Rework tasks:**
 - [ ] Remove facility-specific license duplicates from all 11 files: `BLS-01-01`, `CAR-01-01`, `CWS-01-01`, `MRB-01-01`, `PNT-01-01`, `PRT-01-01`, `GPL-01-01`, `SPH-01-01`, `BAK-10-01`, `CLD-17-01`, `PRD-01-01`
-- [ ] Rewrite `BGN-01-01` to adopt mechanic's "operating with no license at all" phrasing as universal standard
+- [ ] Rewrite `BGN-01-01` to adopt mechanic’s “operating with no license at all” phrasing as universal standard
 - [ ] Add anti-obstruction/illegal-operation criterion (model on `UAB-AX8-02`) to `baseGeneralCriteria.ts`
 - [ ] Extend EIA/impact-study requirement from UAB-only to abattoir, couvoir, UPD (impact-category trigger, not facility-type trigger)
 - [ ] Remove `UAB-AX2-02` (duplicate of `BGN-02-04`)
@@ -175,9 +175,9 @@ Each session audited one thematic category across all criteria files.
 
 ### Session 8 — Air Quality / Atmospheric Emissions ✅ Audited
 **Key findings:**
-- Only UAB does the full equipment→measurement→threshold-comparison chain. Blacksmith, carpentry, marble, paint shop, printing all stop at "extraction/ventilation equipment present" — **no measurement, no threshold**
+- Only UAB does the full equipment→measurement→threshold-comparison chain. Blacksmith, carpentry, marble, paint shop, printing all stop at “extraction/ventilation equipment present” — **no measurement, no threshold**
 - `UAB-AX5-02` / `01-09` benchmark against `Décret 06-02` (ambient air-quality alert standard) — needs verification; point-source limit instrument is `Décret 06-138` (already co-cited). **Flagged for verification, not confirmed wrong.**
-- Buffer-distance criterion `03-02` (UPD) says "proportional to risk" with **no actual distance number**
+- Buffer-distance criterion `03-02` (UPD) says “proportional to risk” with **no actual distance number**
 - Legacy duplicates confirmed: `01-02`, `01-08`, `01-09`, `01-10` (UAB); `03-02`, `03-04` (UPD); `02-04` (couvoir)
 - Odor-management proxy controls for livestock/poultry (buffer distance, ventilation, manure-removal frequency) are **reasonably designed** given difficulty of direct odor measurement — not same gap as dust/VOC
 
@@ -185,7 +185,7 @@ Each session audited one thematic category across all criteria files.
 - [ ] Remove legacy duplicates: `01-02`, `01-08`, `01-09`, `01-10` (UAB); `03-02`, `03-04` (UPD); `02-04` (couvoir)
 - [ ] Add periodic emissions measurement criterion (model on `UAB-AX5-02`, `numericField` schema) to: `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`
 - [ ] Verify `Décret 06-02` vs `Décret 06-138` in `UAB-AX5-02`/`01-09` — if ambient standard is wrong benchmark, correct to 06-138 alone
-- [ ] Replace "proportional to risk" in UPD buffer-distance criterion with an actual minimum-distance table tied to facility risk category
+- [ ] Replace “proportional to risk” in UPD buffer-distance criterion with an actual minimum-distance table tied to facility risk category
 - [ ] Add legal citation to `BGN-02-05` and `BGN-02-07` (currently no citation) — use `Décret 17-140` for food-adjacent activities, `Loi 88-07` for general workplace conditions
 
 ---
@@ -241,7 +241,7 @@ Remove from all four affected files:
 ## Phase 4 — Three Confirmed Legal-Citation Fixes
 
 | Criterion | Wrong decree | Correct decree | File |
-|---|---|---|---|
+|---|---|---|
 | `PRT-03-03` + 8 GPL criteria | `Décret 04-409` | `Décret 21-430` (GPL); correct chemical-storage basis (printing) | `gplCriteria.ts` [x done], `printingCriteria.ts` [ ] |
 | `GPL-03-03`, `UAB-AX1-04` | `Décret 09-410` | `Décret 09-335` | [x done] |
 | `UAB-AX5-02`, `01-09` | `Décret 06-02` (ambient) | Verify vs `Décret 06-138` (point-source) — may need correction | [ ] verify |
@@ -273,7 +273,8 @@ Remove from all four affected files:
 | All 18 criteria files | `__tests__/criteria/*.test.ts` | [x] All passing |
 | `baseFoodCriteria.ts` (post-rework) | `baseFoodCriteria.test.ts` | [ ] Update after S5 + S9 tasks |
 | `baseGeneralCriteria.ts` (post-rework) | `baseGeneralCriteria.test.ts` | [ ] Update after S7 + S8 + S9 tasks |
-| `gplCriteria.ts` (post-rework) | `gplCriteria.test.ts` | [ ] Remaining S4 task |
+| `baseCompressedGasCriteria.ts` (new) | `baseCompressedGasCriteria.test.ts` | [ ] Write after all criteria rework done |
+| `gplCriteria.ts` (post-rework) | `gplCriteria.test.ts` | [ ] After GPL aligns with CGS shared module |
 | `uabCriteria.ts` (post-rework) | `uabCriteria.test.ts` | [ ] After legacy purge + S8 tasks |
 | `abattoirCriteria.ts` (post-rework) | `abattoirCriteria.test.ts` | [ ] After legacy purge + S5/S9 tasks |
 | `couvoirCriteria.ts` (post-rework) | `couvoirCriteria.test.ts` | [ ] After legacy purge + S9 tasks |
@@ -289,7 +290,7 @@ Remove from all four affected files:
 | 1 | Initial mapping audit | ✅ Done | 10 new files, 44 dups removed, 26 activities mapped |
 | 2 | Wastewater / liquid discharge | ✅ Audited | `Session_02_Wastewater_Liquid_Discharge_Audit.txt` |
 | 3 | Solid / hazardous waste | ✅ Audited | `Session_03_Solid_Hazardous_Waste_Audit.txt` |
-| 4 | Fire safety / hazardous substances | ✅ Audited + mostly done | `Session_04_Fire_Safety_Hazardous_Substances_Audit.txt` |
+| 4 | Fire safety / hazardous substances | ✅ Audited ✅ Rework complete | `Session_04_Fire_Safety_Hazardous_Substances_Audit.txt` |
 | 5 | Food safety / hygiene | ✅ Audited | `Session_05_Food_Safety_Hygiene_Audit.txt` |
 | 6 | Occupational health / worker protection | ✅ Audited | `Session_06_Occupational_Health_Worker_Protection_Audit.txt` |
 | 7 | Documentation / licensing | ✅ Audited | `Session_07_Documentation_Licensing_Audit.txt` |
@@ -300,22 +301,20 @@ Remove from all four affected files:
 
 ## Current Status (July 14, 2026)
 
-**All 9 sessions audited. Master Rollup available.**
+**All 9 sessions audited. Session 4 rework fully complete.**
 
 **Completed rework:**
 - [x] Session 4 fire-safety decree fixes (gplCriteria.ts, uabCriteria.ts)
 - [x] Extinguisher splits + service-tag (all facilities)
 - [x] Electrical-safety BGN-08-03 + fire-alarm BGN-08-05 added to baseGeneralCriteria
 - [x] UAB risk-study cross-verification criterion
+- [x] `baseCompressedGasCriteria.ts` created; BLS-04-02 replaced with shared CGS-01-01/02/03
 
-**Next actions — start here:**
+**Next action — start here:**
 
-1. **Session 4 leftover:** Merge `BLS-04-02` compressed-gas into shared module with GPL-02-01
-2. **Session 9 pest control consolidation** — biggest single fix, affects 8 files:
-   - Consolidate `BGN-07-*` + `BFD-07-*` into one unified pest module
-   - Remove all facility-specific duplicates listed in S9 above
-3. **Session 3 legacy purge** — remove all four full legacy numeric series from abattoir/UAB/couvoir/UPD
-4. **Session 7 license duplicate removal** — remove from 11 facility files, rewrite `BGN-01-01`
-5. **Session 8 emissions measurement** — add `numericField` measurement criterion to 5 workshop types
-6. **Session 6 occupational health tasks** — machine-guard blacksmith, emergency-stop, noise measurement, citations
-7. **Sessions 2/3/5 remaining rework tasks** (see above sections)
+**Session 9 pest control consolidation** — biggest single fix, affects 8 files:
+1. Upgrade `BGN-07-01…05` in `baseGeneralCriteria.ts`: adopt trap-map/intervention-log evidence standard from `COU-AX8-02`, add insect-screen add-on from `BFD-07-01`
+2. Remove `BFD-07-01`/`02` from `baseFoodCriteria.ts`
+3. Remove facility-specific duplicates from: abattoir, bakery, couvoir, produceStorage, slaughterhouseSmall, UPD
+4. Keep `UPD-AX8-03` (wild-bird exclusion)
+5. Add legal citations to `BGN-02-05` and `BGN-02-07`
