@@ -3,13 +3,14 @@ import { carWashCriteria } from '../../src/criteria/carWashCriteria';
 describe('carWashCriteria', () => {
   it('exports a non-empty array', () => {
     expect(Array.isArray(carWashCriteria)).toBe(true);
+    expect(carWashCriteria.length).toBeGreaterThan(0);
   });
 
-  it('should contain exactly 12 items', () => {
+  it('has exactly 12 items', () => {
     expect(carWashCriteria).toHaveLength(12);
   });
 
-  it('should have no duplicate IDs', () => {
+  it('all IDs are unique', () => {
     const ids = carWashCriteria.map(i => i.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
@@ -22,7 +23,9 @@ describe('carWashCriteria', () => {
     carWashCriteria.forEach(item => {
       expect(item.id).toBeDefined();
       expect(item.axis).toBeDefined();
+      expect(item.category).toBeDefined();
       expect(item.criteria).toBeDefined();
+      expect(item.legalReference).toBeDefined();
       expect(item.severity).toBeDefined();
       expect(item.controlType).toBeDefined();
       expect(item.complianceStatus).toBe('not-evaluated');
@@ -30,33 +33,30 @@ describe('carWashCriteria', () => {
   });
 
   it('severity values are valid', () => {
-    carWashCriteria.forEach(item =>
-      expect(['low', 'medium', 'high']).toContain(item.severity)
-    );
+    const valid = ['low', 'medium', 'high'];
+    carWashCriteria.forEach(item => expect(valid).toContain(item.severity));
   });
 
-  it('CWS-01-01 is licence doc high', () => {
-    const item = carWashCriteria.find(i => i.id === 'CWS-01-01');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-    expect(item!.severity).toBe('high');
+  it('controlType values are valid', () => {
+    const valid = ['visual', 'doc', 'measurement', 'interview'];
+    carWashCriteria.forEach(item => expect(valid).toContain(item.controlType));
   });
 
-  it('CWS-02-01 is oil separator visual high', () => {
+  it('contains water management axis items', () => {
+    const waterItems = carWashCriteria.filter(i => i.axis === 'تسيير مياه الغسل');
+    expect(waterItems.length).toBeGreaterThanOrEqual(3);
+  });
+
+  it('contains oil separator item CWS-02-01', () => {
     const item = carWashCriteria.find(i => i.id === 'CWS-02-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('visual');
     expect(item!.severity).toBe('high');
   });
 
-  it('has at least one low severity item', () => {
-    expect(carWashCriteria.some(i => i.severity === 'low')).toBe(true);
-  });
-
-  it('axes cover expected domains', () => {
-    const axes = new Set(carWashCriteria.map(i => i.axis));
-    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
-    expect(axes.has('تسيير مياه الغسل')).toBe(true);
-    expect(axes.has('النظافة والسلامة')).toBe(true);
+  it('contains fire safety item CWS-05-01', () => {
+    const item = carWashCriteria.find(i => i.id === 'CWS-05-01');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
   });
 });

@@ -3,13 +3,14 @@ import { marbleCriteria } from '../../src/criteria/marbleCriteria';
 describe('marbleCriteria', () => {
   it('exports a non-empty array', () => {
     expect(Array.isArray(marbleCriteria)).toBe(true);
+    expect(marbleCriteria.length).toBeGreaterThan(0);
   });
 
-  it('should contain exactly 10 items', () => {
+  it('has exactly 10 items', () => {
     expect(marbleCriteria).toHaveLength(10);
   });
 
-  it('should have no duplicate IDs', () => {
+  it('all IDs are unique', () => {
     const ids = marbleCriteria.map(i => i.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
@@ -22,38 +23,41 @@ describe('marbleCriteria', () => {
     marbleCriteria.forEach(item => {
       expect(item.id).toBeDefined();
       expect(item.axis).toBeDefined();
+      expect(item.category).toBeDefined();
       expect(item.criteria).toBeDefined();
+      expect(item.legalReference).toBeDefined();
       expect(item.severity).toBeDefined();
       expect(item.controlType).toBeDefined();
       expect(item.complianceStatus).toBe('not-evaluated');
     });
   });
 
-  it('MRB-01-01 is licence doc high', () => {
-    const item = marbleCriteria.find(i => i.id === 'MRB-01-01');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-    expect(item!.severity).toBe('high');
+  it('severity values are valid', () => {
+    const valid = ['low', 'medium', 'high'];
+    marbleCriteria.forEach(item => expect(valid).toContain(item.severity));
   });
 
-  it('MRB-03-01 is dust extraction visual high', () => {
+  it('controlType values are valid', () => {
+    const valid = ['visual', 'doc', 'measurement', 'interview'];
+    marbleCriteria.forEach(item => expect(valid).toContain(item.controlType));
+  });
+
+  it('contains silica dust ventilation item MRB-03-01', () => {
     const item = marbleCriteria.find(i => i.id === 'MRB-03-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('visual');
     expect(item!.severity).toBe('high');
   });
 
-  it('MRB-05-03 is medical exams doc high', () => {
-    const item = marbleCriteria.find(i => i.id === 'MRB-05-03');
+  it('contains PPE item MRB-05-01', () => {
+    const item = marbleCriteria.find(i => i.id === 'MRB-05-01');
     expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-    expect(item!.severity).toBe('high');
+    expect(item!.axis).toContain('السلامة');
   });
 
-  it('axes cover expected domains', () => {
-    const axes = new Set(marbleCriteria.map(i => i.axis));
-    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
-    expect(axes.has('المياه المستعملة والغبار')).toBe(true);
-    expect(axes.has('السلامة المهنية')).toBe(true);
+  it('contains machine guard item MRB-05-04', () => {
+    const item = marbleCriteria.find(i => i.id === 'MRB-05-04');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
   });
 });

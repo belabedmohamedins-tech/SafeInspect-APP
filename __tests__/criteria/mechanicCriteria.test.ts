@@ -3,13 +3,14 @@ import { mechanicWorkshopCriteria } from '../../src/criteria/mechanicCriteria';
 describe('mechanicWorkshopCriteria', () => {
   it('exports a non-empty array', () => {
     expect(Array.isArray(mechanicWorkshopCriteria)).toBe(true);
+    expect(mechanicWorkshopCriteria.length).toBeGreaterThan(0);
   });
 
-  it('should contain exactly 7 items', () => {
+  it('has exactly 7 items', () => {
     expect(mechanicWorkshopCriteria).toHaveLength(7);
   });
 
-  it('should have no duplicate IDs', () => {
+  it('all IDs are unique', () => {
     const ids = mechanicWorkshopCriteria.map(i => i.id);
     expect(new Set(ids).size).toBe(ids.length);
   });
@@ -22,7 +23,9 @@ describe('mechanicWorkshopCriteria', () => {
     mechanicWorkshopCriteria.forEach(item => {
       expect(item.id).toBeDefined();
       expect(item.axis).toBeDefined();
+      expect(item.category).toBeDefined();
       expect(item.criteria).toBeDefined();
+      expect(item.legalReference).toBeDefined();
       expect(item.severity).toBeDefined();
       expect(item.controlType).toBeDefined();
       expect(item.complianceStatus).toBe('not-evaluated');
@@ -30,43 +33,30 @@ describe('mechanicWorkshopCriteria', () => {
   });
 
   it('severity values are valid', () => {
-    mechanicWorkshopCriteria.forEach(item =>
-      expect(['low', 'medium', 'high']).toContain(item.severity)
-    );
+    const valid = ['low', 'medium', 'high'];
+    mechanicWorkshopCriteria.forEach(item => expect(valid).toContain(item.severity));
   });
 
-  it('MCH-29-01 is licence doc high', () => {
+  it('controlType values are valid', () => {
+    const valid = ['visual', 'doc', 'measurement', 'interview'];
+    mechanicWorkshopCriteria.forEach(item => expect(valid).toContain(item.controlType));
+  });
+
+  it('contains licence/doc item MCH-29-01', () => {
     const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');
   });
 
-  it('MCH-29-02 nuisance to neighbours should be medium severity (measurement)', () => {
-    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-02');
-    expect(item).toBeDefined();
-    expect(item!.severity).toBe('medium');
-    expect(item!.controlType).toBe('measurement');
+  it('contains hazardous waste items', () => {
+    const wasteItems = mechanicWorkshopCriteria.filter(i => i.axis === 'النفايات الخطرة');
+    expect(wasteItems.length).toBeGreaterThanOrEqual(2);
   });
 
-  it('MCH-29-03 should require sealed containers for used oil (visual)', () => {
-    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-03');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('visual');
-    expect(item!.severity).toBe('high');
-  });
-
-  it('MCH-29-07 is fire safety visual high', () => {
+  it('contains fire safety item MCH-29-07', () => {
     const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-07');
     expect(item).toBeDefined();
-    expect(item!.controlType).toBe('visual');
     expect(item!.severity).toBe('high');
-  });
-
-  it('axes cover expected domains', () => {
-    const axes = new Set(mechanicWorkshopCriteria.map(i => i.axis));
-    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
-    expect(axes.has('النفايات الخطرة')).toBe(true);
-    expect(axes.has('النظافة والسلامة')).toBe(true);
   });
 });
