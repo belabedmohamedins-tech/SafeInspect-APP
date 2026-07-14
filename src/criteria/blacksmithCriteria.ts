@@ -92,6 +92,22 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    id: 'BLS-04-06',
+    axis: 'السلامة المهنية',
+    category: 'سلامة',
+    criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل بصفة دورية (جهاز قياس معتمد)، والتحقق من عدم تجاوز الحد الأقصى المسموح به (85 ديسيبل)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة.',
+    legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 90-11.',
+    severity: 'medium',
+    controlType: 'measurement',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      label: 'مستوى الضجيج المقاس (ديسيبل)',
+      unit: 'dB',
+      threshold: 85,
+      comparisonOperator: 'lte',
+    },
+  },
+  {
     id: 'BLS-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',

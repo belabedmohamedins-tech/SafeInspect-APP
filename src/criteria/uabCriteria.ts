@@ -263,6 +263,22 @@ export const uabSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    id: 'UAB-AX7-07',
+    axis: 'الصحة والسلامة المهنية',
+    category: 'صحية',
+    criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل (مناطق الطحن والخلط والمناولة الميكانيكية) بصفة دورية باستخدام جهاز قياس معتمد، والتحقق من عدم تجاوز الحد الأقصى (85 ديسيبل)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة.',
+    legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 18-11 (السلامة في أماكن العمل).',
+    severity: 'medium',
+    controlType: 'measurement',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      label: 'مستوى الضجيج المقاس (ديسيبل)',
+      unit: 'dB',
+      threshold: 85,
+      comparisonOperator: 'lte',
+    },
+  },
+  {
     id: 'UAB-AX8-01',
     axis: 'الإجراءات والعقوبات',
     category: 'تنظيمية',
