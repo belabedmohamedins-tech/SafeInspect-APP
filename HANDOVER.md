@@ -6,13 +6,12 @@
 
 ---
 
-## 🚫 CURRENT FOCUS — Checklist Rework (NOT Coverage)
+## ✅ CHECKLIST REWORK COMPLETE — All 5 Phases Done
 
-> **Tests are deferred. Do NOT work on Jest coverage until ALL five phases of the checklist rework are complete.**
-> Criteria files (`src/criteria/*.ts`) are actively being modified — tests written now will break on every rework commit.
+> **Tests are still deferred.** The criteria files are stable now, but do NOT start Jest coverage until you decide to begin the coverage sprint.
+> See the Coverage section below for priority order when ready.
 
 **Full implementation spec:** [`Perplexity_Implementation_Spec.md`](./Perplexity_Implementation_Spec.md)
-Read it before touching any `src/criteria/` file. Every change below traces back to it.
 
 ---
 
@@ -51,167 +50,48 @@ src/
 | Phase 1 | Remove legacy duplicate blocks (abattoir, uab, couvrir, upd) | ✅ Done |
 | Phase 2 | Correct 3 confirmed legal citations | ✅ Done |
 | Phase 3 | Merge duplicated shared-module content (license dedup, pest control, food-safety near-duplicates) | ✅ Done |
-| Phase 4 | Add new criteria for confirmed gaps | 🔴 In progress |
-| Phase 5 | Typing/evidence-standard fixes | ⬜ Not started |
+| Phase 4 | Add new criteria for confirmed gaps | ✅ Done |
+| Phase 5 | Typing/evidence-standard fixes | ✅ Done |
 
-### Phase 3 — What was done
-- Removed duplicate operating-license criteria from 12 files — `BGN-01-01` is now the single authoritative check
-- Upgraded `BGN-07-02` with trap-map/intervention-log detail (absorbed from `COU-AX8-02`)
-- Removed pest duplicates from: `abattoirCriteria`, `couvoirCriteria`, `updCriteria`, `bakeryCriteria`, `produceStorageCriteria`, `slaughterhouseSmallCriteria`
-- Kept `UPD-AX8-03` (wild-bird exclusion) and `ABT-AX10-01` (abattoir biosecurity) — genuine content, not duplicates
-- Removed food-safety near-duplicates: `CLD-17-02–05`, `BAK-10-07`, modified `BAK-10-08`
+### What was done — full summary
 
----
+**Phase 1** — Removed legacy numeric series from 4 files:
+- `abattoirCriteria.ts` — IDs `04-01…04-11`
+- `uabCriteria.ts` — IDs `01-01…01-12`
+- `couvoirCriteria.ts` — IDs `02-01…02-11`
+- `updCriteria.ts` — IDs `03-01, 03-03…03-10` (03-02 kept and renamed → Phase 4)
 
-## 🔴 Phase 4 — Next Actions (in order)
+**Phase 2** — Citation fixes:
+- `gplCriteria.ts` — `04-409` → `21-430` (8 criteria), `09-410` → `09-335` (1 criterion)
+- `uabCriteria.ts` — `09-410` → `09-335` on `UAB-AX1-04`
+- `printingCriteria.ts` — removed `04-409` from `PRT-03-03`
 
-All changes are in `src/criteria/`. Every item here is directly from `Perplexity_Implementation_Spec.md §6`.
+**Phase 3** — Shared-module consolidation:
+- Upgraded `BGN-01-01` (operating license) as single authoritative check; removed 12 facility-specific duplicates
+- Upgraded `BGN-07-02` with trap-map/intervention-log detail; removed pest duplicates from 6 files; kept `UPD-AX8-03` (biosecurity) and `ABT-AX10-01`
+- Removed food-safety near-duplicates: `CLD-17-02–05`, `BAK-10-07`; modified `BAK-10-08`
 
-### 4.1 Electrical safety — ADD `BGN-08-04` to `baseGeneralCriteria.ts`
-```typescript
-{
-  id: 'BGN-08-04',
-  axis: 'السلامة من الحريق',
-  category: 'سلامة',
-  criteria: 'اللوحة الكهربائية بحالة سليمة (غير مكشوفة، مؤرضة، بدون أسلاك عارية أو وصلات مؤقتة)، مع عدم وجود تحميل زائد ظاهر على المآخذ.',
-  legalReference: 'القانون 88-07 + القانون 19-02.',
-  severity: 'high',
-  controlType: 'visual',
-  complianceStatus: 'not-evaluated',
-},
-```
+**Phase 4** — New criteria added:
+- `BGN-08-04` — electrical safety (baseGeneralCriteria)
+- `BGN-08-05` — fire alarm / smoke detection (baseGeneralCriteria)
+- `BGN-09-01` — occupational noise with numericField (baseGeneralCriteria)
+- `BGN-01-03` — anti-obstruction / illegal operation (baseGeneralCriteria)
+- `BLS-04-05` — machine guard / emergency stop (blacksmithCriteria)
+- `UPD-AX2-03` — siting distance from residential clusters (updCriteria) ⚠️ distance placeholder — legal verification needed before using in production
+- `BFD-08-01` — traceability register (baseFoodCriteria); `CLD-17-07` and `PRD-05-02` removed
+- `ABT-AX9-01` — HACCP plan (abattoirCriteria)
+- `SLH-06-01` — HACCP plan (slaughterhouseSmallCriteria)
+- `CLD-18-01` — HACCP plan (coldRoomCriteria)
+- `BFD-05-01` — citation precision fix (baseFoodCriteria)
+- `UAB-AX8-02` — removed (merged into `BGN-01-03`)
 
-### 4.2 Fire alarm — ADD `BGN-08-05` to `baseGeneralCriteria.ts`
-```typescript
-{
-  id: 'BGN-08-05',
-  axis: 'السلامة من الحريق',
-  category: 'سلامة',
-  criteria: 'توفر نظام كشف عن الدخان أو الحريق (كاشف دخان، جرس إنذار) بحالة تشغيل سليمة.',
-  legalReference: 'القانون 19-02.',
-  severity: 'high',
-  controlType: 'visual',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.3 Occupational noise — ADD `BGN-09-01` to `baseGeneralCriteria.ts`
-```typescript
-{
-  id: 'BGN-09-01',
-  axis: 'الصحة والسلامة المهنية',
-  category: 'سلامة',
-  criteria: 'مستوى الضجيج في مركز العمل ضمن الحدود المسموح بها، أو توفر واستعمال وسائل حماية سمعية.',
-  legalReference: 'القانون 88-07 + المرسوم التنفيذي 93-120.',
-  severity: 'medium',
-  controlType: 'measurement',
-  complianceStatus: 'not-evaluated',
-  numericField: {
-    unit: 'dB(A)',
-    labelAr: 'مستوى الضجيج المقاس (8 ساعات)',
-    min: 0,
-    max: 85,
-    warningMax: 90,
-    step: 1,
-  },
-},
-```
-
-### 4.4 Machine guard — ADD `BLS-04-05` to `blacksmithCriteria.ts`
-```typescript
-{
-  id: 'BLS-04-05',
-  axis: 'السلامة المهنية',
-  category: 'سلامة',
-  criteria: 'وجود واقيات على الأجزاء المتحركة للآلات، مع توفر أزرار توقف طارئ.',
-  legalReference: 'القانون 88-07 المادة 8.',
-  severity: 'high',
-  controlType: 'visual',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.5 UPD siting distance — ADD `UPD-AX2-03` to `updCriteria.ts`
-> ⚠️ The bracketed distance placeholder requires legal verification before merging. Do not merge with placeholder in place.
-```typescript
-{
-  id: 'UPD-AX2-03',
-  axis: 'الموقع والعزل',
-  category: 'بيئية',
-  criteria: 'موقع الحظائر بعيد عن التجمعات السكنية بمسافة لا تقل عن [يُحدَّد بناءً على مراجعة المرسوم 07-144].',
-  legalReference: 'قانون 03-10 + المرسوم 07-144.',
-  severity: 'high',
-  controlType: 'visual',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.6 Anti-obstruction — ADD `BGN-01-03` to `baseGeneralCriteria.ts`, then REMOVE `UAB-AX8-02` from `uabCriteria.ts`
-```typescript
-{
-  id: 'BGN-01-03',
-  axis: 'هوية المنشأة والوثائق',
-  category: 'تنظيمية',
-  criteria: 'عدم وجود استغلال للنشاط دون ترخيص، أو رغم صدور قرار تعليق أو غلق، أو عرقلة عمل المفتشين.',
-  legalReference: 'القانون 03-10 (المواد الجزائية).',
-  severity: 'high',
-  controlType: 'doc',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.7 Traceability — ADD `BFD-08-01` to `baseFoodCriteria.ts`, then REMOVE `CLD-17-07` and `PRD-05-02`
-```typescript
-{
-  id: 'BFD-08-01',
-  axis: 'التتبعية',
-  category: 'تنظيمية',
-  criteria: 'مسك سجل تتبعية للمنتجات المستقبلة (اسم المورد، تاريخ الاستلام، طبيعة وكمية المنتوج، رقم الدفعة).',
-  legalReference: 'المرسوم التنفيذي 17-140.',
-  severity: 'medium',
-  controlType: 'doc',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.8 HACCP extension — ADD to `abattoirCriteria.ts` (`ABT-AX9-01`), `slaughterhouseSmallCriteria.ts` (`SLH-06-01`), `coldRoomCriteria.ts` (`CLD-18-01`)
-```typescript
-// Adapt the id prefix per file
-{
-  id: 'ABT-AX9-01',
-  axis: 'HACCP',
-  category: 'تنظيمية',
-  criteria: 'توفر خطة HACCP موثقة ومطبقة، تشمل تحديد نقاط التحكم الحرجة (CCP) وإجراءات المراقبة والتصحيح.',
-  legalReference: 'المادة 4 من المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017.',
-  severity: 'high',
-  controlType: 'doc',
-  complianceStatus: 'not-evaluated',
-},
-```
-
-### 4.9 `BFD-05-01` citation precision — MODIFY in `baseFoodCriteria.ts`
-```typescript
-// BEFORE:
-legalReference: 'المرسوم 17-140 + أدلة GHP/القرار الوزاري المشترك 2020 المتعلق بـ HACCP.',
-// AFTER:
-legalReference: 'المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017 (المادة 4) + أدلة الممارسات الصحية الجيدة (GHP) المصادق عليها.',
-```
+**Phase 5** — `UAB-AX7-04` `controlType`: `visual` → `doc`
 
 ---
 
-## ⬜ Phase 5 — After Phase 4 is done
+## ✅ Post-Rework Verification Checklist
 
-Single change in `uabCriteria.ts`:
-```typescript
-// UAB-AX7-04 — controlType: 'visual' → 'doc'
-// (criterion requires documented maintenance — not a visual check)
-```
-
----
-
-## ✅ Phase 4 Verification (run after all adds/removes)
-
-These are grep/build checks — NOT Jest tests:
+Run these after any build to confirm everything is clean — these are grep/build checks, NOT Jest tests:
 
 ```bash
 # No TypeScript errors
@@ -221,7 +101,7 @@ npm run build
 grep -rn "id: '04-\|id: '01-\|id: '02-\|id: '03-'" \
   src/criteria/abattoirCriteria.ts src/criteria/uabCriteria.ts \
   src/criteria/couvoirCriteria.ts src/criteria/updCriteria.ts
-# Expected: zero matches (except UPD-AX2-03)
+# Expected: zero matches (UPD-AX2-03 is fine — different prefix)
 
 # Bad citations fully gone
 grep -rn "04-409\|09-410" src/criteria/*.ts
@@ -240,13 +120,11 @@ Object.entries(d).forEach(([k,v]) => {
 
 ---
 
-## 📊 Coverage — PARKED until rework is done
-
-> ⚠️ Do NOT start coverage work until Phase 5 is marked ✅.
+## 📊 Coverage — Ready to start when you say so
 
 Last known state: ~74% statements (target 95%). Regression from new July 2026 features shipped without tests.
 
-### Priority order when coverage resumes
+### Priority order
 
 1. **`CapNotificationService`** — broken mock on `getStats`. Fix: add `CorrectiveActionRepository.getStats = jest.fn().mockResolvedValue({...})` in test `beforeEach`
 2. **`serverAuth.ts`** — ~12% statements. Lines 23–205 uncovered. Read fully before writing.
@@ -273,6 +151,7 @@ Last known state: ~74% statements (target 95%). Regression from new July 2026 fe
 - **Timezone-safe dates** — never hardcode expected date strings. Compute dynamically from the same `Date` object.
 - **TESTING.md is stale** — claims "zero uncovered files". Ignore it. The coverage report is the truth.
 - **Threshold trap** — thresholds are now failing (~74% statements). Do NOT lower them without user confirmation.
+- **`UPD-AX2-03` placeholder** — the siting-distance figure is bracketed and needs legal verification before the app goes to production inspectors.
 
 ---
 
@@ -295,7 +174,7 @@ Last known state: ~74% statements (target 95%). Regression from new July 2026 fe
 
 ## 📁 Criteria Files — Status
 
-> ⚠️ Actively being reworked. Do NOT write tests for these files until all phases are complete.
+> ✅ Rework complete. Stable. Safe to write tests for these files now.
 
 `InspectionItem` type shape (current):
 ```ts
