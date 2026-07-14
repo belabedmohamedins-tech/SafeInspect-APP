@@ -6,6 +6,15 @@
 
 ---
 
+## 🚫 CURRENT FOCUS — Checklist Rework (NOT Coverage)
+
+> **The checklist rework is in progress. Do NOT work on tests or coverage until it is complete.**  
+> Criteria files (`src/criteria/*.ts`) are actively being modified — tests written now will break on every rework commit.
+
+**Authoritative spec:** [`Perplexity_Implementation_Spec.md`](./Perplexity_Implementation_Spec.md) — follow it for all checklist changes.
+
+---
+
 ## 🏗️ Architecture in 30 seconds
 
 ```
@@ -38,7 +47,32 @@ src/
 
 ---
 
-## 📊 Coverage Status (last known: 2026-07-12 run)
+## 📋 Checklist Rework — Session Log
+
+### Phases from `Perplexity_Implementation_Spec.md`
+
+| Phase | Description | Status |
+|---|---|---|
+| Phase 1 | Remove legacy duplicate blocks (abattoir, uab, couvrir, upd) | ✅ Done |
+| Phase 2 | Correct 3 confirmed legal citations | ✅ Done |
+| Phase 3 | Merge duplicated shared-module content (license dedup, pest control consolidation, food-safety near-duplicates) | ✅ Done |
+| Phase 4 | Add new criteria for confirmed gaps | 🔴 In progress |
+| Phase 5 | Typing/evidence-standard fixes | ⬜ Not started |
+
+### Phase 3 — Completed work
+- Removed duplicate operating-license criteria from 12 facility files — `BGN-01-01` is now the single authoritative check
+- Upgraded `BGN-07-02` with trap-map/intervention-log detail (absorbed from `COU-AX8-02`)
+- Removed pest duplicates from: `abattoirCriteria`, `couvoirCriteria`, `updCriteria`, `bakeryCriteria`, `produceStorageCriteria`, `slaughterhouseSmallCriteria`
+- Kept `UPD-AX8-03` (wild-bird exclusion) and `ABT-AX10-01` (abattoir biosecurity) — genuine content, not duplicates
+- Removed food-safety near-duplicates: `CLD-17-02–05`, `BAK-10-07`, modified `BAK-10-08`
+
+---
+
+## 📊 Coverage Status (PARKED — start only after checklist rework is done)
+
+> ⚠️ Do NOT work on coverage until all phases of the checklist rework are complete.
+
+Coverage was at ~95%+ in June 2026. Regression occurred after new features were shipped July 2026 without tests.
 
 | Metric | Target | Last Known | Status |
 |---|---|---|---|
@@ -47,59 +81,24 @@ src/
 | Functions | 97% | unknown | ❌ Failing |
 | Lines | 96% | unknown | ❌ Failing |
 
-Regression cause: new features shipped July 2026 without tests.
+> Do not lower thresholds — raising tests to meet them is the correct path.
 
----
+### Priority Order (resume after checklist rework)
 
-## 🚫 CURRENT FOCUS — Checklist Rework (NOT Coverage)
+1. **`CapNotificationService`** — broken mock, easy fix, big coverage gain  
+   Fix: add `CorrectiveActionRepository.getStats = jest.fn().mockResolvedValue({...})` in test `beforeEach`
 
-> **The checklist rework is in progress. Do NOT work on tests until it is complete.**  
-> Source of truth: [`CHECKLIST_REWORK_ROADMAP.md`](./CHECKLIST_REWORK_ROADMAP.md)  
-> Criteria files (`src/criteria/*.ts`) are actively being modified — any tests written now will break on every rework commit.
+2. **`serverAuth.ts`** — ~12% statements, highest risk file  
+   Lines 23–205 uncovered. Complex auth flow — read fully before writing tests.
 
-**Current next action** (from `CHECKLIST_REWORK_ROADMAP.md`):  
-Session 9 pest control consolidation — affects 8 criteria files. See that file for the full task list.
+3. **`CorrectiveActionRepository.ts` lines 135–210** — unblocks CapNotificationService too  
+   Bulk ops / stats methods uncovered. `getStats` originates here.
 
-**Coverage priorities below are PARKED until all phases of `CHECKLIST_REWORK_ROADMAP.md` are complete.**
+4. **`pdfService.ts` lines 751–1143** — large print/render section, `expo-print` already mocked at L2
 
----
+5. **`decisionSupport.ts`** — 55% statements, 60% branches, lines 104–164 uncovered. Read fully first.
 
-## 🎯 Coverage Priority Order (PARKED — start only after checklist rework is done)
-
-### 1. `CapNotificationService` — broken mock, easy fix, big coverage gain
-- File: `src/services/CapNotificationService.ts`
-- Test: `src/__tests__/CapNotificationService.test.ts` (exists, 23KB — has content but mock is broken)
-- **Known bug**: `CorrectiveActionRepository.getStats` is NOT mocked as a function in the test setup
-- **Fix**: Add `CorrectiveActionRepository.getStats = jest.fn().mockResolvedValue({...})` in test `beforeEach`/`beforeAll`
-
-### 2. `serverAuth.ts` — nearly 0%, highest risk
-- File: `src/services/serverAuth.ts` (lines 23–205 uncovered)
-- Test: `src/__tests__/serverAuth.test.ts` (12KB — exists but shallow)
-- Only 12.5% statements, 6.66% branches covered
-- Complex auth flow with many branches — read file fully before writing
-
-### 3. `CorrectiveActionRepository.ts` — lines 135–210 uncovered
-- File: `src/repositories/CorrectiveActionRepository.ts`
-- Test: `src/__tests__/CorrectiveActionRepository.test.ts` (15KB — exists)
-- 60% coverage, uncovered block is bulk ops / stats methods
-- `getStats` originates here — fixing this unblocks CapNotificationService too
-
-### 4. `pdfService.ts` — lines 751–1143 untouched
-- File: `src/services/pdfService.ts`
-- Test: `src/__tests__/pdfService.test.ts` (13KB — exists)
-- Large print/render section; `expo-print` already mocked at L2
-- Focus on export entry points
-
-### 5. `decisionSupport.ts` — complex logic, 55% statements
-- File: `src/utils/decisionSupport.ts` (lines 104–164 uncovered)
-- Test: `src/__tests__/decisionSupport.test.ts` (9KB — exists)
-- 60% branches — requires deliberate edge-case inputs
-- Read fully before writing; conditional logic is intricate
-
-### 6. `src/components/` — 0% coverage, needs RTL
-- 5 component files, never tested
-- Requires React Testing Library (RTL) — check `package.json` before installing
-- Use `src/__tests__/components/` directory (already exists)
+6. **`src/components/`** — 0% coverage, needs React Testing Library. Check `package.json` before installing.
 
 ---
 
@@ -111,6 +110,9 @@ Session 9 pest control consolidation — affects 8 criteria files. See that file
 ### jest.config.js threshold trap
 Thresholds set at ~95% are now failing (~74% statements). Do NOT lower thresholds without user confirmation — lowering = regression admission, not a fix.
 
+### Module ordering in moduleNameMapper
+`expo-secure-store` and `expo-local-authentication` MUST appear before `expo-modules-core`. Changing this order silently breaks `getItemAsync` across all auth tests.
+
 ### AsyncStorage timing bug
 Never call `AsyncStorage.__resetStore()` in `beforeEach` when storage is seeded in `beforeAll` — it clears the seed before the test runs.
 
@@ -121,13 +123,13 @@ Never hardcode expected date strings. Always compute expected output dynamically
 `console.warn` noise from error-path tests is intentional. Known prefixes suppressed in `jest.setup.ts`. Never suppress silently without a comment.
 
 ### TESTING.md is stale
-Last updated at commit `4591f1c`, claims "zero uncovered files" — that's wrong. The actual coverage report is the truth.
+Claims "zero uncovered files" — that's wrong. The actual coverage report is the truth.
 
 ---
 
 ## 🗂️ Test File Inventory
 
-### Exists and has content (select important ones)
+### Exists and has content
 | Test File | Source File | Notes |
 |---|---|---|
 | `CapNotificationService.test.ts` | `services/CapNotificationService.ts` | Mock bug on `getStats` |
@@ -136,13 +138,13 @@ Last updated at commit `4591f1c`, claims "zero uncovered files" — that's wrong
 | `pdfService.test.ts` | `services/pdfService.ts` | Lines 751–1143 missing |
 | `decisionSupport.test.ts` | `utils/decisionSupport.ts` | 55% stmts, needs edge cases |
 | `useChecklistData.test.ts` | `hooks/useChecklistData.ts` | 39KB — large, status unclear |
-| `loadHomeData.test.ts` | (loadHomeData util) | 13KB |
+| `loadHomeData.test.ts` | loadHomeData util | 13KB |
 | `utils.test.ts` | multiple utils | 24KB |
 | `BackupService.test.ts` | `services/BackupService.ts` | 18KB |
 | `SyncService.test.ts` | `services/SyncService.ts` | 13KB |
 
 ### Subdirectories in `__tests__/`
-- `components/` — exists but may be empty (check before creating)
+- `components/` — exists but may be empty
 - `repositories/` — exists
 - `utils/` — exists
 
@@ -152,41 +154,41 @@ Last updated at commit `4591f1c`, claims "zero uncovered files" — that's wrong
 
 All pure data — arrays of `InspectionItem[]`. Each file = one facility type.
 
-> ⚠️ These files are actively being reworked. Do NOT write tests for them until `CHECKLIST_REWORK_ROADMAP.md` is fully complete.
+> ⚠️ These files are actively being reworked. Do NOT write tests for them until all phases of the checklist rework are complete.
 
-| File | Items (approx) | Has test? |
-|---|---|---|
-| `abattoirCriteria.ts` | ~30 | ✅ `abattoirCriteria.test.ts` |
-| `bakeryCriteria.ts` | ~20 | ❌ |
-| `baseFoodCriteria.ts` | ~20 | ❌ |
-| `baseGeneralCriteria.ts` | ~28 | ✅ `baseGeneralCriteria.test.ts` |
-| `blacksmithCriteria.ts` | 11 | ✅ `blacksmithCriteria.test.ts` |
-| `carWashCriteria.ts` | ~12 | ✅ (minimal) |
-| `carpenteryCriteria.ts` | ~12 | ✅ |
-| `coldRoomCriteria.ts` | ~12 | ✅ |
-| `couvoirCriteria.ts` | ~35 | ❌ |
-| `gplCriteria.ts` | ~18 | ✅ |
-| `marbleCriteria.ts` | ~10 | ✅ (minimal) |
-| `mechanicCriteria.ts` | ~10 | ✅ |
-| `paintShopCriteria.ts` | ~10 | ✅ |
-| `printingCriteria.ts` | ~12 | ✅ (minimal) |
-| `produceStorageCriteria.ts` | ~14 | ✅ |
-| `semiPharmaCriteria.ts` | ~15 | ❌ |
-| `slaughterhouseSmallCriteria.ts` | ~18 | ❌ |
-| `uabCriteria.ts` | ~40 | ❌ |
+| File | Has test? |
+|---|---|
+| `abattoirCriteria.ts` | ✅ |
+| `bakeryCriteria.ts` | ❌ |
+| `baseFoodCriteria.ts` | ❌ |
+| `baseGeneralCriteria.ts` | ✅ |
+| `blacksmithCriteria.ts` | ✅ |
+| `carWashCriteria.ts` | ✅ (minimal) |
+| `carpenteryCriteria.ts` | ✅ |
+| `coldRoomCriteria.ts` | ✅ |
+| `couvoirCriteria.ts` | ❌ |
+| `gplCriteria.ts` | ✅ |
+| `marbleCriteria.ts` | ✅ (minimal) |
+| `mechanicCriteria.ts` | ✅ |
+| `paintShopCriteria.ts` | ✅ |
+| `printingCriteria.ts` | ✅ (minimal) |
+| `produceStorageCriteria.ts` | ✅ |
+| `semiPharmaCriteria.ts` | ❌ |
+| `slaughterhouseSmallCriteria.ts` | ❌ |
+| `uabCriteria.ts` | ❌ |
 
-`InspectionItem` shape (from `src/types.ts`):
+`InspectionItem` type shape:
 ```ts
 {
-  id: string;           // e.g. 'BLS-04-01'
-  axis: string;         // Arabic section name
-  category: string;     // 'تنظيمية' | 'بيئية' | 'نظافة' | 'سلامة'
-  criteria: string;     // Arabic description
+  id: string;            // e.g. 'BLS-04-01'
+  axis: string;          // Arabic section name
+  category: string;      // 'تنظيمية' | 'بيئية' | 'نظافة' | 'سلامة'
+  criteria: string;      // Arabic description
   legalReference: string;
   severity: 'high' | 'medium' | 'low';
   controlType: 'doc' | 'visual' | 'measurement';
   complianceStatus: 'not-evaluated';
-  numericField?: {      // only for measurement type
+  numericField?: {       // only for measurement type
     label: string;
     unit: string;
     threshold: number;
@@ -200,10 +202,10 @@ All pure data — arrays of `InspectionItem[]`. Each file = one facility type.
 ## 🚀 Working Method
 
 1. User gives short instruction
-2. AI reads actual source file first (never assumes structure)
+2. AI reads actual source file first — never assumes structure
 3. AI pushes changes directly to repo via MCP tools
 4. User runs `npm run test:coverage` locally to verify delta
-5. Repeat file by file — confirm improvement before moving on
+5. Confirm improvement before moving on
 6. Always confirm branch before pushing (default: `main`)
 
 ---
