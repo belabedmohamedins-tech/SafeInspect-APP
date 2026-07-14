@@ -145,6 +145,7 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // مكافحة النواقل إضافية للغذاء
   {
+    // BFD-07-01 kept: window/opening screens are food-specific, not in BGN
     id: 'BFD-07-01',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
@@ -154,16 +155,7 @@ export const baseFoodCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'BFD-07-02',
-    axis: 'مكافحة النواقل',
-    category: 'نظافة',
-    criteria: 'إعداد خريطة مراقبة للقوارض والحشرات مع متابعة دورية.',
-    legalReference: 'ممارسات GHP/HACCP.',
-    severity: 'medium',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // S9: BFD-07-02 removed — pest monitoring map/program covered by BGN-07-02
   // المحور 8: إمكانية التتبع (S5-2 — مشترك لجميع المنشآت الغذائية)
   {
     id: 'BFD-08-01',

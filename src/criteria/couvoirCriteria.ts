@@ -200,26 +200,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'COU-AX8-01',
-    axis: 'مكافحة النواقل',
-    category: 'نظافة',
-    criteria: 'عدم وجود دلائل إصابة بالصراصير أو القوارض داخل قاعات التفريخ وغرف الفقس والمخازن (فضلات، آثار قرض، حشرات حية أو ميتة).',
-    legalReference: 'محور مكافحة النواقل في معايير الرقابة (الصراصير والقوارض) الذي يلزم بمراقبة العلامات ومكافحة وقائية وهجومية.',
-    severity: 'high',
-    controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
-  {
-    id: 'COU-AX8-02',
-    axis: 'مكافحة النواقل',
-    category: 'نظافة',
-    criteria: 'وجود برنامج دوري مكتوب لمكافحة النواقل (صراصير، قوارض)، يتضمن تحقيق أولي، اختيار المواد، خرائط الطعوم والمصائد، وتسجيل التدخلات.',
-    legalReference: 'محور مكافحة النواقل في معايير الرقابة، مع التمييز بين مكافحة وقائية وهجومية، والالتزام بالتوثيق والخرائط.',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // S9: COU-AX8-01 and COU-AX8-02 removed — fully covered by BGN-07-01 and BGN-07-02
   {
     id: 'COU-AX9-01',
     axis: 'HACCP في التفريخ',

@@ -221,8 +221,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-07-02',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
-    criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق).',
-    legalReference: 'القانون 03-10.',
+    // S9: upgraded with map/bait/trap/documentation detail from COU-AX8-02
+    criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تحقيق أولي، اختيار المواد، خرائط الطعوم والمصائد، تسجيل التدخلات) — سواء بتعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق، مع التمييز بين المكافحة الوقائية والهجومية.',
+    legalReference: 'القانون 03-10 + محور مكافحة النواقل في معايير الرقابة (الصراصير والقوارض، إلزامية التوثيق والخرائط).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

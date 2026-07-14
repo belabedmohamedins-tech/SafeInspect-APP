@@ -81,16 +81,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'BAK-10-09',
-    axis: 'مكافحة النواقل',
-    category: 'بيئية',
-    criteria: 'عدم وجود دلائل إصابة بالصراصير أو القوارض داخل المخبزة أو مخزن الدقيق، مع برنامج وقائي (تنظيف الزوايا، سد الشقوق، حماية الفتحات) وبرنامج علاجي عند الضرورة.',
-    legalReference: 'محور مكافحة النواقل في وثيقة معايير الرقابة (الصراصير والقوارض، مكافحة دفاعية وهجومية).',
-    severity: 'high',
-    controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
+  // S9: BAK-10-09 removed — pest control covered by BGN-07-01/02/04
   {
     id: 'BAK-10-10',
     axis: 'HACCP وإدارة الجودة',
