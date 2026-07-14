@@ -91,11 +91,11 @@ src/
 
 ## ✅ Post-Rework Verification Checklist
 
-Run these after any build to confirm everything is clean — these are grep/build checks, NOT Jest tests:
+Run these to confirm everything is clean — grep/TypeScript checks only, NOT Jest tests:
 
 ```bash
-# No TypeScript errors
-npm run build
+# TypeScript check (no "build" script in this Expo project — use tsc directly)
+npx tsc --noEmit
 
 # Legacy series fully gone
 grep -rn "id: '04-\|id: '01-\|id: '02-\|id: '03-'" \
@@ -131,7 +131,7 @@ Last known state: ~74% statements (target 95%). Regression from new July 2026 fe
 3. **`CorrectiveActionRepository.ts` lines 135–210** — bulk ops / stats. Unblocks #1.
 4. **`pdfService.ts` lines 751–1143** — `expo-print` already mocked at L2.
 5. **`decisionSupport.ts`** — 55% statements, lines 104–164. Complex branches, read first.
-6. **`src/components/`** — 0% coverage, needs React Testing Library. Check `package.json` before installing.
+6. **`src/components/`** — 0% coverage, needs React Testing Library. Already in `devDependencies` (`@testing-library/react-native`).
 
 ### Thresholds (do NOT lower)
 | Metric | Target |
@@ -205,7 +205,7 @@ Last known state: ~74% statements (target 95%). Regression from new July 2026 fe
 1. User gives short instruction
 2. AI reads actual source file first — never assumes structure
 3. AI pushes changes directly to repo via MCP tools
-4. User runs `npm run build` or `npm run test:coverage` locally to verify
+4. User runs verification locally to confirm
 5. Confirm before moving to next file
 6. Always on branch `main` unless user says otherwise
 
@@ -214,8 +214,9 @@ Last known state: ~74% statements (target 95%). Regression from new July 2026 fe
 ## 🔑 Key Commands
 
 ```bash
-npm run build                                        # TypeScript check
+npx tsc --noEmit                                     # TypeScript check (no build script in this project)
 npm run test:coverage                                # Full coverage run
 npm run test:coverage -- --testPathPattern=CapNotif  # Single file
 npm test                                             # All tests, no coverage
+npm run lint                                         # Expo lint
 ```
