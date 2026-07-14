@@ -196,6 +196,7 @@ describe('criteriaData — alias keys resolve identically', () => {
 // ─── Minimum item counts per new criteria file ───────────────────────────
 // These assert at-least counts (>= N) rather than exact matches,
 // so they remain valid when criteria files grow.
+// NOTE: PRD- count is 7 after Phase 3 dedup (pest control → BGN-07-xx, traceability → BFD-08-01)
 
 describe('criteriaData — specific item counts (new criteria files only)', () => {
   const specificCounts: Record<string, { prefix: string; expected: number }> = {
@@ -206,7 +207,7 @@ describe('criteriaData — specific item counts (new criteria files only)', () =
     'صناعة الرخام':                  { prefix: 'MRB-', expected: 5  },
     'ورشة طلاء السيارات':            { prefix: 'PNT-', expected: 5  },
     'مطبعة':                         { prefix: 'PRT-', expected: 5  },
-    'وحدة تخزين الزيتون والخضر':    { prefix: 'PRD-', expected: 10 },
+    'وحدة تخزين الزيتون والخضر':    { prefix: 'PRD-', expected: 7  },
     'تعبئة مواد شبه صيدلانية':       { prefix: 'SPH-', expected: 9  },
   };
 
