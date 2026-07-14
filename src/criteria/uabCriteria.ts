@@ -239,7 +239,7 @@ export const uabSpecificCriteria: InspectionItem[] = [
     criteria: 'توفر مطفآت حريق ومعدات تدخل (صنابير حريق، خراطيم...) بعدد كافٍ وبحالة صالحة، مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية).',
     legalReference: 'القانون 19-02 (تجهيزات مكافحة الحريق) + النصوص التطبيقية المنظمة لمعدات الإطفاء في المنشآت.',
     severity: 'high',
-    controlType: 'visual',
+    controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
@@ -288,14 +288,5 @@ export const uabSpecificCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'UAB-AX8-02',
-    axis: 'الإجراءات والعقوبات',
-    category: 'تنظيمية',
-    criteria: 'عدم وجود استغلال للنشاط دون ترخيص، أو رغم صدور قرار تعليق أو غلق، أو عرقلة عمل المفتشين.',
-    legalReference: 'القانون 03-10 (المواد الجزائية المتعلقة بالاستغلال دون ترخيص، عدم الامتثال للإعذار، عرقلة التفتيش، ومواصلة الاستغلال رغم الغلق).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // UAB-AX8-02 removed — merged into BGN-01-03 (baseGeneralCriteria.ts) in Phase 4
 ];
