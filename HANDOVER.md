@@ -51,7 +51,20 @@ Regression cause: new features shipped July 2026 without tests.
 
 ---
 
-## 🎯 Priority Order (attack in this sequence)
+## 🚫 CURRENT FOCUS — Checklist Rework (NOT Coverage)
+
+> **The checklist rework is in progress. Do NOT work on tests until it is complete.**  
+> Source of truth: [`CHECKLIST_REWORK_ROADMAP.md`](./CHECKLIST_REWORK_ROADMAP.md)  
+> Criteria files (`src/criteria/*.ts`) are actively being modified — any tests written now will break on every rework commit.
+
+**Current next action** (from `CHECKLIST_REWORK_ROADMAP.md`):  
+Session 9 pest control consolidation — affects 8 criteria files. See that file for the full task list.
+
+**Coverage priorities below are PARKED until all phases of `CHECKLIST_REWORK_ROADMAP.md` are complete.**
+
+---
+
+## 🎯 Coverage Priority Order (PARKED — start only after checklist rework is done)
 
 ### 1. `CapNotificationService` — broken mock, easy fix, big coverage gain
 - File: `src/services/CapNotificationService.ts`
@@ -135,21 +148,11 @@ Last updated at commit `4591f1c`, claims "zero uncovered files" — that's wrong
 
 ---
 
-## 🔄 What "Checklist Rework" Means (open question)
-
-The user mentioned "checklist rework" in the last session but did NOT clarify whether it means:
-
-1. **Coverage gaps** in `useChecklistData.ts` / checklist-related code
-2. **Feature/content changes** to criteria files in `src/criteria/`
-3. **A specific screen rework** (ChecklistScreen or similar)
-
-**Ask the user to clarify at start of new session before touching anything.**
-
----
-
 ## 📁 Criteria Files (src/criteria/)
 
 All pure data — arrays of `InspectionItem[]`. Each file = one facility type.
+
+> ⚠️ These files are actively being reworked. Do NOT write tests for them until `CHECKLIST_REWORK_ROADMAP.md` is fully complete.
 
 | File | Items (approx) | Has test? |
 |---|---|---|
