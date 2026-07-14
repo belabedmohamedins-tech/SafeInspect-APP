@@ -1,4 +1,5 @@
 import { InspectionItem } from '../types';
+import { baseCompressedGasCriteria } from './baseCompressedGasCriteria';
 
 export const blacksmithCriteria: InspectionItem[] = [
   {
@@ -51,16 +52,8 @@ export const blacksmithCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'BLS-04-02',
-    axis: 'السلامة المهنية',
-    category: 'سلامة',
-    criteria: 'تخزين أسطوانات الغاز (أسيتيلين، أكسجين) في مكان مهوى خارجي ومقيدة وبعيدة عن مصادر الاشتعال وعن بعضها.',
-    legalReference: 'القانون 19-02 (الوقاية من الحريق والانفجار لمحلات الغاز المضغوط).',
-    severity: 'high',
-    controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
+  // BLS-04-02 removed — replaced by shared baseCompressedGasCriteria (CGS-01-01, CGS-01-02, CGS-01-03)
+  ...baseCompressedGasCriteria,
   {
     id: 'BLS-04-03',
     axis: 'السلامة المهنية',
