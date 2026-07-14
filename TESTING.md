@@ -52,17 +52,22 @@ Full cross-check of `collectCoverageFrom` sources vs test inventory:
 ## Component Tests (RTL)
 
 `src/components/` is excluded from the coverage threshold but every component
-should have an RTL test. Components are pure display — no async, no Layer 2 mocks needed.
+should have an RTL test.
 
 | Component | Test file | Tests | Status |
 |---|---|---|---|
 | `RepeatViolationBadge.tsx` | `src/__tests__/components/RepeatViolationBadge.test.tsx` | 5 | ✅ |
 | `DiffStatusIndicator.tsx` | `src/__tests__/components/DiffStatusIndicator.test.tsx` | 9 | ✅ |
-| `DifferentialBanner.tsx` | — | — | 🔲 |
-| `NumericInputField.tsx` | — | — | 🔲 |
-| `DecisionSupportPanel.tsx` | — | — | 🔲 |
+| `DifferentialBanner.tsx` | — | — | ⏸ deferred — write after checklist rework |
+| `NumericInputField.tsx` | — | — | ⏸ deferred — write after checklist rework |
+| `DecisionSupportPanel.tsx` | — | — | ⏸ deferred — write after checklist rework |
 
-**Pattern for new component tests:**
+> **Note:** the three deferred components above are being reworked as part of the
+> checklist overhaul (`Perplexity_Implementation_Spec.md`). Write their tests only
+> after that rework is merged — testing a moving target wastes effort and produces
+> brittle specs.
+
+**Pattern for new component tests (use when deferred items are ready):**
 ```tsx
 import React from 'react';
 import { render, screen } from '@testing-library/react-native';
