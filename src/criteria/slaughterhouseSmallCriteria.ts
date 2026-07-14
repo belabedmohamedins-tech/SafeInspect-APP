@@ -91,14 +91,5 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'SLH-05-10',
-    axis: 'مكافحة النواقل',
-    category: 'بيئية',
-    criteria: 'وجود برنامج دوري لمكافحة القوارض والحشرات داخل وحول المذبحة، مع إزالة المفارغ العشوائية وقص الأعشاب قرب الجدران وإعداد خريطة طعوم ومصائد.',
-    legalReference: 'المادة 31 من المرسوم 17-140 التي تُلزم المنشآت الغذائية بتطبيق برنامج موثق لمكافحة الحشرات والقوارض (خريطة مراقبة، سجلات التدخل، جدول زمني دوري).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // SLH-05-10 removed — pest control covered by BGN-07-01/02/04 (S9 pest dedup)
 ];

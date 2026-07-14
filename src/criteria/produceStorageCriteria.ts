@@ -62,26 +62,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'PRD-04-01',
-    axis: 'مكافحة الآفات',
-    category: 'بيئية',
-    criteria: 'وجود برنامج فعّال لمكافحة القوارض والحشرات (خاصة الذباب، عث التخزين، الفطريات) مع خريطة فخاخ محدّثة وسجل للتدخلات.',
-    legalReference: 'القانون 03-10 المادة 68 + المرسوم التنفيذي 17-140 المادة 26.',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  {
-    id: 'PRD-04-02',
-    axis: 'مكافحة الآفات',
-    category: 'بيئية',
-    criteria: 'سد جميع الثغرات والفتحات التي تسمح بدخول القوارض، وتركيب شبك معدني على فتحات التهوية لمنع دخول الحشرات والطيور.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 26.',
-    severity: 'medium',
-    controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
+  // PRD-04-01 and PRD-04-02 removed — pest control covered by BGN-07-01/02/04 (S9 pest dedup)
   {
     id: 'PRD-05-01',
     axis: 'المياه والتخلص من النفايات',
