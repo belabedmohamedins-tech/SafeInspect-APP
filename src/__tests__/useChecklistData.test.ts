@@ -103,6 +103,15 @@ async function waitLoaded(result: any) {
   await waitFor(() => expect(result.current.isLoading).toBe(false));
 }
 
+// Helper — mark all items compliant so both finish gates pass
+async function evaluateAll(result: any) {
+  await act(async () => {
+    result.current.data.forEach((item: any) => {
+      result.current.handleStatusChange(item.id, 'compliant');
+    });
+  });
+}
+
 // ─── Load from scratch ─────────────────────────────────────────────────────
 describe('useChecklistData — load from scratch', () => {
   it('loads default criteria when no draftId and no activity', async () => {
@@ -123,6 +132,17 @@ describe('useChecklistData — load from scratch', () => {
     await waitLoaded(result);
     expect(result.current.totalItems).toBe(1);
     expect(result.current.data[0].id).toBe('f1');
+  });
+
+  // Branch: activity key provided but NOT in criteriaByActivity → falls to default
+  it('falls back to default criteria when activity key is not in criteriaByActivity', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, activity: 'unknown-activity-xyz' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    // unknown-activity-xyz is not in the mock map → default (3 items)
+    expect(result.current.totalItems).toBe(3);
   });
 
   it('generates a UUID as inspectionId on fresh load', async () => {
@@ -256,15 +276,13 @@ describe('useChecklistData — handlePhotoTake', () => {
   });
 
   // Branch: item.photos is null/undefined (legacy data without photos array)
-  // existingPhotos = item.photos ?? (item.photoUri ? [item.photoUri] : [])
-  // When photos is undefined, falls back to photoUri seed.
   it('seeds existingPhotos from photoUri when photos field is null/undefined', async () => {
     const draftItems = [
       {
         id: 'p1', criteria: 'Photo Check', legalReference: 'PR1',
         severity: 'low', axis: 'A', complianceStatus: 'not-evaluated',
         comment: '',
-        photos: undefined,          // null/undefined triggers the fallback branch
+        photos: undefined,
         photoUri: 'file:///existing.jpg',
       },
     ];
@@ -282,18 +300,15 @@ describe('useChecklistData — handlePhotoTake', () => {
     await waitLoaded(result);
     await act(async () => { result.current.handlePhotoTake('p1', 'file:///new.jpg'); });
     const item = result.current.data.find((i: any) => i.id === 'p1')!;
-    // photos was undefined → seeded from photoUri → [existing, new]
     expect(item.photos).toContain('file:///existing.jpg');
     expect(item.photos).toContain('file:///new.jpg');
     expect(item.photos).toHaveLength(2);
-    // photoUri stays as the original (first photo wins)
     expect(item.photoUri).toBe('file:///existing.jpg');
   });
 });
 
-// ─── handleNumericChange (lines 193, 214-232) ──────────────────────────────
+// ─── handleNumericChange ──────────────────────────────────────────────────
 describe('useChecklistData — handleNumericChange', () => {
-  // Line 193: item has no numericField — stores value, skips compliance derivation
   it('stores numericValue without changing complianceStatus when numericField is absent', async () => {
     const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
@@ -303,11 +318,9 @@ describe('useChecklistData — handleNumericChange', () => {
     await act(async () => { result.current.handleNumericChange('c1', 42); });
     const item = result.current.data.find((i: any) => i.id === 'c1')!;
     expect(item.numericValue).toBe(42);
-    // complianceStatus unchanged — no numericField to derive from
     expect(item.complianceStatus).toBe('not-evaluated');
   });
 
-  // Lines 214-232: item has numericField → auto-derives complianceStatus
   it('auto-derives complianceStatus from numericField when value is provided', async () => {
     const draftItems: InspectionItem[] = [
       {
@@ -319,17 +332,11 @@ describe('useChecklistData — handleNumericChange', () => {
         complianceStatus: 'not-evaluated',
         comment: '',
         photos: [],
-        numericField: {
-          unit: '°C',
-          min: 0,
-          max: 5,
-          label: 'Storage temp',
-        },
+        numericField: { unit: '°C', min: 0, max: 5, label: 'Storage temp' },
       } as any,
     ];
     mockGetById.mockResolvedValue({
-      id: 'draft-num-1',
-      items: draftItems,
+      id: 'draft-num-1', items: draftItems,
       facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
       date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
       status: 'in-progress', inspectionCause: '', referenceDocument: '',
@@ -340,7 +347,6 @@ describe('useChecklistData — handleNumericChange', () => {
       { wrapper: Wrapper }
     );
     await waitLoaded(result);
-
     await act(async () => { result.current.handleNumericChange('n1', 3); });
     const inRange = result.current.data.find((i: any) => i.id === 'n1')!;
     expect(inRange.numericValue).toBe(3);
@@ -359,7 +365,7 @@ describe('useChecklistData — handleNumericChange', () => {
     expect(item.numericValue).toBeUndefined();
   });
 
-  // Line 227: numericField present but value undefined → skips compliance derivation
+  // numericField present but value undefined → skips compliance derivation
   it('skips compliance derivation when numericField is present but value is undefined', async () => {
     const draftItems: InspectionItem[] = [
       {
@@ -368,7 +374,7 @@ describe('useChecklistData — handleNumericChange', () => {
         legalReference: 'NR1',
         severity: 'low',
         axis: 'Environment',
-        complianceStatus: 'compliant', // pre-set — must NOT be changed
+        complianceStatus: 'compliant',
         comment: '',
         photos: [],
         numericField: { unit: 'dB', min: 0, max: 80, label: 'Noise' },
@@ -389,8 +395,40 @@ describe('useChecklistData — handleNumericChange', () => {
     await act(async () => { result.current.handleNumericChange('n2', undefined); });
     const item = result.current.data.find((i: any) => i.id === 'n2')!;
     expect(item.numericValue).toBeUndefined();
-    // complianceStatus must NOT change — derivation skipped when value is undefined
     expect(item.complianceStatus).toBe('compliant');
+  });
+
+  // numericUnit falls back to item.numericUnit when numericField is absent
+  it('uses item.numericUnit as fallback when numericField is absent', async () => {
+    const draftItems: InspectionItem[] = [
+      {
+        id: 'n3',
+        criteria: 'Weight',
+        legalReference: 'WR1',
+        severity: 'low',
+        axis: 'Measures',
+        complianceStatus: 'not-evaluated',
+        comment: '',
+        photos: [],
+        numericUnit: 'kg',
+      } as any,
+    ];
+    mockGetById.mockResolvedValue({
+      id: 'draft-num-3', items: draftItems,
+      facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
+      date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
+      status: 'in-progress', inspectionCause: '', referenceDocument: '',
+      committeeMembers: [],
+    });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-num-3' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await act(async () => { result.current.handleNumericChange('n3', 10); });
+    const item = result.current.data.find((i: any) => i.id === 'n3')!;
+    expect(item.numericValue).toBe(10);
+    expect(item.numericUnit).toBe('kg');
   });
 });
 
@@ -402,7 +440,6 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
       { wrapper: Wrapper }
     );
     await waitLoaded(result);
-    // Only 1 of 3 items evaluated = 33% < 85%
     await act(async () => { result.current.handleStatusChange('c1', 'compliant'); });
     await act(async () => { await result.current.handleFinish(); });
     expect(Alert.alert).toHaveBeenCalledWith(
@@ -413,7 +450,7 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
     expect(mockSave).not.toHaveBeenCalled();
   });
 
-  // Line 195: applicable.length === 0 → completionRate = 1 → passes Gate 1
+  // applicable.length === 0 → completionRate = 1 → passes Gate 1
   it('passes Gate 1 when all items are na (completionRate defaults to 1)', async () => {
     const draftItems: InspectionItem[] = [
       {
@@ -440,8 +477,6 @@ describe('useChecklistData — handleFinish Gate 1 (<85% evaluated)', () => {
     );
     await waitLoaded(result);
     await act(async () => { await result.current.handleFinish(); });
-    // All items are na → applicable = [] → completionRate = 1 → Gate 1 passes
-    // No high-severity non-compliant items → Gate 2 passes → save called
     expect(mockSave).toHaveBeenCalledTimes(1);
   });
 });
@@ -483,17 +518,41 @@ describe('useChecklistData — handleFinish Gate 2 (high-severity missing photo)
     await act(async () => { await result.current.handleFinish(); });
     expect(mockSave).toHaveBeenCalledTimes(1);
   });
+
+  // Branch: high-severity non-compliant item has photoUri (legacy) but no photos array
+  it('passes Gate 2 when item has photoUri but empty photos array', async () => {
+    const draftItems: InspectionItem[] = [
+      {
+        id: 'h1', criteria: 'High Gate Check', legalReference: 'HG1',
+        severity: 'high', axis: 'A', complianceStatus: 'non-compliant',
+        comment: '', photos: [],
+        photoUri: 'file:///legacy.jpg',  // legacy photoUri path
+      },
+      {
+        id: 'h2', criteria: 'Other', legalReference: 'HG2',
+        severity: 'low', axis: 'A', complianceStatus: 'compliant',
+        comment: '', photos: [],
+      },
+    ];
+    mockGetById.mockResolvedValue({
+      id: 'draft-photoUri-gate', items: draftItems,
+      facilityId: 'fac-1', facilityName: 'F', facilityAddress: 'A',
+      date: new Date().toISOString(), inspectorName: 'X', officeName: 'O',
+      status: 'in-progress', inspectionCause: '', referenceDocument: '',
+      committeeMembers: [],
+    });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, draftId: 'draft-photoUri-gate' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await act(async () => { await result.current.handleFinish(); });
+    // photoUri satisfies gate — save should be called
+    expect(mockSave).toHaveBeenCalledTimes(1);
+  });
 });
 
 // ─── handleFinish — success path ───────────────────────────────────────────
-async function evaluateAll(result: any) {
-  await act(async () => {
-    result.current.data.forEach((item: any) => {
-      result.current.handleStatusChange(item.id, 'compliant');
-    });
-  });
-}
-
 describe('useChecklistData — handleFinish success', () => {
   it('calls InspectionRepository.save with status "completed"', async () => {
     const { result } = await renderHook(
@@ -509,7 +568,6 @@ describe('useChecklistData — handleFinish success', () => {
     );
   });
 
-  // Lines 120-128: status === 'completed' path — score/grade fields are set on inspection
   it('persists score and grade fields when status is completed', async () => {
     const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS),
@@ -524,7 +582,6 @@ describe('useChecklistData — handleFinish success', () => {
     expect(savedPayload).toHaveProperty('riskLevel');
   });
 
-  // Line 150: signature param is passed → persisted on completed inspection
   it('persists signature when signature param is provided', async () => {
     const { result } = await renderHook(
       () => useChecklistData(BASE_PARAMS, 'data:image/png;base64,sig=='),
@@ -535,6 +592,19 @@ describe('useChecklistData — handleFinish success', () => {
     await act(async () => { await result.current.handleFinish(); });
     const savedPayload = mockSave.mock.calls[0][0];
     expect(savedPayload.signature).toBe('data:image/png;base64,sig==');
+  });
+
+  // Branch: no signature → signature field must NOT appear in saved payload
+  it('does not set signature field when no signature param is provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    const savedPayload = mockSave.mock.calls[0][0];
+    expect(savedPayload.signature).toBeUndefined();
   });
 
   it('calls router.replace after successful save', async () => {
@@ -575,7 +645,6 @@ describe('useChecklistData — handleFinish success', () => {
     expect(mockUpdateInspectionLink).not.toHaveBeenCalled();
   });
 
-  // Branch: writer is empty → falls back to settings.inspectorName
   it('uses settings.inspectorName when writer param is empty', async () => {
     mockSettingsGet.mockResolvedValue({ officeName: 'HQ', inspectorName: 'Settings Inspector' });
     const { result } = await renderHook(
@@ -590,7 +659,21 @@ describe('useChecklistData — handleFinish success', () => {
     );
   });
 
-  // Branch: agendaId set but updateInspectionLink throws → save still ran, success Alert fires
+  // Branch: writer empty AND settings.inspectorName empty → falls to hard-coded 'المفتش'
+  it('falls back to hard-coded inspector name when writer and settings.inspectorName are both empty', async () => {
+    mockSettingsGet.mockResolvedValue({ officeName: 'HQ', inspectorName: '' });
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, writer: '' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ inspectorName: 'المفتش' })
+    );
+  });
+
   it('shows success Alert even when AgendaRepository.updateInspectionLink throws', async () => {
     mockUpdateInspectionLink.mockRejectedValue(new Error('agenda DB error'));
     const { result } = await renderHook(
@@ -601,10 +684,148 @@ describe('useChecklistData — handleFinish success', () => {
     await evaluateAll(result);
     await act(async () => { await result.current.handleFinish(); });
     expect(mockSave).toHaveBeenCalledTimes(1);
-    expect(Alert.alert).toHaveBeenCalledWith(
-      'نجاح',
-      expect.any(String)
+    expect(Alert.alert).toHaveBeenCalledWith('نجاح', expect.any(String));
+  });
+
+  // Branch: saveInspection returns false → setIsFinishing(false), no router.replace
+  it('resets isFinishing and does not navigate when saveInspection returns false', async () => {
+    mockSave.mockRejectedValue(new Error('disk full'));
+    const mockReplace = jest.fn();
+    const { useRouter } = require('expo-router');
+    (useRouter as jest.Mock).mockReturnValue({
+      replace: mockReplace, push: jest.fn(), back: jest.fn(),
+    });
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
     );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockReplace).not.toHaveBeenCalled();
+  });
+});
+
+// ─── Phase-3/5/6 fields persisted on save ─────────────────────────────────
+describe('useChecklistData — Phase-3/5/6 fields on save payload', () => {
+  it('persists inspectionType on the saved payload', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, inspectionType: 'follow-up' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ inspectionType: 'follow-up' })
+    );
+  });
+
+  it('defaults inspectionType to "routine" when not provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ inspectionType: 'routine' })
+    );
+  });
+
+  it('persists priorInspectionId when provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, inspectionType: 'follow-up', priorInspectionId: 'prior-123' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ priorInspectionId: 'prior-123' })
+    );
+  });
+
+  it('persists openingMeetingDone and closingMeetingDone flags (Phase-5)', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, openingMeetingDone: true, closingMeetingDone: true }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ openingMeetingDone: true, closingMeetingDone: true })
+    );
+  });
+
+  it('defaults openingMeetingDone and closingMeetingDone to false when not provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ openingMeetingDone: false, closingMeetingDone: false })
+    );
+  });
+
+  it('persists escalationOverrideReason when provided (Phase-6)', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, escalationOverrideReason: 'inspector override' }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({ escalationOverrideReason: 'inspector override' })
+    );
+  });
+
+  it('does not set escalationOverrideReason when not provided (Phase-6)', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    const savedPayload = mockSave.mock.calls[0][0];
+    expect(savedPayload.escalationOverrideReason).toBeUndefined();
+  });
+});
+
+// ─── coordinates branch ────────────────────────────────────────────────────
+describe('useChecklistData — coordinates on save payload', () => {
+  it('persists coordinates when lat and lng are provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData({ ...BASE_PARAMS, lat: 36.7, lng: 3.1 }),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        coordinates: { latitude: 36.7, longitude: 3.1 },
+      })
+    );
+  });
+
+  it('sets coordinates to undefined when lat/lng are not provided', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    await act(async () => { await result.current.handleFinish(); });
+    const savedPayload = mockSave.mock.calls[0][0];
+    expect(savedPayload.coordinates).toBeUndefined();
   });
 });
 
@@ -643,12 +864,19 @@ describe('useChecklistData — derived values', () => {
     await waitLoaded(result);
     expect(result.current.sections).toHaveLength(2);
   });
+
+  it('progressPercent is 100 when all items are evaluated', async () => {
+    const { result } = await renderHook(
+      () => useChecklistData(BASE_PARAMS),
+      { wrapper: Wrapper }
+    );
+    await waitLoaded(result);
+    await evaluateAll(result);
+    expect(result.current.progressPercent).toBeCloseTo(100, 0);
+  });
 });
 
 // ─── saveInspection error path ─────────────────────────────────────────────
-// NOTE: the hook catches save errors and calls:
-//   Alert.alert('خطأ', 'حدث خطأ أثناء الحفظ')
-// It does NOT interpolate the thrown Error message into the alert body.
 describe('useChecklistData — saveInspection error path', () => {
   it('calls Alert when save throws', async () => {
     mockSave.mockRejectedValue(new Error('disk full'));
@@ -697,7 +925,7 @@ describe('useChecklistData — beforeRemove auto-save', () => {
     );
   });
 
-  // Line 287: isFinishing=true guard — beforeRemove returns early without saving
+  // isFinishing=true guard — beforeRemove returns early without saving
   it('skips auto-save when isFinishing is true (handleFinish in progress)', async () => {
     let capturedCallback: Function | null = null;
     const mockAddListener = jest.fn((event: string, callback: Function) => {
