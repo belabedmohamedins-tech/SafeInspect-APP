@@ -102,4 +102,15 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
+  {
+    // Phase 3.6: veterinary/medical waste — zero coverage previously (Ch.2; Décret 03-478)
+    id: 'SLH-07-01',
+    axis: 'النفايات البيطرية والطبية',
+    category: 'بيئية',
+    criteria: 'الفصل الميداني للنفايات البيطرية الخطرة الناتجة عن فحص الدواجن وعمليات الذبح وفق نظام التدفقات الثلاث: الأخضر (نفايات عادية)، الأصفر (نفايات خاصة غير خطرة)، الأحمر (نفايات معدية/حادة). وجود حاويات مُصنَّفة لكل تدفق، مع عقد مع متعامل معتمد لجمع النفايات الخطرة ومعالجتها، والاحتفاظ ببيانات النقل.',
+    legalReference: 'المرسوم التنفيذي 03-478 (9 ديسمبر 2003) المتعلق بتسيير النفايات الطبية والبيطرية الخاصة الخطرة (نظام التدفقات الثلاث، إلزامية الفصل والتوثيق).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

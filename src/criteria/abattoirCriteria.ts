@@ -236,11 +236,13 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
 
   // ===== AX8 — HACCP وإدارة الجودة =====
   {
+    // Phase 3.2 + 3.3: corrected citation — removed unverified "2020" ministerial order;
+    // Décret 17-140 art.4 is the mandatory HACCP basis; local arrêté number needs verification (OQ-7)
     id: 'ABT-AX8-01',
     axis: 'HACCP في المذبح',
     category: 'تنظيمية',
     criteria: 'وجود خطة HACCP مُعدّة ومطبقة خصيصًا لخط الذبح والتقطيع والتبريد، تشمل على الأقل نقاط التحكم الحرجة مثل درجة حرارة التبريد، زمن التبريد، ونظافة المعدات.',
-    legalReference: 'المرسوم التنفيذي 17-140 (المادة 4: إلزامية تطبيق إجراءات HACCP في المنشآت الغذائية). القراران الوزاريان المشتركان بتاريخ 1 ديسمبر 2020 (كيفيات تطبيق HACCP والمصادقة على أدلة الممارسات الصحية الجيدة).',
+    legalReference: 'المرسوم التنفيذي 17-140 (المادة 4: إلزامية تطبيق إجراءات HACCP في المنشآت الغذائية) + مبادئ CODEX ALIMENTARIUS بشأن HACCP — ملاحظة: رقم القرار الوزاري المحلي المحدد بحاجة تحقق قبل النشر (OQ-7).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -275,6 +277,17 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     category: 'بيئية',
     criteria: 'عدم وجود دلائل إصابة بحشرات أو قوارض في قاعات الذبح وغرف التبريد ومخازن المنتجات، مع برنامج دوري مكتوب لمكافحة النواقل وسجل للتدخلات.',
     legalReference: 'محور مكافحة النواقل في معايير الرقابة (الصراصير والقوارض، مكافحة وقائية وهجومية، خرائط مراقبة وسجلات). القانون 03-10.',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // Phase 3.6: veterinary/medical waste three-stream system — zero coverage previously
+    id: 'ABT-AX10-02',
+    axis: 'النفايات البيطرية والطبية',
+    category: 'بيئية',
+    criteria: 'الفصل الميداني للنفايات البيطرية الخطرة الناتجة عن الذبح وفحص الذبائح وفق نظام التدفقات الثلاث: الأخضر (نفايات عادية)، الأصفر (نفايات خاصة غير خطرة)، الأحمر (نفايات معدية/حادة). وجود أوعية أو حاويات مُصنَّفة لكل تدفق، مع عقد مع متعامل معتمد لجمع النفايات الحمراء والصفراء ومعالجتها، والاحتفاظ ببيانات النقل.',
+    legalReference: 'المرسوم التنفيذي 03-478 (9 ديسمبر 2003) المتعلق بتسيير النفايات الطبية والبيطرية الخاصة الخطرة (نظام التدفقات الثلاث، إلزامية الفصل والتوثيق).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
