@@ -82,7 +82,7 @@ export const paintShopCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'PNT-05-01',
+    id: 'PNT-04-03',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر مطفآت حريق مناسبة للمواد الكيميائية (نوع بودرة ABC أو ثاني أكسيد الكربون CO2) ومخارج طوارئ واضحة.',

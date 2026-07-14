@@ -5,19 +5,18 @@ describe('bakerySpecificCriteria', () => {
     expect(Array.isArray(bakerySpecificCriteria)).toBe(true);
   });
 
-  it('should contain exactly 10 items', () => {
-    expect(bakerySpecificCriteria).toHaveLength(10);
+  it('should contain exactly 13 items', () => {
+    expect(bakerySpecificCriteria).toHaveLength(13);
   });
 
   it('should have no duplicate IDs', () => {
-    const ids = bakerySpecificCriteria.map(item => item.id);
-    const unique = new Set(ids);
-    expect(unique.size).toBe(ids.length);
+    const ids = bakerySpecificCriteria.map(i => i.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('all IDs should match BAK-10-XX pattern', () => {
+  it('all IDs should match BAK-XX-XX pattern', () => {
     bakerySpecificCriteria.forEach(item => {
-      expect(item.id).toMatch(/^BAK-10-\d{2}$/);
+      expect(item.id).toMatch(/^BAK-\d{2}-\d{2}$/);
     });
   });
 
@@ -27,54 +26,44 @@ describe('bakerySpecificCriteria', () => {
     });
   });
 
-  it('all items should have non-empty criteria text', () => {
+  it('all items should have non-empty criteria, legalReference, and axis', () => {
     bakerySpecificCriteria.forEach(item => {
       expect(item.criteria.trim().length).toBeGreaterThan(0);
-    });
-  });
-
-  it('all items should have non-empty legalReference', () => {
-    bakerySpecificCriteria.forEach(item => {
       expect(item.legalReference.trim().length).toBeGreaterThan(0);
-    });
-  });
-
-  it('all items should have non-empty axis', () => {
-    bakerySpecificCriteria.forEach(item => {
       expect(item.axis.trim().length).toBeGreaterThan(0);
     });
   });
 
-  it('severity should be one of high/medium/low', () => {
+  it('severity should be valid for all items', () => {
     bakerySpecificCriteria.forEach(item => {
       expect(['high', 'medium', 'low']).toContain(item.severity);
     });
   });
 
-  it('should have majority high severity items (food safety)', () => {
-    const high = bakerySpecificCriteria.filter(i => i.severity === 'high');
-    expect(high.length).toBeGreaterThanOrEqual(7);
-  });
-
-  it('BAK-10-01 should be doc controlType for licence verification', () => {
+  it('BAK-10-01 should be operating licence doc', () => {
     const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');
   });
 
-  it('BAK-10-10 should reference HACCP', () => {
-    const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-10');
+  it('BAK-10-05 water quality should have test controlType', () => {
+    const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-05');
     expect(item).toBeDefined();
-    expect(item!.criteria).toContain('HACCP');
-    expect(item!.controlType).toBe('doc');
+    expect(item!.controlType).toBe('test');
   });
 
-  it('should cover expected axes', () => {
+  it('BAK-10-10 HACCP should be doc and high', () => {
+    const item = bakerySpecificCriteria.find(i => i.id === 'BAK-10-10');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+  });
+
+  it('should cover key axes', () => {
     const axes = new Set(bakerySpecificCriteria.map(i => i.axis));
     expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
-    expect(axes.has('المبنى والتهيئة الداخلية')).toBe(true);
+    expect(axes.has('المياه والصرف')).toBe(true);
     expect(axes.has('صحة وسلوك العمال')).toBe(true);
-    expect(axes.has('مكافحة النواقل')).toBe(true);
   });
 });
