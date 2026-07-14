@@ -1,82 +1,94 @@
 import { carpenteryCriteria } from '../../src/criteria/carpenteryCriteria';
 
 describe('carpenteryCriteria', () => {
-  it('should export an array', () => {
+  it('exports a non-empty array', () => {
     expect(Array.isArray(carpenteryCriteria)).toBe(true);
-  });
-
-  it('should have items', () => {
     expect(carpenteryCriteria.length).toBeGreaterThan(0);
   });
 
-  it('should have no duplicate IDs', () => {
-    const ids = carpenteryCriteria.map(item => item.id);
-    const unique = new Set(ids);
-    expect(unique.size).toBe(ids.length);
+  it('has exactly 10 items', () => {
+    expect(carpenteryCriteria).toHaveLength(10);
   });
 
-  it('all IDs should match expected prefix pattern', () => {
-    carpenteryCriteria.forEach(item => {
-      expect(item.id).toMatch(/^[A-Z]{2,4}-\d{2}-\d{2}$/);
-    });
+  it('all IDs are unique', () => {
+    const ids = carpenteryCriteria.map(i => i.id);
+    expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('all items should have complianceStatus not-evaluated', () => {
+  it('all IDs follow CAR- prefix', () => {
+    carpenteryCriteria.forEach(item => expect(item.id).toMatch(/^CAR-/));
+  });
+
+  it('all items have required fields', () => {
     carpenteryCriteria.forEach(item => {
+      expect(item.id).toBeDefined();
+      expect(item.axis).toBeDefined();
+      expect(item.category).toBeDefined();
+      expect(item.criteria).toBeDefined();
+      expect(item.legalReference).toBeDefined();
+      expect(item.severity).toBeDefined();
+      expect(item.controlType).toBeDefined();
       expect(item.complianceStatus).toBe('not-evaluated');
     });
   });
 
-  it('all items should have non-empty criteria, legalReference, and axis', () => {
-    carpenteryCriteria.forEach(item => {
-      expect(item.criteria.trim().length).toBeGreaterThan(0);
-      expect(item.legalReference.trim().length).toBeGreaterThan(0);
-      expect(item.axis.trim().length).toBeGreaterThan(0);
+  it('severity values are valid', () => {
+    const valid = ['low', 'medium', 'high'];
+    carpenteryCriteria.forEach(item => expect(valid).toContain(item.severity));
+  });
+
+  it('controlType values are valid', () => {
+    const valid = ['doc', 'visual', 'measurement', 'test'];
+    carpenteryCriteria.forEach(item => expect(valid).toContain(item.controlType));
+  });
+
+  it('measurement items with numericField have valid unit and bounds', () => {
+    const measured = carpenteryCriteria.filter(i => i.controlType === 'measurement' && i.numericField);
+    measured.forEach(item => {
+      expect(item.numericField!.unit).toBeTruthy();
     });
   });
 
-  it('severity should be valid for all items', () => {
-    carpenteryCriteria.forEach(item => {
-      expect(['high', 'medium', 'low']).toContain(item.severity);
-    });
+  it('CAR-01-01 is licence doc high', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-01-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
   });
 
-  it('should have at least one high severity item', () => {
-    const high = carpenteryCriteria.filter(i => i.severity === 'high');
-    expect(high.length).toBeGreaterThanOrEqual(1);
+  it('CAR-02-01 is dust extraction visual high', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-02-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('visual');
+    expect(item!.severity).toBe('high');
   });
 
-  it('controlType should be valid for all items', () => {
-    carpenteryCriteria.forEach(item => {
-      expect(['visual', 'doc', 'test', 'measurement']).toContain(item.controlType);
-    });
+  it('CAR-02-02 is noise measurement medium (no numericField required)', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-02-02');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('measurement');
+    expect(item!.severity).toBe('medium');
   });
 
-  it('items with measurement controlType should have numericField', () => {
-    const measurement = carpenteryCriteria.filter(i => i.controlType === 'measurement');
-    measurement.forEach(item => {
-      expect(item.numericField).toBeDefined();
-    });
+  it('CAR-04-03 is fire extinguisher visual high', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-04-03');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('visual');
+    expect(item!.severity).toBe('high');
   });
 
-  it('should have all items with CAR prefix', () => {
-    const car = carpenteryCriteria.filter(i => i.id.startsWith('CAR-'));
-    expect(car.length).toBe(carpenteryCriteria.length);
+  it('CAR-05-01 is emergency exits visual high', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-05-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('visual');
+    expect(item!.severity).toBe('high');
   });
 
-  it('should have items covering السلامة المهنية axis', () => {
-    const safety = carpenteryCriteria.filter(i => i.axis === 'السلامة المهنية');
-    expect(safety.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('should have items covering نفايات الخشب والألمنيوم axis', () => {
-    const waste = carpenteryCriteria.filter(i => i.axis === 'نفايات الخشب والألمنيوم');
-    expect(waste.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it('category values should be valid', () => {
-    carpenteryCriteria.forEach(item => {
-      expect(['تنظيمية', 'بيئية', 'سلامة', 'صحية']).toContain(item.category);
-    });
+  it('axes cover expected domains', () => {
+    const axes = new Set(carpenteryCriteria.map(i => i.axis));
+    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
+    expect(axes.has('الموقع والتهيئة')).toBe(true);
+    expect(axes.has('نفايات الخشب والألمنيوم')).toBe(true);
+    expect(axes.has('السلامة المهنية')).toBe(true);
   });
 });

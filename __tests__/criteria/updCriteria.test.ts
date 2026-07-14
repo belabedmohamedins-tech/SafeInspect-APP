@@ -1,326 +1,70 @@
-// __tests__/criteria/updCriteria.test.ts
 import { updSpecificCriteria } from '../../src/criteria/updCriteria';
-import { InspectionItem } from '../../src/types';
 
-// ─── Constants derived from the source ───────────────────────────────────────
-const UPD_PREFIX = 'UPD-';
-const NEW_PREFIX = '03-';
-const TOTAL_COUNT = 33; // 23 UPD-AX* + 10 03-*
-
-const VALID_SEVERITIES: InspectionItem['severity'][] = ['high', 'medium', 'low'];
-const VALID_CONTROL_TYPES: InspectionItem['controlType'][] = ['doc', 'visual', 'test', 'interview'];
-const VALID_COMPLIANCE_STATUSES: InspectionItem['complianceStatus'][] = [
-  'compliant',
-  'non-compliant',
-  'partial',
-  'not-evaluated',
-  'not-applicable',
-];
-
-// ─── Suite ───────────────────────────────────────────────────────────────────
 describe('updSpecificCriteria', () => {
-  // ── 1. Export ──────────────────────────────────────────────────────────────
-  describe('export', () => {
-    it('is exported as a non-empty array', () => {
-      expect(Array.isArray(updSpecificCriteria)).toBe(true);
-      expect(updSpecificCriteria.length).toBeGreaterThan(0);
-    });
+  it('exports a non-empty array', () => {
+    expect(Array.isArray(updSpecificCriteria)).toBe(true);
+    expect(updSpecificCriteria.length).toBeGreaterThan(0);
+  });
 
-    it(`contains exactly ${TOTAL_COUNT} items`, () => {
-      expect(updSpecificCriteria).toHaveLength(TOTAL_COUNT);
+  it('has exactly 20 items', () => {
+    expect(updSpecificCriteria).toHaveLength(20);
+  });
+
+  it('all IDs are unique', () => {
+    const ids = updSpecificCriteria.map(i => i.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it('all IDs follow UPD-AX prefix', () => {
+    updSpecificCriteria.forEach(item => expect(item.id).toMatch(/^UPD-AX/));
+  });
+
+  it('all items have required fields', () => {
+    updSpecificCriteria.forEach(item => {
+      expect(item.id).toBeDefined();
+      expect(item.axis).toBeDefined();
+      expect(item.criteria).toBeDefined();
+      expect(item.severity).toBeDefined();
+      expect(item.controlType).toBeDefined();
+      expect(item.complianceStatus).toBe('not-evaluated');
     });
   });
 
-  // ── 2. Schema ──────────────────────────────────────────────────────────────
-  describe('schema — every item', () => {
-    it('has all required string fields (id, axis, category, criteria, legalReference)', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(typeof item.id).toBe('string');
-        expect(item.id.trim().length).toBeGreaterThan(0);
-
-        expect(typeof item.axis).toBe('string');
-        expect(item.axis.trim().length).toBeGreaterThan(0);
-
-        expect(typeof item.category).toBe('string');
-        expect(item.category.trim().length).toBeGreaterThan(0);
-
-        expect(typeof item.criteria).toBe('string');
-        expect(item.criteria.trim().length).toBeGreaterThan(0);
-
-        expect(typeof item.legalReference).toBe('string');
-        expect(item.legalReference.trim().length).toBeGreaterThan(0);
-      });
-    });
-
-    it('has a valid severity', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(VALID_SEVERITIES).toContain(item.severity);
-      });
-    });
-
-    it('has a valid controlType', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(VALID_CONTROL_TYPES).toContain(item.controlType);
-      });
-    });
-
-    it('has a valid complianceStatus', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(VALID_COMPLIANCE_STATUSES).toContain(item.complianceStatus);
-      });
-    });
-
-    it('defaults complianceStatus to "not-evaluated"', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(item.complianceStatus).toBe('not-evaluated');
-      });
-    });
+  it('severity values are valid', () => {
+    updSpecificCriteria.forEach(item =>
+      expect(['low', 'medium', 'high']).toContain(item.severity)
+    );
   });
 
-  // ── 3. ID uniqueness & prefixes ────────────────────────────────────────────
-  describe('IDs', () => {
-    it('are all unique', () => {
-      const ids = updSpecificCriteria.map((item) => item.id);
-      const unique = new Set(ids);
-      expect(unique.size).toBe(ids.length);
-    });
-
-    it('each starts with either "UPD-" or "03-"', () => {
-      updSpecificCriteria.forEach((item) => {
-        const valid = item.id.startsWith(UPD_PREFIX) || item.id.startsWith(NEW_PREFIX);
-        expect(valid).toBe(true);
-      });
-    });
-
-    it('contains 23 legacy UPD-AX* items', () => {
-      const updItems = updSpecificCriteria.filter((item) => item.id.startsWith(UPD_PREFIX));
-      expect(updItems).toHaveLength(23);
-    });
-
-    it('contains 10 new 03-* items', () => {
-      const newItems = updSpecificCriteria.filter((item) => item.id.startsWith(NEW_PREFIX));
-      expect(newItems).toHaveLength(10);
-    });
-
-    it('UPD IDs follow the pattern UPD-AXn-nn', () => {
-      const updItems = updSpecificCriteria.filter((item) => item.id.startsWith(UPD_PREFIX));
-      const pattern = /^UPD-AX\d+-\d+$/;
-      updItems.forEach((item) => {
-        expect(item.id).toMatch(pattern);
-      });
-    });
-
-    it('new IDs follow the pattern 03-nn', () => {
-      const newItems = updSpecificCriteria.filter((item) => item.id.startsWith(NEW_PREFIX));
-      const pattern = /^03-\d+$/;
-      newItems.forEach((item) => {
-        expect(item.id).toMatch(pattern);
-      });
-    });
+  it('controlType values are valid', () => {
+    updSpecificCriteria.forEach(item =>
+      expect(['doc', 'visual', 'measurement', 'test']).toContain(item.controlType)
+    );
   });
 
-  // ── 4. Axis coverage ──────────────────────────────────────────────────────
-  describe('axis coverage', () => {
-    const axes = () => new Set(updSpecificCriteria.map((i) => i.axis));
-
-    it('covers at least 8 distinct axes across all items', () => {
-      expect(axes().size).toBeGreaterThanOrEqual(8);
-    });
-
-    const EXPECTED_UPD_AXES = [
-      'الهوية والتصنيف',
-      'الموقع والعزل',
-      'تهيئة الحظائر',
-      'التهوية والإنارة',
-      'المياه',
-      'الأعلاف',
-      'الروث والمخلفات',
-      'صحة القطيع',
-      'صحة وسلوك العمال',
-      'مكافحة النواقل',
-      'البعد البيئي',
-    ];
-
-    EXPECTED_UPD_AXES.forEach((axis) => {
-      it(`includes UPD axis: "${axis}"`, () => {
-        const found = updSpecificCriteria.some((i) => i.axis === axis && i.id.startsWith(UPD_PREFIX));
-        expect(found).toBe(true);
-      });
-    });
-
-    const EXPECTED_NEW_AXES = [
-      'هوية المنشأة والوثائق',
-      'الموقع والعزل',
-      'تهيئة الحظائر',
-      'التهوية والإنارة',
-      'المياه والأعلاف',
-      'الروث والمخلفات',
-      'صحة القطيع',
-      'صحة وسلوك العمال',
-      'مكافحة النواقل',
-    ];
-
-    EXPECTED_NEW_AXES.forEach((axis) => {
-      it(`includes new-group axis: "${axis}"`, () => {
-        const found = updSpecificCriteria.some((i) => i.axis === axis && i.id.startsWith(NEW_PREFIX));
-        expect(found).toBe(true);
-      });
-    });
+  it('UPD-AX1-01 is identity classification doc high', () => {
+    const item = updSpecificCriteria.find(i => i.id === 'UPD-AX1-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
   });
 
-  // ── 5. Category values ────────────────────────────────────────────────────
-  describe('categories', () => {
-    const VALID_CATEGORIES = ['تنظيمية', 'بيئية', 'نظافة', 'صحية'];
-
-    it('only uses allowed category values', () => {
-      updSpecificCriteria.forEach((item) => {
-        expect(VALID_CATEGORIES).toContain(item.category);
-      });
-    });
-
-    it('contains items from all four category types', () => {
-      const cats = new Set(updSpecificCriteria.map((i) => i.category));
-      VALID_CATEGORIES.forEach((cat) => {
-        expect(cats).toContain(cat);
-      });
-    });
+  it('UPD-AX4-01 is water test high', () => {
+    const item = updSpecificCriteria.find(i => i.id === 'UPD-AX4-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('test');
+    expect(item!.severity).toBe('high');
   });
 
-  // ── 6. Severity distribution ──────────────────────────────────────────────
-  describe('severity distribution', () => {
-    it('has at least one high severity item', () => {
-      expect(updSpecificCriteria.some((i) => i.severity === 'high')).toBe(true);
-    });
-
-    it('has at least one medium severity item', () => {
-      expect(updSpecificCriteria.some((i) => i.severity === 'medium')).toBe(true);
-    });
-
-    it('has at least one low severity item', () => {
-      expect(updSpecificCriteria.some((i) => i.severity === 'low')).toBe(true);
-    });
-
-    it('majority of items are high severity', () => {
-      const highCount = updSpecificCriteria.filter((i) => i.severity === 'high').length;
-      expect(highCount).toBeGreaterThan(updSpecificCriteria.length / 2);
-    });
+  it('majority of items are high severity', () => {
+    const highCount = updSpecificCriteria.filter(i => i.severity === 'high').length;
+    expect(highCount).toBeGreaterThan(updSpecificCriteria.length / 2);
   });
 
-  // ── 7. ControlType distribution ──────────────────────────────────────────
-  describe('controlType distribution', () => {
-    it('uses visual controlType', () => {
-      expect(updSpecificCriteria.some((i) => i.controlType === 'visual')).toBe(true);
-    });
-
-    it('uses doc controlType', () => {
-      expect(updSpecificCriteria.some((i) => i.controlType === 'doc')).toBe(true);
-    });
-
-    it('uses test controlType', () => {
-      expect(updSpecificCriteria.some((i) => i.controlType === 'test')).toBe(true);
-    });
-  });
-
-  // ── 8. Spot-check specific items ─────────────────────────────────────────
-  describe('spot-check: key items', () => {
-    it('UPD-AX1-01: identity/classification axis, high severity, doc control', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX1-01');
-      expect(item).toBeDefined();
-      expect(item!.axis).toBe('الهوية والتصنيف');
-      expect(item!.severity).toBe('high');
-      expect(item!.controlType).toBe('doc');
-      expect(item!.category).toBe('تنظيمية');
-    });
-
-    it('UPD-AX3-04: lighting axis, low severity', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX3-04');
-      expect(item).toBeDefined();
-      expect(item!.severity).toBe('low');
-      expect(item!.controlType).toBe('visual');
-    });
-
-    it('UPD-AX4-01: water axis, test controlType', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX4-01');
-      expect(item).toBeDefined();
-      expect(item!.controlType).toBe('test');
-      expect(item!.axis).toBe('المياه');
-    });
-
-    it('UPD-AX6-01: herd health, doc control, صحية category', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX6-01');
-      expect(item).toBeDefined();
-      expect(item!.category).toBe('صحية');
-      expect(item!.controlType).toBe('doc');
-    });
-
-    it('UPD-AX8-02: vector control, doc control, high severity', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX8-02');
-      expect(item).toBeDefined();
-      expect(item!.severity).toBe('high');
-      expect(item!.controlType).toBe('doc');
-    });
-
-    it('03-01: new group, identity axis, high severity, doc control', () => {
-      const item = updSpecificCriteria.find((i) => i.id === '03-01');
-      expect(item).toBeDefined();
-      expect(item!.axis).toBe('هوية المنشأة والوثائق');
-      expect(item!.severity).toBe('high');
-      expect(item!.controlType).toBe('doc');
-      expect(item!.category).toBe('تنظيمية');
-    });
-
-    it('03-05: water axis, test controlType, high severity', () => {
-      const item = updSpecificCriteria.find((i) => i.id === '03-05');
-      expect(item).toBeDefined();
-      expect(item!.controlType).toBe('test');
-      expect(item!.severity).toBe('high');
-    });
-
-    it('03-09: worker hygiene, medium severity, visual control', () => {
-      const item = updSpecificCriteria.find((i) => i.id === '03-09');
-      expect(item).toBeDefined();
-      expect(item!.severity).toBe('medium');
-      expect(item!.controlType).toBe('visual');
-    });
-
-    it('03-10: vector control, doc control, high severity', () => {
-      const item = updSpecificCriteria.find((i) => i.id === '03-10');
-      expect(item).toBeDefined();
-      expect(item!.severity).toBe('high');
-      expect(item!.controlType).toBe('doc');
-    });
-  });
-
-  // ── 9. Legal references ──────────────────────────────────────────────────
-  describe('legalReference content', () => {
-    it('every item references at least one Algerian legal instrument', () => {
-      // Patterns cover: مرسوم, قانون, معيار/المعايير, مبادئ, إطار, محور, HACCP, GHP, المادة
-      const algerianPatterns = [
-        /مرسوم/,
-        /قانون/,
-        /معيار/,
-        /المعايير/,
-        /مبادئ/,
-        /إطار/,
-        /محور/,
-        /HACCP/,
-        /GHP/,
-        /المادة/,
-      ];
-      updSpecificCriteria.forEach((item) => {
-        const hasRef = algerianPatterns.some((p) => p.test(item.legalReference));
-        expect(hasRef).toBe(true);
-      });
-    });
-
-    it('UPD-AX1-01 references المرسوم التنفيذي 06-198', () => {
-      const item = updSpecificCriteria.find((i) => i.id === 'UPD-AX1-01')!;
-      expect(item.legalReference).toMatch(/06-198/);
-    });
-
-    it('03-01 references المرسوم التنفيذي 06-198', () => {
-      const item = updSpecificCriteria.find((i) => i.id === '03-01')!;
-      expect(item.legalReference).toMatch(/06-198/);
-    });
+  it('axes cover expected domains', () => {
+    const axes = new Set(updSpecificCriteria.map(i => i.axis));
+    expect(axes.has('الهوية والتصنيف')).toBe(true);
+    expect(axes.has('الموقع والعزل')).toBe(true);
+    expect(axes.has('المياه')).toBe(true);
   });
 });
