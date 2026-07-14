@@ -23,6 +23,16 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
+  {
+    id: 'BGN-01-03',
+    axis: 'هوية المنشأة والوثائق',
+    category: 'تنظيمية',
+    criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فورًا عند الطلب.',
+    legalReference: 'القانون 03-10 المادة 71 (حق الدخول والتفتيش للمفتشين) + المادة 73 (تجريم عرقلة المفتش أو التهديد، عقوبة جزائية).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
   // المحور 2: الموقع والتهيئة العامة (عام)
   {
     id: 'BGN-02-01',
@@ -289,16 +299,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'BGN-08-04',
-    axis: 'السلامة العامة والوقاية من الحوادث',
-    category: 'تنظيمية',
-    criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فورًا عند الطلب.',
-    legalReference: 'القانون 03-10 المادة 71 (حق الدخول والتفتيش للمفتشين) + المادة 73 (تجريم عرقلة المفتش أو التهديد، عقوبة جزائية).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // BGN-08-04 (anti-obstruction) moved to BGN-01-03 under هوية المنشأة والوثائق — correct axis per spec
   {
     id: 'BGN-08-05',
     axis: 'السلامة العامة والوقاية من الحوادث',
@@ -308,5 +309,25 @@ export const baseGeneralCriteria: InspectionItem[] = [
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
+  },
+  // المحور 9: الضجيج والانبعاثات البيئية (عام)
+  {
+    id: 'BGN-09-01',
+    axis: 'الضجيج والانبعاثات البيئية',
+    category: 'بيئية',
+    criteria: 'قياس مستوى الضجيج الصادر عن المنشأة عند الحدود مع الجوار أو داخل أماكن العمل، والتحقق من عدم تجاوز الحد المقرر (70 ديسيبل في المحيط الحضري نهاراً) مع توثيق النتائج.',
+    legalReference: 'القانون 03-10 (حماية البيئة وراحة الجوار) + المرسوم التنفيذي 93-120 (الحدود القصوى للضجيج الصناعي في المناطق الحضرية).',
+    severity: 'medium',
+    controlType: 'measurement',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'dB',
+      labelAr: 'مستوى الضجيج المقاس عند حدود المنشأة',
+      min: 0,
+      max: 140,
+      warningMax: 70,
+      step: 1,
+      upperLimit: true,
+    },
   },
 ];

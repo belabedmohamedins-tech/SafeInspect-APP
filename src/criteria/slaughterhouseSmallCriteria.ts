@@ -92,4 +92,14 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   // SLH-05-10 removed — pest control covered by BGN-07-01/02/04 (S9 pest dedup)
+  {
+    id: 'SLH-06-01',
+    axis: 'نظام HACCP وسلامة الغذاء',
+    category: 'صحيه',
+    criteria: 'تطبيق مبادئ HACCP أو نظام مكافئ: تحديد نقاط التحكم الحرجة (CCP) في خط الذبح (دم، سلخ، تحرير الأحشاء)، مع سجلات مراقبة موثقة لكل CCP.',
+    legalReference: 'المادة 5 من المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017 التي تُلزم مشغلي المنشآت الغذائية بتطبيق نظام تحليل الأخطار ونقاط التحكم الحرجة (HACCP) أو إجراءات مكافئة مستندة إلى مبادئه.',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

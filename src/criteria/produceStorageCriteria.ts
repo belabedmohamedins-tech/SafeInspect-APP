@@ -73,14 +73,5 @@ export const produceStorageCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  {
-    id: 'PRD-05-02',
-    axis: 'التتبعية',
-    category: 'تنظيمية',
-    criteria: 'وجود سجل استقبال وتوزيع يتيح تتبع مصدر كل دفعة من المنتجات (المورد، تاريخ الاستقبال، الكمية) والجهة الموزعة إليها.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 4 (التتبعية Traçabilité).',
-    severity: 'medium',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // PRD-05-02 removed — traceability now covered by BFD-08-01 in baseFoodCriteria (Phase 3 dedup)
 ];
