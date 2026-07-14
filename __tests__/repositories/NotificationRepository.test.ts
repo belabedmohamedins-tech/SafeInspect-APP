@@ -6,7 +6,7 @@ beforeEach(() => {
   AsyncStorage.clear();
 });
 
-const baseItem = { title: 'Test notif', body: 'body text', type: 'info' as const };
+const baseItem = { title: 'Test notif', body: 'body text', type: 'SYSTEM' as const };
 
 describe('NotificationRepository.append', () => {
   it('creates entry with id and createdAt', async () => {
@@ -31,7 +31,7 @@ describe('NotificationRepository.append', () => {
       id: `notif_old_${i}`,
       title: 'old',
       body: 'b',
-      type: 'info' as const,
+      type: 'SYSTEM' as const,
       createdAt: new Date().toISOString(),
     }));
     await AsyncStorage.setItem('NOTIFICATIONS', JSON.stringify(existing));

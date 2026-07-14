@@ -15,12 +15,11 @@ jest.mock('@react-native-async-storage/async-storage', () => ({
 
 function makeAgendaItem(overrides: Partial<AgendaItem> & { id: string }): AgendaItem {
   return {
-    facilityId: 'FAC-01',
+    facilityId:   'FAC-01',
     facilityName: 'Test Facility',
-    date: '2026-03-01T09:00:00.000Z',
-    notes: '',
-    completed: false,
-    status: 'pending',
+    date:         '2026-03-01T09:00:00.000Z',
+    notes:        '',
+    status:       'pending',
     ...overrides,
   };
 }
@@ -94,11 +93,11 @@ describe('AgendaRepository.delete', () => {
 
 describe('AgendaRepository.updateInspectionLink', () => {
   it('links an inspection id and marks the item completed', async () => {
-    await AgendaRepository.save(makeAgendaItem({ id: 'agenda-1', completed: false, status: 'pending' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'agenda-1', status: 'pending' }));
     await AgendaRepository.updateInspectionLink('agenda-1', 'inspection-99');
     const updated = await AgendaRepository.getById('agenda-1');
     expect(updated?.inspectionId).toBe('inspection-99');
-    expect(updated?.completed).toBe(true);
+    expect((updated as any)?.completed).toBe(true);
     expect(updated?.status).toBe('completed');
   });
 
@@ -115,6 +114,6 @@ describe('AgendaRepository.updateInspectionLink', () => {
     await AgendaRepository.updateInspectionLink('a', 'ins-001');
     const b = await AgendaRepository.getById('b');
     expect(b?.inspectionId).toBeUndefined();
-    expect(b?.completed).toBe(false);
+    expect((b as any)?.completed).toBeUndefined();
   });
 });

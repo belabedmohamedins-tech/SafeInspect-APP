@@ -6,9 +6,9 @@ import { InspectionItem } from '../../src/types';
 // Helpers
 // ---------------------------------------------------------------------------
 const VALID_SEVERITIES: InspectionItem['severity'][] = ['high', 'medium', 'low'];
-const VALID_CONTROL_TYPES: InspectionItem['controlType'][] = ['doc', 'visual', 'measurement', 'interview'];
+const VALID_CONTROL_TYPES: InspectionItem['controlType'][] = ['doc', 'visual', 'measurement', 'test'];
 const VALID_COMPLIANCE: InspectionItem['complianceStatus'][] = [
-  'compliant', 'non-compliant', 'partial', 'not-evaluated', 'not-applicable',
+  'compliant', 'non-compliant', 'na', 'not-evaluated', 'observation-only', 'unable-to-verify',
 ];
 
 // ---------------------------------------------------------------------------
@@ -75,12 +75,12 @@ describe('uabSpecificCriteria – per-item field integrity', () => {
 
       it('has a non-empty axis string', () => {
         expect(typeof item.axis).toBe('string');
-        expect(item.axis.trim().length).toBeGreaterThan(0);
+        expect((item.axis ?? '').trim().length).toBeGreaterThan(0);
       });
 
       it('has a non-empty category string', () => {
         expect(typeof item.category).toBe('string');
-        expect(item.category.trim().length).toBeGreaterThan(0);
+        expect((item.category ?? '').trim().length).toBeGreaterThan(0);
       });
 
       it('has a non-empty criteria string', () => {

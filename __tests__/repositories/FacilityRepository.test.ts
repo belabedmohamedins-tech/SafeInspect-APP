@@ -6,7 +6,12 @@ beforeEach(() => {
   AsyncStorage.clear();
 });
 
-const facilityData = { name: 'Factory A', type: 'industrial' as const, city: 'Algiers', region: 'North' };
+const facilityData = {
+  projectName: 'Factory Alpha',
+  ownerName:   'SARL Algiers',
+  activity:    'Agro-alimentaire',
+  address:     '12 Rue des Industries, Alger',
+};
 
 describe('FacilityRepository.getAll', () => {
   it('returns empty array when nothing stored', async () => {
@@ -74,13 +79,13 @@ describe('FacilityRepository.add', () => {
 
 describe('FacilityRepository.update', () => {
   it('returns null for unknown id', async () => {
-    expect(await FacilityRepository.update('NOPE', { name: 'X' })).toBeNull();
+    expect(await FacilityRepository.update('NOPE', { projectName: 'X' })).toBeNull();
   });
 
   it('merges updatedData', async () => {
     const f = await FacilityRepository.add(facilityData);
-    const updated = await FacilityRepository.update(f.id, { name: 'Factory B' });
-    expect(updated?.name).toBe('Factory B');
+    const updated = await FacilityRepository.update(f.id, { projectName: 'Factory Beta' });
+    expect(updated?.projectName).toBe('Factory Beta');
   });
 
   it('sanitizes lat/lng on update', async () => {
