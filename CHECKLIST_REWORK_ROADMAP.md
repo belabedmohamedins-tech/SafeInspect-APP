@@ -73,7 +73,7 @@ Each session audited one thematic category across all 18 criteria files.
 
 ---
 
-### Session 4 — Fire Safety / Hazardous Substances ✅ Audited ✅ Partially Reworked
+### Session 4 — Fire Safety / Hazardous Substances ✅ Audited ✅ REWORK COMPLETE
 **Key findings:**
 - `Décret 04-409` mis-cited in **8 of 10** `gplCriteria.ts` criteria — should be `Décret 21-430`
 - `Décret 09-410` mis-cited in `GPL-03-03` and `UAB-AX1-04` — should be `Décret 09-335`
@@ -87,13 +87,13 @@ Each session audited one thematic category across all 18 criteria files.
 - [x] Fix `gplCriteria.ts`: replace `04-409` with `Décret 21-430` in GPL-01-01, GPL-01-02, GPL-02-01, GPL-02-02, GPL-03-01, GPL-03-02, GPL-04-01, GPL-04-02
 - [x] Fix `gplCriteria.ts` GPL-03-03: replace `09-410` with `Décret 09-335`
 - [x] Add service-tag date requirement to `GPL-03-02` extinguisher criterion
-- [ ] Fix `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
-- [ ] Split bundled extinguisher+housekeeping criteria into two separate items: `BLS-04-03`, `CWS-05-01`, `MCH-29-06`, `CAR-04-03`, `PRT-05-02`
-- [ ] Add service-tag date requirement to all remaining extinguisher criteria (BGN-08-01, UAB-AX7-04, BLS-04-03, CWS-05-01, MCH-29-06, CAR-04-03, PNT-04-03, PRT-05-02)
+- [x] Fix `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
+- [x] Split bundled extinguisher+housekeeping criteria into two separate items: `BLS-04-03`, `CWS-05-01`, `MCH-29-06`, `CAR-04-03`, `PRT-05-02`
+- [x] Add service-tag date requirement to all remaining extinguisher criteria (BGN-08-01, UAB-AX7-04, BLS-04-03, CWS-05-01, MCH-29-06, CAR-04-03, PNT-04-03, PRT-05-02)
 - [ ] Merge blacksmith compressed-gas criterion `BLS-04-02` into a shared module with GPL-02-01, adding full/empty separation and stock-ceiling requirement
-- [ ] Add electrical-safety module to `baseGeneralCriteria.ts`: grounding, panel condition, no exposed/spliced wiring (new criteria — zero currently exist)
-- [ ] Add fire-alarm/detection criterion to `baseGeneralCriteria.ts` (new — zero currently exist)
-- [ ] Add cross-verification criterion to `uabCriteria.ts`: physical fire-prevention measures must match what the risk study prescribes
+- [x] Add electrical-safety module to `baseGeneralCriteria.ts`: grounding, panel condition, no exposed/spliced wiring (BGN-08-03)
+- [x] Add fire-alarm/detection criterion to `baseGeneralCriteria.ts` (BGN-08-05)
+- [x] Add cross-verification criterion to `uabCriteria.ts`: physical fire-prevention measures must match what the risk study prescribes
 
 ---
 
@@ -225,13 +225,18 @@ These fixes span the whole library and should be done last, when content is stab
 
 ## Current Status (July 14, 2026)
 
-**Session 4 — gplCriteria.ts decree fixes: DONE** (commit b2df8db)
+**Session 4 — ALL rework tasks DONE** except one:
+- [x] gplCriteria.ts decree fixes (commit b2df8db)
+- [x] uabCriteria.ts UAB-AX1-04 decree fix
+- [x] Extinguisher splits + service-tag (all facilities)
+- [x] Electrical-safety criterion BGN-08-03 (already present in baseGeneralCriteria.ts)
+- [x] Fire-alarm/detection criterion BGN-08-05 (already present in baseGeneralCriteria.ts)
+- [x] UAB risk-study cross-verification criterion
+- [ ] Merge blacksmith `BLS-04-02` compressed-gas into shared module with GPL-02-01
 
-**Next actions (Session 4 remaining):**
-1. Fix `uabCriteria.ts` UAB-AX1-04: replace `09-410` with `Décret 09-335`
-2. Split bundled extinguisher+housekeeping in `BLS-04-03`, `CWS-05-01`, `MCH-29-06`, `CAR-04-03`, `PRT-05-02`
-3. Add service-tag date to all remaining extinguisher criteria
-4. Add electrical-safety + fire-alarm module to `baseGeneralCriteria.ts`
-5. Add UAB risk-study cross-verification criterion
-
-**Then: Session 7 — Remove 11 duplicate license criteria**
+**Next actions — Session 6 (Occupational Health):**
+1. Add machine-guard criterion to `blacksmithCriteria.ts`
+2. Add emergency-stop/interlock to carpentry, marble, printing machine-guard criteria
+3. Add noise-exposure measurement criterion (85 dBA, `numericField`) to blacksmith, UAB (carpentry & marble already done)
+4. Add `Décret 93-120` citation to medical-exam criteria in UAB, abattoir, couvoir, baseFoodCriteria
+5. Align `SPH-05-01` with `BFD-06-01/02`
