@@ -22,6 +22,16 @@ export const marbleCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    id: 'MRB-02-02',
+    axis: 'الموقع والتهيئة',
+    category: 'بيئية',
+    criteria: 'عدم تسبب الورشة في انتشار غبار الرخام خارج المنشأة وعدم إزعاج الجوار أو تلوث الطريق العام.',
+    legalReference: 'القانون 03-10 + المرسوم 06-141.',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
     id: 'MRB-03-01',
     axis: 'المياه المستعملة والغبار',
     category: 'بيئية',
