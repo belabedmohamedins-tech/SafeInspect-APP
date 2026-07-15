@@ -6,8 +6,8 @@ describe('gplCriteria', () => {
     expect(Array.isArray(gplCriteria)).toBe(true);
   });
 
-  it('contains exactly 10 criteria', () => {
-    expect(gplCriteria).toHaveLength(10);
+  it('contains exactly 11 criteria', () => {
+    expect(gplCriteria).toHaveLength(11);
   });
 
   it('has no duplicate IDs', () => {

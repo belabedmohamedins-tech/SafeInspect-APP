@@ -5,8 +5,8 @@ describe('printingCriteria', () => {
     expect(Array.isArray(printingCriteria)).toBe(true);
   });
 
-  it('should contain exactly 10 items', () => {
-    expect(printingCriteria).toHaveLength(10);
+  it('should contain exactly 11 items', () => {
+    expect(printingCriteria).toHaveLength(11);
   });
 
   it('should have no duplicate IDs', () => {

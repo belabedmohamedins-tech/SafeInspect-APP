@@ -33,11 +33,11 @@ describe('blacksmithCriteria', () => {
     });
   });
 
-  it('BLS-01-01 operating license is high severity doc', () => {
-    const item = blacksmithCriteria.find((c: InspectionItem) => c.id === 'BLS-01-01');
+  it('BLS-02-01 noise level is medium severity visual', () => {
+    const item = blacksmithCriteria.find((c: InspectionItem) => c.id === 'BLS-02-01');
     expect(item).toBeDefined();
-    expect(item!.severity).toBe('high');
-    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('medium');
+    expect(item!.controlType).toBe('visual');
   });
 
   it('gas storage cylinder criterion exists (CGS-01-01)', () => {
