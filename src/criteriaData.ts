@@ -135,7 +135,7 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'تربية الدواجن (03 حظائر)': updChecklist,
   'تربية الدواجن (حظيرتين)': updChecklist,
   'تربية الدواجن (حظيرة)': updChecklist,
-  // ── New activity types ──────────────────────────────────────────────────
+  // ── Facility activity strings (exact match from facilitiesData.ts) ──────
   'ورشة حدادة': blacksmithChecklist,
   'صناعة سياج': blacksmithChecklist,
   'ورشة نجارة': carpenteryChecklist,
@@ -149,6 +149,13 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'لوازم مدرسية ومكاتب': printingChecklist,
   'وحدة تخزين الزيتون والخضر': produceStorageChecklist,
   'تعبئة مواد شبه صيدلانية': semiPharmaChecklist,
+  // ── Bug-fix aliases: exact strings from facilitiesData.ts that previously
+  //    had no matching key and silently fell back to baseGeneralCriteria ────
+  'ميكانيك السيارات': mechanicChecklist,                                    // was 'ميكانيك سيارات' (missing ال)
+  'ورشة حدادة (صناعة السياج)': blacksmithChecklist,                        // variant with parenthetical
+  'ورشة نجارة الألمنيوم': carpenteryChecklist,                              // was 'ورشة ألمنيوم'
+  'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب': printingChecklist,  // full facility name
+  'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)': slaughterhouseSmallChecklist, // medium slaughterhouse (const-001)
 };
 
 // ─── Safe checklist lookup with unknown-activity guard ───────────────────────
