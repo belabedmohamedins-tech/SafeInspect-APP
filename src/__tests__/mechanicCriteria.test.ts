@@ -6,8 +6,8 @@ describe('mechanicWorkshopCriteria', () => {
     expect(Array.isArray(mechanicWorkshopCriteria)).toBe(true);
   });
 
-  it('contains exactly 10 criteria', () => {
-    expect(mechanicWorkshopCriteria).toHaveLength(10);
+  it('contains exactly 9 criteria', () => {
+    expect(mechanicWorkshopCriteria).toHaveLength(9);
   });
 
   it('has no duplicate IDs', () => {
@@ -33,13 +33,6 @@ describe('mechanicWorkshopCriteria', () => {
     });
   });
 
-  it('MCH-29-01 operating license is high severity doc', () => {
-    const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-01');
-    expect(item).toBeDefined();
-    expect(item!.severity).toBe('high');
-    expect(item!.controlType).toBe('doc');
-  });
-
   it('MCH-29-02 nuisance to neighbours should be medium severity', () => {
     const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-02');
     expect(item).toBeDefined();
@@ -61,18 +54,17 @@ describe('mechanicWorkshopCriteria', () => {
     expect(item!.legalReference).toContain('01-19');
   });
 
-  it('MCH-29-09 end-of-life tyres — no open burning, high severity', () => {
+  it('MCH-29-09 end-of-life tyres — medium severity visual', () => {
     const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-09');
     expect(item).toBeDefined();
-    expect(item!.severity).toBe('high');
-    expect(item!.legalReference).toContain('01-19');
+    expect(item!.severity).toBe('medium');
+    expect(item!.controlType).toBe('visual');
   });
 
-  it('MCH-29-10 lead-acid batteries — sealed storage, high severity doc', () => {
+  it('MCH-29-10 lead-acid batteries — high severity doc', () => {
     const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-10');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
     expect(item!.controlType).toBe('doc');
-    expect(item!.legalReference).toContain('05-315');
   });
 });

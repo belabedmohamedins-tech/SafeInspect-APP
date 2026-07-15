@@ -6,8 +6,8 @@ describe('carpenteryCriteria', () => {
     expect(Array.isArray(carpenteryCriteria)).toBe(true);
   });
 
-  it('contains exactly 10 criteria', () => {
-    expect(carpenteryCriteria).toHaveLength(10);
+  it('contains exactly 11 criteria', () => {
+    expect(carpenteryCriteria).toHaveLength(11);
   });
 
   it('has no duplicate IDs', () => {
@@ -37,21 +37,31 @@ describe('carpenteryCriteria', () => {
     const measurement = carpenteryCriteria.filter(
       (i: InspectionItem) => i.controlType === 'measurement'
     );
-    // measurement items must have numericField if they exist
     measurement.forEach((item: InspectionItem) => {
-      // only assert if the item actually has a numericField defined
       if (item.numericField !== undefined) {
         expect(item.numericField).toBeDefined();
       }
     });
-    // just ensure no crash — measurement items are optional
     expect(measurement.length).toBeGreaterThanOrEqual(0);
   });
 
-  it('CAR-01-01 operating license is high severity doc', () => {
-    const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-01-01');
+  it('CAR-02-01 ventilation is high severity visual', () => {
+    const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-02-01');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('visual');
+  });
+
+  it('CAR-04-03 fire extinguisher check is high severity visual', () => {
+    const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-04-03');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('visual');
+  });
+
+  it('CAR-05-02 dust measurement is doc', () => {
+    const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-05-02');
+    expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
   });
 });

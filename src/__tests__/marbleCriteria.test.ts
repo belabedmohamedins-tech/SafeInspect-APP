@@ -5,8 +5,8 @@ describe('marbleCriteria', () => {
     expect(Array.isArray(marbleCriteria)).toBe(true);
   });
 
-  it('contains exactly 10 criteria', () => {
-    expect(marbleCriteria).toHaveLength(10);
+  it('contains exactly 11 criteria', () => {
+    expect(marbleCriteria).toHaveLength(11);
   });
 
   it('has no duplicate IDs', () => {
@@ -30,5 +30,19 @@ describe('marbleCriteria', () => {
     marbleCriteria.forEach(item => {
       expect(['high', 'medium', 'low']).toContain(item.severity);
     });
+  });
+
+  it('MRB-03-02 has numericField with MES unit', () => {
+    const item = marbleCriteria.find(i => i.id === 'MRB-03-02');
+    expect(item).toBeDefined();
+    expect(item!.numericField).toBeDefined();
+    expect(item!.numericField!.unit).toBe('mg/L');
+    expect(item!.numericField!.max).toBe(35);
+  });
+
+  it('MRB-05-05 silica dust measurement is doc', () => {
+    const item = marbleCriteria.find(i => i.id === 'MRB-05-05');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
   });
 });

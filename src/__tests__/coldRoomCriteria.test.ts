@@ -6,8 +6,8 @@ describe('coldRoomSpecificCriteria', () => {
     expect(Array.isArray(coldRoomSpecificCriteria)).toBe(true);
   });
 
-  it('contains exactly 7 criteria', () => {
-    expect(coldRoomSpecificCriteria).toHaveLength(7);
+  it('contains exactly 8 criteria', () => {
+    expect(coldRoomSpecificCriteria).toHaveLength(8);
   });
 
   it('has no duplicate IDs', () => {
@@ -16,8 +16,7 @@ describe('coldRoomSpecificCriteria', () => {
     expect(unique.size).toBe(ids.length);
   });
 
-  it('all IDs follow the CLD-1X-XX pattern', () => {
-    // IDs use CLD-17-XX and CLD-18-XX (HACCP axis added in Phase 3)
+  it('all IDs follow the CLD-1X-XX or CLD-19-XX pattern', () => {
     coldRoomSpecificCriteria.forEach((c: InspectionItem) => {
       expect(c.id).toMatch(/^CLD-1\d-\d{2}$/);
     });
@@ -83,7 +82,6 @@ describe('coldRoomSpecificCriteria', () => {
     expect(item!.numericField!.warningMax).toBe(7);
   });
 
-  // CLD-17-07 was removed in Phase 3 (traceability moved to baseFoodCriteria BFD-08-01)
   it('CLD-17-07 is removed (deduped to baseFoodCriteria)', () => {
     const item = coldRoomSpecificCriteria.find(
       (c: InspectionItem) => c.id === 'CLD-17-07'
@@ -94,6 +92,15 @@ describe('coldRoomSpecificCriteria', () => {
   it('HACCP criterion CLD-18-01 exists and is a doc', () => {
     const item = coldRoomSpecificCriteria.find(
       (c: InspectionItem) => c.id === 'CLD-18-01'
+    );
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+  });
+
+  it('EIA criterion CLD-19-01 exists and is high severity doc', () => {
+    const item = coldRoomSpecificCriteria.find(
+      (c: InspectionItem) => c.id === 'CLD-19-01'
     );
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');

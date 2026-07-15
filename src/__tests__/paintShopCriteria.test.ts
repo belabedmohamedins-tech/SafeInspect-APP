@@ -55,9 +55,9 @@ describe('paintShopCriteria', () => {
     });
   });
 
-  it('all items are high severity (VOC + fire risk)', () => {
+  it('majority of items are high severity (VOC + fire risk)', () => {
     const highCount = paintShopCriteria.filter((c: InspectionItem) => c.severity === 'high').length;
-    expect(highCount).toBe(9);
+    expect(highCount).toBe(8);
   });
 
   it('covers expected axes', () => {
@@ -78,5 +78,12 @@ describe('paintShopCriteria', () => {
     const contractItem = paintShopCriteria.find((c: InspectionItem) => c.id === 'PNT-03-02');
     expect(contractItem).toBeDefined();
     expect(contractItem!.controlType).toBe('doc');
+  });
+
+  it('PNT-02-03 VOC measurement criterion is medium severity doc', () => {
+    const item = paintShopCriteria.find((c: InspectionItem) => c.id === 'PNT-02-03');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('medium');
+    expect(item!.controlType).toBe('doc');
   });
 });

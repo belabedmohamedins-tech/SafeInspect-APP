@@ -7,8 +7,8 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(slaughterhouseSmallCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 11 items', () => {
-    expect(slaughterhouseSmallCriteria).toHaveLength(11);
+  it('has exactly 12 items', () => {
+    expect(slaughterhouseSmallCriteria).toHaveLength(12);
   });
 
   it('all items have required InspectionItem fields', () => {
@@ -80,7 +80,7 @@ describe('slaughterhouseSmallCriteria', () => {
     const item = slaughterhouseSmallCriteria.find((i) => i.id === 'SLH-05-04');
     expect(item).toBeDefined();
     expect(item!.category).toBe('بيئية');
-    expect(item!.controlType).toBe('visual');
+    expect(item!.controlType).toBe('measurement');
   });
 
   it('contains SLH-05-05 (solid waste contract)', () => {
@@ -131,6 +131,14 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');
     expect(item!.legalReference).toContain('03-478');
+  });
+
+  it('contains SLH-08-01 (EIA trigger)', () => {
+    const item = slaughterhouseSmallCriteria.find((i) => i.id === 'SLH-08-01');
+    expect(item).toBeDefined();
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
   });
 
   it('does NOT contain removed SLH-05-10 (pest dedup)', () => {
