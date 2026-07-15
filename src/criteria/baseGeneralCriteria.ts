@@ -375,4 +375,15 @@ export const baseGeneralCriteria: InspectionItem[] = [
       upperLimit: true,
     },
   },
+  {
+    // Phase 9.3: PPE-use training — upgrades Session 6 audit gap from best-practice to [LOI]-grounded
+    id: 'BGN-09-02',
+    axis: 'الضجيج والانبعاثات البيئية',
+    category: 'سلامة',
+    criteria: 'التحقق من أن العمال المعرضين لمخاطر مهنية (مواد كيميائية، ضجيج، أتربة، إلخ) تلقّوا تعليمات وتدريبًا موثقًا على الاستخدام الصحيح لوسائل الحماية الفردية (EPI) المخصصة لهم، وذلك بموجب سجل تدريب موقَّع أو محضر تكوين.',
+    legalReference: 'المرسوم التنفيذي 02-427 المؤرخ في 7 ديسمبر 2002 (شروط تنظيم تعليم وإعلام وتكوين العمال في مجال الوقاية من أخطار المهنة) — يُلزم صاحب العمل بتوفير التكوين العملي والتعليمات الكافية لكل عامل معرض لخطر مهني.',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];
