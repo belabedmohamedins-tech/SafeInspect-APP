@@ -3,6 +3,21 @@ export type Severity = 'low' | 'medium' | 'high';
 export type ControlType = 'visual' | 'doc' | 'test' | 'measurement';
 
 /**
+ * T0.6 — SeverityLevel const enum.
+ * Use this in new code (services, utils, tests) for type-safe severity comparisons.
+ * Existing criteria files continue using the Severity string-literal type — both are
+ * compatible since TS const enums compile to their literal values.
+ *
+ * Numeric values align with the scoring model in scoringUtils.ts:
+ *   high=3, medium=2, low=1
+ */
+export const enum SeverityLevel {
+  Low    = 'low',
+  Medium = 'medium',
+  High   = 'high',
+}
+
+/**
  * Compliance status for a single checklist item.
  *
  * - 'compliant'        — criterion met
