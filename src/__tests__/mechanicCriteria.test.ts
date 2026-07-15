@@ -6,8 +6,8 @@ describe('mechanicWorkshopCriteria', () => {
     expect(Array.isArray(mechanicWorkshopCriteria)).toBe(true);
   });
 
-  it('contains exactly 7 criteria', () => {
-    expect(mechanicWorkshopCriteria).toHaveLength(7);
+  it('contains exactly 10 criteria', () => {
+    expect(mechanicWorkshopCriteria).toHaveLength(10);
   });
 
   it('has no duplicate IDs', () => {
@@ -44,7 +44,6 @@ describe('mechanicWorkshopCriteria', () => {
     const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-02');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('medium');
-    // controlType is measurement (noise measurement criterion)
     expect(item!.controlType).toBe('measurement');
   });
 
@@ -52,5 +51,28 @@ describe('mechanicWorkshopCriteria', () => {
     const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-03');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('visual');
+  });
+
+  it('MCH-29-08 brake fluid waste — high severity doc', () => {
+    const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-08');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('doc');
+    expect(item!.legalReference).toContain('01-19');
+  });
+
+  it('MCH-29-09 end-of-life tyres — no open burning, high severity', () => {
+    const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-09');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+    expect(item!.legalReference).toContain('01-19');
+  });
+
+  it('MCH-29-10 lead-acid batteries — sealed storage, high severity doc', () => {
+    const item = mechanicWorkshopCriteria.find((c: InspectionItem) => c.id === 'MCH-29-10');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('doc');
+    expect(item!.legalReference).toContain('05-315');
   });
 });
