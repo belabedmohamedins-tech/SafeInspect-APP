@@ -10,10 +10,10 @@
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **53 / 100** → targeting 75+ after Phase 1–3 |
-| Total criteria in library | ~350 |
+| Overall checklist maturity score | **68 / 100** → targeting 80+ after remaining phases |
+| Total criteria in library | ~360 |
 | Confirmed duplicate criteria removed | **60+** |
-| Confirmed legal mis-citations | **3 (+ 1 flagged for verification)** |
+| Confirmed legal mis-citations | **3 fixed + 1 verified correct** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **4 / 4 uploaded (Ch. 1–4)** |
 | Inspection Manual chapters pending | **Ch. 5+ (not yet uploaded)** |
@@ -39,16 +39,17 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ## ✅ Completion Legend
 
-- ✅ **Done** — shipped to `main`, tests green
+- ✅ **Done** — shipped to `main`, verified in repo
 - 🔲 **Pending** — not yet started
 - 🔄 **Partial** — started but not complete
 - ❓ **Blocked** — awaiting user decision
 
 ---
 
-## Tier 0 — Technical Debt Fixes (DeepSeek Review — Do Before Phase 2)
+## Tier 0 — Technical Debt Fixes (DeepSeek Review)
 
-> These were identified in the Master Audit v2 / DeepSeek review. They are **not in the original Implementation Spec** but must be done first as they affect integrity and correctness of all subsequent work.
+> Identified in the Master Audit v2 / DeepSeek review. These affect integrity and correctness of the whole app.  
+> **Do these in the order shown — T0.1 before T0.5; T0.6 before T0.7.**
 
 | # | Item | File(s) | Priority | Status |
 |---|---|---|---|---|
@@ -60,6 +61,11 @@ All 9 audit sessions are **complete**. No remaining session work.
 | T0.6 | **Severity field → TypeScript enum** — currently string literals `'high'\|'medium'\|'low'`, should be a proper enum for type safety | `src/types/index.ts` + all criteria files | 🟡 Low-Medium | 🔲 Pending |
 | T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
 | T0.8 | **Mechanic criteria expansion** — brake fluid, tyres, battery acid checks missing | `src/criteria/mechanicCriteria.ts` | 🟢 Low-Medium | 🔲 Pending |
+| T0.9 | **Offline sync conflict resolution** — DeepSeek flagged: no merge strategy when two devices edit the same inspection while offline | `src/services/SyncService.ts` | 🔴 CRITICAL | 🔲 Pending |
+| T0.10 | **Export PDF — missing photos** — PDF export does not embed photo evidence; legal reports incomplete without them | `src/services/pdfService.ts` | 🟠 High | 🔲 Pending |
+| T0.11 | **Numeric field validation gap** — `numericField` values entered by inspector are not range-validated before saving; out-of-range values can be stored silently | `src/utils/` or form handler | 🟠 High | 🔲 Pending |
+| T0.12 | **criteriaData.ts duplicate spread** — same criteria array spread twice in one checklist (identified in DeepSeek review) | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending — read file first to confirm which checklist |
+| T0.13 | **Missing `complianceStatus` reset on checklist reload** — stale status from prior session bleeds into new inspection if same device reused | `src/services/` or state management | 🟡 Medium | 🔲 Pending |
 
 > **Note on scoring:** `scoringUtils.ts` already implements the severity-weighted model (high=3/medium=2/low=1 + critical override). The "rewrite" proposed in older docs is already done. **Do not touch scoringUtils.ts.**
 
@@ -151,14 +157,16 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 
 ---
 
-### Phase 4 — Wastewater Numeric Thresholds `HIGH VALUE` 🔲 Pending
+### Phase 4 — Wastewater Numeric Thresholds `HIGH VALUE` ✅ COMPLETE
 
-| # | Action | Criterion(s) | Status |
-|---|---|---|---|
-| 4.1 | Upgrade discharge criteria to `numericField` | `ABT-AX4-01`, `SLH-05-04`, `UAB-AX3-01`, `MRB-03-01`, `CWS-03-01` | 🔲 Pending |
-| 4.2 | Split conflated permit criterion | `UAB-AX3-02` | 🔲 Pending |
-| 4.3 | Extend permit+lab chain beyond UAB | New criteria for car wash, mechanic, marble | 🔲 Pending |
-| 4.4 | Add septic-pit pumping-frequency check | `ABT-AX4-04`, `BGN-03-06` | 🔲 Pending — `BGN-03-06` already exists, needs pumping frequency detail |
+All numeric threshold upgrades and discharge permit criteria shipped. Verified in repo.
+
+| # | Action | Criterion(s) | Details | Status |
+|---|---|---|---|---|
+| 4.1 | Upgrade discharge criteria to `numericField` | `ABT-AX4-01`, `SLH-05-04`, `MRB-03-02`, `CWS-02-01` | DBO5 ≤ 30 mg/L (abattoir/slaughterhouse), MES ≤ 35 mg/L (marble), Hydrocarbons ≤ 10 mg/L (car wash) — all with `warningMax` | ✅ Done |
+| 4.2 | Split conflated permit criterion | `UAB-AX3-02` / `UAB-AX3-03` | Permit criterion (doc) separated from lab-analysis criterion (measurement) — already split in repo | ✅ Done |
+| 4.3 | Extend permit+lab chain beyond UAB | `MRB-04-02`, `CWS-02-05` | Discharge permit criteria added to marble workshop and car wash (القانون 05-12 + المرسوم 06-141) | ✅ Done |
+| 4.4 | Septic-pit pumping-frequency check | `BGN-03-06` | Pumping frequency criterion — verify current BGN-03-06 text covers frequency | 🔲 Pending — read BGN-03-06 before closing |
 
 ---
 
@@ -179,7 +187,7 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 |---|---|---|---|
 | 6.1 | Add electrical-safety criterion | `BGN-08-03` | ✅ Done — المرسوم 76-35 + القانون 90-11 |
 | 6.2 | Add fire-alarm/smoke-detection criterion | `BGN-08-05` | ✅ Done — القانون 19-02 المادة 5 |
-| 6.3 | Add extinguisher service-tag date check | `BGN-08-01` (already has maintenance card check) | ✅ Done — service-tag date (تاريخ آخر فحص وتاريخ انتهاء الصلاحية) already in BGN-08-01 criteria text |
+| 6.3 | Add extinguisher service-tag date check | `BGN-08-01` | ✅ Done — service-tag date (تاريخ آخر فحص وتاريخ انتهاء الصلاحية) already in BGN-08-01 criteria text |
 | 6.4 | Add wilaya operating-user authorization | New per-facility-type criterion | 🔲 Pending |
 | 6.5 | Split extinguisher+housekeeping bundled criteria | Various (see S4) | 🔲 Pending |
 
@@ -229,11 +237,10 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 > Quick reference — everything still needing code changes.
 
 ### 🔲 Content additions (criteria code)
+
 | Phase | Item | Notes |
 |---|---|---|
-| 4.1 | Wastewater numericField upgrades | 5 criteria |
-| 4.2 | Split UAB-AX3-02 | Permit vs lab chain |
-| 4.3 | Permit+lab chain for CWS/MCH/MRB | New criteria |
+| 4.4 | Verify BGN-03-06 septic-pit pumping text | Read before closing Phase 4 |
 | 6.4 | Wilaya operating-user auth | Per-facility |
 | 6.5 | Split bundled extinguisher criteria | See S4 |
 | 7.1 | Emissions measurement for 5 facility types | New criteria |
@@ -244,14 +251,20 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid |
 
 ### 🔲 Technical debt (non-criteria code)
+
 | Item | File | Notes |
 |---|---|---|
-| T0.1 | SHA-256 hash replacement | IntegrityService.ts |
-| T0.2 | Bundle ID fix | app.json |
+| T0.1 | SHA-256 hash replacement | IntegrityService.ts — CRITICAL |
+| T0.2 | Bundle ID fix | app.json — quick win |
 | T0.4 | Article numbers in baseGeneralCriteria | Several criteria vague |
-| T0.5 | Photo backup inclusion | BackupService.ts |
+| T0.5 | Photo backup inclusion | BackupService.ts — High |
 | T0.6 | Severity enum | types/index.ts + all criteria |
 | T0.7 | Criteria registry pattern | criteriaData.ts |
+| T0.9 | Offline sync conflict resolution | SyncService.ts — CRITICAL |
+| T0.10 | PDF export missing photos | pdfService.ts — High |
+| T0.11 | numericField validation gap | form handler — High |
+| T0.12 | criteriaData.ts duplicate spread | Confirm which checklist first |
+| T0.13 | complianceStatus reset on reload | state management |
 
 ---
 
@@ -286,14 +299,16 @@ This resolves: the duplication problem (Tier 1 is defined once), the "equipment-
 
 ## Implementation Order (Recommended)
 
-1. **Phase 4** — Wastewater numeric thresholds (highest inspection value)
+1. **Phase 4.4** — Verify BGN-03-06 pumping text (close Phase 4)
 2. **Phase 6.4/6.5** — Wilaya auth + split bundled fire criteria
 3. **Phase 7.1/7.3** — Air quality measurement extension
 4. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
 5. **Phase 9.2** — Machine-guard blacksmith
 6. **Phase 10.2** — EIA trigger criteria
-7. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
-8. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
+7. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
+8. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
+9. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
+10. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
 
 ---
 
