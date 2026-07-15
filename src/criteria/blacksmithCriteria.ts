@@ -56,16 +56,18 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 6.5: split — extinguisher service-tag check only (exits covered by BGN-08-02)
     id: 'BLS-04-04',
     axis: 'السلامة المهنية',
     category: 'سلامة',
-    criteria: 'توفر مطفأة حريق واحدة على الأقل بحالة صالحة مع التحقق من بطاقة الصيانة السنوية (تاريخ آخر فحص وتاريخ انتهاء الصلاحية)، ومخارج طوارئ واضحة التسمية.',
-    legalReference: 'القانون 19-02 (الوقاية من الحريق).',
+    criteria: 'توفر مطفأة حريق واحدة على الأقل (نوع بودرة ABC أو CO2 مناسب لبيئة اللحام والمعادن) بحالة صالحة، مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية).',
+    legalReference: 'القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية في المنشآت الصناعية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 9.2: machine-guard criterion for rotating cutting/grinding equipment
     id: 'BLS-04-05',
     axis: 'السلامة المهنية',
     category: 'سلامة',
@@ -78,7 +80,7 @@ export const blacksmithCriteria: InspectionItem[] = [
   {
     id: 'BLS-04-06',
     axis: 'السلامة المهنية',
-    category: 'سلامة',
+    category: 'بيئية',
     criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل بصفة دورية (جهاز قياس معتمد)، والتحقق من عدم تجاوز الحد الأقصى المسموح به (85 ديسيبل)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة.',
     legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 90-11.',
     severity: 'medium',
