@@ -10,9 +10,9 @@
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **72 / 100** → targeting 80+ after remaining phases |
-| Total criteria in library | ~361 |
-| Confirmed duplicate criteria removed | **62+** |
+| Overall checklist maturity score | **68 / 100** → targeting 80+ after remaining phases |
+| Total criteria in library | ~360 |
+| Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations | **3 fixed + 1 verified correct** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **4 / 4 uploaded (Ch. 1–4)** |
@@ -43,6 +43,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 - 🔲 **Pending** — not yet started
 - 🔄 **Partial** — started but not complete
 - ❓ **Blocked** — awaiting user decision
+- 🟡 **CURRENT** — actively being worked now
 
 ---
 
@@ -105,7 +106,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | `bakeryCriteria.ts` | `BAK-10-08` | Bakery-specific (cash→dough pattern) — NOT a duplicate | ✅ Keep |
 | `bakeryCriteria.ts` | `BAK-10-09` | Pest control | ✅ Removed (S9) |
 | `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | All cold-room-specific — NOT duplicates | ✅ Keep |
-| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded by `BGN-07-*` | ✅ Removed (Phase 8.4) |
+| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded by `BGN-07-*` | 🔲 Pending (Phase 8.4) |
 | `carWashCriteria.ts` | `CWS-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
 | `marbleCriteria.ts` | `MRB-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
 | `paintShopCriteria.ts` | `PNT-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
@@ -162,38 +163,38 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 6.1 | Add electrical-safety criterion | `BGN-08-03` | ✅ Done |
 | 6.2 | Add fire-alarm/smoke-detection criterion | `BGN-08-05` | ✅ Done |
 | 6.3 | Add extinguisher service-tag date check | `BGN-08-01` | ✅ Done |
-| 6.4 | Add Wilaya operating-user authorization (D1) | `BGN-08-06` | ✅ Done |
-| 6.5 | Split extinguisher+housekeeping bundled criteria | `BGN-08-01` already separate from BGN-08-02 | ✅ Done — split already in place |
+| 6.4 | Add wilaya operating-user authorization | New per-facility-type criterion | ✅ Done |
+| 6.5 | Split extinguisher+housekeeping bundled criteria | `CAR-04-03` / `CAR-04-04` (carpentry split done) | ✅ Done |
 
 ---
 
-### Phase 7 — Air Quality Measurement Extension `MEDIUM` 🔲 Pending
+### Phase 7 — Air Quality Measurement Extension `MEDIUM` 🔄 Partial
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 7.1 | Add periodic emissions measurement criterion | New `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | 🔲 Pending |
+| 7.1 | **🟡 CURRENT** — Add periodic emissions measurement criterion | New `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | 🟡 In Progress |
 | 7.2 | Resolve Décret 06-02 vs 06-138 benchmark | `UAB-AX5-02` | ✅ Done (Phase 1.6) |
 | 7.3 | Add buffer-distance numeric minimum | `UPD-AX2-01` or similar | 🔲 Pending |
 
 ---
 
-### Phase 8 — Pest Control Consolidation `MEDIUM` ✅ COMPLETE
+### Phase 8 — Pest Control Consolidation `MEDIUM` 🔄 Partial
 
 | # | Action | Status |
 |---|---|---|
-| 8.1 | Consolidate to one pest module (`BGN-07-01…05`) | ✅ Done |
-| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅; `BAK-10-09` ✅; `BFD-07-01/02` ✅ |
+| 8.1 | Consolidate to one pest module (`BGN-07-01–05`) | ✅ Done |
+| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅; `BAK-10-09` ✅; `BFD-07-01/02` 🔲 Pending |
 | 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | ✅ Confirmed |
-| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | ✅ Done |
+| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | 🔲 Pending |
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` ✅ COMPLETE
+### Phase 9 — Occupational Health `MEDIUM` 🔄 Partial
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
 | 9.1 | Add noise exposure measurement | `BGN-09-01` | ✅ Done |
-| 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | ✅ Done — already in repo |
+| 9.2 | Add machine-guard criterion for blacksmith | New: `BLS-AX06-01` | 🔲 Pending |
 
 ---
 
@@ -212,8 +213,10 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | Phase | Item | Notes |
 |---|---|---|
-| 7.1 | Emissions measurement for 5 facility types | New criteria per file: BLS/CAR/MRB/PNT/PRT |
+| **7.1** | **🟡 CURRENT** — Emissions measurement for 5 facility types | `BLS`, `CAR`, `MRB`, `PNT`, `PRT` — new criteria per file |
 | 7.3 | Buffer-distance numeric (UPD) | numericField |
+| 8.4 | Remove BFD-07-01/02 | After BGN-07-* confirmed |
+| 9.2 | Machine-guard BLS-AX06-01 | Blacksmith |
 | 10.2 | EIA trigger criteria | Per applicable facility types |
 | T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid |
 
@@ -264,12 +267,16 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 
 ## Implementation Order (Recommended)
 
-1. **Phase 7.1/7.3** — Air quality measurement extension (5 facility types + UPD buffer distance)
-2. **Phase 10.2** — EIA trigger criteria
-3. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
-4. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
-5. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
-6. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
+1. ✅ ~~Phase 6.4/6.5~~ — Wilaya auth + split bundled fire criteria — **DONE**
+2. **🟡 Phase 7.1 — CURRENT** — Emissions measurement criteria (BLS, CAR, MRB, PNT, PRT)
+3. **Phase 7.3** — Buffer-distance numeric (UPD)
+4. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
+5. **Phase 9.2** — Machine-guard blacksmith
+6. **Phase 10.2** — EIA trigger criteria
+7. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
+8. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
+9. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
+10. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
 
 ---
 
@@ -278,5 +285,5 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 - **Scoring engine** (`src/utils/scoringUtils.ts`) — severity-weighted model already correct. **Do not touch.**
 - **`numericField` schema** — proven in `baseFoodCriteria`. Reuse, don't rebuild.
 - **UAB's existing AX-series criteria** — best-designed content in the library. Preserve as the model.
-- **`BGN-07-01…05` pest module** — technically correct. Consolidate around it.
+- **`BGN-07-01–05` pest module** — technically correct. Consolidate around it.
 - **Décret 06-198 citations** — most precisely cited instrument in the codebase. Leave as-is.
