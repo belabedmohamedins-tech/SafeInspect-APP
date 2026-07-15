@@ -106,7 +106,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | `bakeryCriteria.ts` | `BAK-10-08` | Bakery-specific (cash→dough pattern) — NOT a duplicate | ✅ Keep |
 | `bakeryCriteria.ts` | `BAK-10-09` | Pest control | ✅ Removed (S9) |
 | `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | All cold-room-specific — NOT duplicates | ✅ Keep |
-| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded by `BGN-07-*` | 🔲 Pending (Phase 8.4) |
+| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded by `BGN-07-*` | ✅ Done (Phase 8.4) |
 | `carWashCriteria.ts` | `CWS-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
 | `marbleCriteria.ts` | `MRB-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
 | `paintShopCriteria.ts` | `PNT-01-01` | Pure restate of BGN-01-01 | ✅ Removed |
@@ -168,33 +168,33 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 7 — Air Quality Measurement Extension `MEDIUM` 🔄 Partial
+### Phase 7 — Air Quality Measurement Extension `MEDIUM` ✅ COMPLETE
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 7.1 | **🟡 CURRENT** — Add periodic emissions measurement criterion | New `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | 🟡 In Progress |
+| 7.1 | Add periodic emissions measurement criterion | `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | ✅ Done |
 | 7.2 | Resolve Décret 06-02 vs 06-138 benchmark | `UAB-AX5-02` | ✅ Done (Phase 1.6) |
-| 7.3 | Add buffer-distance numeric minimum | `UPD-AX2-01` or similar | 🔲 Pending |
+| 7.3 | Add buffer-distance numeric minimum | `UPD-AX2-01` — upgraded to `measurement` + `numericField` (min 500 m, warningMin 700 m) | ✅ Done |
 
 ---
 
-### Phase 8 — Pest Control Consolidation `MEDIUM` 🔄 Partial
+### Phase 8 — Pest Control Consolidation `MEDIUM` ✅ COMPLETE
 
 | # | Action | Status |
 |---|---|---|
 | 8.1 | Consolidate to one pest module (`BGN-07-01–05`) | ✅ Done |
-| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅; `BAK-10-09` ✅; `BFD-07-01/02` 🔲 Pending |
+| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅; `BAK-10-09` ✅; `BFD-07-01/02` ✅ |
 | 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | ✅ Confirmed |
-| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | 🔲 Pending |
+| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | ✅ Done |
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` 🔄 Partial
+### Phase 9 — Occupational Health `MEDIUM` ✅ COMPLETE
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
 | 9.1 | Add noise exposure measurement | `BGN-09-01` | ✅ Done |
-| 9.2 | Add machine-guard criterion for blacksmith | New: `BLS-AX06-01` | 🔲 Pending |
+| 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | ✅ Done |
 
 ---
 
@@ -213,12 +213,8 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | Phase | Item | Notes |
 |---|---|---|
-| **7.1** | **🟡 CURRENT** — Emissions measurement for 5 facility types | `BLS`, `CAR`, `MRB`, `PNT`, `PRT` — new criteria per file |
-| 7.3 | Buffer-distance numeric (UPD) | numericField |
-| 8.4 | Remove BFD-07-01/02 | After BGN-07-* confirmed |
-| 9.2 | Machine-guard BLS-AX06-01 | Blacksmith |
-| 10.2 | EIA trigger criteria | Per applicable facility types |
-| T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid |
+| 10.2 | EIA trigger criteria | Per applicable facility types — read existing `UPD-AX10-01` as the model |
+| T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid — read `mechanicCriteria.ts` first |
 
 ### 🔲 Technical debt (non-criteria code)
 
@@ -267,16 +263,12 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 
 ## Implementation Order (Recommended)
 
-1. ✅ ~~Phase 6.4/6.5~~ — Wilaya auth + split bundled fire criteria — **DONE**
-2. **🟡 Phase 7.1 — CURRENT** — Emissions measurement criteria (BLS, CAR, MRB, PNT, PRT)
-3. **Phase 7.3** — Buffer-distance numeric (UPD)
-4. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
-5. **Phase 9.2** — Machine-guard blacksmith
-6. **Phase 10.2** — EIA trigger criteria
-7. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
-8. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
-9. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
-10. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
+1. **🟡 Phase 10.2 — CURRENT** — EIA trigger criteria for applicable facility types
+2. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
+3. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
+4. **Tier 0 criteria** — T0.8 (mechanic expansion)
+5. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
+6. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern)
 
 ---
 
