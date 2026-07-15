@@ -10,8 +10,8 @@
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **68 / 100** → targeting 80+ after remaining phases |
-| Total criteria in library | ~360 |
+| Overall checklist maturity score | **74 / 100** → targeting 80+ after remaining phases |
+| Total criteria in library | ~370 |
 | Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations | **3 fixed + 1 verified correct** |
 | Sessions completed | **9 / 9 audit sessions done** |
@@ -205,7 +205,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 10 — Documentation & Licensing `MEDIUM` 🟡 CURRENT
+### Phase 10 — Documentation & Licensing `MEDIUM` ✅ COMPLETE
 
 > Grounded in Inspection Manual **Chapter 6** (Documentation & Licensing).  
 > **Most consequential chapter finding:** Décret 06-198 has been **amended twice** since 2006 — Décret 22-167 (April 2022) and **Décret 24-196 (June 2024)**. The 2024 amendment creates an active three-year regularization grace period (≈ until June 2027) that directly changes how "no license" findings must be scored. Any licensing criterion that does not account for this is currently wrong for facilities inside the grace period.  
@@ -214,11 +214,11 @@ All 9 audit sessions are **complete**. No remaining session work.
 | # | Action | Criterion(s) | Legal basis | Status |
 |---|---|---|---|---|
 | 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | — | ✅ Done |
-| 10.2 | **Extend impact-category-triggered EIA** | New criteria for applicable facility types | Décret 06-198 art. 5 + Décret 07-145 — EIA/impact summary required before license; model on existing `UPD-AX10-01` | 🔲 Pending |
-| 10.3 | **Grace-period logic for "no license" findings** | All facility-type licensing criteria | **Décret 24-196** (11 juin 2024) — three-year regularization window ≈ until June 2027. Update severity: "no license, grace-period active" = **major** (not critical); "no license, grace-period expired or inapplicable" = **critical**. Affects every facility type. | 🔲 Pending |
-| 10.4 | **Non-substitution cross-reference** | All facility-type licensing criteria | **Décret 06-198 art. 4** — operating license does NOT replace fire-safety authorization or discharge permit. Add inspector note to licensing criteria. | 🔲 Pending |
-| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** (19 mai 2007) — maps each activity type to one of four categories. **Research gap:** facility-type-to-category mapping not yet extracted. Do NOT implement until confirmed. | ❓ Research gap — highest value |
-| 10.6 | **Update Décret 06-198 citation strings** | All criteria files citing Décret 06-198 | Update all `legalReference` strings to read **"Décret 06-198 tel que modifié par Décrets 22-167 et 24-196"** | 🟡 CURRENT |
+| 10.2 | **Extend impact-category-triggered EIA** | `BGN-10-01` (universal) + per-facility: `CLD-19-01`, `SPH-06-01`, `BAK-10-13` (already existed in UPD/ABT/SLH/UAB/COU) | Décret 06-198 art. 5 + Décret 07-145 | ✅ Done |
+| 10.3 | **Grace-period logic for "no license" findings** | `BGN-01-01` — full grace-period two-scenario text embedded | **Décret 24-196** (11 juin 2024) — three-year window ≈ June 2027 | ✅ Done |
+| 10.4 | **Non-substitution cross-reference** | `BGN-01-01`, `BGN-08-06` — non-substitution note embedded in criteria text + legalReference | **Décret 06-198 art. 4** | ✅ Done |
+| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** — facility-type-to-category mapping not yet extracted. Do NOT implement until confirmed. | ❓ Research gap — highest value |
+| 10.6 | **Update Décret 06-198 citation strings** | All criteria files citing Décret 06-198 | All updated to **"كما عُدِّل بالمرسومَيْن 22-167 و24-196"** across all facility-type files | ✅ Done |
 
 ---
 
@@ -228,10 +228,6 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | Phase | Item | Notes |
 |---|---|---|
-| 10.2 | EIA trigger criteria | Per applicable facility types — model on existing `UPD-AX10-01` |
-| 10.3 | Grace-period logic for "no license" | Update severity metadata on all licensing criteria |
-| 10.4 | Non-substitution note on licensing criteria | Inspector guidance text addition |
-| 10.6 | Citation update: 06-198 → "tel que modifié" | 🟡 IN PROGRESS — scanning all criteria files |
 | T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid — read `mechanicCriteria.ts` first |
 
 ### 🔲 Research gaps (block implementation until resolved)
@@ -289,19 +285,22 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 
 ---
 
-## Implementation Order (Recommended)
+## Implementation Order (Recommended — Next Up)
 
-1. ✅ ~~**Phase 9.3** — Add `BGN-09-02` PPE-use training criterion~~
-2. **🟡 Phase 10.6 — CURRENT** — Update all Décret 06-198 citation strings to "tel que modifié" (quick pass across criteria files)
-3. **Phase 10.3** — Grace-period severity logic on all licensing criteria
-4. **Phase 10.4** — Non-substitution inspector note on licensing criteria
-5. **Phase 10.2** — EIA trigger criteria (model on `UPD-AX10-01`)
-6. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
-7. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
-8. **Tier 0 criteria** — T0.8 (mechanic expansion)
-9. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
-10. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern)
-11. **Research gaps** — 9.4 (noise decree), 9.5 (medical interval), 10.5 (Décret 07-144 mapping) — when ready
+1. ✅ ~~**Phases 1–10** — All criteria phases complete~~
+2. **T0.2** — Bundle ID fix (`app.json`) — 5-minute quick win
+3. **T0.12** — Confirm + fix duplicate spread in `criteriaData.ts`
+4. **T0.4** — Article numbers in `baseGeneralCriteria.ts`
+5. **T0.8** — Mechanic criteria expansion (brake fluid, tyres, battery acid)
+6. **T0.11** — numericField range validation before save
+7. **T0.13** — complianceStatus reset on checklist reload
+8. **T0.5** — Photo backup inclusion (`BackupService.ts`)
+9. **T0.10** — PDF export missing photos
+10. **T0.1** — SHA-256 hash replacement (CRITICAL)
+11. **T0.9** — Offline sync conflict resolution (CRITICAL)
+12. **T0.6** — Severity enum (heavy refactor)
+13. **T0.7** — Criteria registry pattern (heavy refactor)
+14. **Research gaps** — 9.4, 9.5, 10.5 — when manual chapters arrive
 
 ---
 
@@ -311,4 +310,4 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 - **`numericField` schema** — proven in `baseFoodCriteria`. Reuse, don't rebuild.
 - **UAB's existing AX-series criteria** — best-designed content in the library. Preserve as the model.
 - **`BGN-07-01–05` pest module** — technically correct. Consolidate around it.
-- **Décret 06-198 citations** — most precisely cited instrument in the codebase. All now need "tel que modifié" suffix (Phase 10.6), but the base citation is correct.
+- **Décret 06-198 citations** — all now include "كما عُدِّل بالمرسومَيْن 22-167 و24-196" (Phase 10.6 complete).
