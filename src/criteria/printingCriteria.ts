@@ -64,11 +64,13 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Fix: Décret 93-120 covers occupational medical exams only — not chemical storage.
+    // Chemical storage safety → Décret 91-05 (hazardous substances at work) + Loi 88-07 (OHS general).
     id: 'PRT-03-03',
     axis: 'تسيير النفايات الكيميائية',
     category: 'بيئية',
     criteria: 'تخزين المواد الكيميائية في مخزن مغلق ومهوى بعيداً عن مصادر الاشتعال.',
-    legalReference: 'القانون 19-02 + المرسوم 93-120.',
+    legalReference: 'القانون 19-02 (الوقاية من الحريق في مناطق تخزين المواد القابلة للاشتعال) + المرسوم التنفيذي 91-05 (الوقاية الصحية والأمن وطب العمل — اشتراطات تخزين المواد الخطرة) + القانون 88-07 المادة 9.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -84,21 +86,25 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Fix: Décret 93-120 covers occupational medical exams only — not PPE.
+    // PPE obligation → Loi 90-11 Art. 8 (employer duty to provide PPE) + Décret 91-05 Art. 6.
     id: 'PRT-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة: كمامات، نظارات وقاية، قفازات مقاومة للأحبار والمذيبات.',
-    legalReference: 'المرسوم 93-120 + القانون 90-11.',
+    legalReference: 'القانون 90-11 المادة 8 (التزام صاحب العمل بتوفير وسائل الوقاية الشخصية الملائمة) + المرسوم التنفيذي 91-05 المادة 6 (الحد الأدنى من معدات الوقاية الشخصية في الأنشطة ذات المخاطر الكيميائية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
+    // Fix: Décret 93-120 covers occupational medical exams only — not machine guarding.
+    // Machine guards → Loi 90-11 (OHS) + Décret 93-05 (equipment safety standards).
     id: 'PRT-05-02',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر حواجز وقائية على الآلات المتحركة (بكرات الطباعة، تجهيزات التقطيع) لمنع التماس مع الأجزاء الدوارة، مع وجود أزرار إيقاف طارئ في متناول المشغّل والتحقق من سلامة نظام القفل المانع (interlock) عند فتح الغطاء الواقي.',
-    legalReference: 'القانون 90-11 + المرسوم 93-120 (اشتراطات حماية الآلات الدوارة وأزرار الإيقاف الطارئ ونظام القفل المانع).',
+    legalReference: 'القانون 90-11 (الوقاية الصحية والأمن وطب العمل — الالتزام العام بسلامة الآلات) + المرسوم التنفيذي 93-05 (اشتراطات السلامة التقنية للآلات الصناعية: الحمايات الميكانيكية وأزرار الإيقاف الطارئ ونظام القفل المانع).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',

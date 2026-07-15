@@ -33,6 +33,12 @@ describe('blacksmithCriteria', () => {
     });
   });
 
+  // BLS-01-01 removed in Phase 2.2 — pure restate of BGN-01-01 (operating license)
+  it('BLS-01-01 is not present (removed Phase 2.2 — covered by BGN-01-01)', () => {
+    const item = blacksmithCriteria.find((c: InspectionItem) => c.id === 'BLS-01-01');
+    expect(item).toBeUndefined();
+  });
+
   it('BLS-02-01 noise level is medium severity visual', () => {
     const item = blacksmithCriteria.find((c: InspectionItem) => c.id === 'BLS-02-01');
     expect(item).toBeDefined();

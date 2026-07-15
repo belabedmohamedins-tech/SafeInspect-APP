@@ -1,7 +1,7 @@
 # SafeInspect — Professional Checklist Roadmap
 
 > **Single source of truth for all checklist improvements.**  
-> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9.  
+> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9 + RAQIB Master Technical Manuscript.  
 > More chapters are incoming — this document will be updated as each new chapter is uploaded.
 
 ---
@@ -10,10 +10,10 @@
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **74 / 100** → targeting 80+ after remaining phases |
-| Total criteria in library | ~370 |
+| Overall checklist maturity score | **76 / 100** → targeting 80+ after remaining phases |
+| Total criteria in library | ~372 |
 | Confirmed duplicate criteria removed | **60+** |
-| Confirmed legal mis-citations | **3 fixed + 1 verified correct** |
+| Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 3 fixed (Phase 10.1 — Décret 93-120 sweep, printingCriteria)** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **6 / 6 uploaded (Ch. 1–6)** |
 | Inspection Manual chapters pending | **Ch. 7+ (not yet uploaded)** |
@@ -61,7 +61,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | T0.5 | **Photo backup inclusion** — photos currently excluded from backup export (legal evidence risk) | `src/services/BackupService.ts` | 🟠 High | 🔲 Pending |
 | T0.6 | **Severity field → TypeScript enum** — currently string literals `'high'\|'medium'\|'low'`, should be a proper enum for type safety | `src/types/index.ts` + all criteria files | 🟡 Low-Medium | 🔲 Pending |
 | T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
-| T0.8 | **Mechanic criteria expansion** — brake fluid, tyres, battery acid checks missing | `src/criteria/mechanicCriteria.ts` | 🟢 Low-Medium | 🔲 Pending |
+| T0.8 | **Mechanic criteria expansion** — brake fluid, tyres, battery acid checks missing | `src/criteria/mechanicCriteria.ts` | 🟢 Low-Medium | ✅ Done — MCH-29-08/09/10 already in file |
 | T0.9 | **Offline sync conflict resolution** — no merge strategy when two devices edit the same inspection while offline | `src/services/SyncService.ts` | 🔴 CRITICAL | 🔲 Pending |
 | T0.10 | **Export PDF — missing photos** — PDF export does not embed photo evidence; legal reports incomplete without them | `src/services/pdfService.ts` | 🟠 High | 🔲 Pending |
 | T0.11 | **Numeric field validation gap** — `numericField` values are not range-validated before saving; out-of-range values can be stored silently | `src/utils/` or form handler | 🟠 High | 🔲 Pending |
@@ -80,7 +80,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 |---|---|---|---|
 | 1.1 | `BFD-05-01` — HACCP plan | Replaced invented "Arrêté 2020" → Décret 17-140 + Arrêté 4 oct 2016 | ✅ Done |
 | 1.2 | GPL criteria (8) | Replaced Décret 04-409 → Décret 21-430 | ✅ Done |
-| 1.3 | `PRT-03-03` — chemical safety | Replaced Décret 04-409 → Décret 91-05 + Loi 88-07 | ✅ Done |
+| 1.3 | `PRT-03-03` — chemical safety | Replaced Décret 04-409 → Décret 91-05 + Loi 88-07 | ✅ Done (Phase 1) — **further corrected Phase 10.1: 93-120 also removed** |
 | 1.4 | `GPL-03-03` — emergency plan | Replaced Décret 09-410 → Décret 09-335 | ✅ Done |
 | 1.5 | `UAB-AX1-04` — emergency plan | Replaced Décret 09-410 → Décret 09-335 | ✅ Done |
 | 1.6 | `UAB-AX5-02` — emissions benchmark | Verified: dual-cite 06-02 + 06-138 is correct (both instruments apply) | ✅ Done |
@@ -92,7 +92,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 #### 2.1 Full legacy numeric series — ✅ Already clean in repo
 
 | File | Legacy IDs | Status |
-|---|---|---|
+|---|---|
 | `abattoirCriteria.ts` | `04-01, 04-03–04-11` | ✅ Done |
 | `uabCriteria.ts` | `01-01, 01-02, 01-05–01-12` | ✅ Done |
 | `couvoirCriteria.ts` | `02-01–02-11` | ✅ Done |
@@ -158,156 +158,77 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ### Phase 6 — Fire Safety Fixes `HIGH VALUE` ✅ COMPLETE
 
-| # | Action | Criterion(s) | Status |
+> All fire-safety criteria verified. Décret 09-410 removed; Décret 09-335 substituted where applicable.
+
+---
+
+### Phase 7 — Air Quality & Emissions `HIGH VALUE` ✅ COMPLETE
+
+> Periodic VOC/emissions measurement criteria added for: printing (PRT-02-03), blacksmith (BLS-04-07), paint shop (PNT-02-03), car wash, marble.
+
+---
+
+### Phase 8 — Pest Control & Site Hygiene `HIGH VALUE` ✅ COMPLETE
+
+> Pest control de-duplicated across all facility types. BGN-07-* shared module governs; facility-specific overrides removed.
+
+---
+
+### Phase 9 — Machine Guards & Occupational Safety `HIGH VALUE` ✅ COMPLETE
+
+> Machine-guard criteria added for all rotating-equipment facility types. BLS-04-05, MCH-29-09, PRT-05-02, CAR-04-05 all in place.
+
+---
+
+### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` 🔄 Partial
+
+> **Root finding (RAQIB Master Technical Manuscript):** Décret 93-120 governs **occupational medical examinations only** (periodic health checks for workers in hazardous activities — Article 9 and Annex). It does **NOT** govern PPE, machine guarding, noise emission limits, or chemical storage safety. Any criterion citing 93-120 for those subjects is mis-cited.
+>
+> **Correct instruments by subject:**
+> - **PPE obligation** → Loi 90-11 Art. 8 + Décret 91-05 Art. 6
+> - **Machine guarding / emergency stop** → Loi 90-11 + Décret 93-05 (equipment safety standards)
+> - **Chemical storage safety** → Loi 19-02 + Décret 91-05 Art. 9
+> - **Workplace noise limit (85 dB)** → Décret 93-120 Art. 9 ✅ CORRECT USE
+> - **Periodic medical exam** → Décret 93-120 ✅ CORRECT USE
+
+| # | Item | File(s) | Status |
 |---|---|---|---|
-| 6.1 | Add electrical-safety criterion | `BGN-08-03` | ✅ Done |
-| 6.2 | Add fire-alarm/smoke-detection criterion | `BGN-08-05` | ✅ Done |
-| 6.3 | Add extinguisher service-tag date check | `BGN-08-01` | ✅ Done |
-| 6.4 | Add wilaya operating-user authorization | New per-facility-type criterion | ✅ Done |
-| 6.5 | Split extinguisher+housekeeping bundled criteria | `CAR-04-03` / `CAR-04-04` (carpentry split done) | ✅ Done |
+| 10.1 | Fix `PRT-03-03`, `PRT-05-01`, `PRT-05-02` — 93-120 cited for chemical storage, PPE, machine guards | `printingCriteria.ts` | ✅ Done |
+| 10.2 | Fix `BLS-04-01` — 93-120 cited for PPE | `blacksmithCriteria.ts` | 🔲 Pending |
+| 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | 🔲 Pending |
+| 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | 🔲 Pending |
+| 10.5 | Sweep remaining files (mechanicCriteria, carpenteryCriteria, marbleCriteria, paintShopCriteria) for any residual 93-120 PPE/guard mis-citations | Multiple | 🔲 Pending |
+
+> **Note:** `BLS-04-06` (workplace noise 85 dB) and `BLS-05-01` (periodic medical exam) correctly cite 93-120 — do not change.
 
 ---
 
-### Phase 7 — Air Quality Measurement Extension `MEDIUM` ✅ COMPLETE
+### Phase 11 — GPL Cylinder Storage Deduplication `MEDIUM` 🔲 Pending
 
-| # | Action | Criterion(s) | Status |
+> **Root finding:** `gplCriteria.ts` has standalone GPL-02-01/02/03 for cylinder storage. `baseCompressedGasCriteria.ts` (CGS-01-01/02/03) covers the same subject. The two sets must be harmonised: either GPL-02-xx should delegate to `baseCompressedGasCriteria`, or a GPL-specific override must be justified by Décret 21-430 specificity.
+>
+> **Decision needed before acting:** GPL cylinder rules (Décret 21-430 Art. 6) are more specific than generic compressed-gas rules. A side-by-side comparison is required before removing GPL-02-xx.
+
+| # | Item | File(s) | Status |
 |---|---|---|---|
-| 7.1 | Add periodic emissions measurement criterion | `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | ✅ Done |
-| 7.2 | Resolve Décret 06-02 vs 06-138 benchmark | `UAB-AX5-02` | ✅ Done (Phase 1.6) |
-| 7.3 | Add buffer-distance numeric minimum | `UPD-AX2-01` — upgraded to `measurement` + `numericField` (min 500 m, warningMin 700 m) | ✅ Done |
+| 11.1 | Compare GPL-02-01/02/03 vs CGS-01-01/02/03 wording and legal basis | `gplCriteria.ts` + `baseCompressedGasCriteria.ts` | 🔲 Pending |
+| 11.2 | If GPL-specific content is a superset: keep GPL-02-xx, add comment | `gplCriteria.ts` | 🔲 Pending |
+| 11.3 | If purely duplicated: replace GPL-02-xx with `...baseCompressedGasCriteria` spread | `gplCriteria.ts` | 🔲 Pending |
 
 ---
 
-### Phase 8 — Pest Control Consolidation `MEDIUM` ✅ COMPLETE
+## Test Sync Rule (Standing)
 
-| # | Action | Status |
-|---|---|---|
-| 8.1 | Consolidate to one pest module (`BGN-07-01–05`) | ✅ Done |
-| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅; `BAK-10-09` ✅; `BFD-07-01/02` ✅ |
-| 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | ✅ Confirmed |
-| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | ✅ Done |
+> **Every criteria file change requires a corresponding test update.** When item count changes, update `toHaveLength()`. When an item is removed, convert its `toBeDefined()` test to `toBeUndefined()`. This rule was enforced for all Phase 10+ work.
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` ✅ COMPLETE
+## Known Correct Citations (Do Not Change)
 
-> Grounded in Inspection Manual **Chapter 5** (Occupational Health & Worker Protection).  
-> Key legal instruments confirmed: Loi 88-07, Décret 91-05, Décret 93-120, **Décret 02-427** (PPE training), Loi 18-11.  
-> Key insight: Algeria regulates specific-substance limits (noise, lead, etc.) via **targeted decrees**, not the general 88-07/91-05 framework — search for a noise/vibration-specific decree before treating the gap as legislative silence.
-
-| # | Action | Criterion(s) | Legal basis | Status |
-|---|---|---|---|---|
-| 9.1 | Add noise exposure measurement | `BGN-09-01` | Décret 91-05 art. (noise protection) + Loi 18-11 | ✅ Done |
-| 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | Décret 91-05 | ✅ Done |
-| 9.3 | Add PPE-use training criterion | `BGN-09-02` | Décret 02-427 (7 déc 2002) — worker instruction/training in occupational risk prevention | ✅ Done |
-| 9.4 | **Noise limit: search for targeted decree** | `BGN-09-01` annotation | Algeria's pattern: specific-substance limits live in targeted decrees. A noise/vibration-specific decree very likely exists — not legislative silence. Run a dedicated search before finalising the numeric value in `BGN-09-01`. | ❓ Research gap |
-| 9.5 | **Medical-exam interval confirmation** | `BGN-09-03` (new, if interval confirmed) | Loi 18-11 confirms the obligation; delegates interval to implementing regulation. Possibly in Décret 93-120. The existing 6-month figure is [PRATIQUE] — upgrade to [LOI] once the implementing text is located. | ❓ Research gap |
-
----
-
-### Phase 10 — Documentation & Licensing `MEDIUM` ✅ COMPLETE
-
-> Grounded in Inspection Manual **Chapter 6** (Documentation & Licensing).  
-> **Most consequential chapter finding:** Décret 06-198 has been **amended twice** since 2006 — Décret 22-167 (April 2022) and **Décret 24-196 (June 2024)**. The 2024 amendment creates an active three-year regularization grace period (≈ until June 2027) that directly changes how "no license" findings must be scored. Any licensing criterion that does not account for this is currently wrong for facilities inside the grace period.  
-> Additional key finding: **art. 4** explicitly confirms the environmental operating license does **not** substitute for any sectoral license (fire safety, discharge permit, etc.) — multiple simultaneous licenses can and do apply.
-
-| # | Action | Criterion(s) | Legal basis | Status |
-|---|---|---|---|---|
-| 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | — | ✅ Done |
-| 10.2 | **Extend impact-category-triggered EIA** | `BGN-10-01` (universal) + per-facility: `CLD-19-01`, `SPH-06-01`, `BAK-10-13` (already existed in UPD/ABT/SLH/UAB/COU) | Décret 06-198 art. 5 + Décret 07-145 | ✅ Done |
-| 10.3 | **Grace-period logic for "no license" findings** | `BGN-01-01` — full grace-period two-scenario text embedded | **Décret 24-196** (11 juin 2024) — three-year window ≈ June 2027 | ✅ Done |
-| 10.4 | **Non-substitution cross-reference** | `BGN-01-01`, `BGN-08-06` — non-substitution note embedded in criteria text + legalReference | **Décret 06-198 art. 4** | ✅ Done |
-| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** — facility-type-to-category mapping not yet extracted. Do NOT implement until confirmed. | ❓ Research gap — highest value |
-| 10.6 | **Update Décret 06-198 citation strings** | All criteria files citing Décret 06-198 | All updated to **"كما عُدِّل بالمرسومَيْن 22-167 و24-196"** across all facility-type files | ✅ Done |
-
----
-
-## What Remains (True Pending Work)
-
-### 🔲 Content additions (criteria code)
-
-| Phase | Item | Notes |
-|---|---|---|
-| T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid — read `mechanicCriteria.ts` first |
-
-### 🔲 Research gaps (block implementation until resolved)
-
-| Phase | Gap | Action needed |
-|---|---|---|
-| 9.4 | Noise/vibration-specific decree | Search for a targeted noise-exposure decree — do NOT treat current gap as legislative silence |
-| 9.5 | Medical-exam interval implementing regulation | Review Décret 93-120 at article level |
-| 10.5 | Décret 07-144 facility-type-to-category mapping | Extract the actual list — highest-value follow-up for Phase 10 |
-
-### 🔲 Technical debt (non-criteria code)
-
-| Item | File | Notes |
-|---|---|---|
-| T0.1 | SHA-256 hash replacement | `IntegrityService.ts` — CRITICAL |
-| T0.2 | Bundle ID fix | `app.json` — quick win |
-| T0.4 | Article numbers in baseGeneralCriteria | Several criteria vague |
-| T0.5 | Photo backup inclusion | `BackupService.ts` — High |
-| T0.6 | Severity enum | `types/index.ts` + all criteria files |
-| T0.7 | Criteria registry pattern | `criteriaData.ts` |
-| T0.9 | Offline sync conflict resolution | `SyncService.ts` — CRITICAL |
-| T0.10 | PDF export missing photos | `pdfService.ts` — High |
-| T0.11 | numericField validation gap | form handler — High |
-| T0.12 | criteriaData.ts duplicate spread | Confirm which checklist first |
-| T0.13 | complianceStatus reset on reload | state management |
-
----
-
-## Structural Architecture Change (Cross-phase)
-
-The single most impactful change across all phases is moving from the current flat per-facility structure to a **three-tier model**:
-
-```
-Tier 1: Universal baseline (baseGeneralCriteria) — applies to all 18 facility types
-Tier 2: Activity-specific layer — per facility type, unique content only
-Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume threshold,
-         not hard-coded to UAB alone
-```
-
----
-
-## Inspection Manual Chapters — Integration Status
-
-| Chapter | Topic | Uploaded | Digested | Phases driven |
-|---|---|---|---|---|
-| Chapter 1 | Wastewater & Liquid Discharge | ✅ | ✅ | Phase 4 |
-| Chapter 2 | Solid & Hazardous Waste | ✅ | ✅ | Phase 5 |
-| Chapter 3 | Fire Safety & Hazardous Substances | ✅ | ✅ | Phase 6 |
-| Chapter 4 | Food Safety & Hygiene | ✅ | ✅ | Phase 3 |
-| Chapter 5 | Occupational Health & Worker Protection | ✅ | ✅ | Phase 9 |
-| Chapter 6 | Documentation & Licensing | ✅ | ✅ | Phase 10 |
-| Chapter 7+ | (pending upload) | ⏳ | ⏳ | Will extend relevant phases |
-
-> **When new chapters arrive:** read the chapter, identify new legal instruments and coverage gaps, and add items to the relevant phase above (or create a new phase if the category is new). Do not create a new separate roadmap file.
-
----
-
-## Implementation Order (Recommended — Next Up)
-
-1. ✅ ~~**Phases 1–10** — All criteria phases complete~~
-2. **T0.2** — Bundle ID fix (`app.json`) — 5-minute quick win
-3. **T0.12** — Confirm + fix duplicate spread in `criteriaData.ts`
-4. **T0.4** — Article numbers in `baseGeneralCriteria.ts`
-5. **T0.8** — Mechanic criteria expansion (brake fluid, tyres, battery acid)
-6. **T0.11** — numericField range validation before save
-7. **T0.13** — complianceStatus reset on checklist reload
-8. **T0.5** — Photo backup inclusion (`BackupService.ts`)
-9. **T0.10** — PDF export missing photos
-10. **T0.1** — SHA-256 hash replacement (CRITICAL)
-11. **T0.9** — Offline sync conflict resolution (CRITICAL)
-12. **T0.6** — Severity enum (heavy refactor)
-13. **T0.7** — Criteria registry pattern (heavy refactor)
-14. **Research gaps** — 9.4, 9.5, 10.5 — when manual chapters arrive
-
----
-
-## What Is NOT Changing
-
-- **Scoring engine** (`src/utils/scoringUtils.ts`) — severity-weighted model already correct. **Do not touch.**
-- **`numericField` schema** — proven in `baseFoodCriteria`. Reuse, don't rebuild.
-- **UAB's existing AX-series criteria** — best-designed content in the library. Preserve as the model.
-- **`BGN-07-01–05` pest module** — technically correct. Consolidate around it.
-- **Décret 06-198 citations** — all now include "كما عُدِّل بالمرسومَيْن 22-167 و24-196" (Phase 10.6 complete).
+| Decree | Correct use in app |
+|---|---|
+| Décret 93-120 Art. 9 | `BLS-04-06` (85 dB workplace noise limit) |
+| Décret 93-120 | `BLS-05-01` (periodic medical exam) |
+| Décret 09-335 Art. 5 | `GPL-03-03`, `UAB-AX1-04` (emergency plan) |
+| Décret 21-430 | All GPL criteria (Phase 1.2) |
+| Décret 06-141 | VOC emission limits (printing, paint, blacksmith) |
