@@ -1,16 +1,7 @@
 import { InspectionItem } from '../types';
 
 export const carpenteryCriteria: InspectionItem[] = [
-  {
-    id: 'CAR-01-01',
-    axis: 'هوية المنشأة والوثائق',
-    category: 'تنظيمية',
-    criteria: 'توفر رخصة استغلال سارية لنشاط نجارة، أو معاينة اشتغالها بدون ترخيص.',
-    legalReference: 'المرسوم 06-198 (تصنيف المنشآت ورخصة الاستغلال).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // CAR-01-01 removed — fully covered by BGN-01-01 (baseGeneralCriteria)
   {
     id: 'CAR-02-01',
     axis: 'الموقع والتهيئة',

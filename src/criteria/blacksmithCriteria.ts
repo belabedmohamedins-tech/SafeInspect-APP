@@ -2,16 +2,7 @@ import { InspectionItem } from '../types';
 import { baseCompressedGasCriteria } from './baseCompressedGasCriteria';
 
 export const blacksmithCriteria: InspectionItem[] = [
-  {
-    id: 'BLS-01-01',
-    axis: 'هوية المنشأة والوثائق',
-    category: 'تنظيمية',
-    criteria: 'توفر رخصة استغلال سارية لنشاط حدادة، أو معاينة عدمها مع الإشارة إلى مخالفة تنظيم المؤسسات المصنفة.',
-    legalReference: 'المرسوم 06-198 (تصنيف المنشآت ورخصة الاستغلال).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // BLS-01-01 removed — fully covered by BGN-01-01 (baseGeneralCriteria)
   {
     id: 'BLS-02-01',
     axis: 'الموقع والتهيئة',

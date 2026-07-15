@@ -1,16 +1,7 @@
 import { InspectionItem } from '../types';
 
 export const mechanicWorkshopCriteria: InspectionItem[] = [
-  {
-    id: 'MCH-29-01',
-    axis: 'هوية المنشأة والوثائق',
-    category: 'تنظيمية',
-    criteria: 'توفر رخصة أو تصريح استغلال لنشاط ميكانيك سيارات، أو معاينة كونه يشتغل بدون أي ترخيص مع الإشارة إلى مخالفة تنظيم المؤسسات المصنفة.',
-    legalReference: 'المرسوم التنفيذي 06-198 بشأن المؤسسات المصنفة والقانون 03-10 الذي يجرّم استغلال منشأة مصنفة دون ترخيص (المواد الجزائية).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // MCH-29-01 removed — fully covered by BGN-01-01 (baseGeneralCriteria)
   {
     id: 'MCH-29-02',
     axis: 'الموقع والتهيئة',
