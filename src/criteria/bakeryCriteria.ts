@@ -6,7 +6,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'توفر تصريح أو رخصة استغلال سارية لنشاط مخبزة صناعية، مع مطابقة العنوان وطبيعة النشاط لما هو وارد في القرار الإداري.',
-    legalReference: 'المرسوم التنفيذي 06-198 الخاص بالمؤسسات المصنفة (رخصة أو تصريح الاستغلال حسب الفئة).',
+    legalReference: 'المرسوم التنفيذي 06-198 المتعلق بالمؤسسات المصنفة لحماية البيئة، كما عُدِّل بالمرسومَيْن 22-167 و24-196 (رخصة أو تصريح الاستغلال حسب الفئة والنشاط).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -115,12 +115,12 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // S4-8: EIA / environmental summary study
+    // Phase 10.2: EIA trigger criterion (already present — preserved as-is with citation upgrade)
     id: 'BAK-10-13',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد للمنشآت المصنفة الخاضعة لهذا الالتزام، مع التجديد عند إجراء توسعات أو تغييرات جوهرية.',
-    legalReference: 'القانون 03-10 المواد 15–22 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198.',
+    legalReference: 'القانون 03-10 المواد 15–22 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196.',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
