@@ -12,7 +12,7 @@
 |---|---|
 | Overall checklist maturity score | **53 / 100** → targeting 75+ after Phase 1–3 |
 | Total criteria in library | ~350 |
-| Confirmed duplicate criteria to remove | **60+** |
+| Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations | **3 (+ 1 flagged for verification)** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **4 / 4 uploaded (Ch. 1–4)** |
@@ -98,12 +98,29 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 
 | File | IDs | Assessment | Status |
 |---|---|---|---|
-| `bakeryCriteria.ts` | `BAK-10-07` | Equipment surfaces — bakery-specific (kneading tables), NOT a duplicate of baseFoodCriteria | ✅ Keep as-is |
-| `bakeryCriteria.ts` | `BAK-10-08` | Worker hygiene — bakery-specific (cash→dough pattern), NOT a generic duplicate | ✅ Keep as-is |
-| `bakeryCriteria.ts` | `BAK-10-09` | Pest control | ✅ Done — removed in S9 |
-| `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | Verify if these restate baseFoodCriteria cold-chain content | 🔲 Pending verification |
+| `bakeryCriteria.ts` | `BAK-10-07` | Equipment surfaces — bakery-specific (kneading tables), NOT a duplicate of baseFoodCriteria | ✅ Keep |
+| `bakeryCriteria.ts` | `BAK-10-08` | Worker hygiene — bakery-specific (cash→dough pattern), NOT a generic duplicate | ✅ Keep |
+| `bakeryCriteria.ts` | `BAK-10-09` | Pest control | ✅ Removed (S9) |
+| `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | ✅ Verified — all cold-room-specific (surfaces, thermometer, temp ranges, shelf organisation). NOT duplicates of baseFoodCriteria. | ✅ Keep |
 | `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded once pest module is consolidated into `BGN-07-*` (Phase 8) | 🔲 Pending (blocked on Phase 8) |
-| 11 facility-specific operating-license criteria | (one per facility type) | Restate `BGN-01-01` — see S7 for full ID list | 🔲 Pending |
+| `carWashCriteria.ts` | `CWS-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
+| `marbleCriteria.ts` | `MRB-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
+| `paintShopCriteria.ts` | `PNT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
+| `printingCriteria.ts` | `PRT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
+| `blacksmithCriteria.ts` | `BLS-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
+| `carpenteryCriteria.ts` | `CAR-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
+| `mechanicCriteria.ts` | `MCH-29-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
+
+**Intentional specialisations kept (not duplicates):**
+- `ABT-AX1-01` — adds animal type + capacity match
+- `BAK-10-01` — adds address + activity-type match
+- `COU-AX1-01/02` — adds hatchery capacity + technical file detail
+- `GPL-01-01` — adds sector-specific issuing authority (GPL/C)
+- `PRD-01-01` — adds storage capacity + product types in technical file
+- `SPH-01-01` — adds sectoral authorization (Health/Industry ministry)
+- `SLH-05-01` — adds <500 kg/day capacity threshold
+- `UAB-AX1-02` — adds territorial authority match
+- `UPD-AX1-01/02` — adds pen count + technical booklet conditions
 
 #### 2.3 `criteriaData.ts` — remove `baseFoodCriteria` from non-food checklists
 
@@ -125,7 +142,7 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | # | Action | Criterion(s) | Details | Status |
 |---|---|---|---|---|
 | 3.1 | **Fix HACCP scope** | `BFD-05-01` | Remove UPD from HACCP scope | ✅ Done — baseFoodCriteria removed from updChecklist (Phase 2.3) |
-| 3.2 | **Extend HACCP requirement** | `ABT-AX10-01`, `SLH-06-01`, `CLD-AX10-01` | HACCP added to abattoir ✅ and slaughterhouse ✅; cold room pending | 🔄 Partial |
+| 3.2 | **Extend HACCP requirement** | `ABT-AX10-01`, `SLH-06-01`, `CLD-18-01` | HACCP added to abattoir ✅, slaughterhouse ✅, cold room ✅ (`CLD-18-01` already in repo) | ✅ Done |
 | 3.3 | **Fix BFD-05-01 citation** | `BFD-05-01` | ✅ Done (Phase 1.1) | ✅ Done |
 | 3.4 | **Add traceability criterion** | New: `BFD-08-01` | Add to baseFoodCriteria | 🔲 Pending |
 | 3.5 | **Verify cold-chain temperature values** | `BFD-04-01`, `BFD-04-02`, `CLD-*` | Verify 0–5°C / ≤−18°C against Décret 17-140 arts. 7/8/9 | 🔲 Pending |
@@ -237,9 +254,9 @@ This resolves: the duplication problem (Tier 1 is defined once), the "equipment-
 
 ## Implementation Order (Recommended)
 
-1. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
-2. **Phase 2 remainder** — cold room CLD-17-02–05 verification, 11 operating-license duplicates
-3. **Phase 3** — Complete food safety fixes (cold room HACCP, traceability, cold-chain verify)
+1. **Phase 2 remainder** — borderline licensing IDs (BLS-01-01, CAR-01-01, MCH-29-01) — pending user decision
+2. **Phase 3 remainder** — traceability `BFD-08-01`, cold-chain temperature verification
+3. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
 4. **Phase 4** — Wastewater numeric thresholds
 5. **Phase 5** — Solid/hazardous waste additions
 6. **Phase 6** — Fire safety additions

@@ -1,16 +1,7 @@
 import { InspectionItem } from '../types';
 
 export const carWashCriteria: InspectionItem[] = [
-  {
-    id: 'CWS-01-01',
-    axis: 'هوية المنشأة والوثائق',
-    category: 'تنظيمية',
-    criteria: 'توفر رخصة استغلال سارية لنشاط غسيل السيارات.',
-    legalReference: 'المرسوم 06-198.',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // CWS-01-01 removed — pure restate of BGN-01-01 (operating license, generic). BGN-01-01 already covers نوع النشاط.
   {
     id: 'CWS-01-02',
     axis: 'هوية المنشأة والوثائق',

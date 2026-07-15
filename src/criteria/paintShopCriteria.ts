@@ -1,16 +1,7 @@
 import { InspectionItem } from '../types';
 
 export const paintShopCriteria: InspectionItem[] = [
-  {
-    id: 'PNT-01-01',
-    axis: 'هوية المنشأة والوثائق',
-    category: 'تنظيمية',
-    criteria: 'توفر رخصة استغلال سارية لنشاط دهن وورنيش سيارات.',
-    legalReference: 'المرسوم 06-198.',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // PNT-01-01 removed — pure restate of BGN-01-01 (operating license, generic). No unique content added.
   {
     id: 'PNT-01-02',
     axis: 'هوية المنشأة والوثائق',
