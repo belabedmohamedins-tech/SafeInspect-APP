@@ -189,7 +189,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` 🔄 Partial
+### Phase 9 — Occupational Health `MEDIUM` ✅ COMPLETE
 
 > Grounded in Inspection Manual **Chapter 5** (Occupational Health & Worker Protection).  
 > Key legal instruments confirmed: Loi 88-07, Décret 91-05, Décret 93-120, **Décret 02-427** (PPE training), Loi 18-11.  
@@ -199,13 +199,13 @@ All 9 audit sessions are **complete**. No remaining session work.
 |---|---|---|---|---|
 | 9.1 | Add noise exposure measurement | `BGN-09-01` | Décret 91-05 art. (noise protection) + Loi 18-11 | ✅ Done |
 | 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | Décret 91-05 | ✅ Done |
-| 9.3 | **Add PPE-use training criterion** | `BGN-09-02` (new) | **Décret 02-427** (7 déc 2002) — worker instruction/training in occupational risk prevention. This upgrades the original audit's Session 6 gap from a best-practice recommendation to a [LOI]-grounded criterion. | 🔲 Pending |
-| 9.4 | **Noise limit: search for targeted decree** | `BGN-09-01` annotation | Algeria's pattern: specific-substance limits live in targeted decrees (confirmed for lead). A noise/vibration-specific decree very likely exists — not legislative silence. Run a dedicated search before finalising the numeric value in `BGN-09-01`. | ❓ Research gap |
-| 9.5 | **Medical-exam interval confirmation** | `BGN-09-03` (new, if interval confirmed) | Loi 18-11 confirms the obligation; delegates interval to implementing regulation. Possibly in Décret 93-120 (not yet reviewed at article level). The existing 6-month figure in the checklist is [PRATIQUE] — upgrade to [LOI] once the implementing text is located. | ❓ Research gap |
+| 9.3 | Add PPE-use training criterion | `BGN-09-02` | Décret 02-427 (7 déc 2002) — worker instruction/training in occupational risk prevention | ✅ Done |
+| 9.4 | **Noise limit: search for targeted decree** | `BGN-09-01` annotation | Algeria's pattern: specific-substance limits live in targeted decrees. A noise/vibration-specific decree very likely exists — not legislative silence. Run a dedicated search before finalising the numeric value in `BGN-09-01`. | ❓ Research gap |
+| 9.5 | **Medical-exam interval confirmation** | `BGN-09-03` (new, if interval confirmed) | Loi 18-11 confirms the obligation; delegates interval to implementing regulation. Possibly in Décret 93-120. The existing 6-month figure is [PRATIQUE] — upgrade to [LOI] once the implementing text is located. | ❓ Research gap |
 
 ---
 
-### Phase 10 — Documentation & Licensing `MEDIUM` 🔄 Partial
+### Phase 10 — Documentation & Licensing `MEDIUM` 🟡 CURRENT
 
 > Grounded in Inspection Manual **Chapter 6** (Documentation & Licensing).  
 > **Most consequential chapter finding:** Décret 06-198 has been **amended twice** since 2006 — Décret 22-167 (April 2022) and **Décret 24-196 (June 2024)**. The 2024 amendment creates an active three-year regularization grace period (≈ until June 2027) that directly changes how "no license" findings must be scored. Any licensing criterion that does not account for this is currently wrong for facilities inside the grace period.  
@@ -216,9 +216,9 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | — | ✅ Done |
 | 10.2 | **Extend impact-category-triggered EIA** | New criteria for applicable facility types | Décret 06-198 art. 5 + Décret 07-145 — EIA/impact summary required before license; model on existing `UPD-AX10-01` | 🔲 Pending |
 | 10.3 | **Grace-period logic for "no license" findings** | All facility-type licensing criteria | **Décret 24-196** (11 juin 2024) — three-year regularization window ≈ until June 2027. Update severity: "no license, grace-period active" = **major** (not critical); "no license, grace-period expired or inapplicable" = **critical**. Affects every facility type. | 🔲 Pending |
-| 10.4 | **Non-substitution cross-reference** | All facility-type licensing criteria | **Décret 06-198 art. 4** — operating license does NOT replace fire-safety authorization or discharge permit. Add inspector note to licensing criteria reminding that holding this license does not mean all licensing obligations are met. | 🔲 Pending |
-| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** (19 mai 2007) — maps each activity type to one of four categories (ministerial / wali / commune / declaration-only). Currently all facility types get a single generic "operating license" criterion; this should be category-specific. **Research gap:** the actual facility-type-to-category mapping from Décret 07-144 has not been extracted — this is the single highest-value follow-up item for this chapter. Do NOT implement until the mapping is confirmed. | ❓ Research gap — highest value |
-| 10.6 | **Add Décret 06-198 amendment citations** | All criteria citing Décret 06-198 | Update all legalReference strings citing "Décret 06-198" to read "Décret 06-198 tel que modifié par Décrets 22-167 et 24-196" so citations reflect the current amended text. | 🔲 Pending |
+| 10.4 | **Non-substitution cross-reference** | All facility-type licensing criteria | **Décret 06-198 art. 4** — operating license does NOT replace fire-safety authorization or discharge permit. Add inspector note to licensing criteria. | 🔲 Pending |
+| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** (19 mai 2007) — maps each activity type to one of four categories. **Research gap:** facility-type-to-category mapping not yet extracted. Do NOT implement until confirmed. | ❓ Research gap — highest value |
+| 10.6 | **Update Décret 06-198 citation strings** | All criteria files citing Décret 06-198 | Update all `legalReference` strings to read **"Décret 06-198 tel que modifié par Décrets 22-167 et 24-196"** | 🟡 CURRENT |
 
 ---
 
@@ -228,19 +228,18 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | Phase | Item | Notes |
 |---|---|---|
-| 9.3 | PPE-use training criterion `BGN-09-02` | Décret 02-427 — straightforward addition, model on `BGN-09-01` |
 | 10.2 | EIA trigger criteria | Per applicable facility types — model on existing `UPD-AX10-01` |
 | 10.3 | Grace-period logic for "no license" | Update severity metadata on all licensing criteria |
 | 10.4 | Non-substitution note on licensing criteria | Inspector guidance text addition |
-| 10.6 | Citation update: 06-198 → "tel que modifié" | All criteria files that cite Décret 06-198 |
+| 10.6 | Citation update: 06-198 → "tel que modifié" | 🟡 IN PROGRESS — scanning all criteria files |
 | T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid — read `mechanicCriteria.ts` first |
 
 ### 🔲 Research gaps (block implementation until resolved)
 
 | Phase | Gap | Action needed |
 |---|---|---|
-| 9.4 | Noise/vibration-specific decree | Search for a targeted noise-exposure decree (same pattern that found the lead decree) — do NOT treat current gap as legislative silence |
-| 9.5 | Medical-exam interval implementing regulation | Review Décret 93-120 at article level — likely source of the 6-month figure |
+| 9.4 | Noise/vibration-specific decree | Search for a targeted noise-exposure decree — do NOT treat current gap as legislative silence |
+| 9.5 | Medical-exam interval implementing regulation | Review Décret 93-120 at article level |
 | 10.5 | Décret 07-144 facility-type-to-category mapping | Extract the actual list — highest-value follow-up for Phase 10 |
 
 ### 🔲 Technical debt (non-criteria code)
@@ -292,8 +291,8 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 
 ## Implementation Order (Recommended)
 
-1. **🟡 Phase 9.3 — CURRENT** — Add `BGN-09-02` PPE-use training criterion (Décret 02-427, quick win)
-2. **Phase 10.6** — Update all Décret 06-198 citation strings to "tel que modifié" (quick pass across criteria files)
+1. ✅ ~~**Phase 9.3** — Add `BGN-09-02` PPE-use training criterion~~
+2. **🟡 Phase 10.6 — CURRENT** — Update all Décret 06-198 citation strings to "tel que modifié" (quick pass across criteria files)
 3. **Phase 10.3** — Grace-period severity logic on all licensing criteria
 4. **Phase 10.4** — Non-substitution inspector note on licensing criteria
 5. **Phase 10.2** — EIA trigger criteria (model on `UPD-AX10-01`)
