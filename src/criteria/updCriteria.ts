@@ -23,14 +23,24 @@ export const updSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 7.3 ✅: upgraded to measurement + numericField (buffer distance ≥500 m)
+    // Threshold: 500 m minimum per standard classified installation practice (Décret 06-198)
+    // warningMax used in reverse: inspector triggers warning when measured distance < 700 m
     id: 'UPD-AX2-01',
     axis: 'الموقع والعزل',
     category: 'بيئية',
-    criteria: 'موقع وحدة تربية الدواجن بعيد بمسافة أمان كافية عن التجمعات السكنية، وفق مخطط التهيئة وتصنيف المنطقة (فلاحية/صناعية/مختلطة).',
-    legalReference: 'القانون 90-29 المتعلق بالتهيئة والتعمير (ملاءمة استعمال الأرض وموقع المنشأة مع أدوات التهيئة) + القانون 03-10 (عدم الإضرار بالساكنة والجوار).',
+    criteria: 'موقع وحدة تربية الدواجن بعيد بمسافة أمان لا تقل عن 500 متر عن أقرب تجمع سكني، أو المسافة الأشد المنصوص عليها في قرار الترخيص أو أدوات التهيئة المحلية. تُقاس المسافة من أقرب حظيرة إلى أقرب مسكن.',
+    legalReference: 'القانون 90-29 المتعلق بالتهيئة والتعمير (ملاءمة استعمال الأرض وموقع المنشأة مع أدوات التهيئة) + القانون 03-10 (عدم الإضرار بالساكنة والجوار) + المرسوم 06-198 (مطابقة المنشأة المصنفة لشروط الترخيص والملف التقني).',
     severity: 'high',
-    controlType: 'visual',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'm',
+      labelAr: 'المسافة المقاسة إلى أقرب مسكن (متر)',
+      min: 500,
+      warningMin: 700,
+      step: 1,
+    },
   },
   {
     id: 'UPD-AX2-02',
