@@ -38,9 +38,10 @@ const couvoirChecklist: InspectionItem[] = [
   ...couvoirSpecificCriteria,
 ];
 
+// UPD = primary poultry production (not food processing).
+// baseFoodCriteria (HACCP, food hygiene) does NOT apply here — removed per S5 audit.
 const updChecklist: InspectionItem[] = [
   ...baseGeneralCriteria,
-  ...baseFoodCriteria,
   ...updSpecificCriteria,
 ];
 

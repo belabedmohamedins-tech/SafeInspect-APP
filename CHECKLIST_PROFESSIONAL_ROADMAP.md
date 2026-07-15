@@ -53,11 +53,11 @@ All 9 audit sessions are **complete**. No remaining session work.
 |---|---|---|---|---|
 | T0.1 | **SHA-256 replacement** — replace djb2 hash with SHA-256 for inspection integrity fingerprinting | `src/utils/` or `IntegrityService.ts` | 🔴 CRITICAL | 🔲 Pending |
 | T0.2 | **app.json bundle ID fix** — bundle ID is placeholder/incorrect | `app.json` | 🟡 Quick win | 🔲 Pending |
-| T0.3 | **criteriaByActivity unknown-key validation** — no guard when an unknown activity key is passed | `src/data/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
+| T0.3 | **criteriaByActivity unknown-key validation** — guard when unknown activity key is passed | `src/criteriaData.ts` | 🟡 Medium | ✅ Done — `getChecklistForActivity()` already implemented |
 | T0.4 | **baseGeneralCriteria article numbers** — several criteria missing specific article numbers in legalReference | `src/criteria/baseGeneralCriteria.ts` | 🟡 Medium | 🔲 Pending |
 | T0.5 | **Photo backup inclusion** — photos currently excluded from backup export (legal evidence risk) | `src/services/BackupService.ts` | 🟠 High | 🔲 Pending |
 | T0.6 | **Severity field → TypeScript enum** — currently string literals `'high'\|'medium'\|'low'`, should be a proper enum for type safety | `src/types/index.ts` + all criteria files | 🟡 Low-Medium | 🔲 Pending |
-| T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/data/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
+| T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
 | T0.8 | **Mechanic criteria expansion** — brake fluid, tyres, battery acid checks missing | `src/criteria/mechanicCriteria.ts` | 🟢 Low-Medium | 🔲 Pending |
 
 > **Note on scoring:** `scoringUtils.ts` already implements the severity-weighted model (high=3/medium=2/low=1 + critical override). The "rewrite" proposed in older docs is already done. **Do not touch scoringUtils.ts.**
@@ -81,33 +81,42 @@ All 6 citation fixes shipped. Verified in repo.
 
 ---
 
-### Phase 2 — Remove Legacy Duplicates `PRIORITY` 🔲 Pending
+### Phase 2 — Remove Legacy Duplicates `PRIORITY` 🔄 Partial
 
 Removing these ~60+ criteria shrinks each affected inspection to the correct item count and eliminates the silent double-weighting of findings in scores.
 
-#### 2.1 Full legacy numeric series to remove
+#### 2.1 Full legacy numeric series — ✅ Already clean in repo
 
-| File | IDs to remove | Replaced by | Status |
+| File | Legacy IDs | Status |
+|---|---|---|
+| `abattoirCriteria.ts` | `04-01, 04-03–04-11` | ✅ Done — only `ABT-AX*` series present |
+| `uabCriteria.ts` | `01-01, 01-02, 01-05–01-12` | ✅ Done — only `UAB-AX*` series present |
+| `couvoirCriteria.ts` | `02-01–02-11` | ✅ Done — only `COU-AX*` series present |
+| `updCriteria.ts` | `03-01–03-10` | ✅ Done — only `UPD-AX*` series present |
+
+#### 2.2 Facility-specific restatements of shared modules
+
+| File | IDs | Assessment | Status |
 |---|---|---|---|
-| `abattoirCriteria.ts` | `04-01, 04-03–04-11` | `ABT-AX*` series | 🔲 Pending |
-| `uabCriteria.ts` | `01-01, 01-02, 01-05–01-12` | `UAB-AX*` series | 🔲 Pending |
-| `couvoirCriteria.ts` | `02-01, 02-02, 02-03, 02-04, 02-06, 02-09, 02-10, 02-11` | `COU-AX*` series | 🔲 Pending |
-| `updCriteria.ts` | `03-01, 03-02, 03-03–03-10` | `UPD-AX*` series | 🔲 Pending |
-
-#### 2.2 Facility-specific restatements of shared modules to remove
-
-| File | IDs to remove | Reason | Status |
-|---|---|---|---|
-| `bakeryCriteria.ts` | `BAK-10-07, BAK-10-08 (partial), BAK-10-09` | Restates `baseFoodCriteria` | 🔲 Pending |
-| `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | Restates `baseFoodCriteria` cold-chain content | 🔲 Pending |
-| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded once pest module is consolidated into `BGN-07-*` (Phase 8) | 🔲 Pending |
+| `bakeryCriteria.ts` | `BAK-10-07` | Equipment surfaces — bakery-specific (kneading tables), NOT a duplicate of baseFoodCriteria | ✅ Keep as-is |
+| `bakeryCriteria.ts` | `BAK-10-08` | Worker hygiene — bakery-specific (cash→dough pattern), NOT a generic duplicate | ✅ Keep as-is |
+| `bakeryCriteria.ts` | `BAK-10-09` | Pest control | ✅ Done — removed in S9 |
+| `coldRoomCriteria.ts` | `CLD-17-02–CLD-17-05` | Verify if these restate baseFoodCriteria cold-chain content | 🔲 Pending verification |
+| `baseFoodCriteria.ts` | `BFD-07-01, BFD-07-02` | Superseded once pest module is consolidated into `BGN-07-*` (Phase 8) | 🔲 Pending (blocked on Phase 8) |
 | 11 facility-specific operating-license criteria | (one per facility type) | Restate `BGN-01-01` — see S7 for full ID list | 🔲 Pending |
 
-#### 2.3 `criteriaData.ts` — remove `baseFoodCriteria` spread from non-food checklists
+#### 2.3 `criteriaData.ts` — remove `baseFoodCriteria` from non-food checklists
 
-`...baseFoodCriteria` is still spread into `uabChecklist`, `abattoirChecklist`, `couvoirChecklist`, and `updChecklist`. This was documented as removed in a prior audit report but was **not shipped**. Remove it.
-
-Status: 🔲 Pending
+| Checklist | baseFoodCriteria spread | Decision | Status |
+|---|---|---|---|
+| `uabChecklist` | ✅ kept | UAB = animal feed manufacturing (food chain) — correct | ✅ Done |
+| `abattoirChecklist` | ✅ kept | Abattoir = meat processing (food) — correct | ✅ Done |
+| `couvoirChecklist` | ✅ kept | Couvoir = hatchery supplying food chain — correct | ✅ Done |
+| `updChecklist` | ❌ **removed** | UPD = primary poultry production, not food processing — per S5 finding | ✅ Done |
+| `slaughterhouseSmallChecklist` | ✅ kept | Slaughterhouse = food processing — correct | ✅ Done |
+| `bakeryChecklist` | ✅ kept | Bakery = food production — correct | ✅ Done |
+| `coldRoomChecklist` | ✅ kept | Cold room = food storage — correct | ✅ Done |
+| `produceStorageChecklist` | ✅ kept | Produce storage = food handling — correct | ✅ Done |
 
 ---
 
@@ -115,7 +124,7 @@ Status: 🔲 Pending
 
 | # | Action | Criterion(s) | Details | Status |
 |---|---|---|---|---|
-| 3.1 | **Fix HACCP scope** | `BFD-05-01` | Remove UPD from HACCP scope | 🔲 Pending |
+| 3.1 | **Fix HACCP scope** | `BFD-05-01` | Remove UPD from HACCP scope | ✅ Done — baseFoodCriteria removed from updChecklist (Phase 2.3) |
 | 3.2 | **Extend HACCP requirement** | `ABT-AX10-01`, `SLH-06-01`, `CLD-AX10-01` | HACCP added to abattoir ✅ and slaughterhouse ✅; cold room pending | 🔄 Partial |
 | 3.3 | **Fix BFD-05-01 citation** | `BFD-05-01` | ✅ Done (Phase 1.1) | ✅ Done |
 | 3.4 | **Add traceability criterion** | New: `BFD-08-01` | Add to baseFoodCriteria | 🔲 Pending |
@@ -173,8 +182,8 @@ Status: 🔲 Pending
 | # | Action | Status |
 |---|---|---|
 | 8.1 | Consolidate to one pest module (`BGN-07-01…05`) | 🔲 Pending |
-| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅ removed; others pending |
-| 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | 🔲 Pending (keep, don't remove) |
+| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅ removed; `BAK-10-09` ✅ removed; others pending |
+| 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | ✅ Confirmed — kept, biosecurity distinct from generic pest control |
 | 8.4 | Add insect-screen criterion as food-specific add-on | 🔲 Pending |
 
 ---
@@ -228,16 +237,16 @@ This resolves: the duplication problem (Tier 1 is defined once), the "equipment-
 
 ## Implementation Order (Recommended)
 
-1. **Tier 0** — Technical debt fixes (SHA-256, bundle ID, unknown-key validation, article numbers)
-2. **Phase 2** — Remove legacy duplicates (mechanical, ~60 items, no logic change)
+1. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
+2. **Phase 2 remainder** — cold room CLD-17-02–05 verification, 11 operating-license duplicates
 3. **Phase 3** — Complete food safety fixes (cold room HACCP, traceability, cold-chain verify)
 4. **Phase 4** — Wastewater numeric thresholds
 5. **Phase 5** — Solid/hazardous waste additions
 6. **Phase 6** — Fire safety additions
 7. **Phase 7** — Air quality measurement extension
-8. **Phase 8** — Pest control consolidation (finish SLH-05-10 already done)
+8. **Phase 8** — Pest control consolidation
 9. **Phases 9–10** — Occupational health + documentation
-10. **Tier 0 remainder** — Photo backup, severity enum, registry pattern, mechanic expansion
+10. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
 
 ---
 
