@@ -112,4 +112,15 @@ export const marbleCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    // Phase 7.1: periodic silica dust air quality measurement
+    id: 'MRB-05-05',
+    axis: 'الانبعاثات الهوائية',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز غبار السيليكا (الكوارتز الحر) في هواء بيئة العمل (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة (0.1 ملغ/م³ للسيليكا الحرة القابلة للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من السحار السيليكاوي).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

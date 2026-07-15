@@ -33,6 +33,17 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 7.1: periodic ink/solvent VOC air quality measurement for printing shop
+    id: 'PRT-02-03',
+    axis: 'التهوية ومنع التلوث الهوائي',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز المركبات العضوية المتطايرة (VOC) من أبخرة الأحبار والمذيبات في هواء بيئة العمل وعند نقطة المصب الهوائي (مرة في السنة على الأقل أو عند تغيير أنواع الأحبار أو المذيبات) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية — VOC).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
     id: 'PRT-03-01',
     axis: 'تسيير النفايات الكيميائية',
     category: 'بيئية',

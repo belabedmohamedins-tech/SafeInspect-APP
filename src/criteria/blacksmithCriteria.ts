@@ -94,6 +94,17 @@ export const blacksmithCriteria: InspectionItem[] = [
     },
   },
   {
+    // Phase 7.1: periodic air quality measurement for welding fumes and VOC
+    id: 'BLS-04-07',
+    axis: 'الانبعاثات الهوائية',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز أبخرة اللحام والمركبات العضوية المتطايرة (VOC) في هواء بيئة العمل (مرة في السنة على الأقل أو عند تغيير المواد المستخدمة) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة؛ وتوثيق نتائج القياسات وإجراءات التصحيح عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
     id: 'BLS-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
