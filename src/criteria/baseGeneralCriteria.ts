@@ -156,11 +156,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 4.4: upgraded with pumping frequency — no more than every 90 days or at 80% capacity
     id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
-    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد مع الديوان الوطني للتطهير ONA ومعالجة المواد المستخرجة.',
-    legalReference: 'القانون 01-19 + المرسوم 01-102.',
+    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري (لا تتجاوز دورية الشفط 90 يومًا أو كلما بلغت الحفرة 80% من طاقتها)، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي، وعدم الفيضان أو التسرب نحو الباطن الأرضي.',
+    legalReference: 'القانون 01-19 + المرسوم 01-102 (ONA) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
