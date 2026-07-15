@@ -73,11 +73,23 @@ export const carpenteryCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 6.5: split — extinguisher service-tag check only (exits covered by BGN-08-02)
     id: 'CAR-04-03',
     axis: 'السلامة المهنية',
     category: 'سلامة',
-    criteria: 'توفر مطفآت حريق بحالة صالحة مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية)، وحظر التدخين داخل الورشة.',
-    legalReference: 'القانون 19-02 (الوقاية من الحريق في المحال للمواد القابلة للاشتعال).',
+    criteria: 'توفر مطفآت حريق مناسبة لبيئة غبار الخشب (نوع بودرة ABC) بحالة صالحة، مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية).',
+    legalReference: 'القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية في المنشآت ذات المواد القابلة للاشتعال).',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // Phase 6.5: split — no open flame / no smoking ban (separate from extinguisher check)
+    id: 'CAR-04-04',
+    axis: 'السلامة المهنية',
+    category: 'سلامة',
+    criteria: 'حظر التدخين واستخدام اللهب المكشوف داخل الورشة ومناطق تخزين نشارة الخشب، مع وجود لوحات تحذير واضحة.',
+    legalReference: 'القانون 19-02 المادة 6 (حظر مصادر الاشتعال في المنشآت ذات المواد القابلة للاشتعال واشتراط لافتات التحذير).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
