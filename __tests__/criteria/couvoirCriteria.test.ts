@@ -2,8 +2,8 @@ import { couvoirSpecificCriteria } from '../../src/criteria/couvoirCriteria';
 import { InspectionItem } from '../../src/types';
 
 describe('couvoirSpecificCriteria', () => {
-  it('has exactly 22 items', () => {
-    expect(couvoirSpecificCriteria).toHaveLength(22);
+  it('has exactly 23 items', () => {
+    expect(couvoirSpecificCriteria).toHaveLength(23);
   });
 
   it('all IDs are unique', () => {
@@ -47,8 +47,16 @@ describe('couvoirSpecificCriteria', () => {
     });
   });
 
-  it('covers التصنيف والترخيص axis', () => {
+  it('covers الهوية والتصنيف axis', () => {
     const axes = new Set(couvoirSpecificCriteria.map((c: InspectionItem) => c.axis));
     expect(axes.has('الهوية والتصنيف')).toBe(true);
+  });
+
+  it('contains EIA criterion COU-AX10-01', () => {
+    const item = couvoirSpecificCriteria.find((c: InspectionItem) => c.id === 'COU-AX10-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
   });
 });

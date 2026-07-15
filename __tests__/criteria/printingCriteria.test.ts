@@ -5,8 +5,8 @@ describe('printingCriteria', () => {
     expect(Array.isArray(printingCriteria)).toBe(true);
   });
 
-  it('should contain exactly 11 items', () => {
-    expect(printingCriteria).toHaveLength(11);
+  it('should contain exactly 10 items', () => {
+    expect(printingCriteria).toHaveLength(10);
   });
 
   it('should have no duplicate IDs', () => {
@@ -29,8 +29,12 @@ describe('printingCriteria', () => {
     });
   });
 
-  it('PRT-01-01 is licence doc high', () => {
-    const item = printingCriteria.find(i => i.id === 'PRT-01-01');
+  it('PRT-01-01 removed — covered by BGN-01-01', () => {
+    expect(printingCriteria.find(i => i.id === 'PRT-01-01')).toBeUndefined();
+  });
+
+  it('PRT-01-02 is commercial register doc high', () => {
+    const item = printingCriteria.find(i => i.id === 'PRT-01-02');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');

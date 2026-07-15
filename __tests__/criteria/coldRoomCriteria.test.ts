@@ -11,9 +11,9 @@ describe('coldRoomSpecificCriteria', () => {
     expect(new Set(ids).size).toBe(ids.length);
   });
 
-  it('all IDs match CLD-1X-XX pattern (17 or 18)', () => {
+  it('all IDs match CLD-1X-XX pattern (17, 18, or 19)', () => {
     coldRoomSpecificCriteria.forEach(item =>
-      expect(item.id).toMatch(/^CLD-1[78]-\d{2}$/)
+      expect(item.id).toMatch(/^CLD-1[789]-\d{2}$/)
     );
   });
 
@@ -43,5 +43,13 @@ describe('coldRoomSpecificCriteria', () => {
   it('axes cover expected domains', () => {
     const axes = new Set(coldRoomSpecificCriteria.map(i => i.axis));
     expect(axes.size).toBeGreaterThan(2);
+  });
+
+  it('contains EIA criterion CLD-19-01', () => {
+    const item = coldRoomSpecificCriteria.find(i => i.id === 'CLD-19-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
   });
 });

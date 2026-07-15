@@ -6,8 +6,8 @@ describe('carpenteryCriteria', () => {
     expect(carpenteryCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 10 items', () => {
-    expect(carpenteryCriteria).toHaveLength(10);
+  it('has exactly 11 items', () => {
+    expect(carpenteryCriteria).toHaveLength(11);
   });
 
   it('all IDs are unique', () => {
@@ -49,11 +49,8 @@ describe('carpenteryCriteria', () => {
     });
   });
 
-  it('CAR-01-01 is licence doc high', () => {
-    const item = carpenteryCriteria.find(i => i.id === 'CAR-01-01');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-    expect(item!.severity).toBe('high');
+  it('CAR-01-01 removed — covered by BGN-01-01', () => {
+    expect(carpenteryCriteria.find(i => i.id === 'CAR-01-01')).toBeUndefined();
   });
 
   it('CAR-02-01 is dust extraction visual high', () => {
@@ -84,11 +81,19 @@ describe('carpenteryCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
+  it('CAR-05-02 is air quality measurement doc medium', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CAR-05-02');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('medium');
+    expect(item!.axis).toBe('الانبعاثات الهوائية');
+  });
+
   it('axes cover expected domains', () => {
     const axes = new Set(carpenteryCriteria.map(i => i.axis));
-    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
     expect(axes.has('الموقع والتهيئة')).toBe(true);
     expect(axes.has('نفايات الخشب والألمنيوم')).toBe(true);
     expect(axes.has('السلامة المهنية')).toBe(true);
+    expect(axes.has('الانبعاثات الهوائية')).toBe(true);
   });
 });

@@ -40,9 +40,9 @@ describe('paintShopCriteria', () => {
     });
   });
 
-  it('all items should be high severity (hazardous activity)', () => {
+  it('majority items are high severity (8 of 9)', () => {
     const high = paintShopCriteria.filter(i => i.severity === 'high');
-    expect(high.length).toBe(9);
+    expect(high.length).toBe(8);
   });
 
   it('PNT-02-01 should require spray booth ventilation (visual)', () => {

@@ -5,8 +5,8 @@ describe('semiPharmaCriteria', () => {
     expect(Array.isArray(semiPharmaCriteria)).toBe(true);
   });
 
-  it('should contain exactly 9 items', () => {
-    expect(semiPharmaCriteria).toHaveLength(9);
+  it('should contain exactly 10 items', () => {
+    expect(semiPharmaCriteria).toHaveLength(10);
   });
 
   it('should have no duplicate IDs', () => {
@@ -72,11 +72,20 @@ describe('semiPharmaCriteria', () => {
     expect(item!.controlType).toBe('doc');
   });
 
+  it('SPH-06-01 should be EIA doc high', () => {
+    const item = semiPharmaCriteria.find(i => i.id === 'SPH-06-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
+  });
+
   it('should cover all expected axes', () => {
     const axes = new Set(semiPharmaCriteria.map(i => i.axis));
     expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
     expect(axes.has('نظافة فضاءات التعبئة')).toBe(true);
     expect(axes.has('التوسيم والتتبعية')).toBe(true);
     expect(axes.has('صحة العمال')).toBe(true);
+    expect(axes.has('دراسة التأثير البيئي')).toBe(true);
   });
 });

@@ -6,8 +6,8 @@ describe('baseFoodCriteria', () => {
     expect(baseFoodCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 15 items', () => {
-    expect(baseFoodCriteria).toHaveLength(15);
+  it('has exactly 13 items', () => {
+    expect(baseFoodCriteria).toHaveLength(13);
   });
 
   it('all IDs are unique', () => {
@@ -42,23 +42,27 @@ describe('baseFoodCriteria', () => {
     baseFoodCriteria.forEach(item => expect(valid).toContain(item.controlType));
   });
 
-  it('measurement items with numericField have valid unit and bounds', () => {
+  it('measurement items with numericField have valid unit and threshold', () => {
     baseFoodCriteria
       .filter(i => i.controlType === 'measurement' && i.numericField)
       .forEach(item => {
         expect(item.numericField!.unit).toBeDefined();
-        expect(typeof item.numericField!.min).toBe('number');
-        expect(typeof item.numericField!.max).toBe('number');
+        expect(typeof item.numericField!.threshold).toBe('number');
       });
   });
 
-  it('contains temperature measurement items (BFD-05-02 and BFD-05-03)', () => {
-    const bfd0502 = baseFoodCriteria.find(i => i.id === 'BFD-05-02');
-    const bfd0503 = baseFoodCriteria.find(i => i.id === 'BFD-05-03');
-    expect(bfd0502).toBeDefined();
-    expect(bfd0502!.controlType).toBe('measurement');
-    expect(bfd0503).toBeDefined();
-    expect(bfd0503!.controlType).toBe('measurement');
+  it('contains chilled temperature item BFD-04-01', () => {
+    const item = baseFoodCriteria.find(i => i.id === 'BFD-04-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('measurement');
+    expect(item!.numericField!.threshold).toBe(5);
+  });
+
+  it('contains frozen temperature item BFD-04-02', () => {
+    const item = baseFoodCriteria.find(i => i.id === 'BFD-04-02');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('measurement');
+    expect(item!.numericField!.threshold).toBe(-18);
   });
 
   it('contains traceability item BFD-08-01', () => {
@@ -67,8 +71,8 @@ describe('baseFoodCriteria', () => {
     expect(item!.axis).toContain('التتبع');
   });
 
-  it('contains HACCP item BFD-09-01', () => {
-    const item = baseFoodCriteria.find(i => i.id === 'BFD-09-01');
+  it('contains HACCP item BFD-05-01', () => {
+    const item = baseFoodCriteria.find(i => i.id === 'BFD-05-01');
     expect(item).toBeDefined();
     expect(item!.axis).toContain('HACCP');
   });

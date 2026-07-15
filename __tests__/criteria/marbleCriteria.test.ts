@@ -6,8 +6,8 @@ describe('marbleCriteria', () => {
     expect(marbleCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 10 items', () => {
-    expect(marbleCriteria).toHaveLength(10);
+  it('has exactly 11 items', () => {
+    expect(marbleCriteria).toHaveLength(11);
   });
 
   it('all IDs are unique', () => {
@@ -59,5 +59,12 @@ describe('marbleCriteria', () => {
     const item = marbleCriteria.find(i => i.id === 'MRB-05-04');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
+  });
+
+  it('contains silica air quality item MRB-05-05', () => {
+    const item = marbleCriteria.find(i => i.id === 'MRB-05-05');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.axis).toBe('الانبعاثات الهوائية');
   });
 });

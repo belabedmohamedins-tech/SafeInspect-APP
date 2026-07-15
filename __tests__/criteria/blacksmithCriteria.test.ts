@@ -42,7 +42,7 @@ describe('blacksmithCriteria', () => {
 
   it('axes cover expected domains', () => {
     const axes = new Set(blacksmithCriteria.map(i => i.axis));
-    expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
+    expect(axes.has('الموقع والتهيئة')).toBe(true);
     expect(axes.has('السلامة المهنية')).toBe(true);
   });
 });

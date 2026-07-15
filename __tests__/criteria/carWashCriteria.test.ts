@@ -47,11 +47,14 @@ describe('carWashCriteria', () => {
     expect(waterItems.length).toBeGreaterThanOrEqual(3);
   });
 
-  it('contains oil separator item CWS-02-01', () => {
+  it('CWS-02-01 is oil separator measurement with numericField (mg/L)', () => {
     const item = carWashCriteria.find(i => i.id === 'CWS-02-01');
     expect(item).toBeDefined();
-    expect(item!.controlType).toBe('visual');
+    expect(item!.controlType).toBe('measurement');
     expect(item!.severity).toBe('high');
+    expect(item!.numericField).toBeDefined();
+    expect(item!.numericField!.unit).toBe('mg/L');
+    expect(item!.numericField!.max).toBe(10);
   });
 
   it('contains fire safety item CWS-05-01', () => {

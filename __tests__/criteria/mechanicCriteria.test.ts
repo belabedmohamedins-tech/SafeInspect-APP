@@ -6,8 +6,8 @@ describe('mechanicWorkshopCriteria', () => {
     expect(mechanicWorkshopCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 7 items', () => {
-    expect(mechanicWorkshopCriteria).toHaveLength(7);
+  it('has exactly 9 items', () => {
+    expect(mechanicWorkshopCriteria).toHaveLength(9);
   });
 
   it('all IDs are unique', () => {
@@ -42,11 +42,8 @@ describe('mechanicWorkshopCriteria', () => {
     mechanicWorkshopCriteria.forEach(item => expect(valid).toContain(item.controlType));
   });
 
-  it('contains licence/doc item MCH-29-01', () => {
-    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-01');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
-    expect(item!.severity).toBe('high');
+  it('MCH-29-01 removed — covered by BGN-01-01', () => {
+    expect(mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-01')).toBeUndefined();
   });
 
   it('contains hazardous waste items', () => {
@@ -57,6 +54,26 @@ describe('mechanicWorkshopCriteria', () => {
   it('contains fire safety item MCH-29-07', () => {
     const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-07');
     expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+  });
+
+  it('MCH-29-08 covers brake/hydraulic fluid disposal (doc)', () => {
+    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-08');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+  });
+
+  it('MCH-29-09 covers end-of-life tyre disposal (visual)', () => {
+    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-09');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('visual');
+  });
+
+  it('MCH-29-10 covers lead-acid battery disposal (doc)', () => {
+    const item = mechanicWorkshopCriteria.find(i => i.id === 'MCH-29-10');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('high');
   });
 });

@@ -5,8 +5,8 @@ describe('gplCriteria', () => {
     expect(Array.isArray(gplCriteria)).toBe(true);
   });
 
-  it('should contain exactly 10 items', () => {
-    expect(gplCriteria).toHaveLength(10);
+  it('should contain exactly 11 items', () => {
+    expect(gplCriteria).toHaveLength(11);
   });
 
   it('should have no duplicate IDs', () => {
@@ -97,11 +97,20 @@ describe('gplCriteria', () => {
     expect(item!.axis).toBe('أدوات العمل والمعدات');
   });
 
+  it('GPL-05-01 should be EIA doc high', () => {
+    const item = gplCriteria.find(i => i.id === 'GPL-05-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
+  });
+
   it('should cover all expected axes', () => {
     const axes = new Set(gplCriteria.map(i => i.axis));
     expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
     expect(axes.has('تخزين قوارير الغاز')).toBe(true);
     expect(axes.has('الوقاية من الحريق والانفجار')).toBe(true);
     expect(axes.has('أدوات العمل والمعدات')).toBe(true);
+    expect(axes.has('دراسة التأثير البيئي')).toBe(true);
   });
 });

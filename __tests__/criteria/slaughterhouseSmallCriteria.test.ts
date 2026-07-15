@@ -5,8 +5,8 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(Array.isArray(slaughterhouseSmallCriteria)).toBe(true);
   });
 
-  it('should contain exactly 11 items', () => {
-    expect(slaughterhouseSmallCriteria).toHaveLength(11);
+  it('should contain exactly 12 items', () => {
+    expect(slaughterhouseSmallCriteria).toHaveLength(12);
   });
 
   it('should have no duplicate IDs', () => {
@@ -42,7 +42,7 @@ describe('slaughterhouseSmallCriteria', () => {
 
   it('all items should be high severity (critical activity)', () => {
     const high = slaughterhouseSmallCriteria.filter(i => i.severity === 'high');
-    expect(high.length).toBe(11);
+    expect(high.length).toBe(12);
   });
 
   it('SLH-05-01 should be doc controlType for exploitation licence', () => {
@@ -84,6 +84,22 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(item!.axis).toBe('نظام HACCP وسلامة الغذاء');
   });
 
+  it('SLH-07-01 should cover veterinary waste (doc, high)', () => {
+    const item = slaughterhouseSmallCriteria.find(i => i.id === 'SLH-07-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('النفايات البيطرية والطبية');
+  });
+
+  it('SLH-08-01 should be EIA doc high', () => {
+    const item = slaughterhouseSmallCriteria.find(i => i.id === 'SLH-08-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('high');
+    expect(item!.axis).toBe('دراسة التأثير البيئي');
+  });
+
   it('should cover all expected axes', () => {
     const axes = new Set(slaughterhouseSmallCriteria.map(i => i.axis));
     expect(axes.has('هوية المنشأة والوثائق')).toBe(true);
@@ -94,5 +110,7 @@ describe('slaughterhouseSmallCriteria', () => {
     expect(axes.has('نظافة قاعة الذبح')).toBe(true);
     expect(axes.has('صحة وسلوك العمال')).toBe(true);
     expect(axes.has('نظام HACCP وسلامة الغذاء')).toBe(true);
+    expect(axes.has('النفايات البيطرية والطبية')).toBe(true);
+    expect(axes.has('دراسة التأثير البيئي')).toBe(true);
   });
 });
