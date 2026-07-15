@@ -62,4 +62,37 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    // T0.8: brake fluid and hydraulic fluid handling
+    id: 'MCH-29-08',
+    axis: 'النفايات الخطرة',
+    category: 'بيئية',
+    criteria: 'جمع سوائل الفرامل والسائل الهيدروليكية المستبدلة في حاويات محكمة وموسومة (مواد خطرة)، وعدم خلطها مع الزيوت المستعملة، مع التسليم لمتعامل معتمد وحفظ وثيقة التسليم.',
+    legalReference: 'القانون 01-19 المادة 28 (تصنيف وجرد النفايات الخطرة) + المرسوم 05-315 (بورديرو نقل النفايات الخطرة).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // T0.8: end-of-life tyre disposal
+    id: 'MCH-29-09',
+    axis: 'النفايات الخطرة',
+    category: 'بيئية',
+    criteria: 'عدم تراكم الإطارات المستهلكة (منتهية الصلاحية) داخل أو خارج الورشة، وتسليمها لمتعامل معتمد أو نقطة تجميع معتمدة مع حفظ وثيقة التسليم، وحظر حرقها في الهواء الطلق بكل الأحوال.',
+    legalReference: 'القانون 01-19 المادة 29 (حظر حرق النفايات غير الخطرة في الهواء الطلق) + المرسوم 09-19 (اعتماد متعاملي جمع النفايات).',
+    severity: 'medium',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // T0.8: lead-acid battery disposal (car batteries)
+    id: 'MCH-29-10',
+    axis: 'النفايات الخطرة',
+    category: 'بيئية',
+    criteria: 'تخزين بطاريات السيارات المستبدلة (رصاص-حمض) على أرضية محمية ضد التسرب داخل المستودع، وعدم إفراغ حمض البطارية في شبكة الصرف، مع التسليم لمتعامل معتمد وحفظ بورديرو النقل.',
+    legalReference: 'القانون 01-19 + المرسوم 05-315 (بورديرو نقل النفايات الخطرة لبطاريات الرصاص-حمض).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];
