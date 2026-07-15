@@ -42,6 +42,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 - ✅ **Done** — shipped to `main`, tests green
 - 🔲 **Pending** — not yet started
 - 🔄 **Partial** — started but not complete
+- ❓ **Blocked** — awaiting user decision
 
 ---
 
@@ -107,9 +108,9 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | `marbleCriteria.ts` | `MRB-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
 | `paintShopCriteria.ts` | `PNT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
 | `printingCriteria.ts` | `PRT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
-| `blacksmithCriteria.ts` | `BLS-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
-| `carpenteryCriteria.ts` | `CAR-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
-| `mechanicCriteria.ts` | `MCH-29-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | 🔲 Pending |
+| `blacksmithCriteria.ts` | `BLS-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
+| `carpenteryCriteria.ts` | `CAR-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
+| `mechanicCriteria.ts` | `MCH-29-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
 
 **Intentional specialisations kept (not duplicates):**
 - `ABT-AX1-01` — adds animal type + capacity match
@@ -137,15 +138,15 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 
 ---
 
-### Phase 3 — Food Safety Fixes (Inspection Manual Chapter 4) `HIGH VALUE` 🔄 Partial
+### Phase 3 — Food Safety Fixes (Inspection Manual Chapter 4) `HIGH VALUE` ✅ COMPLETE
 
 | # | Action | Criterion(s) | Details | Status |
 |---|---|---|---|---|
 | 3.1 | **Fix HACCP scope** | `BFD-05-01` | Remove UPD from HACCP scope | ✅ Done — baseFoodCriteria removed from updChecklist (Phase 2.3) |
 | 3.2 | **Extend HACCP requirement** | `ABT-AX10-01`, `SLH-06-01`, `CLD-18-01` | HACCP added to abattoir ✅, slaughterhouse ✅, cold room ✅ (`CLD-18-01` already in repo) | ✅ Done |
 | 3.3 | **Fix BFD-05-01 citation** | `BFD-05-01` | ✅ Done (Phase 1.1) | ✅ Done |
-| 3.4 | **Add traceability criterion** | New: `BFD-08-01` | Add to baseFoodCriteria | 🔲 Pending |
-| 3.5 | **Verify cold-chain temperature values** | `BFD-04-01`, `BFD-04-02`, `CLD-*` | Verify 0–5°C / ≤−18°C against Décret 17-140 arts. 7/8/9 | 🔲 Pending |
+| 3.4 | **Add traceability criterion** | `BFD-08-01` | Added to baseFoodCriteria — القانون 09-03 المادة 19 + المرسوم 17-140 | ✅ Done |
+| 3.5 | **Verify cold-chain temperature values** | `BFD-04-01`, `BFD-04-02` | Verified against Décret 17-140 arts. 7/8/9: 0–5°C chilled ✅, ≤−18°C frozen ✅ | ✅ Done |
 | 3.6 | **Add healthcare/veterinary waste criteria** | `ABT-AX10-02`, `SLH-07-01` | ✅ Both added and tested | ✅ Done |
 
 ---
@@ -157,28 +158,28 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | 4.1 | Upgrade discharge criteria to `numericField` | `ABT-AX4-01`, `SLH-05-04`, `UAB-AX3-01`, `MRB-03-01`, `CWS-03-01` | 🔲 Pending |
 | 4.2 | Split conflated permit criterion | `UAB-AX3-02` | 🔲 Pending |
 | 4.3 | Extend permit+lab chain beyond UAB | New criteria for car wash, mechanic, marble | 🔲 Pending |
-| 4.4 | Add septic-pit pumping-frequency check | `ABT-AX4-04`, `BGN-03-06` | 🔲 Pending |
+| 4.4 | Add septic-pit pumping-frequency check | `ABT-AX4-04`, `BGN-03-06` | 🔲 Pending — `BGN-03-06` already exists, needs pumping frequency detail |
 
 ---
 
-### Phase 5 — Solid & Hazardous Waste Fixes `HIGH VALUE` 🔲 Pending
+### Phase 5 — Solid & Hazardous Waste Fixes `HIGH VALUE` ✅ COMPLETE
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 5.1 | Add waste transfer manifest criterion | New: `BGN-04-05` | 🔲 Pending |
-| 5.2 | Add on-site incineration ban | New: `BGN-04-06` | 🔲 Pending |
-| 5.3 | Add waste inventory/classification criterion | New: `BGN-04-07` | 🔲 Pending |
-| 5.4 | Confirm Décret 04-409 removal (Phase 1 follow-up) | All criteria files | 🔲 Pending |
+| 5.1 | Add waste transfer manifest criterion | `BGN-04-06` | ✅ Done — القانون 01-19 المادة 32 + المرسوم 05-315 |
+| 5.2 | Add on-site incineration ban | `BGN-04-05` (open-air) + `BGN-04-07` (hazardous) | ✅ Done — dual coverage: non-hazardous open-air ban + hazardous incineration ban |
+| 5.3 | Add waste inventory/classification criterion | `BGN-04-08` | ✅ Done — القانون 01-19 المادة 28 + المرسوم 05-315 |
+| 5.4 | Confirm Décret 04-409 removal (Phase 1 follow-up) | All criteria files | ✅ Done — no remaining 04-409 citations across all criteria files |
 
 ---
 
-### Phase 6 — Fire Safety Fixes `HIGH VALUE` 🔲 Pending
+### Phase 6 — Fire Safety Fixes `HIGH VALUE` 🔄 Partial
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 6.1 | Add electrical-safety criterion | New: `BGN-05-05` | 🔲 Pending |
-| 6.2 | Add fire-alarm/smoke-detection criterion | New: `BGN-05-06` | 🔲 Pending |
-| 6.3 | Add extinguisher service-tag date check | All extinguisher criteria | 🔲 Pending |
+| 6.1 | Add electrical-safety criterion | `BGN-08-03` | ✅ Done — المرسوم 76-35 + القانون 90-11 |
+| 6.2 | Add fire-alarm/smoke-detection criterion | `BGN-08-05` | ✅ Done — القانون 19-02 المادة 5 |
+| 6.3 | Add extinguisher service-tag date check | `BGN-08-01` (already has maintenance card check) | ✅ Done — service-tag date (تاريخ آخر فحص وتاريخ انتهاء الصلاحية) already in BGN-08-01 criteria text |
 | 6.4 | Add wilaya operating-user authorization | New per-facility-type criterion | 🔲 Pending |
 | 6.5 | Split extinguisher+housekeeping bundled criteria | Various (see S4) | 🔲 Pending |
 
@@ -189,8 +190,8 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
 | 7.1 | Add periodic emissions measurement criterion | New `BLS-AX02-03`, `CAR-AX02-03`, `MRB-AX02-03`, `PNT-AX02-03`, `PRT-AX02-03` | 🔲 Pending |
-| 7.2 | Resolve Décret 06-02 vs 06-138 benchmark | `UAB-AX5-02`, `01-09` | ✅ Verified (dual-cite correct — see Phase 1.6) |
-| 7.3 | Add buffer-distance numeric minimum | `03-02` (UPD) | 🔲 Pending |
+| 7.2 | Resolve Décret 06-02 vs 06-138 benchmark | `UAB-AX5-02` | ✅ Verified (dual-cite correct — see Phase 1.6) |
+| 7.3 | Add buffer-distance numeric minimum | `UPD-AX2-01` or similar | 🔲 Pending |
 
 ---
 
@@ -198,28 +199,62 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 
 | # | Action | Status |
 |---|---|---|
-| 8.1 | Consolidate to one pest module (`BGN-07-01…05`) | 🔲 Pending |
-| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅ removed; `BAK-10-09` ✅ removed; others pending |
+| 8.1 | Consolidate to one pest module (`BGN-07-01…05`) | ✅ Done — BGN-07-01…05 in baseGeneralCriteria, all facility types inherit |
+| 8.2 | Remove facility-specific duplicates | `SLH-05-10` ✅ removed; `BAK-10-09` ✅ removed; `BFD-07-01/02` pending Phase 8 completion |
 | 8.3 | Keep UPD wild-bird exclusion (`UPD-AX8-03`) | ✅ Confirmed — kept, biosecurity distinct from generic pest control |
-| 8.4 | Add insect-screen criterion as food-specific add-on | 🔲 Pending |
+| 8.4 | Remove `BFD-07-01` and `BFD-07-02` from baseFoodCriteria | 🔲 Pending — superseded by BGN-07-* but kept temporarily until Phase 8 is confirmed complete |
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` 🔲 Pending
+### Phase 9 — Occupational Health `MEDIUM` 🔄 Partial
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 9.1 | Add noise exposure measurement | Various noisy facility types | 🔲 Pending |
+| 9.1 | Add noise exposure measurement | `BGN-09-01` | ✅ Done — القانون 03-10 + المرسوم 93-120, numericField: 70 dB limit |
 | 9.2 | Add machine-guard criterion for blacksmith | New: `BLS-AX06-01` | 🔲 Pending |
 
 ---
 
-### Phase 10 — Documentation Fixes `MEDIUM` 🔲 Pending
+### Phase 10 — Documentation Fixes `MEDIUM` 🔄 Partial
 
 | # | Action | Criterion(s) | Status |
 |---|---|---|---|
-| 10.1 | Add anti-obstruction criterion universally | New in `baseGeneralCriteria` | 🔲 Pending |
+| 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | ✅ Done — القانون 03-10 المادة 71 + المادة 73, in baseGeneralCriteria (all 18 facility types) |
 | 10.2 | Extend impact-category-triggered EIA | New criteria for applicable facility types | 🔲 Pending |
+
+---
+
+## What Remains (True Pending Work)
+
+> Quick reference — everything still needing code changes.
+
+### 🔲 Decisions needed first
+- **Phase 2.2 borderlines**: Should `BLS-01-01`, `CAR-01-01`, `MCH-29-01` be removed (pure restate of BGN-01-01) or kept? → **Awaiting your call.**
+
+### 🔲 Content additions (criteria code)
+| Phase | Item | Notes |
+|---|---|---|
+| 4.1 | Wastewater numericField upgrades | 5 criteria |
+| 4.2 | Split UAB-AX3-02 | Permit vs lab chain |
+| 4.3 | Permit+lab chain for CWS/MCH/MRB | New criteria |
+| 6.4 | Wilaya operating-user auth | Per-facility |
+| 6.5 | Split bundled extinguisher criteria | See S4 |
+| 7.1 | Emissions measurement for 5 facility types | New criteria |
+| 7.3 | Buffer-distance numeric (UPD) | numericField |
+| 8.4 | Remove BFD-07-01/02 | After BGN-07-* confirmed |
+| 9.2 | Machine-guard BLS-AX06-01 | Blacksmith |
+| 10.2 | EIA trigger criteria | Per applicable types |
+| T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid |
+
+### 🔲 Technical debt (non-criteria code)
+| Item | File | Notes |
+|---|---|---|
+| T0.1 | SHA-256 hash replacement | IntegrityService.ts |
+| T0.2 | Bundle ID fix | app.json |
+| T0.4 | Article numbers in baseGeneralCriteria | Several criteria vague |
+| T0.5 | Photo backup inclusion | BackupService.ts |
+| T0.6 | Severity enum | types/index.ts + all criteria |
+| T0.7 | Criteria registry pattern | criteriaData.ts |
 
 ---
 
@@ -254,16 +289,15 @@ This resolves: the duplication problem (Tier 1 is defined once), the "equipment-
 
 ## Implementation Order (Recommended)
 
-1. **Phase 2 remainder** — borderline licensing IDs (BLS-01-01, CAR-01-01, MCH-29-01) — pending user decision
-2. **Phase 3 remainder** — traceability `BFD-08-01`, cold-chain temperature verification
-3. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
-4. **Phase 4** — Wastewater numeric thresholds
-5. **Phase 5** — Solid/hazardous waste additions
-6. **Phase 6** — Fire safety additions
-7. **Phase 7** — Air quality measurement extension
-8. **Phase 8** — Pest control consolidation
-9. **Phases 9–10** — Occupational health + documentation
-10. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
+1. **Phase 2.2 decision** — remove or keep BLS-01-01, CAR-01-01, MCH-29-01
+2. **Phase 4** — Wastewater numeric thresholds (highest inspection value)
+3. **Phase 6.4/6.5** — Wilaya auth + split bundled fire criteria
+4. **Phase 7.1/7.3** — Air quality measurement extension
+5. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
+6. **Phase 9.2** — Machine-guard blacksmith
+7. **Phase 10.2** — EIA trigger criteria
+8. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
+9. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
 
 ---
 
