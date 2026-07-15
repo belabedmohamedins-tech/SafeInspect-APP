@@ -344,6 +344,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    // Phase 6.4: Wilaya operating-user authorization for Class 1 classified establishments
+    id: 'BGN-08-06',
+    axis: 'السلامة العامة والوقاية من الحوادث',
+    category: 'تنظيمية',
+    criteria: 'بالنسبة للمنشآت المصنفة من الدرجة الأولى (التي تستلزم قرار الوالي): التحقق من وجود قرار الاستغلال الصادر عن الوالي (رخصة استغلال المؤسسات المصنفة D1) ساري المفعول، وأن النشاط المُمارَس فعلياً مطابق للنشاط المُرخَّص به، وأن التعديلات الجوهرية أُخضعت لإجراءات الترخيص المسبق.',
+    legalReference: 'المرسوم التنفيذي 06-198 المادة 7 (قرار الوالي لمنشآت الدرجة الأولى) + القانون 03-10 المادة 18 (إلزامية الترخيص المسبق للمنشآت المصنفة D1 وتجريم مخالفته).',
+    severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
   // المحور 9: الضجيج والانبعاثات البيئية (عام)
   {
     id: 'BGN-09-01',
