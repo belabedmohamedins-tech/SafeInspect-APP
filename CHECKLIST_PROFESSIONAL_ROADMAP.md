@@ -1,7 +1,7 @@
 # SafeInspect — Professional Checklist Roadmap
 
 > **Single source of truth for all checklist improvements.**  
-> Grounded in: Inspection Manual Chapters 1–4 (Wastewater, Solid/Hazardous Waste, Fire Safety, Food Safety) + Audit Sessions 2–9.  
+> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9.  
 > More chapters are incoming — this document will be updated as each new chapter is uploaded.
 
 ---
@@ -15,8 +15,8 @@
 | Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations | **3 fixed + 1 verified correct** |
 | Sessions completed | **9 / 9 audit sessions done** |
-| Inspection Manual chapters digested | **4 / 4 uploaded (Ch. 1–4)** |
-| Inspection Manual chapters pending | **Ch. 5+ (not yet uploaded)** |
+| Inspection Manual chapters digested | **6 / 6 uploaded (Ch. 1–6)** |
+| Inspection Manual chapters pending | **Ch. 7+ (not yet uploaded)** |
 
 ---
 
@@ -189,21 +189,36 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 9 — Occupational Health `MEDIUM` ✅ COMPLETE
+### Phase 9 — Occupational Health `MEDIUM` 🔄 Partial
 
-| # | Action | Criterion(s) | Status |
-|---|---|---|---|
-| 9.1 | Add noise exposure measurement | `BGN-09-01` | ✅ Done |
-| 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | ✅ Done |
+> Grounded in Inspection Manual **Chapter 5** (Occupational Health & Worker Protection).  
+> Key legal instruments confirmed: Loi 88-07, Décret 91-05, Décret 93-120, **Décret 02-427** (PPE training), Loi 18-11.  
+> Key insight: Algeria regulates specific-substance limits (noise, lead, etc.) via **targeted decrees**, not the general 88-07/91-05 framework — search for a noise/vibration-specific decree before treating the gap as legislative silence.
+
+| # | Action | Criterion(s) | Legal basis | Status |
+|---|---|---|---|---|
+| 9.1 | Add noise exposure measurement | `BGN-09-01` | Décret 91-05 art. (noise protection) + Loi 18-11 | ✅ Done |
+| 9.2 | Add machine-guard criterion for blacksmith | `BLS-04-05` | Décret 91-05 | ✅ Done |
+| 9.3 | **Add PPE-use training criterion** | `BGN-09-02` (new) | **Décret 02-427** (7 déc 2002) — worker instruction/training in occupational risk prevention. This upgrades the original audit's Session 6 gap from a best-practice recommendation to a [LOI]-grounded criterion. | 🔲 Pending |
+| 9.4 | **Noise limit: search for targeted decree** | `BGN-09-01` annotation | Algeria's pattern: specific-substance limits live in targeted decrees (confirmed for lead). A noise/vibration-specific decree very likely exists — not legislative silence. Run a dedicated search before finalising the numeric value in `BGN-09-01`. | ❓ Research gap |
+| 9.5 | **Medical-exam interval confirmation** | `BGN-09-03` (new, if interval confirmed) | Loi 18-11 confirms the obligation; delegates interval to implementing regulation. Possibly in Décret 93-120 (not yet reviewed at article level). The existing 6-month figure in the checklist is [PRATIQUE] — upgrade to [LOI] once the implementing text is located. | ❓ Research gap |
 
 ---
 
-### Phase 10 — Documentation Fixes `MEDIUM` 🔄 Partial
+### Phase 10 — Documentation & Licensing `MEDIUM` 🔄 Partial
 
-| # | Action | Criterion(s) | Status |
-|---|---|---|---|
-| 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | ✅ Done |
-| 10.2 | Extend impact-category-triggered EIA | New criteria for applicable facility types | 🔲 Pending |
+> Grounded in Inspection Manual **Chapter 6** (Documentation & Licensing).  
+> **Most consequential chapter finding:** Décret 06-198 has been **amended twice** since 2006 — Décret 22-167 (April 2022) and **Décret 24-196 (June 2024)**. The 2024 amendment creates an active three-year regularization grace period (≈ until June 2027) that directly changes how "no license" findings must be scored. Any licensing criterion that does not account for this is currently wrong for facilities inside the grace period.  
+> Additional key finding: **art. 4** explicitly confirms the environmental operating license does **not** substitute for any sectoral license (fire safety, discharge permit, etc.) — multiple simultaneous licenses can and do apply.
+
+| # | Action | Criterion(s) | Legal basis | Status |
+|---|---|---|---|---|
+| 10.1 | Add anti-obstruction criterion universally | `BGN-01-03` | — | ✅ Done |
+| 10.2 | **Extend impact-category-triggered EIA** | New criteria for applicable facility types | Décret 06-198 art. 5 + Décret 07-145 — EIA/impact summary required before license; model on existing `UPD-AX10-01` | 🔲 Pending |
+| 10.3 | **Grace-period logic for "no license" findings** | All facility-type licensing criteria | **Décret 24-196** (11 juin 2024) — three-year regularization window ≈ until June 2027. Update severity: "no license, grace-period active" = **major** (not critical); "no license, grace-period expired or inapplicable" = **critical**. Affects every facility type. | 🔲 Pending |
+| 10.4 | **Non-substitution cross-reference** | All facility-type licensing criteria | **Décret 06-198 art. 4** — operating license does NOT replace fire-safety authorization or discharge permit. Add inspector note to licensing criteria reminding that holding this license does not mean all licensing obligations are met. | 🔲 Pending |
+| 10.5 | **Category-aware licensing criterion** | Shared licensing criterion + all facility types | **Décret 07-144** (19 mai 2007) — maps each activity type to one of four categories (ministerial / wali / commune / declaration-only). Currently all facility types get a single generic "operating license" criterion; this should be category-specific. **Research gap:** the actual facility-type-to-category mapping from Décret 07-144 has not been extracted — this is the single highest-value follow-up item for this chapter. Do NOT implement until the mapping is confirmed. | ❓ Research gap — highest value |
+| 10.6 | **Add Décret 06-198 amendment citations** | All criteria citing Décret 06-198 | Update all legalReference strings citing "Décret 06-198" to read "Décret 06-198 tel que modifié par Décrets 22-167 et 24-196" so citations reflect the current amended text. | 🔲 Pending |
 
 ---
 
@@ -213,8 +228,20 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | Phase | Item | Notes |
 |---|---|---|
-| 10.2 | EIA trigger criteria | Per applicable facility types — read existing `UPD-AX10-01` as the model |
+| 9.3 | PPE-use training criterion `BGN-09-02` | Décret 02-427 — straightforward addition, model on `BGN-09-01` |
+| 10.2 | EIA trigger criteria | Per applicable facility types — model on existing `UPD-AX10-01` |
+| 10.3 | Grace-period logic for "no license" | Update severity metadata on all licensing criteria |
+| 10.4 | Non-substitution note on licensing criteria | Inspector guidance text addition |
+| 10.6 | Citation update: 06-198 → "tel que modifié" | All criteria files that cite Décret 06-198 |
 | T0.8 | Mechanic criteria expansion | Brake fluid, tyres, battery acid — read `mechanicCriteria.ts` first |
+
+### 🔲 Research gaps (block implementation until resolved)
+
+| Phase | Gap | Action needed |
+|---|---|---|
+| 9.4 | Noise/vibration-specific decree | Search for a targeted noise-exposure decree (same pattern that found the lead decree) — do NOT treat current gap as legislative silence |
+| 9.5 | Medical-exam interval implementing regulation | Review Décret 93-120 at article level — likely source of the 6-month figure |
+| 10.5 | Décret 07-144 facility-type-to-category mapping | Extract the actual list — highest-value follow-up for Phase 10 |
 
 ### 🔲 Technical debt (non-criteria code)
 
@@ -255,7 +282,9 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 | Chapter 2 | Solid & Hazardous Waste | ✅ | ✅ | Phase 5 |
 | Chapter 3 | Fire Safety & Hazardous Substances | ✅ | ✅ | Phase 6 |
 | Chapter 4 | Food Safety & Hygiene | ✅ | ✅ | Phase 3 |
-| Chapter 5+ | (pending upload) | ⏳ | ⏳ | Will extend relevant phases |
+| Chapter 5 | Occupational Health & Worker Protection | ✅ | ✅ | Phase 9 |
+| Chapter 6 | Documentation & Licensing | ✅ | ✅ | Phase 10 |
+| Chapter 7+ | (pending upload) | ⏳ | ⏳ | Will extend relevant phases |
 
 > **When new chapters arrive:** read the chapter, identify new legal instruments and coverage gaps, and add items to the relevant phase above (or create a new phase if the category is new). Do not create a new separate roadmap file.
 
@@ -263,12 +292,17 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 
 ## Implementation Order (Recommended)
 
-1. **🟡 Phase 10.2 — CURRENT** — EIA trigger criteria for applicable facility types
-2. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
-3. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
-4. **Tier 0 criteria** — T0.8 (mechanic expansion)
-5. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
-6. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern)
+1. **🟡 Phase 9.3 — CURRENT** — Add `BGN-09-02` PPE-use training criterion (Décret 02-427, quick win)
+2. **Phase 10.6** — Update all Décret 06-198 citation strings to "tel que modifié" (quick pass across criteria files)
+3. **Phase 10.3** — Grace-period severity logic on all licensing criteria
+4. **Phase 10.4** — Non-substitution inspector note on licensing criteria
+5. **Phase 10.2** — EIA trigger criteria (model on `UPD-AX10-01`)
+6. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers), T0.12 (duplicate spread)
+7. **Tier 0 high** — T0.5 (photo backup), T0.10 (PDF photos), T0.11 (numericField validation), T0.13 (status reset)
+8. **Tier 0 criteria** — T0.8 (mechanic expansion)
+9. **Tier 0 critical** — T0.1 (SHA-256), T0.9 (offline sync conflict)
+10. **Tier 0 heavy** — T0.6 (severity enum), T0.7 (registry pattern)
+11. **Research gaps** — 9.4 (noise decree), 9.5 (medical interval), 10.5 (Décret 07-144 mapping) — when ready
 
 ---
 
@@ -278,4 +312,4 @@ Tier 3: UAB-style measured/high-risk tier — triggered by risk level or volume 
 - **`numericField` schema** — proven in `baseFoodCriteria`. Reuse, don't rebuild.
 - **UAB's existing AX-series criteria** — best-designed content in the library. Preserve as the model.
 - **`BGN-07-01–05` pest module** — technically correct. Consolidate around it.
-- **Décret 06-198 citations** — most precisely cited instrument in the codebase. Leave as-is.
+- **Décret 06-198 citations** — most precisely cited instrument in the codebase. All now need "tel que modifié" suffix (Phase 10.6), but the base citation is correct.
