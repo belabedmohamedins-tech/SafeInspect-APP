@@ -82,7 +82,7 @@ All 6 citation fixes shipped. Verified in repo.
 
 ---
 
-### Phase 2 — Remove Legacy Duplicates `PRIORITY` 🔄 Partial
+### Phase 2 — Remove Legacy Duplicates `PRIORITY` ✅ COMPLETE
 
 Removing these ~60+ criteria shrinks each affected inspection to the correct item count and eliminates the silent double-weighting of findings in scores.
 
@@ -95,7 +95,7 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | `couvoirCriteria.ts` | `02-01–02-11` | ✅ Done — only `COU-AX*` series present |
 | `updCriteria.ts` | `03-01–03-10` | ✅ Done — only `UPD-AX*` series present |
 
-#### 2.2 Facility-specific restatements of shared modules
+#### 2.2 Facility-specific restatements of shared modules — ✅ ALL RESOLVED
 
 | File | IDs | Assessment | Status |
 |---|---|---|---|
@@ -108,9 +108,9 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 | `marbleCriteria.ts` | `MRB-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
 | `paintShopCriteria.ts` | `PNT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
 | `printingCriteria.ts` | `PRT-01-01` | Pure restate of BGN-01-01 — only names activity, no unique content | ✅ Removed |
-| `blacksmithCriteria.ts` | `BLS-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
-| `carpenteryCriteria.ts` | `CAR-01-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
-| `mechanicCriteria.ts` | `MCH-29-01` | Borderline — mentions no-license scenario (BGN-01-01 already does too). **Pending user decision.** | ❓ Blocked |
+| `blacksmithCriteria.ts` | `BLS-01-01` | Removed — pure restate of BGN-01-01, no unique content | ✅ Removed |
+| `carpenteryCriteria.ts` | `CAR-01-01` | Removed — pure restate of BGN-01-01, no unique content | ✅ Removed |
+| `mechanicCriteria.ts` | `MCH-29-01` | Removed — pure restate of BGN-01-01, no unique content | ✅ Removed |
 
 **Intentional specialisations kept (not duplicates):**
 - `ABT-AX1-01` — adds animal type + capacity match
@@ -228,9 +228,6 @@ Removing these ~60+ criteria shrinks each affected inspection to the correct ite
 
 > Quick reference — everything still needing code changes.
 
-### 🔲 Decisions needed first
-- **Phase 2.2 borderlines**: Should `BLS-01-01`, `CAR-01-01`, `MCH-29-01` be removed (pure restate of BGN-01-01) or kept? → **Awaiting your call.**
-
 ### 🔲 Content additions (criteria code)
 | Phase | Item | Notes |
 |---|---|---|
@@ -289,15 +286,14 @@ This resolves: the duplication problem (Tier 1 is defined once), the "equipment-
 
 ## Implementation Order (Recommended)
 
-1. **Phase 2.2 decision** — remove or keep BLS-01-01, CAR-01-01, MCH-29-01
-2. **Phase 4** — Wastewater numeric thresholds (highest inspection value)
-3. **Phase 6.4/6.5** — Wilaya auth + split bundled fire criteria
-4. **Phase 7.1/7.3** — Air quality measurement extension
-5. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
-6. **Phase 9.2** — Machine-guard blacksmith
-7. **Phase 10.2** — EIA trigger criteria
-8. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
-9. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
+1. **Phase 4** — Wastewater numeric thresholds (highest inspection value)
+2. **Phase 6.4/6.5** — Wilaya auth + split bundled fire criteria
+3. **Phase 7.1/7.3** — Air quality measurement extension
+4. **Phase 8.4** — Remove BFD-07-01/02 (pest dedup final step)
+5. **Phase 9.2** — Machine-guard blacksmith
+6. **Phase 10.2** — EIA trigger criteria
+7. **Tier 0 quick wins** — T0.2 (bundle ID), T0.4 (article numbers)
+8. **Tier 0 heavy** — T0.1 (SHA-256), T0.5 (photo backup), T0.6 (severity enum), T0.7 (registry pattern), T0.8 (mechanic expansion)
 
 ---
 
