@@ -92,7 +92,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 #### 2.1 Full legacy numeric series — ✅ Already clean in repo
 
 | File | Legacy IDs | Status |
-|---|---|
+|---|---|---|
 | `abattoirCriteria.ts` | `04-01, 04-03–04-11` | ✅ Done |
 | `uabCriteria.ts` | `01-01, 01-02, 01-05–01-12` | ✅ Done |
 | `couvoirCriteria.ts` | `02-01–02-11` | ✅ Done |
@@ -204,17 +204,23 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 11 — GPL Cylinder Storage Deduplication `MEDIUM` 🔲 Pending
+### Phase 11 — GPL Cylinder Storage Deduplication `MEDIUM` ✅ COMPLETE (Won't Merge)
 
-> **Root finding:** `gplCriteria.ts` has standalone GPL-02-01/02/03 for cylinder storage. `baseCompressedGasCriteria.ts` (CGS-01-01/02/03) covers the same subject. The two sets must be harmonised: either GPL-02-xx should delegate to `baseCompressedGasCriteria`, or a GPL-specific override must be justified by Décret 21-430 specificity.
+> **Root finding:** `gplCriteria.ts` GPL-02-01/02/03 and `baseCompressedGasCriteria.ts` CGS-01-01/02/03 cover the same three subjects (vertical storage, full/empty separation, max quantity).
 >
-> **Decision needed before acting:** GPL cylinder rules (Décret 21-430 Art. 6) are more specific than generic compressed-gas rules. A side-by-side comparison is required before removing GPL-02-xx.
+> **Decision (confirmed by side-by-side code review, July 2026):** **Keep GPL-02-xx as-is. Do NOT merge into baseCompressedGasCriteria.**
+>
+> **Justification:** The two sets have different legal bases:
+> - `GPL-02-xx` cites **Décret 21-430 Art. 6** (GPL/C-specific installation & service regulation) — the correct and more precise instrument for GPL cylinder service workshops.
+> - `CGS-01-xx` cites **Décret 76-35** (generic compressed-gas storage) — correct for welding/blacksmith shops.
+>
+> Merging would force inaccurate citations onto GPL inspections. The separation is intentional and legally correct.
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
-| 11.1 | Compare GPL-02-01/02/03 vs CGS-01-01/02/03 wording and legal basis | `gplCriteria.ts` + `baseCompressedGasCriteria.ts` | 🔲 Pending |
-| 11.2 | If GPL-specific content is a superset: keep GPL-02-xx, add comment | `gplCriteria.ts` | 🔲 Pending |
-| 11.3 | If purely duplicated: replace GPL-02-xx with `...baseCompressedGasCriteria` spread | `gplCriteria.ts` | 🔲 Pending |
+| 11.1 | Compare GPL-02-01/02/03 vs CGS-01-01/02/03 wording and legal basis | `gplCriteria.ts` + `baseCompressedGasCriteria.ts` | ✅ Done — different legal basis confirmed |
+| 11.2 | Keep GPL-02-xx with explanatory comment; no merge | `gplCriteria.ts` | ✅ Done — comment already present in file |
+| 11.3 | ~~Replace GPL-02-xx with baseCompressedGasCriteria spread~~ | N/A | ✅ Rejected — would corrupt legal citations |
 
 ---
 
@@ -267,3 +273,4 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 21-430 | All GPL criteria (Phase 1.2) |
 | Décret 06-141 | VOC emission limits (printing, paint, blacksmith) |
 | Décret 06-138 | Ambient/neighborhood noise limits (BLS-02-01) |
+| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) |
