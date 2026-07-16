@@ -42,12 +42,15 @@ describe('baseFoodCriteria', () => {
     baseFoodCriteria.forEach(item => expect(valid).toContain(item.controlType));
   });
 
-  it('measurement items with numericField have valid unit and threshold', () => {
+  // Phase 13: numericField now uses NumericFieldSpec (labelAr, max/warningMax/min, step)
+  // 'threshold' and 'comparisonOperator' were removed — do not reference them
+  it('measurement items with numericField have valid labelAr and unit', () => {
     baseFoodCriteria
       .filter(i => i.controlType === 'measurement' && i.numericField)
       .forEach(item => {
         expect(item.numericField!.unit).toBeDefined();
-        expect(typeof item.numericField!.threshold).toBe('number');
+        expect(typeof item.numericField!.labelAr).toBe('string');
+        expect(item.numericField!.labelAr!.length).toBeGreaterThan(0);
       });
   });
 
@@ -55,14 +58,18 @@ describe('baseFoodCriteria', () => {
     const item = baseFoodCriteria.find(i => i.id === 'BFD-04-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('measurement');
-    expect(item!.numericField!.threshold).toBe(5);
+    // Phase 13: threshold→max (chilled: ≤5°C)
+    expect(item!.numericField!.max).toBe(5);
+    expect(item!.numericField!.min).toBe(0);
   });
 
   it('contains frozen temperature item BFD-04-02', () => {
     const item = baseFoodCriteria.find(i => i.id === 'BFD-04-02');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('measurement');
-    expect(item!.numericField!.threshold).toBe(-18);
+    // Phase 13: threshold→warningMax with upperLimit:true (frozen: ≤-18°C)
+    expect(item!.numericField!.warningMax).toBe(-18);
+    expect(item!.numericField!.upperLimit).toBe(true);
   });
 
   it('contains traceability item BFD-08-01', () => {
