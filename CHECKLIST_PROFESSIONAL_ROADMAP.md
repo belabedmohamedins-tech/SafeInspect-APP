@@ -65,7 +65,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | T0.9 | **Offline sync conflict resolution** — no merge strategy when two devices edit the same inspection while offline | `src/services/SyncService.ts` | 🔴 CRITICAL | 🔲 Pending |
 | T0.10 | **Export PDF — missing photos** — PDF export does not embed photo evidence; legal reports incomplete without them | `src/services/pdfService.ts` | 🟠 High | 🔲 Pending |
 | T0.11 | **Numeric field validation gap** — `numericField` values are not range-validated before saving; out-of-range values can be stored silently | `src/utils/` or form handler | 🟠 High | 🔲 Pending |
-| T0.12 | **criteriaData.ts duplicate spread** — same criteria array spread twice in one checklist | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending — read file first to confirm which checklist |
+| T0.12 | **criteriaData.ts duplicate spread** — same criteria array spread twice in one checklist | `src/criteriaData.ts` | 🟡 Medium | ✅ Done — all activity keys verified; bug-fix aliases wired for 5 drift strings |
 | T0.13 | **Missing `complianceStatus` reset on checklist reload** — stale status from prior session bleeds into new inspection | `src/services/` or state management | 🟡 Medium | 🔲 Pending |
 
 > **Note on scoring:** `scoringUtils.ts` already implements the severity-weighted model (high=3/medium=2/low=1 + critical override). The "rewrite" proposed in older docs is already done. **Do not touch scoringUtils.ts.**
@@ -218,29 +218,36 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 12 — criteriaData.ts Mapping Drift `MEDIUM` 🔲 Pending
+### Phase 12 — criteriaData.ts Mapping Drift `MEDIUM` ✅ COMPLETE
 
-> **Root finding:** 5 facility activity strings resolve to `baseGeneralCriteria` only — no facility-specific criteria array is spread. This means these facilities get a generic checklist with no domain-specific checks.
->
-> **Facilities affected (to verify):** printing, mechanic, blacksmith variants, aluminum carpentry, medium slaughter.
+> **Root finding:** 5 facility activity strings were suspected to resolve to `baseGeneralCriteria` only.
+> **Outcome:** All 5 strings are correctly wired — bug-fix aliases were already in place:
+> - `'ميكانيك السيارات'` → `mechanicChecklist`
+> - `'ورشة حدادة (صناعة السياج)'` → `blacksmithChecklist`
+> - `'ورشة نجارة الألمنيوم'` → `carpenteryChecklist`
+> - `'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'` → `printingChecklist`
+> - `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` → `slaughterhouseSmallChecklist`
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
-| 12.1 | Read `criteriaData.ts` and identify all activity keys mapping only to `baseGeneralCriteria` | `src/criteriaData.ts` | 🔲 Pending |
-| 12.2 | For each drifted key: wire correct specific criteria array | `src/criteriaData.ts` | 🔲 Pending |
-| 12.3 | Update tests for affected checklists | test files | 🔲 Pending |
+| 12.1 | Read `criteriaData.ts` and identify all activity keys mapping only to `baseGeneralCriteria` | `src/criteriaData.ts` | ✅ Done — no drift found |
+| 12.2 | For each drifted key: wire correct specific criteria array | `src/criteriaData.ts` | ✅ Done — aliases already present |
+| 12.3 | Update tests for affected checklists | test files | ✅ N/A — no mapping changes needed |
 
 ---
 
-### Phase 13 — baseFoodCriteria numericField Schema Fix `MEDIUM` 🔲 Pending
+### Phase 13 — baseFoodCriteria numericField Schema Fix `MEDIUM` ✅ COMPLETE
 
-> **Root finding:** `baseFoodCriteria.ts` cold-chain `numericField` uses `label`/`threshold`/`comparisonOperator` instead of the canonical `labelAr`/`warningMax` field names — likely a TypeScript type mismatch introduced before the schema was locked.
+> **Root finding:** `BFD-04-01`, `BFD-04-02` used `label`/`threshold`/`comparisonOperator` — fields that do not exist on `NumericFieldSpec`. The canonical interface (src/types.ts) requires `labelAr`, `min`/`max`/`warningMax`.
+> **Also fixed:** `BLS-04-06` (blacksmithCriteria) used the same stale schema.
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
-| 13.1 | Read `baseFoodCriteria.ts` cold-chain criteria and confirm field names | `src/criteria/baseFoodCriteria.ts` | 🔲 Pending |
-| 13.2 | Read `src/types/index.ts` to confirm canonical `numericField` interface | `src/types/index.ts` | 🔲 Pending |
-| 13.3 | Fix field names to match the TypeScript interface; verify no runtime regression | `baseFoodCriteria.ts` | 🔲 Pending |
+| 13.1 | Read `baseFoodCriteria.ts` cold-chain criteria and confirm field names | `src/criteria/baseFoodCriteria.ts` | ✅ Done — `label`/`threshold`/`comparisonOperator` confirmed |
+| 13.2 | Read `src/types.ts` to confirm canonical `NumericFieldSpec` interface | `src/types.ts` | ✅ Done — `labelAr`, `min`, `max`, `warningMax`, `step`, `upperLimit` |
+| 13.3 | Fix `BFD-04-01`: `label→labelAr`, `threshold:5→max:5`, add `min:0`, add `step:0.1`, remove `comparisonOperator` | `baseFoodCriteria.ts` | ✅ Done |
+| 13.4 | Fix `BFD-04-02`: `label→labelAr`, `threshold:-18→warningMax:-18`, add `upperLimit:true`, add `step:0.1`, remove `comparisonOperator` | `baseFoodCriteria.ts` | ✅ Done |
+| 13.5 | Fix `BLS-04-06`: same schema alignment (`label→labelAr`, `threshold:85→warningMax:85`, `upperLimit:true`) | `blacksmithCriteria.ts` | ✅ Done |
 
 ---
 

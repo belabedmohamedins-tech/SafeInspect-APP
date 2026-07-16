@@ -83,7 +83,9 @@ export const baseFoodCriteria: InspectionItem[] = [
   // =====================================================================
   // المحور 4: سلسلة البرودة — درجات الحرارة مُتحقَّق منها بموجب
   //           المرسوم التنفيذي 17-140 المواد 7/8/9 (Phase 3.5 ✅)
-  //           ثلج/مجمد: ≤ −18°C | مبرد: 0–5°C
+  //           مبرد: 0–5°C | مجمد: ≤ −18°C
+  //           Phase 13 ✅: numericField aligned to NumericFieldSpec interface
+  //           (labelAr replaces label; max/warningMax replace threshold+comparisonOperator)
   // =====================================================================
   {
     id: 'BFD-04-01',
@@ -96,10 +98,11 @@ export const baseFoodCriteria: InspectionItem[] = [
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      label: 'درجة حرارة التبريد المقاسة (°C)',
+      labelAr: 'درجة حرارة التبريد المقاسة (°C)',
       unit: '°C',
-      threshold: 5,
-      comparisonOperator: 'lte',
+      min: 0,
+      max: 5,
+      step: 0.1,
     },
   },
   {
@@ -113,10 +116,11 @@ export const baseFoodCriteria: InspectionItem[] = [
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      label: 'درجة حرارة التجميد المقاسة (°C)',
+      labelAr: 'درجة حرارة التجميد المقاسة (°C)',
       unit: '°C',
-      threshold: -18,
-      comparisonOperator: 'lte',
+      warningMax: -18,
+      step: 0.1,
+      upperLimit: true,
     },
   },
   // =====================================================================

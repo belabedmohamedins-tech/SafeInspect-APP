@@ -78,6 +78,7 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 13 ✅: numericField aligned to NumericFieldSpec (labelAr, warningMax, step)
     id: 'BLS-04-06',
     axis: 'السلامة المهنية',
     category: 'بيئية',
@@ -87,10 +88,11 @@ export const blacksmithCriteria: InspectionItem[] = [
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      label: 'مستوى الضجيج المقاس (ديسيبل)',
+      labelAr: 'مستوى الضجيج المقاس (ديسيبل)',
       unit: 'dB',
-      threshold: 85,
-      comparisonOperator: 'lte',
+      warningMax: 85,
+      step: 1,
+      upperLimit: true,
     },
   },
   {
