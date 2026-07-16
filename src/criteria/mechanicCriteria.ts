@@ -47,7 +47,7 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
     axis: 'النظافة والسلامة',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية للعمال (قفازات، نظارات، ملابس واقية).',
-    legalReference: 'المرسوم 93-120 (وسائل الوقاية الشخصية) + القانون 90-11.',
+    legalReference: 'القانون 90-11 المادة 8 (إلزامية توفير وسائل الوقاية الشخصية الملائمة للمخاطر المهنية) + المرسوم التنفيذي 91-05 المادة 6 (اشتراطات تجهيز العمال بوسائل الوقاية الفردية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',

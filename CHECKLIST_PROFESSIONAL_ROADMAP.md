@@ -10,10 +10,10 @@
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **76 / 100** → targeting 80+ after remaining phases |
+| Overall checklist maturity score | **77 / 100** → targeting 80+ after remaining phases |
 | Total criteria in library | ~372 |
 | Confirmed duplicate criteria removed | **60+** |
-| Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 3 fixed (Phase 10.1 — Décret 93-120 sweep, printingCriteria)** |
+| Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 7 fixed (Phase 10 — Décret 93-120 sweep complete)** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **6 / 6 uploaded (Ch. 1–6)** |
 | Inspection Manual chapters pending | **Ch. 7+ (not yet uploaded)** |
@@ -180,7 +180,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` 🔄 Partial
+### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` ✅ COMPLETE
 
 > **Root finding (RAQIB Master Technical Manuscript):** Décret 93-120 governs **occupational medical examinations only** (periodic health checks for workers in hazardous activities — Article 9 and Annex). It does **NOT** govern PPE, machine guarding, noise emission limits, or chemical storage safety. Any criterion citing 93-120 for those subjects is mis-cited.
 >
@@ -190,14 +190,15 @@ All 9 audit sessions are **complete**. No remaining session work.
 > - **Chemical storage safety** → Loi 19-02 + Décret 91-05 Art. 9
 > - **Workplace noise limit (85 dB)** → Décret 93-120 Art. 9 ✅ CORRECT USE
 > - **Periodic medical exam** → Décret 93-120 ✅ CORRECT USE
+> - **Neighborhood noise (70 dB ambient)** → Loi 03-10 + Décret 06-138 ✅ CORRECT
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
 | 10.1 | Fix `PRT-03-03`, `PRT-05-01`, `PRT-05-02` — 93-120 cited for chemical storage, PPE, machine guards | `printingCriteria.ts` | ✅ Done |
-| 10.2 | Fix `BLS-04-01` — 93-120 cited for PPE | `blacksmithCriteria.ts` | 🔲 Pending |
-| 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | 🔲 Pending |
-| 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | 🔲 Pending |
-| 10.5 | Sweep remaining files (mechanicCriteria, carpenteryCriteria, marbleCriteria, paintShopCriteria) for any residual 93-120 PPE/guard mis-citations | Multiple | 🔲 Pending |
+| 10.2 | Fix `BLS-04-01` — 93-120 cited for PPE | `blacksmithCriteria.ts` | ✅ Done |
+| 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | ✅ Done |
+| 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | ✅ Done |
+| 10.5 | Fix `MCH-29-06` — 93-120 cited for PPE; sweep carpenteryCriteria, marbleCriteria, paintShopCriteria (no residual found) | `mechanicCriteria.ts` | ✅ Done |
 
 > **Note:** `BLS-04-06` (workplace noise 85 dB) and `BLS-05-01` (periodic medical exam) correctly cite 93-120 — do not change.
 
@@ -217,6 +218,32 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
+### Phase 12 — criteriaData.ts Mapping Drift `MEDIUM` 🔲 Pending
+
+> **Root finding:** 5 facility activity strings resolve to `baseGeneralCriteria` only — no facility-specific criteria array is spread. This means these facilities get a generic checklist with no domain-specific checks.
+>
+> **Facilities affected (to verify):** printing, mechanic, blacksmith variants, aluminum carpentry, medium slaughter.
+
+| # | Item | File(s) | Status |
+|---|---|---|---|
+| 12.1 | Read `criteriaData.ts` and identify all activity keys mapping only to `baseGeneralCriteria` | `src/criteriaData.ts` | 🔲 Pending |
+| 12.2 | For each drifted key: wire correct specific criteria array | `src/criteriaData.ts` | 🔲 Pending |
+| 12.3 | Update tests for affected checklists | test files | 🔲 Pending |
+
+---
+
+### Phase 13 — baseFoodCriteria numericField Schema Fix `MEDIUM` 🔲 Pending
+
+> **Root finding:** `baseFoodCriteria.ts` cold-chain `numericField` uses `label`/`threshold`/`comparisonOperator` instead of the canonical `labelAr`/`warningMax` field names — likely a TypeScript type mismatch introduced before the schema was locked.
+
+| # | Item | File(s) | Status |
+|---|---|---|---|
+| 13.1 | Read `baseFoodCriteria.ts` cold-chain criteria and confirm field names | `src/criteria/baseFoodCriteria.ts` | 🔲 Pending |
+| 13.2 | Read `src/types/index.ts` to confirm canonical `numericField` interface | `src/types/index.ts` | 🔲 Pending |
+| 13.3 | Fix field names to match the TypeScript interface; verify no runtime regression | `baseFoodCriteria.ts` | 🔲 Pending |
+
+---
+
 ## Test Sync Rule (Standing)
 
 > **Every criteria file change requires a corresponding test update.** When item count changes, update `toHaveLength()`. When an item is removed, convert its `toBeDefined()` test to `toBeUndefined()`. This rule was enforced for all Phase 10+ work.
@@ -232,3 +259,4 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 09-335 Art. 5 | `GPL-03-03`, `UAB-AX1-04` (emergency plan) |
 | Décret 21-430 | All GPL criteria (Phase 1.2) |
 | Décret 06-141 | VOC emission limits (printing, paint, blacksmith) |
+| Décret 06-138 | Ambient/neighborhood noise limits (BLS-02-01) |
