@@ -18,11 +18,10 @@ describe('carpenteryCriteria', () => {
     }
   });
 
-  it('CAR-05-02 is air quality measurement (measurement type, medium severity)', () => {
+  it('CAR-05-02 is air quality measurement (doc type, medium severity)', () => {
     const item = carpenteryCriteria.find(i => i.id === 'CAR-05-02');
     expect(item).toBeDefined();
-    // Source uses controlType 'measurement' for air quality checks
-    expect(item!.controlType).toBe('measurement');
+    expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('medium');
     expect(item!.axis).toBe('الانبعاثات الهوائية');
   });

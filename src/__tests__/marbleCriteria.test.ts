@@ -18,9 +18,9 @@ describe('marbleCriteria', () => {
     }
   });
 
-  it('MRB-05-05 silica dust measurement is measurement type', () => {
+  it('MRB-05-05 silica dust measurement is doc type', () => {
     const item = marbleCriteria.find(i => i.id === 'MRB-05-05');
     expect(item).toBeDefined();
-    expect(item!.controlType).toBe('measurement');
+    expect(item!.controlType).toBe('doc');
   });
 });

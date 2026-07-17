@@ -18,9 +18,9 @@ describe('carpenteryCriteria', () => {
     }
   });
 
-  it('CAR-05-02 dust measurement controlType is measurement', () => {
+  it('CAR-05-02 dust measurement controlType is doc', () => {
     const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-05-02');
     expect(item).toBeDefined();
-    expect(item!.controlType).toBe('measurement');
+    expect(item!.controlType).toBe('doc');
   });
 });

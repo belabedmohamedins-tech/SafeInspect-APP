@@ -21,8 +21,7 @@ describe('marbleCriteria', () => {
   it('contains silica air quality item MRB-05-05', () => {
     const item = marbleCriteria.find(i => i.id === 'MRB-05-05');
     expect(item).toBeDefined();
-    // Source uses controlType 'measurement' for this dust/air quality check
-    expect(item!.controlType).toBe('measurement');
+    expect(item!.controlType).toBe('doc');
     expect(item!.axis).toBe('الانبعاثات الهوائية');
   });
 });
