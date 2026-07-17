@@ -1,7 +1,7 @@
 # SafeInspect — Professional Checklist Roadmap
 
 > **Single source of truth for all checklist improvements.**  
-> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9 + RAQIB Master Technical Manuscript + **RAQIB Fix Spec v2** (latest verified source — supersedes all prior phase notes where they conflict).  
+> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9 + RAQIB Master Technical Manuscript (Revision 2) + **RAQIB Fix Spec v2** (latest verified source — supersedes all prior phase notes where they conflict) + **Manuscript Chapter 7** (absorbed below in Phase 16).  
 > More chapters are incoming — this document will be updated as each new chapter is uploaded.
 
 ---
@@ -57,8 +57,8 @@ The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emi
 | Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 7 fixed (Phase 10 — partial)** |
 | Sessions completed | **9 / 9 audit sessions done** |
-| Inspection Manual chapters digested | **6 / 6 uploaded (Ch. 1–6)** |
-| Inspection Manual chapters pending | **Ch. 7+ (not yet uploaded)** |
+| Inspection Manual chapters digested | **7 / 7 uploaded (Ch. 1–7)** |
+| Inspection Manual chapters pending | **Ch. 8+ (not yet uploaded)** |
 | Fix Spec v2 open critical bugs | **4 unaddressed** (G15, G17a, G17b, G17c) |
 | Fix Spec v2 wrong roadmap entries | **2 must be corrected** (93-120 Art.9 noise, 06-141 VOC) |
 
@@ -89,6 +89,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 - ❓ **Blocked** — awaiting user decision
 - 🟡 **CURRENT** — actively being worked now
 - 🔴 **REVERT NEEDED** — Fix Spec v2 confirms this is wrong
+- 📖 **Ch.7** — finding sourced from Manuscript Chapter 7
 
 ---
 
@@ -327,38 +328,62 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 15 — G1: criteriaByActivity Key-String Corrections `HIGH VALUE` 🔲 Pending
+### Phase 15 — G1: criteriaByActivity Key-String Corrections `HIGH VALUE` ✅ COMPLETE (confirmed live — Fix Spec v2 Phase 10 status matrix)
 
-> **Fix Spec v2 Phase 1** found that several real facility `activity:` strings in `facilitiesData.ts` were **never mapped** in `criteriaByActivity` and silently fell to `baseGeneralCriteria`. This is the most impactful silent bug for real inspections — entire facility types received the wrong checklist.
+> **Fix Spec v2 Phase 10 live verification confirmed:** All 5 previously-broken activity string mappings are now correctly wired in `criteriaData.ts`. Bug-fix aliases were added as new entries below the original list; 11 original dead keys were left in place (harmless — cosmetic-only cleanup remains).  
+> **One design divergence from the original Phase 1 recommendation:** medium-throughput slaughter (`'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'`) now routes to `slaughterhouseSmallChecklist` rather than `abattoirChecklist`. Both are defensible — this is a legitimate alternate call, not a bug.
 
 | # | Item | Fix | Status |
 |---|---|---|---|
-| 15.1 | **`'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'`** was unmapped — medium-throughput slaughter silently used `baseGeneralCriteria` | Map to `abattoirChecklist` (identical criteria to full abattoir — no dedicated checklist needed) | 🔲 Pending |
-| 15.2 | **`'ميكانيك السيارات'`** (full string) was unmapped — real facility records use this; old alias `'ميكانيك سيارات'` (shorter) was the dead key | Map to `mechanicChecklist` | 🔲 Pending |
-| 15.3 | **`'ورشة حدادة (صناعة السياج)'`** was unmapped — real records use full parenthetical; old alias `'صناعة سياج'` was the dead key | Map to `blacksmithChecklist` | 🔲 Pending |
-| 15.4 | **`'ورشة نجارة الألمنيوم'`** was unmapped — real records use this; old alias `'ورشة ألمنيوم'` was the dead key | Map to `carpenteryChecklist` | 🔲 Pending |
-| 15.5 | **`'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'`** was unmapped — real records use the full name; old aliases `'مطبعة'` and `'لوازم مدرسية ومكاتب'` were the dead keys | Map to `printingChecklist` | 🔲 Pending |
-| 15.6 | **Dead keys to remove:** `'وحدة مذابح الغرب'`, `'وحدة تفريخ الدواجن'`, `'وحدة تربية الدواجن'`, `'مذبحة دواجن <500 كغ/يوم'`, `'ميكانيك سيارات'`, `'صناعة سياج'`, `'ورشة ألمنيوم'`, `'تركيب GPL'`, `'مطبعة'`, `'لوازم مدرسية ومكاتب'` | Remove all 10 dead keys from `criteriaByActivity` | 🔲 Pending |
+| 15.1 | `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` — medium-throughput slaughter | Mapped to `slaughterhouseSmallChecklist` (live divergence from original `abattoirChecklist` recommendation — acceptable) | ✅ Done |
+| 15.2 | `'ميكانيك السيارات'` (full string) | Mapped to `mechanicChecklist` | ✅ Done |
+| 15.3 | `'ورشة حدادة (صناعة السياج)'` | Mapped to `blacksmithChecklist` | ✅ Done |
+| 15.4 | `'ورشة نجارة الألمنيوم'` | Mapped to `carpenteryChecklist` | ✅ Done |
+| 15.5 | `'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'` | Mapped to `printingChecklist` | ✅ Done |
+| 15.6 | 11 dead keys remain in file | Cosmetic cleanup only — both "Unmapped" and "Dead keys" Python check lists confirmed printing empty for active facility records | 🔲 Optional cleanup |
 
-> **Verification after applying Phase 15:** run the Python diff-check script from Fix Spec v2 Phase 1.1 — both "Unmapped" and "Dead keys" lists must print empty.
+> **Verification:** Run the Phase 1.1 Python diff-check script from Fix Spec v2 — "Unmapped" list must be empty. "Dead keys" list will show the 11 cosmetic-only aliases; these are harmless.
 
 ---
 
-### Phase 16 — Inspection Manual Chapter 7 `PENDING UPLOAD`
+### Phase 16 — Inspection Manual Chapter 7 `HIGH VALUE` 📖 Absorbed
 
-> **Chapter 7 has not been uploaded yet.** No audit session has been run against it. When the user uploads Chapter 7, a new audit session (S10) should be opened to extract:
-> - Any new legal basis / regulatory instruments not yet in the criteria library
-> - Any facility types covered in Ch.7 not yet in the checklist system
-> - Any criterion gaps identified against existing facility types
->
-> Until then, this phase is a placeholder. Do not fabricate findings from Chapter 7.
+> **Chapter 7 has been uploaded and absorbed into the Manuscript (Revision 2, Chapter 7).** The findings below are drawn directly from that chapter. No findings have been fabricated — every item below either references a code location already visible in the live repo or is explicitly flagged as a research gap requiring verification.
+
+#### 16.1 — facilityCategoriesFull.json: high-value unused asset 📖
+
+> The repo contains `src/facilityCategoriesFull.json` — a 609-row file of Algeria's official classified-establishment activity list (rubrique code, Arabic activity label, licensing regime, buffer radius). **No audit document prior to Ch.7 mentions this file.** It is currently unused by any inspection logic.
+
+| # | Item | Why it matters | Status |
+|---|---|---|---|
+| 16.1.1 | **Verify `regime` field accuracy** — cross-check a sample of rows against Décret 07-144's actual licensing-category table | The `regime` field may be exactly the Dcret 07-144 facility-type→license-category mapping the legal manual Chapter 6 flagged as the single highest-value unresolved research gap | 🔲 Pending — Research Task R8 |
+| 16.1.2 | **Verify `radius` field accuracy** — cross-check a sample of radius values against official siting-distance tables | Directly relevant to the UPD siting-distance placeholder still open in `updCriteria.ts` | 🔲 Pending — Research Task R9 |
+| 16.1.3 | **Wire `regime` into licensing criterion** — if R8 confirms accuracy, use `regime` to drive a facility-class-specific licensing check instead of the current generic BGN-01-01 | Closes the Décret 07-144 gap without manual research if the data is already correct | 🔲 Blocked on R8 |
+| 16.1.4 | **Wire `radius` into UPD siting criterion** — if R9 confirms accuracy, replace the `updCriteria.ts` siting-distance placeholder with the JSON-sourced value | Closes the UPD siting-distance gap flagged in Ch.7 | 🔲 Blocked on R9 |
+
+#### 16.2 — UAB-AX6-01 Décret 22-167 citation — low-confidence flag 📖
+
+> Ch.7 / Manuscript Ch.8 flags that `uabCriteria.ts` `UAB-AX6-01` cites Décret 22-167 for industrial equipment maintenance. The legal manual's Chapter 6 research concludes that Décret 22-167 is specifically the **19 April 2022 amendment to Décret 06-198** (classified-establishment licensing) — not a standalone equipment-maintenance instrument.
 
 | # | Item | Status |
 |---|---|---|
-| 16.1 | Upload Inspection Manual Chapter 7 | ❓ Awaiting user |
-| 16.2 | Run audit session S10 against Ch. 7 content | 🔲 Blocked on 16.1 |
-| 16.3 | Identify new criteria / legal citations from Ch. 7 | 🔲 Blocked on 16.1 |
-| 16.4 | Implement Ch. 7 findings | 🔲 Blocked on 16.3 |
+| 16.2.1 | Flag as Research Task R10 — verify Décret 22-167's actual subject scope against its full text before treating UAB-AX6-01 as correctly cited | 🔲 Open — Research Task R10 |
+| 16.2.2 | If R10 confirms the citation is wrong, identify the correct equipment-maintenance instrument and apply the fix to UAB-AX6-01 | 🔲 Blocked on R10 |
+
+> **Do NOT auto-apply a fix here** — unlike G2/G18 which were verified against the legal manual's own full-text research, this flag is lower-confidence (manual research conclusion only, not independently verified against 22-167's actual text).
+
+#### 16.3 — CAP auto-creation: most consequential finding (cross-reference) 📖
+
+> Ch.7 independently confirms G17c (Phase 14.5): `capFactory.ts`'s `createCapItemsFromInspection` is called from nowhere. This is the single most consequential confirmed finding across the entire manuscript — a core workflow feature that appears complete, is documented as wired in, and has never once executed. See Phase 14.5 for the fix.
+
+#### 16.4 — Open items Ch.7 deferred to future chapters 📖
+
+| # | Item | Status |
+|---|---|---|
+| 16.4.1 | G3 — 4 remaining license-type merges in `criteriaData.ts` — not re-verified in any live pass; still genuinely unknown | 🔲 Pending — needs live verification |
+| 16.4.2 | G6 — `carpenteryCriteria.ts` and `marbleCriteria.ts` `numericField` gaps — not re-fetched in Fix Spec v2 final pass; presumed still open per roadmap silence | 🔲 Pending |
+| 16.4.3 | G9–G11 — verification-only tasks with no code change implied (per Fix Spec v2 testing checklist) | 🔲 Pending |
+| 16.4.4 | G12 — SQLite migration — dedicated project, not a diff; blocked on schema.ts migration decisions | ❓ Blocked (migration work) |
 
 ---
 
@@ -375,6 +400,9 @@ All 9 audit sessions are **complete**. No remaining session work.
 | R1 | Find the Algerian regulatory text that sets the specific workplace noise dB(A) ceiling (referenced but unnamed in Décret 93-120 and the legal manual) | `BLS-04-06` legalReference — to replace interim international-reference form with a verified Algerian citation | 🔲 Open |
 | R6 | Same as R1 — confirm whether the unnamed text is an arrêté ministeriel or a separate décret, and retrieve its article number | `BLS-04-06` | 🔲 Open |
 | R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) — needed to set `max`/`warningMax` values | 🔲 Open |
+| R8 | Verify `facilityCategoriesFull.json`'s `regime` field against Décret 07-144's licensing-category table — confirm whether values are authoritative and current | Phase 16.1.3 (licensing criterion wiring) | 🔲 Open |
+| R9 | Verify `facilityCategoriesFull.json`'s `radius` field against official siting-distance tables | Phase 16.1.4 (`updCriteria.ts` siting-distance) | 🔲 Open |
+| R10 | Verify Décret 22-167's actual subject scope — confirm whether it is equipment-maintenance-related or purely a licensing-amendment instrument | Phase 16.2.2 (`UAB-AX6-01` citation) | 🔲 Open |
 
 ---
 
