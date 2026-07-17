@@ -377,7 +377,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | # | Item | Status |
 |---|---|---|
 | 16.4.1 | G3 — 4 remaining license-type merges in `criteriaData.ts` — not re-verified in any live pass; still genuinely unknown | 🔲 Pending — needs live verification |
-| 16.4.2 | G6 — `carpenteryCriteria.ts` and `marbleCriteria.ts` `numericField` gaps — not re-fetched in Fix Spec v2 final pass; presumed still open per roadmap silence | 🔲 Pending |
+| 16.4.2 | G6 — `carpenteryCriteria.ts` and `marbleCriteria.ts` `numericField` gaps + 06-141→06-138 citation fixes | ✅ **Done — July 2026** — `CAR-02-02` (85 dB noise), `CAR-05-02` (5 mg/m³ wood dust), `MRB-05-05` (0.1 mg/m³ silica) — all 3 `numericField` blocks added; `CAR-05-02`, `MRB-02-02`, `MRB-05-05` citations corrected 06-141 → 06-138 |
 | 16.4.3 | G9–G11 — verification-only tasks with no code change implied (per Fix Spec v2 testing checklist) | 🔲 Pending |
 | 16.4.4 | G12 — SQLite migration — dedicated project, not a diff; blocked on schema.ts migration decisions | ❓ Blocked (migration work) |
 
@@ -414,6 +414,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 21-430 | All GPL criteria (Phase 1.2) ✅ |
 | **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) ✅ — replaces the wrong 06-141 entry |
 | Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
+| Décret 06-138 | Air-emission limits for carpentry (`CAR-05-02`) and marble (`MRB-05-05`) ✅ — G6 fix July 2026 |
 | Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ |
 | Décret 76-35 | `BGN-08-03` (electrical installations in classified establishments) ✅ — verified Phase 14.18 |
 | Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
