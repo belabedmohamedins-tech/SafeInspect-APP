@@ -79,11 +79,14 @@ export const blacksmithCriteria: InspectionItem[] = [
   },
   {
     // Phase 13 ✅: numericField aligned to NumericFieldSpec (labelAr, warningMax, step)
+    // Phase 10.6 revert: "Décret 93-120 Art. 9" was unverified precision — no article-level
+    // content was ever retrieved. 85 dB is an international reference (WHO/OSHA); the Algerian
+    // regulatory instrument has not been confirmed. Research task R1/R6 remains open.
     id: 'BLS-04-06',
     axis: 'السلامة المهنية',
     category: 'بيئية',
-    criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل بصفة دورية (جهاز قياس معتمد)، والتحقق من عدم تجاوز الحد الأقصى المسموح به (85 ديسيبل)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة.',
-    legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 90-11.',
+    criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل بصفة دورية (جهاز قياس معتمد)، والتحقق من عدم تجاوز الحد الأقصى المسموح به (85 ديسيبل — مرجع دولي WHO/OSHA معتمد في الممارسة المهنية)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة وتوفير وسائل الوقاية السمعية للعمال.',
+    legalReference: 'القانون 90-11 المادة 8 (إلزامية حماية العمال من مخاطر الضجيج المهني) + المرسوم التنفيذي 93-120 (الفحص الطبي الدوري — الفحص السمعي للعمال المعرضين للضجيج). ملاحظة: حد 85 ديسيبل مرجع دولي (WHO/OSHA) — النص التنظيمي الجزائري المحدد للقيمة العددية قيد البحث (R1/R6).',
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -97,11 +100,12 @@ export const blacksmithCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1: periodic air quality measurement for welding fumes and VOC
+    // Phase 14.7: 06-141 (wastewater decree) → 06-138 (air emissions decree)
     id: 'BLS-04-07',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز أبخرة اللحام والمركبات العضوية المتطايرة (VOC) في هواء بيئة العمل (مرة في السنة على الأقل أو عند تغيير المواد المستخدمة) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة؛ وتوثيق نتائج القياسات وإجراءات التصحيح عند الاقتضاء.',
-    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية).',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
