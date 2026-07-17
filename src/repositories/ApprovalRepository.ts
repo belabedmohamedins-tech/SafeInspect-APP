@@ -97,13 +97,12 @@ export const ApprovalRepository = {
         approvalNote: note,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
-      inspectionId,
-      facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
-      detail: `اعتمد المشرف ${supervisorName}`,
-    });
+    // FIX (G17a): positional-args form matching AuditLogRepository.append signature
+    await AuditLogRepository.append(
+      'INSPECTION_SAVED',
+      supervisorName,
+      { inspectionId, facilityName: q[idx].facilityName, detail: `اعتمد المشرف ${supervisorName}` },
+    );
   },
 
   /** Supervisor returns inspection for revision. */
@@ -130,13 +129,12 @@ export const ApprovalRepository = {
         returnedReason: reason,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
-      inspectionId,
-      facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
-      detail: `أعيد المشرف: ${reason}`,
-    });
+    // FIX (G17a): positional-args form
+    await AuditLogRepository.append(
+      'INSPECTION_SAVED',
+      supervisorName,
+      { inspectionId, facilityName: q[idx].facilityName, detail: `أعيد المشرف: ${reason}` },
+    );
   },
 
   /** Supervisor escalates to higher authority. */
@@ -163,12 +161,11 @@ export const ApprovalRepository = {
         approvalNote: note,
       });
     }
-    await AuditLogRepository.append({
-      action: 'INSPECTION_SAVED',
-      inspectionId,
-      facilityName: q[idx].facilityName,
-      inspectorName: supervisorName,
-      detail: `رفع المشرف للجهة الأعلى`,
-    });
+    // FIX (G17a): positional-args form
+    await AuditLogRepository.append(
+      'INSPECTION_SAVED',
+      supervisorName,
+      { inspectionId, facilityName: q[idx].facilityName, detail: `رفع المشرف للجهة الأعلى` },
+    );
   },
 };

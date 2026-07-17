@@ -4,7 +4,7 @@ import { StorageKeys } from './keys';
 import { SavedInspection } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
-import { CorrectiveActionRepository } from './CorrectiveActionRepository';
+import { createCapItemsFromInspection } from '../services/capFactory';
 import { createFollowUpIfNeeded } from '../services/followUpService';
 import { ApprovalRepository } from './ApprovalRepository';
 import { annotateRepeatViolations } from '../services/violationHistory';
@@ -87,13 +87,17 @@ export const InspectionRepository = {
     await saveAll(all);
 
     if (isNewCompletion) {
-      await AuditLogRepository.append({
-        action: 'INSPECTION_SAVED',
-        inspectionId: toSave.id,
-        facilityName: toSave.facilityName,
-        inspectorName: toSave.inspectorName,
-      });
-      await CorrectiveActionRepository.createFromInspection(toSave);
+      // FIX (G17a): use positional-args form that matches AuditLogRepository.append signature
+      await AuditLogRepository.append(
+        'INSPECTION_SAVED',
+        toSave.inspectorName,
+        { inspectionId: toSave.id, facilityName: toSave.facilityName },
+      );
+
+      // FIX (G17c): replaced dead CorrectiveActionRepository.createFromInspection
+      // (method never existed) with the real capFactory function — this is why
+      // CAP items were silently not being created on inspection completion.
+      await createCapItemsFromInspection(toSave);
 
       try {
         await createFollowUpIfNeeded(toSave);
@@ -111,12 +115,12 @@ export const InspectionRepository = {
     const updated = all.filter(i => i.id !== id);
     await saveAll(updated);
     if (target) {
-      await AuditLogRepository.append({
-        action: 'INSPECTION_DELETED',
-        inspectionId: id,
-        facilityName: target.facilityName,
-        inspectorName: target.inspectorName,
-      });
+      // FIX (G17a): positional-args form
+      await AuditLogRepository.append(
+        'INSPECTION_DELETED',
+        target.inspectorName,
+        { inspectionId: id, facilityName: target.facilityName },
+      );
     }
   },
 
@@ -124,10 +128,11 @@ export const InspectionRepository = {
     const all = await loadAll();
     const updated = all.filter(i => !ids.includes(i.id));
     await saveAll(updated);
-    await AuditLogRepository.append({
-      action: 'INSPECTION_BULK_DELETED',
-      inspectorName: 'system',
-      detail: `حذف ${ids.length} تقارير`,
-    });
+    // FIX (G17a): positional-args form
+    await AuditLogRepository.append(
+      'INSPECTION_BULK_DELETED',
+      'system',
+      { detail: `حذف ${ids.length} تقارير` },
+    );
   },
 };
