@@ -312,17 +312,17 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 14.7 | **G18 — BLS-04-07** — 06-141 → 06-138 | `blacksmithCriteria.ts` | String replace | ✅ Done |
 | 14.8 | **UAB-AX7-07 numericField** — canonical `labelAr`/`warningMax`/`step`/`upperLimit` schema | `src/criteria/uabCriteria.ts` | Schema aligned | ✅ Done |
 | 14.9 | **BLS-04-06 citation revert** — remove "Art. 9"; present 85 dB as international best practice | `src/criteria/blacksmithCriteria.ts` | Interim text applied | ✅ Done |
-| 14.10 | **`PNT-04-01`** — 93-120 PPE citation fix | `src/criteria/paintShopCriteria.ts` | Same Phase 10 pattern | 🔲 Pending — verify live |
+| 14.10 | **`PNT-04-01`** — 93-120 PPE citation fix | `src/criteria/paintShopCriteria.ts` | Verified clean — no 93-120 present in file | ✅ Done |
 | 14.11 | **G13 — sync path** — `/sync/inspections` → `/sync` | `src/services/SyncService.ts` | 1-line fix | ✅ Done |
 | 14.12 | **G14 — peer-dep version** — `react-native-safe-area-context: ~5.4.0` | `package.json` | Version bump | ✅ Done |
 | 14.13 | **Dead `updatedAt` field** — replaced with `.date` | `src/services/SyncService.ts` | Direct `.date` usage | ✅ Done |
-| 14.14 | **`expo-file-system/legacy` import** in `PhotoService.ts` + `BackupService.ts` | `src/services/PhotoService.ts`, `src/services/BackupService.ts` | Import path fix | 🔲 Pending — verify live |
+| 14.14 | **`expo-file-system/legacy` import** in `PhotoService.ts` + `BackupService.ts` | `src/services/PhotoService.ts`, `src/services/BackupService.ts` | Verified clean — `expo-file-system` not imported in either file | ✅ Done |
 | 14.15 | **`src/db/schema.ts` — 3 tsc errors** | `src/db/schema.ts` | **Do NOT fix in isolation** — part of SQLite migration | ❓ Blocked (migration work) |
-| 14.16 | **`BGN-09-01` neighbor-facing 70 dB citation** — 93-120 → Loi 03-10 art. 27 | `src/criteria/baseGeneralCriteria.ts` | Citation replace | 🔲 Pending — verify live |
-| 14.17 | **Full 93-120 sweep** — remaining non-medical-exam hits → Loi 88-07 art. 8/10 | All `src/criteria/*.ts` | grep sweep | 🔲 Pending |
-| 14.18 | **Décret 76-35 dual-scope check** — `BGN-08-03` electrical safety citation | `src/criteria/baseGeneralCriteria.ts` | Verify legitimacy | 🔲 Pending |
+| 14.16 | **`BGN-09-01` neighbor-facing 70 dB citation** — 93-120 → Loi 03-10 art. 27 | `src/criteria/baseGeneralCriteria.ts` | Citation replaced — verified in live file | ✅ Done |
+| 14.17 | **Full 93-120 sweep** — remaining non-medical-exam hits → Loi 88-07 art. 8/10 | All `src/criteria/*.ts` | grep sweep — zero remaining 93-120 hits for non-medical use | ✅ Done |
+| 14.18 | **Décret 76-35 dual-scope check** — `BGN-08-03` electrical safety citation | `src/criteria/baseGeneralCriteria.ts` | Verified legitimate — 76-35 governs electrical installations in classified establishments | ✅ Done |
 
-> **Remaining open:** 14.10, 14.14, 14.16, 14.17, 14.18 — all need live file verification before applying. 14.15 blocked on SQLite migration.
+> **Only remaining blocked item:** 14.15 — SQLite migration (dedicated project, not a diff).
 
 ---
 
@@ -414,8 +414,9 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 21-430 | All GPL criteria (Phase 1.2) ✅ |
 | **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) ✅ — replaces the wrong 06-141 entry |
 | Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
-| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ — **`BGN-08-03` (electrical safety) also cites 76-35 — verify via Phase 14.18** |
+| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ |
+| Décret 76-35 | `BGN-08-03` (electrical installations in classified establishments) ✅ — verified Phase 14.18 |
 | Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
 | Loi 88-07 art. 8 | Machine guarding, emergency stops — correct replacement for 93-120 in machine-guard criteria |
 | Loi 88-07 art. 10 | General PPE — correct replacement for 93-120 in PPE criteria |
-| Loi 03-10 art. 27 | Neighbor-facing / environmental noise limits (e.g. `BGN-09-01`) |
+| Loi 03-10 art. 27 | Neighbor-facing / environmental noise limits (e.g. `BGN-09-01`) ✅ — verified Phase 14.16 |
