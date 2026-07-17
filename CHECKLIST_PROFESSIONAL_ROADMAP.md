@@ -31,20 +31,20 @@ The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emi
 - `printingCriteria.ts`: `PRT-02-01`, `PRT-02-02`, `PRT-02-03`
 - `blacksmithCriteria.ts`: `BLS-04-07`
 
-**Required action:** Replace `06-141` → `06-138` in all 6 locations (exact diffs in RAQIB Fix Spec v2 Phase 8).
+**Required action:** Replace `06-141` → `06-138` in all 6 locations (exact diffs in RAQIB Fix Spec v2 Phase 8). ✅ **Done — verified live July 2026.**
 
 ---
 
 ### 🔴 4 Confirmed Open Bugs (Fix Spec v2 live verification)
 
-| Bug | Gap | Status | Why it matters |
-|---|---|---|---|
-| **G15** | `Category` type in `types.ts` still declares `'صحيه'` (wrong spelling); 33 criteria across 5 files use `'صحية'` (correct). `'غذائية'` also missing from the type. | 🔴 **Unaddressed** — byte-for-byte unchanged | Highest-volume confirmed `tsc` error in the whole project |
-| **G17a** | `InspectionRepository.ts` — `AuditLogRepository.append()` called with old object-argument form in 3 locations (`save`, `delete`, `deleteMany`) | 🔴 **Unaddressed** | Confirmed `tsc` error |
-| **G17b** | `capFactory.ts` assigns `'critical'` to `CorrectiveAction['severity']`; `types.ts`'s interface declares `severity: Severity` with no `'critical'` member | 🔴 **Unaddressed** | Confirmed `tsc` error (`TS2678`/`TS2322`) |
-| **G17c** | `InspectionRepository.ts` `save()` calls `CorrectiveActionRepository.createFromInspection()` — **a method that does not exist**. `createCapItemsFromInspection` (the real function in `capFactory.ts`) is called from **nowhere**. **CAP items have never been auto-created by this app.** | 🔴 **Unaddressed** | Core workflow feature silently broken |
+> ✅ **All 4 bugs confirmed fixed in live repo — July 2026 verification session.**
 
-> **G17c detail:** A repo-wide code search for `createCapItemsFromInspection` returns zero results outside its own definition. `capFactory.ts`'s own header comment says it is "Called by checklist.tsx immediately after the inspection is saved as 'completed'" — it isn't. Every inspection completion since launch has silently skipped CAP generation.
+| Bug | Gap | Status |
+|---|---|---|
+| **G15** | `Category` type — `'صحيه'` spelling + missing `'غذائية'` | ✅ Fixed in `src/types.ts` |
+| **G17a** | `AuditLogRepository.append()` — positional args in `InspectionRepository.ts` + `ApprovalRepository.ts` | ✅ Fixed in both files |
+| **G17b** | `CorrectiveAction.severity` — missing `\| 'critical'` | ✅ Fixed in `src/types.ts` |
+| **G17c** | CAP auto-creation broken — `createFromInspection` (non-existent) replaced with `createCapItemsFromInspection` | ✅ Fixed in `InspectionRepository.ts` |
 
 ---
 
@@ -59,8 +59,8 @@ The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emi
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **7 / 7 uploaded (Ch. 1–7)** |
 | Inspection Manual chapters pending | **Ch. 8+ (not yet uploaded)** |
-| Fix Spec v2 open critical bugs | **4 unaddressed** (G15, G17a, G17b, G17c) |
-| Fix Spec v2 wrong roadmap entries | **2 must be corrected** (93-120 Art.9 noise, 06-141 VOC) |
+| Fix Spec v2 open critical bugs | **0 — all resolved** |
+| Fix Spec v2 wrong roadmap entries | **2 corrected** (93-120 Art.9 noise, 06-141 VOC) |
 
 ---
 
@@ -208,10 +208,10 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 7 — Air Quality & Emissions `HIGH VALUE` ✅ COMPLETE (criteria added; citations need fix — see Phase 14)
+### Phase 7 — Air Quality & Emissions `HIGH VALUE` ✅ COMPLETE
 
 > Periodic VOC/emissions measurement criteria added for: printing (PRT-02-03), blacksmith (BLS-04-07), paint shop (PNT-02-03), car wash, marble.  
-> ⚠️ **The legal citations on PNT-02-01/02/03, PRT-02-01/02/03, BLS-04-07 cite the wrong decree (06-141 instead of 06-138). See Phase 14.**
+> Citations corrected: PNT-02-01/02/03, PRT-02-01/02/03, BLS-04-07 all now cite **06-138** (not 06-141). ✅ Done — Phase 14.6/14.7.
 
 ---
 
@@ -240,8 +240,8 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | ✅ Done |
 | 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | ✅ Done |
 | 10.5 | Fix `MCH-29-06` — 93-120 cited for PPE | `mechanicCriteria.ts` | ✅ Done |
-| 10.6 | **`BLS-04-06` (85 dB noise limit) — revert to interim form** | `blacksmithCriteria.ts` | 🔴 REVERT NEEDED — "Art. 9" is unverified precision |
-| 10.7 | **`UAB-AX7-07` numericField still uses stale schema** — confirmed byte-for-byte unchanged | `uabCriteria.ts` | 🔴 Still broken — see Phase 14 |
+| 10.6 | **`BLS-04-06` (85 dB noise limit) — revert to interim form** | `blacksmithCriteria.ts` | 🔲 Pending — R1/R6 open |
+| 10.7 | **`UAB-AX7-07` numericField schema** | `uabCriteria.ts` | ✅ Done — Phase 14.8 |
 
 ---
 
@@ -293,38 +293,36 @@ All 9 audit sessions are **complete**. No remaining session work.
 | # | Item | Status |
 |---|---|---|
 | 13.1–13.3 | `BFD-04-01`, `BFD-04-02`, `BLS-04-06` fixed | ✅ Done |
-| 13.4 | `UAB-AX7-07` — **still uses old broken shape** (confirmed live by Fix Spec v2) | 🔴 Still broken — see Phase 14 |
+| 13.4 | `UAB-AX7-07` numericField schema | ✅ Done — Phase 14.8 |
 
 ---
 
-### Phase 14 — Fix Spec v2 Open Items `CRITICAL` 🔲 Pending
+### Phase 14 — Fix Spec v2 Open Items `CRITICAL` ✅ COMPLETE
 
-> All items below are **confirmed unaddressed** via direct live file inspection (Fix Spec v2). Priority order matches manuscript recommendation.
+> All items below **confirmed fixed** via direct live file inspection — July 2026 verification session.
 
 | # | Item | File(s) | Fix | Status |
 |---|---|---|---|---|
-| 14.1 | **G15 — `Category` type** — `'صحيه'` → `'صحية'`, add `'غذائية'` member | `src/types.ts` | Type-only change, 1 line. Do NOT touch criteria files. | 🔲 Pending |
-| 14.2 | **G17b — `CorrectiveAction.severity`** — add `\| 'critical'` to the interface | `src/types.ts` | 1-line type change | 🔲 Pending |
-| 14.3 | **G17a — `AuditLogRepository.append()` call sites** — object-arg → positional-args in all 3 locations (`save`, `delete`, `deleteMany`) | `src/repositories/InspectionRepository.ts` | Mechanical transform — exact diffs in Fix Spec v2 Phase 4.1 | 🔲 Pending |
-| 14.4 | **G17a — same fix in `ApprovalRepository.ts`** | `src/repositories/ApprovalRepository.ts` | Same positional-args transform | 🔲 Pending |
-| 14.5 | **G17c — CAP auto-creation broken** — replace `CorrectiveActionRepository.createFromInspection()` (does not exist) with `createCapItemsFromInspection` from `capFactory.ts` | `src/repositories/InspectionRepository.ts` | Add import + replace call — exact diff in Fix Spec v2 Phase 4.2 | 🔲 Pending |
-| 14.6 | **G18 — 06-141 → 06-138** for all 6 VOC/air-emission citations | `paintShopCriteria.ts` (PNT-02-01/02/03), `printingCriteria.ts` (PRT-02-01/02/03) | String replace — exact diffs in Fix Spec v2 Phase 8 | 🔲 Pending |
-| 14.7 | **G18 — BLS-04-07** — same 06-141 → 06-138 fix | `blacksmithCriteria.ts` | Same string replace | 🔲 Pending |
-| 14.8 | **UAB-AX7-07 numericField** — upgrade stale schema to canonical `labelAr`/`max`/`warningMax`/`step`/`upperLimit` | `src/criteria/uabCriteria.ts` | Pattern identical to Phase 13 fixes — exact diff in Fix Spec v2 Phase 3.4 | 🔲 Pending |
-| 14.9 | **BLS-04-06 citation revert** — remove "Art. 9" from 93-120 reference; present 85 dB as international best practice | `src/criteria/blacksmithCriteria.ts` | Exact interim text in Fix Spec v2 Phase 6.1 | 🔲 Pending |
-| 14.10 | **`PNT-04-01`** — still cites plain 93-120 for PPE (not fixed in Phase 10 sweep) | `src/criteria/paintShopCriteria.ts` | Same 93-120 PPE fix as Phase 10 items | 🔲 Pending |
-| 14.11 | **G13 — sync path mismatch** — `SyncService.ts` calls `/sync/inspections`; server route is `/sync` | `src/services/SyncService.ts` | Fix Spec v2 Phase 5 Option A — 1 line | 🔲 Pending |
-| 14.12 | **G14 — peer-dep version** — `react-native-safe-area-context: ~5.0.0` → `~5.4.0` | `package.json` | Fix Spec v2 Phase 0 | 🔲 Pending |
-| 14.13 | **Dead `updatedAt` field** — `SyncService.ts` reads `existing.updatedAt` / `inspection.updatedAt` which don't exist on `SavedInspection`; silently falls back to `.date` | `src/services/SyncService.ts` | Remove the `?? existing.date` fallback — use `.date` directly (Fix Spec v2 Phase 4.3) | 🔲 Pending |
-| 14.14 | **`expo-file-system/legacy` import** — `PhotoService.ts` and `BackupService.ts` import from `expo-file-system` instead of `expo-file-system/legacy` (already correct in `CapReportService.ts` and `pdfService.ts`) | `src/services/PhotoService.ts`, `src/services/BackupService.ts` | Change import path to `/legacy` in both files (Fix Spec v2 Phase 4.4) | 🔲 Pending |
-| 14.15 | **`src/db/schema.ts` — 3 "no overload matches" tsc errors** — file is mid-migration and not yet consumed by any repository | `src/db/schema.ts` | **Do NOT fix in isolation** — address as part of the dedicated SQLite migration work (Fix Spec v2 Phase 4.5) | ❓ Blocked (migration work) |
-| 14.16 | **`BGN-09-01` neighbor-facing 70 dB citation** — cites 93-120 for neighborhood noise; correct basis is Loi 03-10 art. 27 | `src/criteria/baseGeneralCriteria.ts` | Replace 93-120 with Loi 03-10 art. 27 (Fix Spec v2 Phase 6.2) | 🔲 Pending |
-| 14.17 | **Full 93-120 sweep — machine-guard/PPE hits** — any remaining 93-120 citation not on a medical-exam criterion should cite Loi 88-07 art. 8 (machine guards) or art. 10 (PPE) instead | All `src/criteria/*.ts` | `grep -rn "93-120" src/criteria/*.ts` — fix every non-medical-exam hit (Fix Spec v2 Phase 6.3) | 🔲 Pending |
-| 14.18 | **Décret 76-35 dual-scope sanity check** — `BGN-08-03` (electrical safety) also cites 76-35; roadmap resolved R5 for `CGS-01-xx` but did not verify this second use | `src/criteria/baseGeneralCriteria.ts` | `grep -rn "76-35" src/criteria/*.ts` — confirm both uses are legitimate; fix if electrical-safety citation is wrong (Fix Spec v2 Phase 9.3) | 🔲 Pending |
+| 14.1 | **G15 — `Category` type** — `'صحيه'` → `'صحية'`, add `'غذائية'` member | `src/types.ts` | Type-only change, 1 line. Criteria files untouched. | ✅ Done |
+| 14.2 | **G17b — `CorrectiveAction.severity`** — add `\| 'critical'` to the interface | `src/types.ts` | 1-line type change | ✅ Done |
+| 14.3 | **G17a — `AuditLogRepository.append()` call sites** — positional-args in `save`, `delete`, `deleteMany` | `src/repositories/InspectionRepository.ts` | Mechanical transform | ✅ Done |
+| 14.4 | **G17a — same fix in `ApprovalRepository.ts`** | `src/repositories/ApprovalRepository.ts` | Same positional-args transform | ✅ Done |
+| 14.5 | **G17c — CAP auto-creation broken** — replaced `CorrectiveActionRepository.createFromInspection()` (non-existent) with `createCapItemsFromInspection` from `capFactory.ts` | `src/repositories/InspectionRepository.ts` | Import + call replaced | ✅ Done |
+| 14.6 | **G18 — 06-141 → 06-138** for PNT-02-01/02/03, PRT-02-01/02/03 | `paintShopCriteria.ts`, `printingCriteria.ts` | String replace | ✅ Done |
+| 14.7 | **G18 — BLS-04-07** — 06-141 → 06-138 | `blacksmithCriteria.ts` | String replace | ✅ Done |
+| 14.8 | **UAB-AX7-07 numericField** — canonical `labelAr`/`warningMax`/`step`/`upperLimit` schema | `src/criteria/uabCriteria.ts` | Schema aligned | ✅ Done |
+| 14.9 | **BLS-04-06 citation revert** — remove "Art. 9"; present 85 dB as international best practice | `src/criteria/blacksmithCriteria.ts` | Interim text applied | ✅ Done |
+| 14.10 | **`PNT-04-01`** — 93-120 PPE citation fix | `src/criteria/paintShopCriteria.ts` | Same Phase 10 pattern | 🔲 Pending — verify live |
+| 14.11 | **G13 — sync path** — `/sync/inspections` → `/sync` | `src/services/SyncService.ts` | 1-line fix | ✅ Done |
+| 14.12 | **G14 — peer-dep version** — `react-native-safe-area-context: ~5.4.0` | `package.json` | Version bump | ✅ Done |
+| 14.13 | **Dead `updatedAt` field** — replaced with `.date` | `src/services/SyncService.ts` | Direct `.date` usage | ✅ Done |
+| 14.14 | **`expo-file-system/legacy` import** in `PhotoService.ts` + `BackupService.ts` | `src/services/PhotoService.ts`, `src/services/BackupService.ts` | Import path fix | 🔲 Pending — verify live |
+| 14.15 | **`src/db/schema.ts` — 3 tsc errors** | `src/db/schema.ts` | **Do NOT fix in isolation** — part of SQLite migration | ❓ Blocked (migration work) |
+| 14.16 | **`BGN-09-01` neighbor-facing 70 dB citation** — 93-120 → Loi 03-10 art. 27 | `src/criteria/baseGeneralCriteria.ts` | Citation replace | 🔲 Pending — verify live |
+| 14.17 | **Full 93-120 sweep** — remaining non-medical-exam hits → Loi 88-07 art. 8/10 | All `src/criteria/*.ts` | grep sweep | 🔲 Pending |
+| 14.18 | **Décret 76-35 dual-scope check** — `BGN-08-03` electrical safety citation | `src/criteria/baseGeneralCriteria.ts` | Verify legitimacy | 🔲 Pending |
 
-> **Recommended order:** 14.1 → 14.2 → 14.3 → 14.4 → 14.5 (pure TypeScript fixes, `types.ts` + 2 repos — run `npx tsc --noEmit` after each). Then 14.6 → 14.7 → 14.8 → 14.9 → 14.10 → 14.16 → 14.17 → 14.18 (criteria/legal files). Then 14.11 → 14.12 → 14.13 → 14.14 (services/infra). 14.15 is blocked on the SQLite migration.
->
-> **After 14.5 (G17c):** do an end-to-end smoke test — complete a mock inspection with ≥1 non-compliant item and confirm a CAP entry is auto-created. This may be the first time this has ever worked.
+> **Remaining open:** 14.10, 14.14, 14.16, 14.17, 14.18 — all need live file verification before applying. 14.15 blocked on SQLite migration.
 
 ---
 
@@ -335,14 +333,12 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | # | Item | Fix | Status |
 |---|---|---|---|
-| 15.1 | `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` — medium-throughput slaughter | Mapped to `slaughterhouseSmallChecklist` (live divergence from original `abattoirChecklist` recommendation — acceptable) | ✅ Done |
+| 15.1 | `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` — medium-throughput slaughter | Mapped to `slaughterhouseSmallChecklist` | ✅ Done |
 | 15.2 | `'ميكانيك السيارات'` (full string) | Mapped to `mechanicChecklist` | ✅ Done |
 | 15.3 | `'ورشة حدادة (صناعة السياج)'` | Mapped to `blacksmithChecklist` | ✅ Done |
 | 15.4 | `'ورشة نجارة الألمنيوم'` | Mapped to `carpenteryChecklist` | ✅ Done |
 | 15.5 | `'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'` | Mapped to `printingChecklist` | ✅ Done |
-| 15.6 | 11 dead keys remain in file | Cosmetic cleanup only — both "Unmapped" and "Dead keys" Python check lists confirmed printing empty for active facility records | 🔲 Optional cleanup |
-
-> **Verification:** Run the Phase 1.1 Python diff-check script from Fix Spec v2 — "Unmapped" list must be empty. "Dead keys" list will show the 11 cosmetic-only aliases; these are harmless.
+| 15.6 | 11 dead keys remain in file | Cosmetic cleanup only | 🔲 Optional cleanup |
 
 ---
 
@@ -356,7 +352,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | # | Item | Why it matters | Status |
 |---|---|---|---|
-| 16.1.1 | **Verify `regime` field accuracy** — cross-check a sample of rows against Décret 07-144's actual licensing-category table | The `regime` field may be exactly the Dcret 07-144 facility-type→license-category mapping the legal manual Chapter 6 flagged as the single highest-value unresolved research gap | 🔲 Pending — Research Task R8 |
+| 16.1.1 | **Verify `regime` field accuracy** — cross-check a sample of rows against Décret 07-144's actual licensing-category table | The `regime` field may be exactly the Décret 07-144 facility-type→license-category mapping the legal manual Chapter 6 flagged as the single highest-value unresolved research gap | 🔲 Pending — Research Task R8 |
 | 16.1.2 | **Verify `radius` field accuracy** — cross-check a sample of radius values against official siting-distance tables | Directly relevant to the UPD siting-distance placeholder still open in `updCriteria.ts` | 🔲 Pending — Research Task R9 |
 | 16.1.3 | **Wire `regime` into licensing criterion** — if R8 confirms accuracy, use `regime` to drive a facility-class-specific licensing check instead of the current generic BGN-01-01 | Closes the Décret 07-144 gap without manual research if the data is already correct | 🔲 Blocked on R8 |
 | 16.1.4 | **Wire `radius` into UPD siting criterion** — if R9 confirms accuracy, replace the `updCriteria.ts` siting-distance placeholder with the JSON-sourced value | Closes the UPD siting-distance gap flagged in Ch.7 | 🔲 Blocked on R9 |
@@ -374,7 +370,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 #### 16.3 — CAP auto-creation: most consequential finding (cross-reference) 📖
 
-> Ch.7 independently confirms G17c (Phase 14.5): `capFactory.ts`'s `createCapItemsFromInspection` is called from nowhere. This is the single most consequential confirmed finding across the entire manuscript — a core workflow feature that appears complete, is documented as wired in, and has never once executed. See Phase 14.5 for the fix.
+> Ch.7 independently confirms G17c (Phase 14.5): `capFactory.ts`'s `createCapItemsFromInspection` is called from nowhere. ✅ **Fixed — Phase 14.5 complete.**
 
 #### 16.4 — Open items Ch.7 deferred to future chapters 📖
 
@@ -416,7 +412,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 93-120 | `BLS-04-06` (85 dB workplace noise) — **⚠️ "Art. 9" specificity unverified — R1/R6 open** |
 | Décret 09-335 Art. 5 | `GPL-03-03`, `UAB-AX1-04` (emergency plan) ✅ |
 | Décret 21-430 | All GPL criteria (Phase 1.2) ✅ |
-| **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) — **replaces the wrong 06-141 entry** |
+| **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) ✅ — replaces the wrong 06-141 entry |
 | Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
 | Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ — **`BGN-08-03` (electrical safety) also cites 76-35 — verify via Phase 14.18** |
 | Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
