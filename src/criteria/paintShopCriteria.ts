@@ -64,11 +64,14 @@ export const paintShopCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // FIX (Phase 14): Décret 93-120 covers occupational medical exams only — not PPE.
+    // PPE obligation → Loi 90-11 Art.8 (employer duty) + Décret 91-05 Art.6 (chemical-risk PPE).
+    // Aligned to PRT-05-01 fix pattern applied in Phase 13.
     id: 'PNT-04-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة (كمامات بخارية FFP2، نظارات وقاية، قفازات مقاومة للمذيبات) لعمال الدهان.',
-    legalReference: 'المرسوم 93-120 + القانون 90-11.',
+    legalReference: 'القانون 90-11 المادة 8 (التزام صاحب العمل بتوفير وسائل الوقاية الشخصية الملائمة للمخاطر المهنية) + المرسوم التنفيذي 91-05 المادة 6 (الحد الأدنى من معدات الوقاية الشخصية في الأنشطة ذات المخاطر الكيميائية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',

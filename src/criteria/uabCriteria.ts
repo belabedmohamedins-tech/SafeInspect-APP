@@ -263,6 +263,9 @@ export const uabSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // FIX (Phase 14): align numericField to NumericFieldSpec
+    // label → labelAr, threshold → warningMax, remove comparisonOperator, add step + upperLimit
+    // matches BLS-04-06 schema (already fixed in Phase 13)
     id: 'UAB-AX7-07',
     axis: 'الصحة والسلامة المهنية',
     category: 'صحية',
@@ -272,10 +275,11 @@ export const uabSpecificCriteria: InspectionItem[] = [
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      label: 'مستوى الضجيج المقاس (ديسيبل)',
+      labelAr: 'مستوى الضجيج المقاس (ديسيبل)',
       unit: 'dB',
-      threshold: 85,
-      comparisonOperator: 'lte',
+      warningMax: 85,
+      step: 1,
+      upperLimit: true,
     },
   },
   {
