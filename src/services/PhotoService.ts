@@ -8,7 +8,7 @@
 //
 // Naming convention:  photos/insp-<itemId>-<timestamp>.jpg
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 
 const PHOTOS_DIR = `${FileSystem.documentDirectory}photos/`;
 
