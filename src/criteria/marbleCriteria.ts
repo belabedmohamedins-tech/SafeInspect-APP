@@ -13,11 +13,12 @@ export const marbleCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // G6 fix: citation corrected 06-141 → 06-138 (06-141 = wastewater, 06-138 = air emissions)
     id: 'MRB-02-02',
     axis: 'الموقع والتهيئة',
     category: 'بيئية',
     criteria: 'عدم تسبب الورشة في انتشار غبار الرخام خارج المنشأة وعدم إزعاج الجوار أو تلوث الطريق العام.',
-    legalReference: 'القانون 03-10 + المرسوم 06-141.',
+    legalReference: 'القانون 03-10 + المرسوم 06-138.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -114,13 +115,23 @@ export const marbleCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1: periodic silica dust air quality measurement
+    // G6 fix: added numericField for silica dust concentration (0.1 mg/m³ threshold)
+    // G6 fix: citation corrected 06-141 → 06-138 (06-141 = wastewater, 06-138 = air emissions)
     id: 'MRB-05-05',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز غبار السيليكا (الكوارتز الحر) في هواء بيئة العمل (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة (0.1 ملغ/م³ للسيليكا الحرة القابلة للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
-    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من السحار السيليكاوي).',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من السحار السيليكاوي).',
     severity: 'medium',
-    controlType: 'doc',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/m³',
+      labelAr: 'تركيز غبار السيليكا الحرة القابل للاستنشاق',
+      max: 0.1,
+      warningMax: 0.08,
+      step: 0.01,
+      upperLimit: true,
+    },
   },
 ];

@@ -13,6 +13,7 @@ export const carpenteryCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // G6 fix: added numericField for workplace noise measurement (85 dB ceiling)
     id: 'CAR-02-02',
     axis: 'الموقع والتهيئة',
     category: 'بيئية',
@@ -21,6 +22,14 @@ export const carpenteryCriteria: InspectionItem[] = [
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'dB(A)',
+      labelAr: 'مستوى الضجيج داخل الورشة',
+      max: 85,
+      warningMax: 80,
+      step: 1,
+      upperLimit: true,
+    },
   },
   {
     id: 'CAR-03-01',
@@ -106,13 +115,23 @@ export const carpenteryCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1: periodic wood dust air quality measurement
+    // G6 fix: added numericField for dust concentration (5 mg/m³ threshold)
+    // G6 fix: citation corrected 06-141 → 06-138 (06-141 = wastewater, 06-138 = air emissions)
     id: 'CAR-05-02',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز غبار الخشب في هواء بيئة العمل (مرة في السنة على الأقل أو عند تغيير أنواع الخشب المُعالَج) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة لغبار الخشب الصلب (5 ملغ/م³ تركيز قابل للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
-    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-141 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من غبار الخشب).',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من غبار الخشب).',
     severity: 'medium',
-    controlType: 'doc',
+    controlType: 'measurement',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/m³',
+      labelAr: 'تركيز غبار الخشب القابل للاستنشاق',
+      max: 5,
+      warningMax: 4,
+      step: 0.1,
+      upperLimit: true,
+    },
   },
 ];
