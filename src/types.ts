@@ -37,7 +37,14 @@ export type ComplianceStatus =
   | 'observation-only'
   | 'unable-to-verify';
 
-export type Category = 'تنظيمية' | 'بيئية' | 'صحيه' | 'سلامة' | 'نظافة' | 'عامة';
+/**
+ * FIX (G15): corrected 'صحيه' → 'صحية' (the value actually used in all 33 criteria
+ * across abattoirCriteria, baseFoodCriteria, couvoirCriteria, uabCriteria, updCriteria);
+ * added 'غذائية' which baseFoodCriteria uses but was never declared here.
+ * The criteria files themselves do NOT need editing — the data was consistent,
+ * the type declaration was wrong.
+ */
+export type Category = 'تنظيمية' | 'بيئية' | 'صحية' | 'سلامة' | 'نظافة' | 'عامة' | 'غذائية';
 export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
 
 /**
@@ -315,7 +322,17 @@ export interface CorrectiveAction {
   facilityId: string;
   facilityName: string;
   criteria: string;
-  severity: Severity;
+  /**
+   * CAP-level severity. Usually mirrors the source criterion's Severity, but
+   * can be independently escalated to 'critical' for items whose
+   * sanctionTier === 'court-referral' (see capFactory.ts). This is a CAP-only
+   * escalation tier — it does not exist on InspectionItem.severity or in the
+   * scoring model (scoringUtils.ts), which remain 'high'|'medium'|'low' only.
+   *
+   * FIX (G17b): added '| critical' — capFactory.ts already assigns this value
+   * and documents the intent in its own comments; the type was never updated to match.
+   */
+  severity: Severity | 'critical';
   deadline: string;
   assignedTo: string;
   status: 'open' | 'in-progress' | 'resolved' | 'overdue';
