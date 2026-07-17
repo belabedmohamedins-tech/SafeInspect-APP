@@ -31,12 +31,11 @@ jest.mock('../../src/repositories/AuditLogRepository', () => ({
   },
 }));
 
-// ─── Mock CorrectiveActionRepository ─────────────────────────────────────────
+// ─── Mock capFactory (G17c fix: source now calls createCapItemsFromInspection,
+//     NOT CorrectiveActionRepository.createFromInspection) ────────────────────
 
-jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: {
-    createFromInspection: jest.fn(() => Promise.resolve()),
-  },
+jest.mock('../../src/services/capFactory', () => ({
+  createCapItemsFromInspection: jest.fn(() => Promise.resolve()),
 }));
 
 // ─── Mock followUpService ─────────────────────────────────────────────────────
@@ -53,10 +52,13 @@ jest.mock('../../src/repositories/ApprovalRepository', () => ({
   },
 }));
 
-// ─── Mock violationHistory ────────────────────────────────────────────────────
+// ─── Mock violationHistory (5-arg signature matching actual source) ───────────
 
 jest.mock('../../src/services/violationHistory', () => ({
-  annotateRepeatViolations: jest.fn((_accessors: unknown, items: unknown[]) => Promise.resolve(items)),
+  annotateRepeatViolations: jest.fn(
+    (_accessors: unknown, items: unknown[], _facilityId: unknown, _id: unknown, _priorId: unknown) =>
+      Promise.resolve(items),
+  ),
 }));
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -171,13 +173,26 @@ describe('InspectionRepository.save', () => {
     expect(mockStore.has(StorageKeys.STATS_CACHE)).toBe(false);
   });
 
-  it('runs full completion path: annotates, hashes, audits, CAP, followUp, approval', async () => {
-    // new completion — triggers full isNewCompletion path
+  it('runs full completion path: annotates, hashes, audits, CAP via capFactory, followUp, approval', async () => {
+    const { createCapItemsFromInspection } = require('../../src/services/capFactory');
+    const { AuditLogRepository } = require('../../src/repositories/AuditLogRepository');
+
     const insp = makeInspection({ id: 'comp-1', status: 'completed', approvalStatus: 'pending' });
     await InspectionRepository.save(insp);
+
     const all = await InspectionRepository.getAll();
     expect(all[0].integrityHash).toBe('mock-hash-abc123');
     expect(all[0].approvalStatus).toBe('pending');
+
+    // capFactory (G17c) must be called, NOT CorrectiveActionRepository
+    expect(createCapItemsFromInspection).toHaveBeenCalledWith(expect.objectContaining({ id: 'comp-1' }));
+
+    // AuditLogRepository.append called with positional args (G17a)
+    expect(AuditLogRepository.append).toHaveBeenCalledWith(
+      'INSPECTION_SAVED',
+      'Inspector',
+      expect.objectContaining({ inspectionId: 'comp-1' }),
+    );
   });
 
   it('handles annotateRepeatViolations failure gracefully', async () => {
@@ -187,7 +202,9 @@ describe('InspectionRepository.save', () => {
     // should not throw — catch block swallows the error
     await expect(InspectionRepository.save(insp)).resolves.toBeUndefined();
     // restore
-    (annotateRepeatViolations as jest.Mock).mockImplementation((_a: unknown, items: unknown[]) => Promise.resolve(items));
+    (annotateRepeatViolations as jest.Mock).mockImplementation(
+      (_a: unknown, items: unknown[]) => Promise.resolve(items),
+    );
   });
 });
 
@@ -204,6 +221,18 @@ describe('InspectionRepository.delete', () => {
     const all = await InspectionRepository.getAll();
     expect(all).toHaveLength(1);
     expect(all[0].id).toBe('2');
+  });
+
+  it('calls AuditLogRepository.append with positional args (G17a) on delete', async () => {
+    const { AuditLogRepository } = require('../../src/repositories/AuditLogRepository');
+    const data = [makeInspection({ id: 'del-1', status: 'completed' })];
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    await InspectionRepository.delete('del-1');
+    expect(AuditLogRepository.append).toHaveBeenCalledWith(
+      'INSPECTION_DELETED',
+      'Inspector',
+      expect.objectContaining({ inspectionId: 'del-1' }),
+    );
   });
 
   it('is a no-op for an unknown id', async () => {
@@ -228,6 +257,22 @@ describe('InspectionRepository.deleteMany', () => {
     const all = await InspectionRepository.getAll();
     expect(all).toHaveLength(1);
     expect(all[0].id).toBe('2');
+  });
+
+  it('calls AuditLogRepository.append with positional args (G17a) on deleteMany', async () => {
+    const { AuditLogRepository } = require('../../src/repositories/AuditLogRepository');
+    (AuditLogRepository.append as jest.Mock).mockClear();
+    const data = [
+      makeInspection({ id: '1', status: 'completed' }),
+      makeInspection({ id: '2', status: 'completed' }),
+    ];
+    mockStore.set(StorageKeys.INSPECTIONS, JSON.stringify(data));
+    await InspectionRepository.deleteMany(['1', '2']);
+    expect(AuditLogRepository.append).toHaveBeenCalledWith(
+      'INSPECTION_BULK_DELETED',
+      'system',
+      expect.objectContaining({ detail: expect.stringContaining('2') }),
+    );
   });
 
   it('handles empty ids array gracefully', async () => {
