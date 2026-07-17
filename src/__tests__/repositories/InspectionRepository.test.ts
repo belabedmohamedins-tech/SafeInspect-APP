@@ -21,6 +21,10 @@
 // deterministically via its module registry. The circular-dep concern is
 // mitigated by the fact that neither followUpService nor ApprovalRepository
 // imports InspectionRepository directly.
+//
+// FIX (G17c): CorrectiveActionRepository.createFromInspection was a dead call
+// in the old source — the method never existed. The source now calls
+// createCapItemsFromInspection from capFactory. The mock below reflects that.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from '../../repositories/keys';
@@ -39,8 +43,10 @@ jest.mock('../../repositories/AuditLogRepository', () => ({
   AuditLogRepository: { append: jest.fn(() => Promise.resolve()) },
 }));
 
-jest.mock('../../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: { createFromInspection: jest.fn(() => Promise.resolve()) },
+// FIX (G17c): mock capFactory.createCapItemsFromInspection (replaces dead
+// CorrectiveActionRepository.createFromInspection mock).
+jest.mock('../../services/capFactory', () => ({
+  createCapItemsFromInspection: jest.fn(() => Promise.resolve()),
 }));
 
 jest.mock('../../services/followUpService', () => ({
@@ -51,21 +57,25 @@ jest.mock('../../repositories/ApprovalRepository', () => ({
   ApprovalRepository: { enqueue: jest.fn(() => Promise.resolve()) },
 }));
 
+jest.mock('../../services/violationHistory', () => ({
+  annotateRepeatViolations: jest.fn((_accessors: any, items: any) => Promise.resolve(items)),
+}));
+
 // ─── module under test (imported AFTER all jest.mock declarations) ─────────────
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { IntegrityService } from '../../services/IntegrityService';
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
-import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
+import { createCapItemsFromInspection } from '../../services/capFactory';
 import { createFollowUpIfNeeded } from '../../services/followUpService';
 import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
 // Typed handles — retrieved after module load, safe from TDZ.
-const mockComputeHash          = IntegrityService.computeHash                    as jest.Mock;
-const mockAuditAppend          = AuditLogRepository.append                       as jest.Mock;
-const mockCreateFromInspection = CorrectiveActionRepository.createFromInspection as jest.Mock;
-const mockCreateFollowUp       = createFollowUpIfNeeded                          as jest.Mock;
-const mockEnqueue              = ApprovalRepository.enqueue                      as jest.Mock;
+const mockComputeHash        = IntegrityService.computeHash          as jest.Mock;
+const mockAuditAppend        = AuditLogRepository.append             as jest.Mock;
+const mockCreateCapItems     = createCapItemsFromInspection          as jest.Mock;
+const mockCreateFollowUp     = createFollowUpIfNeeded                as jest.Mock;
+const mockEnqueue            = ApprovalRepository.enqueue            as jest.Mock;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
@@ -75,7 +85,7 @@ beforeEach(() => {
   // Re-apply Promise-returning implementations after clearAllMocks resets them.
   mockComputeHash.mockReturnValue('mock-hash-abc123');
   mockAuditAppend.mockResolvedValue(undefined);
-  mockCreateFromInspection.mockResolvedValue(undefined);
+  mockCreateCapItems.mockResolvedValue(undefined);
   mockCreateFollowUp.mockResolvedValue(undefined);
   mockEnqueue.mockResolvedValue(undefined);
 });
@@ -188,13 +198,13 @@ describe('InspectionRepository.save', () => {
     expect(stored[0].facilityName).toBe('New Name');
   });
 
-  it('triggers AuditLog + CAP on first completion', async () => {
+  it('triggers AuditLog + capFactory on first completion', async () => {
     await InspectionRepository.save(makeInspection({ id: 'new-c', status: 'completed' }));
-    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_SAVED')).toBe(true);
-    expect(mockCreateFromInspection).toHaveBeenCalled();
+    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0] === 'INSPECTION_SAVED')).toBe(true);
+    expect(mockCreateCapItems).toHaveBeenCalled();
   });
 
-  it('calls followUpService and ApprovalRepository on completion (lazy import paths)', async () => {
+  it('calls followUpService and ApprovalRepository on completion', async () => {
     await InspectionRepository.save(makeInspection({ id: 'lazy-1', status: 'completed' }));
     expect(mockCreateFollowUp).toHaveBeenCalled();
     expect(mockEnqueue).toHaveBeenCalled();
@@ -203,7 +213,7 @@ describe('InspectionRepository.save', () => {
   it('does NOT trigger side-effects when saving an in-progress inspection', async () => {
     await InspectionRepository.save(makeInspection({ id: 'draft-x', status: 'in-progress' }));
     expect(mockAuditAppend).not.toHaveBeenCalled();
-    expect(mockCreateFromInspection).not.toHaveBeenCalled();
+    expect(mockCreateCapItems).not.toHaveBeenCalled();
     expect(mockCreateFollowUp).not.toHaveBeenCalled();
     expect(mockEnqueue).not.toHaveBeenCalled();
   });
@@ -213,6 +223,18 @@ describe('InspectionRepository.save', () => {
     expect(mockComputeHash).toHaveBeenCalled();
     const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
     expect(stored[0].integrityHash).toBe('mock-hash-abc123');
+  });
+
+  it('does NOT trigger side-effects on re-save of already-completed inspection', async () => {
+    // First save — becomes completed
+    await InspectionRepository.save(makeInspection({ id: 'rc-1', status: 'completed' }));
+    jest.clearAllMocks();
+    // Re-apply mocks after clearAllMocks
+    mockCreateCapItems.mockResolvedValue(undefined);
+    mockAuditAppend.mockResolvedValue(undefined);
+    // Second save — already completed, should not re-trigger side-effects
+    await InspectionRepository.save(makeInspection({ id: 'rc-1', status: 'completed' }));
+    expect(mockCreateCapItems).not.toHaveBeenCalled();
   });
 });
 
@@ -229,6 +251,11 @@ describe('InspectionRepository.delete', () => {
   it('is a no-op when id does not exist', async () => {
     await InspectionRepository.delete('nonexistent');
     expect(JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]')).toHaveLength(0);
+  });
+
+  it('does NOT append audit log when deleting non-existent id', async () => {
+    await InspectionRepository.delete('ghost-id');
+    expect(mockAuditAppend).not.toHaveBeenCalledWith('INSPECTION_DELETED', expect.anything(), expect.anything());
   });
 });
 
@@ -247,7 +274,7 @@ describe('InspectionRepository.deleteMany', () => {
 
   it('appends a INSPECTION_BULK_DELETED audit entry', async () => {
     await InspectionRepository.deleteMany(['x1', 'x2']);
-    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0]?.action === 'INSPECTION_BULK_DELETED')).toBe(true);
+    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0] === 'INSPECTION_BULK_DELETED')).toBe(true);
   });
 
   it('is a no-op when the id list is empty', async () => {
