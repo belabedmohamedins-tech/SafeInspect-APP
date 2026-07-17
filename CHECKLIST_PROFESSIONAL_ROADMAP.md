@@ -256,6 +256,24 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
+### Phase 11b — Air Quality Measurement Criteria (New) `HIGH VALUE` 🔲 Pending
+
+> **Context (from deleted ROADMAP.md):** Session S8 found that 5 facility types (paint shop, marble, carpentry, printing, blacksmith) have equipment-only air checks but **no periodic measurement criterion**. These 7 new criteria close that gap. All cite Décret 06-138 (the correct air-emissions decree — see Phase 14). Numeric thresholds depend on Research Task R7 below.
+
+| ID | Facility | Criterion text (Arabic TBD) | Legal basis | Status |
+|---|---|---|---|---|
+| `PNT-07-01` | Paint shop | Periodic VOC concentration measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+| `PNT-07-02` | Paint shop | Measurement report retention (≥ 3 years) | Décret 06-138 | 🔲 Pending |
+| `MRB-07-01` | Marble | Periodic dust/particulate measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+| `MRB-07-02` | Marble | Measurement report retention (≥ 3 years) | Décret 06-138 | 🔲 Pending |
+| `CRP-07-01` | Carpentry | Periodic wood-dust measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+| `PRT-07-01` | Printing | Periodic solvent/VOC measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+| `BLS-07-01` | Blacksmith | Periodic metal-fume/particulate measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+
+> **Blocked on R7** — numeric threshold values (`max`, `warningMax`) cannot be hardcoded until Décret 06-138's Annex is retrieved and the facility-class limits are confirmed. Criteria can be added as `boolean` type in the interim, then upgraded to `numericField` once R7 is resolved.
+
+---
+
 ### Phase 12 — criteriaData.ts Mapping Drift `MEDIUM` ✅ COMPLETE
 
 > All 5 suspected activity strings correctly wired — bug-fix aliases already in place.
@@ -306,6 +324,16 @@ All 9 audit sessions are **complete**. No remaining session work.
 ## Test Sync Rule (Standing)
 
 > **Every criteria file change requires a corresponding test update.** When item count changes, update `toHaveLength()`. When an item is removed, convert its `toBeDefined()` test to `toBeUndefined()`. This rule was enforced for all Phase 10+ work.
+
+---
+
+## Open Research Tasks
+
+| ID | Task | Blocks | Status |
+|---|---|---|---|
+| R1 | Find the Algerian regulatory text that sets the specific workplace noise dB(A) ceiling (referenced but unnamed in Décret 93-120 and the legal manual) | `BLS-04-06` legalReference — to replace interim international-reference form with a verified Algerian citation | 🔲 Open |
+| R6 | Same as R1 — confirm whether the unnamed text is an arrêté ministeriel or a separate décret, and retrieve its article number | `BLS-04-06` | 🔲 Open |
+| R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) — needed to set `max`/`warningMax` values | 🔲 Open |
 
 ---
 
