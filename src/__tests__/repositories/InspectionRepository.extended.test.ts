@@ -16,8 +16,9 @@ jest.mock('../../services/followUpService', () => ({
 jest.mock('../../repositories/AuditLogRepository', () => ({
   AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
 }));
-jest.mock('../../repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: { createFromInspection: jest.fn().mockResolvedValue(undefined) },
+// G17c fix: source calls createCapItemsFromInspection from capFactory, not CorrectiveActionRepository
+jest.mock('../../services/capFactory', () => ({
+  createCapItemsFromInspection: jest.fn().mockResolvedValue(undefined),
 }));
 jest.mock('../../repositories/ApprovalRepository', () => ({
   ApprovalRepository: { enqueue: jest.fn().mockResolvedValue(undefined) },
