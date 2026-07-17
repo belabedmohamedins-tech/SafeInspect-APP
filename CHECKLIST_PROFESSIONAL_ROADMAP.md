@@ -1,8 +1,50 @@
 # SafeInspect — Professional Checklist Roadmap
 
 > **Single source of truth for all checklist improvements.**  
-> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9 + RAQIB Master Technical Manuscript.  
+> Grounded in: Inspection Manual Chapters 1–6 + Audit Sessions 2–9 + RAQIB Master Technical Manuscript + **RAQIB Fix Spec v2** (latest verified source — supersedes all prior phase notes where they conflict).  
 > More chapters are incoming — this document will be updated as each new chapter is uploaded.
+
+---
+
+## ⚠️ RAQIB Fix Spec v2 — Critical Corrections to This Roadmap
+
+> **RAQIB Fix Spec v2** performed a direct live re-verification of the repo (fetched and read actual files, not self-reported status). It found **4 confirmed open bugs** and **2 entries in this roadmap's "Known Correct Citations" table that are factually wrong** and must be corrected before more work builds on top of them.
+
+### 🔴 Two Wrong "Known Correct" Entries — Must Be Reverted
+
+#### 1. Décret 93-120 Art. 9 for workplace noise (85 dB) — NOT verified
+
+The roadmap's Phase 10 asserts `BLS-04-06`'s 85 dB citation to "Décret 93-120 Art. 9" is ✅ CORRECT and must not be changed.
+
+**RAQIB Fix Spec v2 finding:** The legal manual's Occupational Health chapter states verbatim that the noise-exposure limit is a **research gap — neither source contained a specific dB(A) ceiling, and both explicitly defer the numeric standard to an unnamed separate regulatory text.** The article-level specificity "Art. 9" was never established in any research session. This is fabricated precision, not a verified correction. The 85 dB figure is an international reference (WHO/OSHA), not a confirmed Algerian legal threshold.
+
+**Required action:** Revert `BLS-04-06`'s `legalReference` to the interim form: present 85 dB as an international best practice, not as a specific Algerian decree article. Research Task R1/R6 remains **open**, not closed.
+
+#### 2. Décret 06-141 for VOC / air emissions — WRONG DECREE
+
+The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emission limits (printing, paint, blacksmith) ✅`.
+
+**RAQIB Fix Spec v2 finding:** Décret 06-141 is the **wastewater/liquid-discharge decree**. Its full parameter table covers flow, temperature, pH, suspended solids, BOD5, COD, metals (aluminum, cadmium, copper, lead, chromium, nickel, zinc, iron, cobalt). Every parameter is a liquid-discharge parameter. None is an airborne concentration. The correct instrument for air emissions is **Décret 06-138** — already correctly used in `carpenteryCriteria.ts` (`CAR-05-02`) and `marbleCriteria.ts` (`MRB-05-05`) in this same codebase.
+
+**Confirmed scope — 6 instances across 3 files still citing 06-141 for VOC:**
+- `paintShopCriteria.ts`: `PNT-02-01`, `PNT-02-02`, `PNT-02-03`
+- `printingCriteria.ts`: `PRT-02-01`, `PRT-02-02`, `PRT-02-03`
+- `blacksmithCriteria.ts`: `BLS-04-07`
+
+**Required action:** Replace `06-141` → `06-138` in all 6 locations (exact diffs in RAQIB Fix Spec v2 Phase 8).
+
+---
+
+### 🔴 4 Confirmed Open Bugs (Fix Spec v2 live verification)
+
+| Bug | Gap | Status | Why it matters |
+|---|---|---|---|
+| **G15** | `Category` type in `types.ts` still declares `'صحيه'` (wrong spelling); 33 criteria across 5 files use `'صحية'` (correct). `'غذائية'` also missing from the type. | 🔴 **Unaddressed** — byte-for-byte unchanged | Highest-volume confirmed `tsc` error in the whole project |
+| **G17a** | `InspectionRepository.ts` — `AuditLogRepository.append()` called with old object-argument form in 3 locations (`save`, `delete`, `deleteMany`) | 🔴 **Unaddressed** | Confirmed `tsc` error |
+| **G17b** | `capFactory.ts` assigns `'critical'` to `CorrectiveAction['severity']`; `types.ts`'s interface declares `severity: Severity` with no `'critical'` member | 🔴 **Unaddressed** | Confirmed `tsc` error (`TS2678`/`TS2322`) |
+| **G17c** | `InspectionRepository.ts` `save()` calls `CorrectiveActionRepository.createFromInspection()` — **a method that does not exist**. `createCapItemsFromInspection` (the real function in `capFactory.ts`) is called from **nowhere**. **CAP items have never been auto-created by this app.** | 🔴 **Unaddressed** | Core workflow feature silently broken |
+
+> **G17c detail:** A repo-wide code search for `createCapItemsFromInspection` returns zero results outside its own definition. `capFactory.ts`'s own header comment says it is "Called by checklist.tsx immediately after the inspection is saved as 'completed'" — it isn't. Every inspection completion since launch has silently skipped CAP generation.
 
 ---
 
@@ -13,10 +55,12 @@
 | Overall checklist maturity score | **77 / 100** → targeting 80+ after remaining phases |
 | Total criteria in library | ~372 |
 | Confirmed duplicate criteria removed | **60+** |
-| Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 7 fixed (Phase 10 — Décret 93-120 sweep complete)** |
+| Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 7 fixed (Phase 10 — partial)** |
 | Sessions completed | **9 / 9 audit sessions done** |
 | Inspection Manual chapters digested | **6 / 6 uploaded (Ch. 1–6)** |
 | Inspection Manual chapters pending | **Ch. 7+ (not yet uploaded)** |
+| Fix Spec v2 open critical bugs | **4 unaddressed** (G15, G17a, G17b, G17c) |
+| Fix Spec v2 wrong roadmap entries | **2 must be corrected** (93-120 Art.9 noise, 06-141 VOC) |
 
 ---
 
@@ -44,6 +88,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 - 🔄 **Partial** — started but not complete
 - ❓ **Blocked** — awaiting user decision
 - 🟡 **CURRENT** — actively being worked now
+- 🔴 **REVERT NEEDED** — Fix Spec v2 confirms this is wrong
 
 ---
 
@@ -162,9 +207,10 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 7 — Air Quality & Emissions `HIGH VALUE` ✅ COMPLETE
+### Phase 7 — Air Quality & Emissions `HIGH VALUE` ✅ COMPLETE (criteria added; citations need fix — see Phase 14)
 
-> Periodic VOC/emissions measurement criteria added for: printing (PRT-02-03), blacksmith (BLS-04-07), paint shop (PNT-02-03), car wash, marble.
+> Periodic VOC/emissions measurement criteria added for: printing (PRT-02-03), blacksmith (BLS-04-07), paint shop (PNT-02-03), car wash, marble.  
+> ⚠️ **The legal citations on PNT-02-01/02/03, PRT-02-01/02/03, BLS-04-07 cite the wrong decree (06-141 instead of 06-138). See Phase 14.**
 
 ---
 
@@ -180,17 +226,11 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` ✅ COMPLETE
+### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` 🔄 PARTIAL
 
-> **Root finding (RAQIB Master Technical Manuscript):** Décret 93-120 governs **occupational medical examinations only** (periodic health checks for workers in hazardous activities — Article 9 and Annex). It does **NOT** govern PPE, machine guarding, noise emission limits, or chemical storage safety. Any criterion citing 93-120 for those subjects is mis-cited.
+> **Root finding:** Décret 93-120 governs **occupational medical examinations only**. It does **NOT** govern PPE, machine guarding, noise emission limits (in general), or chemical storage safety.
 >
-> **Correct instruments by subject:**
-> - **PPE obligation** → Loi 90-11 Art. 8 + Décret 91-05 Art. 6
-> - **Machine guarding / emergency stop** → Loi 90-11 + Décret 93-05 (equipment safety standards)
-> - **Chemical storage safety** → Loi 19-02 + Décret 91-05 Art. 9
-> - **Workplace noise limit (85 dB)** → Décret 93-120 Art. 9 ✅ CORRECT USE
-> - **Periodic medical exam** → Décret 93-120 ✅ CORRECT USE
-> - **Neighborhood noise (70 dB ambient)** → Loi 03-10 + Décret 06-138 ✅ CORRECT
+> **⚠️ Phase 10's "noise limit" conclusion is contested by Fix Spec v2.** The claim that 93-120 Art. 9 is a verified citation for the 85 dB workplace noise limit is unsubstantiated — no article-level content was ever retrieved. See the critical section at the top of this document.
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
@@ -198,62 +238,68 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 10.2 | Fix `BLS-04-01` — 93-120 cited for PPE | `blacksmithCriteria.ts` | ✅ Done |
 | 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | ✅ Done |
 | 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | ✅ Done |
-| 10.5 | Fix `MCH-29-06` — 93-120 cited for PPE; sweep carpenteryCriteria, marbleCriteria, paintShopCriteria (no residual found) | `mechanicCriteria.ts` | ✅ Done |
-
-> **Note:** `BLS-04-06` (workplace noise 85 dB) and `BLS-05-01` (periodic medical exam) correctly cite 93-120 — do not change.
+| 10.5 | Fix `MCH-29-06` — 93-120 cited for PPE | `mechanicCriteria.ts` | ✅ Done |
+| 10.6 | **`BLS-04-06` (85 dB noise limit) — revert to interim form** | `blacksmithCriteria.ts` | 🔴 REVERT NEEDED — "Art. 9" is unverified precision |
+| 10.7 | **`UAB-AX7-07` numericField still uses stale schema** — confirmed byte-for-byte unchanged | `uabCriteria.ts` | 🔴 Still broken — see Phase 14 |
 
 ---
 
 ### Phase 11 — GPL Cylinder Storage Deduplication `MEDIUM` ✅ COMPLETE (Won't Merge)
 
-> **Root finding:** `gplCriteria.ts` GPL-02-01/02/03 and `baseCompressedGasCriteria.ts` CGS-01-01/02/03 cover the same three subjects (vertical storage, full/empty separation, max quantity).
->
-> **Decision (confirmed by side-by-side code review, July 2026):** **Keep GPL-02-xx as-is. Do NOT merge into baseCompressedGasCriteria.**
->
-> **Justification:** The two sets have different legal bases:
-> - `GPL-02-xx` cites **Décret 21-430 Art. 6** (GPL/C-specific installation & service regulation) — the correct and more precise instrument for GPL cylinder service workshops.
-> - `CGS-01-xx` cites **Décret 76-35** (generic compressed-gas storage) — correct for welding/blacksmith shops.
->
-> Merging would force inaccurate citations onto GPL inspections. The separation is intentional and legally correct.
+> **Decision:** Keep GPL-02-xx and CGS-01-xx separate — different legal bases (Décret 21-430 vs Décret 76-35). Separation is intentional and legally correct.
 
 | # | Item | File(s) | Status |
 |---|---|---|---|
-| 11.1 | Compare GPL-02-01/02/03 vs CGS-01-01/02/03 wording and legal basis | `gplCriteria.ts` + `baseCompressedGasCriteria.ts` | ✅ Done — different legal basis confirmed |
-| 11.2 | Keep GPL-02-xx with explanatory comment; no merge | `gplCriteria.ts` | ✅ Done — comment already present in file |
-| 11.3 | ~~Replace GPL-02-xx with baseCompressedGasCriteria spread~~ | N/A | ✅ Rejected — would corrupt legal citations |
+| 11.1 | Compare GPL-02-xx vs CGS-01-xx wording and legal basis | `gplCriteria.ts` + `baseCompressedGasCriteria.ts` | ✅ Done — different legal basis confirmed |
+| 11.2 | Keep GPL-02-xx with explanatory comment; no merge | `gplCriteria.ts` | ✅ Done |
+| 11.3 | ~~Replace GPL-02-xx with baseCompressedGasCriteria spread~~ | N/A | ✅ Rejected |
 
 ---
 
 ### Phase 12 — criteriaData.ts Mapping Drift `MEDIUM` ✅ COMPLETE
 
-> **Root finding:** 5 facility activity strings were suspected to resolve to `baseGeneralCriteria` only.
-> **Outcome:** All 5 strings are correctly wired — bug-fix aliases were already in place:
-> - `'ميكانيك السيارات'` → `mechanicChecklist`
-> - `'ورشة حدادة (صناعة السياج)'` → `blacksmithChecklist`
-> - `'ورشة نجارة الألمنيوم'` → `carpenteryChecklist`
-> - `'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'` → `printingChecklist`
-> - `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` → `slaughterhouseSmallChecklist`
+> All 5 suspected activity strings correctly wired — bug-fix aliases already in place.
 
-| # | Item | File(s) | Status |
-|---|---|---|---|
-| 12.1 | Read `criteriaData.ts` and identify all activity keys mapping only to `baseGeneralCriteria` | `src/criteriaData.ts` | ✅ Done — no drift found |
-| 12.2 | For each drifted key: wire correct specific criteria array | `src/criteriaData.ts` | ✅ Done — aliases already present |
-| 12.3 | Update tests for affected checklists | test files | ✅ N/A — no mapping changes needed |
+| # | Item | Status |
+|---|---|---|
+| 12.1 | Read `criteriaData.ts` and identify all activity keys mapping only to `baseGeneralCriteria` | ✅ Done — no drift found |
+| 12.2 | Wire correct specific criteria arrays | ✅ Done — aliases already present |
 
 ---
 
 ### Phase 13 — baseFoodCriteria numericField Schema Fix `MEDIUM` ✅ COMPLETE
 
-> **Root finding:** `BFD-04-01`, `BFD-04-02` used `label`/`threshold`/`comparisonOperator` — fields that do not exist on `NumericFieldSpec`. The canonical interface (src/types.ts) requires `labelAr`, `min`/`max`/`warningMax`.
-> **Also fixed:** `BLS-04-06` (blacksmithCriteria) used the same stale schema.
+> `BFD-04-01`, `BFD-04-02`, `BLS-04-06` upgraded from stale `label`/`threshold`/`comparisonOperator` to canonical `labelAr`/`max`/`warningMax`/`step`/`upperLimit` shape.
 
-| # | Item | File(s) | Status |
-|---|---|---|---|
-| 13.1 | Read `baseFoodCriteria.ts` cold-chain criteria and confirm field names | `src/criteria/baseFoodCriteria.ts` | ✅ Done — `label`/`threshold`/`comparisonOperator` confirmed |
-| 13.2 | Read `src/types.ts` to confirm canonical `NumericFieldSpec` interface | `src/types.ts` | ✅ Done — `labelAr`, `min`, `max`, `warningMax`, `step`, `upperLimit` |
-| 13.3 | Fix `BFD-04-01`: `label→labelAr`, `threshold:5→max:5`, add `min:0`, add `step:0.1`, remove `comparisonOperator` | `baseFoodCriteria.ts` | ✅ Done |
-| 13.4 | Fix `BFD-04-02`: `label→labelAr`, `threshold:-18→warningMax:-18`, add `upperLimit:true`, add `step:0.1`, remove `comparisonOperator` | `baseFoodCriteria.ts` | ✅ Done |
-| 13.5 | Fix `BLS-04-06`: same schema alignment (`label→labelAr`, `threshold:85→warningMax:85`, `upperLimit:true`) | `blacksmithCriteria.ts` | ✅ Done |
+| # | Item | Status |
+|---|---|---|
+| 13.1–13.3 | `BFD-04-01`, `BFD-04-02`, `BLS-04-06` fixed | ✅ Done |
+| 13.4 | `UAB-AX7-07` — **still uses old broken shape** (confirmed live by Fix Spec v2) | 🔴 Still broken — see Phase 14 |
+
+---
+
+### Phase 14 — Fix Spec v2 Open Items `CRITICAL` 🔲 Pending
+
+> All items below are **confirmed unaddressed** via direct live file inspection (Fix Spec v2). Priority order matches manuscript recommendation.
+
+| # | Item | File(s) | Fix | Status |
+|---|---|---|---|---|
+| 14.1 | **G15 — `Category` type** — `'صحيه'` → `'صحية'`, add `'غذائية'` member | `src/types.ts` | Type-only change, 1 line. Do NOT touch criteria files. | 🔲 Pending |
+| 14.2 | **G17b — `CorrectiveAction.severity`** — add `\| 'critical'` to the interface | `src/types.ts` | 1-line type change | 🔲 Pending |
+| 14.3 | **G17a — `AuditLogRepository.append()` call sites** — object-arg → positional-args in all 3 locations (`save`, `delete`, `deleteMany`) | `src/repositories/InspectionRepository.ts` | Mechanical transform — exact diffs in Fix Spec v2 Phase 4.1 | 🔲 Pending |
+| 14.4 | **G17a — same fix in `ApprovalRepository.ts`** | `src/repositories/ApprovalRepository.ts` | Same positional-args transform | 🔲 Pending |
+| 14.5 | **G17c — CAP auto-creation broken** — replace `CorrectiveActionRepository.createFromInspection()` (does not exist) with `createCapItemsFromInspection` from `capFactory.ts` | `src/repositories/InspectionRepository.ts` | Add import + replace call — exact diff in Fix Spec v2 Phase 4.2 | 🔲 Pending |
+| 14.6 | **G18 — 06-141 → 06-138** for all 6 VOC/air-emission citations | `paintShopCriteria.ts` (PNT-02-01/02/03), `printingCriteria.ts` (PRT-02-01/02/03) | String replace — exact diffs in Fix Spec v2 Phase 8 | 🔲 Pending |
+| 14.7 | **G18 — BLS-04-07** — same 06-141 → 06-138 fix | `blacksmithCriteria.ts` | Same string replace | 🔲 Pending |
+| 14.8 | **UAB-AX7-07 numericField** — upgrade stale schema to canonical `labelAr`/`max`/`warningMax`/`step`/`upperLimit` | `src/criteria/uabCriteria.ts` | Pattern identical to Phase 13 fixes — exact diff in Fix Spec v2 Phase 3.4 | 🔲 Pending |
+| 14.9 | **BLS-04-06 citation revert** — remove "Art. 9" from 93-120 reference; present 85 dB as international best practice | `src/criteria/blacksmithCriteria.ts` | Exact interim text in Fix Spec v2 Phase 6.1 | 🔲 Pending |
+| 14.10 | **`PNT-04-01`** — still cites plain 93-120 for PPE (not fixed in Phase 10 sweep) | `src/criteria/paintShopCriteria.ts` | Same 93-120 PPE fix as Phase 10 items | 🔲 Pending |
+| 14.11 | **G13 — sync path mismatch** — `SyncService.ts` calls `/sync/inspections`; server route is `/sync` | `src/services/SyncService.ts` | Fix Spec v2 Phase 5 Option A — 1 line | 🔲 Pending |
+| 14.12 | **G14 — peer-dep version** — `react-native-safe-area-context: ~5.0.0` → `~5.4.0` | `package.json` | Fix Spec v2 Phase 0 | 🔲 Pending |
+
+> **Recommended order:** 14.1 → 14.2 → 14.3 → 14.4 → 14.5 (these are pure TypeScript fixes, all in `types.ts` + 2 repos — run `npx tsc --noEmit` after each). Then 14.6 → 14.7 → 14.8 → 14.9 → 14.10 (criteria files). Then 14.11 → 14.12 (environment/infra).
+>
+> **After 14.5 (G17c):** do an end-to-end smoke test — complete a mock inspection with ≥1 non-compliant item and confirm a CAP entry is auto-created. This may be the first time this has ever worked.
 
 ---
 
@@ -263,14 +309,17 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-## Known Correct Citations (Do Not Change)
+## Known Correct Citations
+
+> ⚠️ Two entries from the previous version of this table have been **removed** — they were marked ✅ CORRECT but are contested or wrong per Fix Spec v2. See the critical section at the top.
 
 | Decree | Correct use in app |
 |---|---|
-| Décret 93-120 Art. 9 | `BLS-04-06` (85 dB workplace noise limit) |
-| Décret 93-120 | `BLS-05-01` (periodic medical exam) |
-| Décret 09-335 Art. 5 | `GPL-03-03`, `UAB-AX1-04` (emergency plan) |
-| Décret 21-430 | All GPL criteria (Phase 1.2) |
-| Décret 06-141 | VOC emission limits (printing, paint, blacksmith) |
-| Décret 06-138 | Ambient/neighborhood noise limits (BLS-02-01) |
-| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) |
+| Décret 93-120 | `BLS-05-01` (periodic medical exam) ✅ |
+| Décret 93-120 | `BLS-04-06` (85 dB workplace noise) — **⚠️ "Art. 9" specificity unverified — R1/R6 open** |
+| Décret 09-335 Art. 5 | `GPL-03-03`, `UAB-AX1-04` (emergency plan) ✅ |
+| Décret 21-430 | All GPL criteria (Phase 1.2) ✅ |
+| **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) — **replaces the wrong 06-141 entry** |
+| Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
+| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ |
+| Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
