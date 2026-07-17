@@ -314,10 +314,51 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 14.10 | **`PNT-04-01`** — still cites plain 93-120 for PPE (not fixed in Phase 10 sweep) | `src/criteria/paintShopCriteria.ts` | Same 93-120 PPE fix as Phase 10 items | 🔲 Pending |
 | 14.11 | **G13 — sync path mismatch** — `SyncService.ts` calls `/sync/inspections`; server route is `/sync` | `src/services/SyncService.ts` | Fix Spec v2 Phase 5 Option A — 1 line | 🔲 Pending |
 | 14.12 | **G14 — peer-dep version** — `react-native-safe-area-context: ~5.0.0` → `~5.4.0` | `package.json` | Fix Spec v2 Phase 0 | 🔲 Pending |
+| 14.13 | **Dead `updatedAt` field** — `SyncService.ts` reads `existing.updatedAt` / `inspection.updatedAt` which don't exist on `SavedInspection`; silently falls back to `.date` | `src/services/SyncService.ts` | Remove the `?? existing.date` fallback — use `.date` directly (Fix Spec v2 Phase 4.3) | 🔲 Pending |
+| 14.14 | **`expo-file-system/legacy` import** — `PhotoService.ts` and `BackupService.ts` import from `expo-file-system` instead of `expo-file-system/legacy` (already correct in `CapReportService.ts` and `pdfService.ts`) | `src/services/PhotoService.ts`, `src/services/BackupService.ts` | Change import path to `/legacy` in both files (Fix Spec v2 Phase 4.4) | 🔲 Pending |
+| 14.15 | **`src/db/schema.ts` — 3 "no overload matches" tsc errors** — file is mid-migration and not yet consumed by any repository | `src/db/schema.ts` | **Do NOT fix in isolation** — address as part of the dedicated SQLite migration work (Fix Spec v2 Phase 4.5) | ❓ Blocked (migration work) |
+| 14.16 | **`BGN-09-01` neighbor-facing 70 dB citation** — cites 93-120 for neighborhood noise; correct basis is Loi 03-10 art. 27 | `src/criteria/baseGeneralCriteria.ts` | Replace 93-120 with Loi 03-10 art. 27 (Fix Spec v2 Phase 6.2) | 🔲 Pending |
+| 14.17 | **Full 93-120 sweep — machine-guard/PPE hits** — any remaining 93-120 citation not on a medical-exam criterion should cite Loi 88-07 art. 8 (machine guards) or art. 10 (PPE) instead | All `src/criteria/*.ts` | `grep -rn "93-120" src/criteria/*.ts` — fix every non-medical-exam hit (Fix Spec v2 Phase 6.3) | 🔲 Pending |
+| 14.18 | **Décret 76-35 dual-scope sanity check** — `BGN-08-03` (electrical safety) also cites 76-35; roadmap resolved R5 for `CGS-01-xx` but did not verify this second use | `src/criteria/baseGeneralCriteria.ts` | `grep -rn "76-35" src/criteria/*.ts` — confirm both uses are legitimate; fix if electrical-safety citation is wrong (Fix Spec v2 Phase 9.3) | 🔲 Pending |
 
-> **Recommended order:** 14.1 → 14.2 → 14.3 → 14.4 → 14.5 (these are pure TypeScript fixes, all in `types.ts` + 2 repos — run `npx tsc --noEmit` after each). Then 14.6 → 14.7 → 14.8 → 14.9 → 14.10 (criteria files). Then 14.11 → 14.12 (environment/infra).
+> **Recommended order:** 14.1 → 14.2 → 14.3 → 14.4 → 14.5 (pure TypeScript fixes, `types.ts` + 2 repos — run `npx tsc --noEmit` after each). Then 14.6 → 14.7 → 14.8 → 14.9 → 14.10 → 14.16 → 14.17 → 14.18 (criteria/legal files). Then 14.11 → 14.12 → 14.13 → 14.14 (services/infra). 14.15 is blocked on the SQLite migration.
 >
 > **After 14.5 (G17c):** do an end-to-end smoke test — complete a mock inspection with ≥1 non-compliant item and confirm a CAP entry is auto-created. This may be the first time this has ever worked.
+
+---
+
+### Phase 15 — G1: criteriaByActivity Key-String Corrections `HIGH VALUE` 🔲 Pending
+
+> **Fix Spec v2 Phase 1** found that several real facility `activity:` strings in `facilitiesData.ts` were **never mapped** in `criteriaByActivity` and silently fell to `baseGeneralCriteria`. This is the most impactful silent bug for real inspections — entire facility types received the wrong checklist.
+
+| # | Item | Fix | Status |
+|---|---|---|---|
+| 15.1 | **`'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'`** was unmapped — medium-throughput slaughter silently used `baseGeneralCriteria` | Map to `abattoirChecklist` (identical criteria to full abattoir — no dedicated checklist needed) | 🔲 Pending |
+| 15.2 | **`'ميكانيك السيارات'`** (full string) was unmapped — real facility records use this; old alias `'ميكانيك سيارات'` (shorter) was the dead key | Map to `mechanicChecklist` | 🔲 Pending |
+| 15.3 | **`'ورشة حدادة (صناعة السياج)'`** was unmapped — real records use full parenthetical; old alias `'صناعة سياج'` was the dead key | Map to `blacksmithChecklist` | 🔲 Pending |
+| 15.4 | **`'ورشة نجارة الألمنيوم'`** was unmapped — real records use this; old alias `'ورشة ألمنيوم'` was the dead key | Map to `carpenteryChecklist` | 🔲 Pending |
+| 15.5 | **`'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب'`** was unmapped — real records use the full name; old aliases `'مطبعة'` and `'لوازم مدرسية ومكاتب'` were the dead keys | Map to `printingChecklist` | 🔲 Pending |
+| 15.6 | **Dead keys to remove:** `'وحدة مذابح الغرب'`, `'وحدة تفريخ الدواجن'`, `'وحدة تربية الدواجن'`, `'مذبحة دواجن <500 كغ/يوم'`, `'ميكانيك سيارات'`, `'صناعة سياج'`, `'ورشة ألمنيوم'`, `'تركيب GPL'`, `'مطبعة'`, `'لوازم مدرسية ومكاتب'` | Remove all 10 dead keys from `criteriaByActivity` | 🔲 Pending |
+
+> **Verification after applying Phase 15:** run the Python diff-check script from Fix Spec v2 Phase 1.1 — both "Unmapped" and "Dead keys" lists must print empty.
+
+---
+
+### Phase 16 — Inspection Manual Chapter 7 `PENDING UPLOAD`
+
+> **Chapter 7 has not been uploaded yet.** No audit session has been run against it. When the user uploads Chapter 7, a new audit session (S10) should be opened to extract:
+> - Any new legal basis / regulatory instruments not yet in the criteria library
+> - Any facility types covered in Ch.7 not yet in the checklist system
+> - Any criterion gaps identified against existing facility types
+>
+> Until then, this phase is a placeholder. Do not fabricate findings from Chapter 7.
+
+| # | Item | Status |
+|---|---|---|
+| 16.1 | Upload Inspection Manual Chapter 7 | ❓ Awaiting user |
+| 16.2 | Run audit session S10 against Ch. 7 content | 🔲 Blocked on 16.1 |
+| 16.3 | Identify new criteria / legal citations from Ch. 7 | 🔲 Blocked on 16.1 |
+| 16.4 | Implement Ch. 7 findings | 🔲 Blocked on 16.3 |
 
 ---
 
@@ -349,5 +390,8 @@ All 9 audit sessions are **complete**. No remaining session work.
 | Décret 21-430 | All GPL criteria (Phase 1.2) ✅ |
 | **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) — **replaces the wrong 06-141 entry** |
 | Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
-| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ |
+| Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ — **`BGN-08-03` (electrical safety) also cites 76-35 — verify via Phase 14.18** |
 | Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
+| Loi 88-07 art. 8 | Machine guarding, emergency stops — correct replacement for 93-120 in machine-guard criteria |
+| Loi 88-07 art. 10 | General PPE — correct replacement for 93-120 in PPE criteria |
+| Loi 03-10 art. 27 | Neighbor-facing / environmental noise limits (e.g. `BGN-09-01`) |
