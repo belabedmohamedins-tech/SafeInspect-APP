@@ -1,11 +1,11 @@
 // src/__tests__/PhotoService.test.ts
 //
-// expo-file-system has no L2 mock — the jest-expo preset's auto-mock defines
-// properties as non-configurable, so jest.spyOn cannot redefine them.
-// Solution: provide a full jest.mock() factory (L4) so every exported fn
-// is a plain jest.fn() that is freely reassignable.
+// PhotoService imports from 'expo-file-system/legacy'.
+// The L2 moduleNameMapper routes /legacy → src/__mocks__/expo-file-system-legacy.ts
+// but that stub's functions are not jest.fn()s we can reassign.
+// We override at L4 with a full factory for complete mock control.
 
-jest.mock('expo-file-system', () => ({
+jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///app/',
   getInfoAsync:      jest.fn(),
   copyAsync:         jest.fn(),
@@ -13,12 +13,12 @@ jest.mock('expo-file-system', () => ({
   makeDirectoryAsync: jest.fn(),
 }));
 
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import {
   copyToAppStorage,
   deletePhoto,
   photoExists,
-} from '../../src/services/PhotoService';
+} from '../services/PhotoService';
 
 const mockGetInfo  = FileSystem.getInfoAsync  as jest.Mock;
 const mockCopy     = FileSystem.copyAsync     as jest.Mock;

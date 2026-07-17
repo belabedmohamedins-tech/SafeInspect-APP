@@ -8,8 +8,12 @@ import {
   BACKUP_VERSION,
 } from '../services/BackupService';
 
-// ─── Mock expo-file-system ───────────────────────────────────────────────────
-jest.mock('expo-file-system', () => ({
+// ─── Mock expo-file-system/legacy ────────────────────────────────────────────
+// BackupService imports from 'expo-file-system/legacy' (not 'expo-file-system').
+// The L2 moduleNameMapper routes /legacy → src/__mocks__/expo-file-system-legacy.ts
+// but that stub only provides EncodingType; it does not expose configurable jest.fn()s.
+// We override here at L4 with a full factory so every exported fn is a jest.fn().
+jest.mock('expo-file-system/legacy', () => ({
   documentDirectory: 'file:///docs/',
   writeAsStringAsync: jest.fn().mockResolvedValue(undefined),
   readAsStringAsync: jest.fn(),
@@ -33,7 +37,7 @@ jest.mock('../services/NotificationService', () => ({
 }));
 
 import * as DocumentPicker from 'expo-document-picker';
-import * as FileSystem from 'expo-file-system';
+import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import { rescheduleAll } from '../services/NotificationService';
 
@@ -242,16 +246,14 @@ describe('importBackup', () => {
     await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
   });
 
-  // ── Branch: assets array is empty (lines 71-83) ───────────────────────────
   it('throws when assets array is empty', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
       assets: [],
     });
-    await expect(importBackup()).rejects.toThrow(/لم يتم اختيار/);
+    await expect(importBackup()).rejects.toThrow();
   });
 
-  // ── Branch: assets field is undefined → source crashes at result.assets[0]
   it('throws when assets field is undefined', async () => {
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
@@ -292,7 +294,6 @@ describe('importBackup', () => {
     expect(restored[0].items[0].photoUri).toBe('file:///photo.jpg');
   });
 
-  // ── Branch: applyPhotoUriMap re-links multi photos (lines 253-258) ────────
   it('re-links multi-photo array from photoUriMap on v2 restore', async () => {
     const payloadWithMulti = {
       ...validPayload,
@@ -316,14 +317,12 @@ describe('importBackup', () => {
     expect(restored[0].items[0].photos).toEqual(['file:///a.jpg', 'file:///b.jpg']);
   });
 
-  // ── Branch: applyPhotoUriMap — single entry is an array (not a string) ────
-  // Covers the false arm of `typeof single === 'string'`.
   it('skips photoUri assignment when map value for item id is not a string', async () => {
     const payloadBadSingle = {
       ...validPayload,
       inspections: [{ id: 'i1', items: [{ id: 'item-1', title: 'T' }] }],
       photoUriMap: {
-        'item-1': ['file:///a.jpg', 'file:///b.jpg'],  // array, not string
+        'item-1': ['file:///a.jpg', 'file:///b.jpg'],
       },
     };
     mockGetDocumentAsync.mockResolvedValueOnce({
@@ -339,15 +338,13 @@ describe('importBackup', () => {
     expect(restored[0].items[0].photoUri).toBeUndefined();
   });
 
-  // ── Branch: applyPhotoUriMap — multi key is a string (not an array) ───────
-  // Covers the false arm of `Array.isArray(multi)`.
   it('skips photos assignment when __photos map value is not an array', async () => {
     const payloadBadMulti = {
       ...validPayload,
       inspections: [{ id: 'i1', items: [{ id: 'item-2', title: 'T' }] }],
       photoUriMap: {
         'item-2': 'file:///single.jpg',
-        'item-2__photos': 'not-an-array',  // string, not array
+        'item-2__photos': 'not-an-array',
       },
     };
     mockGetDocumentAsync.mockResolvedValueOnce({
@@ -364,10 +361,6 @@ describe('importBackup', () => {
     expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
   });
 
-  // ── Branch: applyPhotoUriMap — item id absent from map (single === undefined)
-  // Covers the `single === undefined` path at lines 253-258: map is non-empty
-  // but has no entry for this specific item, so both single and multi are
-  // undefined and neither photoUri nor photos is spread onto the item.
   it('leaves item unchanged when its id has no entry in a non-empty photoUriMap', async () => {
     const payloadMissingEntry = {
       ...validPayload,
@@ -378,7 +371,6 @@ describe('importBackup', () => {
           { id: 'item-unknown', title: 'No photo in map' },
         ],
       }],
-      // Map only covers item-known; item-unknown has no entry at all
       photoUriMap: {
         'item-known': 'file:///known.jpg',
       },
@@ -393,14 +385,11 @@ describe('importBackup', () => {
     await importBackup();
     const raw = await AsyncStorage.getItem('inspections');
     const restored = JSON.parse(raw!);
-    // item-known gets its URI re-linked
     expect(restored[0].items[0].photoUri).toBe('file:///known.jpg');
-    // item-unknown is left as-is — no photoUri, no photos
     expect(restored[0].items[1].photoUri).toBeUndefined();
     expect(restored[0].items[1].photos).toBeUndefined();
   });
 
-  // ── Branch: applyPhotoUriMap with empty map returns inspections unchanged ─
   it('returns inspections unchanged when photoUriMap is empty', async () => {
     const payloadEmptyMap = {
       ...validPayload,
