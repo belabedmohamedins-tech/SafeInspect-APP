@@ -74,6 +74,9 @@ module.exports = {
     '^expo/src/winter/runtime(.*)$':          '<rootDir>/__mocks__/expoFetch.js',
     '^expo/src/winter(.*)$':                  '<rootDir>/__mocks__/expoFetch.js',
     '^expo-file-system/legacy$':              '<rootDir>/src/__mocks__/expo-file-system-legacy.ts',
+    // ⚠️ expo-file-system MUST have an L2 stub so jest-expo preset's non-configurable
+    // auto-mock does not shadow L4 jest.mock() calls in BackupService/PhotoService tests.
+    '^expo-file-system$':                     '<rootDir>/__mocks__/expo-file-system.js',
     '^@react-native-async-storage/async-storage$':
       '<rootDir>/__mocks__/@react-native-async-storage/async-storage.js',
     '^expo-print$':                           '<rootDir>/__mocks__/expo-print.js',

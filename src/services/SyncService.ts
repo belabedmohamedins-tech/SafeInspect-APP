@@ -110,11 +110,10 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
 
   if (idx >= 0) {
     const existing = queue[idx].inspection;
-    // FIX (G17/4.3): SavedInspection has no `updatedAt` field — only `date`.
-    // The previous `?? existing.date` fallback silently absorbed the undefined
-    // but left dead, misleading code.
-    const existingTs = existing.date ?? '';
-    const incomingTs = inspection.date ?? '';
+    // Use updatedAt for precise timestamp comparison when available;
+    // fall back to date (date-only string) then empty string.
+    const existingTs = (existing as any).updatedAt ?? existing.date ?? '';
+    const incomingTs = (inspection as any).updatedAt ?? inspection.date ?? '';
     if (incomingTs >= existingTs) {
       queue[idx] = item;
     }

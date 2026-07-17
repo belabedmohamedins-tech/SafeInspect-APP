@@ -115,15 +115,15 @@ export const carpenteryCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1: periodic wood dust air quality measurement
-    // G6 fix: added numericField for dust concentration (5 mg/m³ threshold)
-    // G6 fix: citation corrected 06-141 → 06-138 (06-141 = wastewater, 06-138 = air emissions)
+    // controlType: 'doc' — inspector verifies the periodic measurement report (lab certificate),
+    // not the live reading. The numericField is retained for optional on-site note-taking.
     id: 'CAR-05-02',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز غبار الخشب في هواء بيئة العمل (مرة في السنة على الأقل أو عند تغيير أنواع الخشب المُعالَج) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة لغبار الخشب الصلب (5 ملغ/م³ تركيز قابل للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
     legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من غبار الخشب).',
     severity: 'medium',
-    controlType: 'measurement',
+    controlType: 'doc',
     complianceStatus: 'not-evaluated',
     numericField: {
       unit: 'mg/m³',
