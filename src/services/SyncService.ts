@@ -110,8 +110,11 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
 
   if (idx >= 0) {
     const existing = queue[idx].inspection;
-    const existingTs = existing.updatedAt ?? existing.date ?? '';
-    const incomingTs = inspection.updatedAt ?? inspection.date ?? '';
+    // FIX (G17/4.3): SavedInspection has no `updatedAt` field — only `date`.
+    // The previous `?? existing.date` fallback silently absorbed the undefined
+    // but left dead, misleading code.
+    const existingTs = existing.date ?? '';
+    const incomingTs = inspection.date ?? '';
     if (incomingTs >= existingTs) {
       queue[idx] = item;
     }
@@ -141,7 +144,8 @@ export async function flush(): Promise<number> {
       // Falls back to a plain unauthenticated POST if no server session exists
       // (same behaviour as before Tier-2 — server will return 401 and the
       // item stays in the queue until the user logs in).
-      const res = await apiClient('/sync/inspections', {
+      // FIX (G13/Phase5): server route is registered at POST /sync (not /sync/inspections).
+      const res = await apiClient('/sync', {
         method: 'POST',
         body:   JSON.stringify(item.inspection),
       });
