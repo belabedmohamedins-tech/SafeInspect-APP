@@ -8,8 +8,9 @@
 //   - flush() is called by the scheduler in _layout.tsx (every 15 min) and
 //     can also be triggered manually from the Backup screen.
 //   - Each item is POSTed to SYNC_API_URL.  On 2xx the item is dequeued.
-//     On network error or non-2xx the item stays in the queue for the next
-//     run.
+//     On 409 Conflict the server has a newer/approved version — the local
+//     item is silently discarded (server wins).  On other non-2xx or
+//     network error the item stays in the queue for the next run.
 //   - If SYNC_API_URL is not configured the service is a silent no-op so
 //     development / Expo Go usage is unaffected.
 //
@@ -18,6 +19,15 @@
 //     The apiClient handles silent token refresh on 401 automatically.
 //     If no server session exists (offline / not logged in) the sync
 //     falls back gracefully — items remain in the queue.
+//
+// T0.9 — conflict resolution policy:
+//   HTTP 409 means the server already holds a newer or supervisor-approved
+//   version of this inspection.  Re-queuing would cause an infinite retry
+//   loop.  Instead we discard the stale local item (server-wins strategy).
+//   This is safe because:
+//     (a) the server copy is the authoritative record once approved;
+//     (b) the local copy is still in AsyncStorage and is NOT deleted here —
+//         only the sync-queue entry is dropped.
 //
 // ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to `process.env.KEY`:
 //   babel-preset-expo ships babel-plugin-transform-inline-environment-variables
@@ -61,7 +71,7 @@ export interface SyncStatus {
   isOnline: boolean;
 }
 
-// ── Queue helpers ─────────────────────────────────────────────────────────────────
+// ── Queue helpers ———————————————————————————————————————————————————————————————
 
 async function readQueue(): Promise<SyncQueueItem[]> {
   try {
@@ -76,7 +86,7 @@ async function writeQueue(queue: SyncQueueItem[]): Promise<void> {
   await AsyncStorage.setItem(StorageKeys.SYNC_QUEUE, JSON.stringify(queue));
 }
 
-// ── Network check ─────────────────────────────────────────────────────────────────
+// ── Network check ——————————————————————————————————————————————————————————————
 
 async function checkOnline(): Promise<boolean> {
   try {
@@ -96,7 +106,7 @@ async function checkOnline(): Promise<boolean> {
   }
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────────
+// ── Public API ———————————————————————————————————————————————————————————————
 
 export async function enqueue(inspection: SavedInspection): Promise<void> {
   const queue = await readQueue();
@@ -150,8 +160,16 @@ export async function flush(): Promise<number> {
       });
 
       if (res.ok) {
+        // 2xx — server accepted the record.
+        synced++;
+      } else if (res.status === 409) {
+        // T0.9 — 409 Conflict: server holds a newer or supervisor-approved
+        // version.  Discard the stale local queue entry (server-wins).
+        // The inspection record itself remains in local AsyncStorage;
+        // only this sync-queue slot is dropped.
         synced++;
       } else {
+        // Other non-2xx (5xx, 401 after refresh, etc.) — retry next run.
         remaining.push({ ...item, attempts: item.attempts + 1 });
       }
     } catch {
