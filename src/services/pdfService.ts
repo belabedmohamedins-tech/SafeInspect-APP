@@ -195,12 +195,109 @@ function urgencyLabelAr(u: string): string {
   }
 }
 
+// ─── Phase-8: Field photos section HTML ──────────────────────────────────────
+
+/**
+ * Builds the "الصور الميدانية" section.
+ * @param photoMap  Map from item.id → array of base64 data URIs (jpeg assumed)
+ * @param items     Full inspection items list (for criteria labels)
+ */
+function buildPhotoSectionHTML(
+  photoMap: Map<string, string[]>,
+  items: InspectionItem[],
+): string {
+  if (photoMap.size === 0) return '';
+
+  const blocks = items
+    .filter(item => photoMap.has(item.id))
+    .map(item => {
+      const uris = photoMap.get(item.id)!;
+      const statusDot =
+        item.complianceStatus === 'non-compliant'
+          ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#e74c3c;margin-left:6px;vertical-align:middle"></span>'
+          : item.complianceStatus === 'compliant'
+          ? '<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#27ae60;margin-left:6px;vertical-align:middle"></span>'
+          : '';
+
+      const imgTags = uris
+        .map(
+          src =>
+            `<img src="${src}" alt="صورة ميدانية"
+               style="width:220px;height:165px;object-fit:cover;border-radius:6px;
+                      border:1px solid #d5e0dd;flex-shrink:0" />`,
+        )
+        .join('');
+
+      return `
+        <div style="margin-bottom:14px;page-break-inside:avoid">
+          <p style="font-size:12px;font-weight:700;color:#2c3e50;margin-bottom:6px">
+            ${statusDot}${item.criteria}
+          </p>
+          <div style="display:flex;flex-wrap:wrap;gap:8px">
+            ${imgTags}
+          </div>
+        </div>`;
+    })
+    .join('');
+
+  if (!blocks) return '';
+
+  return `
+    <div class="section-title" style="margin-top:20px">الصور الميدانية</div>
+    ${blocks}`;
+}
+
+/**
+ * Reads a local file URI (file://…) and returns a base64 data URI string,
+ * or null if the file cannot be read.
+ */
+async function uriToBase64DataURI(fileUri: string): Promise<string | null> {
+  try {
+    const b64 = await FileSystem.readAsStringAsync(fileUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+    // Detect jpeg/png by extension; default to jpeg
+    const ext = fileUri.split('.').pop()?.toLowerCase() ?? 'jpg';
+    const mime = ext === 'png' ? 'image/png' : 'image/jpeg';
+    return `data:${mime};base64,${b64}`;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Builds a Map<itemId, base64DataURI[]> by reading every photo URI attached
+ * to inspection items.  Falls back to item.photoUri when photos[] is absent.
+ */
+async function buildPhotoMap(items: InspectionItem[]): Promise<Map<string, string[]>> {
+  const map = new Map<string, string[]>();
+
+  for (const item of items) {
+    const uris: string[] = [];
+
+    if (item.photos && item.photos.length > 0) {
+      for (const uri of item.photos) {
+        const dataUri = await uriToBase64DataURI(uri);
+        if (dataUri) uris.push(dataUri);
+      }
+    } else if (item.photoUri) {
+      const dataUri = await uriToBase64DataURI(item.photoUri);
+      if (dataUri) uris.push(dataUri);
+    }
+
+    if (uris.length > 0) map.set(item.id, uris);
+  }
+
+  return map;
+}
+
 // ─── HTML builder (full inspection report) ────────────────────────────────────────────────────
 
 function buildReportHTML(
   inspection: SavedInspection,
   fallbackInspector: string,
   diffView?: DifferentialView | null,
+  photoMap?: Map<string, string[]>,
 ): string {
   const groups     = groupByAxisRaw(inspection.items);
   const inspector  = inspection.inspectorName?.trim() || fallbackInspector || 'غير محدد';
@@ -296,6 +393,11 @@ function buildReportHTML(
       ? buildDifferentialSectionHTML(diffView)
       : '';
 
+  // ── Phase-8: field photos section ────────────────────────────────────────
+  const photoSectionHTML = photoMap && photoMap.size > 0
+    ? buildPhotoSectionHTML(photoMap, inspection.items)
+    : '';
+
   // ── Main checklist table — now with optional numericValue column ──────────
   // Determine if ANY item in this inspection has a numericValue so we only
   // add the extra column when there is data to show.
@@ -340,9 +442,16 @@ function buildReportHTML(
               }</td>`
             : '';
 
+          // Phase-8: photo indicator in table row
+          const hasPhotos =
+            (item.photos && item.photos.length > 0) || !!item.photoUri;
+          const photoIndicator = hasPhotos
+            ? `<span style="font-size:10px;color:#2980b9;margin-right:4px">📷</span>`
+            : '';
+
           return `
             <tr style="background:${rowBg}">
-              <td>${item.criteria}${diffHTML}</td>
+              <td>${item.criteria}${diffHTML}${photoIndicator}</td>
               <td class="ref-col">${item.legalReference || '-'}</td>
               <td class="status-cell" style="background:${bg};color:${color}">
                 ${getStatusText(item.complianceStatus)}
@@ -460,6 +569,7 @@ function buildReportHTML(
     </thead>
     <tbody>${groupsHTML}</tbody>
   </table>
+  ${photoSectionHTML}
   ${signatureHTML}
   <div class="footer">
     تم إنشاء هذا التقرير تلقائياً بواسطة تطبيق SafeInspect
@@ -629,7 +739,10 @@ export async function exportInspectionPDF(inspection: SavedInspection): Promise<
     } catch { /* non-fatal */ }
   }
 
-  const html = buildReportHTML(inspection, settingsInspector, diffView);
+  // Phase-8: resolve photos to base64 before building HTML
+  const photoMap = await buildPhotoMap(inspection.items);
+
+  const html = buildReportHTML(inspection, settingsInspector, diffView, photoMap);
 
   try {
     if (Platform.OS === 'ios') {
