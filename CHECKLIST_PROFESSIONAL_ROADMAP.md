@@ -64,6 +64,43 @@ The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emi
 
 ---
 
+## 🧪 Test Coverage — Last Run (July 18, 2026)
+
+> Run: `npm run test:coverage` — **119/120 suites passed, 1 skipped**
+
+| Metric | Result | Threshold |
+|---|---|---|
+| **Statements** | **98.72%** | ✅ |
+| **Branches** | **94.2%** | ✅ |
+| **Functions** | **99.26%** | ✅ |
+| **Lines** | **99.47%** | ✅ |
+| **Test suites** | 119 passed, 1 skipped, 119/120 total | ✅ |
+| **Tests** | 1941 passed, 1 skipped, 1942 total | ✅ |
+| **Run time** | 7.1 s | ✅ |
+
+### Remaining Coverage Gaps
+
+| File | Stmts | Branch | Funcs | Lines | Uncovered |
+|---|---|---|---|---|---|
+| `facilitiesService.ts` | 100% | 92.85% | 100% | 100% | Line 95 |
+| `schema.ts` | 100% | 85.57% | 100% | 100% | Lines 297–298, 300, 303, 313–314, 332–334, 355 |
+| `syncEngine.ts` | 95.83% | 86.66% | 100% | 100% | Lines 38–42 |
+| `useChecklistData.ts` | 100% | 97.18% | 100% | 100% | Lines 195, 227 |
+| `useInspectionList.ts` | 100% | 87.5% | 100% | 100% | Line 19 |
+| `InspectionRepository.ts` | 96.49% | 100% | 88.88% | 95.91% | Lines 59–60 |
+| `CapNotificationService.ts` | 92.69% | 85.18% | 100% | 98.67% | Lines 39, 360 |
+| `CapReportService.ts` | 97.77% | 78.57% | 100% | 97.56% | Line 57 |
+| `IntegrityService.ts` | 96.77% | 100% | 100% | 96.55% | Line 40 |
+| `NotificationService.ts` | 95.71% | 97.36% | 88.88% | 96.66% | Lines 43, 96 |
+| `serverAuth.ts` | 98.21% | 86.66% | 100% | 100% | Lines 35–57 |
+| `briefService.ts` | 100% | 91.66% | 100% | 100% | Line 36 |
+| `capFactory.ts` | 100% | 90% | 100% | 100% | Line 63 |
+| `scoringUtils.ts` | 100% | 96.42% | 100% | 100% | Line 119 |
+
+> **Note:** App-side TypeScript errors exist in `app/`, `components/`, `screens/` (routing types, missing exports, renamed fields) — these are **runtime/build concerns**, not test failures. All test files compile and pass cleanly.
+
+---
+
 ## Sessions Status
 
 All 9 audit sessions are **complete**. No remaining session work.
