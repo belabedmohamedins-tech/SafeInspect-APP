@@ -1,13 +1,28 @@
 // src/repositories/InspectionRepository.ts
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from './keys';
-import { SavedInspection } from '../types';
+import { SavedInspection, InspectionItem } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
 import { createCapItemsFromInspection } from '../services/capFactory';
 import { createFollowUpIfNeeded } from '../services/followUpService';
 import { ApprovalRepository } from './ApprovalRepository';
 import { annotateRepeatViolations } from '../services/violationHistory';
+
+// T0.11 — strip NaN / Infinity / null from numericValue before persisting.
+// These can arrive when a user clears the input field or when a platform
+// coerces an empty string to 0 then to NaN through a parseFloat cycle.
+function sanitizeItems(items: InspectionItem[]): InspectionItem[] {
+  return items.map(item => {
+    const v = item.numericValue;
+    if (v === undefined) return item;
+    if (v === null || !isFinite(v) || isNaN(v)) {
+      const { numericValue: _drop, ...rest } = item;
+      return rest as InspectionItem;
+    }
+    return item;
+  });
+}
 
 async function loadAll(): Promise<SavedInspection[]> {
   const raw = await AsyncStorage.getItem(StorageKeys.INSPECTIONS);
@@ -51,7 +66,11 @@ export const InspectionRepository = {
       inspection.status === 'completed' &&
       (idx === -1 || all[idx]?.status !== 'completed');
 
-    let toSave = inspection;
+    // T0.11: sanitize numeric values before any further processing or storage.
+    let toSave: SavedInspection = {
+      ...inspection,
+      items: sanitizeItems(inspection.items),
+    };
 
     if (isNewCompletion) {
       try {
@@ -61,12 +80,12 @@ export const InspectionRepository = {
         };
         const annotatedItems = await annotateRepeatViolations(
           accessors,
-          inspection.items,
-          inspection.facilityId,
-          inspection.id,
-          inspection.priorInspectionId,
+          toSave.items,
+          toSave.facilityId,
+          toSave.id,
+          toSave.priorInspectionId,
         );
-        toSave = { ...inspection, items: annotatedItems }; // istanbul ignore next
+        toSave = { ...toSave, items: annotatedItems }; // istanbul ignore next
       } catch {
         // Non-fatal — annotation failure must not block save.
       }
