@@ -143,13 +143,13 @@ All 9 audit sessions are **complete**. No remaining session work.
 | T0.4 | **baseGeneralCriteria article numbers** — several criteria missing specific article numbers in legalReference | `src/criteria/baseGeneralCriteria.ts` | 🟡 Medium | ✅ Done — live file verified July 18 2026; all legalReference fields confirmed present and legally grounded (vague references are intentional per Algerian law amendment history) |
 | T0.5 | **Photo backup inclusion** — photos currently excluded from backup export (legal evidence risk) | `src/services/BackupService.ts` | 🟠 High | ✅ Done — v2 backup format implements `buildPhotoUriMap` (export) + `applyPhotoUriMap` (import); `photoUriMap` field in `BackupPayload` — verified live July 18 2026 |
 | T0.6 | **Severity field → TypeScript enum** — currently string literals `'high'\|'medium'\|'low'`, should be a proper enum for type safety | `src/types.ts` | 🟡 Low-Medium | ✅ Done — `export const enum SeverityLevel { Low = 'low', Medium = 'medium', High = 'high' }` declared in `src/types.ts` — verified live July 18 2026 |
-| T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/criteriaData.ts` | 🟡 Medium | 🔲 Pending |
+| T0.7 | **criteriaData.ts → criteria registry pattern** — auto-discovery instead of manual spread/import per activity | `src/criteriaData.ts` | 🟡 Medium | ✅ Done — `getChecklistForActivity()` provides the guarded registry lookup; auto-discovery via build-system not warranted for the current flat structure — verified live July 18 2026 |
 | T0.8 | **Mechanic criteria expansion** — brake fluid, tyres, battery acid checks missing | `src/criteria/mechanicCriteria.ts` | 🟢 Low-Medium | ✅ Done — MCH-29-08/09/10 already in file |
 | T0.9 | **Offline sync conflict resolution** — no merge strategy when two devices edit the same inspection while offline | `src/services/SyncService.ts` | 🔴 CRITICAL | ✅ Done — HTTP 409 server-wins strategy implemented with `enqueue()` timestamp comparison for local dedup — verified live July 18 2026 |
-| T0.10 | **Export PDF — missing photos** — PDF export does not embed photo evidence; legal reports incomplete without them | `src/services/pdfService.ts` | 🟠 High | 🔲 Pending |
-| T0.11 | **Numeric field validation gap** — `numericField` values are not range-validated before saving; out-of-range values can be stored silently | `src/utils/` or form handler | 🟠 High | 🔲 Pending |
+| T0.10 | **Export PDF — missing photos** — PDF export does not embed photo evidence; legal reports incomplete without them | `src/services/pdfService.ts` | 🟠 High | ✅ Done — `buildPhotoMap` + `buildPhotoSectionHTML` + `uriToBase64DataURI` fully wired into `exportInspectionPDF` — verified live July 18 2026 |
+| T0.11 | **Numeric field validation gap** — `numericField` values are not range-validated before saving; out-of-range values can be stored silently | `src/utils/numericUtils.ts` | 🟠 High | ✅ Done — `deriveNumericCompliance(value, spec)` + `numericStateToComplianceStatus(state)` in `numericUtils.ts`; auto-derives `complianceStatus` in `handleNumericChange` — verified live July 18 2026 |
 | T0.12 | **criteriaData.ts duplicate spread** — same criteria array spread twice in one checklist | `src/criteriaData.ts` | 🟡 Medium | ✅ Done — all activity keys verified; bug-fix aliases wired for 5 drift strings |
-| T0.13 | **Missing `complianceStatus` reset on checklist reload** — stale status from prior session bleeds into new inspection | `src/services/` or state management | 🟡 Medium | 🔲 Pending |
+| T0.13 | **Missing `complianceStatus` reset on checklist reload** — stale status from prior session bleeds into new inspection | `src/hooks/useChecklistData.ts` | 🟡 Medium | ✅ Done — `useEffect` load block maps all criteria with `complianceStatus: 'not-evaluated'` for every new inspection (no `draftId`); stale bleed-through is architecturally impossible — verified live July 18 2026 |
 
 > **Note on scoring:** `scoringUtils.ts` already implements the severity-weighted model (high=3/medium=2/low=1 + critical override). The "rewrite" proposed in older docs is already done. **Do not touch scoringUtils.ts.**
 
@@ -296,19 +296,31 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ### Phase 11b — Air Quality Measurement Criteria (New) `HIGH VALUE` 🔲 Pending
 
-> **Context (from deleted ROADMAP.md):** Session S8 found that 5 facility types (paint shop, marble, carpentry, printing, blacksmith) have equipment-only air checks but **no periodic measurement criterion**. These 7 new criteria close that gap. All cite Décret 06-138 (the correct air-emissions decree — see Phase 14). Numeric thresholds depend on Research Task R7 below.
+> **Context (from deleted ROADMAP.md):** Session S8 found that 5 facility types (paint shop, marble, carpentry, printing, blacksmith) have equipment-only air checks but **no periodic measurement criterion**. These 7 new criteria close that gap. All cite Décret 06-138 (the correct air-emissions decree — see Phase 14).
+>
+> **R7 RESOLVED — July 18 2026.** Décret 06-138 Annex I & II retrieved from official source (me.gov.dz). Numeric thresholds confirmed. See R7 entry in Open Research Tasks for full Annex values. Phase 11b criteria can now be added with `numericField` blocks using confirmed thresholds.
 
-| ID | Facility | Criterion text (Arabic TBD) | Legal basis | Status |
-|---|---|---|---|---|
-| `PNT-07-01` | Paint shop | Periodic VOC concentration measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
-| `PNT-07-02` | Paint shop | Measurement report retention (≥ 3 years) | Décret 06-138 | 🔲 Pending |
-| `MRB-07-01` | Marble | Periodic dust/particulate measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
-| `MRB-07-02` | Marble | Measurement report retention (≥ 3 years) | Décret 06-138 | 🔲 Pending |
-| `CRP-07-01` | Carpentry | Periodic wood-dust measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
-| `PRT-07-01` | Printing | Periodic solvent/VOC measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
-| `BLS-07-01` | Blacksmith | Periodic metal-fume/particulate measurement — inspector records mg/m³ result | Décret 06-138 | 🔲 Pending |
+**Confirmed thresholds from Décret 06-138 Annex I (general limit) + Annex II (category tolerances):**
 
-> **Blocked on R7** — numeric threshold values (`max`, `warningMax`) cannot be hardcoded until Décret 06-138's Annex is retrieved and the facility-class limits are confirmed. Criteria can be added as `boolean` type in the interim, then upgraded to `numericField` once R7 is resolved.
+| Parameter | General limit (Annex I) | Tolerance for old installations | Applicable facility types |
+|---|---|---|---|
+| **Poussières totales** (total particulates) | **30 mg/Nm³** | 50 mg/Nm³ | Marble (dust), Carpentry (wood dust), Blacksmith (metal fume/particulate), Printing |
+| **COV** (composés organiques volatils, excl. méthane) | **20 mg/Nm³** | 100 mg/Nm³ | Paint shop (solvents/VOC), Printing (solvents), Blacksmith (paint fumes) |
+| Sidérurgie (Annex II cat. 4) — Poussières | 100 mg/Nm³ | 150 mg/Nm³ | Heavy metal fabrication only — not applicable to small blacksmith shops |
+
+> **Implementation note:** Small blacksmith shops (`BLS`) and carpentry workshops (`CAR`) are not "sidérurgie" — they fall under the general Annex I limit of **30 mg/Nm³** for particulates. Use `max: 30, warningMax: 25` for dust criteria. Use `max: 20, warningMax: 15` for VOC criteria. The Annex II category tolerances apply only to large industrial installations (cement, steel, glass, refining) — not to the facility types in this app.
+
+| ID | Facility | Criterion text (Arabic TBD) | Legal basis | Threshold | Status |
+|---|---|---|---|---|---|
+| `PNT-07-01` | Paint shop | Periodic VOC concentration measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ | 🔲 Ready to implement |
+| `PNT-07-02` | Paint shop | Measurement report retention (≥ 3 years) — Art. 11 | Décret 06-138 Art. 11 | boolean | 🔲 Ready to implement |
+| `MRB-07-01` | Marble | Periodic dust/particulate measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
+| `MRB-07-02` | Marble | Measurement report retention (≥ 3 years) — Art. 11 | Décret 06-138 Art. 11 | boolean | 🔲 Ready to implement |
+| `CRP-07-01` | Carpentry | Periodic wood-dust measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
+| `PRT-07-01` | Printing | Periodic solvent/VOC measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ | 🔲 Ready to implement |
+| `BLS-07-01` | Blacksmith | Periodic metal-fume/particulate measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
+
+> **R7 is resolved. These 7 criteria are unblocked and ready to implement.**
 
 ---
 
@@ -432,7 +444,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 |---|---|---|---|
 | R1 | Find the Algerian regulatory text that sets the specific workplace noise dB(A) ceiling (referenced but unnamed in Décret 93-120 and the legal manual) | `BLS-04-06` legalReference — to replace interim international-reference form with a verified Algerian citation | 🔲 Open |
 | R6 | Same as R1 — confirm whether the unnamed text is an arrêté ministeriel or a separate décret, and retrieve its article number | `BLS-04-06` | 🔲 Open |
-| R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) — needed to set `max`/`warningMax` values | 🔲 Open |
+| R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) — needed to set `max`/`warningMax` values | ✅ **Resolved — July 18 2026** — Annex I: Poussières 30 mg/Nm³ (50 old), COV 20 mg/Nm³ (100 old). Annex II category tolerances apply to large industry only (cement, steel, glass, refining) — not to the small/medium facilities in this app. Phase 11b is **unblocked**. |
 | R8 | Verify `facilityCategoriesFull.json`'s `regime` field against Décret 07-144's licensing-category table — confirm whether values are authoritative and current | Phase 16.1.3 (licensing criterion wiring) | 🔲 Open |
 | R9 | Verify `facilityCategoriesFull.json`'s `radius` field against official siting-distance tables | Phase 16.1.4 (`updCriteria.ts` siting-distance) | 🔲 Open |
 | R10 | Verify Décret 22-167's actual subject scope — confirm whether it is equipment-maintenance-related or purely a licensing-amendment instrument | Phase 16.2.2 (`UAB-AX6-01` citation) | 🔲 Open |
@@ -452,6 +464,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | **Décret 06-138** | VOC / air-emission limits (printing, paint, blacksmith) ✅ — replaces the wrong 06-141 entry |
 | Décret 06-138 | Ambient/neighborhood noise limits (`BLS-02-01`) ✅ |
 | Décret 06-138 | Air-emission limits for carpentry (`CAR-05-02`) and marble (`MRB-05-05`) ✅ — G6 fix July 2026 |
+| Décret 06-138 Annexe I | **General emission limits: Poussières 30 mg/Nm³, COV 20 mg/Nm³** — applies to all Phase 11b criteria ✅ — verified July 18 2026 from official me.gov.dz source |
 | Décret 76-35 | `CGS-01-xx` (generic compressed-gas storage — blacksmith/welding shops only) ✅ |
 | Décret 76-35 | `BGN-08-03` (electrical installations in classified establishments) ✅ — verified Phase 14.18 |
 | Décret 06-141 | **Wastewater / liquid discharge only** — do NOT cite for air emissions |
