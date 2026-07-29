@@ -125,15 +125,20 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // =====================================================================
   // المحور 5: نظام HACCP
+  // N4 ✅ (2026-07-29): legalReference pinned to Décret 17-140 Art. 9 (confirmed
+  // primary-source review, Chapter 4 manual). Primary-production exclusion confirmed:
+  // HACCP obligation does NOT apply to couvoir or UPD (primary production) —
+  // those facility types must NOT receive this criterion.
   // =====================================================================
   {
     id: 'BFD-05-01',
     axis: 'HACCP ونظام السلامة الغذائية',
     category: 'غذائية',
-    // OQ-7: local "Arrêté" implementing HACCP for classified food establishments
-    // not yet confirmed — citing Décret 17-140 + Arrêté 4 oct 2016 pending verification
-    criteria: 'وجود نظام HACCP مطبَّق وموثَّق (تحليل المخاطر، نقاط التحكم الحرجة CCP، حدود حرجة، مراقبة، تصحيح، توثيق) في المنشآت التي تُلزَم به قانوناً.',
-    legalReference: 'المرسوم التنفيذي 17-140 (السلامة الغذائية) + الأرضية التنظيمية للمؤسسات الغذائية المصنفة.',
+    // Verified: Décret 17-140 Art. 9 is the confirmed legal basis for the HACCP
+    // obligation in classified food establishments. Primary-production facilities
+    // (couvoir, UPD) are explicitly excluded from this obligation per Art. 9's scope.
+    criteria: 'وجود نظام HACCP مطبَّق وموثَّق (تحليل المخاطر، نقاط التحكم الحرجة CCP، حدود حرجة، مراقبة، تصحيح، توثيق) في المنشآت التي تُلزَم به قانوناً. ملاحظة: مرافق الإنتاج الأولي (كوفوير، UPD) مستثناة صراحةً من هذا الالتزام.',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 9 (إلزامية نظام HACCP في المنشآت الغذائية المصنفة — لا تشمل الإنتاج الأولي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
