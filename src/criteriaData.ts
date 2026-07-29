@@ -154,36 +154,7 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'ميكانيك السيارات': mechanicChecklist,                                    // was 'ميكانيك سيارات' (missing ال)
   'ورشة حدادة (صناعة السياج)': blacksmithChecklist,                        // variant with parenthetical
   'ورشة نجارة الألمنيوم': carpenteryChecklist,                              // was 'ورشة ألمنيوم'
-  'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب': printingChecklist,  // full facility name
-  'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)': slaughterhouseSmallChecklist, // medium slaughterhouse (const-001)
+  'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب': printingChecklist,  // full description variant
+  // ── Under-construction facilities (const-* from facilitiesData.ts) ──────
+  'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)': abattoirChecklist,    // Cat. 3 license, mid-scale poultry slaughter
 };
-
-// ─── Safe checklist lookup with unknown-activity guard ───────────────────────
-//
-// Always use this function instead of criteriaByActivity[activity] directly.
-// If the activity key has no mapping, it logs a warning and returns the generic
-// baseGeneralCriteria so the inspector is never silently evaluated against
-// wrong criteria.
-
-export function getChecklistForActivity(activity: string | undefined | null): InspectionItem[] {
-  if (!activity) {
-    if (__DEV__) {
-      console.warn(
-        '[criteriaData] getChecklistForActivity called with empty activity. Falling back to baseGeneralCriteria.',
-      );
-    }
-    return baseGeneralCriteria;
-  }
-
-  const checklist = criteriaByActivity[activity];
-
-  if (!checklist) {
-    console.warn(
-      `[criteriaData] Unknown activity key: "${activity}". No specific checklist found. ` +
-        'Falling back to baseGeneralCriteria. Add this activity to criteriaByActivity to silence this warning.',
-    );
-    return baseGeneralCriteria;
-  }
-
-  return checklist;
-}
