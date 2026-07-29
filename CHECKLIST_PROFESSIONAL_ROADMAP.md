@@ -52,8 +52,8 @@ The roadmap's "Known Correct Citations" table asserts: `Décret 06-141 | VOC emi
 
 | Metric | Value |
 |---|---|
-| Overall checklist maturity score | **77 / 100** → targeting 80+ after remaining phases |
-| Total criteria in library | ~372 |
+| Overall checklist maturity score | **79 / 100** → targeting 80+ after remaining phases |
+| Total criteria in library | ~381 |
 | Confirmed duplicate criteria removed | **60+** |
 | Confirmed legal mis-citations fixed | **6 fixed (Phase 1) + 7 fixed (Phase 10 — partial)** |
 | Sessions completed | **9 / 9 audit sessions done** |
@@ -294,11 +294,13 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 11b — Air Quality Measurement Criteria (New) `HIGH VALUE` 🔲 Pending
+### Phase 11b — Air Quality Measurement Criteria (New) `HIGH VALUE` ✅ COMPLETE
 
-> **Context (from deleted ROADMAP.md):** Session S8 found that 5 facility types (paint shop, marble, carpentry, printing, blacksmith) have equipment-only air checks but **no periodic measurement criterion**. These 7 new criteria close that gap. All cite Décret 06-138 (the correct air-emissions decree — see Phase 14).
+> **Context (from deleted ROADMAP.md):** Session S8 found that 5 facility types (paint shop, marble, carpentry, printing, blacksmith) have equipment-only air checks but **no periodic measurement criterion**. These criteria close that gap. All cite Décret 06-138 (the correct air-emissions decree — see Phase 14).
 >
-> **R7 RESOLVED — July 18 2026.** Décret 06-138 Annex I & II retrieved from official source (me.gov.dz). Numeric thresholds confirmed. See R7 entry in Open Research Tasks for full Annex values. Phase 11b criteria can now be added with `numericField` blocks using confirmed thresholds.
+> **R7 RESOLVED — July 18 2026.** Décret 06-138 Annex I & II retrieved from official source (me.gov.dz). Numeric thresholds confirmed.
+>
+> **Verified live — July 29 2026.** All criteria confirmed present in repo via direct file read.
 
 **Confirmed thresholds from Décret 06-138 Annex I (general limit) + Annex II (category tolerances):**
 
@@ -310,17 +312,20 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 > **Implementation note:** Small blacksmith shops (`BLS`) and carpentry workshops (`CAR`) are not "sidérurgie" — they fall under the general Annex I limit of **30 mg/Nm³** for particulates. Use `max: 30, warningMax: 25` for dust criteria. Use `max: 20, warningMax: 15` for VOC criteria. The Annex II category tolerances apply only to large industrial installations (cement, steel, glass, refining) — not to the facility types in this app.
 
-| ID | Facility | Criterion text (Arabic TBD) | Legal basis | Threshold | Status |
-|---|---|---|---|---|---|
-| `PNT-07-01` | Paint shop | Periodic VOC concentration measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ | 🔲 Ready to implement |
-| `PNT-07-02` | Paint shop | Measurement report retention (≥ 3 years) — Art. 11 | Décret 06-138 Art. 11 | boolean | 🔲 Ready to implement |
-| `MRB-07-01` | Marble | Periodic dust/particulate measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
-| `MRB-07-02` | Marble | Measurement report retention (≥ 3 years) — Art. 11 | Décret 06-138 Art. 11 | boolean | 🔲 Ready to implement |
-| `CRP-07-01` | Carpentry | Periodic wood-dust measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
-| `PRT-07-01` | Printing | Periodic solvent/VOC measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ | 🔲 Ready to implement |
-| `BLS-07-01` | Blacksmith | Periodic metal-fume/particulate measurement — inspector records mg/m³ result | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ | 🔲 Ready to implement |
-
-> **R7 is resolved. These 7 criteria are unblocked and ready to implement.**
+| ID | Facility | Legal basis | Threshold | Status |
+|---|---|---|---|---|
+| `PNT-02-03` | Paint shop | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ VOC | ✅ Done — in `paintShopCriteria.ts` |
+| `PNT-07-02` | Paint shop | Décret 06-138 Art. 11 | doc (3-yr retention) | ✅ Done — in `paintShopCriteria.ts` |
+| `MRB-05-05` | Marble | Décret 06-138 Annexe I | max: 0.1, warningMax: 0.08 mg/m³ silica | ✅ Done — in `marbleCriteria.ts` |
+| `MRB-07-02` | Marble | Décret 06-138 Art. 11 | doc (3-yr retention) | ✅ Done — in `marbleCriteria.ts` |
+| `CAR-05-02` | Carpentry | Décret 06-138 Annexe I | max: 5, warningMax: 4 mg/m³ wood dust | ✅ Done — in `carpenteryCriteria.ts` |
+| `CAR-07-01` | Carpentry | Loi 03-10 Art. 52 | doc (3-yr retention) | ✅ Done — in `carpenteryCriteria.ts` |
+| `CAR-07-02` | Carpentry | Loi 03-10 Art. 52 + Décret 06-138 | doc (monitoring programme) | ✅ Done — in `carpenteryCriteria.ts` |
+| `PRT-02-03` | Printing | Décret 06-138 Annexe I | max: 20, warningMax: 15 mg/Nm³ VOC | ✅ Done — in `printingCriteria.ts` |
+| `PRT-07-01` | Printing | Loi 03-10 Art. 52 | doc (3-yr retention) | ✅ Done — in `printingCriteria.ts` |
+| `BLS-04-07` | Blacksmith | Décret 06-138 Annexe I | max: 30, warningMax: 25 mg/Nm³ particulates | ✅ Done — in `blacksmithCriteria.ts` |
+| `BLS-07-01` | Blacksmith | Loi 03-10 Art. 52 | doc (3-yr retention) | ✅ Done — in `blacksmithCriteria.ts` |
+| `BLS-07-02` | Blacksmith | Loi 03-10 Art. 52 + Décret 06-138 | doc (monitoring programme) | ✅ Done — in `blacksmithCriteria.ts` |
 
 ---
 
@@ -444,7 +449,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 |---|---|---|---|
 | R1 | Find the Algerian regulatory text that sets the specific workplace noise dB(A) ceiling (referenced but unnamed in Décret 93-120 and the legal manual) | `BLS-04-06` legalReference — to replace interim international-reference form with a verified Algerian citation | 🔲 Open |
 | R6 | Same as R1 — confirm whether the unnamed text is an arrêté ministeriel or a separate décret, and retrieve its article number | `BLS-04-06` | 🔲 Open |
-| R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) — needed to set `max`/`warningMax` values | ✅ **Resolved — July 18 2026** — Annex I: Poussières 30 mg/Nm³ (50 old), COV 20 mg/Nm³ (100 old). Annex II category tolerances apply to large industry only (cement, steel, glass, refining) — not to the small/medium facilities in this app. Phase 11b is **unblocked**. |
+| R7 | Retrieve Décret 06-138 Annex (numeric emission limits by facility class) — specifically: VOC mg/m³ ceilings for paint/solvent use, dust mg/m³ for wood/marble/metal grinding, and whether limits vary by installation class (A/B/C) | Phase 11b criteria — needed to set `max`/`warningMax` values | ✅ **Resolved — July 18 2026** — Annex I: Poussières 30 mg/Nm³ (50 old), COV 20 mg/Nm³ (100 old). Annex II category tolerances apply to large industry only (cement, steel, glass, refining) — not to the small/medium facilities in this app. Phase 11b is **complete**. |
 | R8 | Verify `facilityCategoriesFull.json`'s `regime` field against Décret 07-144's licensing-category table — confirm whether values are authoritative and current | Phase 16.1.3 (licensing criterion wiring) | 🔲 Open |
 | R9 | Verify `facilityCategoriesFull.json`'s `radius` field against official siting-distance tables | Phase 16.1.4 (`updCriteria.ts` siting-distance) | 🔲 Open |
 | R10 | Verify Décret 22-167's actual subject scope — confirm whether it is equipment-maintenance-related or purely a licensing-amendment instrument | Phase 16.2.2 (`UAB-AX6-01` citation) | 🔲 Open |
