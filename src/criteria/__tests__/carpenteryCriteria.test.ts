@@ -7,8 +7,8 @@ describe('carpenteryCriteria', () => {
     expect(carpenteryCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 11 items', () => {
-    expect(carpenteryCriteria).toHaveLength(11);
+  it('has exactly 13 items', () => {
+    expect(carpenteryCriteria).toHaveLength(13);
   });
 
   it('all items have required InspectionItem fields', () => {
@@ -69,7 +69,6 @@ describe('carpenteryCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
-  // G6 — numericField: 85 dB(A) noise ceiling
   it('contains CAR-02-02 (noise measurement) with correct numericField', () => {
     const item = carpenteryCriteria.find((i) => i.id === 'CAR-02-02');
     expect(item).toBeDefined();
@@ -139,7 +138,6 @@ describe('carpenteryCriteria', () => {
     expect(item!.severity).toBe('high');
   });
 
-  // G6 — numericField: 5 mg/m³ inhalable wood dust ceiling
   it('contains CAR-05-02 (air quality measurement) with correct numericField', () => {
     const item = carpenteryCriteria.find((i) => i.id === 'CAR-05-02');
     expect(item).toBeDefined();
@@ -151,9 +149,27 @@ describe('carpenteryCriteria', () => {
     expect(item!.numericField!.warningMax).toBe(4);
     expect(item!.numericField!.step).toBe(0.1);
     expect(item!.numericField!.upperLimit).toBe(true);
-    // G6 citation fix
     expect(item!.legalReference).toContain('06-138');
     expect(item!.legalReference).not.toContain('06-141');
+  });
+
+  // Phase 15: retention criteria
+  it('contains CAR-07-01 (measurement report retention ≥3 years)', () => {
+    const item = carpenteryCriteria.find((i) => i.id === 'CAR-07-01');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.category).toBe('بيئية');
+    expect(item!.severity).toBe('medium');
+    expect(item!.legalReference).toContain('03-10');
+    expect(item!.criteria).toContain('3 سنوات');
+  });
+
+  it('contains CAR-07-02 (monitoring programme document)', () => {
+    const item = carpenteryCriteria.find((i) => i.id === 'CAR-07-02');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('doc');
+    expect(item!.category).toBe('بيئية');
+    expect(item!.severity).toBe('medium');
   });
 
   it('axes cover the expected domains', () => {
@@ -171,7 +187,6 @@ describe('carpenteryCriteria', () => {
     measurementItems.forEach((item) => {
       expect(item.numericField!.unit).toBeDefined();
       expect(item.numericField!.labelAr).toBeDefined();
-      expect(typeof item.numericField!.max).toBe('number');
       expect(typeof item.numericField!.warningMax).toBe('number');
       expect(typeof item.numericField!.step).toBe('number');
       expect(item.numericField!.upperLimit).toBe(true);

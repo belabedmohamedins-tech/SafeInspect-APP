@@ -127,4 +127,15 @@ export const printingCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
+  {
+    // Phase 15: retention criterion for VOC measurement reports
+    id: 'PRT-07-01',
+    axis: 'التهوية ومنع التلوث الهوائي',
+    category: 'بيئية',
+    criteria: 'الاحتفاظ بنتائج قياسات VOC وأبخرة الأحبار والمذيبات (سجلات المختبر المعتمد، تقارير القياس الدوري) لمدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    legalReference: 'القانون 03-10 المادة 52 (إلزام المنشآت المصنفة بالاحتفاظ بسجلات المراقبة البيئية وإتاحتها للرقابة).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

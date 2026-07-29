@@ -79,9 +79,6 @@ export const blacksmithCriteria: InspectionItem[] = [
   },
   {
     // Phase 13 ✅: numericField aligned to NumericFieldSpec (labelAr, warningMax, step)
-    // Phase 10.6 revert: "Décret 93-120 Art. 9" was unverified precision — no article-level
-    // content was ever retrieved. 85 dB is an international reference (WHO/OSHA); the Algerian
-    // regulatory instrument has not been confirmed. Research task R1/R6 remains open.
     id: 'BLS-04-06',
     axis: 'السلامة المهنية',
     category: 'بيئية',
@@ -100,7 +97,6 @@ export const blacksmithCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1 + Phase 11b: periodic welding fumes / VOC measurement with numericField
-    // Phase 14.7: 06-141 (wastewater decree) → 06-138 (air emissions decree)
     id: 'BLS-04-07',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
@@ -125,6 +121,28 @@ export const blacksmithCriteria: InspectionItem[] = [
     criteria: 'إجراء فحوصات طبية دورية للعمال المعرضين للضجيج المفرط والأبخرة المعدنية.',
     legalReference: 'المرسوم 93-120 (الفحص الطبي الدوري للأنشطة ذات المخاطر المهنية).',
     severity: 'high',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // Phase 15: retention criterion for welding fumes + noise measurement reports
+    id: 'BLS-07-01',
+    axis: 'الانبعاثات الهوائية',
+    category: 'بيئية',
+    criteria: 'الاحتفاظ بنتائج قياسات أبخرة اللحام والضجيج المهني (سجلات المختبر المعتمد، تقارير القياس الدوري) لمدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    legalReference: 'القانون 03-10 المادة 52 (إلزام المنشآت المصنفة بالاحتفاظ بسجلات المراقبة البيئية وإتاحتها للرقابة).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // Phase 15: standalone monitoring programme document criterion
+    id: 'BLS-07-02',
+    axis: 'الانبعاثات الهوائية',
+    category: 'بيئية',
+    criteria: 'وجود برنامج مراقبة دورية موثق لقياسات أبخرة اللحام والضجيج (تاريخ آخر قياس، الجهة المنفذة، الجدول الزمني للقياس التالي).',
+    legalReference: 'القانون 03-10 المادة 52 + المرسوم 06-138.',
+    severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
