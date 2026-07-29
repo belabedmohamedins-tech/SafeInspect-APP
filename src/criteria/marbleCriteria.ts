@@ -134,4 +134,15 @@ export const marbleCriteria: InspectionItem[] = [
       upperLimit: true,
     },
   },
+  {
+    // Phase 11b: measurement report retention ≥ 3 years — Décret 06-138 Art. 11
+    id: 'MRB-07-02',
+    axis: 'الانبعاثات الهوائية',
+    category: 'تنظيمية',
+    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (غبار السيليكا) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    legalReference: 'المرسوم 06-138 المادة 11 (إلزامية الاحتفاظ بسجلات القياسات الدورية للانبعاثات الهوائية لمدة ثلاث سنوات على الأقل).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
 ];

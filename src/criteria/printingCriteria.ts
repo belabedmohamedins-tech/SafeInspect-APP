@@ -33,7 +33,7 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 7.1: periodic ink/solvent VOC air quality measurement for printing shop
+    // Phase 7.1 + Phase 11b: periodic ink/solvent VOC measurement with numericField
     id: 'PRT-02-03',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'بيئية',
@@ -42,6 +42,14 @@ export const printingCriteria: InspectionItem[] = [
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/Nm³',
+      labelAr: 'تركيز VOC عند نقطة المصب',
+      max: 20,
+      warningMax: 15,
+      step: 1,
+      upperLimit: true,
+    },
   },
   {
     id: 'PRT-03-01',

@@ -33,11 +33,31 @@ export const paintShopCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 7.1 + Phase 11b: periodic VOC measurement with numericField for on-site note-taking
     id: 'PNT-02-03',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز المركبات العضوية المتطايرة (VOC) من بخار الطلاء في هواء بيئة العمل وعند نقطة المصب الهوائي (مرة في السنة على الأقل أو عند تغيير نوع الطلاء) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
     legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية — VOC).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/Nm³',
+      labelAr: 'تركيز VOC عند نقطة المصب',
+      max: 20,
+      warningMax: 15,
+      step: 1,
+      upperLimit: true,
+    },
+  },
+  {
+    // Phase 11b: measurement report retention ≥ 3 years — Décret 06-138 Art. 11
+    id: 'PNT-07-02',
+    axis: 'التهوية ومنع التلوث الهوائي',
+    category: 'تنظيمية',
+    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (VOC) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    legalReference: 'المرسوم 06-138 المادة 11 (إلزامية الاحتفاظ بسجلات القياسات الدورية للانبعاثات الهوائية لمدة ثلاث سنوات على الأقل).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

@@ -99,7 +99,7 @@ export const blacksmithCriteria: InspectionItem[] = [
     },
   },
   {
-    // Phase 7.1: periodic air quality measurement for welding fumes and VOC
+    // Phase 7.1 + Phase 11b: periodic welding fumes / VOC measurement with numericField
     // Phase 14.7: 06-141 (wastewater decree) → 06-138 (air emissions decree)
     id: 'BLS-04-07',
     axis: 'الانبعاثات الهوائية',
@@ -109,6 +109,14 @@ export const blacksmithCriteria: InspectionItem[] = [
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/Nm³',
+      labelAr: 'تركيز أبخرة اللحام / VOC عند نقطة المصب',
+      max: 30,
+      warningMax: 25,
+      step: 1,
+      upperLimit: true,
+    },
   },
   {
     id: 'BLS-05-01',
