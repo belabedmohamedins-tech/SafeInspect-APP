@@ -7,8 +7,8 @@ describe('marbleCriteria', () => {
     expect(marbleCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 10 items', () => {
-    expect(marbleCriteria).toHaveLength(10);
+  it('has exactly 11 items', () => {
+    expect(marbleCriteria).toHaveLength(11);
   });
 
   it('all items have required InspectionItem fields', () => {
@@ -156,6 +156,16 @@ describe('marbleCriteria', () => {
     // G6 citation fix
     expect(item!.legalReference).toContain('06-138');
     expect(item!.legalReference).not.toContain('06-141');
+  });
+
+  // Phase 11b — retention criterion
+  it('contains MRB-07-02 (silica measurement report retention ≥ 3 years)', () => {
+    const item = marbleCriteria.find((i) => i.id === 'MRB-07-02');
+    expect(item).toBeDefined();
+    expect(item!.category).toBe('تنظيمية');
+    expect(item!.controlType).toBe('doc');
+    expect(item!.severity).toBe('medium');
+    expect(item!.legalReference).toContain('06-138');
   });
 
   it('axes cover the expected domains', () => {
