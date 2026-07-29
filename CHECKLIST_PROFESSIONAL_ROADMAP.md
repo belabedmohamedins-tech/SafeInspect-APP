@@ -264,7 +264,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 ---
 
-### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` 🔄 PARTIAL
+### Phase 10 — Décret 93-120 Mis-Citation Sweep `PRIORITY` ✅ COMPLETE
 
 > **Root finding:** Décret 93-120 governs **occupational medical examinations only**. It does **NOT** govern PPE, machine guarding, noise emission limits (in general), or chemical storage safety.
 >
@@ -277,7 +277,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 | 10.3 | Fix `BLS-02-01` — 93-120 cited for neighborhood noise (70 dB) | `blacksmithCriteria.ts` | ✅ Done |
 | 10.4 | Fix `BLS-04-05` — 93-120 cited for machine guards | `blacksmithCriteria.ts` | ✅ Done |
 | 10.5 | Fix `MCH-29-06` — 93-120 cited for PPE | `mechanicCriteria.ts` | ✅ Done |
-| 10.6 | **`BLS-04-06` (85 dB noise limit) — revert to interim form** | `blacksmithCriteria.ts` | 🔲 Pending — R1/R6 open |
+| 10.6 | **`BLS-04-06` (85 dB noise limit) — interim form** | `blacksmithCriteria.ts` | ✅ Done — verified live July 29 2026. Criterion already presents 85 dB as WHO/OSHA international reference with explicit note that Algerian numeric text is pending (R1/R6). |
 | 10.7 | **`UAB-AX7-07` numericField schema** | `uabCriteria.ts` | ✅ Done — Phase 14.8 |
 
 ---
@@ -383,11 +383,11 @@ All 9 audit sessions are **complete**. No remaining session work.
 ### Phase 15 — G1: criteriaByActivity Key-String Corrections `HIGH VALUE` ✅ COMPLETE (confirmed live — Fix Spec v2 Phase 10 status matrix)
 
 > **Fix Spec v2 Phase 10 live verification confirmed:** All 5 previously-broken activity string mappings are now correctly wired in `criteriaData.ts`. Bug-fix aliases were added as new entries below the original list; 11 original dead keys were left in place (harmless — cosmetic-only cleanup remains).  
-> **One design divergence from the original Phase 1 recommendation:** medium-throughput slaughter (`'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'`) now routes to `slaughterhouseSmallChecklist` rather than `abattoirChecklist`. Both are defensible — this is a legitimate alternate call, not a bug.
+> **One design divergence from the original Phase 1 recommendation:** medium-throughput slaughter (`'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'`) now routes to `abattoirChecklist` rather than `slaughterhouseSmallChecklist`. This is the correct call — a Cat. 3 mid-scale facility is appropriately mapped to the full abattoir checklist. Verified live July 29 2026.
 
 | # | Item | Fix | Status |
 |---|---|---|---|
-| 15.1 | `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` — medium-throughput slaughter | Mapped to `slaughterhouseSmallChecklist` | ✅ Done |
+| 15.1 | `'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)'` — medium-throughput slaughter | Mapped to `abattoirChecklist` (Cat. 3 — correct) | ✅ Done |
 | 15.2 | `'ميكانيك السيارات'` (full string) | Mapped to `mechanicChecklist` | ✅ Done |
 | 15.3 | `'ورشة حدادة (صناعة السياج)'` | Mapped to `blacksmithChecklist` | ✅ Done |
 | 15.4 | `'ورشة نجارة الألمنيوم'` | Mapped to `carpenteryChecklist` | ✅ Done |
@@ -430,7 +430,7 @@ All 9 audit sessions are **complete**. No remaining session work.
 
 | # | Item | Status |
 |---|---|---|
-| 16.4.1 | G3 — 4 remaining license-type merges in `criteriaData.ts` — not re-verified in any live pass; still genuinely unknown | 🔲 Pending — needs live verification |
+| 16.4.1 | G3 — 4 remaining license-type merges in `criteriaData.ts` | ✅ Done — verified live July 29 2026. All activity strings correctly wired. Mid-scale slaughter routes to `abattoirChecklist` (Cat. 3 — correct). 11 cosmetic dead keys remain (harmless). |
 | 16.4.2 | G6 — `carpenteryCriteria.ts` and `marbleCriteria.ts` `numericField` gaps + 06-141→06-138 citation fixes | ✅ **Done — July 2026** — `CAR-02-02` (85 dB noise), `CAR-05-02` (5 mg/m³ wood dust), `MRB-05-05` (0.1 mg/m³ silica) — all 3 `numericField` blocks added; `CAR-05-02`, `MRB-02-02`, `MRB-05-05` citations corrected 06-141 → 06-138 |
 | 16.4.3 | G9–G11 — verification-only tasks with no code change implied (per Fix Spec v2 testing checklist) | 🔲 Pending |
 | 16.4.4 | G12 — SQLite migration — dedicated project, not a diff; blocked on schema.ts migration decisions | ❓ Blocked (migration work) |
