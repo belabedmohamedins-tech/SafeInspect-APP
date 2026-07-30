@@ -8,7 +8,7 @@
 
 ## What SafeInspect Is
 
-A professional inspection platform for Algerian classified establishments (مؤسسات مصنفة).  
+**SafeInspect (RAQIB)** — offline-first React Native/Expo mobile app for Algerian municipal hygiene/safety inspectors covering classified establishments (مؤسسات مصنفة).  
 Full workflow: Registry → Planning → Preparation → Inspection → Evidence → Evaluation → Decision → Report → Corrective Actions → Reinspection → Closure → Statistics.
 
 Checklist/inspection logic is core. Legal grounding is non-negotiable.
@@ -28,10 +28,19 @@ Never cite an international standard (WHO, OSHA, ISO) as the legal basis when an
 
 ---
 
+## Project History (3 phases before this agent)
+
+This project passed through 3 phases before the current Perplexity+GitHub agent sessions:
+
+- **Phase A (9-session audit):** Expert-panel audit of `src/criteria/*.ts` against real Algerian law. Found that many prior audit reports described fixes that were never actually shipped.
+- **Phase B (implementation spec):** `Perplexity_Implementation_Spec.md` — diff-level code-fix document. Partially implemented. See handover doc Section 6 for remaining spec gaps.
+- **Phase C (manual — COMPLETE):** 8-chapter national inspection manual written from scratch as the authoritative legal/technical reference. All 8 chapters complete.
+
+---
+
 ## The Knowledge Asset: `/docs/manual/`
 
-Eight verified chapters (~158 KB total) covering every inspection domain.  
-Each chapter follows an identical 11-section structure:
+Eight verified chapters covering every inspection domain. Each chapter follows an identical 11-section structure:
 
 | Section | Content |
 |---|---|
@@ -49,16 +58,16 @@ Each chapter follows an identical 11-section structure:
 
 **Chapters:**
 
-| File | Domain | Critical Values |
+| File | Domain | Critical Values / Notes |
 |---|---|---|
-| `ch1_wastewater.md` | Rejets liquides | 18-parameter Décret 06-141 table (BOD5, COD, metals, pH) |
-| `ch2_solid_waste.md` | Déchets solides | Décret 06-104 waste classification |
-| `ch3_fire_safety.md` | Sécurité incendie | Largest chapter — rich inspector guidance |
-| `ch4_food_safety.md` | Sécurité alimentaire | Temperature ranges per product type |
-| `ch5_occupational_health.md` | Santé au travail | Noise: Décret 93-120 — verified values only, no [INTL] |
-| `ch6_documentation.md` | Documentation & licensing | Décret 07-144 buffer-zone table by activity |
-| `ch7_air_quality.md` | Qualité de l'air | Décret 06-138 Annex I: dust ≤50 mg/Nm³, VOC ≤150 mg/Nm³ |
-| `ch8_site_hygiene.md` | Hygiène des locaux | Smallest chapter — enrichment opportunity |
+| `ch1_wastewater.md` | Rejets liquides | Full 18-parameter Décret 06-141 table (pH 6.5–8.5, MES 35, BOD5 35, COD 120, oils 20 mg/l, heavy metals — each with standard + derogation value). Source: confirmed via Univ. Ouargla thesis. |
+| `ch2_solid_waste.md` | Déchets solides | Décret 06-104 waste classification. Décret 03-478 3-stream medical waste (green/yellow/red) — NEW, not in original 9-session audit. Affects abattoir/slaughterhouse. |
+| `ch3_fire_safety.md` | Sécurité incendie | Loi 19-02 re-verified against primary JO source (bilingual). 47 articles (NOT 80). Scope = ERPs + high-rise/very-high-rise + residential ONLY — NOT universally all classified establishments. Art. 44 five-year compliance deadline **already expired ~21 July 2024**. |
+| `ch4_food_safety.md` | Sécurité alimentaire | Décret 17-140 art. 9 = HACCP mandatory at decree level. Primary production EXCLUDED. Cold-chain temps (4–5°C / -18°C) still [PRATIQUE] — no confirmed Algerian source yet. |
+| `ch5_occupational_health.md` | Santé au travail | Décret 91-05 = employer duty (noise, toxic gases, PPE, sanitary facilities). No dedicated Algerian in-plant noise-exposure decree found. 85 dB(A)/8h = de facto [INTL] reference only (WHO/Algerian OHS body). Décret 02-427 = correct citation for PPE training. |
+| `ch6_documentation.md` | Documentation & licensing | Décret 06-198 amended twice: Décret 22-167 (2022) + Décret 24-196 (2024). Active regularization grace period expires ~June 2027. Every citation to "06-198" must be treated as potentially outdated. Full Décret 07-144 facility-type mapping complete. |
+| `ch7_air_quality.md` | Qualité de l'air | Décret 06-138 primary PDF confirmed. Annex I: 16 parameters with new/old-facility values. Annex II: 7 sector-specific tables — none match SafeInspect facility types (all fall under Annex I by default). Art. 10: declaration obligation for non-classified emitters (new finding). Art. 11: self-monitoring register required. |
+| `ch8_site_hygiene.md` | Hygiène des locaux | Smallest chapter — enrichment opportunity. |
 
 ---
 
@@ -70,17 +79,45 @@ Each chapter follows an identical 11-section structure:
 
 ---
 
+## ⚠️ CRITICAL KNOWN ERRORS (fix before anything else in affected files)
+
+These are confirmed mis-citations verified independently multiple times. Do NOT work on any affected file without addressing these first.
+
+### 1. Décret 04-409 mis-cited in 9+ places
+**04-409 = transport of hazardous special waste.** It is currently mis-cited as the legal basis for unrelated technical requirements:
+- **`gplCriteria.ts`** — 8 of 10 criteria. Correct citation: **Décret 21-430** (LPG/C installation licensing).
+- **`printingCriteria.ts`** — 1 criterion (SDS/chemical storage). Correct citation: **Loi 88-07**.
+
+### 2. Décret 09-410 mis-cited for emergency intervention plans
+**09-410 = security-sensitive equipment.** Used twice for emergency intervention plans.  
+Correct citation: **Décret 09-335**.
+
+### 3. Décret 06-198 / 22-167 / 24-196 version confusion
+Any citation to "06-198" in the codebase may refer to the pre-amendment (pre-2022) text.  
+- **22-167** = 2022 amendment — does NOT cover equipment maintenance (common mis-use).  
+- **24-196** = 2024 amendment — created active regularization grace period ~June 2027.  
+- Always specify which version applies and verify article numbers against the correct amendment.
+
+### 4. Loi 19-02 ERP scope — half the facility library may not be covered
+Loi 19-02 applies to **ERPs, high-rise buildings, residential buildings ONLY**.  
+- **Out of scope (no public admission):** abattoir, couvoir, UPD, UAB, most produce storage/cold room.  
+- **Plausibly in scope:** mechanic, car wash, retail-facing bakery/semiPharma, conditionally marble/paint/printing/GPL.  
+Do not apply Loi 19-02 fire criteria to out-of-scope facilities without verifying ERP classification first.
+
+---
+
 ## 3-Tier Strategic Plan
 
 ### 🔴 TIER 1 — Fix What's Provably Wrong
 
-Concrete, specced, ready to implement. Each has a verified correct value from the manual.
-
-| Phase | File(s) | What | Manual Source | Status |
+| Phase | File(s) | What | Source | Status |
 |---|---|---|---|---|
-| **A** | `paintShopCriteria.ts`, `marbleCriteria.ts`, `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` | Add/verify 5 missing air emissions criteria: dust ≤50 mg/Nm³ + VOC ≤150 mg/Nm³ per Décret 06-138 Annex I | Ch.7 §6 | 🟡 In Progress — paint shop done, others pending |
-| **B** | `uabCriteria.ts` | Fix UAB-AX7-07 noise citation — 85 dB(A) has no Algerian legal basis, must NOT cite Décret 93-120 unless verified | Ch.5 §6 | ⬜ Pending |
-| **C** | `uabCriteria.ts` | Fix UAB-AX6-01 — revert from wrong Décret 22-167 back to Décret 06-198 art. 13 | Ch.6 §2 | ⬜ Pending |
+| **A** | `paintShopCriteria.ts`, `marbleCriteria.ts`, `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` | Air emissions criteria: dust ≤50 mg/Nm³ + VOC ≤150 mg/Nm³ per Décret 06-138 Annex I | Ch.7 §6 | ✅ **CLOSED 2026-07-30** |
+| **B** | `uabCriteria.ts` | Fix UAB-AX7-07 noise citation — 85 dB(A) is [INTL] only (no Algerian decree), must not be presented as Algerian law | Ch.5 §6 | ⬜ Pending |
+| **C** | `uabCriteria.ts` | Fix UAB-AX6-01 — remove wrong Décret 22-167 reference (it does not cover maintenance); replace with correct Décret 06-198 art. 13 (verify version) | Ch.6 §2 | ⬜ Pending |
+| **D** | `gplCriteria.ts` | Replace all 8 Décret 04-409 mis-citations with Décret 21-430 (LPG/C installation licensing) | Handover §3 | ⬜ Pending — HIGH PRIORITY |
+| **E** | `printingCriteria.ts` | Replace Décret 04-409 citation on SDS/chemical storage criterion with Loi 88-07 | Handover §3 | ⬜ Pending |
+| **F** | Any file with Décret 09-410 for emergency plans | Replace 09-410 with Décret 09-335 (emergency intervention plans) | Handover §3 | ⬜ Pending — search codebase first |
 
 ---
 
@@ -90,22 +127,22 @@ For each chapter: read the manual Section 6 (reference values), read the live cr
 
 **Priority order (impact + legal risk):**
 
-| Priority | Chapter | Criteria files to audit | Status |
-|---|---|---|---|
-| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⬜ Pending |
-| 2 | **Ch.3 Fire Safety** | `baseGeneralCriteria.ts`, `gplCriteria.ts`, `paintShopCriteria.ts` | ⬜ Pending |
-| 3 | **Ch.6 Documentation** | All 21 files (licensing + buffer zones apply everywhere) | ⬜ Pending |
-| 4 | **Ch.2 Solid Waste** | `baseGeneralCriteria.ts`, `abattoirCriteria.ts` | ⬜ Pending |
-| 5 | **Ch.4 Food Safety** | `baseFoodCriteria.ts`, `bakeryCriteria.ts`, `coldRoomCriteria.ts`, `produceStorageCriteria.ts` | ⬜ Pending |
-| 6 | **Ch.5 Occupational Health** | `uabCriteria.ts`, `baseGeneralCriteria.ts` | ⬜ Pending |
-| 7 | **Ch.7 Air Quality** | After Tier 1 Phase A closes | ⬜ Pending |
-| 8 | **Ch.8 Site Hygiene** | `baseGeneralCriteria.ts` | ⬜ Pending |
+| Priority | Chapter | Criteria files to audit | Key risk | Status |
+|---|---|---|---|---|
+| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | Full 18-parameter Décret 06-141 table — BOD5 35, COD 120, MES 35, pH 6.5–8.5, oils 20 mg/l | ⬜ Pending |
+| 2 | **Ch.3 Fire Safety** | `baseGeneralCriteria.ts`, `gplCriteria.ts`, `paintShopCriteria.ts` | Verify each facility is ERP-classified before applying Loi 19-02. Art. 44 deadline expired. | ⬜ Pending |
+| 3 | **Ch.6 Documentation** | All 21 files | Décret 06-198 + amendments. Grace period ~June 2027. Full 07-144 buffer-zone table by activity. | ⬜ Pending |
+| 4 | **Ch.2 Solid Waste** | `baseGeneralCriteria.ts`, `abattoirCriteria.ts` | Add Décret 03-478 3-stream medical waste to abattoir/slaughterhouse | ⬜ Pending |
+| 5 | **Ch.4 Food Safety** | `baseFoodCriteria.ts`, `bakeryCriteria.ts`, `coldRoomCriteria.ts`, `produceStorageCriteria.ts` | Décret 17-140 art. 9 HACCP mandatory. Primary production EXCLUDED. Cold-chain temps = [PRATIQUE] until confirmed. | ⬜ Pending |
+| 6 | **Ch.5 Occupational Health** | `uabCriteria.ts`, `baseGeneralCriteria.ts` | Noise: no dedicated Algerian decree. 85 dB(A) = [INTL] only. Décret 02-427 for PPE training. | ⬜ Pending |
+| 7 | **Ch.7 Air Quality** | All 5 Phase A files + any with combustion/dust | Phase A added stack measurement. Now audit remaining: Décret 06-138 art. 10 declaration obligation for non-classified emitters. | ⬜ Pending |
+| 8 | **Ch.8 Site Hygiene** | `baseGeneralCriteria.ts` | Smallest chapter — enrichment | ⬜ Pending |
 
 ---
 
 ### 🔵 TIER 3 — Features the Manual Enables
 
-Implement only after Tier 2 is complete. Each feature is directly enabled by a specific manual section.
+Implement only after Tier 2 is stable. Each feature is directly enabled by a specific manual section.
 
 | Feature | Manual Source | Value |
 |---|---|---|
@@ -120,12 +157,14 @@ Implement only after Tier 2 is complete. Each feature is directly enabled by a s
 ## Recommended Execution Order
 
 ```
-Session 1 (current) → Tier 1 Phase A: air emissions criteria in marble, carpentry, printing, blacksmith
-Session 2           → Tier 1 Phases B+C: fix 2 citation errors in uabCriteria.ts
-Session 3           → Tier 2 Ch.1: full wastewater audit (18-parameter table)
-Session 4           → Tier 2 Ch.3: fire safety audit (largest chapter)
-Session 5+          → Tier 2 Ch.6, 2, 4, 5, 7, 8 in order
-When stable         → Tier 3 features (start with Inspector Hints — fastest to ship)
+Next session    → Tier 1 Phase D: fix gplCriteria.ts (8 × Décret 04-409 → 21-430)
+                → Tier 1 Phase F: search codebase for 09-410, fix to 09-335
+                → Tier 1 Phase E: fix printingCriteria.ts SDS citation
+After that      → Tier 1 Phases B+C: fix 2 issues in uabCriteria.ts
+Then            → Tier 2 Ch.1: full wastewater audit (18-parameter table)
+                → Tier 2 Ch.3: fire safety audit (ERP scope check first)
+                → Tier 2 Ch.6, 2, 4, 5, 7, 8 in order
+When stable     → Tier 3 features (start with Inspector Hints — fastest to ship)
 ```
 
 ---
@@ -143,15 +182,19 @@ When stable         → Tier 3 features (start with Inspector Hints — fastest 
 - [ ] Read the relevant manual chapter section before adding/changing a legal reference
 - [ ] Never add a numeric limit without citing the exact article and annex
 - [ ] Never cite Décret 22-167 for equipment maintenance (it does NOT cover this)
+- [ ] Never cite Décret 04-409 for anything other than transport of hazardous special waste
+- [ ] Never cite Décret 09-410 for emergency intervention plans (use 09-335)
+- [ ] Never apply Loi 19-02 fire criteria to non-ERP facility types without verification
 - [ ] Never lower test coverage thresholds
 - [ ] Run `jest` after every criteria file change
 - [ ] Update this file when a phase status changes
 
-### Legal Citation Rules
-- **LEGALLY MANDATORY** = cite the exact Algerian decree + article + annex
-- **TECHNICAL RECOMMENDATION** = flag explicitly, never present as law
-- **International standard with no Algerian equivalent** = cite as `[INTL]` with disclaimer
-- **Unknown / unverified** = flag as `[À VÉRIFIER]`, never invent
+### Legal Citation Tags (use in criteria text and comments)
+- **[LOI]** = legally binding, Algerian source confirmed
+- **[PRATIQUE]** = best practice, not legally mandated
+- **[INTL]** = international guidance only, no Algerian equivalent found
+- **[SILENCE]** = confirmed gap — topic not covered by any Algerian text found
+- **[À VÉRIFIER]** = unverified — do not implement until confirmed
 
 ### Legal Quick-Reference (verified values)
 
@@ -160,22 +203,38 @@ When stable         → Tier 3 features (start with Inspector Hints — fastest 
 | Air — dust | Décret 06-138 | ≤ 50 mg/Nm³ | Annex I general limit |
 | Air — VOC | Décret 06-138 | ≤ 150 mg/Nm³ | Annex I general limit |
 | Air — records retention | Décret 06-138 | ≥ 3 years | Art. 11 |
+| Air — non-classified emitters | Décret 06-138 | Declaration obligation | Art. 10 |
 | Wastewater — pH | Décret 06-141 | 6.5–8.5 | Annex I |
-| Wastewater — BOD5 | Décret 06-141 | ≤ 40 mg/L | Annex I |
+| Wastewater — MES | Décret 06-141 | ≤ 35 mg/L | Annex I |
+| Wastewater — BOD5 | Décret 06-141 | ≤ 35 mg/L | Annex I |
 | Wastewater — COD | Décret 06-141 | ≤ 120 mg/L | Annex I |
-| Noise | Décret 93-120 | ⚠️ verify exact article before citing | — |
-| Classified establishment licensing | Décret 07-144 | Buffer zones by activity class | Annex |
-| Equipment maintenance | ⚠️ NOT Décret 22-167 | No Algerian decree confirmed for general equip. maintenance | — |
+| Wastewater — oils/greases | Décret 06-141 | ≤ 20 mg/L | Annex I |
+| Noise (occupational) | ⚠️ NO Algerian decree confirmed | 85 dB(A)/8h = [INTL] only | — |
+| Noise (neighborhood) | Décret 93-184 | 35–45 dB(A) night | Ambient standard — NOT occupational |
+| PPE training | Décret 02-427 | Employer obligation | — |
+| Classified establishment licensing | Décret 06-198 + 22-167 + 24-196 | 4-category system | Active grace period ~June 2027 |
+| Buffer zones by facility type | Décret 07-144 | Full table in Ch.6 | Annex |
+| LPG/C installation licensing | Décret 21-430 | ⚠️ NOT Décret 04-409 | — |
+| Emergency intervention plans | Décret 09-335 | ⚠️ NOT Décret 09-410 | — |
+| HACCP mandate | Décret 17-140 | Art. 9 — excludes primary production | — |
+| Medical/care waste streams | Décret 03-478 | 3-stream: green/yellow/red | — |
+| Fire safety scope | Loi 19-02 | ERPs + high-rise + residential ONLY | Art. 44 deadline expired July 2024 |
+| Equipment maintenance | ⚠️ No confirmed Algerian decree | Do NOT cite 22-167 for this | — |
 
 ---
 
 ## Closed Items (do not re-open)
 
-- PNT-02-03 VOC value corrected: 20 mg/Nm³ → 150 mg/Nm³ (Phases 7.1 + 11b + A)
-- PNT-07-01 dust criterion added to paintShopCriteria.ts (Phase A)
-- PNT-07-02 records retention criterion added to paintShopCriteria.ts (Phase 11b)
-- UAB-AX6-01 Décret 22-167 issue — flagged, Phase C pending fix
-- UAB-AX7-07 noise citation issue — flagged, Phase B pending fix
+| Item | Details | Closed |
+|---|---|---|
+| PNT-02-03 VOC value | Corrected 20 mg/Nm³ → 150 mg/Nm³ (Phases 7.1 + 11b + A) | Pre-2026-07-30 |
+| PNT-07-01 | Dust criterion added to paintShopCriteria.ts | Phase A |
+| PNT-07-02 | Records retention criterion added to paintShopCriteria.ts | Phase 11b |
+| MRB-07-01/02 | Dust + records criteria added to marbleCriteria.ts | Phase A |
+| CRP-07-01/02 | Dust + records criteria added to carpenteryCriteria.ts | **2026-07-30** |
+| PRT-07-01/02/03 | VOC + dust + records criteria added to printingCriteria.ts | **2026-07-30** |
+| BSM-07-01/02/03 | Dust + VOC + records criteria added to blacksmithCriteria.ts | **2026-07-30** |
+| **Phase A** | All 5 air emissions files complete — Décret 06-138 Annex I dust + VOC + Art. 11 records | **2026-07-30 ✅ CLOSED** |
 
 ---
 
