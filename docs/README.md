@@ -1,12 +1,14 @@
 # SafeInspect / RAQIB — `docs/` Knowledge Base
 
-**Last updated:** 2026-07-30 14:14 WAT  
+**Last updated:** 2026-07-30 14:35 WAT  
 **Maintained by:** Perplexity AI (primary engineering agent, GitHub MCP)  
 **Repo:** `belabedmohamedins-tech/SafeInspect-APP`  
 **Stack:** React Native · Expo · TypeScript · Jest · EAS Build · WatermelonDB/AsyncStorage → SQLite (migration in progress)
 
 > **For any agent (Claude, GPT, Gemini, or human) picking up this project:**  
 > Read this file first. It is the living source of truth for what this project is, what is done, what is open, and what the rules are. Do not act on old AI reports, old roadmaps, or any file that contradicts what the current code actually contains. When in doubt: read the code, then read this file.
+>
+> **Perplexity updates this file automatically at the end of every session.** If a phase status here contradicts what you find in the code, trust the code and flag the discrepancy.
 
 ---
 
@@ -62,7 +64,7 @@ These are the **source of truth** for all checklist criteria, legal references, 
 ### Group 2 — Working Engineering Documents
 
 | File | Purpose | Status |
-|---|---|---|
+|---|---| ---|
 | `RAQIB_Fix_Spec_v3.md` | Active fix specification — Phases A–F, open items only | ⚠️ **Active — read before touching criteria files** |
 | `RAQIB_Fix_Spec_v2.md` | Historical — all phases confirmed closed except what v3 lists | 🗄️ Archive — do not act on it |
 | `RAQIB_MASTER_MANUSCRIPT.md` | 102 KB consolidated audit — full closure log, G-number history | 📖 Reference — Chapter 5 §5.7 has closed-item log; Chapter 7 has G12 engineering framing |
@@ -73,110 +75,80 @@ These are the **source of truth** for all checklist criteria, legal references, 
 
 ---
 
-## Live Observations Log (Perplexity, 2026-07-30)
+## Live Observations Log
 
-> This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory. It is updated each session.
+> This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory. Updated each session by Perplexity.
 
-### paintShopCriteria.ts — INSPECTED 2026-07-30
+### 2026-07-30 — Phase A/B/C code verification
 
-- `PNT-02-03`: `numericField.max` was set to **20 mg/Nm³** for VOC. **WRONG.** Décret 06-138 Annex I general limit = **150 mg/Nm³** (200 for pre-existing). This has been **fixed in this commit** → `max: 150`, `warningMax: 130`.
-- `PNT-07-02` (record-retention criterion): **already exists** in this file. Its ID was reserved. The new total-dust criterion (`PNT-07-01`) did not exist → **added in this commit**.
-- `PNT-01-01` was already removed (operating license duplicate). Correct.
-- `PNT-04-03`: fire extinguisher criterion already includes annual maintenance card check. Correct — do not simplify.
-- Axes used in this file: `هوية المنشأة والوثائق`, `التهوية ومنع التلوث الهوائي`, `تسيير النفايات الخطرة`, `السلامة المهنية`. Note: PNT-07-01/07-02 are placed under `التهوية ومنع التلوث الهوائي` — consistent with the existing axis name for air-quality items in this file.
+- **carpenteryCriteria.ts**: `CRP-07-01` (total dust, 50 mg/Nm³), `CRP-07-02` (records retention) — **already present**. Phase A complete for this file.
+- **printingCriteria.ts**: `PRT-07-01` (VOC, 150 mg/Nm³), `PRT-07-02` (total dust, 50 mg/Nm³), `PRT-07-03` (records retention) — **already present**. Phase A complete.
+- **blacksmithCriteria.ts**: `BSM-07-01` (total dust), `BSM-07-02` (VOC), `BSM-07-03` (records retention) — **already present**. Phase A complete.
+- **uabCriteria.ts `UAB-AX7-07`**: `93-120` already removed. Citation now correctly uses Loi 18-11 + Loi 90-11, with `[INTL]` flag for 85 dB threshold. Phase B complete.
+- **uabCriteria.ts `UAB-AX6-01`**: `22-167` already removed. Criterion now based on Loi 03-10 prevention principle only, with `[À VÉRIFIER]` flag for missing specific maintenance decree. Phase C complete.
+- **paintShopCriteria.ts `PNT-02-03`**: VOC max correctly set to 150 mg/Nm³. `PNT-07-01` total dust present. Confirmed.
+- **marbleCriteria.ts `MRB-07-01`**: total dust criterion present. `MRB-05-05` silica dust dual-reference situation correctly acknowledged. Confirmed.
 
-### marbleCriteria.ts — INSPECTED 2026-07-30
+### General pattern confirmed across all criteria files
 
-- `MRB-05-05`: silica dust measurement criterion. `numericField.max: 0.1 mg/m³` — this is the workplace exposure limit, **not** a Décret 06-138 stack-emission limit. The comment says "Décret 06-138" but the value comes from occupational-hygiene standards. This is a **known dual-reference situation**: the criterion correctly cites both 03-10/06-138 (monitoring obligation) and 93-120 (occupational limit). The value 0.1 mg/m³ for respirable free silica is the correct WHO/OSHA reference — but Algerian law is silent on the exact number. The criterion is correctly tagged as using 93-120 occupational context. Leave as-is — this is a borderline `[INTL]`/`[SILENCE]` case, correctly acknowledged in the criterion text.
-- `MRB-07-02` (record-retention): **already exists**. ID was reserved. The new total-dust stack-emission criterion (`MRB-07-01`) did not exist → **added in this commit**.
-- `MRB-04-02` discharge permit criterion: correct legal reference to Loi 05-12 + 06-141. OK.
-- `MRB-02-02`: citation corrected (06-141 → 06-138) in a previous session (G18 fix). Confirmed present. OK.
-- Axes in this file: `هوية المنشأة والوثائق`, `الموقع والتهيئة`, `المياه المستعملة والغبار`, `السلامة المهنية`, `الانبعاثات الهوائية`. New criteria appended under `الانبعاثات الهوائية`.
-
-### carpenteryCriteria.ts, printingCriteria.ts, blacksmithCriteria.ts
-
-- **Not yet read in this session.** These files need the same total-dust criterion added (CRP-07-01, PRT-07-01, BLS-07-01). **Phase A is partially complete — these 3 files are the remaining work.**
-- ⚠️ Read each file before writing any diff. Do not copy-paste across files — prefix, axis name, and existing emission criteria differ per file.
-
-### General pattern confirmed across criteria files
-
-- All files use `complianceStatus: 'not-evaluated'` as default. This is intentional — never change this default.
-- `controlType: 'doc'` is used for criteria where the inspector verifies a document/report, not a live reading. Even when a `numericField` is present (for note-taking), `controlType: 'doc'` means "verify the lab report shows this value". Do not change to `'measurement'` without understanding this distinction.
-- ID gaps are intentional (e.g., PNT-01-01 removed). Do not renumber existing IDs — ever.
+- All files use `complianceStatus: 'not-evaluated'` as default. This is intentional — never change.
+- `controlType: 'doc'` means inspector verifies a lab report/document, even when a `numericField` is present for note-taking. Do not change to `'measurement'` without understanding this distinction.
+- ID gaps are intentional (e.g., PNT-01-01, BSM-01-01 removed). Do not renumber existing IDs — ever.
+- Prefix `BSM-` = blacksmith (not `BLS-`). The roadmap previously used `BLS-` — that was an error in the docs, not in the code.
 
 ---
 
 ## Working Roadmap
 
-### 🔴 Phase A — Air quality criteria: correct Décret 06-138 numbers (HIGHEST PRIORITY)
+### ✅ Phase A — Air quality criteria: Décret 06-138 numbers (CLOSED 2026-07-30)
 
-**Status: PARTIALLY DONE — 2 of 5 files fixed (2026-07-30)**
+All 5 files confirmed correct by direct code inspection:
 
-| File | Criterion | Status |
+| File | Criteria | Status |
 |---|---|---|
-| `paintShopCriteria.ts` | `PNT-02-03` VOC max fixed (20→150), `PNT-07-01` total dust added | ✅ Done 2026-07-30 |
-| `marbleCriteria.ts` | `MRB-07-01` total dust added | ✅ Done 2026-07-30 |
-| `carpenteryCriteria.ts` | `CRP-07-01` total dust — **not yet added** | ❌ Open |
-| `printingCriteria.ts` | `PRT-07-01` total dust — **not yet added** | ❌ Open |
-| `blacksmithCriteria.ts` | `BLS-07-01` total dust — **not yet added** | ❌ Open |
-
-**Correct Annex I general limits (Décret exécutif 06-138):**
-
-| Parameter | Correct limit | Wrong value that was in code |
-|---|---|---|
-| Total dust (poussières totales) | **50 mg/Nm³** (100 for pre-existing) | 30 mg/Nm³ |
-| VOC (composés organiques volatils) | **150 mg/Nm³** (200 for pre-existing) | 20 mg/Nm³ |
-
-**Next action:** Read `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` → add the total-dust criterion to each → close Phase A.
+| `paintShopCriteria.ts` | `PNT-02-03` VOC 150 mg/Nm³, `PNT-07-01` total dust 50 mg/Nm³ | ✅ Done |
+| `marbleCriteria.ts` | `MRB-07-01` total dust 50 mg/Nm³ | ✅ Done |
+| `carpenteryCriteria.ts` | `CRP-07-01` total dust 50 mg/Nm³, `CRP-07-02` records | ✅ Done |
+| `printingCriteria.ts` | `PRT-07-01` VOC 150, `PRT-07-02` dust 50, `PRT-07-03` records | ✅ Done |
+| `blacksmithCriteria.ts` | `BSM-07-01` dust 50, `BSM-07-02` VOC 150, `BSM-07-03` records | ✅ Done |
 
 ---
 
-### 🔴 Phase B — Noise citation fix in `uabCriteria.ts` (HIGH)
+### ✅ Phase B — Noise citation fix in `uabCriteria.ts` UAB-AX7-07 (CLOSED 2026-07-30)
 
-**Status: OPEN**
-
-`UAB-AX7-07` still cites `المرسوم 93-120` as the source for the 85 dB(A) noise limit.  
-This decree does not contain this limit — 85 dB(A) is an international reference (WHO/OSHA), not Algerian law.  
-Fix: match the already-corrected wording in `blacksmithCriteria.ts`'s `BLS-04-06`.  
-**Fetch `BLS-04-06`'s exact current text before applying — do not copy the illustrative text in v3 verbatim.**
+`UAB-AX7-07` correctly cites Loi 18-11 + Loi 90-11. Décret 93-120 removed. `[INTL]` flag on 85 dB threshold. Confirmed by direct code read.
 
 ---
 
-### 🔴 Phase C — Wrong decree cited in `uabCriteria.ts` UAB-AX6-01 (HIGH, CONFIRMED)
+### ✅ Phase C — Wrong decree in `uabCriteria.ts` UAB-AX6-01 (CLOSED 2026-07-30)
 
-**Status: OPEN**
-
-`UAB-AX6-01` cites Décret 22-167 for equipment maintenance. Confirmed wrong: Décret 22-167 is about modifying classified-establishment category definitions and environmental audit terms of reference — it has nothing to do with equipment maintenance.  
-Fix: revert to `Décret exécutif 06-198 art. 13`.  
-**Verify art. 13's content directly before applying.**
+`UAB-AX6-01` no longer cites Décret 22-167 for equipment maintenance. Now based on Loi 03-10 prevention principle with explicit `[À VÉRIFIER]` flag. Confirmed by direct code read.
 
 ---
 
-### 🟡 Phase D — 3 duplicate operating-license criteria (MEDIUM)
+### 🟡 Phase D — 3 duplicate operating-license criteria (MEDIUM) — OPEN
 
 **Status: OPEN — design decision needed**
 
 `BAK-10-01`, `CLD-17-01`, `PRD-01-01` are standalone duplicates of `BGN-01-01`.  
-Options: (a) enrich each with sector-specific nuance (Décret 17-140 for food/cold-room), or (b) remove. Not a mechanical fix — requires a decision.  
-Note: `GPL-01-01` is no longer a duplicate (it was legitimately extended with Décret 24-196 grace-period logic).
+Options: (a) enrich each with sector-specific nuance (Décret 17-140 for food/cold-room), or (b) remove. Not a mechanical fix — requires a domain decision.  
+Note: `GPL-01-01` is no longer a duplicate (extended with Décret 24-196 grace-period logic).
 
 ---
 
-### 🟡 Phase E — `PRD-02-01` missing `numericField` (LOW)
-
-**Status: OPEN**
+### 🟡 Phase E — `PRD-02-01` missing `numericField` (LOW) — OPEN
 
 `produceStorageCriteria.ts`'s `PRD-02-01` is typed `controlType: 'measurement'` but has no `numericField`.  
 Two numeric ranges exist (0–5°C vegetables, 7–15°C olives) — may need splitting into two criteria since `numericField` only supports one min/max pair.
 
 ---
 
-### 🟠 Phase F — G12: AsyncStorage → SQLite Migration (LARGE, ONGOING)
+### 🟠 Phase F — G12: AsyncStorage → SQLite Migration (LARGE) — IN PROGRESS
 
-**Status: Phase A complete (schema + migration runner live). Phase B NOT started.**
+**Status: Schema + migration runner live (Phase A done). Phase B NOT started.**
 
-Full plan: `RAQIB_SQLite_Migration_Plan.md`. Sequencing order:
-1. SettingsRepository (lowest risk)
+Full plan in `RAQIB_SQLite_Migration_Plan.md`. Repository migration order:
+1. SettingsRepository
 2. NotificationRepository
 3. AuditLogRepository
 4. FacilityRepository
@@ -188,9 +160,9 @@ Full plan: `RAQIB_SQLite_Migration_Plan.md`. Sequencing order:
 **Critical pre-requisites before starting B.1:**
 - Extend `migrateAsyncStorageToSQLite()` to cover `corrective_actions`, `audit_log`, `notifications`
 - Add `settings` table to schema
-- Wire `migrateAsyncStorageToSQLite()` call into `_layout.tsx` with a one-time guard
+- Wire `migrateAsyncStorageToSQLite()` into `_layout.tsx` with a one-time guard
 - Write explicit mapping functions for: status string casing, approval status casing, violations JSON↔4-column split, coordinates renaming, committee members JSON parse/stringify
-- Decide: should `audit_log` sync to server? (Currently no Prisma model exists for it)
+- Decide: should `audit_log` sync to server? (No Prisma model exists for it currently)
 
 ---
 
@@ -207,10 +179,12 @@ Full plan: `RAQIB_SQLite_Migration_Plan.md`. Sequencing order:
 
 ## Items Confirmed Closed — Do Not Re-Open
 
-G1 (facility mapping), G2 (93-120 noise, all instances except UAB-AX7-07), G5 (paint/print emissions criteria exist), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug — was highest priority, now closed), G18 (Décret 06-141→06-138, all 6 instances).  
-Phase A partial: PNT-02-03 VOC value, PNT-07-01, MRB-07-01 (2026-07-30).
+G1 (facility mapping), G2 (93-120 noise, all instances), G5 (paint/print emissions criteria), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug), G18 (Décret 06-141→06-138, all 6 instances).  
+Phase A (all 5 files — air quality criteria, Décret 06-138 values correct) — closed 2026-07-30.  
+Phase B (UAB-AX7-07 noise citation — 93-120 removed, [INTL] flag added) — closed 2026-07-30.  
+Phase C (UAB-AX6-01 wrong decree — 22-167 removed, [À VÉRIFIER] flag added) — closed 2026-07-30.
 
-Full closure log with code-comment citations: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
+Full closure log: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 
 ---
 
@@ -230,19 +204,20 @@ Full closure log with code-comment citations: `RAQIB_MASTER_MANUSCRIPT.md` Chapt
 ### Legal References
 - Never cite a decree for a subject it doesn't cover
 - Always include the article number, not just the decree number
-- Mark uncertainty explicitly: "flagged for verification" is better than a confident wrong citation
-- `[SILENCE]` is a valid and important answer — Algerian law is silent on many limits that other frameworks specify
+- Mark uncertainty explicitly: `[À VÉRIFIER]` or `[SILENCE]` is better than a confident wrong citation
+- `[SILENCE]` = Algerian law is confirmed silent on this limit. `[INTL]` = international reference only, not Algerian law.
 
 ### Testing Checklist (always run after criteria changes)
 ```bash
 npx tsc --noEmit          # Should be at or near 0 errors in src/
-grep -rn "93-120" src/criteria/*.ts  # After Phase B: should only return medical-exam criteria
+grep -rn "93-120" src/criteria/*.ts  # Should only return medical-exam criteria (UAB-AX7-02 etc.)
+grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classification criteria, never equipment maintenance
 ```
 - Smoke-test CAP auto-creation end-to-end after any scoring/evaluation changes
 - Run existing Jest suite for any repository touched in the SQLite migration
 
-### Documentation
-- Update this README's roadmap when a phase is opened, closed, or changes status
+### Documentation (mandatory)
+- **Update this README's roadmap when a phase opens, closes, or changes status** — do not wait to be asked
 - Update the relevant manual chapter when a legal reference is corrected
 - Add a `DECISIONS.md` entry for any architectural decision (schema changes, sync design, audit-log scope)
 
@@ -261,4 +236,4 @@ grep -rn "93-120" src/criteria/*.ts  # After Phase B: should only return medical
 | Loi 05-12 | Water code | Art. 45/47 discharge licensing |
 | Loi 18-11 | Workplace safety | General occupational safety obligations |
 | Décret 22-167 | Modifies Décret 06-198 categories + environmental audit TOR | ⚠️ Does NOT cover equipment maintenance |
-| 85 dB(A) noise | NOT in Algerian law | WHO/OSHA reference — cite as `[INTL]` / `[SILENCE]` |
+| 85 dB(A) noise | NOT in Algerian law | WHO/ILO reference — cite as `[INTL]` / `[SILENCE]` |
