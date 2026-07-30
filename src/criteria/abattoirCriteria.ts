@@ -223,11 +223,14 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
 
   // ===== AX7 — صحة العمال =====
   {
+    // Phase H fix: removed Décret 93-120 — same error as UAB-AX7-07 (Phase B).
+    // 93-120 governs occupational medicine service registration, not periodic medical exams.
+    // Correct basis: Loi 18-11 (general worker health) + Loi 90-11 Art.20 (periodic exams obligation).
     id: 'ABT-AX7-01',
     axis: 'صحة العمال في المذابح',
     category: 'صحية',
     criteria: 'خضوع عمال المذبح لفحوص طبية دورية للكشف عن الأمراض المعدية والأمراض الجلدية والتنفسية المرتبطة بالتعامل مع منتجات حيوانية.',
-    legalReference: 'القانون 18-11 المتعلق بالصحة (المتابعة الطبية الدورية للعمال). المرسوم التنفيذي 93-120 (15 مايو 1993) المتعلق بطب العمل والفحوص الدورية للعمال.',
+    legalReference: 'القانون 18-11 المتعلق بالصحة (المتابعة الطبية الدورية للعمال). القانون 90-11 المادة 20 (إلزامية الفحوص الدورية للعمال).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -289,17 +292,9 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
 
-  // ===== AX10 — HACCP (Phase 3.2) + النفايات البيطرية (Phase 3.6) =====
-  {
-    id: 'ABT-AX10-01',
-    axis: 'HACCP في المذبح',
-    category: 'تنظيمية',
-    criteria: 'وجود خطة HACCP مُعدّة ومطبقة خصيصًا لخط الذبح والتقطيع والتبريد، تشمل على الأقل نقاط التحكم الحرجة مثل درجة حرارة التبريد، زمن التبريد، ونظافة المعدات.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 4 (إلزامية HACCP في منشآت تحضير المنتجات الحيوانية).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
+  // ===== AX10 — النفايات البيطرية (Phase 3.6) =====
+  // NOTE: ABT-AX10-01 was a duplicate of ABT-AX8-01 (same HACCP criterion, same axis).
+  // Removed in Phase H to prevent double-counting in scoring. ABT-AX10-02 kept.
   {
     id: 'ABT-AX10-02',
     axis: 'النفايات البيطرية والطبية',
