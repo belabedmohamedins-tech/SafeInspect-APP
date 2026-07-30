@@ -1,6 +1,6 @@
 # SafeInspect / RAQIB — `docs/` Knowledge Base
 
-**Last updated:** 2026-07-30  
+**Last updated:** 2026-07-30 14:14 WAT  
 **Maintained by:** Perplexity AI (primary engineering agent, GitHub MCP)  
 **Repo:** `belabedmohamedins-tech/SafeInspect-APP`  
 **Stack:** React Native · Expo · TypeScript · Jest · EAS Build · WatermelonDB/AsyncStorage → SQLite (migration in progress)
@@ -73,23 +73,61 @@ These are the **source of truth** for all checklist criteria, legal references, 
 
 ---
 
+## Live Observations Log (Perplexity, 2026-07-30)
+
+> This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory. It is updated each session.
+
+### paintShopCriteria.ts — INSPECTED 2026-07-30
+
+- `PNT-02-03`: `numericField.max` was set to **20 mg/Nm³** for VOC. **WRONG.** Décret 06-138 Annex I general limit = **150 mg/Nm³** (200 for pre-existing). This has been **fixed in this commit** → `max: 150`, `warningMax: 130`.
+- `PNT-07-02` (record-retention criterion): **already exists** in this file. Its ID was reserved. The new total-dust criterion (`PNT-07-01`) did not exist → **added in this commit**.
+- `PNT-01-01` was already removed (operating license duplicate). Correct.
+- `PNT-04-03`: fire extinguisher criterion already includes annual maintenance card check. Correct — do not simplify.
+- Axes used in this file: `هوية المنشأة والوثائق`, `التهوية ومنع التلوث الهوائي`, `تسيير النفايات الخطرة`, `السلامة المهنية`. Note: PNT-07-01/07-02 are placed under `التهوية ومنع التلوث الهوائي` — consistent with the existing axis name for air-quality items in this file.
+
+### marbleCriteria.ts — INSPECTED 2026-07-30
+
+- `MRB-05-05`: silica dust measurement criterion. `numericField.max: 0.1 mg/m³` — this is the workplace exposure limit, **not** a Décret 06-138 stack-emission limit. The comment says "Décret 06-138" but the value comes from occupational-hygiene standards. This is a **known dual-reference situation**: the criterion correctly cites both 03-10/06-138 (monitoring obligation) and 93-120 (occupational limit). The value 0.1 mg/m³ for respirable free silica is the correct WHO/OSHA reference — but Algerian law is silent on the exact number. The criterion is correctly tagged as using 93-120 occupational context. Leave as-is — this is a borderline `[INTL]`/`[SILENCE]` case, correctly acknowledged in the criterion text.
+- `MRB-07-02` (record-retention): **already exists**. ID was reserved. The new total-dust stack-emission criterion (`MRB-07-01`) did not exist → **added in this commit**.
+- `MRB-04-02` discharge permit criterion: correct legal reference to Loi 05-12 + 06-141. OK.
+- `MRB-02-02`: citation corrected (06-141 → 06-138) in a previous session (G18 fix). Confirmed present. OK.
+- Axes in this file: `هوية المنشأة والوثائق`, `الموقع والتهيئة`, `المياه المستعملة والغبار`, `السلامة المهنية`, `الانبعاثات الهوائية`. New criteria appended under `الانبعاثات الهوائية`.
+
+### carpenteryCriteria.ts, printingCriteria.ts, blacksmithCriteria.ts
+
+- **Not yet read in this session.** These files need the same total-dust criterion added (CRP-07-01, PRT-07-01, BLS-07-01). **Phase A is partially complete — these 3 files are the remaining work.**
+- ⚠️ Read each file before writing any diff. Do not copy-paste across files — prefix, axis name, and existing emission criteria differ per file.
+
+### General pattern confirmed across criteria files
+
+- All files use `complianceStatus: 'not-evaluated'` as default. This is intentional — never change this default.
+- `controlType: 'doc'` is used for criteria where the inspector verifies a document/report, not a live reading. Even when a `numericField` is present (for note-taking), `controlType: 'doc'` means "verify the lab report shows this value". Do not change to `'measurement'` without understanding this distinction.
+- ID gaps are intentional (e.g., PNT-01-01 removed). Do not renumber existing IDs — ever.
+
+---
+
 ## Working Roadmap
 
 ### 🔴 Phase A — Air quality criteria: correct Décret 06-138 numbers (HIGHEST PRIORITY)
 
-**Status: OPEN — not yet implemented**
+**Status: PARTIALLY DONE — 2 of 5 files fixed (2026-07-30)**
 
-5 new criteria must be added (`PNT-07-01`, `MRB-07-01`, `CRP-07-01`, `PRT-07-01`, `BLS-07-01`) for paint shop, marble, carpentry, printing, and blacksmith facility types.  
-The numbers currently on record are **wrong** and must not be used:
-
-| Parameter | Wrong value (do not use) | Correct Annex I general limit |
+| File | Criterion | Status |
 |---|---|---|
-| Total dust (poussières totales) | 30 mg/Nm³ | **50 mg/Nm³** (100 mg/Nm³ for pre-existing installations) |
-| VOC (composés organiques volatils) | 20 mg/Nm³ | **150 mg/Nm³** (200 mg/Nm³ for pre-existing installations) |
+| `paintShopCriteria.ts` | `PNT-02-03` VOC max fixed (20→150), `PNT-07-01` total dust added | ✅ Done 2026-07-30 |
+| `marbleCriteria.ts` | `MRB-07-01` total dust added | ✅ Done 2026-07-30 |
+| `carpenteryCriteria.ts` | `CRP-07-01` total dust — **not yet added** | ❌ Open |
+| `printingCriteria.ts` | `PRT-07-01` total dust — **not yet added** | ❌ Open |
+| `blacksmithCriteria.ts` | `BLS-07-01` total dust — **not yet added** | ❌ Open |
 
-Source: Décret exécutif 06-138, Annex I. Verified against `me.gov.dz` and `and.dz`.  
-**Get one more independent verification before implementing** (PDF extraction reliability issue was flagged on first fetch).  
-Template TypeScript code: see `RAQIB_Fix_Spec_v3.md` Phase A.
+**Correct Annex I general limits (Décret exécutif 06-138):**
+
+| Parameter | Correct limit | Wrong value that was in code |
+|---|---|---|
+| Total dust (poussières totales) | **50 mg/Nm³** (100 for pre-existing) | 30 mg/Nm³ |
+| VOC (composés organiques volatils) | **150 mg/Nm³** (200 for pre-existing) | 20 mg/Nm³ |
+
+**Next action:** Read `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` → add the total-dust criterion to each → close Phase A.
 
 ---
 
@@ -169,7 +207,8 @@ Full plan: `RAQIB_SQLite_Migration_Plan.md`. Sequencing order:
 
 ## Items Confirmed Closed — Do Not Re-Open
 
-G1 (facility mapping), G2 (93-120 noise, all instances except UAB-AX7-07), G5 (paint/print emissions criteria exist), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug — was highest priority, now closed), G18 (Décret 06-141→06-138, all 6 instances).
+G1 (facility mapping), G2 (93-120 noise, all instances except UAB-AX7-07), G5 (paint/print emissions criteria exist), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug — was highest priority, now closed), G18 (Décret 06-141→06-138, all 6 instances).  
+Phase A partial: PNT-02-03 VOC value, PNT-07-01, MRB-07-01 (2026-07-30).
 
 Full closure log with code-comment citations: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 

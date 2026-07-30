@@ -114,9 +114,11 @@ export const marbleCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 7.1: periodic silica dust air quality measurement
-    // controlType: 'doc' — inspector verifies the periodic measurement report (lab certificate),
-    // not the live reading. The numericField is retained for optional on-site note-taking.
+    // Phase 7.1: periodic silica dust air quality measurement.
+    // Value 0.1 mg/m³ is the occupational exposure limit for respirable free silica (93-120 context).
+    // Algerian law (06-138) mandates the monitoring obligation; the numeric threshold comes from
+    // occupational-hygiene practice — this is a [SILENCE]/[INTL] borderline case, correctly
+    // acknowledged in the criterion text. Do not change without legal verification.
     id: 'MRB-05-05',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
@@ -135,11 +137,30 @@ export const marbleCriteria: InspectionItem[] = [
     },
   },
   {
+    // Phase A: total dust stack-emission measurement — Décret 06-138 Annex I general limit 50 mg/Nm³.
+    id: 'MRB-07-01',
+    axis: 'الانبعاثات الهوائية',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز الغبار الكلي (poussières totales) في الانبعاثات الهوائية عند نقطة المصب (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيمة الحدية (50 ملغ/م³ن للحد العام)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 + المرسوم 06-138 الملحق I (الغبار الكلي ≤ 50 ملغ/م³ن — الحد العام للمنشآت الصناعية).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/Nm³',
+      labelAr: 'تركيز الغبار الكلي عند نقطة المصب',
+      max: 50,
+      warningMax: 40,
+      step: 1,
+      upperLimit: true,
+    },
+  },
+  {
     // Phase 11b: measurement report retention ≥ 3 years — Décret 06-138 Art. 11
     id: 'MRB-07-02',
     axis: 'الانبعاثات الهوائية',
     category: 'تنظيمية',
-    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (غبار السيليكا) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (غبار السيليكا والغبار الكلي) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
     legalReference: 'المرسوم 06-138 المادة 11 (إلزامية الاحتفاظ بسجلات القياسات الدورية للانبعاثات الهوائية لمدة ثلاث سنوات على الأقل).',
     severity: 'medium',
     controlType: 'doc',

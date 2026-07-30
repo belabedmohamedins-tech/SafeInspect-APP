@@ -33,20 +33,40 @@ export const paintShopCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 7.1 + Phase 11b: periodic VOC measurement with numericField for on-site note-taking
+    // Phase 7.1 + Phase 11b + Phase A fix: VOC max corrected to 150 mg/Nm³ (Décret 06-138 Annex I general limit).
+    // Previous incorrect value was 20 mg/Nm³. warningMax set to 130 mg/Nm³.
     id: 'PNT-02-03',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز المركبات العضوية المتطايرة (VOC) من بخار الطلاء في هواء بيئة العمل وعند نقطة المصب الهوائي (مرة في السنة على الأقل أو عند تغيير نوع الطلاء) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
-    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية — VOC).',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 الملحق I (القيم القصوى للانبعاثات الهوائية الصناعية — VOC ≤ 150 ملغ/م³ن للحد العام).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
     numericField: {
       unit: 'mg/Nm³',
       labelAr: 'تركيز VOC عند نقطة المصب',
-      max: 20,
-      warningMax: 15,
+      max: 150,
+      warningMax: 130,
+      step: 1,
+      upperLimit: true,
+    },
+  },
+  {
+    // Phase A: total dust stack-emission measurement — Décret 06-138 Annex I general limit 50 mg/Nm³.
+    id: 'PNT-07-01',
+    axis: 'التهوية ومنع التلوث الهوائي',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز الغبار الكلي (poussières totales) في الانبعاثات الهوائية عند نقطة المصب (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيمة الحدية (50 ملغ/م³ن للحد العام)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 + المرسوم 06-138 الملحق I (الغبار الكلي ≤ 50 ملغ/م³ن — الحد العام للمنشآت الصناعية).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      unit: 'mg/Nm³',
+      labelAr: 'تركيز الغبار الكلي عند نقطة المصب',
+      max: 50,
+      warningMax: 40,
       step: 1,
       upperLimit: true,
     },
@@ -56,7 +76,7 @@ export const paintShopCriteria: InspectionItem[] = [
     id: 'PNT-07-02',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'تنظيمية',
-    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (VOC) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
+    criteria: 'الاحتفاظ بسجلات نتائج القياسات الدورية للانبعاثات الهوائية (VOC والغبار) مدة لا تقل عن 3 سنوات وإتاحتها للمفتش عند الطلب.',
     legalReference: 'المرسوم 06-138 المادة 11 (إلزامية الاحتفاظ بسجلات القياسات الدورية للانبعاثات الهوائية لمدة ثلاث سنوات على الأقل).',
     severity: 'medium',
     controlType: 'doc',
