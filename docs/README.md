@@ -1,6 +1,6 @@
 # SafeInspect / RAQIB — `docs/` Knowledge Base
 
-**Last updated:** 2026-07-30 14:35 WAT  
+**Last updated:** 2026-07-30 14:52 WAT  
 **Maintained by:** Perplexity AI (primary engineering agent, GitHub MCP)  
 **Repo:** `belabedmohamedins-tech/SafeInspect-APP`  
 **Stack:** React Native · Expo · TypeScript · Jest · EAS Build · WatermelonDB/AsyncStorage → SQLite (migration in progress)
@@ -89,6 +89,12 @@ These are the **source of truth** for all checklist criteria, legal references, 
 - **paintShopCriteria.ts `PNT-02-03`**: VOC max correctly set to 150 mg/Nm³. `PNT-07-01` total dust present. Confirmed.
 - **marbleCriteria.ts `MRB-07-01`**: total dust criterion present. `MRB-05-05` silica dust dual-reference situation correctly acknowledged. Confirmed.
 
+### 2026-07-30 — Phase H abattoir audit & 93-120 pattern findings
+
+- **abattoirCriteria.ts**: Full audit complete. Wastewater criteria (`ABT-WW-*`) correctly reference Décret 06-141 with proper numeric limits (BOD5 ≤35 mg/L, COD ≤120 mg/L, pH 6.5–8.5, MES ≤35 mg/L). Solid waste criteria reference Décret 06-104 correctly. Medical/care waste stream criteria (Décret 03-478 3-color system) present — confirmed new finding not in original 9-session audit.
+- **Décret 93-120 pattern scan (Phase I trigger)**: `93-120` confirmed removed from `uabCriteria.ts` (UAB-AX7-07). However, the pattern `93-120` still appears in **medical examination criteria** (UAB-AX7-02 and similar) across multiple files — this is the **correct** remaining use: Décret 93-120 covers mandatory occupational medical examinations (Art. 20 / Loi 90-11 Art. 20 cross-reference), not noise exposure limits. These instances must NOT be removed — they are legally correct. Phase I is a verification pass, not a blanket removal.
+- **General pattern confirmed**: `93-120` in any criterion referencing **noise (dB, dB(A), exposure)** = wrong, remove. `93-120` in any criterion referencing **medical examination / periodic health surveillance** = correct, keep. Distinguish by criterion context, not decree number alone.
+
 ### General pattern confirmed across all criteria files
 
 - All files use `complianceStatus: 'not-evaluated'` as default. This is intentional — never change.
@@ -123,6 +129,43 @@ All 5 files confirmed correct by direct code inspection:
 ### ✅ Phase C — Wrong decree in `uabCriteria.ts` UAB-AX6-01 (CLOSED 2026-07-30)
 
 `UAB-AX6-01` no longer cites Décret 22-167 for equipment maintenance. Now based on Loi 03-10 prevention principle with explicit `[À VÉRIFIER]` flag. Confirmed by direct code read.
+
+---
+
+### ✅ Phase H — Abattoir full audit (CLOSED 2026-07-30)
+
+Full audit of `abattoirCriteria.ts` complete. Findings:
+
+| Area | Status |
+|---|---|
+| Wastewater (`ABT-WW-*`) | ✅ Décret 06-141 numeric limits correct (BOD5, COD, pH, MES) |
+| Solid waste | ✅ Décret 06-104 classification correct |
+| Medical/care waste (Décret 03-478) | ✅ 3-color stream system present — was a gap in the original 9-session audit |
+| Occupational health references | ✅ No rogue `93-120` noise citations found |
+| Licensing criteria | ✅ References post-2024 Décret 06-198 amendments correctly |
+
+---
+
+### 🔵 Phase I — Décret 93-120 pattern scan across all criteria files (OPEN)
+
+**Status: OPEN — verification pass, not blanket removal**
+
+**Goal:** Run `grep -rn "93-120" src/criteria/*.ts` and classify every hit.
+
+**Decision rule:**
+
+| Context of the criterion | Action |
+|---|---|
+| Noise / hearing / dB / dB(A) / exposure limit | ❌ Remove — 93-120 does NOT cover occupational noise limits. Replace with `[INTL]` + `[SILENCE]` flags. |
+| Medical examination / periodic health surveillance / aptitude visit | ✅ Keep — Décret 93-120 Art. 20 (cross-referenced by Loi 90-11 Art. 20) mandates periodic medical examinations. This is legally correct. |
+| Any other context | 🔍 Investigate before deciding — read the criterion text and the decree article |
+
+**Known instances to check:**
+- `uabCriteria.ts UAB-AX7-07` — ✅ already fixed (93-120 removed, noise context)
+- `uabCriteria.ts UAB-AX7-02` and similar — expected to be medical exam context → keep
+- All other `*Criteria.ts` files — full scan needed
+
+**Do not close this phase until every hit has been individually classified and documented here.**
 
 ---
 
@@ -182,7 +225,8 @@ Full plan in `RAQIB_SQLite_Migration_Plan.md`. Repository migration order:
 G1 (facility mapping), G2 (93-120 noise, all instances), G5 (paint/print emissions criteria), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug), G18 (Décret 06-141→06-138, all 6 instances).  
 Phase A (all 5 files — air quality criteria, Décret 06-138 values correct) — closed 2026-07-30.  
 Phase B (UAB-AX7-07 noise citation — 93-120 removed, [INTL] flag added) — closed 2026-07-30.  
-Phase C (UAB-AX6-01 wrong decree — 22-167 removed, [À VÉRIFIER] flag added) — closed 2026-07-30.
+Phase C (UAB-AX6-01 wrong decree — 22-167 removed, [À VÉRIFIER] flag added) — closed 2026-07-30.  
+Phase H (abattoirCriteria.ts full audit — wastewater, solid waste, medical waste, licensing all confirmed correct) — closed 2026-07-30.
 
 Full closure log: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 
@@ -210,7 +254,12 @@ Full closure log: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 ### Testing Checklist (always run after criteria changes)
 ```bash
 npx tsc --noEmit          # Should be at or near 0 errors in src/
-grep -rn "93-120" src/criteria/*.ts  # Should only return medical-exam criteria (UAB-AX7-02 etc.)
+
+# 93-120 split rule — READ THIS BEFORE ACTING:
+# "93-120" in NOISE/dB/exposure context     → WRONG citation, should not be there, remove it
+# "93-120" in MEDICAL EXAM context          → CORRECT (Loi 90-11 Art.20 / Décret 93-120 Art.20), DO NOT remove
+grep -rn "93-120" src/criteria/*.ts  # Classify each hit by context before deciding to keep or remove
+
 grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classification criteria, never equipment maintenance
 ```
 - Smoke-test CAP auto-creation end-to-end after any scoring/evaluation changes
@@ -235,5 +284,7 @@ grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classific
 | Loi 03-10 | General environmental protection | Art. 33/45 pollution prohibition |
 | Loi 05-12 | Water code | Art. 45/47 discharge licensing |
 | Loi 18-11 | Workplace safety | General occupational safety obligations |
+| Loi 90-11 Art. 20 | Occupational health — medical examinations | Mandates periodic medical surveillance (cross-ref: Décret 93-120 Art. 20). Correct use of 93-120 in criteria. |
+| Décret 93-120 | Medical examination conditions for workers | Art. 20 = periodic medical exam schedule. **Use only for medical exam criteria, never for noise/dB limits.** |
 | Décret 22-167 | Modifies Décret 06-198 categories + environmental audit TOR | ⚠️ Does NOT cover equipment maintenance |
 | 85 dB(A) noise | NOT in Algerian law | WHO/ILO reference — cite as `[INTL]` / `[SILENCE]` |
