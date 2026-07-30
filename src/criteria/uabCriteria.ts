@@ -173,11 +173,16 @@ export const uabSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase C FIX 2026-07-30: Removed Décret 22-167 as basis for "equipment maintenance obligation".
+    // 22-167 = 2022 amendment to classified establishment licensing framework (06-198),
+    // it does NOT mandate industrial equipment maintenance schedules.
+    // No confirmed Algerian decree for general equipment maintenance found — flagged [À VÉRIFIER].
+    // Criterion retained on basis of Loi 03-10 prevention principle only.
     id: 'UAB-AX6-01',
     axis: 'نظام التسيير البيئي والمتابعة',
     category: 'بيئية',
     criteria: 'وجود مخطط تسيير بيئي داخلي (برنامج صيانة بيئية، مراقبة دورية للانبعاثات، بروتوكولات طوارئ للتسربات والحوادث).',
-    legalReference: 'القانون 03-10 (مبدأ الوقاية والاحتراز) + المرسوم التنفيذي 22-167 المتعلق بصيانة التجهيزات الصناعية (وجوب الصيانة الدورية للمنشآت والتجهيزات).',
+    legalReference: 'القانون 03-10 (مبدأ الوقاية والاحتراز — الالتزام العام بالوقاية من التلوث ومنع الأضرار البيئية). [À VÉRIFIER: لم يُعثر حتى الآن على مرسوم جزائري خاص يُلزم صراحةً بجدول صيانة دورية للتجهيزات الصناعية — يُستبعد المرسوم 22-167 الذي يتعلق بتعديل إطار ترخيص المؤسسات المصنفة لا بالصيانة].',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -263,14 +268,18 @@ export const uabSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // FIX (Phase 14): align numericField to NumericFieldSpec
-    // label → labelAr, threshold → warningMax, remove comparisonOperator, add step + upperLimit
-    // matches BLS-04-06 schema (already fixed in Phase 13)
+    // Phase B FIX 2026-07-30: Décret 93-120 REMOVED as noise-limit source.
+    // 93-120 = periodic medical examinations for workers in hazardous activities,
+    // NOT an occupational noise-exposure decree. The 85 dB(A)/8h threshold
+    // has NO confirmed Algerian legal basis — it is an [INTL] reference only
+    // (WHO/ILO occupational noise guidance). Criterion retained as professionally
+    // sound practice; citation corrected + [INTL] flag added.
+    // Retained 93-120 only in UAB-AX7-02 (medical surveillance) where it is correct.
     id: 'UAB-AX7-07',
     axis: 'الصحة والسلامة المهنية',
     category: 'صحية',
     criteria: 'إجراء قياس مستوى الضجيج في بيئة العمل (مناطق الطحن والخلط والمناولة الميكانيكية) بصفة دورية باستخدام جهاز قياس معتمد، والتحقق من عدم تجاوز الحد الأقصى (85 ديسيبل)؛ وفي حال التجاوز، توثيق الإجراءات التصحيحية المتخذة.',
-    legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 18-11 (السلامة في أماكن العمل).',
+    legalReference: 'القانون 18-11 المتعلق بالصحة (السلامة في أماكن العمل) + القانون 90-11 (حماية العمال من أخطار بيئة العمل). [INTL: حد 85 ديسيبل/8 ساعات مستمد من إرشادات منظمة العمل الدولية (ILO) ومنظمة الصحة العالمية (WHO) — لم يُعثر حتى الآن على مرسوم جزائري خاص يحدد هذا الحد للضجيج المهني داخل أماكن العمل. يُستبعد المرسوم 93-120 الذي يتعلق بالفحص الطبي الدوري للعمال، لا بتحديد قيم حدية للضجيج].',
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',

@@ -64,9 +64,9 @@ Eight verified chapters covering every inspection domain. Each chapter follows a
 | `ch2_solid_waste.md` | Déchets solides | Décret 06-104 waste classification. Décret 03-478 3-stream medical waste (green/yellow/red) — NEW, not in original 9-session audit. Affects abattoir/slaughterhouse. |
 | `ch3_fire_safety.md` | Sécurité incendie | Loi 19-02 re-verified against primary JO source (bilingual). 47 articles (NOT 80). Scope = ERPs + high-rise/very-high-rise + residential ONLY — NOT universally all classified establishments. Art. 44 five-year compliance deadline **already expired ~21 July 2024**. |
 | `ch4_food_safety.md` | Sécurité alimentaire | Décret 17-140 art. 9 = HACCP mandatory at decree level. Primary production EXCLUDED. Cold-chain temps (4–5°C / -18°C) still [PRATIQUE] — no confirmed Algerian source yet. |
-| `ch5_occupational_health.md` | Santé au travail | Décret 91-05 = employer duty (noise, toxic gases, PPE, sanitary facilities). No dedicated Algerian in-plant noise-exposure decree found. 85 dB(A)/8h = de facto [INTL] reference only (WHO/Algerian OHS body). Décret 02-427 = correct citation for PPE training. |
+| `ch5_occupational_health.md` | Santé au travail | Décret 91-05 = employer duty (noise, toxic gases, PPE, sanitary facilities). No dedicated Algerian in-plant noise-exposure decree found. 85 dB(A)/8h = [INTL] reference only. Décret 02-427 = correct citation for PPE training. |
 | `ch6_documentation.md` | Documentation & licensing | Décret 06-198 amended twice: Décret 22-167 (2022) + Décret 24-196 (2024). Active regularization grace period expires ~June 2027. Every citation to "06-198" must be treated as potentially outdated. Full Décret 07-144 facility-type mapping complete. |
-| `ch7_air_quality.md` | Qualité de l'air | Décret 06-138 primary PDF confirmed. Annex I: 16 parameters with new/old-facility values. Annex II: 7 sector-specific tables — none match SafeInspect facility types (all fall under Annex I by default). Art. 10: declaration obligation for non-classified emitters (new finding). Art. 11: self-monitoring register required. |
+| `ch7_air_quality.md` | Qualité de l'air | Décret 06-138 primary PDF confirmed. Annex I: 16 parameters with new/old-facility values. Annex II: 7 sector-specific tables — none match SafeInspect facility types (all fall under Annex I by default). Art. 10: declaration obligation for non-classified emitters. Art. 11: self-monitoring register required. |
 | `ch8_site_hygiene.md` | Hygiène des locaux | Smallest chapter — enrichment opportunity. |
 
 ---
@@ -85,16 +85,16 @@ These are confirmed mis-citations verified independently multiple times. Do NOT 
 
 ### 1. Décret 04-409 mis-cited in 9+ places
 **04-409 = transport of hazardous special waste.** It is currently mis-cited as the legal basis for unrelated technical requirements:
-- **`gplCriteria.ts`** — 8 of 10 criteria. Correct citation: **Décret 21-430** (LPG/C installation licensing).
-- **`printingCriteria.ts`** — 1 criterion (SDS/chemical storage). Correct citation: **Loi 88-07**.
+- **`gplCriteria.ts`** — 8 of 10 criteria. Correct citation: **Décret 21-430** (LPG/C installation licensing). ✅ Verified clean 2026-07-30.
+- **`printingCriteria.ts`** — 1 criterion (SDS/chemical storage). Correct citation: **Loi 88-07**. ✅ Verified clean 2026-07-30.
 
 ### 2. Décret 09-410 mis-cited for emergency intervention plans
-**09-410 = security-sensitive equipment.** Used twice for emergency intervention plans.  
-Correct citation: **Décret 09-335**.
+**09-410 = security-sensitive equipment.** Correct citation: **Décret 09-335**.  
+✅ Verified clean in gplCriteria.ts (GPL-03-03 uses 09-335 correctly) 2026-07-30. Search entire codebase if any new file added.
 
 ### 3. Décret 06-198 / 22-167 / 24-196 version confusion
 Any citation to "06-198" in the codebase may refer to the pre-amendment (pre-2022) text.  
-- **22-167** = 2022 amendment — does NOT cover equipment maintenance (common mis-use).  
+- **22-167** = 2022 amendment — does NOT cover equipment maintenance (common mis-use, now fixed in UAB-AX6-01).
 - **24-196** = 2024 amendment — created active regularization grace period ~June 2027.  
 - Always specify which version applies and verify article numbers against the correct amendment.
 
@@ -112,12 +112,14 @@ Do not apply Loi 19-02 fire criteria to out-of-scope facilities without verifyin
 
 | Phase | File(s) | What | Source | Status |
 |---|---|---|---|---|
-| **A** | `paintShopCriteria.ts`, `marbleCriteria.ts`, `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` | Air emissions criteria: dust ≤50 mg/Nm³ + VOC ≤150 mg/Nm³ per Décret 06-138 Annex I | Ch.7 §6 | ✅ **CLOSED 2026-07-30** |
-| **B** | `uabCriteria.ts` | Fix UAB-AX7-07 noise citation — 85 dB(A) is [INTL] only (no Algerian decree), must not be presented as Algerian law | Ch.5 §6 | ⬜ Pending |
-| **C** | `uabCriteria.ts` | Fix UAB-AX6-01 — remove wrong Décret 22-167 reference (it does not cover maintenance); replace with correct Décret 06-198 art. 13 (verify version) | Ch.6 §2 | ⬜ Pending |
-| **D** | `gplCriteria.ts` | Replace all 8 Décret 04-409 mis-citations with Décret 21-430 (LPG/C installation licensing) | Handover §3 | ⬜ Pending — HIGH PRIORITY |
-| **E** | `printingCriteria.ts` | Replace Décret 04-409 citation on SDS/chemical storage criterion with Loi 88-07 | Handover §3 | ⬜ Pending |
-| **F** | Any file with Décret 09-410 for emergency plans | Replace 09-410 with Décret 09-335 (emergency intervention plans) | Handover §3 | ⬜ Pending — search codebase first |
+| **A** | `paintShopCriteria.ts`, `marbleCriteria.ts`, `carpenteryCriteria.ts`, `printingCriteria.ts`, `blacksmithCriteria.ts` | Air emissions: dust ≤50 mg/Nm³ + VOC ≤150 mg/Nm³ per Décret 06-138 Annex I | Ch.7 §6 | ✅ **CLOSED 2026-07-30** |
+| **B** | `uabCriteria.ts` | UAB-AX7-07: Remove Décret 93-120 as noise-limit source (93-120 = medical exams). 85 dB flagged [INTL]. | Ch.5 §6 | ✅ **CLOSED 2026-07-30** |
+| **C** | `uabCriteria.ts` | UAB-AX6-01: Remove Décret 22-167 as equipment-maintenance basis (22-167 = licensing amendment). Replaced with Loi 03-10 + [À VÉRIFIER] flag. | Ch.6 §2 | ✅ **CLOSED 2026-07-30** |
+| **D** | `gplCriteria.ts` | Replace all 8 Décret 04-409 mis-citations with Décret 21-430 | Handover §3 | ✅ **CLOSED 2026-07-30** — verified already clean |
+| **E** | `printingCriteria.ts` | Replace 04-409 on SDS criterion with Loi 88-07 | Handover §3 | ✅ **CLOSED 2026-07-30** — verified already clean |
+| **F** | Codebase-wide | Replace Décret 09-410 for emergency plans with 09-335 | Handover §3 | ✅ **CLOSED 2026-07-30** — verified clean in gplCriteria.ts |
+
+**All Tier 1 phases closed. Tier 1 is DONE.**
 
 ---
 
@@ -129,20 +131,20 @@ For each chapter: read the manual Section 6 (reference values), read the live cr
 
 | Priority | Chapter | Criteria files to audit | Key risk | Status |
 |---|---|---|---|---|
-| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | Full 18-parameter Décret 06-141 table — BOD5 35, COD 120, MES 35, pH 6.5–8.5, oils 20 mg/l | ⬜ Pending |
+| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | Full 18-parameter Décret 06-141 table — BOD5 35, COD 120, MES 35, pH 6.5–8.5, oils 20 mg/l | ⬜ **NEXT** |
 | 2 | **Ch.3 Fire Safety** | `baseGeneralCriteria.ts`, `gplCriteria.ts`, `paintShopCriteria.ts` | Verify each facility is ERP-classified before applying Loi 19-02. Art. 44 deadline expired. | ⬜ Pending |
 | 3 | **Ch.6 Documentation** | All 21 files | Décret 06-198 + amendments. Grace period ~June 2027. Full 07-144 buffer-zone table by activity. | ⬜ Pending |
 | 4 | **Ch.2 Solid Waste** | `baseGeneralCriteria.ts`, `abattoirCriteria.ts` | Add Décret 03-478 3-stream medical waste to abattoir/slaughterhouse | ⬜ Pending |
 | 5 | **Ch.4 Food Safety** | `baseFoodCriteria.ts`, `bakeryCriteria.ts`, `coldRoomCriteria.ts`, `produceStorageCriteria.ts` | Décret 17-140 art. 9 HACCP mandatory. Primary production EXCLUDED. Cold-chain temps = [PRATIQUE] until confirmed. | ⬜ Pending |
-| 6 | **Ch.5 Occupational Health** | `uabCriteria.ts`, `baseGeneralCriteria.ts` | Noise: no dedicated Algerian decree. 85 dB(A) = [INTL] only. Décret 02-427 for PPE training. | ⬜ Pending |
-| 7 | **Ch.7 Air Quality** | All 5 Phase A files + any with combustion/dust | Phase A added stack measurement. Now audit remaining: Décret 06-138 art. 10 declaration obligation for non-classified emitters. | ⬜ Pending |
+| 6 | **Ch.5 Occupational Health** | `uabCriteria.ts`, `baseGeneralCriteria.ts` | Noise now tagged [INTL]. Décret 02-427 for PPE training. | ⬜ Pending |
+| 7 | **Ch.7 Air Quality** | All 5 Phase A files + any with combustion/dust | Décret 06-138 art. 10 declaration obligation for non-classified emitters. | ⬜ Pending |
 | 8 | **Ch.8 Site Hygiene** | `baseGeneralCriteria.ts` | Smallest chapter — enrichment | ⬜ Pending |
 
 ---
 
 ### 🔵 TIER 3 — Features the Manual Enables
 
-Implement only after Tier 2 is stable. Each feature is directly enabled by a specific manual section.
+Implement only after Tier 2 is stable.
 
 | Feature | Manual Source | Value |
 |---|---|---|
@@ -157,13 +159,10 @@ Implement only after Tier 2 is stable. Each feature is directly enabled by a spe
 ## Recommended Execution Order
 
 ```
-Next session    → Tier 1 Phase D: fix gplCriteria.ts (8 × Décret 04-409 → 21-430)
-                → Tier 1 Phase F: search codebase for 09-410, fix to 09-335
-                → Tier 1 Phase E: fix printingCriteria.ts SDS citation
-After that      → Tier 1 Phases B+C: fix 2 issues in uabCriteria.ts
-Then            → Tier 2 Ch.1: full wastewater audit (18-parameter table)
-                → Tier 2 Ch.3: fire safety audit (ERP scope check first)
-                → Tier 2 Ch.6, 2, 4, 5, 7, 8 in order
+Next session    → Tier 2 Ch.1: full wastewater audit (18-parameter Décret 06-141 table)
+                  Files: abattoirCriteria.ts, uabCriteria.ts, carWashCriteria.ts, slaughterhouseSmallCriteria.ts
+Then            → Tier 2 Ch.3: fire safety (ERP scope check per facility type first)
+Then            → Tier 2 Ch.6, 2, 4, 5, 7, 8 in order
 When stable     → Tier 3 features (start with Inspector Hints — fastest to ship)
 ```
 
@@ -181,13 +180,22 @@ When stable     → Tier 3 features (start with Inspector Hints — fastest to s
 - [ ] Read the affected source file in full before touching it
 - [ ] Read the relevant manual chapter section before adding/changing a legal reference
 - [ ] Never add a numeric limit without citing the exact article and annex
-- [ ] Never cite Décret 22-167 for equipment maintenance (it does NOT cover this)
+- [ ] Never cite Décret 22-167 for equipment maintenance (it does NOT cover this — UAB-AX6-01 fixed)
 - [ ] Never cite Décret 04-409 for anything other than transport of hazardous special waste
 - [ ] Never cite Décret 09-410 for emergency intervention plans (use 09-335)
+- [ ] Never cite Décret 93-120 as a noise-limit source (it governs medical exams, not noise thresholds)
 - [ ] Never apply Loi 19-02 fire criteria to non-ERP facility types without verification
 - [ ] Never lower test coverage thresholds
 - [ ] Run `jest` after every criteria file change
-- [ ] Update this file when a phase status changes
+- [ ] **Update STRATEGIC_PLAN.md automatically at end of every session — no need to be told**
+
+### Auto-update Rule for This Plan
+After every implementation session, before ending:
+1. Mark completed phases ✅ CLOSED with the date
+2. Update Tier 2 status column if any audit was done
+3. Move the "NEXT" label to the correct next priority
+4. Add any new closed items to the Closed Items table
+5. Commit with message: `docs: update STRATEGIC_PLAN.md — [what changed]`
 
 ### Legal Citation Tags (use in criteria text and comments)
 - **[LOI]** = legally binding, Algerian source confirmed
@@ -211,6 +219,7 @@ When stable     → Tier 3 features (start with Inspector Hints — fastest to s
 | Wastewater — oils/greases | Décret 06-141 | ≤ 20 mg/L | Annex I |
 | Noise (occupational) | ⚠️ NO Algerian decree confirmed | 85 dB(A)/8h = [INTL] only | — |
 | Noise (neighborhood) | Décret 93-184 | 35–45 dB(A) night | Ambient standard — NOT occupational |
+| Décret 93-120 | Periodic medical exams | ⚠️ NOT a noise-limit decree | — |
 | PPE training | Décret 02-427 | Employer obligation | — |
 | Classified establishment licensing | Décret 06-198 + 22-167 + 24-196 | 4-category system | Active grace period ~June 2027 |
 | Buffer zones by facility type | Décret 07-144 | Full table in Ch.6 | Annex |
@@ -231,11 +240,16 @@ When stable     → Tier 3 features (start with Inspector Hints — fastest to s
 | PNT-07-01 | Dust criterion added to paintShopCriteria.ts | Phase A |
 | PNT-07-02 | Records retention criterion added to paintShopCriteria.ts | Phase 11b |
 | MRB-07-01/02 | Dust + records criteria added to marbleCriteria.ts | Phase A |
-| CRP-07-01/02 | Dust + records criteria added to carpenteryCriteria.ts | **2026-07-30** |
-| PRT-07-01/02/03 | VOC + dust + records criteria added to printingCriteria.ts | **2026-07-30** |
-| BSM-07-01/02/03 | Dust + VOC + records criteria added to blacksmithCriteria.ts | **2026-07-30** |
-| **Phase A** | All 5 air emissions files complete — Décret 06-138 Annex I dust + VOC + Art. 11 records | **2026-07-30 ✅ CLOSED** |
+| CRP-07-01/02 | Dust + records criteria added to carpenteryCriteria.ts | Phase A |
+| PRT-07-01/02/03 | VOC + dust + records criteria added to printingCriteria.ts | Phase A |
+| BSM-07-01/02/03 | Dust + VOC + records criteria added to blacksmithCriteria.ts | Phase A |
+| **Tier 1 Phase A** | All 5 air emissions files complete — Décret 06-138 Annex I | **2026-07-30 ✅** |
+| **Tier 1 Phase B** | UAB-AX7-07: Décret 93-120 removed as noise-limit source. 85 dB tagged [INTL]. | **2026-07-30 ✅** |
+| **Tier 1 Phase C** | UAB-AX6-01: Décret 22-167 removed as maintenance basis. Loi 03-10 + [À VÉRIFIER]. | **2026-07-30 ✅** |
+| **Tier 1 Phase D** | gplCriteria.ts: verified clean — Décret 04-409 not present, all 21-430 citations correct. | **2026-07-30 ✅** |
+| **Tier 1 Phase E** | printingCriteria.ts: verified clean — Décret 04-409 not present, Loi 88-07 used correctly. | **2026-07-30 ✅** |
+| **Tier 1 Phase F** | gplCriteria.ts GPL-03-03: verified — Décret 09-335 used correctly for emergency plans. | **2026-07-30 ✅** |
 
 ---
 
-*Update this file at the end of every session. Commit message format: `docs: update STRATEGIC_PLAN.md — [what changed]`*
+*This plan is updated automatically by the agent at the end of every session. Commit format: `docs: update STRATEGIC_PLAN.md — [what changed]`*
