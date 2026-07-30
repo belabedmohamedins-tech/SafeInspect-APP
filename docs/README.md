@@ -1,6 +1,6 @@
 # SafeInspect / RAQIB — `docs/` Knowledge Base
 
-**Last updated:** 2026-07-30 14:52 WAT  
+**Last updated:** 2026-07-30 15:35 WAT  
 **Maintained by:** Perplexity AI (primary engineering agent, GitHub MCP)  
 **Repo:** `belabedmohamedins-tech/SafeInspect-APP`  
 **Stack:** React Native · Expo · TypeScript · Jest · EAS Build · WatermelonDB/AsyncStorage → SQLite (migration in progress)
@@ -9,6 +9,30 @@
 > Read this file first. It is the living source of truth for what this project is, what is done, what is open, and what the rules are. Do not act on old AI reports, old roadmaps, or any file that contradicts what the current code actually contains. When in doubt: read the code, then read this file.
 >
 > **Perplexity updates this file automatically at the end of every session.** If a phase status here contradicts what you find in the code, trust the code and flag the discrepancy.
+
+---
+
+## Agent Handoff Log
+
+> Most recent entry first. Read the top entry before doing anything else.
+
+### 2026-07-30 15:35 WAT — [Agent: Perplexity] — Wastewater audit Tier 2 complete across all 4 activity files
+- Phases closed: Phase J (wastewater audit — carWash, abattoir, slaughterhouseSmall, uab)
+- Phases opened: none
+- Files changed: `docs/README.md`
+- Critical finding: All 4 wastewater files already had correct Décret 06-141 values (DBO5 ≤35, DCO ≤120, MES ≤35, pH 6.5–8.5) with proper `numericField` shapes. `uabCriteria.ts` and `slaughterhouseSmallCriteria.ts` confirmed fully correct. No new code changes needed — roadmap updated to reflect confirmed status.
+
+### 2026-07-30 14:52 WAT — [Agent: Perplexity] — docs/README.md created as living handoff document
+- Phases closed: A, B, C, H (all confirmed by direct code read)
+- Phases opened: I (93-120 pattern scan), D, E, F, G (pre-existing)
+- Files changed: `docs/README.md` (new file)
+- Critical finding: slaughterhouseSmallCriteria.ts and uabCriteria.ts already had correct Décret 06-141 wastewater values — no fixes needed there.
+
+### 2026-07-30 ~12:00 WAT — [Agent: Perplexity] — carWashCriteria + abattoirCriteria wastewater fixes
+- Phases closed: none formally (H partially)
+- Phases opened: none
+- Files changed: `src/criteria/carWashCriteria.ts`, `src/criteria/abattoirCriteria.ts`
+- Critical finding: CWS-04-01 had wrong decree (93-120); ABT-AX4-01 had BOD5=30 instead of 35. Both corrected. New companion numericField criteria added for DCO, MES, pH.
 
 ---
 
@@ -64,7 +88,7 @@ These are the **source of truth** for all checklist criteria, legal references, 
 ### Group 2 — Working Engineering Documents
 
 | File | Purpose | Status |
-|---|---| ---|
+|---| ---| ---|
 | `RAQIB_Fix_Spec_v3.md` | Active fix specification — Phases A–F, open items only | ⚠️ **Active — read before touching criteria files** |
 | `RAQIB_Fix_Spec_v2.md` | Historical — all phases confirmed closed except what v3 lists | 🗄️ Archive — do not act on it |
 | `RAQIB_MASTER_MANUSCRIPT.md` | 102 KB consolidated audit — full closure log, G-number history | 📖 Reference — Chapter 5 §5.7 has closed-item log; Chapter 7 has G12 engineering framing |
@@ -77,28 +101,35 @@ These are the **source of truth** for all checklist criteria, legal references, 
 
 ## Live Observations Log
 
-> This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory. Updated each session by Perplexity.
+> This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory.
+
+### 2026-07-30 15:35 — Tier 2 wastewater audit complete
+
+- **slaughterhouseSmallCriteria.ts**: `SLH-05-04` (DBO5 ≤35), `SLH-05-04B` (DCO ≤120), `SLH-05-04C` (MES ≤35), `SLH-05-04D` (pH 6.5–8.5) — **all present and correct**. Confirmed by direct code read.
+- **uabCriteria.ts**: `UAB-AX3-05` (DBO5 ≤35), `UAB-AX3-06` (DCO ≤120), `UAB-AX3-07` (MES ≤35), `UAB-AX3-08` (pH 6.5–8.5) — **all present and correct** with proper `numericField` shapes. Confirmed by direct code read.
+- **carWashCriteria.ts**: Updated earlier today — `CWS-02-01B` through `CWS-02-01E` added, `CWS-04-01` decree corrected. Confirmed.
+- **abattoirCriteria.ts**: Updated earlier today — `ABT-AX4-01` DBO5 corrected 30→35, full parameter text updated. Confirmed.
+- **Phase J status**: CLOSED. All 4 files aligned with Décret 06-141 Annex I values.
 
 ### 2026-07-30 — Phase A/B/C code verification
 
-- **carpenteryCriteria.ts**: `CRP-07-01` (total dust, 50 mg/Nm³), `CRP-07-02` (records retention) — **already present**. Phase A complete for this file.
+- **carpenteryCriteria.ts**: `CRP-07-01` (total dust, 50 mg/Nm³), `CRP-07-02` (records retention) — **already present**. Phase A complete.
 - **printingCriteria.ts**: `PRT-07-01` (VOC, 150 mg/Nm³), `PRT-07-02` (total dust, 50 mg/Nm³), `PRT-07-03` (records retention) — **already present**. Phase A complete.
 - **blacksmithCriteria.ts**: `BSM-07-01` (total dust), `BSM-07-02` (VOC), `BSM-07-03` (records retention) — **already present**. Phase A complete.
 - **uabCriteria.ts `UAB-AX7-07`**: `93-120` already removed. Citation now correctly uses Loi 18-11 + Loi 90-11, with `[INTL]` flag for 85 dB threshold. Phase B complete.
-- **uabCriteria.ts `UAB-AX6-01`**: `22-167` already removed. Criterion now based on Loi 03-10 prevention principle only, with `[À VÉRIFIER]` flag for missing specific maintenance decree. Phase C complete.
+- **uabCriteria.ts `UAB-AX6-01`**: `22-167` already removed. Criterion now based on Loi 03-10 prevention principle only, with `[À VÉRIFIER]` flag. Phase C complete.
 - **paintShopCriteria.ts `PNT-02-03`**: VOC max correctly set to 150 mg/Nm³. `PNT-07-01` total dust present. Confirmed.
-- **marbleCriteria.ts `MRB-07-01`**: total dust criterion present. `MRB-05-05` silica dust dual-reference situation correctly acknowledged. Confirmed.
+- **marbleCriteria.ts `MRB-07-01`**: total dust criterion present. `MRB-05-05` silica dust dual-reference acknowledged. Confirmed.
 
 ### 2026-07-30 — Phase H abattoir audit & 93-120 pattern findings
 
-- **abattoirCriteria.ts**: Full audit complete. Wastewater criteria (`ABT-WW-*`) correctly reference Décret 06-141 with proper numeric limits (BOD5 ≤35 mg/L, COD ≤120 mg/L, pH 6.5–8.5, MES ≤35 mg/L). Solid waste criteria reference Décret 06-104 correctly. Medical/care waste stream criteria (Décret 03-478 3-color system) present — confirmed new finding not in original 9-session audit.
-- **Décret 93-120 pattern scan (Phase I trigger)**: `93-120` confirmed removed from `uabCriteria.ts` (UAB-AX7-07). However, the pattern `93-120` still appears in **medical examination criteria** (UAB-AX7-02 and similar) across multiple files — this is the **correct** remaining use: Décret 93-120 covers mandatory occupational medical examinations (Art. 20 / Loi 90-11 Art. 20 cross-reference), not noise exposure limits. These instances must NOT be removed — they are legally correct. Phase I is a verification pass, not a blanket removal.
-- **General pattern confirmed**: `93-120` in any criterion referencing **noise (dB, dB(A), exposure)** = wrong, remove. `93-120` in any criterion referencing **medical examination / periodic health surveillance** = correct, keep. Distinguish by criterion context, not decree number alone.
+- **abattoirCriteria.ts**: Full audit complete. Wastewater criteria correctly reference Décret 06-141 with proper numeric limits (BOD5 ≤35, COD ≤120, pH 6.5–8.5, MES ≤35). Medical/care waste stream criteria (Décret 03-478 3-color system) present.
+- **Décret 93-120 pattern**: `93-120` in **noise/dB context** = wrong (remove). `93-120` in **medical exam context** = correct (keep). Never do a blanket removal — classify by criterion context.
 
-### General pattern confirmed across all criteria files
+### General patterns confirmed across all criteria files
 
 - All files use `complianceStatus: 'not-evaluated'` as default. This is intentional — never change.
-- `controlType: 'doc'` means inspector verifies a lab report/document, even when a `numericField` is present for note-taking. Do not change to `'measurement'` without understanding this distinction.
+- `controlType: 'doc'` means inspector verifies a lab report/document, even when a `numericField` is present for note-taking.
 - ID gaps are intentional (e.g., PNT-01-01, BSM-01-01 removed). Do not renumber existing IDs — ever.
 - Prefix `BSM-` = blacksmith (not `BLS-`). The roadmap previously used `BLS-` — that was an error in the docs, not in the code.
 
@@ -128,27 +159,38 @@ All 5 files confirmed correct by direct code inspection:
 
 ### ✅ Phase C — Wrong decree in `uabCriteria.ts` UAB-AX6-01 (CLOSED 2026-07-30)
 
-`UAB-AX6-01` no longer cites Décret 22-167 for equipment maintenance. Now based on Loi 03-10 prevention principle with explicit `[À VÉRIFIER]` flag. Confirmed by direct code read.
+`UAB-AX6-01` no longer cites Décret 22-167 for equipment maintenance. Based on Loi 03-10 prevention principle with `[À VÉRIFIER]` flag. Confirmed by direct code read.
 
 ---
 
 ### ✅ Phase H — Abattoir full audit (CLOSED 2026-07-30)
 
-Full audit of `abattoirCriteria.ts` complete. Findings:
-
 | Area | Status |
 |---|---|
 | Wastewater (`ABT-WW-*`) | ✅ Décret 06-141 numeric limits correct (BOD5, COD, pH, MES) |
 | Solid waste | ✅ Décret 06-104 classification correct |
-| Medical/care waste (Décret 03-478) | ✅ 3-color stream system present — was a gap in the original 9-session audit |
+| Medical/care waste (Décret 03-478) | ✅ 3-color stream system present |
 | Occupational health references | ✅ No rogue `93-120` noise citations found |
 | Licensing criteria | ✅ References post-2024 Décret 06-198 amendments correctly |
 
 ---
 
-### 🔵 Phase I — Décret 93-120 pattern scan across all criteria files (OPEN)
+### ✅ Phase J — Wastewater audit Tier 2: carWash, slaughterhouseSmall, uab (CLOSED 2026-07-30 15:35 WAT)
 
-**Status: OPEN — verification pass, not blanket removal**
+All 4 wastewater-generating activity files aligned with Décret 06-141 Annex I.
+
+| File | Key criteria | Status |
+|---|---|---|
+| `carWashCriteria.ts` | `CWS-04-01` decree corrected; `CWS-02-01B/C/D/E` added (pH, MES, BOD5, COD) | ✅ Done |
+| `abattoirCriteria.ts` | `ABT-AX4-01` BOD5 corrected 30→35; full parameter list updated | ✅ Done |
+| `slaughterhouseSmallCriteria.ts` | `SLH-05-04/04B/04C/04D` — all correct, confirmed by direct read | ✅ Confirmed (no change needed) |
+| `uabCriteria.ts` | `UAB-AX3-05/06/07/08` — all correct with proper `numericField` | ✅ Confirmed (no change needed) |
+
+**Next natural step:** Phase I (93-120 pattern scan across all remaining criteria files).
+
+---
+
+### 🔵 Phase I — Décret 93-120 pattern scan across all criteria files (OPEN — next priority)
 
 **Goal:** Run `grep -rn "93-120" src/criteria/*.ts` and classify every hit.
 
@@ -157,13 +199,13 @@ Full audit of `abattoirCriteria.ts` complete. Findings:
 | Context of the criterion | Action |
 |---|---|
 | Noise / hearing / dB / dB(A) / exposure limit | ❌ Remove — 93-120 does NOT cover occupational noise limits. Replace with `[INTL]` + `[SILENCE]` flags. |
-| Medical examination / periodic health surveillance / aptitude visit | ✅ Keep — Décret 93-120 Art. 20 (cross-referenced by Loi 90-11 Art. 20) mandates periodic medical examinations. This is legally correct. |
-| Any other context | 🔍 Investigate before deciding — read the criterion text and the decree article |
+| Medical examination / periodic health surveillance / aptitude visit | ✅ Keep — Décret 93-120 Art. 20 mandates periodic medical examinations. Legally correct. |
+| Any other context | 🔍 Investigate before deciding |
 
-**Known instances to check:**
-- `uabCriteria.ts UAB-AX7-07` — ✅ already fixed (93-120 removed, noise context)
-- `uabCriteria.ts UAB-AX7-02` and similar — expected to be medical exam context → keep
-- All other `*Criteria.ts` files — full scan needed
+**Files confirmed so far:**
+- `uabCriteria.ts UAB-AX7-07` — ✅ fixed (93-120 removed, noise context)
+- `uabCriteria.ts UAB-AX7-02` — ✅ keep (medical exam context)
+- All other `*Criteria.ts` files — **full scan still needed**
 
 **Do not close this phase until every hit has been individually classified and documented here.**
 
@@ -171,10 +213,8 @@ Full audit of `abattoirCriteria.ts` complete. Findings:
 
 ### 🟡 Phase D — 3 duplicate operating-license criteria (MEDIUM) — OPEN
 
-**Status: OPEN — design decision needed**
-
 `BAK-10-01`, `CLD-17-01`, `PRD-01-01` are standalone duplicates of `BGN-01-01`.  
-Options: (a) enrich each with sector-specific nuance (Décret 17-140 for food/cold-room), or (b) remove. Not a mechanical fix — requires a domain decision.  
+Options: (a) enrich each with sector-specific nuance (Décret 17-140 for food/cold-room), or (b) remove. Design decision needed.  
 Note: `GPL-01-01` is no longer a duplicate (extended with Décret 24-196 grace-period logic).
 
 ---
@@ -182,7 +222,7 @@ Note: `GPL-01-01` is no longer a duplicate (extended with Décret 24-196 grace-p
 ### 🟡 Phase E — `PRD-02-01` missing `numericField` (LOW) — OPEN
 
 `produceStorageCriteria.ts`'s `PRD-02-01` is typed `controlType: 'measurement'` but has no `numericField`.  
-Two numeric ranges exist (0–5°C vegetables, 7–15°C olives) — may need splitting into two criteria since `numericField` only supports one min/max pair.
+Two numeric ranges exist (0–5°C vegetables, 7–15°C olives) — may need splitting into two criteria.
 
 ---
 
@@ -223,10 +263,11 @@ Full plan in `RAQIB_SQLite_Migration_Plan.md`. Repository migration order:
 ## Items Confirmed Closed — Do Not Re-Open
 
 G1 (facility mapping), G2 (93-120 noise, all instances), G5 (paint/print emissions criteria), G6 (carpentry/marble numericField), G8 (mechanic expansion), G13 (sync path), G14 (peer-dep version), G15 (Category type), G16 (all 4 numericField instances), G17a (AuditLogRepository signature), G17b (CorrectiveAction.severity), G17c/G-CAP (CAP auto-creation bug), G18 (Décret 06-141→06-138, all 6 instances).  
-Phase A (all 5 files — air quality criteria, Décret 06-138 values correct) — closed 2026-07-30.  
+Phase A (all 5 air quality files — Décret 06-138 values correct) — closed 2026-07-30.  
 Phase B (UAB-AX7-07 noise citation — 93-120 removed, [INTL] flag added) — closed 2026-07-30.  
 Phase C (UAB-AX6-01 wrong decree — 22-167 removed, [À VÉRIFIER] flag added) — closed 2026-07-30.  
-Phase H (abattoirCriteria.ts full audit — wastewater, solid waste, medical waste, licensing all confirmed correct) — closed 2026-07-30.
+Phase H (abattoirCriteria.ts full audit — wastewater, solid waste, medical waste, licensing all confirmed) — closed 2026-07-30.  
+Phase J (wastewater Tier 2 — carWash, slaughterhouseSmall, uab — Décret 06-141 values confirmed/corrected) — closed 2026-07-30.
 
 Full closure log: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 
@@ -243,24 +284,25 @@ Full closure log: `RAQIB_MASTER_MANUSCRIPT.md` Chapter 5 §5.7.
 ### Before Touching Any Criterion
 - Read the relevant manual chapter's Section 6 for the correct legal reference and numeric value
 - Check `RAQIB_Fix_Spec_v3.md` to see if the criterion is already flagged
-- Fetch the actual current source file from GitHub before writing any diff — never use illustrative code from a document verbatim without confirming it still matches the live file
+- Fetch the actual current source file from GitHub before writing any diff — never use illustrative code from a document verbatim
 
 ### Legal References
 - Never cite a decree for a subject it doesn't cover
 - Always include the article number, not just the decree number
 - Mark uncertainty explicitly: `[À VÉRIFIER]` or `[SILENCE]` is better than a confident wrong citation
-- `[SILENCE]` = Algerian law is confirmed silent on this limit. `[INTL]` = international reference only, not Algerian law.
+- `[SILENCE]` = Algerian law confirmed silent on this limit. `[INTL]` = international reference only, not Algerian law.
 
 ### Testing Checklist (always run after criteria changes)
 ```bash
-npx tsc --noEmit          # Should be at or near 0 errors in src/
+npx tsc --noEmit
 
-# 93-120 split rule — READ THIS BEFORE ACTING:
-# "93-120" in NOISE/dB/exposure context     → WRONG citation, should not be there, remove it
-# "93-120" in MEDICAL EXAM context          → CORRECT (Loi 90-11 Art.20 / Décret 93-120 Art.20), DO NOT remove
-grep -rn "93-120" src/criteria/*.ts  # Classify each hit by context before deciding to keep or remove
+# 93-120 split rule:
+# "93-120" in NOISE/dB/exposure context     → WRONG — remove it
+# "93-120" in MEDICAL EXAM context          → CORRECT — do NOT remove
+grep -rn "93-120" src/criteria/*.ts
 
-grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classification criteria, never equipment maintenance
+# 22-167 should only appear in licensing/classification criteria:
+grep -rn "22-167" src/criteria/*.ts
 ```
 - Smoke-test CAP auto-creation end-to-end after any scoring/evaluation changes
 - Run existing Jest suite for any repository touched in the SQLite migration
@@ -268,7 +310,7 @@ grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classific
 ### Documentation (mandatory)
 - **Update this README's roadmap when a phase opens, closes, or changes status** — do not wait to be asked
 - Update the relevant manual chapter when a legal reference is corrected
-- Add a `DECISIONS.md` entry for any architectural decision (schema changes, sync design, audit-log scope)
+- Add a `DECISIONS.md` entry for any architectural decision
 
 ---
 
@@ -276,7 +318,7 @@ grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classific
 
 | Decree | Subject | Key figures |
 |---|---|---|
-| Décret 06-141 | Industrial liquid discharge limits | BOD5 ≤35 mg/l, COD ≤120 mg/l, pH 6.5–8.5 (Annex table) |
+| Décret 06-141 | Industrial liquid discharge limits | BOD5 ≤35 mg/l, COD ≤120 mg/l, pH 6.5–8.5, MES ≤35 mg/l (Annex I) |
 | Décret 06-138 | Atmospheric emissions limits | Dust ≤50 mg/Nm³, VOC ≤150 mg/Nm³ (Annex I general) |
 | Décret 06-198 | Classified establishment operating license | Art. 5 (license), Art. 13 (technical file + equipment) |
 | Décret 07-144 | Buffer zones by facility category | Per-activity radii (0.5–3 km) |
@@ -284,7 +326,7 @@ grep -rn "22-167" src/criteria/*.ts  # Should only appear in licensing/classific
 | Loi 03-10 | General environmental protection | Art. 33/45 pollution prohibition |
 | Loi 05-12 | Water code | Art. 45/47 discharge licensing |
 | Loi 18-11 | Workplace safety | General occupational safety obligations |
-| Loi 90-11 Art. 20 | Occupational health — medical examinations | Mandates periodic medical surveillance (cross-ref: Décret 93-120 Art. 20). Correct use of 93-120 in criteria. |
-| Décret 93-120 | Medical examination conditions for workers | Art. 20 = periodic medical exam schedule. **Use only for medical exam criteria, never for noise/dB limits.** |
+| Loi 90-11 Art. 20 | Occupational health — medical examinations | Mandates periodic medical surveillance (cross-ref: Décret 93-120 Art. 20) |
+| Décret 93-120 | Medical examination conditions for workers | Art. 20 = periodic medical exam schedule. **Use ONLY for medical exam criteria — never for noise/dB limits.** |
 | Décret 22-167 | Modifies Décret 06-198 categories + environmental audit TOR | ⚠️ Does NOT cover equipment maintenance |
 | 85 dB(A) noise | NOT in Algerian law | WHO/ILO reference — cite as `[INTL]` / `[SILENCE]` |
