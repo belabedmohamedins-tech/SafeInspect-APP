@@ -1,6 +1,6 @@
 # SafeInspect / RAQIB — `docs/` Knowledge Base
 
-**Last updated:** 2026-07-30 15:35 WAT  
+**Last updated:** 2026-08-04 19:15 WAT  
 **Maintained by:** Perplexity AI (primary engineering agent, GitHub MCP)  
 **Repo:** `belabedmohamedins-tech/SafeInspect-APP`  
 **Stack:** React Native · Expo · TypeScript · Jest · EAS Build · WatermelonDB/AsyncStorage → SQLite (migration in progress)
@@ -15,6 +15,12 @@
 ## Agent Handoff Log
 
 > Most recent entry first. Read the top entry before doing anything else.
+
+### 2026-08-04 19:15 WAT — [Agent: Perplexity] — Docs sync: Ch.1 wastewater Tier 2 closed in STRATEGIC_PLAN, next = Ch.3 Fire Safety
+- Phases closed: none (Phase J already closed 2026-07-30 — STRATEGIC_PLAN.md now reflects this correctly)
+- Phases opened: none
+- Files changed: `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: Connector session desync issues between 2026-07-30 and 2026-08-04 caused no lost work — code is intact. STRATEGIC_PLAN.md Tier 2 wastewater row was still marked NEXT despite Phase J being closed; now corrected. Next priority confirmed: Tier 2 Ch.3 Fire Safety audit (ERP scope check per facility type first).
 
 ### 2026-07-30 15:35 WAT — [Agent: Perplexity] — Wastewater audit Tier 2 complete across all 4 activity files
 - Phases closed: Phase J (wastewater audit — carWash, abattoir, slaughterhouseSmall, uab)
@@ -96,12 +102,19 @@ These are the **source of truth** for all checklist criteria, legal references, 
 | `RAQIB_Citation_Verification_Protocol.md` | How to verify Algerian legal citations before using them | ✅ Evergreen — apply to any new legal reference |
 | `RAQIB_Perplexity_Prompt_Ready.md` | AI prompt scaffolding for research tasks | 🛠️ Working tool |
 | `TIER1_MIGRATION.md` | Tier 1 migration plan | ⚠️ Status needs verification against current code |
+| `STRATEGIC_PLAN.md` | **Living strategic roadmap — read before every session** | ✅ Updated every session |
 
 ---
 
 ## Live Observations Log
 
 > This section records direct code-inspection findings. Every entry is based on reading the actual source file from GitHub, not from a document or memory.
+
+### 2026-08-04 — Docs sync only (no code changes)
+
+- No code was changed. Connector session issues (Perplexity GitHub MCP desync between old and new chat sessions) caused a 5-day gap in doc updates.
+- STRATEGIC_PLAN.md Tier 2 wastewater row corrected from `⬜ NEXT` → `✅ CLOSED` to match Phase J closure from 2026-07-30.
+- Next confirmed priority: **Tier 2 Ch.3 Fire Safety audit** — must check ERP classification of each facility type before applying Loi 19-02 criteria.
 
 ### 2026-07-30 15:35 — Tier 2 wastewater audit complete
 
@@ -175,7 +188,7 @@ All 5 files confirmed correct by direct code inspection:
 
 ---
 
-### ✅ Phase J — Wastewater audit Tier 2: carWash, slaughterhouseSmall, uab (CLOSED 2026-07-30 15:35 WAT)
+### ✅ Phase J — Wastewater audit Tier 2: carWash, slaughterhouseSmall, uab (CLOSED 2026-07-30)
 
 All 4 wastewater-generating activity files aligned with Décret 06-141 Annex I.
 
@@ -186,11 +199,9 @@ All 4 wastewater-generating activity files aligned with Décret 06-141 Annex I.
 | `slaughterhouseSmallCriteria.ts` | `SLH-05-04/04B/04C/04D` — all correct, confirmed by direct read | ✅ Confirmed (no change needed) |
 | `uabCriteria.ts` | `UAB-AX3-05/06/07/08` — all correct with proper `numericField` | ✅ Confirmed (no change needed) |
 
-**Next natural step:** Phase I (93-120 pattern scan across all remaining criteria files).
-
 ---
 
-### 🔵 Phase I — Décret 93-120 pattern scan across all criteria files (OPEN — next priority)
+### 🔵 Phase I — Décret 93-120 pattern scan across all criteria files (OPEN)
 
 **Goal:** Run `grep -rn "93-120" src/criteria/*.ts` and classify every hit.
 
@@ -208,6 +219,35 @@ All 4 wastewater-generating activity files aligned with Décret 06-141 Annex I.
 - All other `*Criteria.ts` files — **full scan still needed**
 
 **Do not close this phase until every hit has been individually classified and documented here.**
+
+---
+
+### 🔴 Phase K — Tier 2 Ch.3 Fire Safety audit (OPEN — NEXT PRIORITY)
+
+**Goal:** For each facility type in the library, determine if it qualifies as an ERP (Établissement Recevant du Public) under Loi 19-02, then verify or add fire-safety criteria accordingly.
+
+**Key facts about Loi 19-02:**
+- 47 articles (NOT 80). Scope = ERPs + high-rise + very-high-rise + residential buildings ONLY.
+- Art. 44 five-year compliance deadline **already expired ~21 July 2024** — enforcement is now in effect.
+- Loi 19-02 does NOT apply to: abattoir, couvoir, UPD, UAB, most produce storage/cold room.
+- Loi 19-02 plausibly applies to: mechanic, car wash, retail-facing bakery/semiPharma, conditionally marble/paint/printing/GPL.
+
+**Files to audit:**
+
+| File | ERP status | Action needed |
+|---|---|---|
+| `baseGeneralCriteria.ts` | Mixed — verify per criterion | Audit |
+| `gplCriteria.ts` | Conditionally ERP (retail GPL station has public access) | Audit |
+| `paintShopCriteria.ts` | Usually no public access — verify | Audit |
+| `bakeryCriteria.ts` | Retail = ERP | Audit |
+| `semiPharmaCriteria.ts` | Retail = ERP | Audit |
+| `mechanicCriteria.ts` | Customer-facing = likely ERP | Audit |
+| `carWashCriteria.ts` | Customer-facing = likely ERP | Audit |
+| `abattoirCriteria.ts` | No public access = out of scope | Confirm exclusion |
+| `uabCriteria.ts` | Industrial = out of scope | Confirm exclusion |
+| `couvoirCriteria.ts` | Industrial = out of scope | Confirm exclusion |
+
+**Do not apply Loi 19-02 criteria to any out-of-scope facility type.**
 
 ---
 
@@ -326,6 +366,7 @@ grep -rn "22-167" src/criteria/*.ts
 | Loi 03-10 | General environmental protection | Art. 33/45 pollution prohibition |
 | Loi 05-12 | Water code | Art. 45/47 discharge licensing |
 | Loi 18-11 | Workplace safety | General occupational safety obligations |
+| Loi 19-02 | Fire safety | ERPs + high-rise + residential ONLY. Art. 44 deadline expired July 2024. |
 | Loi 90-11 Art. 20 | Occupational health — medical examinations | Mandates periodic medical surveillance (cross-ref: Décret 93-120 Art. 20) |
 | Décret 93-120 | Medical examination conditions for workers | Art. 20 = periodic medical exam schedule. **Use ONLY for medical exam criteria — never for noise/dB limits.** |
 | Décret 22-167 | Modifies Décret 06-198 categories + environmental audit TOR | ⚠️ Does NOT cover equipment maintenance |

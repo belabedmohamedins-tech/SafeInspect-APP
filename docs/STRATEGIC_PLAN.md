@@ -1,6 +1,6 @@
 # SafeInspect — Strategic Plan
 
-> **Last updated:** 2026-07-30  
+> **Last updated:** 2026-08-04 19:15 WAT  
 > **Updated by:** Perplexity Agent  
 > **Status:** Live working document — update every time a phase closes or opens.
 
@@ -38,7 +38,7 @@ This project passed through 3 phases before the current Perplexity+GitHub agent 
 
 ---
 
-## The Knowledge Asset: `/docs/manual/`
+## The Knowledge Asset: `/docs/`
 
 Eight verified chapters covering every inspection domain. Each chapter follows an identical 11-section structure:
 
@@ -60,14 +60,14 @@ Eight verified chapters covering every inspection domain. Each chapter follows a
 
 | File | Domain | Critical Values / Notes |
 |---|---|---|
-| `ch1_wastewater.md` | Rejets liquides | Full 18-parameter Décret 06-141 table (pH 6.5–8.5, MES 35, BOD5 35, COD 120, oils 20 mg/l, heavy metals — each with standard + derogation value). Source: confirmed via Univ. Ouargla thesis. |
-| `ch2_solid_waste.md` | Déchets solides | Décret 06-104 waste classification. Décret 03-478 3-stream medical waste (green/yellow/red) — NEW, not in original 9-session audit. Affects abattoir/slaughterhouse. |
-| `ch3_fire_safety.md` | Sécurité incendie | Loi 19-02 re-verified against primary JO source (bilingual). 47 articles (NOT 80). Scope = ERPs + high-rise/very-high-rise + residential ONLY — NOT universally all classified establishments. Art. 44 five-year compliance deadline **already expired ~21 July 2024**. |
-| `ch4_food_safety.md` | Sécurité alimentaire | Décret 17-140 art. 9 = HACCP mandatory at decree level. Primary production EXCLUDED. Cold-chain temps (4–5°C / -18°C) still [PRATIQUE] — no confirmed Algerian source yet. |
-| `ch5_occupational_health.md` | Santé au travail | Décret 91-05 = employer duty (noise, toxic gases, PPE, sanitary facilities). No dedicated Algerian in-plant noise-exposure decree found. 85 dB(A)/8h = [INTL] reference only. Décret 02-427 = correct citation for PPE training. |
-| `ch6_documentation.md` | Documentation & licensing | Décret 06-198 amended twice: Décret 22-167 (2022) + Décret 24-196 (2024). Active regularization grace period expires ~June 2027. Every citation to "06-198" must be treated as potentially outdated. Full Décret 07-144 facility-type mapping complete. |
-| `ch7_air_quality.md` | Qualité de l'air | Décret 06-138 primary PDF confirmed. Annex I: 16 parameters with new/old-facility values. Annex II: 7 sector-specific tables — none match SafeInspect facility types (all fall under Annex I by default). Art. 10: declaration obligation for non-classified emitters. Art. 11: self-monitoring register required. |
-| `ch8_site_hygiene.md` | Hygiène des locaux | Smallest chapter — enrichment opportunity. |
+| `Inspection_Manual_Chapter1_Wastewater.md` | Rejets liquides | Full 18-parameter Décret 06-141 table (pH 6.5–8.5, MES 35, BOD5 35, COD 120, oils 20 mg/l, heavy metals — each with standard + derogation value). Source: confirmed via Univ. Ouargla thesis. |
+| `Inspection_Manual_Chapter2_Solid_Hazardous_Waste.md` | Déchets solides | Décret 06-104 waste classification. Décret 03-478 3-stream medical waste (green/yellow/red) — NEW, not in original 9-session audit. Affects abattoir/slaughterhouse. |
+| `Inspection_Manual_Chapter3_Fire_Safety.md` | Sécurité incendie | Loi 19-02 re-verified against primary JO source (bilingual). 47 articles (NOT 80). Scope = ERPs + high-rise/very-high-rise + residential ONLY — NOT universally all classified establishments. Art. 44 five-year compliance deadline **already expired ~21 July 2024**. |
+| `Inspection_Manual_Chapter4_Food_Safety.md` | Sécurité alimentaire | Décret 17-140 art. 9 = HACCP mandatory at decree level. Primary production EXCLUDED. Cold-chain temps (4–5°C / -18°C) still [PRATIQUE] — no confirmed Algerian source yet. |
+| `Inspection_Manual_Chapter5_Occupational_Health.md` | Santé au travail | Décret 91-05 = employer duty (noise, toxic gases, PPE, sanitary facilities). No dedicated Algerian in-plant noise-exposure decree found. 85 dB(A)/8h = [INTL] reference only. Décret 02-427 = correct citation for PPE training. |
+| `Inspection_Manual_Chapter6_Documentation_Licensing.md` | Documentation & licensing | Décret 06-198 amended twice: Décret 22-167 (2022) + Décret 24-196 (2024). Active regularization grace period expires ~June 2027. Every citation to "06-198" must be treated as potentially outdated. Full Décret 07-144 facility-type mapping complete. |
+| `Inspection_Manual_Chapter7_Air_Quality.md` | Qualité de l'air | Décret 06-138 primary PDF confirmed. Annex I: 16 parameters with new/old-facility values. Annex II: 7 sector-specific tables — none match SafeInspect facility types (all fall under Annex I by default). Art. 10: declaration obligation for non-classified emitters. Art. 11: self-monitoring register required. |
+| `Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md` | Hygiène des locaux | Smallest chapter — enrichment opportunity. |
 
 ---
 
@@ -131,8 +131,8 @@ For each chapter: read the manual Section 6 (reference values), read the live cr
 
 | Priority | Chapter | Criteria files to audit | Key risk | Status |
 |---|---|---|---|---|
-| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | Full 18-parameter Décret 06-141 table — BOD5 35, COD 120, MES 35, pH 6.5–8.5, oils 20 mg/l | ⬜ **NEXT** |
-| 2 | **Ch.3 Fire Safety** | `baseGeneralCriteria.ts`, `gplCriteria.ts`, `paintShopCriteria.ts` | Verify each facility is ERP-classified before applying Loi 19-02. Art. 44 deadline expired. | ⬜ Pending |
+| 1 | **Ch.1 Wastewater** | `abattoirCriteria.ts`, `uabCriteria.ts`, `carWashCriteria.ts`, `slaughterhouseSmallCriteria.ts` | Full 18-parameter Décret 06-141 table — BOD5 35, COD 120, MES 35, pH 6.5–8.5, oils 20 mg/l | ✅ **CLOSED 2026-07-30 (Phase J)** |
+| 2 | **Ch.3 Fire Safety** | `baseGeneralCriteria.ts`, `gplCriteria.ts`, `paintShopCriteria.ts`, `bakeryCriteria.ts`, `mechanicCriteria.ts`, `carWashCriteria.ts` | Verify ERP classification before applying Loi 19-02. Art. 44 deadline expired July 2024. | 🔴 **NEXT — Phase K** |
 | 3 | **Ch.6 Documentation** | All 21 files | Décret 06-198 + amendments. Grace period ~June 2027. Full 07-144 buffer-zone table by activity. | ⬜ Pending |
 | 4 | **Ch.2 Solid Waste** | `baseGeneralCriteria.ts`, `abattoirCriteria.ts` | Add Décret 03-478 3-stream medical waste to abattoir/slaughterhouse | ⬜ Pending |
 | 5 | **Ch.4 Food Safety** | `baseFoodCriteria.ts`, `bakeryCriteria.ts`, `coldRoomCriteria.ts`, `produceStorageCriteria.ts` | Décret 17-140 art. 9 HACCP mandatory. Primary production EXCLUDED. Cold-chain temps = [PRATIQUE] until confirmed. | ⬜ Pending |
@@ -159,10 +159,16 @@ Implement only after Tier 2 is stable.
 ## Recommended Execution Order
 
 ```
-Next session    → Tier 2 Ch.1: full wastewater audit (18-parameter Décret 06-141 table)
-                  Files: abattoirCriteria.ts, uabCriteria.ts, carWashCriteria.ts, slaughterhouseSmallCriteria.ts
-Then            → Tier 2 Ch.3: fire safety (ERP scope check per facility type first)
-Then            → Tier 2 Ch.6, 2, 4, 5, 7, 8 in order
+CURRENT SESSION  → Phase K: Tier 2 Ch.3 Fire Safety audit
+                   Step 1: For each criteria file, determine ERP status
+                   Step 2: For ERP-confirmed files, audit existing fire criteria against Loi 19-02
+                   Step 3: For out-of-scope files, confirm exclusion and document it
+                   Files: baseGeneralCriteria.ts, gplCriteria.ts, paintShopCriteria.ts,
+                          bakeryCriteria.ts, mechanicCriteria.ts, carWashCriteria.ts
+
+Then            → Phase I: 93-120 full codebase scan (classify every hit)
+Then            → Tier 2 Ch.6 Documentation (all 21 files — largest scope)
+Then            → Tier 2 Ch.2, 4, 5, 7, 8 in order
 When stable     → Tier 3 features (start with Inspector Hints — fastest to ship)
 ```
 
@@ -173,7 +179,7 @@ When stable     → Tier 3 features (start with Inspector Hints — fastest to s
 ### Source of Truth Order
 1. **Current GitHub code** + actual app behavior = what EXISTS
 2. **Verified Algerian legal/scientific sources** = what SHOULD exist
-3. **`/docs/manual/`** = current project knowledge and decisions
+3. **`/docs/`** (8 manual chapters) = current project knowledge and decisions
 4. **Old AI audits/reports/roadmaps** = historical context only — never blindly trust
 
 ### Pre-Implementation Checklist
@@ -193,7 +199,7 @@ When stable     → Tier 3 features (start with Inspector Hints — fastest to s
 After every implementation session, before ending:
 1. Mark completed phases ✅ CLOSED with the date
 2. Update Tier 2 status column if any audit was done
-3. Move the "NEXT" label to the correct next priority
+3. Move the "NEXT" / "CURRENT SESSION" label to the correct next priority
 4. Add any new closed items to the Closed Items table
 5. Commit with message: `docs: update STRATEGIC_PLAN.md — [what changed]`
 
@@ -249,6 +255,7 @@ After every implementation session, before ending:
 | **Tier 1 Phase D** | gplCriteria.ts: verified clean — Décret 04-409 not present, all 21-430 citations correct. | **2026-07-30 ✅** |
 | **Tier 1 Phase E** | printingCriteria.ts: verified clean — Décret 04-409 not present, Loi 88-07 used correctly. | **2026-07-30 ✅** |
 | **Tier 1 Phase F** | gplCriteria.ts GPL-03-03: verified — Décret 09-335 used correctly for emergency plans. | **2026-07-30 ✅** |
+| **Tier 2 Phase J / Ch.1 Wastewater** | All 4 files (carWash, abattoir, slaughterhouseSmall, uab) aligned with Décret 06-141 Annex I. BOD5 35, COD 120, MES 35, pH 6.5–8.5 confirmed/corrected. | **2026-07-30 ✅** |
 
 ---
 
