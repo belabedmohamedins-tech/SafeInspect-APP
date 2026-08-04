@@ -29,12 +29,13 @@
 | Q-1 | Lifecycle audit — read checklist.tsx + start.tsx | 2026-08-04 | Evidence/Evaluation/Decision/Closure all inside checklist.tsx |
 | Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated — ⚠️ test gate pending |
 | **S** | **Legal verify — Loi 19-02 fire safety scope** | **2026-08-04** | **Ch3 cross-verified against JORADP primary source (both language editions). Scope confirmed: ERPs, high-rise (>28m non-residential, >50m residential, >200m very-high-rise), residential. NOT universal. Classified establishments use Décret 06-198 + Décret 09-335 instead. Facility-type ERP analysis complete in Ch3 Section 6.** |
+| **T** | **Legal verify — Décret 06-138 air quality Annex I numeric table** | **2026-08-04** | **Confirmed by direct read of Ch7 primary-source content. Full Annex I (16 parameters, mg/Nm³, new vs. pre-2006 tolerances) and Annex II (7 industrial sectors) verified in `docs/Inspection_Manual_Chapter7_Air_Quality.md` Section 6. JO N°24 of 16 April 2006. Resolved: units are mg/Nm³ (concentration), not kg/h. Resolved: Décret 06-02 (ambient) and 06-138 (point-source) are distinct instruments. One cell flagged (Iron industry SO2: 1200/1000 reversal — likely PDF extraction artifact, needs visual check).** |
 
 ---
 
 ### 🔴 OPEN Phases (in execution order)
 
-#### Phase R — Integration / Validation (CURRENT PRIORITY — run before any feature work)
+#### Phase R — Integration / Validation (REQUIRES LOCAL DEV ENV — assign to Claude)
 **Type:** Test gate  
 **Priority:** 🔴 IMMEDIATE — must be run by Claude or local agent (requires local dev environment)  
 **Opened:** 2026-08-04  
@@ -52,37 +53,14 @@
 
 **Close condition:** `npx tsc --noEmit` passes with 0 errors + Jest passes for affected files + docs updated.
 
-**Note for Perplexity:** This phase requires a local dev environment to run TypeScript compiler and Jest. Cannot be completed remotely. Assign to Claude or human dev.
+**Note for Perplexity:** This phase requires a local dev environment. Cannot be completed remotely. Assign to Claude or human dev.
 
 ---
 
-#### Phase T — Legal Verify: Air Quality Décret 06-138 Annex Numeric Table (CURRENT PERPLEXITY PRIORITY)
-**Type:** LEGAL-VERIFY  
-**Priority:** 🟡 HIGH — blocks Ch7 air quality criteria accuracy  
-**Opened:** 2026-08-04  
-
-**Question:** What are the exact numeric emission limits per activity/sector in Annex I of Décret exécutif n° 06-138 (15 avril 2006)? Are limits expressed as point-source concentration limits (mg/m³) or mass-flow limits (kg/h)? Which pollutants are covered?
-
-**Research path:**
-1. JORADP: retrieve Décret 06-138 full text including Annex I — Journal Officiel n° 26, 2006
-2. Extract numeric table: pollutant × activity sector × limit value × unit
-3. Compare with what Ch7 currently states — correct any discrepancy
-4. Update `docs/Inspection_Manual_Chapter7_Air_Quality.md` Section 6 with verified table
-5. Identify if any criteria in `src/criteria/` reference wrong values — flag with `[À VÉRIFIER]` if so
-
-**Files to touch:**
-- `docs/Inspection_Manual_Chapter7_Air_Quality.md`
-- Matching activity criteria files in `src/criteria/` if values are wrong
-- `docs/README.md` (handoff log + roadmap table)
-- `docs/STRATEGIC_PLAN.md` (close this phase when done)
-
-**Close condition:** Exact numeric values confirmed from JORADP primary source + Ch7 updated + any wrong criteria flagged + docs updated.
-
----
-
-#### Phase U — UX Polish: End-to-End Inspector Flow
+#### Phase U — UX Polish: End-to-End Inspector Flow (CURRENT PERPLEXITY PRIORITY)
 **Type:** UX review  
-**Priority:** 🔵 AFTER R and T  
+**Priority:** 🟡 HIGH — after Phase T closes  
+**Opened:** 2026-08-04  
 
 **Scope:**
 - Walk the full lifecycle as an inspector (field perspective): Registry → start.tsx → checklist.tsx → report → CAP → reinspection.tsx
@@ -90,6 +68,7 @@
 - Fix any friction points identified
 - Specifically verify: reinspection.tsx member list UX on small screens, Grade badge legibility, trigger banner clarity
 - Confirm no blank/empty states are left undesigned (empty agenda, no CAPs, first-time user)
+- Read the relevant screen files before assessing — never assume from filenames
 
 ---
 
@@ -97,8 +76,7 @@
 
 ```
 R  → TypeScript + Jest validation gate (REQUIRES LOCAL ENV — assign to Claude)
-T  → Legal verify: Décret 06-138 air quality annex (Perplexity)
-U  → UX polish end-to-end flow (either agent)
+U  → UX polish end-to-end flow (Perplexity — read source files first)
 ```
 
 ---
@@ -124,7 +102,7 @@ U  → UX polish end-to-end flow (either agent)
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ **VERIFIED 2026-08-04** — ERPs, high-rise, very-high-rise, residential ONLY. NOT classified establishments universally. Deadline art. 44 expired ~21 July 2024. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified — mines ministry accreditation, ≥60m² premises |
-| Air emissions point source | Décret 06-138 | Annex I | 🟡 **NUMERIC VALUES UNDER VERIFICATION (Phase T — CURRENT)** |
+| Air emissions point source | Décret 06-138 | Annex I + II | ✅ **VERIFIED 2026-08-04** — Full Annex I (16 params, mg/Nm³) + Annex II (7 sectors) in Ch7 Section 6. JO N°24, 16 April 2006. Units: mg/Nm³ concentration. Décret 06-02 is ambient (distinct). One cell (Iron/SO2) flagged for visual PDF check. |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
 | Occupational health | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |

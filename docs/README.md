@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 23:58 WAT — [Agent: Perplexity] — Phase T CLOSED: Décret 06-138 Annex I already fully verified in Ch7; docs corrected
+- Phases closed: T (Legal verify — Décret 06-138 air quality Annex I numeric table)
+- Phases opened: none
+- Files changed: docs/STRATEGIC_PLAN.md, docs/README.md
+- Critical finding: **Phase T was already complete** — Ch7's Section 6 contained the full Annex I (16 parameters, mg/Nm³) + Annex II (7 sectors) from JORADP primary source (JO N°24, 16 April 2006). STRATEGIC_PLAN.md incorrectly showed T as OPEN. Closed by CODE VS DOC detection. Units confirmed as mg/Nm³ concentration (not kg/h mass-flow). Décret 06-02 (ambient) confirmed distinct from 06-138 (point-source). One cell flagged: Iron industry SO2 value reversal (1200/1000) — likely PDF extraction artifact, needs visual check. **Next for Perplexity: Phase U — UX polish.**
+
 ### 2026-08-04 23:45 WAT — [Agent: Perplexity] — Phase S CLOSED: Loi 19-02 scope fully verified from JORADP primary source; Phase T opened (Décret 06-138 air quality annex)
 - Phases closed: S (Legal verify — Loi 19-02 fire safety scope)
 - Phases opened: T (Legal verify — Décret 06-138 air quality Annex I numeric table)
@@ -148,7 +154,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 | `Inspection_Manual_Chapter4_Food_Safety.md` | ✅ Active | Food safety, HACCP, hygiene. |
 | `Inspection_Manual_Chapter5_Occupational_Health.md` | ✅ Active | Occupational health and worker protection. |
 | `Inspection_Manual_Chapter6_Documentation_Licensing.md` | ✅ Active | Licensing, classified establishment classification, document verification. |
-| `Inspection_Manual_Chapter7_Air_Quality.md` | ✅ Active | Air emissions, Décret 06-138 point-source rules. **⚠️ Annex I numeric values under verification — Phase T open.** |
+| `Inspection_Manual_Chapter7_Air_Quality.md` | ✅ Active | Air emissions, Décret 06-138. **✅ Annex I + II FULLY VERIFIED 2026-08-04 — 16 params mg/Nm³ + 7 sectors in Section 6.** |
 | `Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md` | ✅ Active | Site hygiene and pest control. |
 | `Perplexity_Implementation_Spec.md` | ✅ Active | Current implementation spec from Perplexity sessions. |
 | `RAQIB_MASTER_MANUSCRIPT.md` | 📚 Reference | Full manuscript. Read for context only — do not re-implement without checking code first. |
@@ -165,7 +171,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 23:45 WAT)
+### Quick Status Summary (as of 2026-08-04 23:58 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -185,18 +191,48 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` |
 | Q-1 | Read checklist.tsx + start.tsx (lifecycle audit) | ✅ CLOSED 2026-08-04 | Direct code read |
 | Q | UI screens — Reinspection screen | ✅ CLOSED 2026-08-04 | Code delivered — ⚠️ test gate pending (Phase R) |
-| **S** | **Legal verify — Loi 19-02 fire safety scope** | ✅ **CLOSED 2026-08-04** | JORADP primary source, both language editions. ERP/high-rise/residential scope confirmed. |
+| S | Legal verify — Loi 19-02 fire safety scope | ✅ CLOSED 2026-08-04 | JORADP primary source, both editions |
+| **T** | **Legal verify — Décret 06-138 air quality Annex I** | ✅ **CLOSED 2026-08-04** | Ch7 Section 6 — primary source already in doc. Detected by CODE VS DOC check. |
 | **R** | **Integration / end-to-end tests** | 🔴 **OPEN — needs local env (Claude)** | `npx tsc --noEmit` + Jest pending |
-| **T** | **Legal verify — Décret 06-138 air quality annex** | 🟡 **OPEN — Perplexity next** | Numeric Annex I values not yet primary-source verified |
-| U | UX polish — end-to-end inspector flow | 🔵 QUEUED | After R and T |
+| **U** | **UX polish — end-to-end inspector flow** | 🟡 **OPEN — Perplexity next** | After T and R |
 
 ### Recommended Execution Order (next sessions)
 
 ```
 → Claude / local dev: Phase R — run npx tsc --noEmit + Jest for reinspection.tsx / _layout.tsx
-→ Perplexity: Phase T — fetch Décret 06-138 from JORADP, verify Annex I numeric table, update Ch7
-→ Either agent: Phase U — UX polish end-to-end inspector flow
+→ Perplexity: Phase U — UX polish, walk full lifecycle as inspector, read source files first
 ```
+
+---
+
+## Phase T — CLOSED: Décret 06-138 Air Quality Annex I (2026-08-04)
+
+**Detection method:** CODE VS DOC conflict — Ch7 Section 6 already contained the full verified numeric table from primary source (JO N°24, 16 April 2006). STRATEGIC_PLAN.md incorrectly showed T as OPEN. Closed by direct doc read.
+
+### Verified: Décret 06-138 Annex I — General emission limits (mg/Nm³)
+
+| # | Parameter | New/current installations | Pre-2006 installations (transitional) |
+|---|---|---|---|
+| 1 | Total dust | 50 | 100 |
+| 2 | SO2 | 300 | 500 |
+| 3 | NOx | 300 | 500 |
+| 4 | Nitrous oxide | 300 | 500 |
+| 5 | HCl (inorganic gaseous chlorine) | 50 | 100 |
+| 6 | HF (fluorine compounds) | 10 | 20 |
+| 7 | VOC (total, excl. methane) | 150 | 200 |
+| 8 | Metals and metallic compounds | 5 | 10 |
+| 9 | Cd, Hg, Tl and compounds | 0.25 | 0.5 |
+| 10 | As, Se, Te and compounds | 1 | 2 |
+| 11 | Anthracite dust, Cr, Co, Cu, Sn, Mn, Ni, V, Zn compounds | 5 | 10 |
+| 12 | Phosphine, phosgene | 1 | 2 |
+| 13 | HCN, Br, HBr, Cl, H2S | 5 | 10 |
+| 14 | Ammonia | 50 | 100 |
+| 15 | Asbestos | 0.1 | 0.5 |
+| 16 | Non-asbestos fibers | 1 | 50 |
+
+**Transitional grace periods (Art. 3):** 5 years for most installations; 7 years for petroleum-sector installations.  
+**Units:** mg/Nm³ (concentration) — NOT kg/h mass-flow.  
+**⚠️ One cell flagged:** Iron industry SO2 in Annex II shows 1200/1000 (new > old), breaking the pattern in every other row. Likely PDF extraction artifact — needs visual check before implementation.
 
 ---
 
@@ -310,6 +346,7 @@ This app uses **Expo Router file-system routing**. There is **no `src/navigation
 - **Q-1: checklist.tsx + start.tsx fully read** ✅ (2026-08-04)
 - **Phase Q: `app/screens/reinspection.tsx` + `app/_layout.tsx` delivered** ✅ (2026-08-04) — ⚠️ test gate pending
 - **Phase S: Loi 19-02 scope fully verified from JORADP primary source** ✅ (2026-08-04)
+- **Phase T: Décret 06-138 Annex I + II fully verified** ✅ (2026-08-04) — 16 params, mg/Nm³, in Ch7 Section 6
 
 ---
 
@@ -369,7 +406,7 @@ Update **both** of the following before pushing:
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19 | ✅ VERIFIED — ERPs + high-rise + residential ONLY. Art. 44 deadline expired ~21 July 2024. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | Required for classified establishments |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | Mines ministry accreditation, ≥60m² premises |
-| Air emissions — point source | Décret 06-138 | Annex I | ⚠️ Numeric values under verification — Phase T open |
+| Air emissions — point source | Décret 06-138 | Annex I + II | ✅ **VERIFIED 2026-08-04** — mg/Nm³ concentration limits; 16 params (Annex I) + 7 sectors (Annex II); JO N°24 16 April 2006; Décret 06-02 is separate (ambient, not point-source) |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | HACCP mandatory for food-producing establishments |
 | Occupational health — medical surveillance | Loi 88-07 | Art. 12–14 | Annual medical exam, occupational disease register |
 | Pest control — certified operators | Arrêté 1995 (phytosanitaire) | Art. 3 | Licensed operator required for chemical control |
@@ -384,6 +421,5 @@ Any agent picking this up should do in order:
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
 3. Run `git log --oneline -5` to confirm latest commits
 4. **Phase R (Claude/local):** Run `npx tsc --noEmit` — fix any TS errors in reinspection.tsx / _layout.tsx. Then run Jest. Then mark R closed.
-5. **Phase T (Perplexity):** Fetch Décret 06-138 from JORADP (JO N°26, 2006), extract Annex I numeric table, update Ch7, mark T closed.
-6. **Phase U (either):** UX polish — walk the full lifecycle as an inspector, identify and fix friction.
-7. After each phase: update this file + STRATEGIC_PLAN.md + push.
+5. **Phase U (Perplexity):** UX polish — read actual screen source files (`app/screens/reinspection.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/start.tsx`) before assessing. Walk the full lifecycle. Fix friction.
+6. After each phase: update this file + STRATEGIC_PLAN.md + push.
