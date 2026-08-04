@@ -160,11 +160,6 @@ export default function RootLayout() {
             return;
           }
 
-          if (screen === 'reinspection') {
-            router.push('/screens/reinspection');
-            return;
-          }
-
           if (data.agendaId) {
             router.push({
               pathname: '/(tabs)/agenda',
@@ -185,6 +180,17 @@ export default function RootLayout() {
             router.push('/screens/supervisor-approvals');
             return;
           }
+
+          // Phase-Q: reinspection deep-link
+          // Notifications sent by followUpService / CapNotificationService
+          // may carry { type: 'REINSPECTION', priorInspectionId: '...' }
+          if (data.type === 'REINSPECTION' && data.priorInspectionId) {
+            router.push({
+              pathname: '/screens/reinspection',
+              params:   { priorInspectionId: data.priorInspectionId },
+            });
+            return;
+          }
         } catch (err) {
           console.warn('[_layout] notification tap handler error:', err);
         }
@@ -197,25 +203,15 @@ export default function RootLayout() {
   }, []);
 
   // ── 5. Session auto-lock ────────────────────────────────────────────────────
-  //
-  // Two triggers:
-  //   a) AppState change: when app returns to foreground, immediately check
-  //      whether the inactivity timeout has elapsed while backgrounded.
-  //   b) Periodic poll: every 60 s while the app is active, check inactivity.
-  //      This catches cases where the user left the screen on without
-  //      backgrounding the app (e.g. device on a desk).
-  //
-  // We only lock when a PIN is configured AND the user is not already on
-  // pin-lock (avoids a redirect loop).
   useEffect(() => {
     if (!dbReady) return;
 
     const tryLock = async () => {
       const pin = await AuthRepository.getPin();
-      if (!pin) return; // no PIN configured — nothing to lock
+      if (!pin) return;
 
       const currentPath = segments.join('/');
-      if (currentPath.includes('pin-lock')) return; // already locked
+      if (currentPath.includes('pin-lock')) return;
 
       const lock = await SessionLockService.shouldLock();
       if (lock) {
@@ -224,20 +220,15 @@ export default function RootLayout() {
       }
     };
 
-    // a) AppState listener — triggers on foreground resume
     const handleAppStateChange = (next: AppStateStatus) => {
       if (next === 'active') {
         tryLock();
       } else {
-        // Record activity when the user switches away so the timer
-        // starts from the moment the app was backgrounded.
         SessionLockService.recordActivity();
       }
     };
 
     const sub = AppState.addEventListener('change', handleAppStateChange);
-
-    // b) Periodic poll every 60 seconds
     const poll = setInterval(tryLock, 60_000);
 
     return () => {
@@ -253,28 +244,29 @@ export default function RootLayout() {
     <I18nProvider>
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(tabs)"                            options={{ headerShown: false }} />
         <Stack.Screen name="pin-lock"                          options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/onboarding"               options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/server-login"             options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/reinspection"             options={{ headerShown: false }} />
-        <Stack.Screen name="screens/notifications"            options={{ headerShown: false }} />
-        <Stack.Screen name="screens/inspector-profile"        options={{ headerShown: false }} />
-        <Stack.Screen name="screens/approval-queue"           options={{ headerShown: false }} />
-        <Stack.Screen name="screens/approval-detail"          options={{ headerShown: false }} />
-        <Stack.Screen name="screens/supervisor-approvals"     options={{ headerShown: false }} />
-        <Stack.Screen name="screens/stats"                    options={{ headerShown: false }} />
-        <Stack.Screen name="screens/cap"                      options={{ headerShown: false }} />
-        <Stack.Screen name="screens/audit-log"                options={{ headerShown: false }} />
-        <Stack.Screen name="screens/backup"                   options={{ headerShown: false }} />
-        <Stack.Screen name="screens/settings"                 options={{ headerShown: false }} />
-        <Stack.Screen name="screens/brief"                    options={{ headerShown: false }} />
-        <Stack.Screen name="screens/geofence-check"           options={{ headerShown: false }} />
-        <Stack.Screen name="screens/signature"                options={{ headerShown: false }} />
-        <Stack.Screen name="screens/map"                      options={{ headerShown: false }} />
-        <Stack.Screen name="screens/legal"                    options={{ headerShown: false }} />
-        <Stack.Screen name="screens/checklists"               options={{ headerShown: false }} />
-        <Stack.Screen name="screens/reports"                  options={{ headerShown: false }} />
+        <Stack.Screen name="screens/onboarding"                options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="screens/server-login"              options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="screens/notifications"             options={{ headerShown: false }} />
+        <Stack.Screen name="screens/inspector-profile"         options={{ headerShown: false }} />
+        <Stack.Screen name="screens/approval-queue"            options={{ headerShown: false }} />
+        <Stack.Screen name="screens/approval-detail"           options={{ headerShown: false }} />
+        <Stack.Screen name="screens/supervisor-approvals"      options={{ headerShown: false }} />
+        <Stack.Screen name="screens/stats"                     options={{ headerShown: false }} />
+        <Stack.Screen name="screens/cap"                       options={{ headerShown: false }} />
+        <Stack.Screen name="screens/audit-log"                 options={{ headerShown: false }} />
+        <Stack.Screen name="screens/backup"                    options={{ headerShown: false }} />
+        <Stack.Screen name="screens/settings"                  options={{ headerShown: false }} />
+        <Stack.Screen name="screens/brief"                     options={{ headerShown: false }} />
+        <Stack.Screen name="screens/geofence-check"            options={{ headerShown: false }} />
+        <Stack.Screen name="screens/signature"                 options={{ headerShown: false }} />
+        <Stack.Screen name="screens/map"                       options={{ headerShown: false }} />
+        <Stack.Screen name="screens/legal"                     options={{ headerShown: false }} />
+        <Stack.Screen name="screens/checklists"                options={{ headerShown: false }} />
+        <Stack.Screen name="screens/reports"                   options={{ headerShown: false }} />
+        {/* Phase-Q: reinspection launch screen */}
+        <Stack.Screen name="screens/reinspection"              options={{ headerShown: false }} />
       </Stack>
     </I18nProvider>
   );

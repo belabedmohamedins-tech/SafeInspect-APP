@@ -1,390 +1,424 @@
 // app/screens/reinspection.tsx
-// Phase Q-4: Reinspection / Follow-up launcher screen.
+// Phase-Q: Reinspection launch screen.
 //
-// Shows all pending follow-up agenda items for the current inspector.
-// Tapping one launches a follow-up inspection pre-filled with:
-//   - facilityId, facilityName, facilityAddress (from AgendaItem)
-//   - inspectionType = 'follow-up'
-//   - priorInspectionId = most recent completed inspection for that facility
+// Entry points:
+//   - AgendaRepository follow-up items (created by followUpService.ts)
+//   - Any screen that has a completed SavedInspection with grade D or open CAPs
 //
-// The backend that auto-creates these agenda items is followUpService.ts
-// (called by InspectionRepository.save on grade D or open CAP items).
+// This screen:
+//   1. Loads the prior inspection from InspectionRepository by id
+//   2. Shows facility info, prior grade, prior date, and open CAP count
+//   3. Lets the inspector confirm/update the committee and reference
+//   4. Pushes to /(tabs)/inspection/categories with:
+//        inspectionType = 'follow-up'
+//        priorInspectionId = prior inspection id
+//      so checklist.tsx activates its differential view automatically.
 
 import { FontAwesome } from '@expo/vector-icons';
-import { useRouter } from 'expo-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
-  FlatList,
+  Alert,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, Radius, Spacing } from '../../constants';
-import { AgendaRepository } from '../../src/repositories/AgendaRepository';
+import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
-import { AgendaItem } from '../../src/types';
+import { SavedInspection } from '../../src/types';
 
-// ── Helpers ────────────────────────────────────────────────────────────────────
-
-/** Extract grade from the agenda note string, e.g. "... درجة D ..." → "D" */
-function extractGrade(notes: string): string | null {
-  const match = notes.match(/درجة ([A-D])/);
-  return match ? match[1] : null;
-}
-
-/** Format YYYY-MM-DD to Arabic locale date string */
-function formatDate(dateStr: string): string {
-  try {
-    return new Date(dateStr).toLocaleDateString('ar-DZ', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  } catch {
-    return dateStr;
-  }
-}
-
-/** Grade → background colour for the badge */
+// ─── Grade badge colours (mirrors pdfService logic) ───────────────────────────
 const GRADE_COLORS: Record<string, string> = {
   A: '#27ae60',
   B: '#2980b9',
-  C: '#e67e22',
-  D: '#c0392b',
+  C: '#f39c12',
+  D: '#e74c3c',
 };
-
-// ── Component ─────────────────────────────────────────────────────────────────
 
 export default function ReinspectionScreen() {
   const router = useRouter();
-  const [items, setItems]     = useState<AgendaItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const params = useLocalSearchParams<{
+    priorInspectionId: string;
+    facilityId?: string;
+    facilityName?: string;
+    facilityAddress?: string;
+  }>();
 
-  const loadItems = useCallback(async () => {
-    setLoading(true);
-    try {
-      const all = await AgendaRepository.getAll();
-      // Only show pending follow-up items (auto-created by followUpService)
-      const pending = all.filter(
-        item =>
-          item.status === 'pending' &&
-          item.notes.includes('[follow-up:')
-      );
-      // Sort ascending by date (earliest follow-up first)
-      pending.sort((a, b) => a.date.localeCompare(b.date));
-      setItems(pending);
-    } catch (err) {
-      console.error('[Reinspection] Failed to load agenda items:', err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const [prior, setPrior]         = useState<SavedInspection | null>(null);
+  const [capCount, setCapCount]   = useState(0);
+  const [loading, setLoading]     = useState(true);
+  const [error, setError]         = useState<string | null>(null);
 
+  // Inspector editable fields
+  const [reference, setReference]           = useState('');
+  const [members, setMembers]               = useState<string[]>([]);
+  const [newMember, setNewMember]           = useState('');
+  const [writer, setWriter]                 = useState('');
+
+  // ── Load prior inspection on mount ──────────────────────────────────────────
   useEffect(() => {
-    loadItems();
-  }, [loadItems]);
+    (async () => {
+      try {
+        const id = params.priorInspectionId;
+        if (!id) throw new Error('priorInspectionId manquant');
 
-  const handleLaunch = useCallback(async (agendaItem: AgendaItem) => {
-    // Resolve the most recent completed inspection for this facility
-    // so checklist.tsx can build the differential view.
-    let priorInspectionId: string | undefined;
-    try {
-      const inspections = await InspectionRepository.getAll();
-      const completed = inspections
-        .filter(
-          i =>
-            i.facilityId === agendaItem.facilityId &&
-            i.status === 'completed'
-        )
-        .sort((a, b) => b.date.localeCompare(a.date));
-      priorInspectionId = completed[0]?.id;
-    } catch (err) {
-      console.warn('[Reinspection] Could not resolve priorInspectionId:', err);
+        const saved = await InspectionRepository.getById(id);
+        if (!saved) throw new Error('التفتيش السابق غير موجود في قاعدة البيانات');
+
+        const caps = await CorrectiveActionRepository.getByInspection(id);
+        const openCaps = caps.filter(c => c.status !== 'closed');
+
+        setPrior(saved);
+        setCapCount(openCaps.length);
+        // Pre-fill writer if available
+        if (saved.inspectorName) setWriter(saved.inspectorName);
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : 'خطأ غير معروف';
+        setError(msg);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [params.priorInspectionId]);
+
+  // ── Member helpers ───────────────────────────────────────────────────────────
+  const addMember = () => {
+    const t = newMember.trim();
+    if (t) { setMembers(prev => [...prev, t]); setNewMember(''); }
+  };
+  const removeMember = (i: number) =>
+    setMembers(prev => prev.filter((_, idx) => idx !== i));
+
+  // ── Launch reinspection ──────────────────────────────────────────────────────
+  const handleLaunch = () => {
+    if (!prior) return;
+
+    if (!writer.trim()) {
+      Alert.alert('تنبيه', 'الرجاء إدخال اسم المحرر');
+      return;
+    }
+    if (members.length === 0) {
+      Alert.alert('تنبيه', 'الرجاء إضافة عضو واحد على الأقل في اللجنة');
+      return;
     }
 
     router.push({
-      pathname: '/(tabs)/inspection/start',
+      pathname: '/(tabs)/inspection/categories',
       params: {
-        facilityId:       agendaItem.facilityId,
-        facilityName:     agendaItem.facilityName,
-        facilityAddress:  agendaItem.facilityAddress ?? '',
-        inspectionType:   'follow-up',
+        facilityId:       prior.facilityId,
+        facilityName:     prior.facilityName,
+        facilityAddress:  prior.facilityAddress,
+        activity:         prior.activity ?? '',
         cause:            'followup',
-        agendaId:         agendaItem.id,
-        ...(priorInspectionId ? { priorInspectionId } : {}),
+        inspectionType:   'follow-up',
+        priorInspectionId: prior.id,
+        reference,
+        committeeMembers: JSON.stringify(members),
+        writer,
       },
     });
-  }, [router]);
-
-  // ── Render helpers ───────────────────────────────────────────────────────────
-
-  const renderItem = ({ item }: { item: AgendaItem }) => {
-    const grade      = extractGrade(item.notes);
-    const gradeColor = grade ? (GRADE_COLORS[grade] ?? Colors.warning) : Colors.warning;
-    const isOverdue  = item.date < new Date().toISOString().split('T')[0];
-
-    return (
-      <TouchableOpacity
-        style={styles.card}
-        onPress={() => handleLaunch(item)}
-        activeOpacity={0.75}
-      >
-        {/* Header row */}
-        <View style={styles.cardHeader}>
-          <View style={[styles.gradeBadge, { backgroundColor: gradeColor }]}>
-            <Text style={styles.gradeText}>{grade ?? '?'}</Text>
-          </View>
-          <Text style={styles.facilityName} numberOfLines={1}>
-            {item.facilityName}
-          </Text>
-          {isOverdue && (
-            <View style={styles.overduePill}>
-              <Text style={styles.overdueText}>متأخر</Text>
-            </View>
-          )}
-        </View>
-
-        {/* Address */}
-        {!!item.facilityAddress && (
-          <View style={styles.metaRow}>
-            <FontAwesome name="map-marker" size={12} color={Colors.textSecondary} />
-            <Text style={styles.metaText} numberOfLines={1}>
-              {item.facilityAddress}
-            </Text>
-          </View>
-        )}
-
-        {/* Scheduled date */}
-        <View style={styles.metaRow}>
-          <FontAwesome
-            name="calendar"
-            size={12}
-            color={isOverdue ? Colors.danger : Colors.textSecondary}
-          />
-          <Text style={[styles.metaText, isOverdue && styles.overdueDate]}>
-            {formatDate(item.date)}
-          </Text>
-        </View>
-
-        {/* Reason */}
-        <Text style={styles.reason} numberOfLines={2}>
-          {item.notes.replace(/\[follow-up:[^\]]+\]/, '').trim()}
-        </Text>
-
-        {/* CTA */}
-        <View style={styles.ctaRow}>
-          <FontAwesome name="play-circle" size={14} color={Colors.primary} />
-          <Text style={styles.ctaText}>بدء التفتيش التتبعي</Text>
-        </View>
-      </TouchableOpacity>
-    );
   };
 
-  const renderEmpty = () => (
-    <View style={styles.emptyState}>
-      <FontAwesome name="check-circle" size={52} color={Colors.success} />
-      <Text style={styles.emptyTitle}>لا توجد متابعات معلقة</Text>
-      <Text style={styles.emptyBody}>
-        ستظهر هنا عمليات التفتيش التتبعية المقررة تلقائياً عند اكتمال
-        تفتيش بدرجة D أو بإجراءات تصحيحية مفتوحة.
-      </Text>
-    </View>
-  );
+  // ── Render states ────────────────────────────────────────────────────────────
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+        <Text style={styles.loadingText}>جاري تحميل بيانات التفتيش...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  if (error || !prior) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <FontAwesome name="exclamation-circle" size={40} color={Colors.danger} />
+        <Text style={styles.errorText}>{error ?? 'تعذّر تحميل التفتيش السابق'}</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Text style={styles.backButtonText}>العودة</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
+  }
+
+  const gradeColor = GRADE_COLORS[prior.grade ?? ''] ?? Colors.textSecondary;
+  const priorDateFormatted = prior.date
+    ? new Date(prior.date).toLocaleDateString('ar-DZ', {
+        year: 'numeric', month: 'long', day: 'numeric',
+      })
+    : '—';
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => router.back()}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>التفتيش التتبعي</Text>
-        <TouchableOpacity
-          onPress={loadItems}
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-        >
-          <FontAwesome name="refresh" size={18} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-      {/* Subtitle */}
-      <Text style={styles.subtitle}>
-        عمليات المتابعة المقررة تلقائياً بعد التفتيشات عالية الخطورة
-      </Text>
-
-      {loading ? (
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={Colors.primary} />
+        {/* ── Header ───────────────────────────────────────────────────────── */}
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
+            <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
+          </TouchableOpacity>
+          <Text style={styles.headerTitle}>إطلاق تفتيش متابعة</Text>
         </View>
-      ) : (
-        <FlatList
-          data={items}
-          keyExtractor={i => i.id}
-          renderItem={renderItem}
-          ListEmptyComponent={renderEmpty}
-          contentContainerStyle={
-            items.length === 0 ? styles.emptyContainer : styles.listContent
-          }
-          showsVerticalScrollIndicator={false}
+
+        {/* ── Prior inspection summary card ────────────────────────────────── */}
+        <View style={styles.summaryCard}>
+          <Text style={styles.facilityName}>{prior.facilityName}</Text>
+          <Text style={styles.facilityAddress}>{prior.facilityAddress}</Text>
+
+          <View style={styles.summaryRow}>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>التفتيش السابق</Text>
+              <Text style={styles.summaryValue}>{priorDateFormatted}</Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>الدرجة</Text>
+              <Text style={[styles.gradeBadge, { color: gradeColor, borderColor: gradeColor }]}>
+                {prior.grade ?? '—'}
+              </Text>
+            </View>
+            <View style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>إجراءات مفتوحة</Text>
+              <Text style={[
+                styles.summaryValue,
+                capCount > 0 && { color: Colors.danger, fontWeight: '700' },
+              ]}>
+                {capCount}
+              </Text>
+            </View>
+          </View>
+
+          {/* Trigger reason banner */}
+          <View style={styles.triggerBanner}>
+            <FontAwesome name="info-circle" size={13} color="#2980b9" />
+            <Text style={styles.triggerText}>
+              {prior.grade === 'D' && capCount > 0
+                ? `تفتيش متابعة إلزامي — درجة D و${capCount} إجراء تصحيحي مفتوح`
+                : prior.grade === 'D'
+                  ? 'تفتيش متابعة إلزامي — الدرجة السابقة D'
+                  : `تفتيش متابعة — ${capCount} إجراء تصحيحي مفتوح`}
+            </Text>
+          </View>
+        </View>
+
+        {/* ── Inspector fields ─────────────────────────────────────────────── */}
+        <Text style={styles.sectionTitle}>بيانات التفتيش الجديد</Text>
+
+        <Text style={styles.label}>المحرر (حامل الجهاز)</Text>
+        <TextInput
+          style={styles.input}
+          value={writer}
+          onChangeText={setWriter}
+          placeholder="الاسم الكامل"
+          placeholderTextColor={Colors.textTertiary}
+          textAlign="right"
         />
-      )}
+
+        <Text style={styles.label}>مرجع المستند (اختياري)</Text>
+        <TextInput
+          style={styles.input}
+          value={reference}
+          onChangeText={setReference}
+          placeholder="رقم الإشعار / الإنذار / ..."
+          placeholderTextColor={Colors.textTertiary}
+          textAlign="right"
+        />
+
+        <Text style={styles.label}>أعضاء اللجنة</Text>
+        <View style={styles.memberRow}>
+          <TextInput
+            style={[styles.input, styles.memberInput]}
+            value={newMember}
+            onChangeText={setNewMember}
+            placeholder="اسم العضو"
+            placeholderTextColor={Colors.textTertiary}
+            textAlign="right"
+            onSubmitEditing={addMember}
+            returnKeyType="done"
+          />
+          <TouchableOpacity style={styles.addButton} onPress={addMember}>
+            <FontAwesome name="plus" size={18} color={Colors.textInverse} />
+          </TouchableOpacity>
+        </View>
+
+        {members.map((m, i) => (
+          <View key={i} style={styles.memberItem}>
+            <Text style={styles.memberText}>{m}</Text>
+            <TouchableOpacity
+              onPress={() => removeMember(i)}
+              hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            >
+              <FontAwesome name="trash" size={16} color={Colors.danger} />
+            </TouchableOpacity>
+          </View>
+        ))}
+
+        {/* ── Launch button ────────────────────────────────────────────────── */}
+        <TouchableOpacity style={styles.launchButton} onPress={handleLaunch}>
+          <FontAwesome name="search" size={16} color={Colors.textInverse} style={{ marginLeft: Spacing.sm }} />
+          <Text style={styles.launchButtonText}>إطلاق تفتيش المتابعة</Text>
+        </TouchableOpacity>
+
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────
-
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.background,
-  },
+  container:        { flex: 1, backgroundColor: Colors.background },
+  centered:         { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg },
+  content:          { padding: Spacing.lg, paddingBottom: Spacing.xxl },
+
+  // Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-    backgroundColor: Colors.surface,
+    gap: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   headerTitle: {
-    fontSize: 17,
-    fontWeight: '700',
+    flex: 1,
+    fontSize: 18,
+    fontWeight: 'bold',
     color: Colors.textPrimary,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 12,
-    color: Colors.textSecondary,
     textAlign: 'right',
-    paddingHorizontal: Spacing.lg,
-    paddingVertical: Spacing.sm,
-    borderBottomWidth: 1,
-    borderBottomColor: Colors.border,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  listContent: {
-    padding: Spacing.md,
-    gap: Spacing.sm,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
   },
 
-  // ── Card ──────────────────────────────────────────────────────────────────
-  card: {
+  // Summary card
+  summaryCard: {
     backgroundColor: Colors.surface,
     borderRadius: Radius.md,
-    padding: Spacing.md,
     borderWidth: 1,
     borderColor: Colors.border,
-    gap: Spacing.xs,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.sm,
-    marginBottom: Spacing.xs,
-  },
-  gradeBadge: {
-    width: 32,
-    height: 32,
-    borderRadius: Radius.full,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  gradeText: {
-    fontSize: 14,
-    fontWeight: '800',
-    color: '#fff',
+    padding: Spacing.md,
+    marginBottom: Spacing.lg,
   },
   facilityName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    textAlign: 'right',
+    marginBottom: Spacing.xs,
+  },
+  facilityAddress: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+    textAlign: 'right',
+    marginBottom: Spacing.md,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.md,
+  },
+  summaryItem:  { alignItems: 'center', flex: 1 },
+  summaryLabel: { fontSize: 11, color: Colors.textSecondary, marginBottom: 4, textAlign: 'center' },
+  summaryValue: { fontSize: 15, fontWeight: '600', color: Colors.textPrimary, textAlign: 'center' },
+  gradeBadge: {
+    fontSize: 18,
+    fontWeight: '800',
+    borderWidth: 2,
+    borderRadius: Radius.full,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+    textAlign: 'center',
+  },
+
+  // Trigger banner
+  triggerBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: Spacing.xs,
+    backgroundColor: '#e8f4fd',
+    borderRadius: Radius.sm,
+    padding: Spacing.md,
+    borderRightWidth: 3,
+    borderRightColor: '#2980b9',
+  },
+  triggerText: {
     flex: 1,
+    fontSize: 12,
+    color: '#1a5276',
+    textAlign: 'right',
+    lineHeight: 18,
+  },
+
+  // Form fields
+  sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
     color: Colors.textPrimary,
     textAlign: 'right',
-  },
-  overduePill: {
-    backgroundColor: '#fdecea',
-    borderRadius: Radius.full,
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: 2,
-  },
-  overdueText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.danger,
-  },
-  metaRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.xs,
-    justifyContent: 'flex-end',
-  },
-  metaText: {
-    fontSize: 12,
-    color: Colors.textSecondary,
-    textAlign: 'right',
-  },
-  overdueDate: {
-    color: Colors.danger,
-    fontWeight: '600',
-  },
-  reason: {
-    fontSize: 12,
-    color: Colors.textSecondary,
-    textAlign: 'right',
-    lineHeight: 18,
+    marginBottom: Spacing.sm,
     marginTop: Spacing.xs,
   },
-  ctaRow: {
+  label: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: Colors.textSecondary,
+    marginBottom: Spacing.xs,
+    marginTop: Spacing.md,
+    textAlign: 'right',
+  },
+  input: {
+    backgroundColor: Colors.surface,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    borderRadius: Radius.md - 2,
+    padding: Spacing.md,
+    fontSize: 15,
+    color: Colors.textPrimary,
+    textAlign: 'right',
+    marginBottom: Spacing.sm,
+  },
+  memberRow:   { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginBottom: Spacing.xs },
+  memberInput: { flex: 1, marginBottom: 0 },
+  addButton: {
+    backgroundColor: Colors.primary,
+    width: 40, height: 40,
+    borderRadius: Radius.full,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  memberItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: Colors.surfaceOffset,
+    paddingHorizontal: Spacing.md,
+    paddingVertical: Spacing.sm,
+    borderRadius: Radius.md - 2,
+    marginBottom: Spacing.xs,
+  },
+  memberText: { fontSize: 14, color: Colors.textPrimary, textAlign: 'right', flex: 1 },
+
+  // Launch button
+  launchButton: {
+    backgroundColor: Colors.primary,
     flexDirection: 'row',
     alignItems: 'center',
-    gap: Spacing.xs,
-    justifyContent: 'flex-end',
-    marginTop: Spacing.sm,
-    paddingTop: Spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: Colors.border,
+    justifyContent: 'center',
+    padding: Spacing.md,
+    borderRadius: Radius.md,
+    marginTop: Spacing.lg,
+    gap: Spacing.sm,
   },
-  ctaText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: Colors.primary,
-  },
+  launchButtonText: { color: Colors.textInverse, fontSize: 16, fontWeight: 'bold' },
 
-  // ── Empty state ───────────────────────────────────────────────────────────
-  emptyState: {
-    alignItems: 'center',
-    gap: Spacing.md,
+  // Error / loading
+  loadingText: { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
+  errorText:   { fontSize: 14, color: Colors.danger, textAlign: 'center', marginTop: Spacing.sm },
+  backButton: {
+    marginTop: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.surfaceOffset,
+    borderRadius: Radius.md,
   },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    textAlign: 'center',
-  },
-  emptyBody: {
-    fontSize: 13,
-    color: Colors.textSecondary,
-    textAlign: 'center',
-    lineHeight: 20,
-    maxWidth: 300,
-  },
+  backButtonText: { fontSize: 14, color: Colors.textPrimary },
 });
