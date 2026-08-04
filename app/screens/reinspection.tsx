@@ -33,7 +33,7 @@ import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveAct
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../src/types';
 
-// ─── Grade badge colours (mirrors pdfService logic) ───────────────────────────
+// ─── Grade badge colours (mirrors pdfService logic) ───────────────────────────────────
 const GRADE_COLORS: Record<string, string> = {
   A: '#27ae60',
   B: '#2980b9',
@@ -61,12 +61,12 @@ export default function ReinspectionScreen() {
   const [newMember, setNewMember]           = useState('');
   const [writer, setWriter]                 = useState('');
 
-  // ── Load prior inspection on mount ──────────────────────────────────────────
+  // ── Load prior inspection on mount ────────────────────────────────────────────
   useEffect(() => {
     (async () => {
       try {
         const id = params.priorInspectionId;
-        if (!id) throw new Error('priorInspectionId manquant');
+        if (!id) throw new Error('priorInspectionId مانق');
 
         const saved = await InspectionRepository.getById(id);
         if (!saved) throw new Error('التفتيش السابق غير موجود في قاعدة البيانات');
@@ -87,7 +87,7 @@ export default function ReinspectionScreen() {
     })();
   }, [params.priorInspectionId]);
 
-  // ── Member helpers ───────────────────────────────────────────────────────────
+  // ── Member helpers ──────────────────────────────────────────────────────
   const addMember = () => {
     const t = newMember.trim();
     if (t) { setMembers(prev => [...prev, t]); setNewMember(''); }
@@ -95,7 +95,7 @@ export default function ReinspectionScreen() {
   const removeMember = (i: number) =>
     setMembers(prev => prev.filter((_, idx) => idx !== i));
 
-  // ── Launch reinspection ──────────────────────────────────────────────────────
+  // ── Launch reinspection ──────────────────────────────────────────────
   const handleLaunch = () => {
     if (!prior) return;
 
@@ -125,7 +125,7 @@ export default function ReinspectionScreen() {
     });
   };
 
-  // ── Render states ────────────────────────────────────────────────────────────
+  // ── Render states ──────────────────────────────────────────────────
   if (loading) {
     return (
       <SafeAreaView style={styles.centered}>
@@ -158,10 +158,11 @@ export default function ReinspectionScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-        {/* ── Header ───────────────────────────────────────────────────────── */}
+        {/* ── Header ──────────────────────────────────────────────────── */}
         <View style={styles.header}>
+          {/* RTL: arrow-left points toward the start of the reading direction = "go back" */}
           <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
-            <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
+            <FontAwesome name="arrow-left" size={20} color={Colors.textPrimary} />
           </TouchableOpacity>
           <Text style={styles.headerTitle}>إطلاق تفتيش متابعة</Text>
         </View>
@@ -206,7 +207,7 @@ export default function ReinspectionScreen() {
           </View>
         </View>
 
-        {/* ── Inspector fields ─────────────────────────────────────────────── */}
+        {/* ── Inspector fields ────────────────────────────────────────────── */}
         <Text style={styles.sectionTitle}>بيانات التفتيش الجديد</Text>
 
         <Text style={styles.label}>المحرر (حامل الجهاز)</Text>
@@ -246,6 +247,11 @@ export default function ReinspectionScreen() {
           </TouchableOpacity>
         </View>
 
+        {/* Empty member list hint */}
+        {members.length === 0 && (
+          <Text style={styles.memberEmptyHint}>أدخل اسم عضو (مطلوب عضو واحد على الأقل)</Text>
+        )}
+
         {members.map((m, i) => (
           <View key={i} style={styles.memberItem}>
             <Text style={styles.memberText}>{m}</Text>
@@ -258,9 +264,9 @@ export default function ReinspectionScreen() {
           </View>
         ))}
 
-        {/* ── Launch button ────────────────────────────────────────────────── */}
+        {/* ── Launch button ────────────────────────────────────────────── */}
         <TouchableOpacity style={styles.launchButton} onPress={handleLaunch}>
-          <FontAwesome name="search" size={16} color={Colors.textInverse} style={{ marginLeft: Spacing.sm }} />
+          <FontAwesome name="search" size={16} color={Colors.textInverse} />
           <Text style={styles.launchButtonText}>إطلاق تفتيش المتابعة</Text>
         </TouchableOpacity>
 
@@ -384,6 +390,13 @@ const styles = StyleSheet.create({
     borderRadius: Radius.full,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  memberEmptyHint: {
+    fontSize: 12,
+    color: Colors.textTertiary,
+    textAlign: 'right',
+    marginBottom: Spacing.sm,
+    fontStyle: 'italic',
   },
   memberItem: {
     flexDirection: 'row',

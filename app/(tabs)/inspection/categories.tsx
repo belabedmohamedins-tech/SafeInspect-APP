@@ -20,14 +20,15 @@ export default function CategoriesScreen() {
         router.push({
           pathname: '/(tabs)/inspection/facilities',
           params: {
-            ...params, // includes cause, reference, committeeMembers, writer, lat, lng
+            ...params,
             category: item,
           },
         });
       }}
     >
-      <FontAwesome name="folder" size={24} color={Colors.primary} />
+      {/* RTL: icon on right side, text to the left */}
       <Text style={styles.categoryText}>{item}</Text>
+      <FontAwesome name="folder" size={24} color={Colors.primary} />
     </TouchableOpacity>
   );
 
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
   categoryCard: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     backgroundColor: Colors.textInverse,
     padding: 16,
     borderRadius: 8,
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
     elevation: 2,
   },
-  categoryText: { fontSize: 16, color: Colors.textPrimary, marginLeft: 12 },
+  categoryText: { fontSize: 16, color: Colors.textPrimary, flex: 1, textAlign: 'right' },
   empty:        { alignItems: 'center', padding: 20 },
   emptyText:    { color: Colors.textTertiary, fontSize: 16 },
 });

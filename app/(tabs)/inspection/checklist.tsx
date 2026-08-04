@@ -4,6 +4,8 @@
 //          escalationOverrideReason threaded into saveInspection.
 // Phase-7: suggestDecision call site fixed — passes ScoringResult (from
 //          computeScoreAndGrade) + diffView rather than the raw items array.
+// Phase-U: empty-checklist guard — shows a clear error state when no criteria
+//          load for the selected activity, instead of a blank list + Finish.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -73,12 +75,12 @@ export default function ChecklistScreen() {
   const [showClosingGate, setShowClosingGate] = useState(false);
   const pendingFinish = useRef(false);
 
-  // ── Phase-6: decision support state ─────────────────────────────────────
+  // ── Phase-6: decision support state ──────────────────────────────────────
   const [escalationOverrideReason, setEscalationOverrideReason] = useState<string | undefined>(undefined);
 
   const [diffView, setDiffView] = useState<DifferentialView | null>(null);
 
-  // ── Build checklist params ───────────────────────────────────────────────
+  // ── Build checklist params ──────────────────────────────────────────────
   const checklistParams = {
     draftId:             params.draftId as string | undefined,
     facilityId:          params.facilityId as string,
@@ -138,9 +140,7 @@ export default function ChecklistScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
 
-  // ── Phase-6/7: compute suggested decision whenever items change ──────────
-  // suggestDecision requires a ScoringResult, so we compute the score first.
-  // This is cheap (pure function, no I/O).
+  // ── Phase-6/7: compute suggested decision whenever items change ──────────────
   const allEvaluated = !isLoading && data.length > 0 &&
     data.every(i => i.complianceStatus !== 'not-evaluated');
 
@@ -150,7 +150,7 @@ export default function ChecklistScreen() {
     return suggestDecision(scoring, diffView);
   }, [allEvaluated, data, diffView]);
 
-  // ── Phase-5: opening gate confirmed (safety-net path) ────────────────────
+  // ── Phase-5: opening gate confirmed (safety-net path) ─────────────────────
   const handleOpeningConfirmed = () => {
     setShowOpeningGate(false);
     setOpeningDone(true);
@@ -231,6 +231,20 @@ export default function ChecklistScreen() {
       <SafeAreaView style={styles.centered}>
         <ActivityIndicator size="large" color={Colors.primary} />
         <Text style={styles.loadingText}>جاري تحميل قائمة التفتيش...</Text>
+      </SafeAreaView>
+    );
+  }
+
+  // Phase-U: guard against empty criteria — prevents blank checklist + active Finish button
+  if (!isLoading && data.length === 0) {
+    return (
+      <SafeAreaView style={styles.centered}>
+        <FontAwesome name="exclamation-triangle" size={40} color={Colors.warning ?? '#f39c12'} />
+        <Text style={styles.emptyTitle}>لا توجد معايير لهذا النشاط</Text>
+        <Text style={styles.emptySubtitle}>تحقق من نوع المنشأة المختار أو تواصل مع مسؤول التطبيق</Text>
+        <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
+          <Text style={styles.backButtonText}>العودة</Text>
+        </TouchableOpacity>
       </SafeAreaView>
     );
   }
@@ -348,8 +362,34 @@ export default function ChecklistScreen() {
 
 const styles = StyleSheet.create({
   safeArea:          { flex: 1 },
-  centered:          { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md },
+  centered:          { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg },
   loadingText:       { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
+
+  // Empty-criteria state (Phase-U)
+  emptyTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+    textAlign: 'center',
+    marginTop: Spacing.sm,
+  },
+  emptySubtitle: {
+    fontSize: 13,
+    color: Colors.textSecondary,
+    textAlign: 'center',
+    lineHeight: 20,
+    marginTop: Spacing.xs,
+    paddingHorizontal: Spacing.lg,
+  },
+  backButton: {
+    marginTop: Spacing.md,
+    paddingHorizontal: Spacing.lg,
+    paddingVertical: Spacing.sm,
+    backgroundColor: Colors.surfaceOffset,
+    borderRadius: 8,
+  },
+  backButtonText: { fontSize: 14, color: Colors.textPrimary },
+
   meetingDoneStrip:  {
     flexDirection: 'row', alignItems: 'center', gap: 6,
     backgroundColor: '#eafaf1', paddingHorizontal: Spacing.base,
