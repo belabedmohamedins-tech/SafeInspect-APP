@@ -160,6 +160,11 @@ export default function RootLayout() {
             return;
           }
 
+          if (screen === 'reinspection') {
+            router.push('/screens/reinspection');
+            return;
+          }
+
           if (data.agendaId) {
             router.push({
               pathname: '/(tabs)/agenda',
@@ -249,26 +254,27 @@ export default function RootLayout() {
       <StatusBar style="light" />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="pin-lock"              options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/onboarding"    options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/server-login"  options={{ headerShown: false, gestureEnabled: false }} />
-        <Stack.Screen name="screens/notifications"         options={{ headerShown: false }} />
-        <Stack.Screen name="screens/inspector-profile"     options={{ headerShown: false }} />
-        <Stack.Screen name="screens/approval-queue"        options={{ headerShown: false }} />
-        <Stack.Screen name="screens/approval-detail"       options={{ headerShown: false }} />
-        <Stack.Screen name="screens/supervisor-approvals"  options={{ headerShown: false }} />
-        <Stack.Screen name="screens/stats"                 options={{ headerShown: false }} />
-        <Stack.Screen name="screens/cap"                   options={{ headerShown: false }} />
-        <Stack.Screen name="screens/audit-log"             options={{ headerShown: false }} />
-        <Stack.Screen name="screens/backup"                options={{ headerShown: false }} />
-        <Stack.Screen name="screens/settings"              options={{ headerShown: false }} />
-        <Stack.Screen name="screens/brief"                 options={{ headerShown: false }} />
-        <Stack.Screen name="screens/geofence-check"        options={{ headerShown: false }} />
-        <Stack.Screen name="screens/signature"             options={{ headerShown: false }} />
-        <Stack.Screen name="screens/map"                   options={{ headerShown: false }} />
-        <Stack.Screen name="screens/legal"                 options={{ headerShown: false }} />
-        <Stack.Screen name="screens/checklists"            options={{ headerShown: false }} />
-        <Stack.Screen name="screens/reports"               options={{ headerShown: false }} />
+        <Stack.Screen name="pin-lock"                          options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="screens/onboarding"               options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="screens/server-login"             options={{ headerShown: false, gestureEnabled: false }} />
+        <Stack.Screen name="screens/reinspection"             options={{ headerShown: false }} />
+        <Stack.Screen name="screens/notifications"            options={{ headerShown: false }} />
+        <Stack.Screen name="screens/inspector-profile"        options={{ headerShown: false }} />
+        <Stack.Screen name="screens/approval-queue"           options={{ headerShown: false }} />
+        <Stack.Screen name="screens/approval-detail"          options={{ headerShown: false }} />
+        <Stack.Screen name="screens/supervisor-approvals"     options={{ headerShown: false }} />
+        <Stack.Screen name="screens/stats"                    options={{ headerShown: false }} />
+        <Stack.Screen name="screens/cap"                      options={{ headerShown: false }} />
+        <Stack.Screen name="screens/audit-log"                options={{ headerShown: false }} />
+        <Stack.Screen name="screens/backup"                   options={{ headerShown: false }} />
+        <Stack.Screen name="screens/settings"                 options={{ headerShown: false }} />
+        <Stack.Screen name="screens/brief"                    options={{ headerShown: false }} />
+        <Stack.Screen name="screens/geofence-check"           options={{ headerShown: false }} />
+        <Stack.Screen name="screens/signature"                options={{ headerShown: false }} />
+        <Stack.Screen name="screens/map"                      options={{ headerShown: false }} />
+        <Stack.Screen name="screens/legal"                    options={{ headerShown: false }} />
+        <Stack.Screen name="screens/checklists"               options={{ headerShown: false }} />
+        <Stack.Screen name="screens/reports"                  options={{ headerShown: false }} />
       </Stack>
     </I18nProvider>
   );
