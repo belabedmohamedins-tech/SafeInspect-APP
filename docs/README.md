@@ -8,32 +8,38 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 21:50 WAT — [Agent: Perplexity] — Phase Q screen map 100% complete; 4 lifecycle gaps identified
+- Phases closed: none (Q stays open until gaps are resolved)
+- Phases opened: none
+- Files changed: docs/README.md
+- Critical finding: `app/(tabs)/inspection/` confirmed: _layout, index, facilities, categories, start, checklist (14 KB). `app/screens/facilities/` confirmed: _layout, index, all, add, edit, profile (22 KB). **Full screen map is now known.** Gaps confirmed: no dedicated Evaluation, Decision, Reinspection, or Closure screens exist as separate files. These may be embedded inside `checklist.tsx` or `start.tsx` — read those files before building anything new for these stages.
+
 ### 2026-08-04 21:43 WAT — [Agent: Perplexity] — Phase Q UI map confirmed: Expo Router app/ (NOT src/screens/)
 - Phases closed: none
 - Phases opened: none (Q re-scoped with accurate file map)
 - Files changed: docs/README.md
-- Critical finding: The app uses **Expo Router file-system routing** — screens live in `app/`, NOT `src/screens/` or `src/navigation/`. `app/(tabs)/` has: home, cap, inspection/, plus, actions. `app/screens/` has 20 detailed screens: approval-detail, approval-queue, audit-log, backup, brief, cap, checklists, corrective-actions, facilities/, geofence-check, inspector-profile, legal, map, notifications, onboarding, pin-setup, reports, server-login, settings, signature, stats, supervisor-approvals. Root app/: _layout.tsx, index.tsx, modal.tsx, onboarding.tsx, pin-lock.tsx. Phase Q work = wire missing lifecycle screens and confirm all tab + stack navigation is complete.
+- Critical finding: The app uses **Expo Router file-system routing** — screens live in `app/`, NOT `src/screens/` or `src/navigation/`. `app/(tabs)/` has: home, cap, inspection/, plus, actions. `app/screens/` has 20 detailed screens. Root app/: _layout.tsx, index.tsx, modal.tsx, onboarding.tsx, pin-lock.tsx.
 
 ### 2026-08-04 22:10 WAT — [Agent: Perplexity] — Phases O and P confirmed CLOSED by direct code read
 - Phases closed: O (corrective actions tracking), P (statistics / dashboard)
 - Phases opened: Q (UI screens / navigation wiring — next priority)
 - Files changed: docs/README.md
-- Critical finding: `src/repositories/CorrectiveActionRepository.ts` (5.9 KB) + `src/services/CapReportService.ts` (11 KB) + `src/services/CapNotificationService.ts` (16 KB) + `src/services/capFactory.ts` (2.3 KB) confirm full corrective action pipeline exists. `src/utils/statsUtils.ts` (1.7 KB) + `src/utils/scoringUtils.ts` (8.9 KB) + `src/utils/loadHomeData.ts` (3.6 KB) confirm statistics/dashboard utilities exist. Also confirmed: `violationHistory.ts`, `followUpService.ts`, `differentialView.ts`, `groupViolations.ts`, `numericUtils.ts`. The entire backend is essentially complete. **Next gap is UI screens and navigation wiring** — inspect `app/` before building anything.
+- Critical finding: Full corrective action pipeline + statistics utilities confirmed in `src/`. Entire backend is complete.
 
 ### 2026-08-04 21:55 WAT — [Agent: Perplexity] — Phase N confirmed CLOSED by direct code read of pdfService.ts (54 KB)
 - Phases closed: N (report generation)
-- Phases opened: none (O and P already listed as open)
+- Phases opened: none
 - Files changed: docs/README.md
-- Critical finding: `src/services/pdfService.ts` is a complete, production-grade Arabic RTL PDF report module. Includes letterhead, score/grade badge, severity breakdown bars, differential verification section (follow-up), decision support section with legal basis, field photos (base64), and blank printable checklist. Uses `expo-print` + `expo-sharing`. Phase O (corrective actions) is now the top priority.
+- Critical finding: `src/services/pdfService.ts` is a complete, production-grade Arabic RTL PDF report module.
 
 ### 2026-08-04 21:16 WAT — [Agent: Perplexity] — Phases L & M confirmed CLOSED by direct code read; roadmap updated
 - Phases closed: L (criteria implementation), M (scoring integration)
 - Phases opened: none
 - Files changed: docs/README.md
-- Critical finding: `src/criteria/` has 20 fully-implemented activity criteria files. `src/utils/scoringUtils.ts` is production-grade — severity-weighted scoring, grade A/B/C/D with critical override, risk levels 1–4, inspection cycle days (730/365/180/30), 60% completion gate, Arabic legal disclaimer.
+- Critical finding: `src/criteria/` has 20 fully-implemented activity criteria files. `scoringUtils.ts` is production-grade.
 
 ### 2026-08-04 19:25 WAT — [Agent: Perplexity] — Connector stabilized; docs updated with full session history and current phase map
-- Phases closed: none (no code session this round)
+- Phases closed: none
 - Phases opened: none
 - Files changed: docs/README.md, docs/STRATEGIC_PLAN.md
 - Critical finding: All 8 manual chapters confirmed in docs/. STRATEGIC_PLAN.md phase list now reflects actual repo state as of 2026-08-04.
@@ -42,7 +48,7 @@
 - Phases closed: none
 - Phases opened: A through G (initial roadmap)
 - Files changed: docs/README.md, docs/STRATEGIC_PLAN.md
-- Critical finding: docs/ previously had no unified roadmap file. README and STRATEGIC_PLAN now serve as the handoff mechanism.
+- Critical finding: docs/ previously had no unified roadmap file.
 
 ---
 
@@ -127,7 +133,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 | `Inspection_Manual_Chapter7_Air_Quality.md` | ✅ Active | Air emissions, Décret 06-138 point-source rules, self-monitoring. |
 | `Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md` | ✅ Active | Site hygiene and pest control. |
 | `Perplexity_Implementation_Spec.md` | ✅ Active | Current implementation spec from Perplexity sessions. |
-| `RAQIB_MASTER_MANUSCRIPT.md` | 📚 Reference | Full manuscript. Read for context, do not re-implement from it without checking code first. |
+| `RAQIB_MASTER_MANUSCRIPT.md` | 📚 Reference | Full manuscript. Read for context only — do not re-implement without checking code first. |
 | `RAQIB_Fix_Spec_v2.md` | 📚 Reference | Earlier fix spec. Superseded by v3 and Perplexity_Implementation_Spec. |
 | `RAQIB_Fix_Spec_v3.md` | 📚 Reference | Later fix spec. Check against current code before acting on it. |
 | `RAQIB_Citation_Verification_Protocol.md` | 📚 Reference | Legal citation verification protocol. |
@@ -141,7 +147,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 21:43 WAT)
+### Quick Status Summary (as of 2026-08-04 21:50 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -159,102 +165,119 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | L | Criteria implementation in app code | ✅ CLOSED 2026-08-04 | Direct code read — 20 activity files in `src/criteria/` |
 | M | Scoring integration with criteria | ✅ CLOSED 2026-08-04 | Direct code read — `scoringUtils.ts` fully implemented |
 | N | Report generation module | ✅ CLOSED 2026-08-04 | Direct code read — `pdfService.ts` 54 KB, fully implemented |
-| O | Corrective actions tracking | ✅ CLOSED 2026-08-04 | Direct code read — `CorrectiveActionRepository.ts` + `CapReportService.ts` + `CapNotificationService.ts` + `capFactory.ts` |
-| P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` + `scoringUtils.ts` all present |
-| **Q** | **UI screens / navigation wiring** | 🔴 **OPEN — NEXT PRIORITY** | Expo Router `app/` inspected — see full screen map below |
+| O | Corrective actions tracking | ✅ CLOSED 2026-08-04 | Direct code read — full pipeline confirmed |
+| P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` |
+| **Q** | **UI screens / navigation wiring** | 🔴 **OPEN** | Screen map 100% known — 4 lifecycle gaps confirmed |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Phase Q: inspect app/(tabs)/inspection/ and app/screens/ gaps vs. lifecycle stages
-→ Phase Q: wire missing lifecycle screens (Preparation, Evaluation, Decision, Reinspection, Closure)
+→ Q-1: Read checklist.tsx (14 KB) and start.tsx (12 KB) — confirm if Evaluation/Decision are embedded
+→ Q-2: If missing — add evaluation.tsx and decision.tsx under app/(tabs)/inspection/
+→ Q-3: Add reinspection.tsx and closure.tsx under app/screens/ if confirmed missing
+→ Q-4: Verify app/_layout.tsx auth guard + PIN lock + onboarding redirect
+→ Q-5: Run npx tsc --noEmit and Jest — fix all failures
+→ Q close: update README + STRATEGIC_PLAN, push
 → Phase J: Legal verify fire safety (Loi 19-02 scope)
 → Phase K: Legal verify air quality (Décret 06-138 annex)
-→ Phase R: Integration / end-to-end tests — open after Q closes
+→ Phase R: Integration / end-to-end tests
 ```
 
 ---
 
-## Phase Q — UI Screens / Navigation Wiring (OPEN — Top Priority)
+## Phase Q — UI Screens / Navigation Wiring (OPEN)
 
 ### ⚠️ CRITICAL: Routing Architecture
 
 This app uses **Expo Router file-system routing**. There is **no `src/navigation/` folder**. Routes are defined by the file tree under `app/`.
 
+### Complete Confirmed File Tree
+
 ```
 app/
-├── _layout.tsx          ← Root layout (auth guard, font loading, providers)
-├── index.tsx            ← Entry point / redirect
-├── modal.tsx            ← Global modal route
-├── onboarding.tsx       ← Onboarding flow (root level)
-├── pin-lock.tsx         ← PIN lock screen (root level)
+├── _layout.tsx                    ← Root layout (auth guard, font loading, providers)
+├── index.tsx                      ← Entry point / redirect
+├── modal.tsx                      ← Global modal route
+├── onboarding.tsx                 ← Onboarding flow (root level)
+├── pin-lock.tsx                   ← PIN lock screen (root level)
 │
-├── (tabs)/              ← Bottom tab navigator group
-│   ├── _layout.tsx      ← Tab bar definition
-│   ├── home.tsx         ← Home / dashboard tab
-│   ├── cap.tsx          ← CAP (Corrective Action Plan) tab
-│   ├── plus.tsx         ← Quick action / new inspection tab
-│   ├── actions.tsx      ← Actions tab
-│   └── inspection/      ← Inspection sub-group (stack inside tab)
+├── (tabs)/                        ← Bottom tab navigator group
+│   ├── _layout.tsx                ← Tab bar definition
+│   ├── home.tsx         (5 KB)    ← Home / dashboard
+│   ├── cap.tsx          (14 KB)   ← CAP tab (Corrective Action Plan)
+│   ├── plus.tsx         (3 KB)    ← Quick-action / new inspection
+│   ├── actions.tsx      (198 B)   ← Actions tab (stub?)
+│   └── inspection/
+│       ├── _layout.tsx    (359 B)   ← Inspection stack layout
+│       ├── index.tsx      (2 KB)    ← Inspection list / entry
+│       ├── facilities.tsx (4 KB)    ← Facility picker
+│       ├── categories.tsx (2 KB)    ← Checklist category picker
+│       ├── start.tsx      (12 KB)   ← Inspection start / preparation
+│       └── checklist.tsx  (15 KB)   ← Checklist execution (Inspection + Evidence)
 │
-└── screens/             ← Stack screens pushed from tabs
-    ├── approval-detail.tsx
-    ├── approval-queue.tsx
-    ├── audit-log.tsx
-    ├── backup.tsx
-    ├── brief.tsx
-    ├── cap.tsx
-    ├── checklists.tsx
-    ├── corrective-actions.tsx
-    ├── facilities/          ← Sub-group for facility screens
-    ├── geofence-check.tsx
-    ├── inspector-profile.tsx
-    ├── legal.tsx
-    ├── map.tsx
-    ├── notifications.tsx
-    ├── onboarding.tsx
-    ├── pin-setup.tsx
-    ├── reports.tsx
-    ├── server-login.tsx
-    ├── settings.tsx
-    ├── signature.tsx
-    ├── stats.tsx
-    └── supervisor-approvals.tsx
+└── screens/                       ← Stack screens pushed from tabs
+    ├── approval-detail.tsx  (20 KB)
+    ├── approval-queue.tsx   (11 KB)
+    ├── audit-log.tsx        (10 KB)
+    ├── backup.tsx           (14 KB)
+    ├── brief.tsx            (10 KB)  ← Inspection brief / planning
+    ├── cap.tsx              (15 KB)  ← CAP detail screen
+    ├── checklists.tsx       (9 KB)   ← Checklist library
+    ├── corrective-actions.tsx (13 KB)
+    ├── geofence-check.tsx   (12 KB)
+    ├── inspector-profile.tsx (10 KB)
+    ├── legal.tsx            (4 KB)
+    ├── map.tsx              (6 KB)
+    ├── notifications.tsx    (9 KB)
+    ├── onboarding.tsx       (5 KB)
+    ├── pin-setup.tsx        (9 KB)
+    ├── reports.tsx          (18 KB)  ← Report viewer / generator
+    ├── server-login.tsx     (7 KB)
+    ├── settings.tsx         (14 KB)
+    ├── signature.tsx        (5 KB)
+    ├── stats.tsx            (14 KB)  ← Statistics dashboard
+    ├── supervisor-approvals.tsx (20 KB)
+    └── facilities/
+        ├── _layout.tsx      (380 B)
+        ├── index.tsx        (7 KB)   ← Facility list
+        ├── all.tsx          (4 KB)   ← All facilities view
+        ├── add.tsx          (10 KB)  ← Add new facility (Registry)
+        ├── edit.tsx         (11 KB)  ← Edit facility
+        └── profile.tsx      (22 KB)  ← Facility profile detail
 ```
 
-### Lifecycle coverage check
+### Lifecycle Coverage Map
 
-| Lifecycle Stage | Existing screen | Gap? |
+| Lifecycle Stage | Confirmed screen(s) | Status |
 |---|---|---|
-| Registry | `screens/facilities/` | Inspect sub-dir |
-| Planning | `screens/brief.tsx` | Likely covers planning brief |
-| Preparation | `screens/checklists.tsx` + `screens/geofence-check.tsx` | Check if preparation flow is complete |
-| Inspection | `(tabs)/inspection/` | Inspect sub-dir contents |
-| Evidence / Photos | Unknown | Check inspection sub-dir |
-| Evaluation | Unknown | May be inside inspection/ |
-| Decision | Unknown | May be inside inspection/ |
-| Report | `screens/reports.tsx` | Likely complete |
-| Corrective Actions | `screens/corrective-actions.tsx` + `(tabs)/cap.tsx` + `screens/cap.tsx` | Likely complete |
-| Reinspection | Unknown | Not yet confirmed |
-| Closure | Unknown | Not yet confirmed |
-| Statistics | `screens/stats.tsx` | Likely complete |
+| Registry | `screens/facilities/` (index, all, add, edit, profile) | ✅ CONFIRMED |
+| Planning | `screens/brief.tsx` | ✅ CONFIRMED |
+| Preparation | `(tabs)/inspection/start.tsx` (12 KB) | ✅ CONFIRMED |
+| Inspection (checklist execution) | `(tabs)/inspection/checklist.tsx` (15 KB) | ✅ CONFIRMED |
+| Evidence (photos, notes) | Likely inside `checklist.tsx` | ⚠️ READ FIRST |
+| Evaluation (scoring review) | Unknown — may be inside `checklist.tsx` or `start.tsx` | ⚠️ READ FIRST |
+| Decision | Unknown — may be inside `checklist.tsx` or `reports.tsx` | ⚠️ READ FIRST |
+| Report | `screens/reports.tsx` (18 KB) | ✅ CONFIRMED |
+| Corrective Actions | `screens/corrective-actions.tsx` + `(tabs)/cap.tsx` + `screens/cap.tsx` | ✅ CONFIRMED |
+| Reinspection | Unknown — no dedicated screen found | ❌ GAP (read checklist.tsx first) |
+| Closure | Unknown — no dedicated screen found | ❌ GAP (read checklist.tsx first) |
+| Statistics | `screens/stats.tsx` (14 KB) | ✅ CONFIRMED |
 
-### What to do next in Phase Q
+### ⚠️ Before building anything for the gaps
 
-1. Inspect `app/(tabs)/inspection/` — list all files there
-2. Inspect `app/screens/facilities/` — list all files there
-3. Map each file to a lifecycle stage
-4. Identify missing screens and implement them
-5. Check `app/(tabs)/_layout.tsx` — confirm all tabs are correctly declared
-6. Check `app/_layout.tsx` — confirm auth guard, PIN lock, and onboarding redirect logic
+**Read these two files first:**
+- `app/(tabs)/inspection/checklist.tsx` (15 KB) — may contain evaluation, decision, and closure flows as in-screen steps
+- `app/(tabs)/inspection/start.tsx` (12 KB) — may contain preparation + evaluation entry
+
+**Only if those files confirm the stages are missing** should you create new screens. Do not duplicate functionality.
 
 ### Traps to avoid
 
-- **Do NOT create `src/navigation/` or `src/screens/`** — this is Expo Router; routes = files in `app/`
-- Do NOT rebuild services that already exist — the backend is complete
+- **Do NOT create `src/navigation/` or `src/screens/`** — Expo Router only; routes = files in `app/`
+- Do NOT rebuild backend services — the full service + repository layer is confirmed complete
 - Do NOT add new dependencies without checking `package.json` first
-- RTL (Arabic) layout must be applied consistently — check existing screens for the RTL pattern before creating new ones
-- Adding a new screen = creating a new file under `app/` in the right location — not registering it in a navigator manually
+- RTL (Arabic) layout must be applied consistently — study `checklist.tsx` as the RTL reference before creating new screens
+- `actions.tsx` is 198 bytes — it may be a stub; verify before assuming it is functional
 
 ---
 
@@ -263,53 +286,28 @@ app/
 - All 8 manual chapters pushed to `docs/` ✅
 - `docs/README.md` created as living handoff ✅
 - `docs/STRATEGIC_PLAN.md` created as phase registry ✅
-- Scoring engine (`scoringUtils`, `statsUtils`, `types`, `useChecklistData`) confirmed in repo ✅
-- `test_scoring.txt` confirms Jest tests exist for scoring ✅
-- **20 activity-specific criteria files confirmed in `src/criteria/`** ✅ (2026-08-04)
-  - `baseGeneralCriteria.ts` (29 KB), `uabCriteria.ts` (26 KB), `abattoirCriteria.ts` (20 KB), `couvoirCriteria.ts` (17 KB), `updCriteria.ts` (15 KB), `slaughterhouseSmallCriteria.ts` (13 KB), and 14 more activity files
-- **`scoringUtils.ts` severity-weighted scoring engine confirmed production-grade** ✅ (2026-08-04)
-  - Weights: high=3, medium=2, low=1
-  - Grades A/B/C/D with critical override (forced D at ≥3 high violations, ceiling C at ≥1)
-  - Risk levels 1–4 → inspection cycles 730/365/180/30 days
-  - Completion rate gate: 60% minimum before grade is issued
-  - Arabic legal disclaimer hardcoded in `ScoringResult` output
-- **`pdfService.ts` report generation confirmed production-grade** ✅ (2026-08-04)
-  - Full Arabic RTL HTML report: letterhead, score/grade badge, severity bars, grouped checklist
-  - Differential verification section (follow-up inspection comparison)
-  - Decision support section with `suggestDecision()` + legal basis + urgency color coding
-  - Field photos section (base64 embed from `item.photos[]` or `item.photoUri`)
-  - Blank printable checklist generator (for paper field use)
-  - `expo-print` → PDF + `expo-sharing` for export/share
-  - Also imports: `differentialView.ts`, `decisionSupport.ts`, `CapReportService.ts`
-- **Full corrective action pipeline confirmed** ✅ (2026-08-04)
-  - `src/repositories/CorrectiveActionRepository.ts` (5.9 KB)
-  - `src/services/CapReportService.ts` (11 KB)
-  - `src/services/CapNotificationService.ts` (16 KB)
-  - `src/services/capFactory.ts` (2.3 KB)
-  - `src/services/followUpService.ts` (2 KB)
-  - `src/utils/violationHistory.ts` (5.5 KB)
-  - `src/utils/differentialView.ts` (7.3 KB)
-- **Statistics / dashboard utilities confirmed** ✅ (2026-08-04)
-  - `src/utils/statsUtils.ts` (1.7 KB)
-  - `src/utils/loadHomeData.ts` (3.6 KB)
-  - `src/utils/scoringUtils.ts` (8.9 KB)
-  - `src/utils/groupViolations.ts` (2.1 KB)
-  - `src/utils/numericUtils.ts` (2.4 KB)
-- **Other confirmed services** ✅ (2026-08-04)
-  - `src/services/BackupService.ts` (10.6 KB)
-  - `src/services/NotificationService.ts` (6.9 KB)
-  - `src/services/CapNotificationService.ts` (16 KB)
-  - `src/services/PhotoService.ts` (2.5 KB)
-  - `src/services/SessionLockService.ts`
-  - `src/services/IntegrityService.ts` (4.1 KB)
-- **Full repository layer confirmed** ✅ (2026-08-04)
-  - `AgendaRepository`, `ApprovalRepository`, `AuditLogRepository`, `AuthRepository`
-  - `CorrectiveActionRepository`, `FacilityRepository`, `InspectionRepository`
-  - `NotificationRepository`, `SettingsRepository`
-- **Expo Router `app/` screen map confirmed** ✅ (2026-08-04)
-  - 5 tab screens in `app/(tabs)/`: home, cap, inspection/, plus, actions
-  - 20 stack screens in `app/screens/`: see full list in Phase Q section above
-  - Root screens: index, modal, onboarding, pin-lock
+- Scoring engine (`scoringUtils`, `statsUtils`, `types`, `useChecklistData`) confirmed ✅
+- **20 activity criteria files in `src/criteria/`** ✅ (2026-08-04)
+- **`scoringUtils.ts` production-grade severity-weighted scoring** ✅ (2026-08-04)
+  - Weights: high=3, medium=2, low=1 | Grades A/B/C/D with critical override
+  - Risk 1–4 → cycles 730/365/180/30 days | 60% completion gate
+- **`pdfService.ts` (54 KB) production-grade Arabic RTL PDF** ✅ (2026-08-04)
+  - Letterhead, score/grade badge, severity bars, grouped checklist, field photos, differential section, decision support, blank printable checklist
+  - Uses `expo-print` + `expo-sharing`
+- **Full corrective action pipeline** ✅ (2026-08-04)
+  - `CorrectiveActionRepository.ts`, `CapReportService.ts`, `CapNotificationService.ts`, `capFactory.ts`, `followUpService.ts`, `violationHistory.ts`, `differentialView.ts`
+- **Statistics utilities** ✅ (2026-08-04)
+  - `statsUtils.ts`, `loadHomeData.ts`, `scoringUtils.ts`, `groupViolations.ts`, `numericUtils.ts`
+- **Full repository layer** ✅ (2026-08-04)
+  - `AgendaRepository`, `ApprovalRepository`, `AuditLogRepository`, `AuthRepository`, `CorrectiveActionRepository`, `FacilityRepository`, `InspectionRepository`, `NotificationRepository`, `SettingsRepository`
+- **Full service layer** ✅ (2026-08-04)
+  - `BackupService`, `NotificationService`, `CapNotificationService`, `PhotoService`, `SessionLockService`, `IntegrityService`
+- **Expo Router `app/` screen map 100% confirmed** ✅ (2026-08-04)
+  - 6 screens in `app/(tabs)/inspection/`
+  - 6 screens in `app/screens/facilities/`
+  - 20 screens in `app/screens/`
+  - 5 root-level app screens
+  - See full tree in Phase Q section above
 
 ---
 
@@ -381,10 +379,10 @@ Any agent picking this up should do in order:
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
 3. **Run `git log --oneline -10` to see recent commits**
-4. **Inspect `app/(tabs)/inspection/`** — list all files to find what's already in the inspection flow
-5. **Inspect `app/screens/facilities/`** — list all files to confirm registry screens
-6. **Map each existing screen to a lifecycle stage** — see the table in Phase Q above
-7. **Implement only the missing lifecycle screens** — do not duplicate what exists
+4. **Read `app/(tabs)/inspection/checklist.tsx`** — confirm if Evaluation, Decision, Closure are embedded steps
+5. **Read `app/(tabs)/inspection/start.tsx`** — confirm if Preparation + Evaluation entry are covered
+6. **Read `app/(tabs)/actions.tsx`** — confirm if it's a stub (198 bytes) or functional
+7. Based on findings: implement only what is genuinely missing (likely Reinspection and Closure screens)
 8. Run `npx tsc --noEmit` + Jest after any implementation
 9. Update this file + STRATEGIC_PLAN.md
 10. Push
