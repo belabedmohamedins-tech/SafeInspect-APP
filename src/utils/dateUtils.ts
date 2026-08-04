@@ -31,6 +31,12 @@ export const formatDateTimeShort = (isoString: string): string => {
 };
 
 /**
+ * Alias kept for callers that use the shorter name.
+ * @deprecated Use formatDateTimeShort instead.
+ */
+export const formatDateShort = formatDateTimeShort;
+
+/**
  * تنسيق التاريخ فقط (بدون وقت)
  * مثال: "15 مارس 2026"
  */
@@ -42,7 +48,7 @@ export const formatDateOnly = (isoString: string): string => {
     day: 'numeric',
   });
 };
-// داخل src/utils/dateUtils.ts
+
 export const formatDateForAgenda = (isoString: string): string => {
   const date = new Date(isoString);
   return date.toLocaleDateString('ar-DZ', {

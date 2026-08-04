@@ -14,7 +14,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-05-02',
     axis: 'الذبح والفحص الصحي',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'تنظيم فحص صحي قبل الذبح للدواجن (ante mortem) للتأكد من خلوّها من الأمراض الظاهرة واستبعاد الحالات المشتبه فيها قبل الدخول إلى غرفة الذبح.',
     legalReference: 'المادة 6 من المرسوم التنفيذي 04-82 المؤرخ في 24 مارس 2004 المتعلق بالاعتماد الصحي للمنشآت المرتبطة بالحيوانات والمنتوجات الحيوانية، التي تشترط إجراء المراقبة الصحية قبل ذبح الدواجن.',
     severity: 'high',
@@ -24,7 +24,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-05-03',
     axis: 'الذبح والفحص الصحي',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'إجراء فحص بعدي للذبائح (post mortem) للتأكد من سلامة الذبائح واستبعاد الأجزاء أو الذبائح غير الصالحة للاستهلاك وتوجيهها لمسار نفايات خاص.',
     legalReference: 'المادة 9 من المرسوم 04-82 بخصوص الاعتماد الصحي للمنشآت الحيوانية، والمادة 3 من المرسوم 17-140 المؤرخ في 27 مارس 2017 حول سلامة المنتجات الغذائية ذات الأصل الحيواني.',
     severity: 'high',
@@ -32,8 +32,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 4.1 — DBO5 corrected to 35 mg/L per Décret 06-141 Annex I (same as abattoirCriteria)
-    // Previous value was 30 mg/L — incorrect. Confirmed 35 mg/L applies to slaughterhouse effluents.
     id: 'SLH-05-04',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
@@ -52,7 +50,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     },
   },
   {
-    // Companion criterion — DCO discharge threshold (Décret 06-141 Annex I)
     id: 'SLH-05-04B',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
@@ -71,7 +68,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     },
   },
   {
-    // Companion criterion — MES discharge threshold (Décret 06-141 Annex I)
     id: 'SLH-05-04C',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
@@ -90,7 +86,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     },
   },
   {
-    // Companion criterion — pH range (Décret 06-141 Annex I)
     id: 'SLH-05-04D',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
@@ -123,7 +118,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-05-06',
     axis: 'مياه الغسل والتطهير',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'استعمال ماء صالح للشرب في غسل الدواجن والأدوات والأسطح، مع احترام الحد الأدنى للكلور الحر المتبقي عند استعمال ماء الشبكة.',
     legalReference: 'المادة 25 من المرسوم 17-140 المؤرخ في 27 مارس 2017 بخصوص الماء الصالح للشرب في المنشآت الغذائية، والمادة 4 من المرسوم 11-125 المعدل بالمرسوم 14-96 الذي يحدد الحد الأدنى للكلور الحر المتبقي بـ 0.1 ملغ/ل.',
     severity: 'high',
@@ -133,7 +128,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-05-07',
     axis: 'غرف التبريد',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'توفر ثلاجات أو غرف تبريد ملائمة لحفظ لحوم الدواجن بدرجة حرارة مناسبة (عادة بين 0 و5°م) حسب نوع المنتجات، مع ميزان حرارة داخلي.',
     legalReference: 'المادة 20 من المرسوم 17-140 التي تنص على وجوب توفير تجهيزات تبريد كافية مزودة بأجهزة قياس الحرارة في المنشآت الغذائية التي تتعامل مع منتجات حيوانية.',
     severity: 'high',
@@ -153,7 +148,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-05-09',
     axis: 'صحة وسلوك العمال',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'ارتداء عمال المذبحة لملابس عمل نظيفة ومناسبة (مآزر، أغطية رأس، أحذية خاصة) مع منع الأكل والشرب والتدخين في منطقة الذبح.',
     legalReference: 'المادتان 35 و36 من المرسوم التنفيذي 17-140 المتعلق بشروط النظافة والنظافة الصحية للمؤسسات الغذائية (ملابس العمل، سلوك المستخدمين، المنع الصريح للتدخين).',
     severity: 'high',
@@ -164,7 +159,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
   {
     id: 'SLH-06-01',
     axis: 'نظام HACCP وسلامة الغذاء',
-    category: 'صحيه',
+    category: 'صحية',
     criteria: 'تطبيق مبادئ HACCP أو نظام مكافئ: تحديد نقاط التحكم الحرجة (CCP) في خط الذبح (دم، سلخ، تحرير الأحشاء)، مع سجلات مراقبة موثقة لكل CCP.',
     legalReference: 'المادة 5 من المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017 التي تُلزم مشغلي المنشآت الغذائية بتطبيق نظام تحليل الأخطار ونقاط التحكم الحرجة (HACCP) أو إجراءات مكافئة مستندة إلى مبادئه.',
     severity: 'high',
@@ -172,7 +167,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 3.6: veterinary/medical waste — zero coverage previously (Ch.2; Décret 03-478)
     id: 'SLH-07-01',
     axis: 'النفايات البيطرية والطبية',
     category: 'بيئية',
@@ -183,7 +177,6 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 10.2: EIA trigger criterion — modelled on UPD-AX10-01
     id: 'SLH-08-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
