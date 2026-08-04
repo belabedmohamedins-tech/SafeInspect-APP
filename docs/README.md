@@ -8,11 +8,17 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 21:55 WAT — [Agent: Perplexity] — Phase N confirmed CLOSED by direct code read of pdfService.ts (54 KB)
+- Phases closed: N (report generation)
+- Phases opened: none (O and P already listed as open)
+- Files changed: docs/README.md
+- Critical finding: `src/services/pdfService.ts` is a complete, production-grade Arabic RTL PDF report module. Includes letterhead, score/grade badge, severity breakdown bars, differential verification section (follow-up), decision support section with legal basis, field photos (base64), and blank printable checklist. Uses `expo-print` + `expo-sharing`. No screens/ directory exists — app uses flat service architecture. Phase O (corrective actions) is now the top priority.
+
 ### 2026-08-04 21:16 WAT — [Agent: Perplexity] — Phases L & M confirmed CLOSED by direct code read; roadmap updated
 - Phases closed: L (criteria implementation), M (scoring integration)
 - Phases opened: none
 - Files changed: docs/README.md
-- Critical finding: `src/criteria/` has 20 fully-implemented activity criteria files. `src/utils/scoringUtils.ts` is production-grade — severity-weighted scoring, grade A/B/C/D with critical override, risk levels 1–4, inspection cycle days (730/365/180/30), 60% completion gate, Arabic legal disclaimer. Phase N (report generation) is now the top priority.
+- Critical finding: `src/criteria/` has 20 fully-implemented activity criteria files. `src/utils/scoringUtils.ts` is production-grade — severity-weighted scoring, grade A/B/C/D with critical override, risk levels 1–4, inspection cycle days (730/365/180/30), 60% completion gate, Arabic legal disclaimer.
 
 ### 2026-08-04 19:25 WAT — [Agent: Perplexity] — Connector stabilized; docs updated with full session history and current phase map
 - Phases closed: none (no code session this round)
@@ -122,7 +128,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 21:16 WAT)
+### Quick Status Summary (as of 2026-08-04 21:55 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -137,17 +143,18 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | I | Site Hygiene/Pest Control (Ch8) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
 | J | Verify Ch3 Fire Safety Loi 19-02 scope | 🟡 OPEN | Legal scope per facility type needs clarification |
 | K | Verify Ch7 Air Quality annex numeric table | 🟡 OPEN | Décret 06-138 annex values need verification per activity |
-| **L** | **Criteria implementation in app code** | **✅ CLOSED 2026-08-04** | **Direct code read — 20 activity files in `src/criteria/`** |
-| **M** | **Scoring integration with criteria** | **✅ CLOSED 2026-08-04** | **Direct code read — `scoringUtils.ts` fully implemented** |
-| N | Report generation module | 🔴 OPEN — **NEXT PRIORITY** | Not started |
-| O | Corrective actions tracking | 🔴 OPEN | Not started |
-| P | Statistics / dashboard module | 🔴 OPEN | Not started |
+| L | Criteria implementation in app code | ✅ CLOSED 2026-08-04 | Direct code read — 20 activity files in `src/criteria/` |
+| M | Scoring integration with criteria | ✅ CLOSED 2026-08-04 | Direct code read — `scoringUtils.ts` fully implemented |
+| **N** | **Report generation module** | **✅ CLOSED 2026-08-04** | **Direct code read — `pdfService.ts` 54 KB, fully implemented** |
+| O | Corrective actions tracking | 🔴 OPEN — **NEXT PRIORITY** | Not yet confirmed in code — inspect before building |
+| P | Statistics / dashboard module | 🔴 OPEN | Not yet confirmed in code — inspect before building |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-N (Report generation)  →  O (Corrective actions)  →  J (Legal verify fire)
-→  K (Legal verify air)  →  P (Statistics)
+→ Inspect src/services/ and src/stores/ for any existing corrective actions or stats code
+→ O (Corrective actions tracking)  →  P (Statistics / dashboard)
+→ J (Legal verify fire safety)  →  K (Legal verify air quality)
 ```
 
 ---
@@ -167,28 +174,55 @@ N (Report generation)  →  O (Corrective actions)  →  J (Legal verify fire)
   - Risk levels 1–4 → inspection cycles 730/365/180/30 days
   - Completion rate gate: 60% minimum before grade is issued
   - Arabic legal disclaimer hardcoded in `ScoringResult` output
+- **`pdfService.ts` report generation confirmed production-grade** ✅ (2026-08-04)
+  - Full Arabic RTL HTML report: letterhead, score/grade badge, severity bars, grouped checklist
+  - Differential verification section (follow-up inspection comparison)
+  - Decision support section with `suggestDecision()` + legal basis + urgency color coding
+  - Field photos section (base64 embed from `item.photos[]` or `item.photoUri`)
+  - Blank printable checklist generator (for paper field use)
+  - `expo-print` → PDF + `expo-sharing` for export/share
+  - Also imports: `differentialView.ts`, `decisionSupport.ts`, `CapReportService.ts`
 
 ---
 
-## Phase N — Report Generation (OPEN — Top Priority)
+## Phase O — Corrective Actions Tracking (OPEN — Top Priority)
 
 ### What is needed
-A report generation module that takes a completed `ScoringResult` + establishment metadata + `InspectionItem[]` and produces:
-- A structured Arabic/French inspection report (PDF or shareable format)
-- Summary: establishment name, date, inspector, activity type, score, grade, risk level
-- Violation list grouped by severity (high → medium → low)
-- Next inspection date (computed from `nextInspectionDays` in `ScoringResult`)
-- Legal disclaimer (already available as `result.disclaimer` in `ScoringResult`)
-- Signature/stamp placeholder
+A corrective actions module that allows an inspector to:
+1. Record a corrective action required against a non-compliant criterion
+2. Set a deadline for the establishment to comply
+3. Track status: pending → in progress → completed → verified
+4. Link back to the specific `InspectionItem` and `SavedInspection`
+5. Feed into the differential verification section of the next follow-up report (already consumed by `pdfService.ts` via `differentialView.ts`)
 
 ### Files to read before starting
-- `src/utils/scoringUtils.ts` — `ScoringResult` interface (fully defined, reuse as-is)
-- `src/types/index.ts` — `InspectionItem`, `Establishment` types
-- `src/utils/groupViolations.ts` — violation grouping utility (already exists, reuse it)
-- `src/screens/` — check for any existing report screen before building new one
+- `src/services/differentialView.ts` — already consumes prior inspection data for follow-up comparison; understand its interface before designing corrective actions storage
+- `src/services/decisionSupport.ts` — `suggestDecision()` already outputs `nextVisitDays`; corrective action deadlines should align
+- `src/repositories/` — check for any existing corrective action repository
+- `src/stores/` — check for any corrective action store
+- `src/types.ts` — check if `CorrectiveAction` type already exists
 
-### Trap to avoid
-Do NOT generate a report that hard-codes legal consequences (closure, fines, criminal referral). The grade is a prioritisation tool only. All legal decisions are taken by the competent authority per Loi 03-10 and Décret 06-198. The disclaimer text is already in `scoringUtils.ts` — use it verbatim.
+### Traps to avoid
+- Do NOT hard-code legal deadlines for corrective actions (varies by decree and category)
+- Do NOT duplicate the differential view logic — `differentialView.ts` already handles follow-up comparison; corrective actions tracking is the data source for it
+- Always link to `SavedInspection.id` and `InspectionItem.id` — never use facility name as key
+
+---
+
+## Phase P — Statistics / Dashboard Module (OPEN)
+
+### What is needed
+An aggregated statistics view for the inspector showing:
+- Inspections per month / per activity type
+- Grade distribution (A/B/C/D) across establishments
+- Most common violation axes
+- Establishments due for reinspection (based on `nextInspectionDays`)
+- Corrective action completion rate
+
+### Files to read before starting
+- `src/utils/statsUtils.ts` — already exists; read before building anything
+- `src/repositories/InspectionRepository.ts` — source of inspection data
+- `src/types.ts` — check `ScoringResult` and `SavedInspection` interfaces
 
 ---
 
@@ -198,7 +232,7 @@ Do NOT generate a report that hard-codes legal consequences (closure, fines, cri
 1. Inspect repo and current branch
 2. Read affected source files and existing tests
 3. Identify all dependencies
-4. Check docs vs code — if already implemented, close the phase, do not rebuild
+4. **Check docs vs code — if already implemented, close the phase, do not rebuild**
 
 ### After every implementation session
 Update **both** of the following before pushing:
@@ -259,9 +293,10 @@ Any agent picking this up should do in order:
 
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. Inspect `src/screens/` for any existing report or corrective action screens
-4. Inspect `src/utils/groupViolations.ts` — already exists, must be reused in Phase N
-5. Start Phase N: report generation (see Phase N detail section above)
-6. Run `npx tsc --noEmit` + Jest after implementation
-7. Update this file + STRATEGIC_PLAN.md
-8. Push
+3. **Inspect `src/services/` directory listing** — several large services exist; confirm what is already implemented before starting any phase
+4. **Inspect `src/repositories/` and `src/stores/`** — check for existing corrective action or statistics code
+5. **Inspect `src/types.ts`** — check for `CorrectiveAction` type before defining a new one
+6. Start Phase O only after the above inspection confirms it is not already implemented
+7. Run `npx tsc --noEmit` + Jest after any implementation
+8. Update this file + STRATEGIC_PLAN.md
+9. Push
