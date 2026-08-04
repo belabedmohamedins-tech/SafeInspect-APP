@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 22:00 WAT — [Agent: Perplexity] — Q-1 DONE: checklist.tsx + start.tsx fully read; lifecycle map updated
+- Phases closed: Q-1 (read checklist.tsx + start.tsx)
+- Phases opened: none
+- Files changed: docs/README.md
+- Critical finding: **Evidence, Evaluation, Decision, and Closing-meeting/Closure are ALL embedded inside `checklist.tsx`**. Only Reinspection has no dedicated screen. Start.tsx covers Preparation only (type, reference, committee, GPS → pushes to categories). No new screens needed except possibly a dedicated Reinspection flow.
+
 ### 2026-08-04 21:50 WAT — [Agent: Perplexity] — Phase Q screen map 100% complete; 4 lifecycle gaps identified
 - Phases closed: none (Q stays open until gaps are resolved)
 - Phases opened: none
@@ -147,7 +153,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 21:50 WAT)
+### Quick Status Summary (as of 2026-08-04 22:00 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -167,15 +173,16 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | N | Report generation module | ✅ CLOSED 2026-08-04 | Direct code read — `pdfService.ts` 54 KB, fully implemented |
 | O | Corrective actions tracking | ✅ CLOSED 2026-08-04 | Direct code read — full pipeline confirmed |
 | P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` |
-| **Q** | **UI screens / navigation wiring** | 🔴 **OPEN** | Screen map 100% known — 4 lifecycle gaps confirmed |
+| Q-1 | Read checklist.tsx + start.tsx (lifecycle audit) | ✅ CLOSED 2026-08-04 | Direct code read — see findings below |
+| **Q** | **UI screens — Reinspection screen** | 🔴 **OPEN** | Only remaining gap after Q-1 audit |
+| R | Integration / end-to-end tests | 🔵 NEXT after Q |  |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Q-1: Read checklist.tsx (14 KB) and start.tsx (12 KB) — confirm if Evaluation/Decision are embedded
-→ Q-2: If missing — add evaluation.tsx and decision.tsx under app/(tabs)/inspection/
-→ Q-3: Add reinspection.tsx and closure.tsx under app/screens/ if confirmed missing
-→ Q-4: Verify app/_layout.tsx auth guard + PIN lock + onboarding redirect
+→ Q-2: Read app/(tabs)/actions.tsx (198 B) — confirm stub or functional
+→ Q-3: Read app/_layout.tsx — confirm auth guard + PIN + onboarding redirect
+→ Q-4: Build reinspection screen (app/screens/reinspection.tsx) — only confirmed gap
 → Q-5: Run npx tsc --noEmit and Jest — fix all failures
 → Q close: update README + STRATEGIC_PLAN, push
 → Phase J: Legal verify fire safety (Loi 19-02 scope)
@@ -185,9 +192,42 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 
 ---
 
-## Phase Q — UI Screens / Navigation Wiring (OPEN)
+## Phase Q — UI Screens Audit Results (Q-1 CLOSED)
 
-### ⚠️ CRITICAL: Routing Architecture
+### What `checklist.tsx` actually contains (confirmed by direct read)
+
+`checklist.tsx` is **NOT just a checklist screen**. It contains the following lifecycle stages embedded as in-screen steps:
+
+| Lifecycle Stage | Implementation inside checklist.tsx |
+|---|---|
+| **Preparation** | `start.tsx` feeds params (type, reference, committee, GPS) → categories → checklist |
+| **Inspection** | `SectionList` of `InspectionItem` with status, comment, photo, numeric inputs |
+| **Evidence** | `handlePhotoTake`, `handleCommentChange` — per-item evidence collection |
+| **Evaluation** | `computeScoreAndGrade(data)` runs on every item change; `allEvaluated` flag gates decision panel |
+| **Decision** | `DecisionSupportPanel` rendered in `ListFooterComponent` when `allEvaluated === true`; `suggestDecision(scoringResult, diffView)` — supports escalation override with mandatory reason |
+| **Opening Meeting** | `MeetingGateModal` (type="opening") — shown on entry if not already confirmed |
+| **Closing Meeting / Closure** | `MeetingGateModal` (type="closing") — required before `doFinish()` can run |
+| **Corrective Actions auto-create** | `createCapItemsFromInspection(saved)` called inside `doFinish()` |
+| **Follow-up / Reinspection diff** | `buildDifferentialView(shell)` → `DifferentialBanner` + `DiffStatusIndicator` per item |
+
+### What `start.tsx` actually contains (confirmed by direct read)
+
+- Inspection type picker: routine / follow-up / complaint / extraordinary
+- Reference document input (optional)
+- Writer (device holder) input — mandatory
+- Committee members: add/remove list — at least 1 mandatory
+- GPS coordinates: 10s timeout, silent fallback
+- On submit → pushes to `/(tabs)/inspection/categories` with all params
+
+### Remaining gaps after Q-1 audit
+
+| Gap | Status | Notes |
+|---|---|---|
+| Reinspection screen | ❌ MISSING | Follow-up diff view exists inside checklist.tsx but there is no dedicated "schedule reinspection" or "launch reinspection" screen. The `followUpService.ts` in `src/services/` has the backend logic — needs a UI entry point. |
+| `actions.tsx` (198 B) | ⚠️ UNREAD | Likely a stub — read before next session |
+| `app/_layout.tsx` | ⚠️ UNREAD | Auth guard + PIN lock + onboarding redirect — read before testing |
+
+### ⚠️ Routing Architecture — Never change this
 
 This app uses **Expo Router file-system routing**. There is **no `src/navigation/` folder**. Routes are defined by the file tree under `app/`.
 
@@ -206,14 +246,14 @@ app/
 │   ├── home.tsx         (5 KB)    ← Home / dashboard
 │   ├── cap.tsx          (14 KB)   ← CAP tab (Corrective Action Plan)
 │   ├── plus.tsx         (3 KB)    ← Quick-action / new inspection
-│   ├── actions.tsx      (198 B)   ← Actions tab (stub?)
+│   ├── actions.tsx      (198 B)   ← ⚠️ UNREAD — likely stub
 │   └── inspection/
 │       ├── _layout.tsx    (359 B)   ← Inspection stack layout
 │       ├── index.tsx      (2 KB)    ← Inspection list / entry
 │       ├── facilities.tsx (4 KB)    ← Facility picker
 │       ├── categories.tsx (2 KB)    ← Checklist category picker
-│       ├── start.tsx      (12 KB)   ← Inspection start / preparation
-│       └── checklist.tsx  (15 KB)   ← Checklist execution (Inspection + Evidence)
+│       ├── start.tsx      (12 KB)   ✅ CONFIRMED: Preparation only
+│       └── checklist.tsx  (15 KB)   ✅ CONFIRMED: Inspection + Evidence + Evaluation + Decision + Meetings + CAP trigger
 │
 └── screens/                       ← Stack screens pushed from tabs
     ├── approval-detail.tsx  (20 KB)
@@ -246,37 +286,31 @@ app/
         └── profile.tsx      (22 KB)  ← Facility profile detail
 ```
 
-### Lifecycle Coverage Map
+### Full Lifecycle Coverage Map (updated after Q-1)
 
-| Lifecycle Stage | Confirmed screen(s) | Status |
+| Lifecycle Stage | Screen(s) | Status |
 |---|---|---|
 | Registry | `screens/facilities/` (index, all, add, edit, profile) | ✅ CONFIRMED |
 | Planning | `screens/brief.tsx` | ✅ CONFIRMED |
-| Preparation | `(tabs)/inspection/start.tsx` (12 KB) | ✅ CONFIRMED |
-| Inspection (checklist execution) | `(tabs)/inspection/checklist.tsx` (15 KB) | ✅ CONFIRMED |
-| Evidence (photos, notes) | Likely inside `checklist.tsx` | ⚠️ READ FIRST |
-| Evaluation (scoring review) | Unknown — may be inside `checklist.tsx` or `start.tsx` | ⚠️ READ FIRST |
-| Decision | Unknown — may be inside `checklist.tsx` or `reports.tsx` | ⚠️ READ FIRST |
-| Report | `screens/reports.tsx` (18 KB) | ✅ CONFIRMED |
+| Preparation | `(tabs)/inspection/start.tsx` | ✅ CONFIRMED |
+| Inspection (checklist) | `(tabs)/inspection/checklist.tsx` | ✅ CONFIRMED |
+| Evidence (photos, notes) | Inside `checklist.tsx` — per-item | ✅ CONFIRMED |
+| Evaluation (score + grade) | Inside `checklist.tsx` — `computeScoreAndGrade()` | ✅ CONFIRMED |
+| Decision (suggest + override) | Inside `checklist.tsx` — `DecisionSupportPanel` | ✅ CONFIRMED |
+| Opening Meeting gate | Inside `checklist.tsx` — `MeetingGateModal` | ✅ CONFIRMED |
+| Closing Meeting / Closure | Inside `checklist.tsx` — `MeetingGateModal` (closing) | ✅ CONFIRMED |
+| Report | `screens/reports.tsx` | ✅ CONFIRMED |
 | Corrective Actions | `screens/corrective-actions.tsx` + `(tabs)/cap.tsx` + `screens/cap.tsx` | ✅ CONFIRMED |
-| Reinspection | Unknown — no dedicated screen found | ❌ GAP (read checklist.tsx first) |
-| Closure | Unknown — no dedicated screen found | ❌ GAP (read checklist.tsx first) |
-| Statistics | `screens/stats.tsx` (14 KB) | ✅ CONFIRMED |
-
-### ⚠️ Before building anything for the gaps
-
-**Read these two files first:**
-- `app/(tabs)/inspection/checklist.tsx` (15 KB) — may contain evaluation, decision, and closure flows as in-screen steps
-- `app/(tabs)/inspection/start.tsx` (12 KB) — may contain preparation + evaluation entry
-
-**Only if those files confirm the stages are missing** should you create new screens. Do not duplicate functionality.
+| Reinspection (dedicated UI) | **No dedicated screen** — `followUpService.ts` exists in backend | ❌ GAP |
+| Statistics | `screens/stats.tsx` | ✅ CONFIRMED |
 
 ### Traps to avoid
 
 - **Do NOT create `src/navigation/` or `src/screens/`** — Expo Router only; routes = files in `app/`
 - Do NOT rebuild backend services — the full service + repository layer is confirmed complete
-- Do NOT add new dependencies without checking `package.json` first
-- RTL (Arabic) layout must be applied consistently — study `checklist.tsx` as the RTL reference before creating new screens
+- Do NOT add Evaluation or Decision screens — they are already inside `checklist.tsx`
+- Do NOT add a Closure screen — closing meeting gate is inside `checklist.tsx`
+- RTL (Arabic) layout must be applied consistently — use `checklist.tsx` as the RTL reference for any new screen
 - `actions.tsx` is 198 bytes — it may be a stub; verify before assuming it is functional
 
 ---
@@ -303,11 +337,10 @@ app/
 - **Full service layer** ✅ (2026-08-04)
   - `BackupService`, `NotificationService`, `CapNotificationService`, `PhotoService`, `SessionLockService`, `IntegrityService`
 - **Expo Router `app/` screen map 100% confirmed** ✅ (2026-08-04)
-  - 6 screens in `app/(tabs)/inspection/`
-  - 6 screens in `app/screens/facilities/`
-  - 20 screens in `app/screens/`
-  - 5 root-level app screens
-  - See full tree in Phase Q section above
+- **Q-1: checklist.tsx + start.tsx fully read** ✅ (2026-08-04)
+  - Evidence, Evaluation, Decision, Meetings, Closure → all inside `checklist.tsx`
+  - Preparation → `start.tsx`
+  - Only Reinspection UI is missing
 
 ---
 
@@ -378,11 +411,11 @@ Any agent picking this up should do in order:
 
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. **Run `git log --oneline -10` to see recent commits**
-4. **Read `app/(tabs)/inspection/checklist.tsx`** — confirm if Evaluation, Decision, Closure are embedded steps
-5. **Read `app/(tabs)/inspection/start.tsx`** — confirm if Preparation + Evaluation entry are covered
-6. **Read `app/(tabs)/actions.tsx`** — confirm if it's a stub (198 bytes) or functional
-7. Based on findings: implement only what is genuinely missing (likely Reinspection and Closure screens)
-8. Run `npx tsc --noEmit` + Jest after any implementation
+3. Run `git log --oneline -10` to see recent commits
+4. **Read `app/(tabs)/actions.tsx`** — confirm stub (198 B) or functional
+5. **Read `app/_layout.tsx`** — confirm auth guard + PIN lock + onboarding redirect
+6. **Read `src/services/followUpService.ts`** — understand existing reinspection backend before building the UI
+7. Build `app/screens/reinspection.tsx` — only confirmed missing UI piece
+8. Run `npx tsc --noEmit` + Jest after implementation
 9. Update this file + STRATEGIC_PLAN.md
 10. Push
