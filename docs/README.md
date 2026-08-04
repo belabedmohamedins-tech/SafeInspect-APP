@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 00:23 WAT — [Agent: Perplexity] — Verification session: _layout.tsx wiring confirmed, activity→criteria mapping 100% verified (26/26), no gaps
+- Phases closed: none
+- Phases opened: none
+- Files changed: docs/README.md (this entry only)
+- Critical finding: **All 26 unique `activity` strings in `facilitiesData.ts` have exact keys in `criteriaByActivity` in `criteriaData.ts`. Zero facilities will silently fall back to `baseGeneralCriteria`. The empty-criteria guard added in Phase U (checklist.tsx) is a safety net for future unknown activities only. `_layout.tsx` reinspection route + REINSPECTION deep-link handler both confirmed correct. Only open phase is R (local TypeScript + Jest — Claude only).**
+
 ### 2026-08-04 23:58 WAT — [Agent: Perplexity] — Phase U CLOSED: 3 RTL/UX bugs fixed across reinspection.tsx, checklist.tsx, categories.tsx
 - Phases closed: U (UX polish — end-to-end inspector flow)
 - Phases opened: none
@@ -165,7 +171,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 23:58 WAT)
+### Quick Status Summary (as of 2026-08-05 00:23 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -188,6 +194,41 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 → Claude / local dev: Phase R — run npx tsc --noEmit + Jest for all 4 recently changed files
 → Perplexity: no open phases — open Phase V from new user direction or new finding
 ```
+
+---
+
+## Activity → Criteria Mapping — VERIFIED 2026-08-05
+
+All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys in `criteriaByActivity` (`src/criteriaData.ts`). Zero facilities fall back to `baseGeneralCriteria` unexpectedly.
+
+| Activity string | Maps to | Checklist |
+|---|---|---|
+| مخبزة صناعية | `bakeryChecklist` | baseGeneral + baseFood + bakerySpecific |
+| مذبحة دواجن ≤500 كغ/ي | `slaughterhouseSmallChecklist` | baseGeneral + baseFood + slaughterhouseSmall |
+| غرفة تبريد | `coldRoomChecklist` | baseGeneral + baseFood + coldRoom |
+| تعبئة مواد شبه صيدلانية | `semiPharmaChecklist` | baseGeneral + semiPharma |
+| غسل وتشحيم السيارات | `carWashChecklist` | baseGeneral + carWash |
+| تركيب GPL/C | `gplChecklist` | baseGeneral + gpl |
+| منشأة صناعة تغذية حيوانية | `uabChecklist` | baseGeneral + baseFood + uab |
+| وحدة تخزين الزيتون والخضر | `produceStorageChecklist` | baseGeneral + baseFood + produceStorage |
+| إنتاج أغذية الأنعام (مؤسسة عمومية اقتصادية) | `uabChecklist` | baseGeneral + baseFood + uab |
+| مفرخة الدواجن (مؤسسة عمومية اقتصادية) | `couvoirChecklist` | baseGeneral + baseFood + couvoirs |
+| تربية الدواجن (مؤسسة عمومية اقتصادية) | `updChecklist` | baseGeneral + upd |
+| ذبح وبيع الدواجن (مؤسسة عمومية اقتصادية) | `slaughterhouseSmallChecklist` | baseGeneral + baseFood + slaughterhouseSmall |
+| مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب | `printingChecklist` | baseGeneral + printing |
+| ميكانيك السيارات | `mechanicChecklist` | baseGeneral + mechanicWorkshop |
+| ميكانيك | `mechanicChecklist` | baseGeneral + mechanicWorkshop |
+| ورشة طلاء السيارات | `paintShopChecklist` | baseGeneral + paintShop |
+| ورشة نجارة | `carpenteryChecklist` | baseGeneral + carpentry |
+| ورشة نجارة الألمنيوم | `carpenteryChecklist` | baseGeneral + carpentry |
+| صناعة الرخام | `marbleChecklist` | baseGeneral + marble |
+| ورشة حدادة (صناعة السياج) | `blacksmithChecklist` | baseGeneral + blacksmith |
+| ورشة حدادة | `blacksmithChecklist` | baseGeneral + blacksmith |
+| تربية الدواجن (07 حظائر) | `updChecklist` | baseGeneral + upd |
+| تربية الدواجن (03 حظائر) | `updChecklist` | baseGeneral + upd |
+| تربية الدواجن (حظيرتين) | `updChecklist` | baseGeneral + upd |
+| تربية الدواجن (حظيرة) | `updChecklist` | baseGeneral + upd |
+| ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي) | `abattoirChecklist` | baseGeneral + baseFood + abattoir |
 
 ---
 
@@ -280,6 +321,7 @@ This app uses **Expo Router file-system routing**. Routes = files in `app/`. No 
 - Loi 19-02 scope verified ✅
 - Décret 06-138 Annex I + II verified ✅
 - **3 RTL/UX bugs fixed in reinspection.tsx, checklist.tsx, categories.tsx** ✅ (2026-08-04)
+- **Activity → criteria mapping 100% verified (26/26 exact matches)** ✅ (2026-08-05)
 
 ---
 
@@ -326,7 +368,7 @@ Update **both** of the following before pushing:
 ## Legal Quick-Reference Table
 
 | Topic | Key Instrument | Article / Annex | Notes |
-|---|---|---|
+|---|---|---|---|
 | Classified establishments | Décret 06-198 | Art. 2–5 | 3 categories |
 | Wastewater | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
 | Solid waste | Décret 06-104 | Annexes | ✅ Verified |
