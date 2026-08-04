@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 22:10 WAT — [Agent: Perplexity] — Phases O and P confirmed CLOSED by direct code read
+- Phases closed: O (corrective actions tracking), P (statistics / dashboard)
+- Phases opened: Q (UI screens / navigation wiring — next priority)
+- Files changed: docs/README.md
+- Critical finding: `src/repositories/CorrectiveActionRepository.ts` (5.9 KB) + `src/services/CapReportService.ts` (11 KB) + `src/services/CapNotificationService.ts` (16 KB) + `src/services/capFactory.ts` (2.3 KB) confirm full corrective action pipeline exists. `src/utils/statsUtils.ts` (1.7 KB) + `src/utils/scoringUtils.ts` (8.9 KB) + `src/utils/loadHomeData.ts` (3.6 KB) confirm statistics/dashboard utilities exist. Also confirmed: `violationHistory.ts`, `followUpService.ts`, `differentialView.ts`, `groupViolations.ts`, `numericUtils.ts`. The entire backend is essentially complete. **Next gap is UI screens and navigation wiring** — inspect `src/screens/` or `src/navigation/` before building anything.
+
 ### 2026-08-04 21:55 WAT — [Agent: Perplexity] — Phase N confirmed CLOSED by direct code read of pdfService.ts (54 KB)
 - Phases closed: N (report generation)
 - Phases opened: none (O and P already listed as open)
@@ -128,7 +134,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04 21:55 WAT)
+### Quick Status Summary (as of 2026-08-04 22:10 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -145,16 +151,19 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | K | Verify Ch7 Air Quality annex numeric table | 🟡 OPEN | Décret 06-138 annex values need verification per activity |
 | L | Criteria implementation in app code | ✅ CLOSED 2026-08-04 | Direct code read — 20 activity files in `src/criteria/` |
 | M | Scoring integration with criteria | ✅ CLOSED 2026-08-04 | Direct code read — `scoringUtils.ts` fully implemented |
-| **N** | **Report generation module** | **✅ CLOSED 2026-08-04** | **Direct code read — `pdfService.ts` 54 KB, fully implemented** |
-| O | Corrective actions tracking | 🔴 OPEN — **NEXT PRIORITY** | Not yet confirmed in code — inspect before building |
-| P | Statistics / dashboard module | 🔴 OPEN | Not yet confirmed in code — inspect before building |
+| N | Report generation module | ✅ CLOSED 2026-08-04 | Direct code read — `pdfService.ts` 54 KB, fully implemented |
+| O | Corrective actions tracking | ✅ CLOSED 2026-08-04 | Direct code read — `CorrectiveActionRepository.ts` + `CapReportService.ts` + `CapNotificationService.ts` + `capFactory.ts` |
+| P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` + `scoringUtils.ts` all present |
+| **Q** | **UI screens / navigation wiring** | 🔴 **OPEN — NEXT PRIORITY** | `src/screens/` or `src/navigation/` not yet inspected — do this first |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Inspect src/services/ and src/stores/ for any existing corrective actions or stats code
-→ O (Corrective actions tracking)  →  P (Statistics / dashboard)
-→ J (Legal verify fire safety)  →  K (Legal verify air quality)
+→ Inspect src/screens/ and src/navigation/ to map which screens exist vs. which are missing
+→ Q (Wire all services → screens → navigation)
+→ J (Legal verify fire safety)
+→ K (Legal verify air quality)
+→ R (Integration / end-to-end tests) — to be opened after Q
 ```
 
 ---
@@ -182,47 +191,73 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
   - Blank printable checklist generator (for paper field use)
   - `expo-print` → PDF + `expo-sharing` for export/share
   - Also imports: `differentialView.ts`, `decisionSupport.ts`, `CapReportService.ts`
+- **Full corrective action pipeline confirmed** ✅ (2026-08-04)
+  - `src/repositories/CorrectiveActionRepository.ts` (5.9 KB)
+  - `src/services/CapReportService.ts` (11 KB)
+  - `src/services/CapNotificationService.ts` (16 KB)
+  - `src/services/capFactory.ts` (2.3 KB)
+  - `src/services/followUpService.ts` (2 KB)
+  - `src/utils/violationHistory.ts` (5.5 KB)
+  - `src/utils/differentialView.ts` (7.3 KB)
+- **Statistics / dashboard utilities confirmed** ✅ (2026-08-04)
+  - `src/utils/statsUtils.ts` (1.7 KB)
+  - `src/utils/loadHomeData.ts` (3.6 KB)
+  - `src/utils/scoringUtils.ts` (8.9 KB)
+  - `src/utils/groupViolations.ts` (2.1 KB)
+  - `src/utils/numericUtils.ts` (2.4 KB)
+- **Other confirmed services** ✅ (2026-08-04)
+  - `src/services/BackupService.ts` (10.6 KB)
+  - `src/services/NotificationService.ts` (6.9 KB)
+  - `src/services/CapNotificationService.ts` (16 KB)
+  - `src/services/PhotoService.ts` (2.5 KB)
+  - `src/services/SessionLockService.ts`
+  - `src/services/IntegrityService.ts` (4.1 KB)
+- **Full repository layer confirmed** ✅ (2026-08-04)
+  - `AgendaRepository`, `ApprovalRepository`, `AuditLogRepository`, `AuthRepository`
+  - `CorrectiveActionRepository`, `FacilityRepository`, `InspectionRepository`
+  - `NotificationRepository`, `SettingsRepository`
 
 ---
 
-## Phase O — Corrective Actions Tracking (OPEN — Top Priority)
+## Phase Q — UI Screens / Navigation Wiring (OPEN — Top Priority)
 
-### What is needed
-A corrective actions module that allows an inspector to:
-1. Record a corrective action required against a non-compliant criterion
-2. Set a deadline for the establishment to comply
-3. Track status: pending → in progress → completed → verified
-4. Link back to the specific `InspectionItem` and `SavedInspection`
-5. Feed into the differential verification section of the next follow-up report (already consumed by `pdfService.ts` via `differentialView.ts`)
+### Context
+The entire backend layer is implemented and confirmed:
+- Criteria engine (20 activity files)
+- Scoring engine (severity-weighted, grade A–D, risk-based cycle)
+- Report generation (full Arabic RTL PDF)
+- Corrective actions pipeline (repository + service + notifications + CAP report)
+- Statistics utilities (statsUtils, loadHomeData)
+- Full repository layer (9 repositories)
+- Full service layer (backup, notifications, photos, session lock, integrity)
 
-### Files to read before starting
-- `src/services/differentialView.ts` — already consumes prior inspection data for follow-up comparison; understand its interface before designing corrective actions storage
-- `src/services/decisionSupport.ts` — `suggestDecision()` already outputs `nextVisitDays`; corrective action deadlines should align
-- `src/repositories/` — check for any existing corrective action repository
-- `src/stores/` — check for any corrective action store
-- `src/types.ts` — check if `CorrectiveAction` type already exists
+**The likely gap is the UI layer** — screens that wire all of this together for the inspector in the field.
+
+### What to inspect first
+```
+src/screens/        — list all screen files and note which are missing
+src/navigation/     — list navigation structure (stack, tab, drawer)
+src/components/     — list reusable components
+src/hooks/          — list custom hooks wiring stores to screens
+src/stores/         — list Zustand/MobX/other stores
+```
+
+### What to look for
+- Is there a screen for each lifecycle stage?
+  ```
+  RegistryScreen → PlanningScreen → PreparationScreen → InspectionScreen
+  → EvidenceScreen → EvaluationScreen → DecisionScreen → ReportScreen
+  → CorrectiveActionsScreen → ReinspectionScreen → ClosureScreen → StatisticsScreen
+  ```
+- Are the navigation routes wired to the existing services?
+- Are the stores (Zustand or equivalent) hydrated from the repositories?
+- Are loading states, error states, and offline states handled?
 
 ### Traps to avoid
-- Do NOT hard-code legal deadlines for corrective actions (varies by decree and category)
-- Do NOT duplicate the differential view logic — `differentialView.ts` already handles follow-up comparison; corrective actions tracking is the data source for it
-- Always link to `SavedInspection.id` and `InspectionItem.id` — never use facility name as key
-
----
-
-## Phase P — Statistics / Dashboard Module (OPEN)
-
-### What is needed
-An aggregated statistics view for the inspector showing:
-- Inspections per month / per activity type
-- Grade distribution (A/B/C/D) across establishments
-- Most common violation axes
-- Establishments due for reinspection (based on `nextInspectionDays`)
-- Corrective action completion rate
-
-### Files to read before starting
-- `src/utils/statsUtils.ts` — already exists; read before building anything
-- `src/repositories/InspectionRepository.ts` — source of inspection data
-- `src/types.ts` — check `ScoringResult` and `SavedInspection` interfaces
+- Do NOT rebuild services that already exist — the backend is complete
+- Do NOT add new dependencies without checking `package.json` first
+- Navigation must be inspected before any screen is added — adding screens outside the existing nav structure will break routing
+- RTL (Arabic) layout must be applied consistently — check existing screens for the RTL pattern before creating new ones
 
 ---
 
@@ -293,10 +328,11 @@ Any agent picking this up should do in order:
 
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. **Inspect `src/services/` directory listing** — several large services exist; confirm what is already implemented before starting any phase
-4. **Inspect `src/repositories/` and `src/stores/`** — check for existing corrective action or statistics code
-5. **Inspect `src/types.ts`** — check for `CorrectiveAction` type before defining a new one
-6. Start Phase O only after the above inspection confirms it is not already implemented
-7. Run `npx tsc --noEmit` + Jest after any implementation
-8. Update this file + STRATEGIC_PLAN.md
-9. Push
+3. **Run `git log --oneline -10` to see recent commits**
+4. **Inspect `src/screens/` and `src/navigation/`** — map all existing screens before building
+5. **Inspect `src/hooks/` and `src/stores/`** — understand state management layer
+6. **Inspect `src/components/`** — list reusable components to avoid duplication
+7. Start Phase Q only after the above inspection confirms what is missing
+8. Run `npx tsc --noEmit` + Jest after any implementation
+9. Update this file + STRATEGIC_PLAN.md
+10. Push
