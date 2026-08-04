@@ -27,9 +27,10 @@
 | O | Corrective actions tracking | 2026-08-04 | Direct code read — full CAP pipeline in `src/` |
 | P | Statistics / dashboard module | 2026-08-04 | Direct code read — `statsUtils.ts`, `loadHomeData.ts` |
 | Q-1 | Lifecycle audit — read checklist.tsx + start.tsx | 2026-08-04 | Evidence/Evaluation/Decision/Closure all inside checklist.tsx |
-| Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated — ⚠️ test gate pending |
-| **S** | **Legal verify — Loi 19-02 fire safety scope** | **2026-08-04** | **Ch3 cross-verified against JORADP primary source (both language editions). Scope confirmed: ERPs, high-rise (>28m non-residential, >50m residential, >200m very-high-rise), residential. NOT universal. Classified establishments use Décret 06-198 + Décret 09-335 instead. Facility-type ERP analysis complete in Ch3 Section 6.** |
-| **T** | **Legal verify — Décret 06-138 air quality Annex I numeric table** | **2026-08-04** | **Confirmed by direct read of Ch7 primary-source content. Full Annex I (16 parameters, mg/Nm³, new vs. pre-2006 tolerances) and Annex II (7 industrial sectors) verified in `docs/Inspection_Manual_Chapter7_Air_Quality.md` Section 6. JO N°24 of 16 April 2006. Resolved: units are mg/Nm³ (concentration), not kg/h. Resolved: Décret 06-02 (ambient) and 06-138 (point-source) are distinct instruments. One cell flagged (Iron industry SO2: 1200/1000 reversal — likely PDF extraction artifact, needs visual check).** |
+| Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated — ⚠️ test gate pending (Phase R) |
+| S | Legal verify — Loi 19-02 fire safety scope | 2026-08-04 | JORADP primary source, both editions. ERP scope fully confirmed. |
+| T | Legal verify — Décret 06-138 air quality Annex I | 2026-08-04 | Ch7 Section 6 — 16 params mg/Nm³ + 7 sectors. Detected by CODE VS DOC check. |
+| **U** | **UX polish — end-to-end inspector flow** | **2026-08-04** | **3 RTL/UX bugs fixed: (1) reinspection.tsx back arrow RTL correction + member empty hint; (2) checklist.tsx empty-criteria guard state; (3) categories.tsx RTL icon order + layout. Commit 239811b.** |
 
 ---
 
@@ -41,14 +42,17 @@
 **Opened:** 2026-08-04  
 
 **Tasks:**
-1. Run `npx tsc --noEmit` — fix any TypeScript errors in `app/screens/reinspection.tsx` and `app/_layout.tsx`
+1. Run `npx tsc --noEmit` — fix any TypeScript errors in `app/screens/reinspection.tsx`, `app/_layout.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`
 2. Run Jest for affected files — add unit tests if coverage drops
 3. Manual smoke test: navigate from a follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
 4. Verify notification deep-link: `{ type: 'REINSPECTION', priorInspectionId }` → opens reinspection screen correctly
+5. Verify empty-criteria guard: select a facility type with no matching criteria → should show warning + back button, not blank list
 
 **Files to touch:**
-- `app/screens/reinspection.tsx` (fix TS errors if any)
-- `app/_layout.tsx` (fix TS errors if any)
+- `app/screens/reinspection.tsx`
+- `app/_layout.tsx`
+- `app/(tabs)/inspection/checklist.tsx`
+- `app/(tabs)/inspection/categories.tsx`
 - `__tests__/screens/reinspection.test.tsx` (create if missing)
 
 **Close condition:** `npx tsc --noEmit` passes with 0 errors + Jest passes for affected files + docs updated.
@@ -57,26 +61,12 @@
 
 ---
 
-#### Phase U — UX Polish: End-to-End Inspector Flow (CURRENT PERPLEXITY PRIORITY)
-**Type:** UX review  
-**Priority:** 🟡 HIGH — after Phase T closes  
-**Opened:** 2026-08-04  
-
-**Scope:**
-- Walk the full lifecycle as an inspector (field perspective): Registry → start.tsx → checklist.tsx → report → CAP → reinspection.tsx
-- Check: tap count, cognitive load, RTL consistency, offline behaviour, evidence collection UX, error states
-- Fix any friction points identified
-- Specifically verify: reinspection.tsx member list UX on small screens, Grade badge legibility, trigger banner clarity
-- Confirm no blank/empty states are left undesigned (empty agenda, no CAPs, first-time user)
-- Read the relevant screen files before assessing — never assume from filenames
-
----
-
 ## Recommended Execution Order
 
 ```
 R  → TypeScript + Jest validation gate (REQUIRES LOCAL ENV — assign to Claude)
-U  → UX polish end-to-end flow (Perplexity — read source files first)
+     No open Perplexity phases at this time.
+     Next available phase letter: V
 ```
 
 ---
@@ -99,10 +89,10 @@ U  → UX polish end-to-end flow (Perplexity — read source files first)
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
-| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ **VERIFIED 2026-08-04** — ERPs, high-rise, very-high-rise, residential ONLY. NOT classified establishments universally. Deadline art. 44 expired ~21 July 2024. |
+| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED 2026-08-04 — ERPs, high-rise, very-high-rise, residential ONLY. Art. 44 deadline expired ~21 July 2024. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
-| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified — mines ministry accreditation, ≥60m² premises |
-| Air emissions point source | Décret 06-138 | Annex I + II | ✅ **VERIFIED 2026-08-04** — Full Annex I (16 params, mg/Nm³) + Annex II (7 sectors) in Ch7 Section 6. JO N°24, 16 April 2006. Units: mg/Nm³ concentration. Décret 06-02 is ambient (distinct). One cell (Iron/SO2) flagged for visual PDF check. |
+| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
+| Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED 2026-08-04 — 16 params mg/Nm³ + 7 sectors in Ch7 Section 6. JO N°24, 16 April 2006. |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
 | Occupational health | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |

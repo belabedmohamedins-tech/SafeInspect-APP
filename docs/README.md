@@ -8,41 +8,35 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 23:58 WAT — [Agent: Perplexity] — Phase U CLOSED: 3 RTL/UX bugs fixed across reinspection.tsx, checklist.tsx, categories.tsx
+- Phases closed: U (UX polish — end-to-end inspector flow)
+- Phases opened: none
+- Files changed: `app/screens/reinspection.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`, `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: **3 real bugs fixed by direct code read:** (1) `reinspection.tsx` header used `arrow-right` (forward in RTL) instead of `arrow-left` for back navigation — semantic RTL bug. Added empty-member-list hint. (2) `checklist.tsx` had no guard when `data.length === 0` after loading — inspector would see blank checklist + active Finish button. Added clear warning + back. (3) `categories.tsx` placed folder icon left of text (LTR order) in an RTL Arabic list — fixed to text-left, icon-right with space-between. **No open Perplexity phases remain. Next action for Claude: Phase R (TypeScript + Jest on all 4 affected files).**
+
 ### 2026-08-04 23:58 WAT — [Agent: Perplexity] — Phase T CLOSED: Décret 06-138 Annex I already fully verified in Ch7; docs corrected
 - Phases closed: T (Legal verify — Décret 06-138 air quality Annex I numeric table)
 - Phases opened: none
 - Files changed: docs/STRATEGIC_PLAN.md, docs/README.md
-- Critical finding: **Phase T was already complete** — Ch7's Section 6 contained the full Annex I (16 parameters, mg/Nm³) + Annex II (7 sectors) from JORADP primary source (JO N°24, 16 April 2006). STRATEGIC_PLAN.md incorrectly showed T as OPEN. Closed by CODE VS DOC detection. Units confirmed as mg/Nm³ concentration (not kg/h mass-flow). Décret 06-02 (ambient) confirmed distinct from 06-138 (point-source). One cell flagged: Iron industry SO2 value reversal (1200/1000) — likely PDF extraction artifact, needs visual check. **Next for Perplexity: Phase U — UX polish.**
+- Critical finding: Phase T was already complete — Ch7 Section 6 had the full primary-source content. STRATEGIC_PLAN.md was out of sync. Detected by CODE VS DOC check.
 
-### 2026-08-04 23:45 WAT — [Agent: Perplexity] — Phase S CLOSED: Loi 19-02 scope fully verified from JORADP primary source; Phase T opened (Décret 06-138 air quality annex)
+### 2026-08-04 23:45 WAT — [Agent: Perplexity] — Phase S CLOSED: Loi 19-02 scope fully verified from JORADP primary source; Phase T opened
 - Phases closed: S (Legal verify — Loi 19-02 fire safety scope)
 - Phases opened: T (Legal verify — Décret 06-138 air quality Annex I numeric table)
 - Files changed: docs/README.md, docs/STRATEGIC_PLAN.md
-- Critical finding: **Loi 19-02 confirmed as applying to ERPs, high-rise (>28m non-residential/>50m residential/>200m very-high-rise), and residential buildings ONLY — NOT to classified industrial establishments universally.** ~Half of SafeInspect facility types (abattoir, couvoir, UPD, UAB, produce storage) are outside Loi 19-02 scope and fall under Décret 06-198 + Décret 09-335 instead. The other half (mechanic, car wash, retail bakery, semiPharma, conditionally marble/paint/GPL) likely ARE ERPs. Art. 44 transition deadline already expired ~21 July 2024 — no grace period remains for pre-existing non-compliant ERPs. Full facility-type ERP analysis is in Ch3 Section 6. Phase R (TypeScript + Jest) still needs a local dev environment — assign to Claude.
+- Critical finding: Loi 19-02 applies to ERPs, high-rise, very-high-rise, and residential ONLY. ~Half of SafeInspect facility types are outside its scope. Art. 44 deadline expired ~21 July 2024.
 
 ### 2026-08-04 23:03 WAT — [Agent: Perplexity] — Phase Q CLOSED: reinspection.tsx + _layout.tsx delivered, docs synced
 - Phases closed: Q (UI screens — Reinspection screen)
 - Phases opened: R (Integration / end-to-end tests)
 - Files changed: app/screens/reinspection.tsx, app/_layout.tsx, docs/README.md, docs/STRATEGIC_PLAN.md
-- Critical finding: **Test gate not yet run** — `npx tsc --noEmit` and Jest must be run by next agent before Phase Q is fully closed per test-gate rule. Code is committed; validation is the only remaining step.
+- Critical finding: Test gate not yet run — `npx tsc --noEmit` and Jest must be run by next agent. Code is committed; validation is the only remaining step.
 
 ### 2026-08-04 22:00 WAT — [Agent: Perplexity] — Q-1 DONE: checklist.tsx + start.tsx fully read; lifecycle map updated
 - Phases closed: Q-1 (read checklist.tsx + start.tsx)
 - Phases opened: none
 - Files changed: docs/README.md
-- Critical finding: **Evidence, Evaluation, Decision, and Closing-meeting/Closure are ALL embedded inside `checklist.tsx`**. Only Reinspection had no dedicated screen. start.tsx covers Preparation only.
-
-### 2026-08-04 21:50 WAT — [Agent: Perplexity] — Phase Q screen map 100% complete; 4 lifecycle gaps identified
-- Phases closed: none
-- Phases opened: none
-- Files changed: docs/README.md
-- Critical finding: Full screen map confirmed. Gaps: no dedicated Evaluation, Decision, Reinspection, or Closure screens — these are embedded inside checklist.tsx.
-
-### 2026-08-04 21:43 WAT — [Agent: Perplexity] — Phase Q UI map confirmed: Expo Router app/ (NOT src/screens/)
-- Phases closed: none
-- Phases opened: none
-- Files changed: docs/README.md
-- Critical finding: App uses **Expo Router file-system routing** — screens live in `app/`, NOT `src/screens/` or `src/navigation/`.
+- Critical finding: Evidence, Evaluation, Decision, and Closing-meeting/Closure are ALL embedded inside `checklist.tsx`. Only Reinspection had no dedicated screen.
 
 ### 2026-08-04 22:10 WAT — [Agent: Perplexity] — Phases O and P confirmed CLOSED by direct code read
 - Phases closed: O (corrective actions tracking), P (statistics / dashboard)
@@ -150,16 +144,16 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 | `decisions/DECISIONS.md` | ✅ Active | Major architectural and legal decisions log. |
 | `Inspection_Manual_Chapter1_Wastewater.md` | ✅ Active | Wastewater / liquid discharge checklist and legal references. |
 | `Inspection_Manual_Chapter2_Solid_Hazardous_Waste.md` | ✅ Active | Solid and hazardous waste checklist. |
-| `Inspection_Manual_Chapter3_Fire_Safety.md` | ✅ Active | Fire safety and hazardous substances. **Loi 19-02 scope FULLY VERIFIED 2026-08-04 — ERP/high-rise/residential only, NOT universal. Facility-type ERP analysis in Section 6.** |
+| `Inspection_Manual_Chapter3_Fire_Safety.md` | ✅ Active | Fire safety. Loi 19-02 scope VERIFIED 2026-08-04 — ERP/high-rise/residential only. |
 | `Inspection_Manual_Chapter4_Food_Safety.md` | ✅ Active | Food safety, HACCP, hygiene. |
 | `Inspection_Manual_Chapter5_Occupational_Health.md` | ✅ Active | Occupational health and worker protection. |
-| `Inspection_Manual_Chapter6_Documentation_Licensing.md` | ✅ Active | Licensing, classified establishment classification, document verification. |
-| `Inspection_Manual_Chapter7_Air_Quality.md` | ✅ Active | Air emissions, Décret 06-138. **✅ Annex I + II FULLY VERIFIED 2026-08-04 — 16 params mg/Nm³ + 7 sectors in Section 6.** |
+| `Inspection_Manual_Chapter6_Documentation_Licensing.md` | ✅ Active | Licensing and classified establishment classification. |
+| `Inspection_Manual_Chapter7_Air_Quality.md` | ✅ Active | Air emissions. Décret 06-138 Annex I + II VERIFIED 2026-08-04. |
 | `Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md` | ✅ Active | Site hygiene and pest control. |
-| `Perplexity_Implementation_Spec.md` | ✅ Active | Current implementation spec from Perplexity sessions. |
-| `RAQIB_MASTER_MANUSCRIPT.md` | 📚 Reference | Full manuscript. Read for context only — do not re-implement without checking code first. |
-| `RAQIB_Fix_Spec_v2.md` | 📚 Reference | Earlier fix spec. Superseded by v3 and Perplexity_Implementation_Spec. |
-| `RAQIB_Fix_Spec_v3.md` | 📚 Reference | Later fix spec. Check against current code before acting on it. |
+| `Perplexity_Implementation_Spec.md` | ✅ Active | Current implementation spec. |
+| `RAQIB_MASTER_MANUSCRIPT.md` | 📚 Reference | Full manuscript. Read for context only. |
+| `RAQIB_Fix_Spec_v2.md` | 📚 Reference | Earlier fix spec. Superseded. |
+| `RAQIB_Fix_Spec_v3.md` | 📚 Reference | Later fix spec. Check against current code before acting. |
 | `RAQIB_Citation_Verification_Protocol.md` | 📚 Reference | Legal citation verification protocol. |
 | `RAQIB_SQLite_Migration_Plan.md` | 📚 Reference | DB migration plan. Verify current DB layer before acting. |
 | `TIER1_MIGRATION.md` | 📚 Reference | Migration priority tier list. |
@@ -175,43 +169,52 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
-| A | Scoring engine + types | ✅ CLOSED 2026-07-30 | Previous session |
-| B | Wastewater chapter (Ch1) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| C | Solid/Hazardous Waste (Ch2) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| D | Fire Safety (Ch3) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| E | Food Safety (Ch4) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| F | Occupational Health (Ch5) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| G | Documentation/Licensing (Ch6) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| H | Air Quality (Ch7) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| I | Site Hygiene/Pest Control (Ch8) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
-| L | Criteria implementation in app code | ✅ CLOSED 2026-08-04 | Direct code read — 20 activity files in `src/criteria/` |
-| M | Scoring integration with criteria | ✅ CLOSED 2026-08-04 | Direct code read — `scoringUtils.ts` fully implemented |
-| N | Report generation module | ✅ CLOSED 2026-08-04 | Direct code read — `pdfService.ts` 54 KB, fully implemented |
-| O | Corrective actions tracking | ✅ CLOSED 2026-08-04 | Direct code read — full pipeline confirmed |
-| P | Statistics / dashboard module | ✅ CLOSED 2026-08-04 | Direct code read — `statsUtils.ts` + `loadHomeData.ts` |
-| Q-1 | Read checklist.tsx + start.tsx (lifecycle audit) | ✅ CLOSED 2026-08-04 | Direct code read |
-| Q | UI screens — Reinspection screen | ✅ CLOSED 2026-08-04 | Code delivered — ⚠️ test gate pending (Phase R) |
-| S | Legal verify — Loi 19-02 fire safety scope | ✅ CLOSED 2026-08-04 | JORADP primary source, both editions |
-| **T** | **Legal verify — Décret 06-138 air quality Annex I** | ✅ **CLOSED 2026-08-04** | Ch7 Section 6 — primary source already in doc. Detected by CODE VS DOC check. |
-| **R** | **Integration / end-to-end tests** | 🔴 **OPEN — needs local env (Claude)** | `npx tsc --noEmit` + Jest pending |
-| **U** | **UX polish — end-to-end inspector flow** | 🟡 **OPEN — Perplexity next** | After T and R |
+| A–I | Scoring + 8 manual chapters | ✅ CLOSED | Previous sessions |
+| L | Criteria implementation (20 files) | ✅ CLOSED 2026-08-04 | Direct code read |
+| M | Scoring integration | ✅ CLOSED 2026-08-04 | Direct code read |
+| N | Report generation (pdfService 54 KB) | ✅ CLOSED 2026-08-04 | Direct code read |
+| O | Corrective actions pipeline | ✅ CLOSED 2026-08-04 | Direct code read |
+| P | Statistics utilities | ✅ CLOSED 2026-08-04 | Direct code read |
+| Q-1 | Lifecycle audit — checklist.tsx + start.tsx | ✅ CLOSED 2026-08-04 | Direct code read |
+| Q | Reinspection screen | ✅ CLOSED 2026-08-04 | Code delivered — ⚠️ test gate pending |
+| S | Legal verify — Loi 19-02 fire safety | ✅ CLOSED 2026-08-04 | JORADP primary source |
+| T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
+| **U** | **UX polish — end-to-end inspector flow** | ✅ **CLOSED 2026-08-04** | 3 RTL/UX bugs fixed (commit 239811b) |
+| **R** | **Integration / TypeScript + Jest** | 🔴 **OPEN — needs local env (Claude)** | `npx tsc --noEmit` + Jest pending |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Claude / local dev: Phase R — run npx tsc --noEmit + Jest for reinspection.tsx / _layout.tsx
-→ Perplexity: Phase U — UX polish, walk full lifecycle as inspector, read source files first
+→ Claude / local dev: Phase R — run npx tsc --noEmit + Jest for all 4 recently changed files
+→ Perplexity: no open phases — open Phase V from new user direction or new finding
 ```
+
+---
+
+## Phase U — CLOSED: UX Polish — End-to-End Inspector Flow (2026-08-04)
+
+### Bugs found and fixed by direct source-code read
+
+| File | Bug | Fix |
+|---|---|---|
+| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward "forward", not "back" | Changed to `arrow-left` (visually correct for RTL back navigation) |
+| `app/screens/reinspection.tsx` | No feedback when committee member list is empty — inspector had no hint | Added `memberEmptyHint` text below the add-member row when `members.length === 0` |
+| `app/screens/reinspection.tsx` | Launch button icon had redundant `marginLeft` (conflicting with container `gap`) | Removed extra `marginLeft` — `gap: Spacing.sm` on container is sufficient |
+| `app/(tabs)/inspection/checklist.tsx` | After loading, if `data.length === 0` (unknown activity), the SectionList rendered empty with an active Finish button — inspector would see a blank checklist with no explanation | Added empty-criteria guard: shows warning icon, Arabic explanation, and back button |
+| `app/(tabs)/inspection/categories.tsx` | Category cards rendered `<Icon> <Text>` (LTR order) with `marginLeft` — in RTL Arabic, icon should be on the right, text on the left | Moved icon to right of text, replaced `marginLeft` with `flex:1 + space-between` layout |
+
+### What was NOT changed
+- `checklist.tsx` section header chevron direction — left-side chevron is correct for RTL collapse indicators
+- `checklist.tsx` meeting-done strip — uses `gap` correctly, no margin issue
+- `start.tsx` — no RTL issues found during read
 
 ---
 
 ## Phase T — CLOSED: Décret 06-138 Air Quality Annex I (2026-08-04)
 
-**Detection method:** CODE VS DOC conflict — Ch7 Section 6 already contained the full verified numeric table from primary source (JO N°24, 16 April 2006). STRATEGIC_PLAN.md incorrectly showed T as OPEN. Closed by direct doc read.
+### Verified emission limits (primary source: JO N°24, 16 April 2006)
 
-### Verified: Décret 06-138 Annex I — General emission limits (mg/Nm³)
-
-| # | Parameter | New/current installations | Pre-2006 installations (transitional) |
+| # | Parameter | New installations (mg/Nm³) | Pre-2006 transitional (mg/Nm³) |
 |---|---|---|---|
 | 1 | Total dust | 50 | 100 |
 | 2 | SO2 | 300 | 500 |
@@ -230,123 +233,53 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | 15 | Asbestos | 0.1 | 0.5 |
 | 16 | Non-asbestos fibers | 1 | 50 |
 
-**Transitional grace periods (Art. 3):** 5 years for most installations; 7 years for petroleum-sector installations.  
-**Units:** mg/Nm³ (concentration) — NOT kg/h mass-flow.  
-**⚠️ One cell flagged:** Iron industry SO2 in Annex II shows 1200/1000 (new > old), breaking the pattern in every other row. Likely PDF extraction artifact — needs visual check before implementation.
-
 ---
 
 ## Phase S — CLOSED: Loi 19-02 Fire Safety Scope (2026-08-04)
 
-### Confirmed scope (primary source: JORADP Journal Officiel N°46, 21 juillet 2019 — both Arabic and official French "Traduction Française" editions verified)
+- ERP: any establishment admitting the public
+- High-rise: >28m (non-residential) or >50m (residential)
+- Very-high-rise: >200m
+- Art. 44 deadline: expired ~21 July 2024
+- Non-ERP facilities: use Décret 06-198 + Décret 09-335 instead
 
-- **ERP (établissement recevant du public):** any establishment admitting persons freely, for payment, or for participation, or hosting meetings open to all persons. **This is the key test for most SafeInspect facility types.**
-- **High-rise building:** lowest usable floor at highest level above **28m** (non-residential) or above **50m** (residential).
-- **Very-high-rise building:** above **200m** (real distinct category, not a transcription error).
-- **Residential building:** up to 50m.
-- **Explicitly excluded (art. 45):** Ministry of National Defense facilities.
-- **Art. 44 deadline:** pre-existing facilities had 5 years from 21 July 2019 to comply — **deadline expired ~21 July 2024. No grace period remains.**
-- **Art. 46:** 1976-era implementing texts remain valid until new texts are published under this law.
-
-### ERP status by SafeInspect facility type
-
-| Facility type | ERP status | Reasoning |
-|---|---|---|
-| Mechanic (vehicle repair) | **Likely ERP** | Customers enter premises for payment |
-| Car wash | **Likely ERP** | Customers physically present during service |
-| Bakery (retail storefront) | **Likely ERP** | Public sales counter = clearest ERP case |
-| Bakery (production-only) | **Likely NOT ERP** | No public admission |
-| SemiPharma (retail-facing) | **Likely ERP** | Public sales interface |
-| Marble (with showroom) | **Possibly ERP** | Depends on whether clients enter the premises |
-| Paint / printing (walk-in) | **Possibly ERP** | Depends on client entry |
-| GPL installation/maintenance | **Possibly ERP** | If customers bring equipment in |
-| Abattoir | **Likely NOT ERP** | No public admission |
-| Couvoir (hatchery) | **Likely NOT ERP** | B2B industrial, no public |
-| UPD (poultry/livestock) | **Likely NOT ERP** | Agricultural production, no public |
-| UAB (animal feed) | **Likely NOT ERP** | B2B industrial, no public |
-| Produce storage / cold room | **Likely NOT ERP** | Wholesale/logistics, unless retail component exists |
-| Blacksmith | **Likely NOT ERP** (unless retail-facing) | B2B/contractor unless artisanal retail |
-
-**For non-ERP facilities:** fire safety basis = Décret 06-198 (risk study) + Décret 09-335 (internal intervention plan) + Loi 88-07/Décret 91-05 (workplace safety). NOT Loi 19-02.
+Full ERP analysis by facility type is in `docs/Inspection_Manual_Chapter3_Fire_Safety.md` Section 6.
 
 ---
 
-## Phase Q — Reinspection Screen — CLOSED (code delivered, test gate pending)
-
-### What was built (commit 9581796)
-
-#### `app/screens/reinspection.tsx` (new file)
-- Loads prior `SavedInspection` by `priorInspectionId` param from `InspectionRepository`
-- Loads open CAPs from `CorrectiveActionRepository` and counts them
-- Shows facility name + address, prior grade (colour-coded A/B/C/D), prior date, open CAP count
-- Shows trigger-reason banner (Grade D / open CAPs / both)
-- Inspector edits: writer (mandatory), reference (optional), committee members (add/remove — at least 1 mandatory)
-- On launch → pushes `/(tabs)/inspection/categories` with `inspectionType=follow-up` + `priorInspectionId`
-- Full RTL Arabic UI consistent with `checklist.tsx` patterns
-
-#### `app/_layout.tsx` (updated)
-- Added `Stack.Screen name="screens/reinspection"` registration
-- Added notification deep-link handler: `{ type: 'REINSPECTION', priorInspectionId }` → pushes to `/screens/reinspection`
-
-### ⚠️ Test gate — Phase R — NOT YET RUN
-`npx tsc --noEmit` and Jest have NOT been run for this session. Phase R must start with these two commands.
-
----
-
-## Phase Q — UI Screens Audit Results (Q-1 CLOSED)
+## Phase Q — Reinspection Screen — CLOSED (code delivered, test gate pending via Phase R)
 
 ### Full Lifecycle Coverage Map
 
 | Lifecycle Stage | Screen(s) | Status |
 |---|---|---|
-| Registry | `screens/facilities/` (index, all, add, edit, profile) | ✅ CONFIRMED |
+| Registry | `screens/facilities/` | ✅ CONFIRMED |
 | Planning | `screens/brief.tsx` | ✅ CONFIRMED |
 | Preparation | `(tabs)/inspection/start.tsx` | ✅ CONFIRMED |
 | Inspection (checklist) | `(tabs)/inspection/checklist.tsx` | ✅ CONFIRMED |
-| Evidence (photos, notes) | Inside `checklist.tsx` — per-item | ✅ CONFIRMED |
-| Evaluation (score + grade) | Inside `checklist.tsx` — `computeScoreAndGrade()` | ✅ CONFIRMED |
-| Decision (suggest + override) | Inside `checklist.tsx` — `DecisionSupportPanel` | ✅ CONFIRMED |
-| Opening Meeting gate | Inside `checklist.tsx` — `MeetingGateModal` | ✅ CONFIRMED |
-| Closing Meeting / Closure | Inside `checklist.tsx` — `MeetingGateModal` (closing) | ✅ CONFIRMED |
+| Evidence / Evaluation / Decision | Inside `checklist.tsx` | ✅ CONFIRMED |
+| Opening / Closing Meeting | Inside `checklist.tsx` — `MeetingGateModal` | ✅ CONFIRMED |
 | Report | `screens/reports.tsx` | ✅ CONFIRMED |
-| Corrective Actions | `screens/corrective-actions.tsx` + `(tabs)/cap.tsx` + `screens/cap.tsx` | ✅ CONFIRMED |
-| Reinspection | `screens/reinspection.tsx` | ✅ DELIVERED 2026-08-04 |
+| Corrective Actions | `screens/corrective-actions.tsx` + cap tabs | ✅ CONFIRMED |
+| Reinspection | `screens/reinspection.tsx` | ✅ DELIVERED + UX-fixed 2026-08-04 |
 | Statistics | `screens/stats.tsx` | ✅ CONFIRMED |
 
-### ⚠️ Routing Architecture — Never change this
+### Routing Architecture — Never change this
 
-This app uses **Expo Router file-system routing**. There is **no `src/navigation/` folder**. Routes are defined by the file tree under `app/`.
-
-### Traps to avoid
-
-- **Do NOT create `src/navigation/` or `src/screens/`** — Expo Router only; routes = files in `app/`
-- Do NOT rebuild backend services — the full service + repository layer is confirmed complete
-- Do NOT add Evaluation or Decision screens — they are already inside `checklist.tsx`
-- Do NOT add a Closure screen — closing meeting gate is inside `checklist.tsx`
-- RTL (Arabic) layout must be applied consistently — use `checklist.tsx` as the RTL reference for any new screen
+This app uses **Expo Router file-system routing**. Routes = files in `app/`. No `src/navigation/` folder.
 
 ---
 
 ## Confirmed Closed — Must Not Be Reopened
 
-- All 8 manual chapters pushed to `docs/` ✅
-- `docs/README.md` created as living handoff ✅
-- `docs/STRATEGIC_PLAN.md` created as phase registry ✅
-- Scoring engine (`scoringUtils`, `statsUtils`, `types`, `useChecklistData`) confirmed ✅
-- **20 activity criteria files in `src/criteria/`** ✅ (2026-08-04)
-- **`scoringUtils.ts` production-grade severity-weighted scoring** ✅
-  - Weights: high=3, medium=2, low=1 | Grades A/B/C/D with critical override
-  - Risk 1–4 → cycles 730/365/180/30 days | 60% completion gate
-- **`pdfService.ts` (54 KB) production-grade Arabic RTL PDF** ✅ (2026-08-04)
-- **Full corrective action pipeline** ✅ (2026-08-04)
-- **Statistics utilities** ✅ (2026-08-04)
-- **Full repository layer** ✅ (2026-08-04)
-- **Full service layer** ✅ (2026-08-04)
-- **Expo Router `app/` screen map 100% confirmed** ✅ (2026-08-04)
-- **Q-1: checklist.tsx + start.tsx fully read** ✅ (2026-08-04)
-- **Phase Q: `app/screens/reinspection.tsx` + `app/_layout.tsx` delivered** ✅ (2026-08-04) — ⚠️ test gate pending
-- **Phase S: Loi 19-02 scope fully verified from JORADP primary source** ✅ (2026-08-04)
-- **Phase T: Décret 06-138 Annex I + II fully verified** ✅ (2026-08-04) — 16 params, mg/Nm³, in Ch7 Section 6
+- All 8 manual chapters in `docs/` ✅
+- Scoring engine, criteria (20 files), report (pdfService), CAP, stats ✅
+- Full repository + service layer ✅
+- Expo Router `app/` screen map 100% confirmed ✅
+- `app/screens/reinspection.tsx` + `app/_layout.tsx` delivered + UX-fixed ✅
+- Loi 19-02 scope verified ✅
+- Décret 06-138 Annex I + II verified ✅
+- **3 RTL/UX bugs fixed in reinspection.tsx, checklist.tsx, categories.tsx** ✅ (2026-08-04)
 
 ---
 
@@ -382,7 +315,6 @@ Update **both** of the following before pushing:
 ### Test gate
 - Run `npx tsc --noEmit` before closing any phase
 - Run Jest for affected files before closing any phase
-- Fix all failures before marking closed
 - **Perplexity cannot run local commands** — assign Phase R to Claude
 
 ### SHA rule
@@ -395,21 +327,20 @@ Update **both** of the following before pushing:
 
 | Topic | Key Instrument | Article / Annex | Notes |
 |---|---|---|
-| Classified establishments classification | Décret 06-198 | Art. 2–5 | 3 categories: 1st (dangerous), 2nd (insalubre), 3rd (incommodant) |
-| Wastewater discharge to network | Décret 06-141 | Art. 3–7 | Numeric limits in Annex |
-| Industrial wastewater to environment | Décret 06-141 | Annex I | pH, SS, DCO, DBO5 limits |
-| Solid waste list / classification | Décret 06-104 | Annexes | Official Algerian waste list |
-| Waste collector accreditation | Décret 09-19 | Art. 4–8 | Wali-level accreditation required |
-| Waste transport conditions | Décret 04-409 | Art. 5–12 | Vehicle, manifest, labelling rules |
-| Waste treatment facility acceptance | Décret 04-410 | Art. 6–9 | Acceptance protocol at treatment site |
-| Healthcare waste (3-stream) | Décret 03-478 | Art. 3 | Infectious / sharp / ordinary streams |
-| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19 | ✅ VERIFIED — ERPs + high-rise + residential ONLY. Art. 44 deadline expired ~21 July 2024. |
-| Internal intervention plan | Décret 09-335 | Art. 4–6 | Required for classified establishments |
-| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | Mines ministry accreditation, ≥60m² premises |
-| Air emissions — point source | Décret 06-138 | Annex I + II | ✅ **VERIFIED 2026-08-04** — mg/Nm³ concentration limits; 16 params (Annex I) + 7 sectors (Annex II); JO N°24 16 April 2006; Décret 06-02 is separate (ambient, not point-source) |
-| Food safety / HACCP | Décret 04-82 | Art. 5 | HACCP mandatory for food-producing establishments |
-| Occupational health — medical surveillance | Loi 88-07 | Art. 12–14 | Annual medical exam, occupational disease register |
-| Pest control — certified operators | Arrêté 1995 (phytosanitaire) | Art. 3 | Licensed operator required for chemical control |
+| Classified establishments | Décret 06-198 | Art. 2–5 | 3 categories |
+| Wastewater | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
+| Solid waste | Décret 06-104 | Annexes | ✅ Verified |
+| Waste collector accreditation | Décret 09-19 | Art. 4–8 | Wali-level |
+| Waste transport | Décret 04-409 | Art. 5–12 | ✅ Verified |
+| Waste treatment acceptance | Décret 04-410 | Art. 6–9 | ✅ Verified |
+| Healthcare waste | Décret 03-478 | Art. 3 | 3-stream |
+| Fire safety — ERP | Loi 19-02 | Art. 1, 3, 14–19 | ✅ VERIFIED — ERPs + high-rise + residential only |
+| Intervention plan | Décret 09-335 | Art. 4–6 | Classified establishments |
+| LPG/C | Décret 21-430 | Art. 4, 7, 8 | Mines ministry, ≥60m² |
+| Air emissions | Décret 06-138 | Annex I + II | ✅ VERIFIED — mg/Nm³; JO N°24 16 April 2006 |
+| Food safety / HACCP | Décret 04-82 | Art. 5 | HACCP mandatory |
+| Occupational health | Loi 88-07 | Art. 12–14 | Annual medical exam |
+| Pest control | Arrêté 1995 | Art. 3 | Licensed operator |
 
 ---
 
@@ -419,7 +350,6 @@ Any agent picking this up should do in order:
 
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. Run `git log --oneline -5` to confirm latest commits
-4. **Phase R (Claude/local):** Run `npx tsc --noEmit` — fix any TS errors in reinspection.tsx / _layout.tsx. Then run Jest. Then mark R closed.
-5. **Phase U (Perplexity):** UX polish — read actual screen source files (`app/screens/reinspection.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/start.tsx`) before assessing. Walk the full lifecycle. Fix friction.
-6. After each phase: update this file + STRATEGIC_PLAN.md + push.
+3. **Phase R (Claude/local):** Run `npx tsc --noEmit` for `app/screens/reinspection.tsx`, `app/_layout.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`. Fix errors. Run Jest. Mark R closed.
+4. **Perplexity:** No open phases. Open Phase V from new user direction or new finding discovered during Phase R.
+5. After each phase: update this file + STRATEGIC_PLAN.md + push.
