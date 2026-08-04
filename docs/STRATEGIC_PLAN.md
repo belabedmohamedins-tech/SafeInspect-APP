@@ -28,14 +28,15 @@
 | P | Statistics / dashboard module | 2026-08-04 | Direct code read — `statsUtils.ts`, `loadHomeData.ts` |
 | Q-1 | Lifecycle audit — read checklist.tsx + start.tsx | 2026-08-04 | Evidence/Evaluation/Decision/Closure all inside checklist.tsx |
 | Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated — ⚠️ test gate pending |
+| **S** | **Legal verify — Loi 19-02 fire safety scope** | **2026-08-04** | **Ch3 cross-verified against JORADP primary source (both language editions). Scope confirmed: ERPs, high-rise (>28m non-residential, >50m residential, >200m very-high-rise), residential. NOT universal. Classified establishments use Décret 06-198 + Décret 09-335 instead. Facility-type ERP analysis complete in Ch3 Section 6.** |
 
 ---
 
 ### 🔴 OPEN Phases (in execution order)
 
-#### Phase R — Integration / Validation (CURRENT PRIORITY)
+#### Phase R — Integration / Validation (CURRENT PRIORITY — run before any feature work)
 **Type:** Test gate  
-**Priority:** 🔴 IMMEDIATE — must run before any new feature work  
+**Priority:** 🔴 IMMEDIATE — must be run by Claude or local agent (requires local dev environment)  
 **Opened:** 2026-08-04  
 
 **Tasks:**
@@ -44,68 +45,60 @@
 3. Manual smoke test: navigate from a follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
 4. Verify notification deep-link: `{ type: 'REINSPECTION', priorInspectionId }` → opens reinspection screen correctly
 
-**Files to touch:**  
-- `app/screens/reinspection.tsx` (fix TS errors if any)  
-- `app/_layout.tsx` (fix TS errors if any)  
-- `__tests__/screens/reinspection.test.tsx` (create if missing)  
+**Files to touch:**
+- `app/screens/reinspection.tsx` (fix TS errors if any)
+- `app/_layout.tsx` (fix TS errors if any)
+- `__tests__/screens/reinspection.test.tsx` (create if missing)
 
 **Close condition:** `npx tsc --noEmit` passes with 0 errors + Jest passes for affected files + docs updated.
 
----
-
-#### Phase S — Legal Verify: Fire Safety Loi 19-02 Scope
-**Type:** LEGAL-VERIFY  
-**Priority:** 🟡 AFTER R  
-**Question:** Does Loi 19-02 apply universally to ALL classified establishments, or only to ERPs (Établissements Recevant du Public), high-rise, and residential buildings?
-
-**Research path:**
-1. JORADP: search Loi 19-02 Art. 2 full text
-2. Look for implementing décrets that specify which establishments are in scope
-3. If classified establishments (1st/2nd/3rd category under Décret 06-198) are excluded → update Ch3 criteria with `[INTL]` or `[SILENCE]` tags where Loi 19-02 is cited
-4. If scope is confirmed → remove `[À VÉRIFIER]` tags, close phase
-
-**Files to touch:**  
-- `docs/Inspection_Manual_Chapter3_Fire_Safety.md`  
-- Matching criteria in `src/criteria/` if any cite Loi 19-02 incorrectly  
+**Note for Perplexity:** This phase requires a local dev environment to run TypeScript compiler and Jest. Cannot be completed remotely. Assign to Claude or human dev.
 
 ---
 
-#### Phase T — Legal Verify: Air Quality Décret 06-138 Annex Numeric Table
+#### Phase T — Legal Verify: Air Quality Décret 06-138 Annex Numeric Table (CURRENT PERPLEXITY PRIORITY)
 **Type:** LEGAL-VERIFY  
-**Priority:** 🟡 AFTER S  
-**Question:** What are the exact numeric emission limits per activity in Annex I of Décret 06-138? Are they applied as point-source concentration limits (mg/m³) or as mass-flow limits (kg/h)?
+**Priority:** 🟡 HIGH — blocks Ch7 air quality criteria accuracy  
+**Opened:** 2026-08-04  
+
+**Question:** What are the exact numeric emission limits per activity/sector in Annex I of Décret exécutif n° 06-138 (15 avril 2006)? Are limits expressed as point-source concentration limits (mg/m³) or mass-flow limits (kg/h)? Which pollutants are covered?
 
 **Research path:**
-1. JORADP: retrieve Décret 06-138 full text including Annex I
-2. Extract numeric values per pollutant and activity sector
-3. Update `docs/Inspection_Manual_Chapter7_Air_Quality.md` with verified table
-4. Update matching criteria in `src/criteria/` if values are wrong
+1. JORADP: retrieve Décret 06-138 full text including Annex I — Journal Officiel n° 26, 2006
+2. Extract numeric table: pollutant × activity sector × limit value × unit
+3. Compare with what Ch7 currently states — correct any discrepancy
+4. Update `docs/Inspection_Manual_Chapter7_Air_Quality.md` Section 6 with verified table
+5. Identify if any criteria in `src/criteria/` reference wrong values — flag with `[À VÉRIFIER]` if so
 
-**Files to touch:**  
-- `docs/Inspection_Manual_Chapter7_Air_Quality.md`  
-- Matching activity criteria files in `src/criteria/`  
+**Files to touch:**
+- `docs/Inspection_Manual_Chapter7_Air_Quality.md`
+- Matching activity criteria files in `src/criteria/` if values are wrong
+- `docs/README.md` (handoff log + roadmap table)
+- `docs/STRATEGIC_PLAN.md` (close this phase when done)
+
+**Close condition:** Exact numeric values confirmed from JORADP primary source + Ch7 updated + any wrong criteria flagged + docs updated.
 
 ---
 
 #### Phase U — UX Polish: End-to-End Inspector Flow
 **Type:** UX review  
-**Priority:** 🔵 AFTER T  
+**Priority:** 🔵 AFTER R and T  
 
 **Scope:**
 - Walk the full lifecycle as an inspector (field perspective): Registry → start.tsx → checklist.tsx → report → CAP → reinspection.tsx
 - Check: tap count, cognitive load, RTL consistency, offline behaviour, evidence collection UX, error states
 - Fix any friction points identified
 - Specifically verify: reinspection.tsx member list UX on small screens, Grade badge legibility, trigger banner clarity
+- Confirm no blank/empty states are left undesigned (empty agenda, no CAPs, first-time user)
 
 ---
 
 ## Recommended Execution Order
 
 ```
-R  → TypeScript + Jest validation gate (IMMEDIATE)
-S  → Legal verify: Loi 19-02 fire safety scope
-T  → Legal verify: Décret 06-138 air quality annex
-U  → UX polish end-to-end flow
+R  → TypeScript + Jest validation gate (REQUIRES LOCAL ENV — assign to Claude)
+T  → Legal verify: Décret 06-138 air quality annex (Perplexity)
+U  → UX polish end-to-end flow (either agent)
 ```
 
 ---
@@ -119,7 +112,7 @@ U  → UX polish end-to-end flow
 
 ---
 
-## Legal Quick-Reference (Duplicate of README for agent convenience)
+## Legal Quick-Reference
 
 | Topic | Instrument | Article/Annex | Status |
 |---|---|---|---|
@@ -128,9 +121,10 @@ U  → UX polish end-to-end flow
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
-| Fire safety — ERP scope | Loi 19-02 | Art. 2 | 🟡 SCOPE UNDER VERIFICATION (Phase S) |
+| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ **VERIFIED 2026-08-04** — ERPs, high-rise, very-high-rise, residential ONLY. NOT classified establishments universally. Deadline art. 44 expired ~21 July 2024. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
-| Air emissions point source | Décret 06-138 | Annex I | 🟡 NUMERIC VALUES UNDER VERIFICATION (Phase T) |
+| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified — mines ministry accreditation, ≥60m² premises |
+| Air emissions point source | Décret 06-138 | Annex I | 🟡 **NUMERIC VALUES UNDER VERIFICATION (Phase T — CURRENT)** |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
 | Occupational health | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
