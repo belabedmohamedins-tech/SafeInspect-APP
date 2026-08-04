@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-04 21:16 WAT — [Agent: Perplexity] — Phases L & M confirmed CLOSED by direct code read; roadmap updated
+- Phases closed: L (criteria implementation), M (scoring integration)
+- Phases opened: none
+- Files changed: docs/README.md
+- Critical finding: `src/criteria/` has 20 fully-implemented activity criteria files. `src/utils/scoringUtils.ts` is production-grade — severity-weighted scoring, grade A/B/C/D with critical override, risk levels 1–4, inspection cycle days (730/365/180/30), 60% completion gate, Arabic legal disclaimer. Phase N (report generation) is now the top priority.
+
 ### 2026-08-04 19:25 WAT — [Agent: Perplexity] — Connector stabilized; docs updated with full session history and current phase map
 - Phases closed: none (no code session this round)
 - Phases opened: none
@@ -116,36 +122,73 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-04)
+### Quick Status Summary (as of 2026-08-04 21:16 WAT)
 
-| Phase | Title | Status |
-|---|---|---|
-| A | Scoring engine + types | ✅ CLOSED 2026-07-30 |
-| B | Wastewater chapter (Ch1) push to docs | ✅ CLOSED 2026-07-30 |
-| C | Solid/Hazardous Waste (Ch2) push to docs | ✅ CLOSED 2026-07-30 |
-| D | Fire Safety (Ch3) push to docs | ✅ CLOSED 2026-07-30 |
-| E | Food Safety (Ch4) push to docs | ✅ CLOSED 2026-07-30 |
-| F | Occupational Health (Ch5) push to docs | ✅ CLOSED 2026-07-30 |
-| G | Documentation/Licensing (Ch6) push to docs | ✅ CLOSED 2026-07-30 |
-| H | Air Quality (Ch7) push to docs | ✅ CLOSED 2026-07-30 |
-| I | Site Hygiene/Pest Control (Ch8) push to docs | ✅ CLOSED 2026-07-30 |
-| J | Verify Ch3 Fire Safety Loi 19-02 scope | 🟡 OPEN — legal scope of Loi 19-02 needs facility-by-facility clarification |
-| K | Verify Ch7 Air Quality annex numeric table | 🟡 OPEN — Décret 06-138 annex values need verification per activity type |
-| L | Checklist implementation in app code | 🔴 OPEN — chapters are in docs but not yet wired into app checklist engine |
-| M | Scoring integration with checklist criteria | 🔴 OPEN — scoringUtils exists but criteria weights not finalized |
-| N | Report generation module | 🔴 OPEN — not started |
-| O | Corrective actions tracking | 🔴 OPEN — not started |
-| P | Statistics / dashboard module | 🔴 OPEN — not started |
+| Phase | Title | Status | Confirmed by |
+|---|---|---|---|
+| A | Scoring engine + types | ✅ CLOSED 2026-07-30 | Previous session |
+| B | Wastewater chapter (Ch1) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| C | Solid/Hazardous Waste (Ch2) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| D | Fire Safety (Ch3) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| E | Food Safety (Ch4) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| F | Occupational Health (Ch5) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| G | Documentation/Licensing (Ch6) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| H | Air Quality (Ch7) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| I | Site Hygiene/Pest Control (Ch8) push to docs | ✅ CLOSED 2026-07-30 | Previous session |
+| J | Verify Ch3 Fire Safety Loi 19-02 scope | 🟡 OPEN | Legal scope per facility type needs clarification |
+| K | Verify Ch7 Air Quality annex numeric table | 🟡 OPEN | Décret 06-138 annex values need verification per activity |
+| **L** | **Criteria implementation in app code** | **✅ CLOSED 2026-08-04** | **Direct code read — 20 activity files in `src/criteria/`** |
+| **M** | **Scoring integration with criteria** | **✅ CLOSED 2026-08-04** | **Direct code read — `scoringUtils.ts` fully implemented** |
+| N | Report generation module | 🔴 OPEN — **NEXT PRIORITY** | Not started |
+| O | Corrective actions tracking | 🔴 OPEN | Not started |
+| P | Statistics / dashboard module | 🔴 OPEN | Not started |
+
+### Recommended Execution Order (next sessions)
+
+```
+N (Report generation)  →  O (Corrective actions)  →  J (Legal verify fire)
+→  K (Legal verify air)  →  P (Statistics)
+```
 
 ---
 
-## Closed Items (must not be reopened)
+## Confirmed Closed — Must Not Be Reopened
 
 - All 8 manual chapters pushed to `docs/` ✅
 - `docs/README.md` created as living handoff ✅
 - `docs/STRATEGIC_PLAN.md` created as phase registry ✅
 - Scoring engine (`scoringUtils`, `statsUtils`, `types`, `useChecklistData`) confirmed in repo ✅
 - `test_scoring.txt` confirms Jest tests exist for scoring ✅
+- **20 activity-specific criteria files confirmed in `src/criteria/`** ✅ (2026-08-04)
+  - `baseGeneralCriteria.ts` (29 KB), `uabCriteria.ts` (26 KB), `abattoirCriteria.ts` (20 KB), `couvoirCriteria.ts` (17 KB), `updCriteria.ts` (15 KB), `slaughterhouseSmallCriteria.ts` (13 KB), and 14 more activity files
+- **`scoringUtils.ts` severity-weighted scoring engine confirmed production-grade** ✅ (2026-08-04)
+  - Weights: high=3, medium=2, low=1
+  - Grades A/B/C/D with critical override (forced D at ≥3 high violations, ceiling C at ≥1)
+  - Risk levels 1–4 → inspection cycles 730/365/180/30 days
+  - Completion rate gate: 60% minimum before grade is issued
+  - Arabic legal disclaimer hardcoded in `ScoringResult` output
+
+---
+
+## Phase N — Report Generation (OPEN — Top Priority)
+
+### What is needed
+A report generation module that takes a completed `ScoringResult` + establishment metadata + `InspectionItem[]` and produces:
+- A structured Arabic/French inspection report (PDF or shareable format)
+- Summary: establishment name, date, inspector, activity type, score, grade, risk level
+- Violation list grouped by severity (high → medium → low)
+- Next inspection date (computed from `nextInspectionDays` in `ScoringResult`)
+- Legal disclaimer (already available as `result.disclaimer` in `ScoringResult`)
+- Signature/stamp placeholder
+
+### Files to read before starting
+- `src/utils/scoringUtils.ts` — `ScoringResult` interface (fully defined, reuse as-is)
+- `src/types/index.ts` — `InspectionItem`, `Establishment` types
+- `src/utils/groupViolations.ts` — violation grouping utility (already exists, reuse it)
+- `src/screens/` — check for any existing report screen before building new one
+
+### Trap to avoid
+Do NOT generate a report that hard-codes legal consequences (closure, fines, criminal referral). The grade is a prioritisation tool only. All legal decisions are taken by the competent authority per Loi 03-10 and Décret 06-198. The disclaimer text is already in `scoringUtils.ts` — use it verbatim.
 
 ---
 
@@ -216,9 +259,9 @@ Any agent picking this up should do in order:
 
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. Check repo source for any already-implemented features still marked OPEN above
-4. Close those phases in both docs before writing any new code
-5. Pick the highest-priority OPEN phase and implement
-6. Run `npx tsc --noEmit` + Jest
+3. Inspect `src/screens/` for any existing report or corrective action screens
+4. Inspect `src/utils/groupViolations.ts` — already exists, must be reused in Phase N
+5. Start Phase N: report generation (see Phase N detail section above)
+6. Run `npx tsc --noEmit` + Jest after implementation
 7. Update this file + STRATEGIC_PLAN.md
 8. Push
