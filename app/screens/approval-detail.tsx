@@ -171,7 +171,8 @@ export default function ApprovalDetailScreen() {
     if (actionModal === 'approve') {
       await ApprovalRepository.approve(inspection.id, supervisor, note);
     } else if (actionModal === 'return') {
-      await ApprovalRepository.returnForRevision(inspection.id, supervisor, reason, note);
+      // returnForRevision accepts 3 args: inspectionId, supervisorName, reason
+      await ApprovalRepository.returnForRevision(inspection.id, supervisor, reason);
     } else {
       await ApprovalRepository.escalate(inspection.id, supervisor, note);
     }

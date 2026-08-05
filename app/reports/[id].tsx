@@ -40,9 +40,10 @@ const TYPE_META: Record<
   InspectionType,
   { label: string; bg: string; fg: string }
 > = {
-  routine:       { label: 'روتيني',    bg: '#e8f5e9', fg: '#2e7d32' },
-  'follow-up':   { label: 'متابعة',    bg: '#e3f2fd', fg: '#1565c0' },
-  complaint:     { label: 'شكوى',      bg: '#fff3e0', fg: '#e65100' },
+  routine:       { label: 'روتيني',     bg: '#e8f5e9', fg: '#2e7d32' },
+  'follow-up':   { label: 'متابعة',     bg: '#e3f2fd', fg: '#1565c0' },
+  complaint:     { label: 'شكوى',       bg: '#fff3e0', fg: '#e65100' },
+  extraordinary: { label: 'استثنائي',   bg: '#fce4ec', fg: '#880e4f' },
 };
 
 function InspectionTypeBadge({ type }: { type?: InspectionType | string }) {

@@ -66,7 +66,7 @@ export default function FacilitiesScreen() {
         {
           text: 'حذف', style: 'destructive',
           onPress: async () => {
-            await FacilityRepository.delete(facility.id);
+            await FacilityRepository.remove(facility.id);
             load();
           },
         },
