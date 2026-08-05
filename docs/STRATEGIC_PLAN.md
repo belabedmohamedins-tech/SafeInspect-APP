@@ -36,46 +36,83 @@
 
 ### 🔴 OPEN Phases (in execution order)
 
-#### Phase R — Integration / Validation (REQUIRES LOCAL DEV ENV — assign to Claude)
+#### Phase V — TypeScript Mass Fix (145 errors, 63 files) — ASSIGN TO CLAUDE
+**Type:** Test gate / Code fix  
+**Priority:** 🔴 BLOCKER — TypeScript gate is NOT clean. Must be fixed before Phase R can close.  
+**Opened:** 2026-08-05  
+
+**Context:** User ran `npx tsc --noEmit` on 2026-08-05 10:55 WAT and found **145 errors in 63 files**. This supersedes the previous claim that commit `eca03d0` was clean — either the codebase moved forward since that commit, or a broader tsconfig is now active.
+
+**Error clusters (in priority order):**
+
+| Cluster | Files | Count | Root cause |
+|---|---|---|---|
+| `src/db/schema.ts` SQLite bind params | `src/db/schema.ts:281,326,348` | ~25 | `unknown`/`{}` not assignable to `SQLiteBindValue` — needs explicit cast or typed intermediary |
+| Test mocks missing required fields | many `src/__tests__/` | ~40 | Types evolved (e.g. `ViolationProfile.total`, `CorrectiveAction.inspectionItemId`, `Facility.projectName`) but test fixtures not updated |
+| `NotificationRepository.test.ts` `NotificationType` | `src/__tests__/repositories/NotificationRepository.test.ts` | 19 | `"inspection_completed"` not in `NotificationType` union — add to union or fix test |
+| Expo Router pathname strings | `app/_layout.tsx`, `app/screens/*.tsx`, `components/home/*.tsx` | ~15 | Routes not registered in Expo Router typed map — screen files may be missing or not exported |
+| `CapNotificationService` export | `app/(tabs)/cap.tsx:25` | 1 | Named export `CapNotificationService` missing from that module |
+| `checklist.tsx:325` `decision` prop | `app/(tabs)/inspection/checklist.tsx` | 1 | `DecisionCard` Props type mismatch |
+| `reinspection.tsx` type issues | `app/screens/reinspection.tsx:75,117` | 2 | `c.status !== 'closed'` overlap + `SavedInspection.activity` missing |
+| `src/i18n/index.ts` `.tsx` import | `src/i18n/index.ts:4` | 1 | Remove `.tsx` extension from re-export |
+| `NotificationService.ts` behavior shape | `src/services/NotificationService.ts:43` | 1 | Add `shouldShowBanner`+`shouldShowList` to handler return |
+| Expo boilerplate files | `components/external-link.tsx`, `components/haptic-tab.tsx`, `components/parallax-scroll-view.tsx`, `hooks/use-theme-color.ts`, `components/themed-text.tsx`, `components/themed-view.tsx`, `components/ui/*` | ~12 | Stale Expo template components with wrong color/hook types |
+| `app/preview/index.tsx` | 10 errors | 10 | `Colors.info`, `xxxl` spacing, `complianceStatus` enum, `Shadow.xs`, `CorrectiveAction.description` |
+| `server/src/index.ts` implicit `any` | 1 | 1 | Add explicit `: string` to `.map(s => ...)` |
+| `AuditAction`/`AuditLogEntry` missing exports | `app/screens/audit-log.tsx` | 2 | Types not exported from `src/types.ts` |
+| `FacilityRepository.delete` | `app/screens/facilities/index.tsx:69` | 1 | Method is `remove` not `delete` |
+| `ActionSheet.mode` | `app/screens/approval-queue.tsx:64` | 1 | Property doesn’t exist on that type |
+| `ApprovalRepository.returnForRevision` extra arg | `app/screens/approval-detail.tsx:174` | 1 | Function signature mismatch |
+| `app/reports/[id].tsx` `extraordinary` missing | 1 | 1 | Add `extraordinary` to `TYPE_META` |
+| Criteria test `axis` possibly undefined | 4 criteria tests | 4 | Guard with `item.axis ?? ''` |
+
+**Approach for Claude:**
+1. Fix source files first (non-test), then update test fixtures to match current types.
+2. Do NOT widen types to accept old values unless intentional. Prefer fixing fixtures.
+3. Expo boilerplate components (`haptic-tab`, `parallax-scroll-view`, `themed-*`, `use-theme-color`) — check if actually used; if not, delete them.
+4. Expo Router pathnames — ensure screen files exist at the correct `app/screens/` path AND are accessible routes.
+5. Run `npx tsc --noEmit` after each cluster fix. Commit per cluster.
+
+**Close condition:** `npx tsc --noEmit` exits with 0 errors.
+
+---
+
+#### Phase R — Integration / Validation (BLOCKED on Phase V)
 **Type:** Test gate  
-**Priority:** 🔴 IMMEDIATE — must be run by Claude or local agent (requires local dev environment)  
+**Priority:** 🔴 BLOCKED — cannot run Jest meaningfully until TypeScript is clean (Phase V)  
 **Opened:** 2026-08-04  
 
 **Task status:**
-1. ✅ `npx tsc --noEmit` — **DONE by user** (commit [eca03d0](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/eca03d047a94cd8a816f1db94efb836c0d5e3f79), 2026-08-04 23:08 WAT). Fixed: Arabic typo `صحيه→صحية` in 5 criteria files, `formatDateShort` export in `dateUtils.ts`, `CorrectiveAction.criteria` + optional constants in `AgendaRepository.ts`. **TypeScript gate: CLEAN.**
-2. 🔴 **Run Jest for affected files** — still pending. Files: `app/screens/reinspection.tsx`, `app/_layout.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`. Create `__tests__/screens/reinspection.test.tsx` if missing.
-3. 🔴 Manual smoke test: navigate from a follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
+1. 🔴 `npx tsc --noEmit` — **OPEN** — New run 2026-08-05 shows 145 errors in 63 files. Previous claim of clean (commit eca03d0) is superseded. Phase V must close first.
+2. 🔴 Run Jest for affected files — pending Phase V.
+3. 🔴 Manual smoke test: follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
 4. 🔴 Verify notification deep-link: `{ type: 'REINSPECTION', priorInspectionId }` → opens reinspection screen correctly
-5. 🔴 Verify empty-criteria guard: select a facility type with no matching criteria → should show warning + back button, not blank list
+5. 🔴 Verify empty-criteria guard: select a facility type with no matching criteria → warning + back button
 
-**Files to touch:**
-- `app/screens/reinspection.tsx`
-- `app/_layout.tsx`
-- `app/(tabs)/inspection/checklist.tsx`
-- `app/(tabs)/inspection/categories.tsx`
-- `__tests__/screens/reinspection.test.tsx` (create if missing)
-
-**Close condition:** Jest passes for affected files + docs updated. (TypeScript already clean — commit eca03d0.)
-
-**Note for Perplexity:** This phase requires a local dev environment. Cannot be completed remotely. Assign to Claude or human dev.
+**Close condition:** Phase V closed + Jest passes for affected files + docs updated.
 
 ---
 
 ## Recommended Execution Order
 
 ```
-R  → Jest + smoke tests (REQUIRES LOCAL ENV — assign to Claude)
-     TypeScript gate already CLEAN (commit eca03d0, 2026-08-04).
-     No open Perplexity phases at this time.
-     Next available phase letter: V
+V  → Mass TypeScript fix — 145 errors, 63 files (ASSIGN TO CLAUDE)
+       Fix source files first, then test fixtures.
+       Commit per cluster.
+       Gate: npx tsc --noEmit exits with 0 errors.
+
+R  → Jest + smoke tests (blocked on V)
+       Gate: Jest passes for reinspection + checklist + categories + layout.
+
+Next available phase letter: W
 ```
 
 ---
 
 ## Phase Numbering Convention
 
-- Letters A–U are used or reserved as above
-- Next available letter for a new phase: **V**
+- Letters A–V are used or reserved as above
+- Next available letter for a new phase: **W**
 - Never reuse a closed phase letter
 - Both agents (Perplexity and Claude) must read this file before opening any new phase
 
