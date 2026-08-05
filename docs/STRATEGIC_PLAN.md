@@ -27,7 +27,7 @@
 | O | Corrective actions tracking | 2026-08-04 | Direct code read — full CAP pipeline in `src/` |
 | P | Statistics / dashboard module | 2026-08-04 | Direct code read — `statsUtils.ts`, `loadHomeData.ts` |
 | Q-1 | Lifecycle audit — read checklist.tsx + start.tsx | 2026-08-04 | Evidence/Evaluation/Decision/Closure all inside checklist.tsx |
-| Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated — ⚠️ test gate pending (Phase R) |
+| Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated |
 | S | Legal verify — Loi 19-02 fire safety scope | 2026-08-04 | JORADP primary source, both editions. ERP scope fully confirmed. |
 | T | Legal verify — Décret 06-138 air quality Annex I | 2026-08-04 | Ch7 Section 6 — 16 params mg/Nm³ + 7 sectors. Detected by CODE VS DOC check. |
 | **U** | **UX polish — end-to-end inspector flow** | **2026-08-04** | **3 RTL/UX bugs fixed: (1) reinspection.tsx back arrow RTL correction + member empty hint; (2) checklist.tsx empty-criteria guard state; (3) categories.tsx RTL icon order + layout. Commit 239811b.** |
@@ -41,12 +41,12 @@
 **Priority:** 🔴 IMMEDIATE — must be run by Claude or local agent (requires local dev environment)  
 **Opened:** 2026-08-04  
 
-**Tasks:**
-1. Run `npx tsc --noEmit` — fix any TypeScript errors in `app/screens/reinspection.tsx`, `app/_layout.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`
-2. Run Jest for affected files — add unit tests if coverage drops
-3. Manual smoke test: navigate from a follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
-4. Verify notification deep-link: `{ type: 'REINSPECTION', priorInspectionId }` → opens reinspection screen correctly
-5. Verify empty-criteria guard: select a facility type with no matching criteria → should show warning + back button, not blank list
+**Task status:**
+1. ✅ `npx tsc --noEmit` — **DONE by user** (commit [eca03d0](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/eca03d047a94cd8a816f1db94efb836c0d5e3f79), 2026-08-04 23:08 WAT). Fixed: Arabic typo `صحيه→صحية` in 5 criteria files, `formatDateShort` export in `dateUtils.ts`, `CorrectiveAction.criteria` + optional constants in `AgendaRepository.ts`. **TypeScript gate: CLEAN.**
+2. 🔴 **Run Jest for affected files** — still pending. Files: `app/screens/reinspection.tsx`, `app/_layout.tsx`, `app/(tabs)/inspection/checklist.tsx`, `app/(tabs)/inspection/categories.tsx`. Create `__tests__/screens/reinspection.test.tsx` if missing.
+3. 🔴 Manual smoke test: navigate from a follow-up agenda item → reinspection screen → launch → verify `checklist.tsx` receives `inspectionType=follow-up` and `priorInspectionId`
+4. 🔴 Verify notification deep-link: `{ type: 'REINSPECTION', priorInspectionId }` → opens reinspection screen correctly
+5. 🔴 Verify empty-criteria guard: select a facility type with no matching criteria → should show warning + back button, not blank list
 
 **Files to touch:**
 - `app/screens/reinspection.tsx`
@@ -55,7 +55,7 @@
 - `app/(tabs)/inspection/categories.tsx`
 - `__tests__/screens/reinspection.test.tsx` (create if missing)
 
-**Close condition:** `npx tsc --noEmit` passes with 0 errors + Jest passes for affected files + docs updated.
+**Close condition:** Jest passes for affected files + docs updated. (TypeScript already clean — commit eca03d0.)
 
 **Note for Perplexity:** This phase requires a local dev environment. Cannot be completed remotely. Assign to Claude or human dev.
 
@@ -64,7 +64,8 @@
 ## Recommended Execution Order
 
 ```
-R  → TypeScript + Jest validation gate (REQUIRES LOCAL ENV — assign to Claude)
+R  → Jest + smoke tests (REQUIRES LOCAL ENV — assign to Claude)
+     TypeScript gate already CLEAN (commit eca03d0, 2026-08-04).
      No open Perplexity phases at this time.
      Next available phase letter: V
 ```
