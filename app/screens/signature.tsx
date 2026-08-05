@@ -6,13 +6,16 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
   Alert, SafeAreaView, I18nManager,
 } from 'react-native';
-import { Href, useRouter, useLocalSearchParams } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import SignaturePad, { SignaturePadHandle } from '../../components/inspection/SignaturePad';
 
 I18nManager.forceRTL(true);
 
 export default function SignatureScreen() {
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const push = router.push as (href: any) => void;
+
   const params = useLocalSearchParams<{
     facilityId: string;
     facilityName: string;
@@ -42,8 +45,8 @@ export default function SignatureScreen() {
       Alert.alert('التوقيع مطلوب', 'يرجى التوقيع قبل المتابعة.');
       return;
     }
-    router.push({
-      pathname: '/(tabs)' as unknown as Href,
+    push({
+      pathname: '/(tabs)',
       params: {
         facilityId: params.facilityId,
         facilityName: params.facilityName,

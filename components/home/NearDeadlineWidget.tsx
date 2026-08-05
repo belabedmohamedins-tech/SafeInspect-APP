@@ -1,7 +1,7 @@
 // components/home/NearDeadlineWidget.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
-import { Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CorrectiveAction } from '../../src/types';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
@@ -10,6 +10,8 @@ const NEAR_DAYS = 7;
 
 export default function NearDeadlineWidget() {
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const push = router.push as (href: any) => void;
   const [items, setItems] = useState<CorrectiveAction[]>([]);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export default function NearDeadlineWidget() {
           <TouchableOpacity
             style={styles.row}
             onPress={() =>
-              router.push({ pathname: '/(tabs)/actions' as unknown as Href, params: { filter: 'open' } })
+              push({ pathname: '/(tabs)/actions', params: { filter: 'open' } })
             }
           >
             <View style={styles.rowLeft}>

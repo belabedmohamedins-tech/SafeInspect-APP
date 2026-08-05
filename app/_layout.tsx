@@ -151,28 +151,22 @@ export default function RootLayout() {
 
           const screen = data.screen;
 
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const push = router.push as (href: any) => void;
+
           if (screen === 'actions') {
             const filter = data.filter as string | undefined;
-            router.push({
-              pathname: '/(tabs)/actions' as unknown as Href,
-              params:   filter ? { filter } : {},
-            });
+            push({ pathname: '/(tabs)/actions', params: filter ? { filter } : {} });
             return;
           }
 
           if (data.agendaId) {
-            router.push({
-              pathname: '/(tabs)/agenda' as unknown as Href,
-              params:   { highlight: data.agendaId },
-            });
+            push({ pathname: '/(tabs)/agenda', params: { highlight: data.agendaId } });
             return;
           }
 
           if (data.type === 'APPROVAL_ACTION' && data.inspectionId) {
-            router.push({
-              pathname: '/screens/approval-queue' as unknown as Href,
-              params:   { highlight: data.inspectionId },
-            });
+            push({ pathname: '/screens/approval-queue', params: { highlight: data.inspectionId } });
             return;
           }
 
@@ -183,10 +177,7 @@ export default function RootLayout() {
 
           // Phase-Q: reinspection deep-link
           if (data.type === 'REINSPECTION' && data.priorInspectionId) {
-            router.push({
-              pathname: '/screens/reinspection' as unknown as Href,
-              params:   { priorInspectionId: data.priorInspectionId },
-            });
+            push({ pathname: '/screens/reinspection', params: { priorInspectionId: data.priorInspectionId } });
             return;
           }
         } catch (err) {

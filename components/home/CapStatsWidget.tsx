@@ -1,12 +1,14 @@
 // components/home/CapStatsWidget.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Href, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { MaterialIcons } from '@expo/vector-icons';
 import { CapStats, CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 
 export default function CapStatsWidget() {
   const router = useRouter();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const push = router.push as (href: any) => void;
   const [stats, setStats] = useState<CapStats | null>(null);
 
   useEffect(() => {
@@ -16,10 +18,7 @@ export default function CapStatsWidget() {
   if (!stats || stats.total === 0) return null;
 
   const handlePress = () => {
-    router.push({
-      pathname: '/(tabs)/actions' as unknown as Href,
-      params: { highlight: 'overdue' },
-    });
+    push({ pathname: '/(tabs)/actions', params: { highlight: 'overdue' } });
   };
 
   return (
