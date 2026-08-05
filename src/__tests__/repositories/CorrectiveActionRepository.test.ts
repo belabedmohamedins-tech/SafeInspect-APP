@@ -106,8 +106,17 @@ describe('CorrectiveActionRepository', () => {
 
   describe('sorting', () => {
     it('returns newest first', async () => {
-      await CorrectiveActionRepository.save(makeAction({ criteria: 'A' }));
-      await CorrectiveActionRepository.save(makeAction({ inspectionItemId: 'item-2', criteria: 'B' }));
+      // Seed explicit createdAt values 1 second apart so the sort is deterministic.
+      // Two save() calls in the same millisecond produce equal timestamps and
+      // insertion order (A before B) would win localeCompare() = 0.
+      await CorrectiveActionRepository.save({
+        ...makeAction({ criteria: 'A' }),
+        createdAt: '2026-01-01T00:00:00.000Z',
+      } as any);
+      await CorrectiveActionRepository.save({
+        ...makeAction({ inspectionItemId: 'item-2', criteria: 'B' }),
+        createdAt: '2026-01-01T00:00:01.000Z',
+      } as any);
       const all = await CorrectiveActionRepository.getAll();
       expect(all[0].criteria).toBe('B');
     });
