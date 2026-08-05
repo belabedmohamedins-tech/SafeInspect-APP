@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 11:54 WAT — [Agent: Perplexity] — Phase V batch-2 audit: doc-listed targets already clean; only PRD-02-01 numericField confirmed open
+- Phases closed: none (Phase V still OPEN)
+- Phases opened: none
+- Files changed: docs/README.md (this entry only)
+- Critical finding: **`src/utils/scoringUtils.ts` already has `ViolationProfile.total` field and `RiskLevel` exported — no fix needed. `src/db/schema.ts` uses `expo-sqlite` with plain SQL strings (NOT WatermelonDB column type literals) — no fix needed. README batch-2 list was stale. One confirmed open item: `src/criteria/produceStorageCriteria.ts` `PRD-02-01` has `controlType: 'measurement'` but no `numericField`. Must be split into PRD-02-01 (vegetables 0–5 °C) and PRD-02-01b (olives 7–15 °C) with correct `numericField` on each. Real remaining TSC errors (145 in 63 files per STRATEGIC_PLAN.md) require `npx tsc --noEmit` locally — Claude must run this and fix cluster by cluster per the STRATEGIC_PLAN.md error table.**
+
 ### 2026-08-05 11:24 WAT — [Agent: Perplexity] — Phase V batch-1 pushed: TSC fixes for preview/index.tsx, decisionSupport.test, NotificationService, i18n
 - Phases closed: none (batch-1 of V — more fixes needed)
 - Phases opened: none
@@ -177,7 +183,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 11:24 WAT)
+### Quick Status Summary (as of 2026-08-05 11:54 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -189,20 +195,29 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | P | Statistics utilities | ✅ CLOSED 2026-08-04 | Direct code read |
 | Q-1 | Lifecycle audit — checklist.tsx + start.tsx | ✅ CLOSED 2026-08-04 | Direct code read |
 | Q | Reinspection screen | ✅ CLOSED 2026-08-04 | Code delivered |
-| R | Integration / TypeScript + Jest (Claude) | ✅ SUPERSEDED by V | V is the full TSC fix phase |
+| R | Integration / TypeScript + Jest (Claude) | 🔴 BLOCKED on V | V must close first |
 | S | Legal verify — Loi 19-02 fire safety | ✅ CLOSED 2026-08-04 | JORADP primary source |
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 RTL/UX bugs fixed |
-| **V** | **TSC zero-error pass (all source files)** | 🟡 **IN PROGRESS** | batch-1 pushed (commit c1633f5) — more clusters remain |
+| **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 pushed; 18 clusters remain (see STRATEGIC_PLAN.md) |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Perplexity (next turn): Phase V batch-2 — fix remaining TSC clusters:
-    scoringUtils.ts (ViolationProfile.total, RiskLevel type exports)
-    schema.ts (WatermelonDB column type literals)
-    Any remaining import/type errors reported by tsc --noEmit
-→ After V: Phase W — full Jest run, coverage gate check
+→ Claude (local): Phase V — fix 145 TSC errors cluster by cluster
+    Start with: src/db/schema.ts SQLite bind params (~25 errors)
+    Then: test mock fixtures (~40 errors)
+    Then: NotificationType union (19 errors)
+    Then: remaining clusters per STRATEGIC_PLAN.md table
+    After each cluster: npx tsc --noEmit + commit
+    Gate: npx tsc --noEmit exits with 0 errors
+
+→ Also (criteria fix — can be done by Perplexity remotely):
+    src/criteria/produceStorageCriteria.ts
+    PRD-02-01: split into two criteria (vegetables 0–5 °C, olives 7–15 °C)
+    each with correct numericField
+
+→ After V closes: Phase R — full Jest run, smoke tests, coverage gate
 ```
 
 ---
@@ -219,12 +234,21 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | `src/i18n/index.ts` | Changed re-export to `./index-impl` (no `.tsx` extension) |
 | `app/preview/_layout.tsx` | Simplified (removed `headerBackTitleVisible` which is iOS-only RN prop, not valid in Expo Router Stack.Screen options type) |
 
-### Batch 2 — PENDING
+### Batch 2 — AUDIT COMPLETE (2026-08-05 11:54 WAT)
 
-Files still needing TSC fixes (to be done next turn):
-- `src/utils/scoringUtils.ts` — confirm `ViolationProfile` has `total` field, `RiskLevel` exported
-- `src/db/schema.ts` — WatermelonDB `tableSchema` column type literal issues
-- Any additional files flagged by `npx tsc --noEmit`
+**Important correction:** The README batch-2 list was stale. Direct code read confirmed:
+
+| File | README claimed | Actual state |
+|---|---|---|
+| `src/utils/scoringUtils.ts` | Missing `ViolationProfile.total`, `RiskLevel` not exported | ✅ ALREADY CORRECT — both present |
+| `src/db/schema.ts` | WatermelonDB column type literal issues | ✅ ALREADY CORRECT — uses expo-sqlite plain SQL, not WatermelonDB |
+
+**One confirmed open criteria fix:**
+- `src/criteria/produceStorageCriteria.ts` → `PRD-02-01` has `controlType: 'measurement'` but no `numericField`
+- Fix: split into `PRD-02-01` (vegetables, 0–5 °C) and `PRD-02-01b` (olives, 7–15 °C) with `numericField` on each
+- Can be done remotely by Perplexity
+
+**Remaining 145 TSC errors:** All require local `npx tsc --noEmit`. Error clusters fully documented in `docs/STRATEGIC_PLAN.md` Phase V section. Assign to Claude.
 
 ---
 
@@ -343,6 +367,7 @@ All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys
 - **3 RTL/UX bugs fixed in reinspection.tsx, checklist.tsx, categories.tsx** ✅ (2026-08-04)
 - **Activity → criteria mapping 100% verified (26/26 exact matches)** ✅ (2026-08-05)
 - **Phase V batch-1 TSC fixes pushed** ✅ (2026-08-05 commit c1633f5)
+- **`scoringUtils.ts` + `schema.ts` already correct** ✅ (2026-08-05 — do not re-fix)
 
 ---
 
@@ -378,7 +403,7 @@ Update **both** of the following before pushing:
 ### Test gate
 - Run `npx tsc --noEmit` before closing any phase
 - Run Jest for affected files before closing any phase
-- **Perplexity cannot run local commands** — assign Phase W (Jest) to Claude after V closes
+- **Perplexity cannot run local commands** — assign Phase V + W (Jest) to Claude
 
 ### SHA rule
 - Always fetch current file from GitHub to get its SHA before updating
@@ -412,7 +437,8 @@ Update **both** of the following before pushing:
 Any agent picking this up should do in order:
 
 1. Read this file top to bottom
-2. Read `docs/STRATEGIC_PLAN.md` for full phase details
-3. **Phase V batch-2 (Perplexity):** Read `src/utils/scoringUtils.ts` and `src/db/schema.ts`. Fix remaining TSC errors. Push.
-4. **After V fully closed:** Open Phase W — run `npx tsc --noEmit` (Claude, local) + full Jest run.
-5. After each phase: update this file + STRATEGIC_PLAN.md + push.
+2. Read `docs/STRATEGIC_PLAN.md` for full phase details and the complete TSC error cluster table
+3. **Phase V (Claude, local):** Run `npx tsc --noEmit`. Fix clusters in order from STRATEGIC_PLAN.md. Commit after each cluster. Gate: 0 errors.
+4. **Criteria fix (Perplexity, remote):** `src/criteria/produceStorageCriteria.ts` → split `PRD-02-01` into two criteria (vegetables 0–5 °C, olives 7–15 °C) with `numericField` on each.
+5. **After V closes:** Open Phase W — full Jest run + smoke tests (Claude, local).
+6. After each phase: update this file + STRATEGIC_PLAN.md + push.
