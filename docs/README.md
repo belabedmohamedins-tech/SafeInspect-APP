@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 13:53 WAT — [Agent: Perplexity] — Phase V false-positive audit: CapNotificationService + AuditLogRepository confirmed clean by direct code read
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: **Three more Phase V error table entries confirmed FALSE POSITIVES by direct source read: (1) `cap.tsx:25` — `CapNotificationService` exports `scheduleCapDigestNotification`, `scheduleCapWeeklyDigest`, and default `scheduleCapDeadlineNotifications` — already correct. (2) `audit-log.tsx` — `AuditAction` exported as `export type AuditAction` from `AuditLogRepository.ts`, `AuditEntry` exported as `export interface AuditEntry` — both correct; screen aliases `AuditEntry as AuditLogEntry` — valid. (3) `AuditLogRepository` exported as `export const AuditLogRepository` — correct. All three error table rows must be marked DO NOT TOUCH. STRATEGIC_PLAN.md Phase V error table updated with confirmed false-positive annotations.**
+
 ### 2026-08-05 13:37 WAT — [Agent: Perplexity] — Phase W URLs confirmed complete; fresh-session handoff context logged
 - Phases closed: none
 - Phases opened: none
@@ -213,7 +219,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 13:37 WAT)
+### Quick Status Summary (as of 2026-08-05 13:53 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -229,8 +235,8 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | S | Legal verify — Loi 19-02 fire safety | ✅ CLOSED 2026-08-04 | JORADP primary source |
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 RTL/UX bugs fixed |
-| **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 + criteria fix + server stub pushed; remaining clusters need local tsc |
-| **W** | **Legal document verification (5 source gaps)** | 🟡 **OPEN — USER downloads + Claude ingests** | All 5 URLs confirmed by Perplexity 2026-08-05 12:41 + 13:37 WAT; full URL table in STRATEGIC_PLAN.md |
+| **V** | **TSC zero-error pass** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 + criteria fix + server stub pushed; 7 rows in error table confirmed false positives (DO NOT TOUCH — see STRATEGIC_PLAN.md); remaining clusters need local `npx tsc --noEmit` |
+| **W** | **Legal document verification (5 source gaps)** | 🟡 **OPEN — USER downloads + Claude ingests** | All 5 URLs confirmed by Perplexity; full URL table in STRATEGIC_PLAN.md |
 
 ### Recommended Execution Order (next sessions)
 
@@ -243,9 +249,12 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
     After each cluster: npx tsc --noEmit + commit
     Gate: npx tsc --noEmit exits with 0 errors
 
-    ⚠️  DO NOT re-fix facilities/index.tsx (.remove is already correct — confirmed twice)
-    ⚠️  DO NOT re-fix approval-queue.tsx (ActionSheet type already fixed in-file — confirmed twice)
-    ⚠️  DO NOT re-fix approval-detail.tsx:174 (returnForRevision already uses 3 args — confirmed 2026-08-05)
+    ⚠️  DO NOT re-fix (confirmed clean by direct code read — multiple confirmations):
+        facilities/index.tsx    → .remove() already correct
+        approval-queue.tsx      → ActionSheet type already fixed in-file
+        approval-detail.tsx:174 → returnForRevision already uses 3 args
+        cap.tsx:25              → CapNotificationService exports are correct
+        audit-log.tsx           → AuditAction, AuditEntry, AuditLogRepository all correctly exported
 
 → Parallel: Phase W — user downloads 5 legal docs → adds to Claude project → Claude updates criteria
     W-1: Arrêté 07/05/2025 cold-chain temps (JORADP JO n°43)
@@ -284,13 +293,17 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 |---|---|
 | `server/src/index.ts` | Was 0 bytes. Written with minimal Express bootstrap: helmet + cors + json middleware, /health endpoint, dynamic route loader for auth/inspections/facilities/reports, app.listen on PORT env var. |
 
-### False positives — already clean in source (confirmed 2026-08-05 by direct read)
+### False positives — confirmed clean by direct code read (DO NOT TOUCH)
 
-| Error table claim | Actual source state | Action |
+| Error table claim | Actual source state | Confirmed |
 |---|---|---|
-| `facilities/index.tsx:69` — `FacilityRepository.delete` doesn't exist | Source uses `FacilityRepository.remove(facility.id)` — already correct | **Do NOT touch** |
-| `approval-queue.tsx:64` — `ActionSheet['mode']` type error | In-file comment + code already use `NonNullable<ActionSheet>['mode']` — already fixed | **Do NOT touch** |
-| `approval-detail.tsx:174` — `returnForRevision` extra arg | Source calls `returnForRevision(inspection.id, supervisor, reason)` — exactly 3 args — already correct | **Do NOT touch** |
+| `facilities/index.tsx:69` — `FacilityRepository.delete` doesn't exist | Source uses `FacilityRepository.remove(facility.id)` — already correct | 2026-08-05 (×2) |
+| `approval-queue.tsx:64` — `ActionSheet['mode']` type error | In-file uses `NonNullable<ActionSheet>['mode']` — already fixed | 2026-08-05 (×2) |
+| `approval-detail.tsx:174` — `returnForRevision` extra arg | Source calls `returnForRevision(inspection.id, supervisor, reason)` — exactly 3 args | 2026-08-05 |
+| `cap.tsx:25` — `CapNotificationService` named export missing | `CapNotificationService.ts` exports `scheduleCapDigestNotification`, `scheduleCapWeeklyDigest`, default `scheduleCapDeadlineNotifications` — all correct | 2026-08-05 |
+| `audit-log.tsx` — `AuditAction` type not exported | `AuditLogRepository.ts` exports `export type AuditAction` — correct | 2026-08-05 |
+| `audit-log.tsx` — `AuditEntry`/`AuditLogEntry` not exported | `AuditLogRepository.ts` exports `export interface AuditEntry`; screen aliases it as `AuditLogEntry` — valid | 2026-08-05 |
+| `audit-log.tsx` — `AuditLogRepository` not exported | `AuditLogRepository.ts` exports `export const AuditLogRepository` — correct | 2026-08-05 |
 
 ### Remaining clusters — ALL require `npx tsc --noEmit` locally (Claude)
 

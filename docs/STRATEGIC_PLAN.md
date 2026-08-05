@@ -45,26 +45,31 @@
 
 **Error clusters (in priority order):**
 
-| Cluster | Files | Count | Root cause |
-|---|---|---|---|
-| `src/db/schema.ts` SQLite bind params | `src/db/schema.ts:281,326,348` | ~25 | `unknown`/`{}` not assignable to `SQLiteBindValue` — needs explicit cast or typed intermediary |
-| Test mocks missing required fields | many `src/__tests__/` | ~40 | Types evolved (e.g. `ViolationProfile.total`, `CorrectiveAction.inspectionItemId`, `Facility.projectName`) but test fixtures not updated |
-| `NotificationRepository.test.ts` `NotificationType` | `src/__tests__/repositories/NotificationRepository.test.ts` | 19 | `"inspection_completed"` not in `NotificationType` union — add to union or fix test |
-| Expo Router pathname strings | `app/_layout.tsx`, `app/screens/*.tsx`, `components/home/*.tsx` | ~15 | Routes not registered in Expo Router typed map — screen files may be missing or not exported |
-| `CapNotificationService` export | `app/(tabs)/cap.tsx:25` | 1 | Named export `CapNotificationService` missing from that module |
-| `checklist.tsx:325` `decision` prop | `app/(tabs)/inspection/checklist.tsx` | 1 | `DecisionCard` Props type mismatch |
-| `reinspection.tsx` type issues | `app/screens/reinspection.tsx:75,117` | 2 | `c.status !== 'closed'` overlap + `SavedInspection.activity` missing |
-| `src/i18n/index.ts` `.tsx` import | `src/i18n/index.ts:4` | 1 | Remove `.tsx` extension from re-export |
-| `NotificationService.ts` behavior shape | `src/services/NotificationService.ts:43` | 1 | Add `shouldShowBanner`+`shouldShowList` to handler return |
-| Expo boilerplate files | `components/external-link.tsx`, `components/haptic-tab.tsx`, `components/parallax-scroll-view.tsx`, `hooks/use-theme-color.ts`, `components/themed-text.tsx`, `components/themed-view.tsx`, `components/ui/*` | ~12 | Stale Expo template components with wrong color/hook types |
-| `app/preview/index.tsx` | 10 errors | 10 | `Colors.info`, `xxxl` spacing, `complianceStatus` enum, `Shadow.xs`, `CorrectiveAction.description` |
-| `server/src/index.ts` implicit `any` | 1 | 1 | Add explicit `: string` to `.map(s => ...)` |
-| `AuditAction`/`AuditLogEntry` missing exports | `app/screens/audit-log.tsx` | 2 | Types not exported from `src/types.ts` |
-| `FacilityRepository.delete` | `app/screens/facilities/index.tsx:69` | 1 | Method is `remove` not `delete` |
-| `ActionSheet.mode` | `app/screens/approval-queue.tsx:64` | 1 | Property doesn't exist on that type |
-| `ApprovalRepository.returnForRevision` extra arg | `app/screens/approval-detail.tsx:174` | 1 | Function signature mismatch |
-| `app/reports/[id].tsx` `extraordinary` missing | 1 | 1 | Add `extraordinary` to `TYPE_META` |
-| Criteria test `axis` possibly undefined | 4 criteria tests | 4 | Guard with `item.axis ?? ''` |
+| Cluster | Files | Count | Root cause | Status |
+|---|---|---|---|---|
+| `src/db/schema.ts` SQLite bind params | `src/db/schema.ts:281,326,348` | ~25 | `unknown`/`{}` not assignable to `SQLiteBindValue` — needs explicit cast or typed intermediary | 🔴 OPEN — Claude local |
+| Test mocks missing required fields | many `src/__tests__/` | ~40 | Types evolved (e.g. `ViolationProfile.total`, `CorrectiveAction.inspectionItemId`, `Facility.projectName`) but test fixtures not updated | 🔴 OPEN — Claude local |
+| `NotificationRepository.test.ts` `NotificationType` | `src/__tests__/repositories/NotificationRepository.test.ts` | 19 | `"inspection_completed"` not in `NotificationType` union — add to union or fix test | 🔴 OPEN — Claude local |
+| Expo Router pathname strings | `app/_layout.tsx`, `app/screens/*.tsx`, `components/home/*.tsx` | ~15 | Routes not registered in Expo Router typed map — screen files may be missing or not exported | 🔴 OPEN — Claude local |
+| `checklist.tsx:325` `decision` prop | `app/(tabs)/inspection/checklist.tsx` | 1 | `DecisionCard` Props type mismatch | 🔴 OPEN — Claude local |
+| `reinspection.tsx` type issues | `app/screens/reinspection.tsx:75,117` | 2 | `c.status !== 'closed'` overlap + `SavedInspection.activity` missing | 🔴 OPEN — Claude local |
+| Expo boilerplate files | `components/external-link.tsx`, `components/haptic-tab.tsx`, `components/parallax-scroll-view.tsx`, `hooks/use-theme-color.ts`, `components/themed-text.tsx`, `components/themed-view.tsx`, `components/ui/*` | ~12 | Stale Expo template components with wrong color/hook types | 🔴 OPEN — Claude local |
+| `app/reports/[id].tsx` `extraordinary` missing | 1 | 1 | Add `extraordinary` to `TYPE_META` | 🔴 OPEN — Claude local |
+| Criteria test `axis` possibly undefined | 4 criteria tests | 4 | Guard with `item.axis ?? ''` | 🔴 OPEN — Claude local |
+| `app/preview/index.tsx` | 10 errors | 10 | `Colors.info`, `xxxl` spacing, `complianceStatus` enum, `Shadow.xs`, `CorrectiveAction.description` | ✅ DONE — batch 1 (commit c1633f5) |
+| `src/__tests__/decisionSupport.test.ts` | — | — | `ViolationProfile.total` + `riskLevel: 1 as RiskLevel` | ✅ DONE — batch 1 (commit c1633f5) |
+| `src/services/NotificationService.ts` | — | — | `shouldShowBanner` + `shouldShowList` | ✅ DONE — batch 1 (commit c1633f5) |
+| `src/i18n/index.ts` | — | — | `.tsx` extension in re-export | ✅ DONE — batch 1 (commit c1633f5) |
+| `app/preview/_layout.tsx` | — | — | `headerBackTitleVisible` not valid in Expo Router Stack.Screen | ✅ DONE — batch 1 (commit c1633f5) |
+| `src/criteria/produceStorageCriteria.ts` PRD-02-01 | — | — | `controlType: 'measurement'` with no `numericField` | ✅ DONE — criteria fix (commit 0154707) |
+| `server/src/index.ts` implicit `any` | — | — | Was 0 bytes stub | ✅ DONE — server stub (commit 513adbe) |
+| `facilities/index.tsx:69` — `FacilityRepository.delete` | `app/screens/facilities/index.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — source already uses `.remove()` correctly | ⛔ DO NOT TOUCH |
+| `approval-queue.tsx:64` — `ActionSheet['mode']` | `app/screens/approval-queue.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — source already uses `NonNullable<ActionSheet>['mode']` | ⛔ DO NOT TOUCH |
+| `approval-detail.tsx:174` — `returnForRevision` extra arg | `app/screens/approval-detail.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — source already calls with exactly 3 args | ⛔ DO NOT TOUCH |
+| `cap.tsx:25` — `CapNotificationService` named export missing | `app/(tabs)/cap.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — `CapNotificationService.ts` exports `scheduleCapDigestNotification`, `scheduleCapWeeklyDigest`, default `scheduleCapDeadlineNotifications` — all correct | ⛔ DO NOT TOUCH |
+| `audit-log.tsx` — `AuditAction` not exported | `app/screens/audit-log.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — `AuditLogRepository.ts` exports `export type AuditAction` | ⛔ DO NOT TOUCH |
+| `audit-log.tsx` — `AuditEntry`/`AuditLogEntry` not exported | `app/screens/audit-log.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — `AuditLogRepository.ts` exports `export interface AuditEntry`; screen aliases as `AuditLogEntry` — valid | ⛔ DO NOT TOUCH |
+| `audit-log.tsx` — `AuditLogRepository` not exported | `app/screens/audit-log.tsx` | 1 | **CONFIRMED FALSE POSITIVE** — `AuditLogRepository.ts` exports `export const AuditLogRepository` | ⛔ DO NOT TOUCH |
 
 **Approach for Claude:**
 1. Fix source files first (non-test), then update test fixtures to match current types.
@@ -72,6 +77,7 @@
 3. Expo boilerplate components (`haptic-tab`, `parallax-scroll-view`, `themed-*`, `use-theme-color`) — check if actually used; if not, delete them.
 4. Expo Router pathnames — ensure screen files exist at the correct `app/screens/` path AND are accessible routes.
 5. Run `npx tsc --noEmit` after each cluster fix. Commit per cluster.
+6. **Do NOT re-fix any row marked ⛔ DO NOT TOUCH** — those are confirmed clean by Perplexity direct code read.
 
 **Close condition:** `npx tsc --noEmit` exits with 0 errors.
 
@@ -132,6 +138,7 @@
 V  → Mass TypeScript fix — 145 errors, 63 files (ASSIGN TO CLAUDE, local)
        Fix source files first, then test fixtures.
        Commit per cluster.
+       ⛔ NEVER re-fix rows marked DO NOT TOUCH in error table above.
        Gate: npx tsc --noEmit exits with 0 errors.
 
 W  → Legal document verification — 5 source gaps (PARALLEL — user downloads + Claude ingests)
