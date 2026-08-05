@@ -93,7 +93,7 @@ export default function RootLayout() {
       // 2b. PIN guard
       const pin = await AuthRepository.getPin();
       if (pin && !currentPath.includes('pin-lock')) {
-        router.replace('/pin-lock');
+        router.replace('/pin-lock' as Href);
         return;
       }
 
@@ -107,7 +107,7 @@ export default function RootLayout() {
       // 2d. All clear — start tracking activity
       SessionLockService.reset();
       if (!currentPath.includes('(tabs)')) {
-        router.replace('/(tabs)/home');
+        router.replace('/(tabs)/home' as Href);
       }
     })();
   }, [dbReady]);
@@ -214,7 +214,7 @@ export default function RootLayout() {
       const lock = await SessionLockService.shouldLock();
       if (lock) {
         SessionLockService.markLocked();
-        router.replace('/pin-lock');
+        router.replace('/pin-lock' as Href);
       }
     };
 

@@ -171,7 +171,7 @@ export async function login(matricule: string, password: string): Promise<LoginR
     }
 
     return { ok: true, user: json.user };
-  } catch (err) {
+  } catch {
     return { ok: false, error: 'Network error — check your connection' };
   }
 }
@@ -212,5 +212,84 @@ export async function registerPushToken(pushToken: string): Promise<void> {
     });
   } catch {
     // Non-fatal — retry on next app launch
+  }
+}
+
+// ── Approval workflow ─────────────────────────────────────────────────────────────
+
+export interface ApprovalResult {
+  ok:     boolean;
+  error?: string;
+}
+
+/**
+ * Supervisor approves a submitted inspection report.
+ * POST /inspections/:inspectionId/approve
+ * Body: { note?: string }
+ */
+export async function approveInspection(
+  inspectionId: string,
+  note?: string,
+): Promise<ApprovalResult> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, error: 'Not authenticated' };
+
+  try {
+    const res = await globalThis.fetch(
+      `${getApiUrl()}/inspections/${encodeURIComponent(inspectionId)}/approve`,
+      {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ note: note ?? '' }),
+      },
+    );
+
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({})) as { error?: string };
+      return { ok: false, error: json.error ?? `Server error ${res.status}` };
+    }
+
+    return { ok: true };
+  } catch {
+    return { ok: false, error: 'Network error — check your connection' };
+  }
+}
+
+/**
+ * Supervisor rejects a submitted inspection report.
+ * POST /inspections/:inspectionId/reject
+ * Body: { reason: string }
+ */
+export async function rejectInspection(
+  inspectionId: string,
+  reason: string,
+): Promise<ApprovalResult> {
+  const accessToken = await getAccessToken();
+  if (!accessToken) return { ok: false, error: 'Not authenticated' };
+
+  try {
+    const res = await globalThis.fetch(
+      `${getApiUrl()}/inspections/${encodeURIComponent(inspectionId)}/reject`,
+      {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
+        body: JSON.stringify({ reason }),
+      },
+    );
+
+    if (!res.ok) {
+      const json = await res.json().catch(() => ({})) as { error?: string };
+      return { ok: false, error: json.error ?? `Server error ${res.status}` };
+    }
+
+    return { ok: true };
+  } catch {
+    return { ok: false, error: 'Network error — check your connection' };
   }
 }
