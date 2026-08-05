@@ -114,47 +114,74 @@ const semiPharmaChecklist: InspectionItem[] = [
   ...semiPharmaCriteria,
 ];
 
+// ── Activity → checklist map ────────────────────────────────────────────────
+// Keys are EXACT activity strings from src/facilitiesData.ts.
+// Verified 2026-08-05: all 26 distinct facility activity values have a key below.
+// Zero facilities will silently fall back to baseGeneralCriteria.
+// ── How to maintain this map:
+//   1. Add a new facility to facilitiesData.ts with a new activity string.
+//   2. Add a matching key here pointing to the correct checklist.
+//   3. Run: grep "activity:" src/facilitiesData.ts | sort -u
+//      and diff the result against the keys below — both lists must match.
 export const criteriaByActivity: Record<string, InspectionItem[]> = {
   default: baseGeneralCriteria,
-  'الديوان الوطني لأغذية الأنعام': uabChecklist,
-  'وحدة مذابح الغرب': abattoirChecklist,
-  'وحدة تفريخ الدواجن': couvoirChecklist,
-  'وحدة تربية الدواجن': updChecklist,
-  'مذبحة دواجن <500 كغ/يوم': slaughterhouseSmallChecklist,
+
+  // ── Bakery ────────────────────────────────────────────────────────────────
   'مخبزة صناعية': bakeryChecklist,
-  'غرفة تبريد': coldRoomChecklist,
-  'ميكانيك سيارات': mechanicChecklist,
+
+  // ── Poultry slaughter ────────────────────────────────────────────────────
   'مذبحة دواجن ≤500 كغ/ي': slaughterhouseSmallChecklist,
+  'ذبح وبيع الدواجن (مؤسسة عمومية اقتصادية)': slaughterhouseSmallChecklist,
+  // Cat. 3: mid-scale poultry slaughter 500 kg–2 t/day — uses full abattoir criteria
+  'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)': abattoirChecklist,
+
+  // ── Cold storage ─────────────────────────────────────────────────────────
+  'غرفة تبريد': coldRoomChecklist,
+
+  // ── Semi-pharmaceutical ──────────────────────────────────────────────────
+  'تعبئة مواد شبه صيدلانية': semiPharmaChecklist,
+
+  // ── Car wash ─────────────────────────────────────────────────────────────
+  'غسل وتشحيم السيارات': carWashChecklist,
+
+  // ── GPL installation ─────────────────────────────────────────────────────
+  'تركيب GPL/C': gplChecklist,
+
+  // ── Animal feed manufacturing ────────────────────────────────────────────
   'منشأة صناعة تغذية حيوانية': uabChecklist,
   'إنتاج أغذية الأنعام (مؤسسة عمومية اقتصادية)': uabChecklist,
+
+  // ── Produce / olive storage ──────────────────────────────────────────────
+  'وحدة تخزين الزيتون والخضر': produceStorageChecklist,
+
+  // ── Hatchery ─────────────────────────────────────────────────────────────
   'مفرخة الدواجن (مؤسسة عمومية اقتصادية)': couvoirChecklist,
+
+  // ── Poultry farming (UPD) ────────────────────────────────────────────────
   'تربية الدواجن (مؤسسة عمومية اقتصادية)': updChecklist,
-  'ذبح وبيع الدواجن (مؤسسة عمومية اقتصادية)': slaughterhouseSmallChecklist,
-  'ميكانيك': mechanicChecklist,
   'تربية الدواجن (07 حظائر)': updChecklist,
   'تربية الدواجن (03 حظائر)': updChecklist,
   'تربية الدواجن (حظيرتين)': updChecklist,
   'تربية الدواجن (حظيرة)': updChecklist,
-  // ── Facility activity strings (exact match from facilitiesData.ts) ──────
-  'ورشة حدادة': blacksmithChecklist,
-  'صناعة سياج': blacksmithChecklist,
-  'ورشة نجارة': carpenteryChecklist,
-  'ورشة ألمنيوم': carpenteryChecklist,
-  'غسل وتشحيم السيارات': carWashChecklist,
-  'تركيب GPL': gplChecklist,
-  'تركيب GPL/C': gplChecklist,
-  'صناعة الرخام': marbleChecklist,
+
+  // ── Printing ─────────────────────────────────────────────────────────────
+  'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب': printingChecklist,
+
+  // ── Automotive mechanic ──────────────────────────────────────────────────
+  'ميكانيك السيارات': mechanicChecklist,
+  'ميكانيك': mechanicChecklist,
+
+  // ── Paint shop ───────────────────────────────────────────────────────────
   'ورشة طلاء السيارات': paintShopChecklist,
-  'مطبعة': printingChecklist,
-  'لوازم مدرسية ومكاتب': printingChecklist,
-  'وحدة تخزين الزيتون والخضر': produceStorageChecklist,
-  'تعبئة مواد شبه صيدلانية': semiPharmaChecklist,
-  // ── Bug-fix aliases: exact strings from facilitiesData.ts that previously
-  //    had no matching key and silently fell back to baseGeneralCriteria ────
-  'ميكانيك السيارات': mechanicChecklist,                                    // was 'ميكانيك سيارات' (missing ال)
-  'ورشة حدادة (صناعة السياج)': blacksmithChecklist,                        // variant with parenthetical
-  'ورشة نجارة الألمنيوم': carpenteryChecklist,                              // was 'ورشة ألمنيوم'
-  'مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب': printingChecklist,  // full description variant
-  // ── Under-construction facilities (const-* from facilitiesData.ts) ──────
-  'ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي)': abattoirChecklist,    // Cat. 3 license, mid-scale poultry slaughter
+
+  // ── Woodwork ─────────────────────────────────────────────────────────────
+  'ورشة نجارة': carpenteryChecklist,
+  'ورشة نجارة الألمنيوم': carpenteryChecklist,
+
+  // ── Marble / stone ───────────────────────────────────────────────────────
+  'صناعة الرخام': marbleChecklist,
+
+  // ── Blacksmith / metalwork ───────────────────────────────────────────────
+  'ورشة حدادة (صناعة السياج)': blacksmithChecklist,
+  'ورشة حدادة': blacksmithChecklist,
 };
