@@ -1,7 +1,5 @@
 // app/screens/facilities/profile.tsx
 // ملف المنشأة — Facility Dossier
-// Shows: meta info, KPI row, score trend bars, inspection history,
-//        open CAP items, and quick-action buttons.
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useFocusEffect } from 'expo-router';
@@ -23,8 +21,6 @@ import { CorrectiveActionRepository } from '../../../src/repositories/Corrective
 import { FacilityRepository } from '../../../src/repositories/FacilityRepository';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 import { CorrectiveAction, Facility, SavedInspection } from '../../../src/types';
-
-// ─── helpers ─────────────────────────────────────────────────────────────────────
 
 function gradeColor(grade?: string): string {
   switch (grade) {
@@ -63,8 +59,6 @@ const SEVERITY_COLOR: Record<CorrectiveAction['severity'], string> = {
   low: Colors.success, medium: Colors.warning, high: Colors.danger, critical: '#8e44ad',
 };
 
-// ─── component ─────────────────────────────────────────────────────────────────────
-
 export default function FacilityProfileScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -74,26 +68,28 @@ export default function FacilityProfileScreen() {
   const [caps,         setCaps]         = useState<CorrectiveAction[]>([]);
   const [loading,      setLoading]      = useState(true);
 
-  const load = useCallback(async () => {
+  // useFocusEffect requires a synchronous callback returning void.
+  // Wrap the async load inside useCallback and return nothing.
+  const load = useCallback(() => {
     if (!id) return;
     setLoading(true);
-    const [fac, allInsp, allCap] = await Promise.all([
+    Promise.all([
       FacilityRepository.getById(id),
       InspectionRepository.getCompleted(),
       CorrectiveActionRepository.getAll(),
-    ]);
-    setFacility(fac ?? null);
-    const facInsp = allInsp
-      .filter(i => i.facilityId === id)
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    setInspections(facInsp);
-    setCaps(allCap.filter(c => c.facilityId === id && c.status !== 'resolved'));
-    setLoading(false);
+    ]).then(([fac, allInsp, allCap]) => {
+      setFacility(fac ?? null);
+      const facInsp = allInsp
+        .filter(i => i.facilityId === id)
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+      setInspections(facInsp);
+      setCaps(allCap.filter(c => c.facilityId === id && c.status !== 'resolved'));
+      setLoading(false);
+    });
   }, [id]);
 
   useFocusEffect(load);
 
-  // ── derived stats ──────────────────────────────────────────────────────────
   const scores  = inspections.map(i => i.score ?? 0).filter(s => s > 0);
   const avgScore = scores.length
     ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length)
@@ -101,8 +97,6 @@ export default function FacilityProfileScreen() {
   const lastInsp = inspections[0];
   const openCapCount = caps.length;
   const overdueCount = caps.filter(c => c.status === 'overdue').length;
-
-  // last 6 inspections for the trend bar chart (chronological order)
   const trendData = [...inspections].reverse().slice(-6);
 
   const openMapApp = () => {
@@ -134,7 +128,6 @@ export default function FacilityProfileScreen() {
 
   return (
     <SafeAreaView style={s.container}>
-      {/* Header */}
       <View style={s.header}>
         <TouchableOpacity onPress={() => router.back()} style={s.backBtn}>
           <FontAwesome name="arrow-right" size={20} color={Colors.textPrimary} />
@@ -150,7 +143,6 @@ export default function FacilityProfileScreen() {
 
       <ScrollView contentContainerStyle={s.scroll} showsVerticalScrollIndicator={false}>
 
-        {/* ── Hero / Meta card ── */}
         <View style={s.metaCard}>
           <View style={s.metaIconRow}>
             <View style={s.facilityIcon}>
@@ -161,9 +153,7 @@ export default function FacilityProfileScreen() {
               <Text style={s.facilityActivity}>{facility.activity}</Text>
             </View>
           </View>
-
           <View style={s.divider} />
-
           <MetaRow icon="user"        label="صاحب المشروع" value={facility.ownerName} />
           <MetaRow icon="map-marker" label="العنوان"         value={facility.address} />
           {facility.licenseType && (
@@ -172,8 +162,6 @@ export default function FacilityProfileScreen() {
           {facility.notes && (
             <MetaRow icon="sticky-note" label="ملاحظات" value={facility.notes} />
           )}
-
-          {/* Map button if coordinates exist */}
           {facility.lat && facility.lng ? (
             <TouchableOpacity style={s.mapBtn} onPress={openMapApp}>
               <FontAwesome name="map" size={14} color={Colors.primary} />
@@ -182,13 +170,8 @@ export default function FacilityProfileScreen() {
           ) : null}
         </View>
 
-        {/* ── KPI row ── */}
         <View style={s.kpiRow}>
-          <KpiCard
-            label="إجمالي التفتيشات"
-            value={String(inspections.length)}
-            color={Colors.primary}
-          />
+          <KpiCard label="إجمالي التفتيشات" value={String(inspections.length)} color={Colors.primary} />
           <KpiCard
             label="متوسط النتيجة"
             value={avgScore !== null ? `${avgScore}%` : '—'}
@@ -201,7 +184,6 @@ export default function FacilityProfileScreen() {
           />
         </View>
 
-        {/* ── Last inspection badge ── */}
         {lastInsp && (
           <View style={s.lastInspCard}>
             <Text style={s.sectionTitle}>آخر تفتيش</Text>
@@ -228,24 +210,18 @@ export default function FacilityProfileScreen() {
           </View>
         )}
 
-        {/* ── Score trend ── */}
         {trendData.length > 1 && (
           <View style={s.card}>
             <Text style={s.sectionTitle}>مسار النتائج</Text>
             <View style={s.trendBars}>
-              {trendData.map((ins, idx) => {
+              {trendData.map((ins) => {
                 const sc = ins.score ?? 0;
                 const barH = Math.max(4, (sc / 100) * 80);
                 return (
                   <View key={ins.id} style={s.trendCol}>
                     <Text style={s.trendScore}>{sc > 0 ? `${sc}` : ''}</Text>
                     <View style={s.trendBarBg}>
-                      <View
-                        style={[
-                          s.trendBarFill,
-                          { height: barH, backgroundColor: scoreBarColor(sc) },
-                        ]}
-                      />
+                      <View style={[s.trendBarFill, { height: barH, backgroundColor: scoreBarColor(sc) }]} />
                     </View>
                     <Text style={s.trendLabel}>
                       {new Date(ins.date).toLocaleDateString('ar-DZ', { month: 'short', day: 'numeric' })}
@@ -257,7 +233,6 @@ export default function FacilityProfileScreen() {
           </View>
         )}
 
-        {/* ── Open CAP items ── */}
         {caps.length > 0 && (
           <View style={s.card}>
             <View style={s.sectionHeaderRow}>
@@ -283,7 +258,6 @@ export default function FacilityProfileScreen() {
           </View>
         )}
 
-        {/* ── Inspection history ── */}
         <View style={s.card}>
           <Text style={s.sectionTitle}>سجل التفتيشات</Text>
           {inspections.length === 0 ? (
@@ -295,10 +269,7 @@ export default function FacilityProfileScreen() {
             inspections.map((ins, idx) => (
               <View
                 key={ins.id}
-                style={[
-                  s.historyRow,
-                  idx === inspections.length - 1 && { borderBottomWidth: 0 },
-                ]}
+                style={[s.historyRow, idx === inspections.length - 1 && { borderBottomWidth: 0 }]}
               >
                 <View style={[s.historyGrade, { backgroundColor: gradeColor(ins.grade) + '22', borderColor: gradeColor(ins.grade) }]}>
                   <Text style={[s.historyGradeText, { color: gradeColor(ins.grade) }]}>{ins.grade ?? '?'}</Text>
@@ -322,7 +293,6 @@ export default function FacilityProfileScreen() {
           )}
         </View>
 
-        {/* ── Quick actions ── */}
         <View style={s.actionsRow}>
           <TouchableOpacity
             style={[s.actionBtn, { backgroundColor: Colors.primary }]}
@@ -345,8 +315,6 @@ export default function FacilityProfileScreen() {
   );
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────────────
-
 function MetaRow({ icon, label, value }: { icon: string; label: string; value?: string }) {
   if (!value) return null;
   return (
@@ -367,8 +335,6 @@ function KpiCard({ label, value, color }: { label: string; value: string; color:
   );
 }
 
-// ─── Styles ───────────────────────────────────────────────────────────────────────
-
 const s = StyleSheet.create({
   container:  { flex: 1, backgroundColor: Colors.background },
   center:     { flex: 1, alignItems: 'center', justifyContent: 'center', gap: Spacing.md },
@@ -376,10 +342,7 @@ const s = StyleSheet.create({
   backBtn:    { padding: Spacing.xs },
   headerTitle:{ flex: 1, fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right' },
   editBtn:    { padding: Spacing.xs },
-
   scroll: { padding: Spacing.md, paddingBottom: Spacing.xxl, gap: Spacing.md },
-
-  // Meta card
   metaCard:       { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, gap: Spacing.sm, ...Shadow.sm },
   metaIconRow:    { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, marginBottom: Spacing.xs },
   facilityIcon:   { width: 52, height: 52, borderRadius: Radius.lg, backgroundColor: Colors.primary + '15', alignItems: 'center', justifyContent: 'center' },
@@ -388,11 +351,7 @@ const s = StyleSheet.create({
   divider:        { height: 1, backgroundColor: Colors.border, marginVertical: Spacing.sm },
   mapBtn:         { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, marginTop: Spacing.sm, alignSelf: 'flex-end', paddingVertical: Spacing.xs, paddingHorizontal: Spacing.md, borderRadius: Radius.full, backgroundColor: Colors.primary + '12', borderWidth: 1, borderColor: Colors.primary + '40' },
   mapBtnText:     { fontSize: FontSize.sm, color: Colors.primary, fontWeight: FontWeight.medium },
-
-  // KPI
   kpiRow: { flexDirection: 'row', gap: Spacing.sm },
-
-  // Last inspection
   lastInspCard:  { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, ...Shadow.sm },
   lastInspRow:   { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, marginTop: Spacing.sm },
   gradeBubble:   { width: 48, height: 48, borderRadius: Radius.full, alignItems: 'center', justifyContent: 'center' },
@@ -401,30 +360,22 @@ const s = StyleSheet.create({
   lastInspScore: { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'right' },
   viewBtn:       { paddingVertical: Spacing.xs, paddingHorizontal: Spacing.md, borderRadius: Radius.full, backgroundColor: Colors.primary + '15', borderWidth: 1, borderColor: Colors.primary + '40' },
   viewBtnText:   { fontSize: FontSize.sm, color: Colors.primary, fontWeight: FontWeight.medium },
-
-  // Generic card
   card: { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, ...Shadow.sm },
   sectionTitle: { fontSize: FontSize.lg, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right', marginBottom: Spacing.md },
   sectionHeaderRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: Spacing.md },
   seeAll: { fontSize: FontSize.sm, color: Colors.primary },
-
-  // Trend bars
   trendBars:   { flexDirection: 'row', alignItems: 'flex-end', gap: Spacing.sm, justifyContent: 'center', height: 100 },
   trendCol:    { alignItems: 'center', flex: 1 },
   trendScore:  { fontSize: 10, color: Colors.textSecondary, marginBottom: 2 },
   trendBarBg:  { width: 24, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.sm, height: 80, justifyContent: 'flex-end', overflow: 'hidden' },
   trendBarFill:{ width: '100%', borderRadius: Radius.sm },
   trendLabel:  { fontSize: 9, color: Colors.textTertiary, marginTop: 4, textAlign: 'center' },
-
-  // CAP rows
   capRow:       { flexDirection: 'row', alignItems: 'center', gap: Spacing.sm, paddingVertical: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
   severityDot:  { width: 10, height: 10, borderRadius: Radius.full, flexShrink: 0 },
   capCriteria:  { flex: 1, fontSize: FontSize.sm, color: Colors.textPrimary, textAlign: 'right' },
   statusChip:   { paddingHorizontal: Spacing.sm, paddingVertical: 2, borderRadius: Radius.full, borderWidth: 1 },
   statusChipText:{ fontSize: 10, fontWeight: FontWeight.medium },
   moreText:     { fontSize: FontSize.sm, color: Colors.textSecondary, textAlign: 'center', marginTop: Spacing.sm },
-
-  // History rows
   historyRow:   { flexDirection: 'row', alignItems: 'center', gap: Spacing.md, paddingVertical: Spacing.sm, borderBottomWidth: 1, borderBottomColor: Colors.border },
   historyGrade: { width: 36, height: 36, borderRadius: Radius.md, alignItems: 'center', justifyContent: 'center', borderWidth: 1 },
   historyGradeText: { fontSize: FontSize.base, fontWeight: FontWeight.bold },
@@ -432,13 +383,9 @@ const s = StyleSheet.create({
   historyMeta:  { fontSize: 11, color: Colors.textSecondary, textAlign: 'right' },
   miniBarWrap:  { width: 50, height: 6, backgroundColor: Colors.surfaceOffset, borderRadius: Radius.full, overflow: 'hidden' },
   miniBar:      { height: '100%', borderRadius: Radius.full },
-
-  // Actions
   actionsRow:   { flexDirection: 'row', gap: Spacing.md },
   actionBtn:    { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.sm, paddingVertical: Spacing.md, borderRadius: Radius.lg, ...Shadow.sm },
   actionBtnText:{ fontSize: FontSize.base, fontWeight: FontWeight.semibold, color: '#fff' },
-
-  // Empty
   emptyTitle:     { fontSize: FontSize.lg, color: Colors.textPrimary, fontWeight: FontWeight.bold },
   emptyState:     { alignItems: 'center', paddingVertical: Spacing.lg, gap: Spacing.sm },
   emptyStateText: { fontSize: FontSize.sm, color: Colors.textSecondary },

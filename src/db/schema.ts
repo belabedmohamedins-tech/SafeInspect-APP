@@ -2,45 +2,12 @@
  * src/db/schema.ts
  *
  * SQLite schema definitions for SafeInspect.
- *
- * INSTALL STEP (run once, not yet in package.json):
- *   npx expo install expo-sqlite
- *
- * Usage:
- *   import { getDb } from '../db/schema';
- *   const db = await getDb();
- *
- * All tables are created with IF NOT EXISTS so this file is safe to import
- * at app startup on every launch — repeated calls are idempotent.
- *
- * Migration strategy
- * ──────────────────
- * A `_migrations` table tracks which migrations have been applied.
- * Each migration is a named SQL string.  runMigrations() applies only those
- * that are not yet recorded in the table.  This means you can add new
- * ALTER TABLE statements here over time without re-running old ones.
- *
- * AsyncStorage → SQLite coexistence
- * ──────────────────────────────────
- * Phase A (current):  Schema + migration runner exist; all repositories still
- *                     read/write AsyncStorage.  No behaviour change.
- * Phase B (next):     Repositories are swapped one-by-one to use SQLite.
- *                     A one-time data migration copies AsyncStorage JSON into
- *                     the new tables (see migrateAsyncStorageToSQLite below).
- * Phase C (future):   AsyncStorage imports are removed.
  */
 
 import * as SQLite from 'expo-sqlite';
 
-// ─── Database singleton ──────────────────────────────────────────────────────
-
 let _db: SQLite.SQLiteDatabase | null = null;
 
-/**
- * Returns the open SQLite database, opening it on first call.
- * Awaiting this from multiple places is safe — the promise resolves to the
- * same singleton instance.
- */
 export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   if (_db) return _db;
   _db = await SQLite.openDatabaseAsync('safeinspect.db');
@@ -48,25 +15,15 @@ export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   return _db;
 }
 
-/**
- * initializeDatabase — convenience wrapper called by app/_layout.tsx on startup.
- * Opens the database and runs all pending migrations.
- */
 export async function initializeDatabase(): Promise<void> {
   await getDb();
 }
-
-// ─── Migration runner ────────────────────────────────────────────────────────
 
 interface Migration {
   name: string;
   sql: string;
 }
 
-/**
- * All migrations in order.  NEVER edit a migration that has already been
- * deployed — append a new one instead.
- */
 const MIGRATIONS: Migration[] = [
   {
     name: '001_create_inspections',
@@ -95,7 +52,7 @@ const MIGRATIONS: Migration[] = [
         office_name             TEXT,
         inspection_cause        TEXT,
         reference_document      TEXT,
-        committee_members       TEXT,    -- JSON array
+        committee_members       TEXT,
         coordinates_lat         REAL,
         coordinates_lng         REAL,
         integrity_hash          TEXT,
@@ -105,8 +62,8 @@ const MIGRATIONS: Migration[] = [
         approved_at             TEXT,
         returned_reason         TEXT,
         approval_note           TEXT,
-        items_json              TEXT NOT NULL DEFAULT '[]',  -- serialised InspectionItem[]
-        violations_json         TEXT,    -- serialised ViolationSummary
+        items_json              TEXT NOT NULL DEFAULT '[]',
+        violations_json         TEXT,
         created_at              TEXT NOT NULL DEFAULT (datetime('now')),
         updated_at              TEXT NOT NULL DEFAULT (datetime('now'))
       );
@@ -197,39 +154,25 @@ const MIGRATIONS: Migration[] = [
         created_at  TEXT NOT NULL,
         read_at     TEXT,
         dismissed   INTEGER NOT NULL DEFAULT 0,
-        link_json   TEXT    -- serialised { screen, params }
+        link_json   TEXT
       );
     `,
   },
   {
     name: '002_inspections_add_index_facility',
-    sql: `
-      CREATE INDEX IF NOT EXISTS idx_inspections_facility_id
-        ON inspections(facility_id);
-    `,
+    sql: `CREATE INDEX IF NOT EXISTS idx_inspections_facility_id ON inspections(facility_id);`,
   },
   {
     name: '002_inspections_add_index_status',
-    sql: `
-      CREATE INDEX IF NOT EXISTS idx_inspections_status
-        ON inspections(status);
-    `,
+    sql: `CREATE INDEX IF NOT EXISTS idx_inspections_status ON inspections(status);`,
   },
   {
     name: '002_corrective_actions_add_index_inspection',
-    sql: `
-      CREATE INDEX IF NOT EXISTS idx_corrective_actions_inspection_id
-        ON corrective_actions(inspection_id);
-    `,
+    sql: `CREATE INDEX IF NOT EXISTS idx_corrective_actions_inspection_id ON corrective_actions(inspection_id);`,
   },
 ];
 
-/**
- * Applies all pending migrations inside a transaction.
- * Safe to call on every app launch — already-applied migrations are skipped.
- */
 export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
-  // Ensure the migrations tracker table exists first
   await db.execAsync(`
     CREATE TABLE IF NOT EXISTS _migrations (
       name       TEXT PRIMARY KEY NOT NULL,
@@ -242,38 +185,24 @@ export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
       'SELECT name FROM _migrations WHERE name = ?',
       [migration.name],
     );
-    if (existing) continue; // already applied
+    if (existing) continue;
 
     await db.withTransactionAsync(async () => {
       await db.execAsync(migration.sql);
       await db.runAsync(
         'INSERT INTO _migrations (name) VALUES (?)',
-        [migration.name],
+        [migration.name] as SQLite.SQLiteBindValue[],
       );
     });
   }
 }
 
-// ─── One-time AsyncStorage → SQLite data migration helper ────────────────────
-
-/**
- * Reads every collection from AsyncStorage and bulk-inserts rows into SQLite.
- * Call this ONCE from a migration screen / first-launch flow after the user
- * has been informed.  It does NOT delete AsyncStorage data — the old data
- * remains as a safety net until Phase C cleanup.
- *
- * This function is a stub — it imports AsyncStorage lazily so that tree-shakers
- * can remove it in Phase C when it is no longer referenced.
- *
- * @param onProgress — optional callback called after each collection is migrated
- */
 export async function migrateAsyncStorageToSQLite(
   onProgress?: (step: string) => void,
 ): Promise<void> {
   const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
   const db = await getDb();
 
-  // ── Inspections ─────────────────────────────────────────────────────────
   const rawInspections = await AsyncStorage.getItem('inspections');
   if (rawInspections) {
     const inspections = JSON.parse(rawInspections) as Array<Record<string, unknown>>;
@@ -312,13 +241,12 @@ export async function migrateAsyncStorageToSQLite(
           i.approvedAt ?? null, i.returnedReason ?? null, i.approvalNote ?? null,
           JSON.stringify(i.items ?? []),
           i.violations ? JSON.stringify(i.violations) : null,
-        ],
+        ] as SQLite.SQLiteBindValue[],
       );
     }
     onProgress?.('inspections');
   }
 
-  // ── Facilities ───────────────────────────────────────────────────────────
   const rawFacilities = await AsyncStorage.getItem('userFacilities');
   if (rawFacilities) {
     const facilities = JSON.parse(rawFacilities) as Array<Record<string, unknown>>;
@@ -334,13 +262,12 @@ export async function migrateAsyncStorageToSQLite(
           typeof f.lng === 'number' ? f.lng : null,
           f.licenseType ?? null, f.licenseDetails ?? null,
           f.year ?? null, f.category ?? null, f.notes ?? null,
-        ],
+        ] as SQLite.SQLiteBindValue[],
       );
     }
     onProgress?.('facilities');
   }
 
-  // ── Agenda ───────────────────────────────────────────────────────────────
   const rawAgenda = await AsyncStorage.getItem('agenda');
   if (rawAgenda) {
     const agenda = JSON.parse(rawAgenda) as Array<Record<string, unknown>>;
@@ -354,7 +281,7 @@ export async function migrateAsyncStorageToSQLite(
           a.id, a.facilityId, a.facilityName, a.facilityAddress ?? null,
           a.activity ?? null, a.date, a.notes ?? '', a.status ?? 'pending',
           a.inspectionId ?? null,
-        ],
+        ] as SQLite.SQLiteBindValue[],
       );
     }
     onProgress?.('agenda');

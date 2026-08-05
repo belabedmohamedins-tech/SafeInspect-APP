@@ -1,7 +1,7 @@
 // app/screens/geofence-check.tsx
 // Geofencing gate (FR-047 / PRD § 13.5)
 // Requests location → computes haversine distance → allows override with justification.
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, TouchableOpacity, ActivityIndicator,
   TextInput, Alert, ScrollView, Modal, I18nManager,
@@ -43,6 +43,7 @@ export default function GeofenceCheckScreen() {
       return;
     }
     checkLocation();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const checkLocation = async () => {
@@ -54,9 +55,10 @@ export default function GeofenceCheckScreen() {
         return;
       }
       const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
+      // checkProximity takes two { latitude, longitude } objects
       const result = checkProximity(
-        facilityLat!, facilityLng!,
-        loc.coords.latitude, loc.coords.longitude
+        { latitude: facilityLat!, longitude: facilityLng! },
+        { latitude: loc.coords.latitude, longitude: loc.coords.longitude },
       );
       setProximity(result);
       setLocationState('success');
@@ -133,7 +135,6 @@ export default function GeofenceCheckScreen() {
       );
     }
 
-    // success
     const inRange = proximity?.withinRange ?? false;
     return (
       <View style={styles.resultBox}>
@@ -179,7 +180,6 @@ export default function GeofenceCheckScreen() {
 
       {renderContent()}
 
-      {/* Override justification modal */}
       <Modal visible={showOverrideModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>

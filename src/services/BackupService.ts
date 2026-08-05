@@ -51,7 +51,6 @@ function buildPhotoUriMap(
         map[item.id] = item.photoUri;
       }
       if (item.photos && item.photos.length > 0) {
-        // Store array alongside single URI when both are present
         map[`${item.id}__photos`] = item.photos;
       }
     }
@@ -61,8 +60,6 @@ function buildPhotoUriMap(
 
 /**
  * Re-links photo URIs from the map back into inspection items.
- * Items whose ids are not in the map are left unchanged (photoUri stays
- * as-is from the JSON payload — may be a stale URI, which is acceptable).
  */
 function applyPhotoUriMap(
   inspections: SavedInspection[],
@@ -103,7 +100,7 @@ export interface BackupPayload {
     department: string;
     showGrade: string;
   };
-  /** v2+: flat map of item photo URIs, keyed by item id (and itemId__photos for arrays). */
+  /** v2+: flat map of item photo URIs, keyed by item id. */
   photoUriMap?: Record<string, string | string[]>;
 }
 
@@ -124,14 +121,7 @@ const KEYS = {
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 
-/**
- * Collect all app data, write to a JSON file in documentDirectory,
- * and open the system share sheet so the user can email / save it.
- *
- * Returns the BackupPayload so the caller can display item counts.
- */
 export async function exportBackup(): Promise<BackupPayload> {
-  // 1. Read all collections from AsyncStorage in one call
   const keys = [
     KEYS.inspections,
     KEYS.agenda,
@@ -164,19 +154,16 @@ export async function exportBackup(): Promise<BackupPayload> {
       department:      map[KEYS.department]      ?? '',
       showGrade:       map[KEYS.showGrade]       ?? 'true',
     },
-    // 1C: build photo URI map from all inspection items
     photoUriMap: buildPhotoUriMap(inspections),
   };
 
-  // 2. Write to file
-  const dateStr = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+  const dateStr = new Date().toISOString().slice(0, 10);
   const filename = `safeinspect-backup-${dateStr}.json`;
   const fileUri = `${FileSystem.documentDirectory}${filename}`;
   await FileSystem.writeAsStringAsync(fileUri, JSON.stringify(payload, null, 2), {
     encoding: FileSystem.EncodingType.UTF8,
   });
 
-  // 3. Share
   const canShare = await Sharing.isAvailableAsync();
   if (canShare) {
     await Sharing.shareAsync(fileUri, {
@@ -186,7 +173,6 @@ export async function exportBackup(): Promise<BackupPayload> {
     });
   }
 
-  // 4. Record timestamp
   await AsyncStorage.setItem(KEYS.lastBackupAt, payload.exportedAt);
 
   return payload;
@@ -200,14 +186,7 @@ export interface ImportResult {
   userFacilities: number;
 }
 
-/**
- * Let the user pick a .json backup file, validate it, and restore all data.
- * Accepts both v1 (no photoUriMap) and v2 backups.
- * Returns item counts on success, or null if the user cancelled.
- * Throws on validation or write error.
- */
 export async function importBackup(): Promise<ImportResult | null> {
-  // 1. Open document picker
   const result = await DocumentPicker.getDocumentAsync({
     type: 'application/json',
     copyToCacheDirectory: true,
@@ -218,7 +197,6 @@ export async function importBackup(): Promise<ImportResult | null> {
   const asset = result.assets[0];
   if (!asset?.uri) throw new Error('لم يتم اختيار أي ملف');
 
-  // 2. Read file content
   const raw = await FileSystem.readAsStringAsync(asset.uri, {
     encoding: FileSystem.EncodingType.UTF8,
   });
@@ -230,7 +208,6 @@ export async function importBackup(): Promise<ImportResult | null> {
     throw new Error('ملف غير صالح — تأكد من أنه ملف JSON من SafeInspect');
   }
 
-  // 3. Validate schema (accept v1 and v2)
   if (payload.version !== 1 && payload.version !== BACKUP_VERSION) {
     throw new Error(
       `إصدار غير متوافق (${payload.version}). الإصدارات المدعومة: 1, ${BACKUP_VERSION}`,
@@ -240,13 +217,10 @@ export async function importBackup(): Promise<ImportResult | null> {
     throw new Error('ملف النسخة الاحتياطية تالف');
   }
 
-  // 4. Re-link photo URIs (v2 only; v1 files have no photoUriMap so items
-  //    keep whatever URIs were serialised into the JSON)
   const restoredInspections = payload.photoUriMap
     ? applyPhotoUriMap(payload.inspections, payload.photoUriMap)
     : payload.inspections;
 
-  // 5. Write all collections back to AsyncStorage
   await AsyncStorage.multiSet([
     [KEYS.inspections,    JSON.stringify(restoredInspections)],
     [KEYS.agenda,         JSON.stringify(payload.agenda)],
@@ -259,11 +233,8 @@ export async function importBackup(): Promise<ImportResult | null> {
     [KEYS.showGrade,       payload.settings?.showGrade       ?? 'true'],
   ]);
 
-  // 6. Reschedule notifications for restored pending agenda items
-  const pendingAgenda = payload.agenda
-    .filter(a => a.status === 'pending')
-    .map(a => ({ id: a.id, facilityName: a.facilityName, date: a.date, notes: a.notes }));
-  await rescheduleAll(pendingAgenda);
+  // rescheduleAll() now lazily loads AgendaRepository internally — no args needed
+  await rescheduleAll();
 
   return {
     inspections:    restoredInspections.length,
