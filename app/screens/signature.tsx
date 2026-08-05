@@ -43,7 +43,7 @@ export default function SignatureScreen() {
       return;
     }
     router.push({
-      pathname: '/(tabs)' as Href,
+      pathname: '/(tabs)' as unknown as Href,
       params: {
         facilityId: params.facilityId,
         facilityName: params.facilityName,

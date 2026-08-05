@@ -1,4 +1,4 @@
-// components/home/CapStatsWidget.tsx — router.push Href cast added
+// components/home/CapStatsWidget.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Href, useRouter } from 'expo-router';
@@ -17,7 +17,7 @@ export default function CapStatsWidget() {
 
   const handlePress = () => {
     router.push({
-      pathname: '/(tabs)/actions' as Href,
+      pathname: '/(tabs)/actions' as unknown as Href,
       params: { highlight: 'overdue' },
     });
   };
@@ -33,7 +33,7 @@ export default function CapStatsWidget() {
         <StatItem label="مفتوحة"    value={stats.open}       color="#3b82f6" />
         <StatItem label="قيد التنفيذ" value={stats.inProgress} color="#f59e0b" />
         <StatItem label="متأخرة"    value={stats.overdue}    color="#dc2626" />
-        <StatItem label="مُغلقة"    value={stats.resolved}   color="#16a34a" />
+        <StatItem label="مُغلَقة"    value={stats.resolved}   color="#16a34a" />
       </View>
 
       {stats.overdue > 0 && (

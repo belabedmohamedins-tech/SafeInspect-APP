@@ -262,10 +262,12 @@ export async function approveInspection(
  * Supervisor rejects a submitted inspection report.
  * POST /inspections/:inspectionId/reject
  * Body: { reason: string }
+ * reason is optional here — callers that have a rejection UI should pass it;
+ * callers without a prompt pass no reason (defaults to empty string).
  */
 export async function rejectInspection(
   inspectionId: string,
-  reason: string,
+  reason = '',
 ): Promise<ApprovalResult> {
   const accessToken = await getAccessToken();
   if (!accessToken) return { ok: false, error: 'Not authenticated' };
