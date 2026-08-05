@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 12:41 WAT — [Agent: Perplexity] — Phase W opened: 5 legal source gaps identified, working document URLs located
+- Phases closed: none
+- Phases opened: W (Legal document verification — 5 source gaps)
+- Files changed: `docs/STRATEGIC_PLAN.md`, `docs/README.md`
+- Critical finding: **Claude flagged 5 unresolved legal source gaps. Working copies located by Perplexity web search. User must download and add to Claude project as `legal_sources/` files. Gaps: (W-1) Arrêté 07/05/2025 cold-chain temps — JORADP JO n°43; (W-2) Arrêté 21/11/1999 conservation temps table; (W-3) Loi 19-02 full text art.14 ERP categories — JO n°46; (W-4) Décret 93-120 du 15/05/1993 médecine du travail — ILO NatLex + Univ. Batna2; (W-5) AIM GPL2 technical standard LPG cylinder storage (separate from Décret 21-430). All URLs in STRATEGIC_PLAN.md Phase W section. Next available phase letter: X.**
+
 ### 2026-08-05 12:13 WAT — [Agent: Perplexity] — Phase V criteria fix: PRD-02-01 split into vegetables (0–5 °C) + olives (7–15 °C) with numericField
 - Phases closed: none (Phase V still OPEN — TSC errors require Claude locally)
 - Phases opened: none
@@ -189,7 +195,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 12:13 WAT)
+### Quick Status Summary (as of 2026-08-05 12:41 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -206,6 +212,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 RTL/UX bugs fixed |
 | **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 + criteria fix pushed; remaining clusters need local tsc |
+| **W** | **Legal document verification (5 source gaps)** | 🟡 **OPEN — USER downloads + Claude ingests** | Documents located by Perplexity 2026-08-05; URLs in STRATEGIC_PLAN.md |
 
 ### Recommended Execution Order (next sessions)
 
@@ -218,7 +225,14 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
     After each cluster: npx tsc --noEmit + commit
     Gate: npx tsc --noEmit exits with 0 errors
 
-→ After V closes: Phase W — full Jest run + smoke tests (Claude, local)
+→ Parallel: Phase W — user downloads 5 legal docs → adds to Claude project → Claude updates criteria
+    W-1: Arrêté 07/05/2025 cold-chain temps (JORADP JO n°43)
+    W-2: Arrêté 21/11/1999 conservation temps table
+    W-3: Loi 19-02 full text art.14 ERP categories (JO n°46)
+    W-4: Décret 93-120 du 15/05/1993 médecine du travail
+    W-5: AIM GPL2 technical standard LPG cylinder storage
+
+→ After V closes: Phase R — full Jest run + smoke tests (Claude, local)
 ```
 
 ---
@@ -229,13 +243,13 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 
 | File | Fix |
 |---|---|
-| `app/preview/index.tsx` | Fixed `Colors.info→textTertiary`, `Spacing.xxxl→xxl`, `FontSize.xxxl→32`, `Shadow.xs→sm`, `action.description→notes`, CAP_STATUS keys hyphenated, status strings |
+| `app/preview/index.tsx` | Fixed `Colors.info→textTertiary`, `Spacing.xxxl→xxl`, `FontSize.xxxl→320`, `Shadow.xs→sm`, `action.description→notes`, CAP_STATUS keys hyphenated, status strings |
 | `src/__tests__/decisionSupport.test.ts` | Added `total: 0` to all `ViolationProfile` literals; `riskLevel: 1 as RiskLevel`; imported `RiskLevel` |
 | `src/services/NotificationService.ts` | Added `shouldShowBanner` + `shouldShowList` to handler (Expo SDK 51+ type requirement) |
 | `src/i18n/index.ts` | Changed re-export to `./index-impl` (no `.tsx` extension) |
 | `app/preview/_layout.tsx` | Simplified (removed `headerBackTitleVisible` which is iOS-only RN prop, not valid in Expo Router Stack.Screen options type) |
 
-### Criteria fix — DONE (commit 015470710511616e298072c9dfd9594f106b6816)
+### Criteria fix — DONE (commit 0154707)
 
 | File | Fix |
 |---|---|
@@ -244,6 +258,20 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 ### Remaining clusters — ALL require `npx tsc --noEmit` locally (Claude)
 
 See full error table in `docs/STRATEGIC_PLAN.md` Phase V section.
+
+---
+
+## Phase W — Legal Document Verification — OPEN (2026-08-05)
+
+### Documents to obtain and add to Claude project
+
+| # | File to create | Document | Source URL |
+|---|---|---|---|
+| W-1 | `ARRETE_2025-05-07_cold_chain_temperatures.pdf` | Arrêté interministériel du 7 mai 2025 | https://www.joradp.dz/FTP/jo-francais/2025/F2025043.pdf |
+| W-2 | `ARRETE_1999-11-21_temperatures_conservation.pdf` | Arrêté interministériel du 21 novembre 1999 | https://elearning.univ-bejaia.dz/pluginfile.php/882208/mod_resource/content/0/Cours_BOUDRIES%20Hafid_RECUEIL%20DES%20TEXTES%20RE... |
+| W-3 | `LOI_19-02_2019_ERP_full_text.pdf` | Loi n° 19-02 du 17 juillet 2019 (full text) | https://services.mesrs.dz/DEJA/fichiers_sommaire_des_textes/241%20BIS%203%20fr.pdf |
+| W-4 | `DECRET_93-120_1993_medecine_du_travail.pdf` | Décret exécutif n° 93-120 du 15 mai 1993 | https://natlex.ilo.org/dyn/natlex2/r/natlex/fe/details?p3_isn=33565 (also: https://staff.univ-batna2.dz/sites/default/files/benhassine-wissal/files/decret_executif_ndeg_93-120_du_15_mai_1993_relatif_a_lo...) |
+| W-5 | `AIM_GPL2_technical_standard_LPG_storage.pdf` | AIM GPL2 — règles techniques GPL ≤6 tonnes | https://fr.scribd.com/document/609242056/AIM-GPL2-Derniere-Version-V-14-03-2022 |
 
 ---
 
@@ -288,7 +316,7 @@ All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys
 
 | File | Bug | Fix |
 |---|---|---|
-| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward "forward", not "back" | Changed to `arrow-left` (visually correct for RTL back navigation) |
+| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward “forward”, not “back” | Changed to `arrow-left` (visually correct for RTL back navigation) |
 | `app/screens/reinspection.tsx` | No feedback when committee member list is empty — inspector had no hint | Added `memberEmptyHint` text below the add-member row when `members.length === 0` |
 | `app/screens/reinspection.tsx` | Launch button icon had redundant `marginLeft` (conflicting with container `gap`) | Removed extra `marginLeft` — `gap: Spacing.sm` on container is sufficient |
 | `app/(tabs)/inspection/checklist.tsx` | After loading, if `data.length === 0` (unknown activity), the SectionList rendered empty with an active Finish button — inspector would see a blank checklist with no explanation | Added empty-criteria guard: shows warning icon, Arabic explanation, and back button |
@@ -399,7 +427,7 @@ Update **both** of the following before pushing:
 ### Test gate
 - Run `npx tsc --noEmit` before closing any phase
 - Run Jest for affected files before closing any phase
-- **Perplexity cannot run local commands** — assign Phase V + W (Jest) to Claude
+- **Perplexity cannot run local commands** — assign Phase V + R to Claude
 
 ### SHA rule
 - Always fetch current file from GitHub to get its SHA before updating
@@ -419,21 +447,14 @@ Update **both** of the following before pushing:
 | Waste treatment acceptance | Décret 04-410 | Art. 6–9 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | 3-stream |
 | Fire safety — ERP | Loi 19-02 | Art. 1, 3, 14–19 | ✅ VERIFIED — ERPs + high-rise + residential only |
+| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | 🟡 [À VÉRIFIER] Phase W-3 |
 | Intervention plan | Décret 09-335 | Art. 4–6 | Classified establishments |
-| LPG/C | Décret 21-430 | Art. 4, 7, 8 | Mines ministry, ≥60m² |
+| LPG/C vehicle installation | Décret 21-430 | Art. 4, 7, 8 | Mines ministry, ≥60m² |
+| LPG cylinder storage (dépôt/point de vente) | AIM GPL2 technical standard | Storage distances, quantities, ventilation | 🟡 [À VÉRIFIER] Phase W-5 |
 | Air emissions | Décret 06-138 | Annex I + II | ✅ VERIFIED — mg/Nm³; JO N°24 16 April 2006 |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | HACCP mandatory |
+| Cold-chain temps (restaurants) | Arrêté interministériel 07/05/2025 | Full text | 🟡 [À VÉRIFIER] Phase W-1 |
+| Cold storage temps by product type | Arrêté interministériel 21/11/1999 | Temperature table | 🟡 [À VÉRIFIER] Phase W-2 |
+| Worker periodic medical exam | Décret 93-120 du 15/05/1993 | Exam intervals | 🟡 [À VÉRIFIER] Phase W-4 |
 | Occupational health | Loi 88-07 | Art. 12–14 | Annual medical exam |
 | Pest control | Arrêté 1995 | Art. 3 | Licensed operator |
-
----
-
-## Next Session Checklist
-
-Any agent picking this up should do in order:
-
-1. Read this file top to bottom
-2. Read `docs/STRATEGIC_PLAN.md` for full phase details and the complete TSC error cluster table
-3. **Phase V (Claude, local):** Run `npx tsc --noEmit`. Fix clusters in order from STRATEGIC_PLAN.md. Commit after each cluster. Gate: 0 errors.
-4. **After V closes:** Open Phase W — full Jest run + smoke tests (Claude, local).
-5. After each phase: update this file + STRATEGIC_PLAN.md + push.
