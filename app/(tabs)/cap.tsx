@@ -155,7 +155,7 @@ export default function CapScreen() {
       <TouchableOpacity
         style={styles.card}
         activeOpacity={0.85}
-        onPress={() => router.push({ pathname: '/cap/[id]', params: { id: item.id } })}
+        onPress={() => router.push(`/screens/cap/${item.id}` as any)}
       >
         {/* severity stripe */}
         <View style={[styles.stripe, { backgroundColor: SEVERITY_COLOR[item.severity] }]} />

@@ -116,7 +116,7 @@ async function shouldRunWeekly(): Promise<boolean> {
   try {
     const last         = await AsyncStorage.getItem(StorageKeys.CAP_WEEKLY_DIGEST_LAST_RUN);
     const nextMonday   = nextOrTodayMonday();
-    // Only reschedule if we haven’t already scheduled for this Monday
+    // Only reschedule if we haven't already scheduled for this Monday
     return last !== nextMonday;
   } catch {
     return true;
@@ -280,9 +280,9 @@ export async function scheduleCapWeeklyDigest(): Promise<void> {
 
     // Compose body lines
     const bodyParts: string[] = [];
-    if (stats.open > 0)            bodyParts.push(`مفتوح: ${stats.open}`);
-    if (stats.inProgress > 0)      bodyParts.push(`جارٍ: ${stats.inProgress}`);
-    if (stats.overdue > 0)         bodyParts.push(`متأخر: ${stats.overdue}`);
+    if (stats.open > 0)              bodyParts.push(`مفتوح: ${stats.open}`);
+    if (stats.inProgress > 0)        bodyParts.push(`جارٍ: ${stats.inProgress}`);
+    if (stats.overdue > 0)           bodyParts.push(`متأخر: ${stats.overdue}`);
     if (stats.nearDeadlineCount > 0) bodyParts.push(`يستحق خلال 3 أيام: ${stats.nearDeadlineCount}`);
     bodyParts.push(`نسبة الإنجاز: ${resolutionPct}%`);
 
@@ -399,3 +399,11 @@ export async function cancelCapWeeklyDigestNotification(): Promise<void> {
     console.warn('[CapNotificationService] cancelCapWeeklyDigestNotification error:', error);
   }
 }
+
+// ─── Named namespace object (consumed by cap.tsx via named import) ────────────
+// cap.tsx does: import { CapNotificationService } from '...CapNotificationService'
+// and calls:    CapNotificationService.scheduleAll()
+// This object satisfies that interface without touching the rest of the file.
+export const CapNotificationService = {
+  scheduleAll: scheduleCapDeadlineNotifications,
+};
