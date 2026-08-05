@@ -30,7 +30,7 @@ describe('gplCriteria', () => {
     gplCriteria.forEach(item => {
       expect(item.criteria.trim().length).toBeGreaterThan(0);
       expect(item.legalReference.trim().length).toBeGreaterThan(0);
-      expect(item.axis.trim().length).toBeGreaterThan(0);
+      expect(item.axis!.trim().length).toBeGreaterThan(0);
     });
   });
 

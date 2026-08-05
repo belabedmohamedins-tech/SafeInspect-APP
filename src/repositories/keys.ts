@@ -19,6 +19,8 @@ export const StorageKeys = {
   CAP_WEEKLY_DIGEST_NOTIF_ID:  'CAP_WEEKLY_DIGEST_NOTIF_ID',
   /** ISO date (YYYY-MM-DD) of the Monday the weekly digest was last scheduled */
   CAP_WEEKLY_DIGEST_LAST_RUN:  'CAP_WEEKLY_DIGEST_LAST_RUN',
+  /** Toggle for agenda/inspection push notifications (true by default) */
+  AGENDA_NOTIF_ENABLED:    'AGENDA_NOTIF_ENABLED',
   SYNC_QUEUE:              'SYNC_QUEUE',
   SYNC_LAST_RUN:           'SYNC_LAST_RUN',
   STATS_CACHE:             'STATS_CACHE',

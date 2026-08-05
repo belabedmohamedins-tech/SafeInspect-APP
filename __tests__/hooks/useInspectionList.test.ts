@@ -158,7 +158,7 @@ describe('useInspectionList \u2014 deleteInspection', () => {
 
   it('removes the inspection from state when onPress (destructive) is called', async () => {
     mockDelete.mockResolvedValue(undefined);
-    let capturedButtons: any[];
+    let capturedButtons!: any[];
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
       capturedButtons = buttons!;
     });
@@ -174,7 +174,7 @@ describe('useInspectionList \u2014 deleteInspection', () => {
   it('logs error when InspectionRepository.delete rejects', async () => {
     const err = new Error('delete failed');
     mockDelete.mockRejectedValue(err);
-    let capturedButtons: any[];
+    let capturedButtons!: any[];
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
       capturedButtons = buttons!;
     });
@@ -187,7 +187,7 @@ describe('useInspectionList \u2014 deleteInspection', () => {
   });
 
   it('does nothing on cancel button press', async () => {
-    let capturedButtons: any[];
+    let capturedButtons!: any[];
     const alertSpy = jest.spyOn(Alert, 'alert').mockImplementation((_t, _m, buttons) => {
       capturedButtons = buttons!;
     });
