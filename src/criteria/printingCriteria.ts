@@ -33,6 +33,18 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // Phase 7.1: periodic ambient VOC measurement inside the printing workshop — complements
+    // PRT-07-01 (stack emission). Uses décret 06-138 Art. 4 + Loi 90-11 Art. 7 (workplace air quality).
+    id: 'PRT-02-03',
+    axis: 'التهوية ومنع التلوث الهوائي',
+    category: 'بيئية',
+    criteria: 'إجراء قياس دوري لتركيز المركبات العضوية المتطايرة (VOC) في هواء بيئة العمل داخل ورشة الطباعة (مرة في السنة على الأقل) للتحقق من عدم تجاوز الحدود المهنية المسموح بها، وتوثيق النتائج.',
+    legalReference: 'القانون 90-11 المادة 7 (حماية صحة العمال من المخاطر الكيميائية) + المرسوم 06-138 المادة 4 (رصد جودة الهواء في بيئة العمل).',
+    severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
     // Phase A: VOC stack-emission measurement — Décret 06-138 Annex I general limit 150 mg/Nm³.
     // Printing inks and solvents are a primary VOC source. Annual measurement mandatory.
     id: 'PRT-07-01',
@@ -103,7 +115,8 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'PRT-04-01',
+    // Renamed PRT-04-01 → PRT-05-01 (occupational safety axis renumbered)
+    id: 'PRT-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة: كمامات، نظارات وقاية، قفازات مقاومة للمذيبات لعمال الطباعة.',
@@ -113,11 +126,12 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'PRT-04-02',
+    // Renamed PRT-04-02 → PRT-05-02; added Loi 90-11 Art. 6 (obligation générale de sécurité incendie)
+    id: 'PRT-05-02',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر مطفأة حريق واحدة على الأقل بحالة صالحة مع التحقق من بطاقة الصيانة السنوية (تاريخ آخر فحص وتاريخ انتهاء الصلاحية)، ومخارج طوارئ واضحة التسمية خالية من العوائق.',
-    legalReference: 'القانون 19-02 (الوقاية من الحريق في المحال التي تحتوي على مواد كيميائية قابلة للاشتعال).',
+    legalReference: 'القانون 90-11 المادة 6 (الالتزام العام بالوقاية من الحوادث) + القانون 19-02 (الوقاية من الحريق في المحال التي تحتوي على مواد كيميائية قابلة للاشتعال).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
