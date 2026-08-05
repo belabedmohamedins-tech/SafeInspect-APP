@@ -5,8 +5,8 @@ describe('produceStorageCriteria', () => {
     expect(Array.isArray(produceStorageCriteria)).toBe(true);
   });
 
-  it('should contain exactly 7 items', () => {
-    expect(produceStorageCriteria).toHaveLength(7);
+  it('should contain exactly 8 items', () => {
+    expect(produceStorageCriteria).toHaveLength(8);
   });
 
   it('should have no duplicate IDs', () => {
@@ -41,6 +41,16 @@ describe('produceStorageCriteria', () => {
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('measurement');
     expect(item!.severity).toBe('high');
+  });
+
+  it('PRD-02-01b is olive temperature measurement (7-15°C)', () => {
+    const item = produceStorageCriteria.find(i => i.id === 'PRD-02-01b');
+    expect(item).toBeDefined();
+    expect(item!.controlType).toBe('measurement');
+    expect(item!.numericField).toBeDefined();
+    expect(item!.numericField!.min).toBe(7);
+    expect(item!.numericField!.max).toBe(15);
+    expect(item!.numericField!.unit).toBe('°C');
   });
 
   it('PRD-05-01 is spoiled produce removal visual high', () => {

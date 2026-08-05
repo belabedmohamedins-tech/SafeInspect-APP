@@ -6,8 +6,8 @@ describe('carWashCriteria', () => {
     expect(carWashCriteria.length).toBeGreaterThan(0);
   });
 
-  it('has exactly 12 items', () => {
-    expect(carWashCriteria).toHaveLength(12);
+  it('has exactly 16 items', () => {
+    expect(carWashCriteria).toHaveLength(16);
   });
 
   it('all IDs are unique', () => {
@@ -61,5 +61,12 @@ describe('carWashCriteria', () => {
     const item = carWashCriteria.find(i => i.id === 'CWS-05-01');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
+  });
+
+  it('Tier2-Ch1 discharge parameters exist (pH, MES, DBO5, DCO)', () => {
+    expect(carWashCriteria.find(i => i.id === 'CWS-02-01B')).toBeDefined();
+    expect(carWashCriteria.find(i => i.id === 'CWS-02-01C')).toBeDefined();
+    expect(carWashCriteria.find(i => i.id === 'CWS-02-01D')).toBeDefined();
+    expect(carWashCriteria.find(i => i.id === 'CWS-02-01E')).toBeDefined();
   });
 });
