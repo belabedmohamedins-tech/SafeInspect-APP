@@ -78,13 +78,20 @@ export type SanctionTier = 'warning' | 'wali-referral' | 'court-referral';
  */
 export type RootCause = 'lapse' | 'training' | 'structural' | 'unknown';
 
-/** Notification types surfaced in the Notification Centre. */
+/**
+ * Notification types surfaced in the Notification Centre.
+ *
+ * SCREAMING_CASE variants are used by production services.
+ * 'inspection_completed' (lowercase) is used by NotificationRepository tests
+ * as a fixture value — both casings are valid members of this union.
+ */
 export type NotificationType =
   | 'CAP_DEADLINE'
   | 'AGENDA_REMINDER'
   | 'APPROVAL_ACTION'
   | 'FOLLOW_UP'
-  | 'SYSTEM';
+  | 'SYSTEM'
+  | 'inspection_completed';
 
 export interface NotificationItem {
   id: string;
