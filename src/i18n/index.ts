@@ -1,6 +1,6 @@
 // src/i18n/index.ts
-// Re-exports the i18n public API.
-// We import from the compiled JS neighbour (index.tsx → resolved by Metro
-// without the extension) so TSC does not require allowImportingTsExtensions.
-export { Language, I18nProvider, useTranslation } from './index';
-export type { Language as LanguageType } from './index';
+// Re-exports the i18n public API from the TSX implementation file.
+// Must use './index.tsx' explicitly so TSC does not resolve './index' back to this file.
+// Metro ignores extensions and resolves correctly at runtime.
+export { Language, I18nProvider, useTranslation } from './index.tsx';
+export type { Language as LanguageType } from './index.tsx';
