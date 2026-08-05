@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 17:49 WAT — [Agent: Perplexity] — criteriaData.ts dead-key cleanup; mapping 26/26 verified by source cross-check
+- Phases closed: none
+- Phases opened: none
+- Files changed: `src/criteriaData.ts`
+- Critical finding: **Cross-checked every `activity:` string in `facilitiesData.ts` (26 distinct values) against every key in `criteriaByActivity`. Result: all 26 real activity strings are correctly mapped. 11 dead alias keys (matched no real facility, e.g. 'الديوان الوطني لأغذية الأنعام', 'وحدة مذابح الغرب', 'مذبحة دواجن <500 كغ/يوم', 'ميكانيك سيارات', 'صناعة سياج', 'ورشة ألمنيوم', 'تركيب GPL', 'مطبعة', 'لوازم مدرسية ومكاتب') removed. Map is now clean, grouped by activity category, with a maintenance comment. Commit: [de42437295ff9256821dbb634abdfdb79eeafdbf](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/de42437295ff9256821dbb634abdfdb79eeafdbf)**
+
 ### 2026-08-05 14:02 WAT — [Agent: Perplexity] — i18n index-impl fix pushed; full TSC error triage completed
 - Phases closed: none
 - Phases opened: none
@@ -213,7 +219,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 14:02 WAT)
+### Quick Status Summary (as of 2026-08-05 17:49 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -279,6 +285,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | 0154707 | `src/criteria/produceStorageCriteria.ts` | Split PRD-02-01 into PRD-02-01 + PRD-02-01b with numericField |
 | 513adbe | `server/src/index.ts` | Filled 0-byte stub with Express bootstrap |
 | **b5f036a** | **`src/i18n/index.ts`** | **Root fix: was re-exporting from non-existent `./index-impl`; now correctly re-exports from `./index.tsx`** |
+| **de42437** | **`src/criteriaData.ts`** | **Removed 11 dead alias keys; map now contains only the 26 exact activity strings from facilitiesData.ts** |
 
 ### Confirmed false positives — DO NOT TOUCH
 
