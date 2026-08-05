@@ -30,9 +30,10 @@ describe('AgendaRepository', () => {
   it('updates status', async () => {
     const item = makeItem();
     await AgendaRepository.save(item);
-    await AgendaRepository.save({ ...item, status: 'done' } as AgendaItem);
+    // 'completed' is a valid AgendaItem status (pending | completed | cancelled)
+    await AgendaRepository.save({ ...item, status: 'completed' });
     const all = await AgendaRepository.getAll();
     const found = all.find(a => a.id === item.id);
-    expect(found?.status).toBe('done');
+    expect(found?.status).toBe('completed');
   });
 });

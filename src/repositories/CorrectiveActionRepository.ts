@@ -64,6 +64,11 @@ export const CorrectiveActionRepository = {
     return readAll();
   },
 
+  async getById(id: string): Promise<CorrectiveAction | undefined> {
+    const all = await readAll();
+    return all.find(a => a.id === id);
+  },
+
   async getByInspection(inspectionId: string): Promise<CorrectiveAction[]> {
     const all = await readAll();
     return all.filter(a => a.inspectionId === inspectionId);
@@ -109,7 +114,6 @@ export const CorrectiveActionRepository = {
       if      (a.status === 'open')        stats.open++;
       else if (a.status === 'in-progress') stats.inProgress++;
       else if (a.status === 'overdue')     stats.overdue++;
-      // resolved items counted below
       else                                 stats.resolved++;
 
       if (

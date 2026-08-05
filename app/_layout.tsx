@@ -1,7 +1,7 @@
 // app/_layout.tsx
 import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
-import { Stack, useRouter, useSegments } from 'expo-router';
+import { Href, Stack, useRouter, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useRef, useState } from 'react';
@@ -85,7 +85,7 @@ export default function RootLayout() {
       const all = await SettingsRepository.getAll();
       if (all['onboardingDone'] !== 'true') {
         if (!currentPath.includes('onboarding')) {
-          router.replace('/screens/onboarding');
+          router.replace('/screens/onboarding' as Href);
         }
         return;
       }
@@ -100,7 +100,7 @@ export default function RootLayout() {
       // 2c. Server login — prompt once if never logged in to the server
       const serverSession = await isLoggedIn();
       if (!serverSession && !currentPath.includes('server-login')) {
-        router.replace('/screens/server-login');
+        router.replace('/screens/server-login' as Href);
         return;
       }
 
@@ -154,7 +154,7 @@ export default function RootLayout() {
           if (screen === 'actions') {
             const filter = data.filter as string | undefined;
             router.push({
-              pathname: '/(tabs)/actions',
+              pathname: '/(tabs)/actions' as Href,
               params:   filter ? { filter } : {},
             });
             return;
@@ -162,7 +162,7 @@ export default function RootLayout() {
 
           if (data.agendaId) {
             router.push({
-              pathname: '/(tabs)/agenda',
+              pathname: '/(tabs)/agenda' as Href,
               params:   { highlight: data.agendaId },
             });
             return;
@@ -177,16 +177,14 @@ export default function RootLayout() {
           }
 
           if (data.type === 'NEW_APPROVAL_PENDING') {
-            router.push('/screens/supervisor-approvals');
+            router.push('/screens/supervisor-approvals' as Href);
             return;
           }
 
           // Phase-Q: reinspection deep-link
-          // Notifications sent by followUpService / CapNotificationService
-          // may carry { type: 'REINSPECTION', priorInspectionId: '...' }
           if (data.type === 'REINSPECTION' && data.priorInspectionId) {
             router.push({
-              pathname: '/screens/reinspection',
+              pathname: '/screens/reinspection' as Href,
               params:   { priorInspectionId: data.priorInspectionId },
             });
             return;

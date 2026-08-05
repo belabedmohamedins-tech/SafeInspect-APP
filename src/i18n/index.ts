@@ -1,4 +1,5 @@
 // src/i18n/index.ts
-// Re-export from the TSX implementation so both
-// `import from 'src/i18n'` and `import from 'src/i18n/index'` resolve.
-export { Language, I18nProvider, useTranslation } from './index.tsx';
+// Direct re-export from the TSX implementation.
+// Using './index.tsx' is not allowed without allowImportingTsExtensions,
+// so we export the members by importing the module without an extension.
+export { Language, I18nProvider, useTranslation } from './index';
