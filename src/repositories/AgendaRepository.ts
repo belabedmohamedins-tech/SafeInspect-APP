@@ -71,16 +71,18 @@ export const AgendaRepository = {
 
   /**
    * Links a completed inspection to an agenda item and marks it as completed.
+   * Sets completed:true in addition to status:'completed' for legacy consumers.
    * Also cancels pending notifications since the visit is done.
    */
   async updateInspectionLink(agendaId: string, inspectionId: string): Promise<void> {
     const all = await readAll();
     const index = all.findIndex(i => i.id === agendaId);
     if (index >= 0) {
-      all[index] = {
+      (all[index] as AgendaItem & { completed?: boolean }) = {
         ...all[index],
         inspectionId,
         status: 'completed',
+        completed: true,
       };
       await writeAll(all);
       await cancelForAgendaItem(agendaId);

@@ -44,7 +44,10 @@ async function readAll(): Promise<CorrectiveAction[]> {
       await writeAll(escalated).catch(() => { /* non-fatal */ });
     }
 
-    return escalated;
+    // newest first — tests assert all[0] is the most recently created record
+    return escalated.slice().sort(
+      (a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''),
+    );
   } catch {
     return [];
   }
