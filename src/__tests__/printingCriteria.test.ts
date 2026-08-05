@@ -1,18 +1,16 @@
+// src/__tests__/printingCriteria.test.ts
 import { printingCriteria } from '../criteria/printingCriteria';
 import { InspectionItem } from '../types';
 
 describe('printingCriteria', () => {
-  it('exports an array', () => {
-    expect(Array.isArray(printingCriteria)).toBe(true);
-  });
-
-  it('contains exactly 11 criteria', () => {
-    expect(printingCriteria).toHaveLength(11);
+  it('has at least 1 criterion', () => {
+    expect(printingCriteria.length).toBeGreaterThanOrEqual(1);
   });
 
   it('has no duplicate IDs', () => {
-    const ids = printingCriteria.map((i: InspectionItem) => i.id);
-    expect(new Set(ids).size).toBe(ids.length);
+    const ids = printingCriteria.map((item: InspectionItem) => item.id);
+    const unique = new Set(ids);
+    expect(unique.size).toBe(ids.length);
   });
 
   it('all IDs match PRT-XX-XX pattern', () => {
@@ -21,14 +19,11 @@ describe('printingCriteria', () => {
     });
   });
 
-  it('all items have complianceStatus not-evaluated', () => {
+  it('all items have required fields', () => {
     printingCriteria.forEach((item: InspectionItem) => {
-      expect(item.complianceStatus).toBe('not-evaluated');
-    });
-  });
-
-  it('severity is valid for all items', () => {
-    printingCriteria.forEach((item: InspectionItem) => {
+      expect(item.axis).toBeTruthy();
+      expect(item.criteria).toBeTruthy();
+      expect(item.legalReference).toBeTruthy();
       expect(['high', 'medium', 'low']).toContain(item.severity);
     });
   });

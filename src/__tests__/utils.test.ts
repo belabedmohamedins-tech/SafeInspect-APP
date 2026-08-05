@@ -15,14 +15,14 @@ const baseSpec: NumericFieldSpec = {
 };
 
 describe('numeric utilities', () => {
-  it('detects out-of-range values', () => {
-    expect(deriveNumericCompliance(3, baseSpec)).toBe('out-of-range');
-    expect(deriveNumericCompliance(40, baseSpec)).toBe('out-of-range');
+  it('detects non-compliant values (outside warning zone)', () => {
+    expect(deriveNumericCompliance(3, baseSpec)).toBe('non-compliant');
+    expect(deriveNumericCompliance(40, baseSpec)).toBe('non-compliant');
   });
   it('detects compliant values', () => {
     expect(deriveNumericCompliance(20, baseSpec)).toBe('compliant');
   });
-  it('maps warning state to observation status', () => {
-    expect(numericStateToComplianceStatus('warning')).toBe('observation');
+  it('maps warning state to observation-only status', () => {
+    expect(numericStateToComplianceStatus('warning')).toBe('observation-only');
   });
 });

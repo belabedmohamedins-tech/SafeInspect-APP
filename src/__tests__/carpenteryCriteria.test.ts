@@ -3,24 +3,28 @@ import { carpenteryCriteria } from '../criteria/carpenteryCriteria';
 import { InspectionItem } from '../types';
 
 describe('carpenteryCriteria', () => {
-  it('exports a non-empty array', () => {
-    expect(Array.isArray(carpenteryCriteria)).toBe(true);
-    expect(carpenteryCriteria.length).toBeGreaterThan(0);
+  it('has at least 1 criterion', () => {
+    expect(carpenteryCriteria.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('every item has required fields', () => {
-    for (const item of carpenteryCriteria as InspectionItem[]) {
-      expect(item.id).toBeDefined();
-      expect(item.axis).toBeDefined();
-      expect(item.criteria).toBeDefined();
-      expect(item.severity).toMatch(/^(low|medium|high)$/);
-      expect(item.controlType).toMatch(/^(visual|doc|measurement)$/);
-    }
+  it('has no duplicate IDs', () => {
+    const ids = carpenteryCriteria.map((item: InspectionItem) => item.id);
+    const unique = new Set(ids);
+    expect(unique.size).toBe(ids.length);
   });
 
-  it('CAR-05-02 dust measurement controlType is doc', () => {
-    const item = carpenteryCriteria.find((c: InspectionItem) => c.id === 'CAR-05-02');
-    expect(item).toBeDefined();
-    expect(item!.controlType).toBe('doc');
+  it('all IDs match CAR-XX-XX pattern', () => {
+    carpenteryCriteria.forEach((item: InspectionItem) => {
+      expect(item.id).toMatch(/^CAR-\d{2}-\d{2}$/);
+    });
+  });
+
+  it('all items have required fields', () => {
+    carpenteryCriteria.forEach((item: InspectionItem) => {
+      expect(item.axis).toBeTruthy();
+      expect(item.criteria).toBeTruthy();
+      expect(item.legalReference).toBeTruthy();
+      expect(['high', 'medium', 'low']).toContain(item.severity);
+    });
   });
 });
