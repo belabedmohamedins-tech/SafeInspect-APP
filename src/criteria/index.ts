@@ -24,47 +24,47 @@ export * from './uabCriteria';
 export * from './updCriteria';
 
 // Convenience aggregate — all criteria from every module in one flat array.
-import { abattoirCriteria }          from './abattoirCriteria';
-import { bakeryCriteria }            from './bakeryCriteria';
-import { baseCompressedGasCriteria } from './baseCompressedGasCriteria';
-import { baseFoodCriteria }          from './baseFoodCriteria';
-import { baseGeneralCriteria }       from './baseGeneralCriteria';
-import { blacksmithCriteria }        from './blacksmithCriteria';
-import { carWashCriteria }           from './carWashCriteria';
-import { carpenteryCriteria }        from './carpenteryCriteria';
-import { coldRoomCriteria }          from './coldRoomCriteria';
-import { couvoirCriteria }           from './couvoirCriteria';
-import { gplCriteria }               from './gplCriteria';
-import { marbleCriteria }            from './marbleCriteria';
-import { mechanicCriteria }          from './mechanicCriteria';
-import { paintShopCriteria }         from './paintShopCriteria';
-import { printingCriteria }          from './printingCriteria';
-import { produceStorageCriteria }    from './produceStorageCriteria';
-import { semiPharmaCriteria }        from './semiPharmaCriteria';
-import { slaughterhouseSmallCriteria } from './slaughterhouseSmallCriteria';
-import { uabCriteria }               from './uabCriteria';
-import { updCriteria }               from './updCriteria';
-import { InspectionItem }            from '../types';
+import { abattoirSpecificCriteria }      from './abattoirCriteria';
+import { bakerySpecificCriteria }        from './bakeryCriteria';
+import { baseCompressedGasCriteria }     from './baseCompressedGasCriteria';
+import { baseFoodCriteria }              from './baseFoodCriteria';
+import { baseGeneralCriteria }           from './baseGeneralCriteria';
+import { blacksmithCriteria }            from './blacksmithCriteria';
+import { carWashCriteria }               from './carWashCriteria';
+import { carpenteryCriteria }            from './carpenteryCriteria';
+import { coldRoomSpecificCriteria }      from './coldRoomCriteria';
+import { couvoirSpecificCriteria }       from './couvoirCriteria';
+import { gplCriteria }                   from './gplCriteria';
+import { marbleCriteria }                from './marbleCriteria';
+import { mechanicWorkshopCriteria }      from './mechanicCriteria';
+import { paintShopCriteria }             from './paintShopCriteria';
+import { printingCriteria }              from './printingCriteria';
+import { produceStorageCriteria }        from './produceStorageCriteria';
+import { semiPharmaCriteria }            from './semiPharmaCriteria';
+import { slaughterhouseSmallCriteria }   from './slaughterhouseSmallCriteria';
+import { uabSpecificCriteria }           from './uabCriteria';
+import { updSpecificCriteria }           from './updCriteria';
+import { InspectionItem }                from '../types';
 
 export const allCriteria: InspectionItem[] = [
-  ...abattoirCriteria,
-  ...bakeryCriteria,
+  ...abattoirSpecificCriteria,
+  ...bakerySpecificCriteria,
   ...baseCompressedGasCriteria,
   ...baseFoodCriteria,
   ...baseGeneralCriteria,
   ...blacksmithCriteria,
   ...carWashCriteria,
   ...carpenteryCriteria,
-  ...coldRoomCriteria,
-  ...couvoirCriteria,
+  ...coldRoomSpecificCriteria,
+  ...couvoirSpecificCriteria,
   ...gplCriteria,
   ...marbleCriteria,
-  ...mechanicCriteria,
+  ...mechanicWorkshopCriteria,
   ...paintShopCriteria,
   ...printingCriteria,
   ...produceStorageCriteria,
   ...semiPharmaCriteria,
   ...slaughterhouseSmallCriteria,
-  ...uabCriteria,
-  ...updCriteria,
+  ...uabSpecificCriteria,
+  ...updSpecificCriteria,
 ];
