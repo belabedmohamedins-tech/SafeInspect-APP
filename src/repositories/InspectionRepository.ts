@@ -59,6 +59,19 @@ export const InspectionRepository = {
     return all.find(i => i.id === id) ?? null;
   },
 
+  /**
+   * Patch the status field of a single inspection without touching any other field.
+   * Used by the supervisor approval workflow to move records through
+   * submitted → approved / rejected without re-running the full save pipeline.
+   */
+  async updateStatus(id: string, status: SavedInspection['status']): Promise<void> {
+    const all = await loadAll();
+    const idx = all.findIndex(i => i.id === id);
+    if (idx === -1) return;
+    all[idx] = { ...all[idx]!, status };
+    await saveAll(all);
+  },
+
   async save(inspection: SavedInspection): Promise<void> {
     const all = await loadAll();
     const idx = all.findIndex(i => i.id === inspection.id);

@@ -212,11 +212,20 @@ export interface SavedInspection {
   inspectorName: string;
   items: InspectionItem[];
   /**
-   * - 'completed'   — fully submitted inspection
-   * - 'in-progress' — active checklist session
-   * - 'draft'       — saved mid-session via back-navigation
+   * Lifecycle status of this inspection record.
+   *
+   * Local statuses (managed by the app):
+   * - 'completed'      — fully finalised inspection, ready for submission
+   * - 'in-progress'    — active checklist session
+   * - 'draft'          — saved mid-session via back-navigation
+   *
+   * Sync / approval statuses (set by serverAuth / supervisor workflow):
+   * - 'submitted'      — sent to server, awaiting supervisor review
+   * - 'pending-review' — server received, under review
+   * - 'approved'       — supervisor approved the report
+   * - 'rejected'       — supervisor rejected the report
    */
-  status: 'completed' | 'in-progress' | 'draft';
+  status: 'completed' | 'in-progress' | 'draft' | 'submitted' | 'pending-review' | 'approved' | 'rejected';
 
   // ── Phase 1.6: Inspection type ────────────────────────────────────────
   /**
@@ -329,6 +338,11 @@ export interface CorrectiveAction {
   facilityId: string;
   facilityName: string;
   criteria: string;
+  /**
+   * Human-readable description of the non-conformity finding.
+   * Used as the display label in NearDeadlineWidget and CAP list screens.
+   */
+  finding?: string;
   /**
    * CAP-level severity. Usually mirrors the source criterion's Severity, but
    * can be independently escalated to 'critical' for items whose

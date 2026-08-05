@@ -1,4 +1,4 @@
-// app/screens/supervisor-approvals.tsx — router.push Href cast added
+// app/screens/supervisor-approvals.tsx
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList, TouchableOpacity,
@@ -57,7 +57,7 @@ export default function SupervisorApprovalsScreen() {
       await approveInspection(item.id);
       await InspectionRepository.updateStatus(item.id, 'approved');
       setInspections(prev =>
-        prev.map(i => i.id === item.id ? { ...i, status: 'approved' } : i),
+        prev.map(i => i.id === item.id ? { ...i, status: 'approved' as const } : i),
       );
       Alert.alert('تمت الموافقة ✓', `تمت الموافقة على تقرير ${item.facilityName}`);
     } catch {
@@ -82,7 +82,7 @@ export default function SupervisorApprovalsScreen() {
               await rejectInspection(item.id);
               await InspectionRepository.updateStatus(item.id, 'rejected');
               setInspections(prev =>
-                prev.map(i => i.id === item.id ? { ...i, status: 'rejected' } : i),
+                prev.map(i => i.id === item.id ? { ...i, status: 'rejected' as const } : i),
               );
             } catch {
               Alert.alert('خطأ', 'تعذّر الرفض.');
@@ -142,7 +142,7 @@ export default function SupervisorApprovalsScreen() {
         </TouchableOpacity>
         <Text style={styles.headerTitle}>موافقات المشرف</Text>
         <TouchableOpacity
-          onPress={() => router.push('/screens/server-login' as Href)}
+          onPress={() => router.push('/screens/server-login' as unknown as Href)}
           style={styles.logoutBtn}
         >
           <MaterialIcons name="logout" size={20} color="#bfdbfe" />

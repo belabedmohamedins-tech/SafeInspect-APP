@@ -1,4 +1,4 @@
-// components/home/NearDeadlineWidget.tsx — router.push Href cast added
+// components/home/NearDeadlineWidget.tsx
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import { Href, useRouter } from 'expo-router';
@@ -44,14 +44,16 @@ export default function NearDeadlineWidget() {
           <TouchableOpacity
             style={styles.row}
             onPress={() =>
-              router.push({ pathname: '/(tabs)/actions' as Href, params: { filter: 'open' } })
+              router.push({ pathname: '/(tabs)/actions' as unknown as Href, params: { filter: 'open' } })
             }
           >
             <View style={styles.rowLeft}>
               <Text style={styles.deadline}>{item.deadline}</Text>
               <DaysLeft deadline={item.deadline} />
             </View>
-            <Text style={styles.finding} numberOfLines={2}>{item.finding}</Text>
+            <Text style={styles.finding} numberOfLines={2}>
+              {item.finding ?? item.criteria}
+            </Text>
           </TouchableOpacity>
         )}
       />

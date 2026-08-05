@@ -54,6 +54,15 @@ export const AuthRepository = {
     await AsyncStorage.removeItem(StorageKeys.PIN_FAILED_ATTEMPTS);
   },
 
+  /**
+   * Alias for setPin(null) — removes the stored PIN and resets failed attempts.
+   * Provided for backwards compatibility with callers that used the old clearPin() API.
+   */
+  clearPin: async (): Promise<void> => {
+    await secureDelete(StorageKeys.APP_PIN);
+    await AsyncStorage.removeItem(StorageKeys.PIN_FAILED_ATTEMPTS);
+  },
+
   getFailedAttempts: async (): Promise<number> => {
     const val = await AsyncStorage.getItem(StorageKeys.PIN_FAILED_ATTEMPTS);
     return val ? parseInt(val, 10) : 0;
