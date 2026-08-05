@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 13:02 WAT — [Agent: Perplexity] — Phase V false-positive audit: 2 STRATEGIC_PLAN error claims already fixed in source; Phase W URLs confirmed
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/README.md`
+- Critical finding: **Two Phase V error items confirmed clean by direct source read: (1) `facilities/index.tsx:69` — uses `FacilityRepository.remove(facility.id)` already; the "`.delete` vs `.remove`" claim in the error table is stale. (2) `approval-queue.tsx:64` — ActionSheet type already fixed in-file with `NonNullable<ActionSheet>['mode']`; the comment in the file confirms it. Do NOT re-fix either. All 5 Phase W legal document URLs confirmed present in STRATEGIC_PLAN.md and README Phase W table. Next action: Claude continues Phase V remaining TSC clusters locally (`npx tsc --noEmit`); user downloads Phase W documents and adds to Claude project.**
+
 ### 2026-08-05 12:41 WAT — [Agent: Perplexity] — Phase W opened: 5 legal source gaps identified, working document URLs located
 - Phases closed: none
 - Phases opened: W (Legal document verification — 5 source gaps)
@@ -195,7 +201,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 12:41 WAT)
+### Quick Status Summary (as of 2026-08-05 13:02 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -224,6 +230,9 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
     Then: remaining clusters per STRATEGIC_PLAN.md table
     After each cluster: npx tsc --noEmit + commit
     Gate: npx tsc --noEmit exits with 0 errors
+
+    ⚠️  DO NOT re-fix facilities/index.tsx (.remove is already correct)
+    ⚠️  DO NOT re-fix approval-queue.tsx (ActionSheet type already fixed in-file)
 
 → Parallel: Phase W — user downloads 5 legal docs → adds to Claude project → Claude updates criteria
     W-1: Arrêté 07/05/2025 cold-chain temps (JORADP JO n°43)
@@ -254,6 +263,13 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | File | Fix |
 |---|---|
 | `src/criteria/produceStorageCriteria.ts` | Split `PRD-02-01` (measurement with no numericField) into `PRD-02-01` (vegetables, 0–5 °C) and `PRD-02-01b` (olives, 7–15 °C), each with `numericField: { min, max, unit, labelAr }` |
+
+### False positives — already clean in source (confirmed 2026-08-05 by direct read)
+
+| Error table claim | Actual source state | Action |
+|---|---|---|
+| `facilities/index.tsx:69` — `FacilityRepository.delete` doesn't exist | Source uses `FacilityRepository.remove(facility.id)` — already correct | **Do NOT touch** |
+| `approval-queue.tsx:64` — `ActionSheet['mode']` type error | In-file comment + code already use `NonNullable<ActionSheet>['mode']` — already fixed | **Do NOT touch** |
 
 ### Remaining clusters — ALL require `npx tsc --noEmit` locally (Claude)
 
@@ -316,7 +332,7 @@ All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys
 
 | File | Bug | Fix |
 |---|---|---|
-| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward “forward”, not “back” | Changed to `arrow-left` (visually correct for RTL back navigation) |
+| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward "forward", not "back" | Changed to `arrow-left` (visually correct for RTL back navigation) |
 | `app/screens/reinspection.tsx` | No feedback when committee member list is empty — inspector had no hint | Added `memberEmptyHint` text below the add-member row when `members.length === 0` |
 | `app/screens/reinspection.tsx` | Launch button icon had redundant `marginLeft` (conflicting with container `gap`) | Removed extra `marginLeft` — `gap: Spacing.sm` on container is sufficient |
 | `app/(tabs)/inspection/checklist.tsx` | After loading, if `data.length === 0` (unknown activity), the SectionList rendered empty with an active Finish button — inspector would see a blank checklist with no explanation | Added empty-criteria guard: shows warning icon, Arabic explanation, and back button |
@@ -392,6 +408,8 @@ All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys
 - **Phase V batch-1 TSC fixes pushed** ✅ (2026-08-05 commit c1633f5)
 - **`scoringUtils.ts` + `schema.ts` already correct — do NOT re-fix** ✅ (2026-08-05)
 - **PRD-02-01 split into PRD-02-01 (vegetables) + PRD-02-01b (olives) with numericField** ✅ (2026-08-05 commit 0154707)
+- **`facilities/index.tsx` uses `.remove` already — do NOT re-fix** ✅ (2026-08-05 confirmed by direct read)
+- **`approval-queue.tsx` ActionSheet type already fixed in-file** ✅ (2026-08-05 confirmed by direct read)
 
 ---
 
