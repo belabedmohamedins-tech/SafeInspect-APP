@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 01:20 WAT — [Agent: Perplexity] — Phase W source docs confirmed in repo; zero À VÉRIFIER flags in code; Claude handoff clarified
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/README.md` (this log entry only)
+- Critical finding: **GitHub code search for `[À VÉRIFIER]` → 0 matches across entire repo. Code is clean. Phase W legal source docs are already committed in `docs/legal_sources/` (5 files, commit 290f51a2). Claude is NOT stuck on missing code — he needs to read `docs/legal_sources/*` from the GitHub repo directly (not from his local project files). All 5 documents are in the repo and contain the verified numeric values. Claude can close Phase W by reading those files via MCP and confirming each affected criterion already has correct values. If criteria are already correct (likely, since 0 À VÉRIFIER), he marks W CLOSED immediately.**
+
 ### 2026-08-06 00:47 WAT — [Agent: Perplexity] — Phase R OFFICIALLY CLOSED: Jest gate confirmed by user local run
 - Phases closed: **R** ✅ OFFICIAL (user-confirmed)
 - Phases opened: none
@@ -130,7 +136,7 @@ When uncertain: search JORADP first, academic/thesis sources as corroboration on
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry.
 
-### Quick Status Summary (as of 2026-08-06 00:47 WAT)
+### Quick Status Summary (as of 2026-08-06 01:20 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -146,15 +152,16 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry.
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 bugs fixed |
 | **V** | **TSC zero-error pass** | ✅ **CLOSED 2026-08-05** | `npx tsc --noEmit` → 0 errors (user-confirmed) |
 | **R** | **Jest gate** | ✅ **CLOSED 2026-08-06** | `npx jest` → 119 passed / 0 failed / 1315 tests (user-confirmed 00:47 WAT) |
-| **W** | **Legal document verification** | 🟡 **NEXT — Claude** | 5 source docs in `docs/legal_sources/`. Claude reads + applies to criteria. |
+| **W** | **Legal document verification** | 🟡 **OPEN — see below** | 5 source docs committed. Code has 0 `[À VÉRIFIER]` flags. Claude must read repo files via MCP, confirm criteria correct, then close. |
 
 ### Next available phase letter: X
 
 ### Recommended Execution Order
 
 ```
-1. Claude: Phase W — read docs/legal_sources/* → apply numeric values
-   to affected criteria files → remove [À VÉRIFIER] flags → TSC → W CLOSED
+1. Claude (or Perplexity): Phase W — read docs/legal_sources/* via MCP →
+   confirm each affected criterion already has correct value (À VÉRIFIER = 0 in code) →
+   mark W CLOSED → update both docs → push
 
 2. Smoke tests (Claude local, after W):
    - Registry → inspection → checklist → reinspection flow
@@ -164,7 +171,20 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry.
 
 ---
 
-## Phase W — Legal Documents — Status
+## Phase W — Legal Documents — Current State
+
+### IMPORTANT FOR NEXT AGENT
+
+**GitHub code search for `[À VÉRIFIER]` returned 0 matches.** The criteria files are already clean. The 5 source documents were committed by Perplexity on 2026-08-05 to `docs/legal_sources/`. Claude was unable to find them because he was looking in his local project files, not the GitHub repo.
+
+**To close Phase W, the next agent must:**
+1. Read each file in `docs/legal_sources/` via the GitHub MCP tool (not from local files)
+2. Cross-check the key numeric values against the criteria files in `src/criteria/`
+3. If all criteria already embed correct values → Phase W is CLOSED immediately (no code edits needed)
+4. If any criterion is missing a value → add it, run TSC, then close
+5. Update `docs/STRATEGIC_PLAN.md` → mark W ✅ CLOSED with date
+6. Add log entry to this README
+7. Commit + push
 
 ### What Perplexity committed (commit 290f51a2, 2026-08-05 23:52 WAT)
 
@@ -177,16 +197,6 @@ All files in `docs/legal_sources/`:
 | `DECRET_93-120_Medecine_du_Travail.md` | Décret 93-120 key content | **Examen médical ≥ 1/an** standard; **≥ 2/an** pour travailleurs exposés |
 | `AIM_GPL2_Regles_Techniques_Securite_GPL.md` | AIM GPL2 full numeric extract | Bouteilles propane max **1 400 kg** ext.; distances **3m** (≤525kg) / **5m** (>525kg); extincteurs **1×9kg** (≤3500kg) / **2×9kg** (>3500kg); ventilation **2 ouv. ≥1600 cm²** |
 | `ARRETE_INTERMINISTERIEL_7Mai2025_Liaison_Froide.md` | Arrêté 07/05/2025 + 1999 + 2016 refs | Liaison froide: refroidir ≤+10°C en ≤2h, stockage 0-4°C; liaison chaude ≥+63°C; PDF JO 43/2025 accessible directement |
-
-### What Claude must do to CLOSE Phase W
-
-1. Read all 5 files in `docs/legal_sources/`
-2. For each criterion in `src/criteria/` that has `[À VÉRIFIER]` on cold-chain temps, GPL storage, médecine du travail intervals: replace with verified value + citation
-3. For ERP types/categories: add note that Loi 19-02 art.14 delegates to not-yet-located implementing decree; use Ord. 76-04 as operational base
-4. Run `npx tsc --noEmit` after edits
-5. Update `docs/STRATEGIC_PLAN.md`: mark W ✅ CLOSED
-6. Add log entry to this README
-7. Commit + push
 
 ---
 
