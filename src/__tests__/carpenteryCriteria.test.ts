@@ -13,9 +13,9 @@ describe('carpenteryCriteria', () => {
     expect(unique.size).toBe(ids.length);
   });
 
-  it('all IDs match CAR-XX-XX pattern', () => {
+  it('all IDs match CRP-XX-XX pattern', () => {
     carpenteryCriteria.forEach((item: InspectionItem) => {
-      expect(item.id).toMatch(/^CAR-\d{2}-\d{2}$/);
+      expect(item.id).toMatch(/^CRP-\d{2}-\d{2}$/);
     });
   });
 

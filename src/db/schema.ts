@@ -5,6 +5,7 @@
  */
 
 import * as SQLite from 'expo-sqlite';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let _db: SQLite.SQLiteDatabase | null = null;
 
@@ -200,7 +201,6 @@ export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
 export async function migrateAsyncStorageToSQLite(
   onProgress?: (step: string) => void,
 ): Promise<void> {
-  const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
   const db = await getDb();
 
   const rawInspections = await AsyncStorage.getItem('inspections');

@@ -18,8 +18,9 @@ describe('carpenteryCriteria', () => {
     }
   });
 
-  it('CAR-05-02 is air quality measurement (doc type, medium severity)', () => {
-    const item = carpenteryCriteria.find(i => i.id === 'CAR-05-02');
+  // CRP-07-01: periodic total-dust stack measurement (Décret 06-138 Annex I, ≤50 mg/Nm³)
+  it('CRP-07-01 is air quality measurement (doc type, medium severity)', () => {
+    const item = carpenteryCriteria.find(i => i.id === 'CRP-07-01');
     expect(item).toBeDefined();
     expect(item!.controlType).toBe('doc');
     expect(item!.severity).toBe('medium');
