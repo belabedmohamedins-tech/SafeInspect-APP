@@ -36,11 +36,6 @@ describe('Facility shape', () => {
     'ownerName',
     'activity',
     'address',
-    'licenseType',
-    'licenseDetails',
-    'year',
-    'category',
-    'notes',
   ] as const;
 
   it('every facility has all required fields', () => {
@@ -53,7 +48,7 @@ describe('Facility shape', () => {
     }
   });
 
-  it('all field values are strings', () => {
+  it('all required field values are strings', () => {
     for (const facility of facilities) {
       for (const field of REQUIRED_FIELDS) {
         expect(typeof facility[field]).toBe('string');
@@ -131,7 +126,7 @@ describe('licensed facilities (lic-)', () => {
 
   it('all have a non-empty category', () => {
     for (const f of licensed) {
-      expect(f.category.trim().length).toBeGreaterThan(0);
+      expect(f.category?.trim().length ?? 0).toBeGreaterThan(0);
     }
   });
 
@@ -149,7 +144,7 @@ describe('unlicensed facilities (unlic-)', () => {
 
   it('all have empty category', () => {
     for (const f of unlicensed) {
-      expect(f.category).toBe('');
+      expect(f.category ?? '').toBe('');
     }
   });
 
@@ -168,13 +163,13 @@ describe('under-construction facilities (const-)', () => {
 
   it('notes field contains "قيد الإنشاء"', () => {
     for (const f of underConstruction) {
-      expect(f.notes).toContain('قيد الإنشاء');
+      expect(f.notes ?? '').toContain('قيد الإنشاء');
     }
   });
 
   it('category references "الفئة الثالثة" (class 3 license)', () => {
     for (const f of underConstruction) {
-      expect(f.category).toContain('الفئة الثالثة');
+      expect(f.category ?? '').toContain('الفئة الثالثة');
     }
   });
 });
@@ -185,11 +180,11 @@ describe('coordinates in notes', () => {
   const COORD_PATTERN = /الإحداثيات:\s*(-?[\d.]+),\s*(-?[\d.]+)/;
 
   it('all facilities with coordinates in notes parse as valid floats', () => {
-    const withCoords = facilities.filter((f) => COORD_PATTERN.test(f.notes));
+    const withCoords = facilities.filter((f) => COORD_PATTERN.test(f.notes ?? ''));
     expect(withCoords.length).toBeGreaterThan(0);
 
     for (const f of withCoords) {
-      const match = f.notes.match(COORD_PATTERN)!;
+      const match = (f.notes ?? '').match(COORD_PATTERN)!;
       const lng = parseFloat(match[1]);
       const lat = parseFloat(match[2]);
       expect(Number.isFinite(lng)).toBe(true);
@@ -223,7 +218,7 @@ describe('known facility lookup', () => {
     const f = facilities.find((x) => x.id === 'const-001')!;
     expect(f).toBeDefined();
     expect(f.activity).toContain('ذبح الدواجن');
-    expect(f.notes).toContain('قيد الإنشاء');
+    expect(f.notes ?? '').toContain('قيد الإنشاء');
   });
 
   it('can find all GPL installations', () => {

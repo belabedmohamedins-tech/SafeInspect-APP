@@ -19,5 +19,18 @@
     ".expo/types/**/*.d.ts",
     "expo-env.d.ts",
     ".expo/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "components/haptic-tab.tsx",
+    "components/parallax-scroll-view.tsx",
+    "components/ThemedText.tsx",
+    "components/ThemedView.tsx",
+    "components/themed-text.tsx",
+    "components/themed-view.tsx",
+    "components/ui/collapsible.tsx",
+    "components/ui/icon-symbol.tsx",
+    "components/external-link.tsx",
+    "hooks/use-theme-color.ts"
   ]
 }

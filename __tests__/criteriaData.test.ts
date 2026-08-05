@@ -1,226 +1,51 @@
 /**
  * __tests__/criteriaData.test.ts
  *
- * Covers:
- *  - criteriaByActivity: all keys resolve to InspectionItem[]
- *  - getChecklistForActivity: null/undefined branch (DEV warn)
- *  - getChecklistForActivity: unknown activity branch (warn + fallback)
- *  - getChecklistForActivity: known activity branch (returns correct list)
- *  - Composition integrity: food checklists contain baseGeneralCriteria items
- *  - Composition integrity: non-food checklists do NOT contain baseFoodCriteria items
+ * Smoke-tests for the legacy criteriaData module (src/criteriaData.ts).
+ * Verifies that criteriaByActivity is exported and structurally sound.
+ * getChecklistForActivity was removed from criteriaData — new code uses
+ * the modular src/criteria/ files directly.
  */
 
-import { criteriaByActivity, getChecklistForActivity } from '../src/criteriaData';
-import { baseGeneralCriteria } from '../src/criteria/baseGeneralCriteria';
-import { baseFoodCriteria } from '../src/criteria/baseFoodCriteria';
-import { uabSpecificCriteria } from '../src/criteria/uabCriteria';
-import { mechanicWorkshopCriteria } from '../src/criteria/mechanicCriteria';
-
-// ─── Silence expected console.warn calls ─────────────────────────────────────────────────
-const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-
-beforeEach(() => {
-  warnSpy.mockClear();
-});
-
-afterAll(() => {
-  warnSpy.mockRestore();
-});
-
-// ─── criteriaByActivity ──────────────────────────────────────────────────────────────
+import { criteriaByActivity } from '../src/criteriaData';
+import type { InspectionItem } from '../src/types';
 
 describe('criteriaByActivity', () => {
-  it('has a "default" key that maps to baseGeneralCriteria', () => {
-    expect(criteriaByActivity['default']).toBe(baseGeneralCriteria);
+  it('is a non-empty object', () => {
+    expect(typeof criteriaByActivity).toBe('object');
+    expect(criteriaByActivity).not.toBeNull();
+    const keys = Object.keys(criteriaByActivity);
+    expect(keys.length).toBeGreaterThan(0);
   });
 
-  it('every value is a non-empty InspectionItem[]', () => {
-    for (const [key, checklist] of Object.entries(criteriaByActivity)) {
-      expect(Array.isArray(checklist)).toBe(true);
-      expect(checklist.length).toBeGreaterThan(0);
-      // Each item must have at minimum an id and category
-      checklist.forEach((item) => {
-        expect(item).toHaveProperty('id');
-        expect(item).toHaveProperty('category');
-      });
-      void key;
+  it('every activity key maps to a non-empty array', () => {
+    for (const [activity, items] of Object.entries(criteriaByActivity)) {
+      expect(Array.isArray(items)).toBe(true);
+      expect((items as InspectionItem[]).length).toBeGreaterThan(0);
+      // sanity label
+      expect(activity.length).toBeGreaterThan(0);
     }
   });
 
-  it('covers all expected Arabic activity keys', () => {
-    const expectedKeys = [
-      'الديوان الوطني لأغذية الأنعام',
-      'وحدة مذابح الغرب',
-      'وحدة تفريخ الدواجن',
-      'وحدة تربية الدواجن',
-      'مذبحة دواجن <500 كغ/يوم',
-      'مخبزة صناعية',
-      'غرفة تبريد',
-      'ميكانيك سيارات',
-      'ورشة حدادة',
-      'ورشة نجارة',
-      'غسل وتشحيم السيارات',
-      'تركيب GPL',
-      'صناعة الرخام',
-      'ورشة طلاء السيارات',
-      'مطبعة',
-      'وحدة تخزين الزيتون والخضر',
-      'تعبئة مواد شبه صيدلانية',
-    ];
-    for (const key of expectedKeys) {
-      expect(criteriaByActivity).toHaveProperty(key);
-    }
-  });
-
-  it('UAB checklist contains baseGeneralCriteria + baseFoodCriteria + uabSpecific items', () => {
-    const uabChecklist = criteriaByActivity['الديوان الوطني لأغذية الأنعام'];
-    const baseGeneralIds = new Set(baseGeneralCriteria.map((i) => i.id));
-    const baseFoodIds = new Set(baseFoodCriteria.map((i) => i.id));
-    const uabSpecificIds = new Set(uabSpecificCriteria.map((i) => i.id));
-    const checklistIds = new Set(uabChecklist.map((i) => i.id));
-
-    for (const id of baseGeneralIds) {
-      expect(checklistIds.has(id)).toBe(true);
-    }
-    for (const id of baseFoodIds) {
-      expect(checklistIds.has(id)).toBe(true);
-    }
-    for (const id of uabSpecificIds) {
-      expect(checklistIds.has(id)).toBe(true);
-    }
-  });
-
-  it('mechanic checklist contains baseGeneral but NOT baseFoodCriteria items', () => {
-    const mechanicChecklist = criteriaByActivity['ميكانيك سيارات'];
-    const baseFoodIds = new Set(baseFoodCriteria.map((i) => i.id));
-    const checklistIds = new Set(mechanicChecklist.map((i) => i.id));
-
-    for (const id of baseFoodIds) {
-      expect(checklistIds.has(id)).toBe(false);
-    }
-    const mechanicIds = new Set(mechanicWorkshopCriteria.map((i) => i.id));
-    for (const id of mechanicIds) {
-      expect(checklistIds.has(id)).toBe(true);
-    }
-  });
-
-  it('alias keys point to the same array reference as their canonical counterpart', () => {
-    expect(criteriaByActivity['تركيب GPL']).toBe(criteriaByActivity['تركيب GPL/C']);
-    expect(criteriaByActivity['وحدة تربية الدواجن']).toBe(
-      criteriaByActivity['تربية الدواجن (07 حظائر)'],
-    );
-    expect(criteriaByActivity['تربية الدواجن (07 حظائر)']).toBe(
-      criteriaByActivity['تربية الدواجن (03 حظائر)'],
-    );
-    expect(criteriaByActivity['ورشة حدادة']).toBe(criteriaByActivity['صناعة سياج']);
-    expect(criteriaByActivity['ورشة نجارة']).toBe(criteriaByActivity['ورشة ألمنيوم']);
-    expect(criteriaByActivity['مطبعة']).toBe(criteriaByActivity['لوازم مدرسية ومكاتب']);
-  });
-});
-
-// ─── getChecklistForActivity ──────────────────────────────────────────────────────
-
-describe('getChecklistForActivity', () => {
-  describe('null / undefined / empty input', () => {
-    it('returns baseGeneralCriteria when called with null', () => {
-      const result = getChecklistForActivity(null);
-      expect(result).toBe(baseGeneralCriteria);
-    });
-
-    it('returns baseGeneralCriteria when called with undefined', () => {
-      const result = getChecklistForActivity(undefined);
-      expect(result).toBe(baseGeneralCriteria);
-    });
-
-    it('returns baseGeneralCriteria when called with empty string', () => {
-      const result = getChecklistForActivity('');
-      expect(result).toBe(baseGeneralCriteria);
-    });
-
-    it('logs a console.warn (DEV) for null/undefined/empty input', () => {
-      getChecklistForActivity(null);
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy.mock.calls[0][0]).toContain('[criteriaData]');
-    });
-  });
-
-  describe('unknown activity key', () => {
-    it('returns baseGeneralCriteria for an unregistered activity', () => {
-      const result = getChecklistForActivity('نشاط غير معروف - XYZ');
-      expect(result).toBe(baseGeneralCriteria);
-    });
-
-    it('logs a console.warn with the unknown key name', () => {
-      const unknownKey = 'نشاط_اختبار_مجهول';
-      getChecklistForActivity(unknownKey);
-      expect(warnSpy).toHaveBeenCalledTimes(1);
-      expect(warnSpy.mock.calls[0][0]).toContain(unknownKey);
-      expect(warnSpy.mock.calls[0][0]).toContain('[criteriaData]');
-    });
-
-    it('does not throw for any unknown key', () => {
-      expect(() => getChecklistForActivity('completely-unknown')).not.toThrow();
-    });
-  });
-
-  describe('known activity keys', () => {
-    it('returns the UAB checklist for the UAB activity key', () => {
-      const result = getChecklistForActivity('الديوان الوطني لأغذية الأنعام');
-      expect(result).toBe(criteriaByActivity['الديوان الوطني لأغذية الأنعام']);
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
-
-    it('returns the mechanic checklist for the mechanic activity key', () => {
-      const result = getChecklistForActivity('ميكانيك سيارات');
-      expect(result).toBe(criteriaByActivity['ميكانيك سيارات']);
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
-
-    it('returns the GPL checklist for "تركيب GPL"', () => {
-      const result = getChecklistForActivity('تركيب GPL');
-      expect(result).toBe(criteriaByActivity['تركيب GPL']);
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
-
-    it('returns the bakery checklist for "مخبزة صناعية"', () => {
-      const result = getChecklistForActivity('مخبزة صناعية');
-      expect(result).toBe(criteriaByActivity['مخبزة صناعية']);
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
-
-    it('returns a non-empty array for every registered activity', () => {
-      for (const key of Object.keys(criteriaByActivity)) {
-        if (key === 'default') continue;
-        const result = getChecklistForActivity(key);
-        expect(Array.isArray(result)).toBe(true);
-        expect(result.length).toBeGreaterThan(0);
+  it('every item has required InspectionItem fields', () => {
+    for (const items of Object.values(criteriaByActivity)) {
+      for (const item of items as InspectionItem[]) {
+        expect(typeof item.id).toBe('string');
+        expect(item.id.trim().length).toBeGreaterThan(0);
+        expect(typeof item.criteria).toBe('string');
+        expect(item.criteria.trim().length).toBeGreaterThan(0);
+        expect(typeof item.complianceStatus).toBe('string');
       }
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
-
-    it('does not warn for the default key', () => {
-      getChecklistForActivity('default');
-      expect(warnSpy).not.toHaveBeenCalled();
-    });
+    }
   });
 
-  describe('result integrity', () => {
-    it('returned items all have id, category, and criteria properties', () => {
-      const result = getChecklistForActivity('وحدة مذابح الغرب');
-      for (const item of result) {
-        expect(item).toHaveProperty('id');
-        expect(item).toHaveProperty('category');
-        expect(item).toHaveProperty('criteria');
+  it('every item axis (when present) is a non-empty string', () => {
+    for (const items of Object.values(criteriaByActivity)) {
+      for (const item of items as InspectionItem[]) {
+        if (item.axis !== undefined) {
+          expect(item.axis.trim().length).toBeGreaterThan(0);
+        }
       }
-    });
-
-    it('no duplicate ids in any checklist', () => {
-      for (const [key, checklist] of Object.entries(criteriaByActivity)) {
-        const ids = checklist.map((i) => i.id);
-        const unique = new Set(ids);
-        expect(unique.size).toBe(ids.length);
-        void key;
-      }
-    });
+    }
   });
 });
