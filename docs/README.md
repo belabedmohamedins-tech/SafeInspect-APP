@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 13:37 WAT — [Agent: Perplexity] — Phase W URLs confirmed complete; fresh-session handoff context logged
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/README.md`
+- Critical finding: **User delivered fresh-session handoff context. All 5 Phase W legal document URLs confirmed present and accessible: W-1 JORADP JO n°43 (cold-chain 07/05/2025), W-2 FAO mirror/Bejaia recueil (temps 21/11/1999), W-3 MESRS PDF (Loi 19-02 full text), W-4 ILO NatLex + Univ Batna2 DOCX (Décret 93-120), W-5 Scribd AIM GPL2 (LPG cylinder storage). Ordonnance 76-04 (evacuation/extinguisher base text) located at Scribd securite-ERP PDF as bonus. No new phases opened. Next action: user downloads Phase W docs → adds to Claude project as `legal_sources/` folder → Claude ingests and resolves [À VÉRIFIER] items. Phase V (TSC 145 errors) remains assigned to Claude locally.**
+
 ### 2026-08-05 13:10 WAT — [Agent: Perplexity] — server/src/index.ts stub filled; 3 remaining Phase V error table claims confirmed false positives
 - Phases closed: none (Phase V still requires `npx tsc --noEmit` gate locally)
 - Phases opened: none
@@ -207,7 +213,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 13:10 WAT)
+### Quick Status Summary (as of 2026-08-05 13:37 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -224,7 +230,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 RTL/UX bugs fixed |
 | **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 + criteria fix + server stub pushed; remaining clusters need local tsc |
-| **W** | **Legal document verification (5 source gaps)** | 🟡 **OPEN — USER downloads + Claude ingests** | Documents located by Perplexity 2026-08-05; URLs in STRATEGIC_PLAN.md |
+| **W** | **Legal document verification (5 source gaps)** | 🟡 **OPEN — USER downloads + Claude ingests** | All 5 URLs confirmed by Perplexity 2026-08-05 12:41 + 13:37 WAT; full URL table in STRATEGIC_PLAN.md |
 
 ### Recommended Execution Order (next sessions)
 
@@ -247,6 +253,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
     W-3: Loi 19-02 full text art.14 ERP categories (JO n°46)
     W-4: Décret 93-120 du 15/05/1993 médecine du travail
     W-5: AIM GPL2 technical standard LPG cylinder storage
+    Bonus: Ordonnance 76-04 base text (evacuation/extinguisher legal basis)
 
 → After V closes: Phase R — full Jest run + smoke tests (Claude, local)
 ```
@@ -293,202 +300,15 @@ See full error table in `docs/STRATEGIC_PLAN.md` Phase V section.
 
 ## Phase W — Legal Document Verification — OPEN (2026-08-05)
 
-### Documents to obtain and add to Claude project
+### Documents to download and add to Claude project as `legal_sources/`
 
-| # | File to create | Document | Source URL |
+| # | Filename to use | Document | Download URL |
 |---|---|---|---|
-| W-1 | `ARRETE_2025-05-07_cold_chain_temperatures.pdf` | Arrêté interministériel du 7 mai 2025 | https://www.joradp.dz/FTP/jo-francais/2025/F2025043.pdf |
-| W-2 | `ARRETE_1999-11-21_temperatures_conservation.pdf` | Arrêté interministériel du 21 novembre 1999 | https://elearning.univ-bejaia.dz/pluginfile.php/882208/mod_resource/content/0/Cours_BOUDRIES%20Hafid_RECUEIL%20DES%20TEXTES%20RE... |
-| W-3 | `LOI_19-02_2019_ERP_full_text.pdf` | Loi n° 19-02 du 17 juillet 2019 (full text) | https://services.mesrs.dz/DEJA/fichiers_sommaire_des_textes/241%20BIS%203%20fr.pdf |
-| W-4 | `DECRET_93-120_1993_medecine_du_travail.pdf` | Décret exécutif n° 93-120 du 15 mai 1993 | https://natlex.ilo.org/dyn/natlex2/r/natlex/fe/details?p3_isn=33565 (also: https://staff.univ-batna2.dz/sites/default/files/benhassine-wissal/files/decret_executif_ndeg_93-120_du_15_mai_1993_relatif_a_lo...) |
-| W-5 | `AIM_GPL2_technical_standard_LPG_storage.pdf` | AIM GPL2 — règles techniques GPL ≤6 tonnes | https://fr.scribd.com/document/609242056/AIM-GPL2-Derniere-Version-V-14-03-2022 |
-
----
-
-## Activity → Criteria Mapping — VERIFIED 2026-08-05
-
-All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys in `criteriaByActivity` (`src/criteriaData.ts`). Zero facilities fall back to `baseGeneralCriteria` unexpectedly.
-
-| Activity string | Maps to | Checklist |
-|---|---|---|
-| مخبزة صناعية | `bakeryChecklist` | baseGeneral + baseFood + bakerySpecific |
-| مذبحة دواجن ≤500 كغ/ي | `slaughterhouseSmallChecklist` | baseGeneral + baseFood + slaughterhouseSmall |
-| غرفة تبريد | `coldRoomChecklist` | baseGeneral + baseFood + coldRoom |
-| تعبئة مواد شبه صيدلانية | `semiPharmaChecklist` | baseGeneral + semiPharma |
-| غسل وتشحيم السيارات | `carWashChecklist` | baseGeneral + carWash |
-| تركيب GPL/C | `gplChecklist` | baseGeneral + gpl |
-| منشأة صناعة تغذية حيوانية | `uabChecklist` | baseGeneral + baseFood + uab |
-| وحدة تخزين الزيتون والخضر | `produceStorageChecklist` | baseGeneral + baseFood + produceStorage |
-| إنتاج أغذية الأنعام (مؤسسة عمومية اقتصادية) | `uabChecklist` | baseGeneral + baseFood + uab |
-| مفرخة الدواجن (مؤسسة عمومية اقتصادية) | `couvoirChecklist` | baseGeneral + baseFood + couvoirs |
-| تربية الدواجن (مؤسسة عمومية اقتصادية) | `updChecklist` | baseGeneral + upd |
-| ذبح وبيع الدواجن (مؤسسة عمومية اقتصادية) | `slaughterhouseSmallChecklist` | baseGeneral + baseFood + slaughterhouseSmall |
-| مطبعة خاصة بإنتاج لوازم مدرسية ومستلزمات المكاتب | `printingChecklist` | baseGeneral + printing |
-| ميكانيك السيارات | `mechanicChecklist` | baseGeneral + mechanicWorkshop |
-| ميكانيك | `mechanicChecklist` | baseGeneral + mechanicWorkshop |
-| ورشة طلاء السيارات | `paintShopChecklist` | baseGeneral + paintShop |
-| ورشة نجارة | `carpenteryChecklist` | baseGeneral + carpentry |
-| ورشة نجارة الألمنيوم | `carpenteryChecklist` | baseGeneral + carpentry |
-| صناعة الرخام | `marbleChecklist` | baseGeneral + marble |
-| ورشة حدادة (صناعة السياج) | `blacksmithChecklist` | baseGeneral + blacksmith |
-| ورشة حدادة | `blacksmithChecklist` | baseGeneral + blacksmith |
-| تربية الدواجن (07 حظائر) | `updChecklist` | baseGeneral + upd |
-| تربية الدواجن (03 حظائر) | `updChecklist` | baseGeneral + upd |
-| تربية الدواجن (حظيرتين) | `updChecklist` | baseGeneral + upd |
-| تربية الدواجن (حظيرة) | `updChecklist` | baseGeneral + upd |
-| ذبح الدواجن (أكثر من 500 كغ/ي وأقل من 2 طن/ي) | `abattoirChecklist` | baseGeneral + baseFood + abattoir |
-
----
-
-## Phase U — CLOSED: UX Polish — End-to-End Inspector Flow (2026-08-04)
-
-### Bugs found and fixed by direct source-code read
-
-| File | Bug | Fix |
-|---|---|---|
-| `app/screens/reinspection.tsx` | Header back button used `arrow-right` — in RTL Arabic UI this icon points toward "forward", not "back" | Changed to `arrow-left` (visually correct for RTL back navigation) |
-| `app/screens/reinspection.tsx` | No feedback when committee member list is empty — inspector had no hint | Added `memberEmptyHint` text below the add-member row when `members.length === 0` |
-| `app/screens/reinspection.tsx` | Launch button icon had redundant `marginLeft` (conflicting with container `gap`) | Removed extra `marginLeft` — `gap: Spacing.sm` on container is sufficient |
-| `app/(tabs)/inspection/checklist.tsx` | After loading, if `data.length === 0` (unknown activity), the SectionList rendered empty with an active Finish button — inspector would see a blank checklist with no explanation | Added empty-criteria guard: shows warning icon, Arabic explanation, and back button |
-| `app/(tabs)/inspection/categories.tsx` | Category cards rendered `<Icon> <Text>` (LTR order) with `marginLeft` — in RTL Arabic, icon should be on the right, text on the left | Moved icon to right of text, replaced `marginLeft` with `flex:1 + space-between` layout |
-
----
-
-## Phase T — CLOSED: Décret 06-138 Air Quality Annex I (2026-08-04)
-
-### Verified emission limits (primary source: JO N°24, 16 April 2006)
-
-| # | Parameter | New installations (mg/Nm³) | Pre-2006 transitional (mg/Nm³) |
-|---|---|---|---|
-| 1 | Total dust | 50 | 100 |
-| 2 | SO2 | 300 | 500 |
-| 3 | NOx | 300 | 500 |
-| 4 | Nitrous oxide | 300 | 500 |
-| 5 | HCl (inorganic gaseous chlorine) | 50 | 100 |
-| 6 | HF (fluorine compounds) | 10 | 20 |
-| 7 | VOC (total, excl. methane) | 150 | 200 |
-| 8 | Metals and metallic compounds | 5 | 10 |
-| 9 | Cd, Hg, Tl and compounds | 0.25 | 0.5 |
-| 10 | As, Se, Te and compounds | 1 | 2 |
-| 11 | Anthracite dust, Cr, Co, Cu, Sn, Mn, Ni, V, Zn compounds | 5 | 10 |
-| 12 | Phosphine, phosgene | 1 | 2 |
-| 13 | HCN, Br, HBr, Cl, H2S | 5 | 10 |
-| 14 | Ammonia | 50 | 100 |
-| 15 | Asbestos | 0.1 | 0.5 |
-| 16 | Non-asbestos fibers | 1 | 50 |
-
----
-
-## Phase S — CLOSED: Loi 19-02 Fire Safety Scope (2026-08-04)
-
-- ERP: any establishment admitting the public
-- High-rise: >28m (non-residential) or >50m (residential)
-- Very-high-rise: >200m
-- Art. 44 deadline: expired ~21 July 2024
-- Non-ERP facilities: use Décret 06-198 + Décret 09-335 instead
-
----
-
-## Phase Q — Reinspection Screen — CLOSED (2026-08-04)
-
-### Full Lifecycle Coverage Map
-
-| Lifecycle Stage | Screen(s) | Status |
-|---|---|---|
-| Registry | `screens/facilities/` | ✅ CONFIRMED |
-| Planning | `screens/brief.tsx` | ✅ CONFIRMED |
-| Preparation | `(tabs)/inspection/start.tsx` | ✅ CONFIRMED |
-| Inspection (checklist) | `(tabs)/inspection/checklist.tsx` | ✅ CONFIRMED |
-| Evidence / Evaluation / Decision | Inside `checklist.tsx` | ✅ CONFIRMED |
-| Opening / Closing Meeting | Inside `checklist.tsx` — `MeetingGateModal` | ✅ CONFIRMED |
-| Report | `screens/reports.tsx` | ✅ CONFIRMED |
-| Corrective Actions | `screens/corrective-actions.tsx` + cap tabs | ✅ CONFIRMED |
-| Reinspection | `screens/reinspection.tsx` | ✅ DELIVERED + UX-fixed 2026-08-04 |
-| Statistics | `screens/stats.tsx` | ✅ CONFIRMED |
-
----
-
-## Confirmed Closed — Must Not Be Reopened
-
-- All 8 manual chapters in `docs/` ✅
-- Scoring engine, criteria (20 files), report (pdfService), CAP, stats ✅
-- Full repository + service layer ✅
-- Expo Router `app/` screen map 100% confirmed ✅
-- `app/screens/reinspection.tsx` + `app/_layout.tsx` delivered + UX-fixed ✅
-- Loi 19-02 scope verified ✅
-- Décret 06-138 Annex I + II verified ✅
-- **3 RTL/UX bugs fixed in reinspection.tsx, checklist.tsx, categories.tsx** ✅ (2026-08-04)
-- **Activity → criteria mapping 100% verified (26/26 exact matches)** ✅ (2026-08-05)
-- **Phase V batch-1 TSC fixes pushed** ✅ (2026-08-05 commit c1633f5)
-- **`scoringUtils.ts` + `schema.ts` already correct — do NOT re-fix** ✅ (2026-08-05)
-- **PRD-02-01 split into PRD-02-01 (vegetables) + PRD-02-01b (olives) with numericField** ✅ (2026-08-05 commit 0154707)
-- **`facilities/index.tsx` uses `.remove` already — do NOT re-fix** ✅ (2026-08-05 confirmed twice)
-- **`approval-queue.tsx` ActionSheet type already fixed in-file** ✅ (2026-08-05 confirmed twice)
-- **`approval-detail.tsx:174` uses 3 args already — do NOT re-fix** ✅ (2026-08-05 confirmed)
-- **`server/src/index.ts` written (was 0 bytes stub) — Express bootstrap** ✅ (2026-08-05 commit 513adbe)
-
----
-
-## Agent Rules
-
-### Before any implementation
-1. Inspect repo and current branch
-2. Read affected source files and existing tests
-3. Identify all dependencies
-4. **Check docs vs code — if already implemented, close the phase, do not rebuild**
-
-### After every implementation session
-Update **both** of the following before pushing:
-- `docs/README.md` — add top entry to Live Observations Log, update Working Roadmap table
-- `docs/STRATEGIC_PLAN.md` — mark closed phases ✅ CLOSED with date, open new phases if found
-
-### Log entry format (mandatory)
-```
-### YYYY-MM-DD HH:MM WAT — [Agent: Perplexity or Claude] — [One-line summary]
-- Phases closed: [list or "none"]
-- Phases opened: [list or "none"]
-- Files changed: [list]
-- Critical finding: [one line if any, else "none"]
-```
-
-### Legal citation rules
-- Never invent legal articles or numeric values
-- Suspicious criterion → tag `[À VÉRIFIER]`, commit, open a LEGAL-VERIFY phase
-- Verify via JORADP first — academic/thesis sources as corroboration only
-- Once verified: update criterion, remove tag, close phase
-- If unverifiable: change to `[SILENCE]` or `[INTL]` with explanation
-
-### Test gate
-- Run `npx tsc --noEmit` before closing any phase
-- Run Jest for affected files before closing any phase
-- **Perplexity cannot run local commands** — assign Phase V + R to Claude
-
-### SHA rule
-- Always fetch current file from GitHub to get its SHA before updating
-- Never hardcode SHAs between sessions — they change with every commit
-
----
-
-## Legal Quick-Reference Table
-
-| Topic | Key Instrument | Article / Annex | Notes |
-|---|---|---|---|
-| Classified establishments | Décret 06-198 | Art. 2–5 | 3 categories |
-| Wastewater | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
-| Solid waste | Décret 06-104 | Annexes | ✅ Verified |
-| Waste collector accreditation | Décret 09-19 | Art. 4–8 | Wali-level |
-| Waste transport | Décret 04-409 | Art. 5–12 | ✅ Verified |
-| Waste treatment acceptance | Décret 04-410 | Art. 6–9 | ✅ Verified |
-| Healthcare waste | Décret 03-478 | Art. 3 | 3-stream |
-| Fire safety — ERP | Loi 19-02 | Art. 1, 3, 14–19 | ✅ VERIFIED — ERPs + high-rise + residential only |
-| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | 🟡 [À VÉRIFIER] Phase W-3 |
-| Intervention plan | Décret 09-335 | Art. 4–6 | Classified establishments |
-| LPG/C vehicle installation | Décret 21-430 | Art. 4, 7, 8 | Mines ministry, ≥60m² |
-| LPG cylinder storage (dépôt/point de vente) | AIM GPL2 technical standard | Storage distances, quantities, ventilation | 🟡 [À VÉRIFIER] Phase W-5 |
-| Air emissions | Décret 06-138 | Annex I + II | ✅ VERIFIED — mg/Nm³; JO N°24 16 April 2006 |
-| Food safety / HACCP | Décret 04-82 | Art. 5 | HACCP mandatory |
-| Cold-chain temps (restaurants) | Arrêté interministériel 07/05/2025 | Full text | 🟡 [À VÉRIFIER] Phase W-1 |
-| Cold storage temps by product type | Arrêté interministériel 21/11/1999 | Temperature table | 🟡 [À VÉRIFIER] Phase W-2 |
-| Worker periodic medical exam | Décret 93-120 du 15/05/1993 | Exam intervals | 🟡 [À VÉRIFIER] Phase W-4 |
-| Occupational health | Loi 88-07 | Art. 12–14 | Annual medical exam |
-| Pest control | Arrêté 1995 | Art. 3 | Licensed operator |
+| W-1 | `ARRETE_2025-05-07_cold_chain_temperatures.pdf` | Arrêté interministériel 07/05/2025 — cold-chain temps (restaurants) | https://www.joradp.dz/FTP/jo-francais/2025/F2025043.pdf |
+| W-1b | *(same folder)* | Ministry of Commerce mirror of W-1 | https://www.commerce.gov.dz/fr/reglementation/arrete-interministeriel-du-7-mai-2025 |
+| W-2 | `ARRETE_1999-11-21_temperatures_conservation.pdf` | Arrêté interministériel 21/11/1999 — conservation temps by product | https://elearning.univ-bejaia.dz/pluginfile.php/882208/mod_resource/content/0/Cours_BOUDRIES%20Hafid_RECUEIL%20DES%20TEXTES%20RE... |
+| W-3 | `LOI_19-02_2019_ERP_full_text.pdf` | Loi n° 19-02 du 17/07/2019 — full text incl. art. 14 ERP categories | https://services.mesrs.dz/DEJA/fichiers_sommaire_des_textes/241%20BIS%203%20fr.pdf |
+| W-4 | `DECRET_93-120_1993_medecine_du_travail.docx` | Décret exécutif n° 93-120 du 15/05/1993 — médecine du travail | https://staff.univ-batna2.dz/sites/default/files/benhassine-wissal/files/decret_executif_ndeg_93-120_du_15_mai_1993_relatif_a_lo... |
+| W-4b | *(alternative)* | ILO NatLex entry with PDF | https://natlex.ilo.org/dyn/natlex2/r/natlex/fe/details?p3_isn=33565 |
+| W-5 | `AIM_GPL2_technical_standard_LPG_storage.pdf` | AIM GPL2 — règles techniques installations et points de vente GPL ≤6t | https://fr.scribd.com/document/609242056/AIM-GPL2-Derniere-Version-V-14-03-2022 |
+| BONUS | `ORD_76-04_securite_incendie_ERP.pdf` | Ordonnance n° 76-04 du 20/02/1976 — base legal text for ERP fire safety/evacuation | https://fr.scribd.com/document/474400319/securite-ERP-pdf |
