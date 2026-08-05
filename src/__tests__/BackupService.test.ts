@@ -222,7 +222,10 @@ describe('importBackup', () => {
     expect(JSON.parse(raw!)).toHaveLength(1);
   });
 
-  it('calls rescheduleAll for pending agenda items', async () => {
+  it('calls rescheduleAll with no arguments after restore', async () => {
+    // rescheduleAll() takes 0 args — it lazy-loads AgendaRepository internally
+    // to avoid a circular dependency. BackupService writes to AsyncStorage first,
+    // then calls rescheduleAll() so the service reads the freshly-restored data.
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
       assets: [{ uri: 'file:///ok.json' }],
@@ -231,11 +234,7 @@ describe('importBackup', () => {
       JSON.stringify(validPayload),
     );
     await importBackup();
-    expect(rescheduleAll).toHaveBeenCalledWith(
-      expect.arrayContaining([
-        expect.objectContaining({ id: 'a1' }),
-      ]),
-    );
+    expect(rescheduleAll).toHaveBeenCalledWith();
   });
 
   it('throws when asset uri is missing', async () => {
