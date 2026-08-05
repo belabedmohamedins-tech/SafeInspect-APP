@@ -2,7 +2,7 @@
 // Barrel export — aggregates every criteria module into allCriteria.
 // Import from 'src/criteria' resolves here.
 
-import { abattoirCriteria } from './abattoirCriteria';
+import { abattoirSpecificCriteria } from './abattoirCriteria';
 import { bakeryCriteria } from './bakeryCriteria';
 import { baseCompressedGasCriteria } from './baseCompressedGasCriteria';
 import { baseFoodCriteria } from './baseFoodCriteria';
@@ -24,7 +24,7 @@ import { uabCriteria } from './uabCriteria';
 import { updCriteria } from './updCriteria';
 
 export const allCriteria = [
-  ...abattoirCriteria,
+  ...abattoirSpecificCriteria,
   ...bakeryCriteria,
   ...baseCompressedGasCriteria,
   ...baseFoodCriteria,
@@ -47,7 +47,7 @@ export const allCriteria = [
 ];
 
 // Named re-exports for per-module imports
-export { abattoirCriteria } from './abattoirCriteria';
+export { abattoirSpecificCriteria } from './abattoirCriteria';
 export { bakeryCriteria } from './bakeryCriteria';
 export { baseCompressedGasCriteria } from './baseCompressedGasCriteria';
 export { baseFoodCriteria } from './baseFoodCriteria';

@@ -1,21 +1,22 @@
 // src/criteria/__tests__/abattoirCriteria.test.ts
-import { abattoirCriteria } from '../abattoirCriteria';
+import { abattoirSpecificCriteria } from '../abattoirCriteria';
+import { InspectionItem } from '../../types';
 
-describe('abattoirCriteria', () => {
+describe('abattoirSpecificCriteria', () => {
   it('has at least one criterion', () => {
-    expect(abattoirCriteria.length).toBeGreaterThan(0);
+    expect(abattoirSpecificCriteria.length).toBeGreaterThan(0);
   });
 
   it('every item has a non-empty id', () => {
-    abattoirCriteria.forEach(item => {
+    abattoirSpecificCriteria.forEach((item: InspectionItem) => {
       expect(item.id.trim().length).toBeGreaterThan(0);
     });
   });
 
   it('numericField min < max when both are defined', () => {
-    abattoirCriteria
-      .filter(item => item.numericField?.min !== undefined && item.numericField?.max !== undefined)
-      .forEach(item => {
+    abattoirSpecificCriteria
+      .filter((item: InspectionItem) => item.numericField?.min !== undefined && item.numericField?.max !== undefined)
+      .forEach((item: InspectionItem) => {
         expect(item.numericField!.min!).toBeLessThan(item.numericField!.max!);
       });
   });
