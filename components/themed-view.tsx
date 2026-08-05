@@ -1,6 +1,10 @@
-import { View, type ViewProps } from 'react-native';
+// components/themed-view.tsx
+// Scaffold component — wraps RN View with light/dark background support.
+// Uses useColorScheme + Colors directly to avoid broken useThemeColor typing.
 
-import { useThemeColor } from '@/hooks/use-theme-color';
+import { View, type ViewProps } from 'react-native';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import { Colors } from '@/constants/theme';
 
 export type ThemedViewProps = ViewProps & {
   lightColor?: string;
@@ -8,7 +12,11 @@ export type ThemedViewProps = ViewProps & {
 };
 
 export function ThemedView({ style, lightColor, darkColor, ...otherProps }: ThemedViewProps) {
-  const backgroundColor = useThemeColor({ light: lightColor, dark: darkColor }, 'background');
+  const scheme = useColorScheme();
+  const isDark = scheme === 'dark';
+  const backgroundColor: string = isDark
+    ? (darkColor ?? Colors.background)
+    : (lightColor ?? Colors.background);
 
   return <View style={[{ backgroundColor }, style]} {...otherProps} />;
 }
