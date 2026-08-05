@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-05 12:13 WAT — [Agent: Perplexity] — Phase V criteria fix: PRD-02-01 split into vegetables (0–5 °C) + olives (7–15 °C) with numericField
+- Phases closed: none (Phase V still OPEN — TSC errors require Claude locally)
+- Phases opened: none
+- Files changed: `src/criteria/produceStorageCriteria.ts`
+- Critical finding: **PRD-02-01 had `controlType: 'measurement'` but no `numericField` — type error. Split into `PRD-02-01` (vegetables, 0–5 °C) and `PRD-02-01b` (olives, 7–15 °C), each with correct `numericField: { min, max, unit, labelAr }`. Commit: [015470710511616e298072c9dfd9594f106b6816](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/015470710511616e298072c9dfd9594f106b6816). Phase V TSC zero-error gate still requires `npx tsc --noEmit` locally — assign remaining 145-error clusters to Claude per STRATEGIC_PLAN.md.**
+
 ### 2026-08-05 11:54 WAT — [Agent: Perplexity] — Phase V batch-2 audit: doc-listed targets already clean; only PRD-02-01 numericField confirmed open
 - Phases closed: none (Phase V still OPEN)
 - Phases opened: none
@@ -119,7 +125,7 @@ Checklist logic is the core of the app. Every criterion must have:
 |---|---|
 | Framework | React Native + Expo |
 | Language | TypeScript |
-| Local DB | WatermelonDB / AsyncStorage |
+| Local DB | expo-sqlite (NOT WatermelonDB) |
 | Build | EAS Build |
 | Tests | Jest |
 | Routing | **Expo Router (file-system routing in `app/`)** |
@@ -183,7 +189,7 @@ When uncertain: search JORADP (official gazette) first, academic/thesis sources 
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, statuses, and execution order.
 
-### Quick Status Summary (as of 2026-08-05 11:54 WAT)
+### Quick Status Summary (as of 2026-08-05 12:13 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -199,12 +205,12 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | S | Legal verify — Loi 19-02 fire safety | ✅ CLOSED 2026-08-04 | JORADP primary source |
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 primary-source content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 RTL/UX bugs fixed |
-| **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 pushed; 18 clusters remain (see STRATEGIC_PLAN.md) |
+| **V** | **TSC zero-error pass (145 errors, 63 files)** | 🔴 **OPEN — ASSIGN TO CLAUDE** | batch-1 + criteria fix pushed; remaining clusters need local tsc |
 
 ### Recommended Execution Order (next sessions)
 
 ```
-→ Claude (local): Phase V — fix 145 TSC errors cluster by cluster
+→ Claude (local): Phase V — fix remaining TSC error clusters
     Start with: src/db/schema.ts SQLite bind params (~25 errors)
     Then: test mock fixtures (~40 errors)
     Then: NotificationType union (19 errors)
@@ -212,12 +218,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
     After each cluster: npx tsc --noEmit + commit
     Gate: npx tsc --noEmit exits with 0 errors
 
-→ Also (criteria fix — can be done by Perplexity remotely):
-    src/criteria/produceStorageCriteria.ts
-    PRD-02-01: split into two criteria (vegetables 0–5 °C, olives 7–15 °C)
-    each with correct numericField
-
-→ After V closes: Phase R — full Jest run, smoke tests, coverage gate
+→ After V closes: Phase W — full Jest run + smoke tests (Claude, local)
 ```
 
 ---
@@ -234,21 +235,15 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry with priorities, status
 | `src/i18n/index.ts` | Changed re-export to `./index-impl` (no `.tsx` extension) |
 | `app/preview/_layout.tsx` | Simplified (removed `headerBackTitleVisible` which is iOS-only RN prop, not valid in Expo Router Stack.Screen options type) |
 
-### Batch 2 — AUDIT COMPLETE (2026-08-05 11:54 WAT)
+### Criteria fix — DONE (commit 015470710511616e298072c9dfd9594f106b6816)
 
-**Important correction:** The README batch-2 list was stale. Direct code read confirmed:
+| File | Fix |
+|---|---|
+| `src/criteria/produceStorageCriteria.ts` | Split `PRD-02-01` (measurement with no numericField) into `PRD-02-01` (vegetables, 0–5 °C) and `PRD-02-01b` (olives, 7–15 °C), each with `numericField: { min, max, unit, labelAr }` |
 
-| File | README claimed | Actual state |
-|---|---|---|
-| `src/utils/scoringUtils.ts` | Missing `ViolationProfile.total`, `RiskLevel` not exported | ✅ ALREADY CORRECT — both present |
-| `src/db/schema.ts` | WatermelonDB column type literal issues | ✅ ALREADY CORRECT — uses expo-sqlite plain SQL, not WatermelonDB |
+### Remaining clusters — ALL require `npx tsc --noEmit` locally (Claude)
 
-**One confirmed open criteria fix:**
-- `src/criteria/produceStorageCriteria.ts` → `PRD-02-01` has `controlType: 'measurement'` but no `numericField`
-- Fix: split into `PRD-02-01` (vegetables, 0–5 °C) and `PRD-02-01b` (olives, 7–15 °C) with `numericField` on each
-- Can be done remotely by Perplexity
-
-**Remaining 145 TSC errors:** All require local `npx tsc --noEmit`. Error clusters fully documented in `docs/STRATEGIC_PLAN.md` Phase V section. Assign to Claude.
+See full error table in `docs/STRATEGIC_PLAN.md` Phase V section.
 
 ---
 
@@ -367,7 +362,8 @@ All 26 unique `activity` strings in `facilitiesData.ts` have exact matching keys
 - **3 RTL/UX bugs fixed in reinspection.tsx, checklist.tsx, categories.tsx** ✅ (2026-08-04)
 - **Activity → criteria mapping 100% verified (26/26 exact matches)** ✅ (2026-08-05)
 - **Phase V batch-1 TSC fixes pushed** ✅ (2026-08-05 commit c1633f5)
-- **`scoringUtils.ts` + `schema.ts` already correct** ✅ (2026-08-05 — do not re-fix)
+- **`scoringUtils.ts` + `schema.ts` already correct — do NOT re-fix** ✅ (2026-08-05)
+- **PRD-02-01 split into PRD-02-01 (vegetables) + PRD-02-01b (olives) with numericField** ✅ (2026-08-05 commit 0154707)
 
 ---
 
@@ -439,6 +435,5 @@ Any agent picking this up should do in order:
 1. Read this file top to bottom
 2. Read `docs/STRATEGIC_PLAN.md` for full phase details and the complete TSC error cluster table
 3. **Phase V (Claude, local):** Run `npx tsc --noEmit`. Fix clusters in order from STRATEGIC_PLAN.md. Commit after each cluster. Gate: 0 errors.
-4. **Criteria fix (Perplexity, remote):** `src/criteria/produceStorageCriteria.ts` → split `PRD-02-01` into two criteria (vegetables 0–5 °C, olives 7–15 °C) with `numericField` on each.
-5. **After V closes:** Open Phase W — full Jest run + smoke tests (Claude, local).
-6. After each phase: update this file + STRATEGIC_PLAN.md + push.
+4. **After V closes:** Open Phase W — full Jest run + smoke tests (Claude, local).
+5. After each phase: update this file + STRATEGIC_PLAN.md + push.
