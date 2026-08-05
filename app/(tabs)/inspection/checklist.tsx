@@ -44,7 +44,6 @@ import { InspectionRepository } from '../../../src/repositories/InspectionReposi
 import { SavedInspection } from '../../../src/types';
 import { computeScoreAndGrade } from '../../../src/utils/scoringUtils';
 
-/** Safely parse a JSON string that is expected to be a string[]. */
 function parseStringArray(raw: string | string[] | undefined): string[] {
   if (!raw) return [];
   const str = Array.isArray(raw) ? raw[0] : raw;
@@ -62,44 +61,37 @@ export default function ChecklistScreen() {
 
   const { showSignature, setShowSignature, signature, handleSignature } = useSignature();
 
-  // ── Phase-3 ───────────────────────────────────────────────────────────────
-  const inspectionType    = (params.inspectionType as string | undefined) ?? 'routine';
+  const inspectionType = (params.inspectionType as string | undefined) ?? 'routine';
   const priorInspectionId = params.priorInspectionId as string | undefined;
-  const isFollowUp        = inspectionType === 'follow-up';
+  const isFollowUp = inspectionType === 'follow-up';
 
-  // ── Phase-5: meeting gate state ──────────────────────────────────────────
   const openingFromParam = params.openingMeetingDone === 'true';
-  const [openingDone,     setOpeningDone]     = useState(openingFromParam);
-  const [closingDone,     setClosingDone]     = useState(false);
+  const [openingDone, setOpeningDone] = useState(openingFromParam);
+  const [closingDone, setClosingDone] = useState(false);
   const [showOpeningGate, setShowOpeningGate] = useState(!openingFromParam);
   const [showClosingGate, setShowClosingGate] = useState(false);
   const pendingFinish = useRef(false);
 
-  // ── Phase-6: decision support state ──────────────────────────────────────
   const [escalationOverrideReason, setEscalationOverrideReason] = useState<string | undefined>(undefined);
-
   const [diffView, setDiffView] = useState<DifferentialView | null>(null);
 
-  // ── Build checklist params ──────────────────────────────────────────────
   const checklistParams = {
-    draftId:             params.draftId as string | undefined,
-    facilityId:          params.facilityId as string,
-    facilityName:        params.facilityName as string,
-    facilityAddress:     params.facilityAddress as string,
-    activity:            params.activity as string | undefined,
-    agendaId:            params.agendaId as string | undefined,
-    cause:               (params.cause     as string) ?? '',
-    reference:           (params.reference as string) ?? '',
-    committeeMembers:    parseStringArray(params.committeeMembers as string | string[] | undefined),
-    writer:              (params.writer    as string) ?? '',
-    lat:                 params.lat ? parseFloat(params.lat as string) : undefined,
-    lng:                 params.lng ? parseFloat(params.lng as string) : undefined,
+    draftId: params.draftId as string | undefined,
+    facilityId: params.facilityId as string,
+    facilityName: params.facilityName as string,
+    facilityAddress: params.facilityAddress as string,
+    activity: params.activity as string | undefined,
+    agendaId: params.agendaId as string | undefined,
+    cause: (params.cause as string) ?? '',
+    reference: (params.reference as string) ?? '',
+    committeeMembers: parseStringArray(params.committeeMembers as string | string[] | undefined),
+    writer: (params.writer as string) ?? '',
+    lat: params.lat ? parseFloat(params.lat as string) : undefined,
+    lng: params.lng ? parseFloat(params.lng as string) : undefined,
     inspectionType,
     priorInspectionId,
-    // Phase-5: live flags
     openingMeetingDone: openingDone,
     closingMeetingDone: closingDone,
-    // Phase-6: escalation override reason
     escalationOverrideReason,
   };
 
@@ -121,28 +113,25 @@ export default function ChecklistScreen() {
     sections.map(s => s.title)
   );
 
-  // Phase-3: differential view
   useEffect(() => {
     if (!isFollowUp || isLoading || data.length === 0) return;
     const shell: SavedInspection = {
-      id:              checklistParams.draftId ?? '__current__',
-      facilityId:      checklistParams.facilityId,
-      facilityName:    checklistParams.facilityName,
+      id: checklistParams.draftId ?? '__current__',
+      facilityId: checklistParams.facilityId,
+      facilityName: checklistParams.facilityName,
       facilityAddress: checklistParams.facilityAddress,
-      date:            new Date().toISOString(),
-      inspectorName:   '',
-      items:           data,
-      status:          'in-progress',
-      inspectionType:  'follow-up',
+      date: new Date().toISOString(),
+      inspectorName: '',
+      items: data,
+      status: 'in-progress',
+      inspectionType: 'follow-up',
       priorInspectionId,
     };
     buildDifferentialView(shell).then(setDiffView).catch(console.error);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFollowUp, isLoading, data.length]);
 
-  // ── Phase-6/7: compute suggested decision whenever items change ──────────────
-  const allEvaluated = !isLoading && data.length > 0 &&
-    data.every(i => i.complianceStatus !== 'not-evaluated');
+  const allEvaluated =
+    !isLoading && data.length > 0 && data.every(i => i.complianceStatus !== 'not-evaluated');
 
   const suggestedDecision = useMemo<DecisionSuggestion | null>(() => {
     if (!allEvaluated) return null;
@@ -150,7 +139,6 @@ export default function ChecklistScreen() {
     return suggestDecision(scoring, diffView);
   }, [allEvaluated, data, diffView]);
 
-  // ── Phase-5: opening gate confirmed (safety-net path) ─────────────────────
   const handleOpeningConfirmed = () => {
     setShowOpeningGate(false);
     setOpeningDone(true);
@@ -161,13 +149,8 @@ export default function ChecklistScreen() {
     router.back();
   };
 
-  // ── Phase-5/6: handleFinish ──────────────────────────────────────────────
   const handleFinish = () => {
-    if (
-      suggestedDecision &&
-      suggestedDecision.urgency === 'critical' &&
-      !escalationOverrideReason
-    ) {
+    if (suggestedDecision?.urgency === 'critical' && !escalationOverrideReason) {
       Alert.alert(
         'سبب التجاوز مطلوب',
         'الإجراء المقترح يستوجب إدخال سبب التجاوز قبل الإنهاء.',
@@ -221,7 +204,11 @@ export default function ChecklistScreen() {
       'هل أنت متأكد من إلغاء التفتيش؟ سيتم حفظ التقدم كمسودة.',
       [
         { text: 'استمرار التفتيش', style: 'cancel' },
-        { text: 'إلغاء التفتيش', style: 'destructive', onPress: () => router.replace('/(tabs)/inspection') },
+        {
+          text: 'إلغاء التفتيش',
+          style: 'destructive',
+          onPress: () => router.replace('/(tabs)/inspection'),
+        },
       ]
     );
   };
@@ -235,13 +222,14 @@ export default function ChecklistScreen() {
     );
   }
 
-  // Phase-U: guard against empty criteria — prevents blank checklist + active Finish button
   if (!isLoading && data.length === 0) {
     return (
       <SafeAreaView style={styles.centered}>
         <FontAwesome name="exclamation-triangle" size={40} color={Colors.warning ?? '#f39c12'} />
         <Text style={styles.emptyTitle}>لا توجد معايير لهذا النشاط</Text>
-        <Text style={styles.emptySubtitle}>تحقق من نوع المنشأة المختار أو تواصل مع مسؤول التطبيق</Text>
+        <Text style={styles.emptySubtitle}>
+          تحقق من نوع المنشأة المختار أو تواصل مع مسؤول التطبيق
+        </Text>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
           <Text style={styles.backButtonText}>العودة</Text>
         </TouchableOpacity>
@@ -256,7 +244,6 @@ export default function ChecklistScreen() {
         facilityAddress={checklistParams.facilityAddress}
       />
 
-      {/* Phase-5: opening-meeting indicator strip */}
       {openingDone && (
         <View style={styles.meetingDoneStrip}>
           <FontAwesome name="handshake-o" size={13} color="#27ae60" />
@@ -305,7 +292,10 @@ export default function ChecklistScreen() {
           );
         }}
         renderSectionHeader={({ section: { title, data: sectionData } }) => (
-          <TouchableOpacity style={styles.sectionHeader} onPress={() => toggleSection(title)}>
+          <TouchableOpacity
+            style={styles.sectionHeader}
+            onPress={() => toggleSection(title)}
+          >
             <FontAwesome
               name={isCollapsed(title) ? 'chevron-right' : 'chevron-down'}
               size={14}
@@ -319,10 +309,10 @@ export default function ChecklistScreen() {
         contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
           <>
-            {/* Phase-6/7: decision support panel */}
             {suggestedDecision && (
               <DecisionSupportPanel
-                decision={suggestedDecision}
+                suggestion={suggestedDecision}
+                overrideReason={escalationOverrideReason}
                 onOverrideReasonChange={setEscalationOverrideReason}
               />
             )}
@@ -361,11 +351,15 @@ export default function ChecklistScreen() {
 }
 
 const styles = StyleSheet.create({
-  safeArea:          { flex: 1 },
-  centered:          { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg },
-  loadingText:       { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
-
-  // Empty-criteria state (Phase-U)
+  safeArea: { flex: 1 },
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: Spacing.md,
+    padding: Spacing.lg,
+  },
+  loadingText: { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
   emptyTitle: {
     fontSize: 16,
     fontWeight: '700',
@@ -389,20 +383,29 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   backButtonText: { fontSize: 14, color: Colors.textPrimary },
-
-  meetingDoneStrip:  {
-    flexDirection: 'row', alignItems: 'center', gap: 6,
-    backgroundColor: '#eafaf1', paddingHorizontal: Spacing.base,
-    paddingVertical: 6, borderBottomWidth: 1, borderBottomColor: '#a9dfbf',
+  meetingDoneStrip: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#eafaf1',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#a9dfbf',
   },
-  meetingDoneText:   { fontSize: 12, color: '#27ae60', fontWeight: '600' },
+  meetingDoneText: { fontSize: 12, color: '#27ae60', fontWeight: '600' },
   sectionHeader: {
-    flexDirection: 'row', alignItems: 'center',
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: Colors.surfaceOffset,
-    paddingHorizontal: Spacing.base, paddingVertical: Spacing.md,
-    marginTop: 4, borderTopWidth: 1, borderBottomWidth: 1, borderColor: Colors.border,
+    paddingHorizontal: Spacing.base,
+    paddingVertical: Spacing.md,
+    marginTop: 4,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
   },
-  sectionTitle:     { flex: 1, fontSize: 15, fontWeight: '600', color: Colors.textPrimary },
-  sectionProgress:  { fontSize: 13, color: Colors.textSecondary, fontWeight: '500' },
+  sectionTitle: { flex: 1, fontSize: 15, fontWeight: '600', color: Colors.textPrimary },
+  sectionProgress: { fontSize: 13, color: Colors.textSecondary, fontWeight: '500' },
   diffPipContainer: { paddingHorizontal: Spacing.base, paddingBottom: Spacing.xs },
 });

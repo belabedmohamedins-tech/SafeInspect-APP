@@ -1,5 +1,8 @@
 // src/__tests__/numericUtils.test.ts
-import { isInWarningRange, isOutOfRange } from '../utils/numericUtils';
+import {
+  deriveNumericCompliance,
+  numericStateToComplianceStatus,
+} from '../utils/numericUtils';
 import { NumericFieldSpec } from '../types';
 
 const spec: NumericFieldSpec = {
@@ -11,16 +14,32 @@ const spec: NumericFieldSpec = {
   labelAr: 'درجة الحرارة',
 };
 
-describe('isOutOfRange', () => {
-  it('returns true when below min', () => expect(isOutOfRange(5, spec)).toBe(true));
-  it('returns true when above max', () => expect(isOutOfRange(35, spec)).toBe(true));
-  it('returns false when within range', () => expect(isOutOfRange(20, spec)).toBe(false));
-  it('returns false when null', () => expect(isOutOfRange(null, spec)).toBe(false));
+describe('deriveNumericCompliance', () => {
+  it('flags values below warningMin as out-of-range', () => {
+    expect(deriveNumericCompliance(3, spec)).toBe('out-of-range');
+  });
+  it('flags values above warningMax as out-of-range', () => {
+    expect(deriveNumericCompliance(40, spec)).toBe('out-of-range');
+  });
+  it('flags values in warning band (below min) as warning', () => {
+    expect(deriveNumericCompliance(7, spec)).toBe('warning');
+  });
+  it('flags values in warning band (above max) as warning', () => {
+    expect(deriveNumericCompliance(32, spec)).toBe('warning');
+  });
+  it('flags values within [min, max] as compliant', () => {
+    expect(deriveNumericCompliance(20, spec)).toBe('compliant');
+  });
 });
 
-describe('isInWarningRange', () => {
-  it('returns true when in warning low zone', () => expect(isInWarningRange(7, spec)).toBe(true));
-  it('returns true when in warning high zone', () => expect(isInWarningRange(33, spec)).toBe(true));
-  it('returns false when fully within range', () => expect(isInWarningRange(20, spec)).toBe(false));
-  it('returns false when null', () => expect(isInWarningRange(null, spec)).toBe(false));
+describe('numericStateToComplianceStatus', () => {
+  it('maps out-of-range to non-compliant', () => {
+    expect(numericStateToComplianceStatus('out-of-range')).toBe('non-compliant');
+  });
+  it('maps warning to observation', () => {
+    expect(numericStateToComplianceStatus('warning')).toBe('observation');
+  });
+  it('maps compliant to compliant', () => {
+    expect(numericStateToComplianceStatus('compliant')).toBe('compliant');
+  });
 });

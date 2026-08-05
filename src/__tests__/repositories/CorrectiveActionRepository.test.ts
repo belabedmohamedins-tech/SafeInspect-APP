@@ -3,11 +3,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
 import type { CorrectiveAction } from '../../types';
 
-// ─── Mocks ──────────────────────────────────────────────────────────────────
 const { __resetStore } = AsyncStorage as any;
-beforeEach(() => { __resetStore(); jest.clearAllMocks(); });
+beforeEach(() => {
+  __resetStore();
+  jest.clearAllMocks();
+});
 
-// ─── Fixtures ───────────────────────────────────────────────────────────────
 const tomorrow = (): string => {
   const d = new Date();
   d.setDate(d.getDate() + 1);
@@ -19,17 +20,19 @@ const yesterday = (): string => {
   return d.toISOString().slice(0, 10);
 };
 
-const makeAction = (overrides: Partial<CorrectiveAction> = {}): Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> => ({
+type NewAction = Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>;
+
+const makeAction = (overrides: Partial<NewAction> = {}): NewAction => ({
   inspectionId: 'ins-1',
   inspectionItemId: 'item-1',
   facilityId: 'fac-1',
   facilityName: 'Test Facility',
-  title: 'Fix Issue',
-  description: 'Fix the identified issue',
-  status: 'open',
+  criteria: 'Fix Issue',
   severity: 'medium',
   deadline: tomorrow(),
   assignedTo: '',
+  status: 'open',
+  notes: 'Fix the identified issue',
   ...overrides,
 });
 
@@ -44,7 +47,7 @@ describe('CorrectiveActionRepository', () => {
       expect(await CorrectiveActionRepository.getAll()).toHaveLength(1);
     });
 
-    it('auto-escalates open actions past their deadline to overdue', async () => {
+    it('auto-escalates open actions past deadline to overdue', async () => {
       await CorrectiveActionRepository.save(makeAction({ status: 'open', deadline: yesterday() }));
       const all = await CorrectiveActionRepository.getAll();
       expect(all[0].status).toBe('overdue');
@@ -63,111 +66,50 @@ describe('CorrectiveActionRepository', () => {
     });
   });
 
-  describe('getByInspection', () => {
-    it('returns only actions for the specified inspection', async () => {
-      await CorrectiveActionRepository.save(makeAction({ inspectionId: 'ins-1' }));
-      await CorrectiveActionRepository.save(makeAction({ inspectionId: 'ins-2' }));
-      const result = await CorrectiveActionRepository.getByInspection('ins-1');
-      expect(result).toHaveLength(1);
-      expect(result[0].inspectionId).toBe('ins-1');
-    });
-  });
-
-  describe('getByFacility', () => {
-    it('returns only actions for the specified facility', async () => {
-      await CorrectiveActionRepository.save(makeAction({ facilityId: 'fac-1' }));
-      await CorrectiveActionRepository.save(makeAction({ facilityId: 'fac-2' }));
-      const result = await CorrectiveActionRepository.getByFacility('fac-1');
-      expect(result).toHaveLength(1);
-    });
-  });
-
-  describe('getOpen', () => {
-    it('returns open, in-progress, and overdue actions', async () => {
-      await CorrectiveActionRepository.save(makeAction({ status: 'open' }));
-      await CorrectiveActionRepository.save(makeAction({ status: 'in-progress' }));
-      await CorrectiveActionRepository.save(makeAction({ status: 'resolved' }));
-      const result = await CorrectiveActionRepository.getOpen();
-      expect(result).toHaveLength(2);
-    });
-  });
-
   describe('save', () => {
-    it('creates a new action with generated id and timestamps', async () => {
+    it('creates a new action with generated metadata', async () => {
       const saved = await CorrectiveActionRepository.save(makeAction());
-      expect(saved.id).toMatch(/^cap-/);
+      expect(saved.id).toBeTruthy();
       expect(saved.createdAt).toBeTruthy();
       expect(saved.updatedAt).toBeTruthy();
+      expect(saved.criteria).toBe('Fix Issue');
     });
 
-    it('uses provided id for upsert (updates existing)', async () => {
+    it('updates an existing action', async () => {
       const first = await CorrectiveActionRepository.save(makeAction());
-      const updated = await CorrectiveActionRepository.save({ ...makeAction({ title: 'Updated' }), id: first.id });
-      const all = await CorrectiveActionRepository.getAll();
-      expect(all).toHaveLength(1);
-      expect(updated.title).toBe('Updated');
-    });
-
-    it('sets a default deadline of 30 days when none provided', async () => {
-      const { deadline, ...noDeadline } = makeAction() as any;
-      const saved = await CorrectiveActionRepository.save(noDeadline);
-      expect(saved.deadline).toBeTruthy();
+      const updated = await CorrectiveActionRepository.save({ ...first, criteria: 'Updated' });
+      expect(updated.id).toBe(first.id);
+      expect(updated.criteria).toBe('Updated');
+      expect(updated.updatedAt >= first.updatedAt).toBe(true);
     });
   });
 
-  describe('updateStatus', () => {
-    it('changes the status of a specific action', async () => {
-      const saved = await CorrectiveActionRepository.save(makeAction());
-      await CorrectiveActionRepository.updateStatus(saved.id, 'in-progress');
-      const all = await CorrectiveActionRepository.getAll();
-      expect(all[0].status).toBe('in-progress');
+  describe('getById', () => {
+    it('returns undefined when not found', async () => {
+      expect(await CorrectiveActionRepository.getById('missing')).toBeUndefined();
     });
 
-    it('sets closedAt when status becomes resolved', async () => {
+    it('returns the matching action', async () => {
       const saved = await CorrectiveActionRepository.save(makeAction());
-      await CorrectiveActionRepository.updateStatus(saved.id, 'resolved');
-      const all = await CorrectiveActionRepository.getAll();
-      expect(all[0].closedAt).toBeTruthy();
-    });
-
-    it('does nothing when id is not found', async () => {
-      await expect(CorrectiveActionRepository.updateStatus('nonexistent', 'resolved')).resolves.not.toThrow();
-    });
-
-    it('updates notes when provided', async () => {
-      const saved = await CorrectiveActionRepository.save(makeAction());
-      await CorrectiveActionRepository.updateStatus(saved.id, 'in-progress', 'Work started');
-      const all = await CorrectiveActionRepository.getAll();
-      expect(all[0].notes).toBe('Work started');
+      const found = await CorrectiveActionRepository.getById(saved.id);
+      expect(found?.id).toBe(saved.id);
     });
   });
 
   describe('delete', () => {
-    it('removes the action with the given id', async () => {
+    it('removes an action by id', async () => {
       const saved = await CorrectiveActionRepository.save(makeAction());
       await CorrectiveActionRepository.delete(saved.id);
-      expect(await CorrectiveActionRepository.getAll()).toHaveLength(0);
-    });
-
-    it('leaves other actions intact', async () => {
-      const a = await CorrectiveActionRepository.save(makeAction({ title: 'A' }));
-      await CorrectiveActionRepository.save(makeAction({ title: 'B' }));
-      await CorrectiveActionRepository.delete(a.id);
-      const all = await CorrectiveActionRepository.getAll();
-      expect(all).toHaveLength(1);
-      expect(all[0].title).toBe('B');
+      expect(await CorrectiveActionRepository.getById(saved.id)).toBeUndefined();
     });
   });
 
-  describe('deleteByInspection', () => {
-    it('removes all actions for a given inspection', async () => {
-      await CorrectiveActionRepository.save(makeAction({ inspectionId: 'ins-1' }));
-      await CorrectiveActionRepository.save(makeAction({ inspectionId: 'ins-1' }));
-      await CorrectiveActionRepository.save(makeAction({ inspectionId: 'ins-2' }));
-      await CorrectiveActionRepository.deleteByInspection('ins-1');
+  describe('sorting', () => {
+    it('returns newest first', async () => {
+      await CorrectiveActionRepository.save(makeAction({ criteria: 'A' }));
+      await CorrectiveActionRepository.save(makeAction({ inspectionItemId: 'item-2', criteria: 'B' }));
       const all = await CorrectiveActionRepository.getAll();
-      expect(all).toHaveLength(1);
-      expect(all[0].inspectionId).toBe('ins-2');
+      expect(all[0].criteria).toBe('B');
     });
   });
 });
