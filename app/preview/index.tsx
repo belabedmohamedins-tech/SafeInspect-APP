@@ -53,19 +53,19 @@ const SEVERITY_LABEL: Record<string, string> = {
 const SEVERITY_COLOR: Record<string, string> = {
   critical: Colors.danger,
   major:    Colors.warning,
-  minor:    Colors.info ?? Colors.textTertiary,
+  minor:    Colors.textTertiary,
 };
 const CAP_STATUS_LABEL: Record<string, string> = {
-  open:        'مفتوح',
-  in_progress: 'قيد التنفيذ',
-  resolved:    'محلول',
-  overdue:     'متأخر',
+  open:          'مفتوح',
+  'in-progress': 'قيد التنفيذ',
+  resolved:      'محلول',
+  overdue:       'متأخر',
 };
 const CAP_STATUS_COLOR: Record<string, string> = {
-  open:        Colors.warning,
-  in_progress: Colors.primary,
-  resolved:    Colors.success ?? Colors.gradeA,
-  overdue:     Colors.danger,
+  open:          Colors.warning,
+  'in-progress': Colors.primary,
+  resolved:      Colors.success,
+  overdue:       Colors.danger,
 };
 
 // ─────────────────────── types ───────────────────────
@@ -116,7 +116,7 @@ function SectionAxisHeader({ axis, count, nonCompliant }: { axis: string; count:
 }
 
 function ItemCard({ item }: { item: InspectionItem }) {
-  const nc = item.complianceStatus === 'non_compliant';
+  const nc = item.complianceStatus === 'non-compliant';
   return (
     <View style={[s.itemCard, nc && s.itemCardNc]}>
       <View style={s.itemTop}>
@@ -148,7 +148,7 @@ function CapCard({ action }: { action: CorrectiveAction }) {
     <View style={s.capCard}>
       <View style={s.capTop}>
         <View style={[s.severityDot, { backgroundColor: SEVERITY_COLOR[action.severity] ?? Colors.textTertiary }]} />
-        <Text style={s.capDescription} numberOfLines={3}>{action.description}</Text>
+        <Text style={s.capDescription} numberOfLines={3}>{action.notes ?? action.criteria}</Text>
         <View style={[s.capStatusChip, { backgroundColor: CAP_STATUS_COLOR[action.status] ?? Colors.textTertiary }]}>
           <Text style={s.capStatusText}>{CAP_STATUS_LABEL[action.status] ?? action.status}</Text>
         </View>
@@ -199,27 +199,17 @@ export default function InspectionPreviewScreen() {
 
   useEffect(() => { load(); }, [load]);
 
-  // ── Signature gate ────────────────────────────────────────────────────────
-  // Once the inspection is loaded and we are NOT in raw preview mode,
-  // check whether a signature was collected. If it is missing, redirect the
-  // user to the signature capture screen so they cannot export or share an
-  // unsigned report. The redirect preserves inspectionId so the signature
-  // screen can write back and then navigate here again.
   useEffect(() => {
-    if (isPreviewMode) return;          // raw checklist preview — no sig required
-    if (loading)       return;          // wait until data is ready
-    if (!inspection)   return;          // not-found is handled by the render below
-    if (inspection.signature) return;   // signature already present — all good
+    if (isPreviewMode) return;
+    if (loading)       return;
+    if (!inspection)   return;
+    if (inspection.signature) return;
 
-    // Missing signature → redirect to capture.
-    // The signature screen is expected at /screens/signature and accepts
-    // { inspectionId } as a param. On completion it navigates back here.
     router.replace({
       pathname: '/screens/signature',
       params: { inspectionId: inspection.id },
     });
   }, [isPreviewMode, loading, inspection, router]);
-  // ─────────────────────────────────────────────────────────────────────────
 
   const sections = useMemo((): SectionGroup[] => {
     if (!inspection) return [];
@@ -239,7 +229,7 @@ export default function InspectionPreviewScreen() {
   }, [inspection]);
 
   const nonCompliantCount = useMemo(
-    () => inspection?.items.filter(i => i.complianceStatus === 'non_compliant').length ?? 0,
+    () => inspection?.items.filter(i => i.complianceStatus === 'non-compliant').length ?? 0,
     [inspection]
   );
   const compliantCount = useMemo(
@@ -247,10 +237,10 @@ export default function InspectionPreviewScreen() {
     [inspection]
   );
   const naCount = useMemo(
-    () => inspection?.items.filter(i => i.complianceStatus === 'not_applicable').length ?? 0,
+    () => inspection?.items.filter(i => i.complianceStatus === 'na').length ?? 0,
     [inspection]
   );
-  const openCaps    = caps.filter(c => c.status === 'open' || c.status === 'in_progress').length;
+  const openCaps     = caps.filter(c => c.status === 'open' || c.status === 'in-progress').length;
   const resolvedCaps = caps.filter(c => c.status === 'resolved').length;
 
   const handleExportPDF = async () => {
@@ -286,8 +276,6 @@ export default function InspectionPreviewScreen() {
     );
   }
 
-  // While the signature-gate redirect is in-flight, show nothing to avoid a
-  // flash of the unsigned report.
   if (!isPreviewMode && !inspection.signature) {
     return (
       <SafeAreaView style={s.centered}>
@@ -410,7 +398,7 @@ export default function InspectionPreviewScreen() {
 
         {/* 6. INSPECTION ITEMS BY AXIS */}
         {sections.map(({ axis, items }) => {
-          const nc = items.filter(i => i.complianceStatus === 'non_compliant').length;
+          const nc = items.filter(i => i.complianceStatus === 'non-compliant').length;
           return (
             <View key={axis} style={s.axisSection}>
               <SectionAxisHeader axis={axis} count={items.length} nonCompliant={nc} />
@@ -449,7 +437,7 @@ export default function InspectionPreviewScreen() {
 const s = StyleSheet.create({
   safeArea:          { flex: 1, backgroundColor: Colors.background },
   scroll:            { flex: 1 },
-  scrollContent:     { padding: Spacing.base, paddingBottom: Spacing.xxxl ?? 48 },
+  scrollContent:     { padding: Spacing.base, paddingBottom: Spacing.xxl },
   centered:          { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md },
   loadingText:       { marginTop: Spacing.sm, fontSize: FontSize.base, color: Colors.textSecondary },
   errorText:         { fontSize: FontSize.lg, color: Colors.danger, marginTop: Spacing.sm },
@@ -472,12 +460,12 @@ const s = StyleSheet.create({
   coordText:         { fontSize: FontSize.xs, color: Colors.textTertiary },
   gaugeCard:         { backgroundColor: Colors.surface, borderRadius: Radius.lg, padding: Spacing.lg, marginBottom: Spacing.base, flexDirection: 'row', alignItems: 'center', gap: Spacing.md, ...Shadow.sm },
   gradeBubble:       { width: 64, height: 64, borderRadius: 32, justifyContent: 'center', alignItems: 'center' },
-  gradeLetter:       { fontSize: FontSize.xxxl ?? 32, fontWeight: FontWeight.bold, color: '#fff' },
+  gradeLetter:       { fontSize: 32, fontWeight: FontWeight.bold, color: '#fff' },
   gaugeBars:         { flex: 1, flexDirection: 'row', gap: 3 },
   gaugeBar:          { flex: 1, height: 16, borderRadius: 3 },
   gaugeScore:        { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary, minWidth: 48, textAlign: 'right' },
   kpiRow:            { flexDirection: 'row', gap: Spacing.sm, marginBottom: Spacing.base },
-  kpiBox:            { flex: 1, backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.sm, alignItems: 'center', borderWidth: 1.5, borderColor: Colors.border, ...Shadow.xs ?? Shadow.sm },
+  kpiBox:            { flex: 1, backgroundColor: Colors.surface, borderRadius: Radius.md, padding: Spacing.sm, alignItems: 'center', borderWidth: 1.5, borderColor: Colors.border, ...Shadow.sm },
   kpiValue:          { fontSize: FontSize.xl, fontWeight: FontWeight.bold, color: Colors.textPrimary },
   kpiLabel:          { fontSize: FontSize.xs, color: Colors.textSecondary, textAlign: 'center', marginTop: 2 },
   sectionHeading:    { fontSize: FontSize.lg, fontWeight: FontWeight.bold, color: Colors.textPrimary, textAlign: 'right', marginBottom: Spacing.sm },
@@ -506,7 +494,7 @@ const s = StyleSheet.create({
   capSummaryItem:    { alignItems: 'center' },
   capSummaryNum:     { fontSize: FontSize.xxl, fontWeight: FontWeight.bold, color: Colors.textPrimary },
   capSummaryLabel:   { fontSize: FontSize.xs, color: Colors.textSecondary },
-  capCard:           { backgroundColor: Colors.surfaceOffset ?? Colors.background, borderRadius: Radius.md, padding: Spacing.md, marginBottom: Spacing.sm },
+  capCard:           { backgroundColor: Colors.background, borderRadius: Radius.md, padding: Spacing.md, marginBottom: Spacing.sm },
   capTop:            { flexDirection: 'row', alignItems: 'flex-start', gap: Spacing.xs, marginBottom: Spacing.xs },
   severityDot:       { width: 8, height: 8, borderRadius: 4, marginTop: 5 },
   capDescription:    { flex: 1, fontSize: FontSize.sm, color: Colors.textPrimary, textAlign: 'right', lineHeight: 20 },

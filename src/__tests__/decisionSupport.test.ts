@@ -8,7 +8,7 @@
 //   • fallback reasons.push('لا توجد ملاحظات إضافية') when no reasons
 
 import { suggestDecision, DecisionSuggestion } from '../../src/services/decisionSupport';
-import { ScoringResult } from '../../src/utils/scoringUtils';
+import { ScoringResult, RiskLevel } from '../../src/utils/scoringUtils';
 import { DifferentialView, DiffEntry } from '../../src/services/differentialView';
 
 // ─── Factories ────────────────────────────────────────────────────────────────
@@ -17,11 +17,11 @@ function makeScoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
   return {
     grade: 'B',
     score: 80,
-    violations: { high: 0, medium: 0, low: 0 },
+    violations: { high: 0, medium: 0, low: 0, total: 0 },
     criticalOverride: false,
     nextInspectionDays: 180,
     incomplete: false,
-    riskLevel: 'low',
+    riskLevel: 1 as RiskLevel,
     ...overrides,
   };
 }
@@ -81,7 +81,7 @@ describe('suggestDecision — Grade B', () => {
 
 describe('suggestDecision — Grade C', () => {
   it('returns notice with medium urgency when no unresolved', () => {
-    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 0, medium: 1, low: 0 } }));
+    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 0, medium: 1, low: 0, total: 1 } }));
     expect(result.action).toBe('notice');
     expect(result.urgency).toBe('medium');
   });
@@ -92,7 +92,7 @@ describe('suggestDecision — Grade C', () => {
       stillFailing: [fakeDiffEntry],
     });
     const result = suggestDecision(
-      makeScoring({ grade: 'C', violations: { high: 0, medium: 2, low: 0 } }),
+      makeScoring({ grade: 'C', violations: { high: 0, medium: 2, low: 0, total: 2 } }),
       diff,
     );
     expect(result.action).toBe('formal-warning');
@@ -106,7 +106,7 @@ describe('suggestDecision — Grade C', () => {
 describe('suggestDecision — Grade D', () => {
   it('returns formal-warning when no unresolved', () => {
     const result = suggestDecision(
-      makeScoring({ grade: 'D', violations: { high: 1, medium: 0, low: 0 } }),
+      makeScoring({ grade: 'D', violations: { high: 1, medium: 0, low: 0, total: 1 } }),
     );
     expect(result.action).toBe('formal-warning');
     expect(result.urgency).toBe('high');
@@ -118,7 +118,7 @@ describe('suggestDecision — Grade D', () => {
       stillFailing: [fakeDiffEntry],
     });
     const result = suggestDecision(
-      makeScoring({ grade: 'D', violations: { high: 2, medium: 0, low: 0 } }),
+      makeScoring({ grade: 'D', violations: { high: 2, medium: 0, low: 0, total: 2 } }),
       diff,
     );
     expect(result.action).toBe('partial-closure');
@@ -127,7 +127,7 @@ describe('suggestDecision — Grade D', () => {
 
   it('returns immediate-closure when grade D + >=3 high violations', () => {
     const result = suggestDecision(
-      makeScoring({ grade: 'D', violations: { high: 3, medium: 0, low: 0 } }),
+      makeScoring({ grade: 'D', violations: { high: 3, medium: 0, low: 0, total: 3 } }),
     );
     expect(result.action).toBe('immediate-closure');
     expect(result.urgency).toBe('critical');
@@ -142,7 +142,7 @@ describe('suggestDecision — Grade D', () => {
       newViolations: [fakeDiffEntry],
     });
     const result = suggestDecision(
-      makeScoring({ grade: 'D', violations: { high: 4, medium: 0, low: 0 } }),
+      makeScoring({ grade: 'D', violations: { high: 4, medium: 0, low: 0, total: 4 } }),
       diff,
     );
     expect(result.action).toBe('immediate-closure');
@@ -159,7 +159,7 @@ describe('suggestDecision — escalate-authority', () => {
       newViolations: [fakeDiffEntry, fakeDiffEntry],
     });
     const result = suggestDecision(
-      makeScoring({ grade: 'C', violations: { high: 1, medium: 1, low: 0 } }),
+      makeScoring({ grade: 'C', violations: { high: 1, medium: 1, low: 0, total: 2 } }),
       diff,
     );
     expect(result.action).toBe('escalate-authority');
@@ -180,12 +180,12 @@ describe('suggestDecision — reasons accumulation', () => {
   });
 
   it('adds high violation reason', () => {
-    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 2, medium: 0, low: 0 } }));
+    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 2, medium: 0, low: 0, total: 2 } }));
     expect(result.reasons).toContain('2 مخالفة عالية الخطورة مسجّلة');
   });
 
   it('adds medium violation reason', () => {
-    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 0, medium: 3, low: 0 } }));
+    const result = suggestDecision(makeScoring({ grade: 'C', violations: { high: 0, medium: 3, low: 0, total: 3 } }));
     expect(result.reasons).toContain('3 مخالفة متوسطة الخطورة');
   });
 
