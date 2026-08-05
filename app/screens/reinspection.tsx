@@ -72,7 +72,10 @@ export default function ReinspectionScreen() {
         if (!saved) throw new Error('التفتيش السابق غير موجود في قاعدة البيانات');
 
         const caps = await CorrectiveActionRepository.getByInspection(id);
-        const openCaps = caps.filter(c => c.status !== 'closed');
+        // FIX(reinspection:75): 'closed' is not a valid CorrectiveAction status.
+        // Valid statuses: 'open' | 'in-progress' | 'resolved' | 'overdue'
+        // Open CAPs = anything that is NOT yet resolved.
+        const openCaps = caps.filter(c => c.status === 'open' || c.status === 'in-progress' || c.status === 'overdue');
 
         setPrior(saved);
         setCapCount(openCaps.length);
@@ -114,7 +117,10 @@ export default function ReinspectionScreen() {
         facilityId:       prior.facilityId,
         facilityName:     prior.facilityName,
         facilityAddress:  prior.facilityAddress,
-        activity:         prior.activity ?? '',
+        // FIX(reinspection:117): SavedInspection has no 'activity' field.
+        // The activity string is not stored on SavedInspection; pass empty
+        // string to stay backwards-compatible with the categories screen.
+        activity:         '',
         cause:            'followup',
         inspectionType:   'follow-up',
         priorInspectionId: prior.id,

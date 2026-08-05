@@ -32,6 +32,9 @@ const GRADE_COLOR: Record<string, string> = {
   A: '#16a34a', B: '#2563eb', C: '#d97706', D: '#dc2626',
 };
 
+// FIX(approval-queue:64): ActionSheet is a union including null.
+// ActionSheet['mode'] errors because null has no 'mode' property.
+// Use NonNullable<ActionSheet>['mode'] to extract the mode type correctly.
 type ActionSheet = { record: ApprovalRecord; mode: 'approve' | 'return' | 'escalate' } | null;
 
 export default function ApprovalQueueScreen() {
@@ -61,7 +64,7 @@ export default function ApprovalQueueScreen() {
     ? records
     : records.filter(r => r.status === filter);
 
-  const openAction = (record: ApprovalRecord, mode: ActionSheet['mode']) => {
+  const openAction = (record: ApprovalRecord, mode: NonNullable<ActionSheet>['mode']) => {
     if (record.status === 'approved') {
       Alert.alert('ثابت', 'لا يمكن تعديل تقرير معتمد.');
       return;
