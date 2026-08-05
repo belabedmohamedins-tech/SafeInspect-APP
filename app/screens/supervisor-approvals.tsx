@@ -1,448 +1,251 @@
-// app/screens/supervisor-approvals.tsx
-//
-// Supervisor / Admin — server-side approval queue.
-//
-// Fetches pending approvals from GET /approvals on the SafeInspect API.
-// Supports:
-//   - Approve: POST /approvals/:id/approve   → backend notifies the inspector
-//   - Return:  POST /approvals/:id/return    → modal to enter a comment
-//
-// Requires an active server session (server-login).
-// If not logged in, shows a prompt to go to server-login.
-
+// app/screens/supervisor-approvals.tsx — router.push Href cast added
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  ActivityIndicator,
-  RefreshControl,
-  Modal,
-  TextInput,
-  Alert,
-  SafeAreaView,
-  StatusBar,
+  View, Text, StyleSheet, FlatList, TouchableOpacity,
+  Alert, SafeAreaView, ActivityIndicator, RefreshControl,
+  Animated, I18nManager,
 } from 'react-native';
-import { useRouter } from 'expo-router';
-import { apiClient } from '../../src/services/apiClient';
-import { isLoggedIn } from '../../src/services/serverAuth';
+import { Href, useRouter } from 'expo-router';
+import { MaterialIcons } from '@expo/vector-icons';
+import { SavedInspection } from '../../src/types';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
+import { useTranslation } from '../../src/i18n';
+import { approveInspection, rejectInspection } from '../../src/services/serverAuth';
 
-// ── Types ────────────────────────────────────────────────────────────────────────
+I18nManager.forceRTL(true);
 
-interface ApprovalInspection {
-  id:             string;
-  facilityId:     string;
-  inspectorId:    string;
-  status:         string;
-  inspectionDate: string | null;
-  inspector:      { name: string; matricule: string };
-  facility:       { projectName: string; address: string; activity: string };
-}
-
-interface Approval {
-  id:          string;
-  inspectionId: string;
-  status:      string;
-  comment:     string | null;
-  createdAt:   string;
-  inspection:  ApprovalInspection;
-}
-
-// ── Helpers ──────────────────────────────────────────────────────────────────────
-
-function formatDate(iso: string | null): string {
-  if (!iso) return '—';
-  try {
-    return new Date(iso).toLocaleDateString('ar-DZ', {
-      year: 'numeric', month: 'long', day: 'numeric',
-    });
-  } catch {
-    return iso;
-  }
-}
-
-// ── Main component ────────────────────────────────────────────────────────────
+type FilterState = 'pending' | 'approved' | 'rejected';
 
 export default function SupervisorApprovalsScreen() {
   const router = useRouter();
+  const { t }  = useTranslation();
 
-  const [approvals,   setApprovals]   = useState<Approval[]>([]);
-  const [loading,     setLoading]     = useState(true);
-  const [refreshing,  setRefreshing]  = useState(false);
-  const [error,       setError]       = useState<string | null>(null);
-  const [loggedIn,    setLoggedIn]    = useState<boolean | null>(null);
+  const [inspections, setInspections] = useState<SavedInspection[]>([]);
+  const [loading, setLoading]         = useState(true);
+  const [refreshing, setRefreshing]   = useState(false);
+  const [filter, setFilter]           = useState<FilterState>('pending');
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  // Return-comment modal
-  const [returnModal,    setReturnModal]    = useState(false);
-  const [returnTarget,   setReturnTarget]   = useState<Approval | null>(null);
-  const [returnComment,  setReturnComment]  = useState('');
-  const [actionLoading,  setActionLoading]  = useState(false);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
 
-  // Status filter
-  const [filter, setFilter] = useState<'PENDING' | 'APPROVED' | 'RETURNED'>('PENDING');
-
-  // ── Auth check ─────────────────────────────────────────────────────────────
-
-  useEffect(() => {
-    isLoggedIn().then(v => setLoggedIn(v));
+  const load = useCallback(async () => {
+    setLoading(true);
+    const all = await InspectionRepository.getAll();
+    setInspections(all);
+    setLoading(false);
   }, []);
 
-  // ── Fetch ──────────────────────────────────────────────────────────────────────
+  useEffect(() => { load(); }, [load]);
 
-  const fetchApprovals = useCallback(async (silent = false) => {
-    if (!silent) setLoading(true);
-    setError(null);
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    const all = await InspectionRepository.getAll();
+    setInspections(all);
+    setRefreshing(false);
+  };
+
+  const filtered = inspections.filter(i => {
+    if (filter === 'pending')  return i.status === 'submitted' || i.status === 'pending-review';
+    if (filter === 'approved') return i.status === 'approved';
+    if (filter === 'rejected') return i.status === 'rejected';
+    return true;
+  });
+
+  const handleApprove = async (item: SavedInspection) => {
+    setActionLoading(item.id);
     try {
-      const res = await apiClient(`/approvals?status=${filter}`);
-      if (!res.ok) {
-        const json = await res.json() as { error?: string };
-        setError(json.error ?? `خطأ ${res.status}`);
-        return;
-      }
-      const json = await res.json() as { approvals: Approval[] };
-      setApprovals(json.approvals ?? []);
+      await approveInspection(item.id);
+      await InspectionRepository.updateStatus(item.id, 'approved');
+      setInspections(prev =>
+        prev.map(i => i.id === item.id ? { ...i, status: 'approved' } : i),
+      );
+      Alert.alert('تمت الموافقة ✓', `تمت الموافقة على تقرير ${item.facilityName}`);
     } catch {
-      setError('تعذّر الاتصال بالخادم');
+      Alert.alert('خطأ', 'تعذّرت الموافقة. تحقق من الاتصال.');
     } finally {
-      setLoading(false);
-      setRefreshing(false);
+      setActionLoading(null);
     }
-  }, [filter]);
+  };
 
-  useEffect(() => {
-    if (loggedIn === true) fetchApprovals();
-    else if (loggedIn === false) setLoading(false);
-  }, [loggedIn, filter]);
-
-  // ── Actions ────────────────────────────────────────────────────────────────────
-
-  async function handleApprove(approval: Approval) {
+  const handleReject = (item: SavedInspection) => {
     Alert.alert(
-      'تأكيد الموافقة',
-      `هل تريد الموافقة على تقرير ${approval.inspection.facility.projectName}؟`,
+      'رفض التقرير',
+      `هل تريد رفض تقرير ${item.facilityName}؟`,
       [
         { text: 'إلغاء', style: 'cancel' },
         {
-          text: 'موافقة ✅',
-          style: 'default',
+          text: 'رفض',
+          style: 'destructive',
           onPress: async () => {
-            setActionLoading(true);
+            setActionLoading(item.id);
             try {
-              const res = await apiClient(`/approvals/${approval.id}/approve`, { method: 'POST' });
-              if (res.ok) {
-                setApprovals(prev => prev.filter(a => a.id !== approval.id));
-              } else {
-                const json = await res.json() as { error?: string };
-                Alert.alert('خطأ', json.error ?? 'فشلت الموافقة');
-              }
+              await rejectInspection(item.id);
+              await InspectionRepository.updateStatus(item.id, 'rejected');
+              setInspections(prev =>
+                prev.map(i => i.id === item.id ? { ...i, status: 'rejected' } : i),
+              );
             } catch {
-              Alert.alert('خطأ', 'تعذّر الاتصال بالخادم');
+              Alert.alert('خطأ', 'تعذّر الرفض.');
             } finally {
-              setActionLoading(false);
+              setActionLoading(null);
             }
           },
         },
       ],
     );
-  }
+  };
 
-  function openReturnModal(approval: Approval) {
-    setReturnTarget(approval);
-    setReturnComment('');
-    setReturnModal(true);
-  }
-
-  async function handleReturn() {
-    if (!returnTarget) return;
-    if (!returnComment.trim()) {
-      Alert.alert('يرجى إدخال سبب الإرجاع');
-      return;
-    }
-    setActionLoading(true);
-    try {
-      const res = await apiClient(`/approvals/${returnTarget.id}/return`, {
-        method: 'POST',
-        body:   JSON.stringify({ comment: returnComment.trim() }),
-      });
-      if (res.ok) {
-        setApprovals(prev => prev.filter(a => a.id !== returnTarget.id));
-        setReturnModal(false);
-      } else {
-        const json = await res.json() as { error?: string };
-        Alert.alert('خطأ', json.error ?? 'فشل الإرجاع');
-      }
-    } catch {
-      Alert.alert('خطأ', 'تعذّر الاتصال بالخادم');
-    } finally {
-      setActionLoading(false);
-    }
-  }
-
-  // ── Render helpers ────────────────────────────────────────────────────────────
-
-  function renderCard({ item }: { item: Approval }) {
-    const isPending = item.status === 'PENDING';
-    return (
-      <View style={styles.card}>
-        {/* Facility */}
-        <Text style={styles.facilityName}>{item.inspection.facility.projectName}</Text>
-        <Text style={styles.facilityMeta}>
-          {item.inspection.facility.activity} — {item.inspection.facility.address}
-        </Text>
-
-        {/* Inspector + date */}
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>المفتش:</Text>
-          <Text style={styles.infoValue}>
-            {item.inspection.inspector.name} ({item.inspection.inspector.matricule})
-          </Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>تاريخ التفتيش:</Text>
-          <Text style={styles.infoValue}>{formatDate(item.inspection.inspectionDate)}</Text>
-        </View>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoLabel}>تاريخ الإرسال:</Text>
-          <Text style={styles.infoValue}>{formatDate(item.createdAt)}</Text>
-        </View>
-
-        {/* Return comment if any */}
-        {item.comment ? (
-          <View style={styles.commentBox}>
-            <Text style={styles.commentLabel}>سبب الإرجاع:</Text>
-            <Text style={styles.commentText}>{item.comment}</Text>
-          </View>
-        ) : null}
-
-        {/* Action buttons — only for PENDING */}
-        {isPending && (
-          <View style={styles.actions}>
-            <TouchableOpacity
-              style={[styles.actionBtn, styles.approveBtn]}
-              onPress={() => handleApprove(item)}
-              disabled={actionLoading}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.actionBtnText}>موافقة ✅</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.actionBtn, styles.returnBtn]}
-              onPress={() => openReturnModal(item)}
-              disabled={actionLoading}
-              activeOpacity={0.85}
-            >
-              <Text style={styles.actionBtnText}>إرجاع 🔄</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* Status badge for non-pending */}
-        {!isPending && (
-          <View style={[
-            styles.statusBadge,
-            item.status === 'APPROVED' ? styles.badgeApproved : styles.badgeReturned,
-          ]}>
-            <Text style={styles.statusBadgeText}>
-              {item.status === 'APPROVED' ? 'تمت الموافقة ✅' : 'مُرجَع 🔄'}
-            </Text>
-          </View>
-        )}
+  const renderItem = ({ item }: { item: SavedInspection }) => (
+    <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+      <View style={styles.cardHeader}>
+        <Text style={styles.facilityName}>{item.facilityName}</Text>
+        <StatusBadge status={item.status} />
       </View>
-    );
-  }
+      <Text style={styles.cardDate}>{new Date(item.date).toLocaleDateString('ar-DZ')}</Text>
+      {item.facilityAddress ? (
+        <Text style={styles.cardAddr}>{item.facilityAddress}</Text>
+      ) : null}
 
-  // ── Not logged in ────────────────────────────────────────────────────────────
-
-  if (loggedIn === false) {
-    return (
-      <SafeAreaView style={styles.root}>
-        <View style={styles.notLoggedIn}>
-          <Text style={styles.notLoggedInIcon}>🔐</Text>
-          <Text style={styles.notLoggedInTitle}>تسجيل الدخول مطلوب</Text>
-          <Text style={styles.notLoggedInText}>
-            يجب تسجيل الدخول بحساب المشرف للوصول إلى قائمة الموافقات.
-          </Text>
-          <TouchableOpacity
-            style={styles.loginBtn}
-            onPress={() => router.push('/screens/server-login')}
-            activeOpacity={0.85}
-          >
-            <Text style={styles.loginBtnText}>تسجيل الدخول</Text>
-          </TouchableOpacity>
+      {(item.status === 'submitted' || item.status === 'pending-review') && (
+        <View style={styles.actions}>
+          {actionLoading === item.id ? (
+            <ActivityIndicator size="small" color="#1e40af" />
+          ) : (
+            <>
+              <TouchableOpacity
+                style={styles.rejectBtn}
+                onPress={() => handleReject(item)}
+              >
+                <MaterialIcons name="close" size={16} color="#dc2626" />
+                <Text style={styles.rejectBtnText}>رفض</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.approveBtn}
+                onPress={() => handleApprove(item)}
+              >
+                <MaterialIcons name="check" size={16} color="#fff" />
+                <Text style={styles.approveBtnText}>موافقة</Text>
+              </TouchableOpacity>
+            </>
+          )}
         </View>
-      </SafeAreaView>
-    );
-  }
-
-  // ── Main render ──────────────────────────────────────────────────────────────
+      )}
+    </Animated.View>
+  );
 
   return (
-    <SafeAreaView style={styles.root}>
-      <StatusBar barStyle="light-content" backgroundColor="#0F172A" />
-
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-          <Text style={styles.backText}>‹ رجوع</Text>
+          <MaterialIcons name="arrow-back" size={22} color="#fff" />
         </TouchableOpacity>
-        <Text style={styles.headerTitle}>الموافقات</Text>
-        <View style={styles.badge}>
-          <Text style={styles.badgeCount}>
-            {approvals.filter(a => a.status === 'PENDING').length}
-          </Text>
-        </View>
+        <Text style={styles.headerTitle}>موافقات المشرف</Text>
+        <TouchableOpacity
+          onPress={() => router.push('/screens/server-login' as Href)}
+          style={styles.logoutBtn}
+        >
+          <MaterialIcons name="logout" size={20} color="#bfdbfe" />
+        </TouchableOpacity>
       </View>
 
       {/* Filter tabs */}
-      <View style={styles.tabs}>
-        {(['PENDING', 'APPROVED', 'RETURNED'] as const).map(tab => (
+      <View style={styles.filterRow}>
+        {(['pending','approved','rejected'] as FilterState[]).map(f => (
           <TouchableOpacity
-            key={tab}
-            style={[styles.tab, filter === tab && styles.tabActive]}
-            onPress={() => setFilter(tab)}
+            key={f}
+            style={[styles.filterTab, filter === f && styles.filterTabActive]}
+            onPress={() => setFilter(f)}
           >
-            <Text style={[styles.tabText, filter === tab && styles.tabTextActive]}>
-              {tab === 'PENDING' ? 'قيد الانتظار' : tab === 'APPROVED' ? 'موافق عليها' : 'مُرجَعة'}
+            <Text style={[styles.filterTabText, filter === f && styles.filterTabTextActive]}>
+              {f === 'pending' ? 'قيد الانتظار' : f === 'approved' ? 'موافق عليه' : 'مرفوض'}
             </Text>
           </TouchableOpacity>
         ))}
       </View>
 
-      {/* Content */}
       {loading ? (
         <View style={styles.center}>
-          <ActivityIndicator size="large" color="#0EA5E9" />
+          <ActivityIndicator size="large" color="#1e40af" />
         </View>
-      ) : error ? (
+      ) : filtered.length === 0 ? (
         <View style={styles.center}>
-          <Text style={styles.errorText}>⚠️  {error}</Text>
-          <TouchableOpacity onPress={() => fetchApprovals()} style={styles.retryBtn}>
-            <Text style={styles.retryText}>إعادة المحاولة</Text>
-          </TouchableOpacity>
+          <MaterialIcons name="inbox" size={48} color="#cbd5e1" />
+          <Text style={styles.emptyText}>لا توجد تقارير</Text>
         </View>
       ) : (
         <FlatList
-          data={approvals}
-          keyExtractor={item => item.id}
-          renderItem={renderCard}
+          data={filtered}
+          keyExtractor={i => i.id}
+          renderItem={renderItem}
           contentContainerStyle={styles.list}
           refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => { setRefreshing(true); fetchApprovals(true); }}
-              tintColor="#0EA5E9"
-            />
-          }
-          ListEmptyComponent={
-            <View style={styles.empty}>
-              <Text style={styles.emptyIcon}>📋</Text>
-              <Text style={styles.emptyText}>لا توجد موافقات في هذا القسم</Text>
-            </View>
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         />
       )}
-
-      {/* Return-comment modal */}
-      <Modal visible={returnModal} transparent animationType="slide">
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalBox}>
-            <Text style={styles.modalTitle}>سبب الإرجاع</Text>
-            <Text style={styles.modalSubtitle}>
-              {returnTarget?.inspection.facility.projectName}
-            </Text>
-            <TextInput
-              style={styles.modalInput}
-              value={returnComment}
-              onChangeText={setReturnComment}
-              placeholder="اكتب ملاحظاتك هنا..."
-              placeholderTextColor="#64748B"
-              multiline
-              numberOfLines={4}
-              textAlign="right"
-              textAlignVertical="top"
-            />
-            <View style={styles.modalActions}>
-              <TouchableOpacity
-                style={[styles.modalBtn, styles.modalCancelBtn]}
-                onPress={() => setReturnModal(false)}
-                disabled={actionLoading}
-              >
-                <Text style={styles.modalBtnText}>إلغاء</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.modalBtn, styles.modalConfirmBtn]}
-                onPress={handleReturn}
-                disabled={actionLoading}
-              >
-                {actionLoading
-                  ? <ActivityIndicator color="#fff" />
-                  : <Text style={styles.modalBtnText}>تأكيد الإرجاع</Text>}
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-      </Modal>
     </SafeAreaView>
   );
 }
 
-// ── Styles ────────────────────────────────────────────────────────────────────────
+function StatusBadge({ status }: { status: string }) {
+  const map: Record<string, { bg: string; color: string; label: string }> = {
+    submitted:      { bg: '#eff6ff', color: '#3b82f6', label: 'مُقدَّم' },
+    'pending-review': { bg: '#fefce8', color: '#ca8a04', label: 'قيد المراجعة' },
+    approved:       { bg: '#f0fdf4', color: '#16a34a', label: 'موافق عليه' },
+    rejected:       { bg: '#fef2f2', color: '#dc2626', label: 'مرفوض' },
+    draft:          { bg: '#f8fafc', color: '#64748b', label: 'مسودة' },
+  };
+  const s = map[status] ?? { bg: '#f8fafc', color: '#64748b', label: status };
+  return (
+    <View style={[styles.badge, { backgroundColor: s.bg }]}>
+      <Text style={[styles.badgeText, { color: s.color }]}>{s.label}</Text>
+    </View>
+  );
+}
 
 const styles = StyleSheet.create({
-  root:          { flex: 1, backgroundColor: '#0F172A' },
-  header:        { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12 },
-  backBtn:       { padding: 8 },
-  backText:      { color: '#0EA5E9', fontSize: 16 },
-  headerTitle:   { color: '#F1F5F9', fontSize: 18, fontWeight: '700' },
-  badge:         { backgroundColor: '#EF4444', borderRadius: 12, minWidth: 24, height: 24, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 6 },
-  badgeCount:    { color: '#fff', fontSize: 12, fontWeight: '700' },
-  tabs:          { flexDirection: 'row', paddingHorizontal: 16, gap: 8, marginBottom: 8 },
-  tab:           { flex: 1, paddingVertical: 8, borderRadius: 8, backgroundColor: '#1E293B', alignItems: 'center' },
-  tabActive:     { backgroundColor: '#0EA5E9' },
-  tabText:       { color: '#94A3B8', fontSize: 12, fontWeight: '600' },
-  tabTextActive: { color: '#fff' },
-  list:          { paddingHorizontal: 16, paddingBottom: 32 },
-  card:          { backgroundColor: '#1E293B', borderRadius: 12, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: '#334155' },
-  facilityName:  { color: '#F1F5F9', fontSize: 16, fontWeight: '700', textAlign: 'right', marginBottom: 4 },
-  facilityMeta:  { color: '#94A3B8', fontSize: 13, textAlign: 'right', marginBottom: 12 },
-  infoRow:       { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 4 },
-  infoLabel:     { color: '#64748B', fontSize: 12 },
-  infoValue:     { color: '#CBD5E1', fontSize: 12, flexShrink: 1, textAlign: 'right', marginLeft: 8 },
-  commentBox:    { backgroundColor: '#7F1D1D22', borderRadius: 8, padding: 10, marginTop: 10, borderWidth: 1, borderColor: '#EF444433' },
-  commentLabel:  { color: '#FCA5A5', fontSize: 12, marginBottom: 4, textAlign: 'right' },
-  commentText:   { color: '#FCD34D', fontSize: 13, textAlign: 'right' },
-  actions:       { flexDirection: 'row', gap: 8, marginTop: 14 },
-  actionBtn:     { flex: 1, paddingVertical: 11, borderRadius: 8, alignItems: 'center' },
-  approveBtn:    { backgroundColor: '#065F46' },
-  returnBtn:     { backgroundColor: '#7C3AED22', borderWidth: 1, borderColor: '#7C3AED' },
-  actionBtnText: { color: '#F1F5F9', fontWeight: '700', fontSize: 14 },
-  statusBadge:   { marginTop: 12, paddingVertical: 6, borderRadius: 8, alignItems: 'center' },
-  badgeApproved: { backgroundColor: '#065F4633', borderWidth: 1, borderColor: '#10B981' },
-  badgeReturned: { backgroundColor: '#7C3AED22', borderWidth: 1, borderColor: '#7C3AED' },
-  statusBadgeText: { color: '#A7F3D0', fontSize: 13, fontWeight: '600' },
-  center:        { flex: 1, alignItems: 'center', justifyContent: 'center', padding: 32 },
-  errorText:     { color: '#FCA5A5', fontSize: 14, textAlign: 'center', marginBottom: 16 },
-  retryBtn:      { backgroundColor: '#1E293B', borderRadius: 8, paddingHorizontal: 24, paddingVertical: 10 },
-  retryText:     { color: '#0EA5E9', fontWeight: '600' },
-  empty:         { alignItems: 'center', paddingTop: 64 },
-  emptyIcon:     { fontSize: 48, marginBottom: 16 },
-  emptyText:     { color: '#64748B', fontSize: 15, textAlign: 'center' },
-  notLoggedIn:   { flex: 1, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 32 },
-  notLoggedInIcon:  { fontSize: 56, marginBottom: 20 },
-  notLoggedInTitle: { color: '#F1F5F9', fontSize: 20, fontWeight: '700', marginBottom: 10, textAlign: 'center' },
-  notLoggedInText:  { color: '#94A3B8', fontSize: 14, textAlign: 'center', lineHeight: 22, marginBottom: 28 },
-  loginBtn:      { backgroundColor: '#0EA5E9', borderRadius: 12, paddingHorizontal: 36, paddingVertical: 14 },
-  loginBtnText:  { color: '#fff', fontWeight: '700', fontSize: 15 },
-  modalOverlay:  { flex: 1, backgroundColor: '#00000088', justifyContent: 'flex-end' },
-  modalBox:      { backgroundColor: '#1E293B', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24 },
-  modalTitle:    { color: '#F1F5F9', fontSize: 18, fontWeight: '700', textAlign: 'right', marginBottom: 4 },
-  modalSubtitle: { color: '#94A3B8', fontSize: 13, textAlign: 'right', marginBottom: 16 },
-  modalInput:    { backgroundColor: '#0F172A', borderRadius: 10, borderWidth: 1, borderColor: '#334155', color: '#F1F5F9', fontSize: 14, padding: 12, minHeight: 100, marginBottom: 16 },
-  modalActions:  { flexDirection: 'row', gap: 10 },
-  modalBtn:      { flex: 1, paddingVertical: 13, borderRadius: 10, alignItems: 'center' },
-  modalCancelBtn:  { backgroundColor: '#334155' },
-  modalConfirmBtn: { backgroundColor: '#7C3AED' },
-  modalBtnText:  { color: '#fff', fontWeight: '700', fontSize: 14 },
+  container: { flex: 1, backgroundColor: '#f8fafc' },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: '#1e40af', paddingHorizontal: 16, paddingVertical: 14,
+  },
+  backBtn: { padding: 6 },
+  logoutBtn: { padding: 6 },
+  headerTitle: { color: '#fff', fontSize: 17, fontWeight: '700' },
+  filterRow: {
+    flexDirection: 'row', backgroundColor: '#fff',
+    borderBottomWidth: 1, borderBottomColor: '#e2e8f0',
+  },
+  filterTab: { flex: 1, paddingVertical: 12, alignItems: 'center' },
+  filterTabActive: { borderBottomWidth: 2, borderBottomColor: '#1e40af' },
+  filterTabText: { fontSize: 13, color: '#64748b' },
+  filterTabTextActive: { color: '#1e40af', fontWeight: '700' },
+  list: { padding: 16, gap: 12 },
+  card: {
+    backgroundColor: '#fff', borderRadius: 12, padding: 16,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05, shadowRadius: 3, elevation: 2,
+  },
+  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
+  facilityName: { flex: 1, fontSize: 15, fontWeight: '700', color: '#1e293b', textAlign: 'right' },
+  cardDate: { fontSize: 12, color: '#94a3b8', textAlign: 'right', marginTop: 4 },
+  cardAddr: { fontSize: 12, color: '#64748b', textAlign: 'right', marginTop: 2 },
+  actions: { flexDirection: 'row', gap: 8, marginTop: 12, justifyContent: 'flex-end' },
+  rejectBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    borderWidth: 1, borderColor: '#fca5a5', borderRadius: 8,
+    paddingHorizontal: 14, paddingVertical: 8,
+  },
+  rejectBtnText: { fontSize: 13, color: '#dc2626', fontWeight: '600' },
+  approveBtn: {
+    flexDirection: 'row', alignItems: 'center', gap: 4,
+    backgroundColor: '#1e40af', borderRadius: 8,
+    paddingHorizontal: 14, paddingVertical: 8,
+  },
+  approveBtnText: { fontSize: 13, color: '#fff', fontWeight: '600' },
+  badge: { borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 },
+  badgeText: { fontSize: 11, fontWeight: '700' },
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 8 },
+  emptyText: { fontSize: 14, color: '#94a3b8' },
 });

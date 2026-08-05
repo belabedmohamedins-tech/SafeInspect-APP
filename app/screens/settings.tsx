@@ -1,332 +1,242 @@
-// app/screens/settings.tsx
-import React, { useCallback, useState } from 'react';
+// app/screens/settings.tsx — router.push Href casts added
+import React, { useCallback, useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-  Alert,
-  Switch,
+  View, Text, StyleSheet, ScrollView, TouchableOpacity,
+  Switch, Alert, SafeAreaView, ActivityIndicator,
 } from 'react-native';
-import { useFocusEffect, useRouter } from 'expo-router';
-import { AuthRepository } from '../../src/repositories/AuthRepository';
-import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { Href, useRouter } from 'expo-router';
 import { useTranslation } from '../../src/i18n';
-import {
-  isEnabled  as isAgendaNotifEnabled,
-  setEnabled as setAgendaNotifEnabled,
-} from '../../src/services/NotificationService';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from '../../src/repositories/keys';
-
-interface Settings {
-  inspectorName:    string;
-  officeName:       string;
-  pinEnabled:       boolean;
-  biometricEnabled: boolean;
-}
-
-const DEFAULT: Settings = {
-  inspectorName:    '',
-  officeName:       '',
-  pinEnabled:       false,
-  biometricEnabled: false,
-};
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { AuthRepository } from '../../src/repositories/AuthRepository';
 
 export default function SettingsScreen() {
   const router = useRouter();
-  const { language, setLanguage } = useTranslation();
-  const [settings,           setSettings]           = useState<Settings>(DEFAULT);
-  const [saving,             setSaving]             = useState(false);
-  const [bioAvailable,       setBioAvailable]       = useState(false);
-  // Notification toggles
-  const [agendaNotifOn,      setAgendaNotifOn]      = useState(true);
-  const [capNotifOn,         setCapNotifOn]         = useState(true);
+  const { t, language, setLanguage } = useTranslation();
 
-  // ── Load ──────────────────────────────────────────────────────────────────────
-  useFocusEffect(
-    useCallback(() => {
-      let active = true;
-      Promise.all([
-        SettingsRepository.getAll(),
-        AuthRepository.getPin(),
-        AuthRepository.isBiometricEnabled(),
-        AuthRepository.isBiometricAvailable(),
-        isAgendaNotifEnabled(),
-        AsyncStorage.getItem(StorageKeys.CAP_NOTIF_LAST_RUN).then(() =>
-          // CAP toggle uses its own key; default ON (null → true)
-          AsyncStorage.getItem('CAP_NOTIF_ENABLED').then(v => v === null ? true : v === 'true')
-        ),
-      ]).then(([all, pin, bioEnabled, bioAvail, agendaOn, capOn]) => {
-        if (!active) return;
-        setBioAvailable(bioAvail);
-        setSettings({
-          inspectorName:    all['inspectorName'] || '',
-          officeName:       all['officeName']    || '',
-          pinEnabled:       !!pin,
-          biometricEnabled: bioEnabled,
-        });
-        setAgendaNotifOn(agendaOn);
-        setCapNotifOn(capOn);
-      });
-      return () => { active = false; };
-    }, [])
-  );
+  const [loading, setLoading]                   = useState(true);
+  const [pinEnabled, setPinEnabled]             = useState(false);
+  const [notifEnabled, setNotifEnabled]         = useState(true);
+  const [autoSyncEnabled, setAutoSyncEnabled]   = useState(true);
+  const [darkMode, setDarkMode]                 = useState(false);
 
-  // ── Notification toggle handlers ────────────────────────────────────────────
-  const handleAgendaNotifToggle = async (value: boolean) => {
-    setAgendaNotifOn(value);
-    await setAgendaNotifEnabled(value);
-    // setEnabled(false) calls cancelAllScheduledNotificationsAsync internally;
-    // on re-enable, notifications will be rescheduled on next app start.
-  };
+  const load = useCallback(async () => {
+    setLoading(true);
+    const all = await SettingsRepository.getAll();
+    const pin = await AuthRepository.getPin();
+    setPinEnabled(!!pin);
+    setNotifEnabled(all['notifications'] !== 'false');
+    setAutoSyncEnabled(all['autoSync'] !== 'false');
+    setDarkMode(all['darkMode'] === 'true');
+    setLoading(false);
+  }, []);
 
-  const handleCapNotifToggle = async (value: boolean) => {
-    setCapNotifOn(value);
-    try {
-      await AsyncStorage.setItem('CAP_NOTIF_ENABLED', String(value));
-      if (!value) {
-        // Cancel all three CAP notification strategies immediately
-        const { cancelCapDigestNotification, cancelCapWeeklyDigestNotification } =
-          await import('../../src/services/CapNotificationService');
-        await cancelCapDigestNotification();
-        await cancelCapWeeklyDigestNotification();
-        // Per-item alerts share the expo-notifications schedule; we clear the
-        // daily-run guard so they are not rescheduled on next start.
-        await AsyncStorage.removeItem(StorageKeys.CAP_NOTIF_LAST_RUN);
-      }
-    } catch (err) {
-      console.warn('[Settings] handleCapNotifToggle error:', err);
-    }
-  };
+  useEffect(() => { load(); }, [load]);
 
-  // ── PIN toggle ───────────────────────────────────────────────────────────────────
   const handlePinToggle = async (value: boolean) => {
     if (value) {
-      router.push('/screens/pin-setup');
+      router.push('/screens/pin-setup' as Href);
     } else {
       Alert.alert(
-        'إلغاء قفل PIN',
-        'سيتم إزالة رمز PIN الحالي. هل تريد المتابعة؟',
+        t('settings.disablePin') || 'تعطيل PIN',
+        'هل تريد حذف رمز PIN الحالي؟',
         [
-          { text: 'إلغاء', style: 'cancel' },
+          { text: t('common.cancel') || 'إلغاء', style: 'cancel' },
           {
-            text: 'إزالة',
+            text: t('common.confirm') || 'تأكيد',
             style: 'destructive',
             onPress: async () => {
-              await AuthRepository.setPin(null);
-              await AuthRepository.setBiometricEnabled(false);
-              setSettings(s => ({ ...s, pinEnabled: false, biometricEnabled: false }));
+              await AuthRepository.clearPin();
+              setPinEnabled(false);
             },
           },
-        ]
+        ],
       );
     }
   };
 
-  // ── Biometric toggle ───────────────────────────────────────────────────────────
-  const handleBiometricToggle = async (value: boolean) => {
-    if (value && !settings.pinEnabled) {
-      Alert.alert('', 'يجب تفعيل قفل PIN أولاً قبل تفعيل البصمة / الوجه.');
-      return;
-    }
-    await AuthRepository.setBiometricEnabled(value);
-    setSettings(s => ({ ...s, biometricEnabled: value }));
+  const handleNotifToggle = async (value: boolean) => {
+    setNotifEnabled(value);
+    await SettingsRepository.set('notifications', value ? 'true' : 'false');
   };
 
-  // ── Save (text fields only) ─────────────────────────────────────────────────
-  const save = async () => {
-    setSaving(true);
-    await SettingsRepository.set('inspectorName', settings.inspectorName);
-    await SettingsRepository.set('officeName',    settings.officeName);
-    setSaving(false);
-    Alert.alert('', 'تم حفظ الإعدادات بنجاح ✓');
+  const handleAutoSyncToggle = async (value: boolean) => {
+    setAutoSyncEnabled(value);
+    await SettingsRepository.set('autoSync', value ? 'true' : 'false');
   };
+
+  const handleDarkModeToggle = async (value: boolean) => {
+    setDarkMode(value);
+    await SettingsRepository.set('darkMode', value ? 'true' : 'false');
+  };
+
+  const handleLanguageChange = async (lang: 'ar' | 'fr') => {
+    await setLanguage(lang);
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#1e40af" />
+      </SafeAreaView>
+    );
+  }
 
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: 40 }}>
+    <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>الإعدادات</Text>
+        <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+          <Text style={styles.backBtnText}>←</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t('settings.title') || 'الإعدادات'}</Text>
+        <View style={{ width: 40 }} />
       </View>
 
-      {/* Inspector Info */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>معلومات المفتش</Text>
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
 
-        <Text style={styles.label}>اسم المفتش</Text>
-        <TextInput
-          style={styles.input}
-          value={settings.inspectorName}
-          onChangeText={v => setSettings(s => ({ ...s, inspectorName: v }))}
-          placeholder="أدخل اسم المفتش"
-          textAlign="right"
-        />
-
-        <Text style={styles.label}>اسم المكتب / الوحدة</Text>
-        <TextInput
-          style={styles.input}
-          value={settings.officeName}
-          onChangeText={v => setSettings(s => ({ ...s, officeName: v }))}
-          placeholder="أدخل اسم المكتب"
-          textAlign="right"
-        />
-      </View>
-
-      {/* Language */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>اللغة / Langue</Text>
-        <View style={styles.segControl}>
-          <TouchableOpacity
-            style={[styles.segBtn, language === 'ar' && styles.segBtnActive]}
-            onPress={() => setLanguage('ar')}
-          >
-            <Text style={[styles.segBtnText, language === 'ar' && styles.segBtnTextActive]}>
-              🇩🇿 العربية
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.segBtn, language === 'fr' && styles.segBtnActive]}
-            onPress={() => setLanguage('fr')}
-          >
-            <Text style={[styles.segBtnText, language === 'fr' && styles.segBtnTextActive]}>
-              🇫🇷 Français
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Notifications (Phase 21) */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>الإشعارات</Text>
-
-        {/* Agenda notifications */}
-        <View style={styles.switchRow}>
-          <Switch
-            value={agendaNotifOn}
-            onValueChange={handleAgendaNotifToggle}
-            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
-            thumbColor="#fff"
-          />
-          <View style={styles.switchLabelWrap}>
-            <Text style={styles.switchLabel}>تذكيرات الجدول الزمني</Text>
-            <Text style={styles.switchSub}>تنبيه قبل الزيارات التفتيشية</Text>
-          </View>
-        </View>
-
-        {/* CAP deadline notifications */}
-        <View style={[styles.switchRow, { borderBottomWidth: 0 }]}>
-          <Switch
-            value={capNotifOn}
-            onValueChange={handleCapNotifToggle}
-            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
-            thumbColor="#fff"
-          />
-          <View style={styles.switchLabelWrap}>
-            <Text style={styles.switchLabel}>إشعارات مواعيد الإجراءات التصحيحية</Text>
-            <Text style={styles.switchSub}>ملخص يومي وأسبوعي + تنبيهات بالمواعيد</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Security */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>الأمان</Text>
-
-        {/* PIN row */}
-        <View style={styles.switchRow}>
-          <Switch
-            value={settings.pinEnabled}
-            onValueChange={handlePinToggle}
-            trackColor={{ false: '#ddd', true: '#2c7a4b' }}
-            thumbColor="#fff"
-          />
-          <View style={styles.switchLabelWrap}>
-            <Text style={styles.switchLabel}>تفعيل قفل PIN</Text>
-            {settings.pinEnabled && (
-              <TouchableOpacity onPress={() => router.push('/screens/pin-setup')}>
-                <Text style={styles.changePin}>تغيير الرمز</Text>
-              </TouchableOpacity>
-            )}
-          </View>
-        </View>
-
-        {/* Biometric row — only shown if hardware exists */}
-        {bioAvailable && (
-          <View style={[styles.switchRow, { borderBottomWidth: 0 }]}>
+        {/* ── Security ─────────────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>{t('settings.security') || 'الأمان'}</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.rowLeft}>
+              <Text style={styles.rowTitle}>{t('settings.pinLock') || 'قفل PIN'}</Text>
+              <Text style={styles.rowSub}>{t('settings.pinLockDesc') || 'تفعيل قفل بالرمز السري'}</Text>
+            </View>
             <Switch
-              value={settings.biometricEnabled}
-              onValueChange={handleBiometricToggle}
-              trackColor={{ false: '#ddd', true: '#2c7a4b' }}
-              thumbColor="#fff"
-              disabled={!settings.pinEnabled}
+              value={pinEnabled}
+              onValueChange={handlePinToggle}
+              trackColor={{ false: '#e2e8f0', true: '#3b82f6' }}
+              thumbColor={pinEnabled ? '#1e40af' : '#94a3b8'}
             />
-            <Text style={[
-              styles.switchLabel,
-              !settings.pinEnabled && { color: '#aaa' },
-            ]}>
-              المصادقة البيومترية (بصمة / وجه)
-            </Text>
           </View>
-        )}
-      </View>
+          {pinEnabled && (
+            <TouchableOpacity
+              style={styles.subAction}
+              onPress={() => router.push('/screens/pin-setup' as Href)}
+            >
+              <Text style={styles.subActionText}>{t('settings.changePIN') || 'تغيير رمز PIN'}</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
-      {/* Navigation Shortcuts */}
-      <View style={styles.card}>
-        <Text style={styles.sectionTitle}>روابط سريعة</Text>
-        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/backup')}>
-          <Text style={styles.linkText}>النسخ الاحتياطي والاستعادة →</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/inspector-profile')}>
-          <Text style={styles.linkText}>الملف الشخصي للمفتش →</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.linkRow} onPress={() => router.push('/screens/legal')}>
-          <Text style={styles.linkText}>المراجع القانونية →</Text>
-        </TouchableOpacity>
-      </View>
+        {/* ── Notifications ────────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>{t('settings.notifications') || 'الإشعارات'}</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.rowLeft}>
+              <Text style={styles.rowTitle}>{t('settings.pushNotifications') || 'إشعارات الدفع'}</Text>
+              <Text style={styles.rowSub}>{t('settings.pushDesc') || 'تلقي تنبيهات المواعيد والتذكيرات'}</Text>
+            </View>
+            <Switch
+              value={notifEnabled}
+              onValueChange={handleNotifToggle}
+              trackColor={{ false: '#e2e8f0', true: '#3b82f6' }}
+              thumbColor={notifEnabled ? '#1e40af' : '#94a3b8'}
+            />
+          </View>
+        </View>
 
-      {/* Save */}
-      <TouchableOpacity
-        style={[styles.saveBtn, saving && { opacity: 0.6 }]}
-        onPress={save}
-        disabled={saving}
-      >
-        <Text style={styles.saveBtnText}>{saving ? 'جاري الحفظ...' : 'حفظ الإعدادات'}</Text>
-      </TouchableOpacity>
-    </ScrollView>
+        {/* ── Sync ─────────────────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>{t('settings.sync') || 'المزامنة'}</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.rowLeft}>
+              <Text style={styles.rowTitle}>{t('settings.autoSync') || 'المزامنة التلقائية'}</Text>
+              <Text style={styles.rowSub}>{t('settings.autoSyncDesc') || 'مزامنة البيانات كل 30 ثانية'}</Text>
+            </View>
+            <Switch
+              value={autoSyncEnabled}
+              onValueChange={handleAutoSyncToggle}
+              trackColor={{ false: '#e2e8f0', true: '#3b82f6' }}
+              thumbColor={autoSyncEnabled ? '#1e40af' : '#94a3b8'}
+            />
+          </View>
+        </View>
+
+        {/* ── Appearance ───────────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>{t('settings.appearance') || 'المظهر'}</Text>
+        <View style={styles.card}>
+          <View style={styles.row}>
+            <View style={styles.rowLeft}>
+              <Text style={styles.rowTitle}>{t('settings.darkMode') || 'الوضع الداكن'}</Text>
+              <Text style={styles.rowSub}>{t('settings.darkModeDesc') || 'تفعيل المظهر الداكن'}</Text>
+            </View>
+            <Switch
+              value={darkMode}
+              onValueChange={handleDarkModeToggle}
+              trackColor={{ false: '#e2e8f0', true: '#3b82f6' }}
+              thumbColor={darkMode ? '#1e40af' : '#94a3b8'}
+            />
+          </View>
+        </View>
+
+        {/* ── Language ─────────────────────────────────────────────────────── */}
+        <Text style={styles.sectionLabel}>{t('settings.language') || 'اللغة'}</Text>
+        <View style={styles.card}>
+          <View style={styles.langRow}>
+            <TouchableOpacity
+              style={[styles.langBtn, language === 'ar' && styles.langBtnActive]}
+              onPress={() => handleLanguageChange('ar')}
+            >
+              <Text style={[styles.langBtnText, language === 'ar' && styles.langBtnActiveText]}>العربية</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.langBtn, language === 'fr' && styles.langBtnActive]}
+              onPress={() => handleLanguageChange('fr')}
+            >
+              <Text style={[styles.langBtnText, language === 'fr' && styles.langBtnActiveText]}>Français</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={{ height: 40 }} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container:       { flex: 1, backgroundColor: '#f0f4f0' },
-  header:          { backgroundColor: '#2c7a4b', paddingHorizontal: 16,
-                     paddingTop: 52, paddingBottom: 18 },
-  headerTitle:     { fontSize: 22, fontWeight: '800', color: '#fff', textAlign: 'right' },
-  card:            { backgroundColor: '#fff', margin: 16, marginTop: 12, borderRadius: 12,
-                     padding: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
-                     shadowOpacity: 0.06, shadowRadius: 3, elevation: 2 },
-  sectionTitle:    { fontSize: 15, fontWeight: '700', color: '#1a1a2e', textAlign: 'right',
-                     marginBottom: 12 },
-  label:           { fontSize: 13, color: '#555', textAlign: 'right', marginBottom: 4, marginTop: 8 },
-  input:           { borderWidth: 1, borderColor: '#ddd', borderRadius: 8, padding: 10,
-                     fontSize: 14, color: '#1a1a2e', backgroundColor: '#fafafa' },
-  segControl:      { flexDirection: 'row', gap: 10 },
-  segBtn:          { flex: 1, borderWidth: 1, borderColor: '#ddd', borderRadius: 8,
-                     paddingVertical: 10, alignItems: 'center', backgroundColor: '#fafafa' },
-  segBtnActive:    { borderColor: '#2c7a4b', backgroundColor: '#eaf6ef' },
-  segBtnText:      { fontSize: 14, color: '#555', fontWeight: '600' },
-  segBtnTextActive:{ color: '#2c7a4b' },
-  switchRow:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
-                     paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  switchLabelWrap: { flex: 1, marginRight: 10, gap: 2 },
-  switchLabel:     { fontSize: 14, color: '#1a1a2e', textAlign: 'right' },
-  switchSub:       { fontSize: 11, color: '#95a5a6', textAlign: 'right' },
-  changePin:       { fontSize: 12, color: '#2c7a4b', textDecorationLine: 'underline' },
-  linkRow:         { paddingVertical: 12, borderBottomWidth: 1, borderBottomColor: '#f5f5f5' },
-  linkText:        { fontSize: 14, color: '#2c7a4b', textAlign: 'right', fontWeight: '500' },
-  saveBtn:         { margin: 16, backgroundColor: '#2c7a4b', borderRadius: 10,
-                     paddingVertical: 14, alignItems: 'center' },
-  saveBtnText:     { color: '#fff', fontSize: 16, fontWeight: '700' },
+  loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  container: { flex: 1, backgroundColor: '#f8fafc' },
+  header: {
+    flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between',
+    backgroundColor: '#1e40af', paddingHorizontal: 16, paddingVertical: 14,
+  },
+  backBtn: { padding: 8 },
+  backBtnText: { color: '#fff', fontSize: 20 },
+  headerTitle: { color: '#fff', fontSize: 18, fontWeight: '700' },
+  scroll: { flex: 1, paddingHorizontal: 16 },
+  sectionLabel: {
+    fontSize: 12, fontWeight: '700', color: '#64748b',
+    textTransform: 'uppercase', letterSpacing: 0.5,
+    marginTop: 20, marginBottom: 8, textAlign: 'right',
+  },
+  card: {
+    backgroundColor: '#fff', borderRadius: 12,
+    shadowColor: '#000', shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05, shadowRadius: 3, elevation: 2,
+    overflow: 'hidden',
+  },
+  row: {
+    flexDirection: 'row', alignItems: 'center',
+    justifyContent: 'space-between', padding: 16,
+  },
+  rowLeft: { flex: 1, marginLeft: 12 },
+  rowTitle: { fontSize: 15, fontWeight: '600', color: '#1e293b', textAlign: 'right' },
+  rowSub: { fontSize: 12, color: '#94a3b8', textAlign: 'right', marginTop: 2 },
+  subAction: {
+    paddingVertical: 12, paddingHorizontal: 16,
+    borderTopWidth: 1, borderTopColor: '#f1f5f9',
+    alignItems: 'flex-end',
+  },
+  subActionText: { fontSize: 14, color: '#3b82f6', fontWeight: '600' },
+  langRow: { flexDirection: 'row', padding: 8, gap: 8 },
+  langBtn: {
+    flex: 1, paddingVertical: 12, borderRadius: 8,
+    alignItems: 'center', backgroundColor: '#f8fafc',
+    borderWidth: 1, borderColor: '#e2e8f0',
+  },
+  langBtnActive: { backgroundColor: '#1e40af', borderColor: '#1e40af' },
+  langBtnText: { fontSize: 14, fontWeight: '600', color: '#64748b' },
+  langBtnActiveText: { color: '#fff' },
 });

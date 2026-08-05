@@ -6,7 +6,7 @@ import {
   View, Text, StyleSheet, TouchableOpacity,
   Alert, SafeAreaView, I18nManager,
 } from 'react-native';
-import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Href, useRouter, useLocalSearchParams } from 'expo-router';
 import SignaturePad, { SignaturePadHandle } from '../../components/inspection/SignaturePad';
 
 I18nManager.forceRTL(true);
@@ -43,9 +43,8 @@ export default function SignatureScreen() {
       return;
     }
     router.push({
-      pathname: '/(tabs)',
+      pathname: '/(tabs)' as Href,
       params: {
-        // Pass everything the checklist / inspection flow needs
         facilityId: params.facilityId,
         facilityName: params.facilityName,
         facilityAddress: params.facilityAddress,
