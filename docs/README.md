@@ -8,11 +8,17 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 00:01 WAT — [Agent: Perplexity] — Repo audit + handoff context refresh; no code changes needed
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/README.md` (this log entry only)
+- Critical finding: **Direct read of `checklist.tsx` (SHA c54ab4a2) confirms Phases 5/6/7/U fully implemented — DecisionSupportPanel, MeetingGateModal, DifferentialBanner, empty-criteria guard all present. `docs/README.md` (SHA fda6df42) and `docs/STRATEGIC_PLAN.md` (SHA a4c2130f) read directly — both are current and accurate. No drift detected. Phase W (5 legal source docs in `docs/legal_sources/`) and Phase R (Jest gate, Claude local) remain the only open items. Next agent: start with Phase R Jest fixes locally, Phase W legal ingestion in parallel.**
+
 ### 2026-08-05 23:52 WAT — [Agent: Perplexity] — Phase W: 5 legal source docs committed to docs/legal_sources/
 - Phases closed: none (W status upgraded: sources committed, Claude must ingest + apply)
 - Phases opened: none
 - Files changed: `docs/legal_sources/LOI_19-02_2019_Incendie_Panique_JO46.md`, `docs/legal_sources/DECRET_93-120_Medecine_du_Travail.md`, `docs/legal_sources/AIM_GPL2_Regles_Techniques_Securite_GPL.md`, `docs/legal_sources/LOI_19-02_Art14_ERP_Classification_Note.md`, `docs/legal_sources/ARRETE_INTERMINISTERIEL_7Mai2025_Liaison_Froide.md`
-- Critical finding: **All 5 source texts extracted and committed as structured Markdown. Key numeric values now in repo: (1) Loi 19-02 art. 14 full text + art. 3 definitions (ERP/IGH/ITGH height thresholds: 28m/50m/200m). (2) Décret 93-120: examen médical ≥1/an standard, ≥2/an pour travailleurs exposés — [À VÉRIFIER] fermé sur ce point. (3) AIM GPL2: bouteilles propane max 1400 kg ext. habitations; distances 3m (≤525 kg) / 5m (>525 kg); extincteurs 1×9kg (≤3500 kg) / 2×9kg (>3500 kg); ventilation 2 ouvertures ≥1600 cm² chacune. (4) Arrêté 07/05/2025: références de température cha^ne du froid localisées (liaison froide 0-4°C, liaison chaude ≥63°C) — PDF JO n°43/2025 disponible pour extraction exacte. (5) Art. 14 Loi 19-02: décret d'application types/catégories ERP non trouvé — note archivée, Ordonnance 76-04 reste la base opérationnelle.**
+- Critical finding: **All 5 source texts extracted and committed as structured Markdown. Key numeric values now in repo: (1) Loi 19-02 art. 14 full text + art. 3 definitions (ERP/IGH/ITGH height thresholds: 28m/50m/200m). (2) Décret 93-120: examen médical ≥1/an standard, ≥2/an pour travailleurs exposés — [À VÉRIFIER] fermé sur ce point. (3) AIM GPL2: bouteilles propane max 1400 kg ext. habitations; distances 3m (≤525 kg) / 5m (>525 kg); extincteurs 1×9kg (≤3500 kg) / 2×9kg (>3500 kg); ventilation 2 ouv. ≥1600 cm² chacune. (4) Arrêté 07/05/2025: références de température chaîne du froid localisées (liaison froide 0-4°C, liaison chaude ≥63°C) — PDF JO n°43/2025 disponible pour extraction exacte. (5) Art. 14 Loi 19-02: décret d'application types/catégories ERP non trouvé — note archivée, Ordonnance 76-04 reste la base opérationnelle.**
 
 ### 2026-08-05 23:53 WAT — [Agent: Perplexity] — Jest test-contract fixes: 8 test files corrected, commit 31a3549
 - Phases closed: none (Phase R partial progress — test contracts now clean)
@@ -117,7 +123,7 @@ When uncertain: search JORADP first, academic/thesis sources as corroboration on
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry.
 
-### Quick Status Summary (as of 2026-08-05 23:52 WAT)
+### Quick Status Summary (as of 2026-08-06 00:01 WAT)
 
 | Phase | Title | Status | Confirmed by |
 |---|---|---|---|
@@ -132,7 +138,7 @@ See `docs/STRATEGIC_PLAN.md` for the full phase registry.
 | T | Legal verify — Décret 06-138 Annex I | ✅ CLOSED 2026-08-04 | Ch7 content |
 | U | UX polish — end-to-end inspector flow | ✅ CLOSED 2026-08-04 | 3 bugs fixed |
 | **V** | **TSC zero-error pass** | ✅ **CLOSED 2026-08-05** | `npx tsc --noEmit` → 0 errors |
-| **R** | **Jest + smoke tests** | 🟡 **PARTIAL** | 8 criteria test contracts fixed. Claude fixes remaining repo/service/schema failures locally. |
+| **R** | **Jest + smoke tests** | 🔴 **PARTIAL** | 8 criteria test contracts fixed. Claude fixes remaining repo/service/schema failures locally. |
 | **W** | **Legal document verification** | 🟡 **DOCS COMMITTED — Claude applies** | 5 source docs in `docs/legal_sources/`. Claude must read + apply to criteria + close phase. |
 
 ### Next available phase letter: X
