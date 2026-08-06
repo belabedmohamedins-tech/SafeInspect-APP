@@ -27,6 +27,15 @@
 //   registry down, so the next require/import of IntegrityService returns the
 //   REAL module (which has no hashAndStore in the test environment) instead
 //   of the mock. SQLiteMock.__resetAll() is sufficient to isolate tests.
+//
+// WHY __resetDb() IS CALLED IN beforeEach
+// ─────────────────────────────────────────
+// SQLiteMock.__resetAll() wipes the in-memory SQLite store, but schema.ts
+// caches _db and _initPromise as module-level singletons. Without
+// __resetDb(), getDb() returns the stale (now empty) handle on subsequent
+// calls and skips re-running migrations — tables are gone, repository calls
+// fail with opaque errors. __resetDb() clears both singletons so the next
+// getDb() call opens a fresh handle and re-runs all migrations.
 
 import { SavedInspection } from '../../types';
 
@@ -82,6 +91,10 @@ beforeEach(() => {
   // Reset the in-memory SQLite store between tests.
   const SQLiteMock = jest.requireMock('expo-sqlite') as any;
   if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
+  // Clear the schema.ts singleton so getDb() re-opens a fresh handle and
+  // re-runs all migrations against the just-reset in-memory store.
+  const schema = jest.requireActual('../../db/schema') as any;
+  if (typeof schema.__resetDb === 'function') schema.__resetDb();
   // NOTE: jest.resetModules() was intentionally removed here.
   // It would tear down the mock registry, causing subsequent requires of
   // IntegrityService to return the real module (no hashAndStore in tests).

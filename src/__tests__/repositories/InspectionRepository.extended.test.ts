@@ -12,6 +12,15 @@
 //   set via jest.fn().mockResolvedValue() in factory closures — same issue as
 //   InspectionRepository.test.ts. Re-apply hashAndStore + annotateRepeatViolations
 //   implementations explicitly in beforeEach after clearAllMocks.
+//
+// WHY __resetDb() IS CALLED IN beforeEach
+// ─────────────────────────────────────────
+// SQLiteMock.__resetAll() wipes the in-memory SQLite store, but schema.ts
+// caches _db and _initPromise as module-level singletons. Without
+// __resetDb(), getDb() returns the stale (now empty) handle on subsequent
+// calls and skips re-running migrations — tables are gone, repository calls
+// fail with opaque errors. __resetDb() clears both singletons so the next
+// getDb() call opens a fresh handle and re-runs all migrations.
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import type { SavedInspection } from '../../types';
@@ -50,6 +59,10 @@ beforeEach(() => {
   // Reset the in-memory SQLite store — repository is SQLite-backed since Z5.
   const SQLiteMock = jest.requireMock('expo-sqlite') as any;
   if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
+  // Clear the schema.ts singleton so getDb() re-opens a fresh handle and
+  // re-runs all migrations against the just-reset in-memory store.
+  const schema = jest.requireActual('../../db/schema') as any;
+  if (typeof schema.__resetDb === 'function') schema.__resetDb();
   jest.clearAllMocks();
   // Re-apply Promise-returning implementations after clearAllMocks wipes them.
   // jest.clearAllMocks() clears mock.calls AND implementations set via
