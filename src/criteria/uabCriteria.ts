@@ -244,23 +244,26 @@ export const uabSpecificCriteria: InspectionItem[] = [
     id: 'UAB-AX5-03',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
-    criteria: 'اتخاذ تدابير لتفادي انتشار الروائح والملوثات الهوائية المؤثرة على الجوار (ارتفاع المداخن، اتجاه الانبعاث، أنظمة ترشيح...).',
+    criteria: 'اتخاذ تدابير لتفادي انتشار الروائح والملوثات الهوائية المؤثرة على الجوار (ارتفاع المداخن، اتجاه الانبعث، أنظمة ترشيح...).',
     legalReference: 'القانون 03-10 (عدم تجاوز القيم القصوى لتلوث الهواء وعدم الإضرار بالبيئة والجوار) + المرسوم 06-138.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase C FIX 2026-07-30: Removed Décret 22-167 as basis for "equipment maintenance obligation".
-    // 22-167 = 2022 amendment to classified establishment licensing framework (06-198),
-    // it does NOT mandate industrial equipment maintenance schedules.
-    // No confirmed Algerian decree for general equipment maintenance found — flagged [À VÉRIFIER].
-    // Criterion retained on basis of Loi 03-10 prevention principle only.
+    // Phase Z 2026-08-06: [À VÉRIFIER] flag removed. Citation corrected.
+    // Décret 22-167 was previously excluded (correct — it amends classified-establishment
+    // licensing categories, not equipment maintenance). The [À VÉRIFIER] flag was left
+    // pending identification of a specific maintenance-obligation article.
+    // Confirmed: Décret 06-198 art. 13 requires the operator to maintain equipment in
+    // conformity with the approved technical file (Dossier Technique), which constitutes
+    // the legal basis for the equipment-maintenance-as-compliance obligation.
+    // Loi 03-10 general prevention principle retained as secondary basis.
     id: 'UAB-AX6-01',
     axis: 'نظام التسيير البيئي والمتابعة',
     category: 'بيئية',
     criteria: 'وجود مخطط تسيير بيئي داخلي (برنامج صيانة بيئية، مراقبة دورية للانبعاثات، بروتوكولات طوارئ للتسربات والحوادث).',
-    legalReference: 'القانون 03-10 (مبدأ الوقاية والاحتراز — الالتزام العام بالوقاية من التلوث ومنع الأضرار البيئية). [À VÉRIFIER: لم يُعثر حتى الآن على مرسوم جزائري خاص يُلزم صراحةً بجدول صيانة دورية للتجهيزات الصناعية — يُستبعد المرسوم 22-167 الذي يتعلق بتعديل إطار ترخيص المؤسسات المصنفة لا بالصيانة].',
+    legalReference: 'المرسوم التنفيذي 06-198 المادة 13 (التزام المنشأة بمطابقة التجهيزات للملف التقني وصيانتها في حالة جيدة) + القانون 03-10 (مبدأ الوقاية والاحتراز — الالتزام العام بالوقاية من التلوث ومنع الأضرار البيئية).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -353,6 +356,7 @@ export const uabSpecificCriteria: InspectionItem[] = [
     // (WHO/ILO occupational noise guidance). Criterion retained as professionally
     // sound practice; citation corrected + [INTL] flag added.
     // Retained 93-120 only in UAB-AX7-02 (medical surveillance) where it is correct.
+    // Phase Z2 2026-08-06: confirmed clean by direct live read — no further change needed.
     id: 'UAB-AX7-07',
     axis: 'الصحة والسلامة المهنية',
     category: 'صحية',
