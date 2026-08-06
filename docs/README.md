@@ -8,6 +8,15 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 21:36 WAT — [Agent: Perplexity] — fix(db): remove withTransactionAsync from DDL migrations — expo-sqlite v15 crash
+- Phases closed: none (runtime crash fix)
+- Files changed:
+  - `src/db/schema.ts` — removed `withTransactionAsync` wrapper from every migration in `runMigrations()`. DDL now runs via `db.execAsync(sql)` directly; migration record via `db.runAsync(INSERT)`. Added comment block explaining why `withTransactionAsync` must not wrap DDL in expo-sqlite ≥15.
+- Root cause: expo-sqlite ≥15 (SDK 56) runs `execAsync` DDL with its own implicit transaction. Wrapping it inside `withTransactionAsync` produced a nested transaction; SQLite threw `cannot rollback - no transaction is active` on app start, crashing `initializeDatabase()` and all repositories.
+- Gate: TSC NOT re-run (no type changes). Jest: existing schema.test.ts covers `runMigrations` — ask Claude to run `npx jest src/__tests__/schema.test.ts` before full suite.
+- Commit: `71dee944`
+- Verify: cold-start the app — `[RAQIB] Database initialization failed` error should be gone.
+
 ### 2026-08-06 20:57 WAT — [Agent: Perplexity] — Z6+Z8 CLOSED: BGN-04-06 Décret 09-19 added + BGN-03-06 unverified figures removed
 - Phases closed: **Z6** ✅ CLOSED, **Z8** ✅ CLOSED
 - Files changed:
