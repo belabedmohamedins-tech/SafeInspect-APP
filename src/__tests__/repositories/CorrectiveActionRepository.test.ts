@@ -68,7 +68,7 @@ describe('CorrectiveActionRepository', () => {
 
   describe('save', () => {
     it('creates a new action with generated metadata', async () => {
-      const saved = await CorrectiveActionRepository.save(makeAction());
+      const saved: CorrectiveAction = await CorrectiveActionRepository.save(makeAction());
       expect(saved.id).toBeTruthy();
       expect(saved.createdAt).toBeTruthy();
       expect(saved.updatedAt).toBeTruthy();
@@ -76,8 +76,8 @@ describe('CorrectiveActionRepository', () => {
     });
 
     it('updates an existing action', async () => {
-      const first = await CorrectiveActionRepository.save(makeAction());
-      const updated = await CorrectiveActionRepository.save({ ...first, criteria: 'Updated' });
+      const first: CorrectiveAction = await CorrectiveActionRepository.save(makeAction());
+      const updated: CorrectiveAction = await CorrectiveActionRepository.save({ ...first, criteria: 'Updated' });
       expect(updated.id).toBe(first.id);
       expect(updated.criteria).toBe('Updated');
       expect(updated.updatedAt >= first.updatedAt).toBe(true);
@@ -90,7 +90,7 @@ describe('CorrectiveActionRepository', () => {
     });
 
     it('returns the matching action', async () => {
-      const saved = await CorrectiveActionRepository.save(makeAction());
+      const saved: CorrectiveAction = await CorrectiveActionRepository.save(makeAction());
       const found = await CorrectiveActionRepository.getById(saved.id);
       expect(found?.id).toBe(saved.id);
     });
@@ -98,7 +98,7 @@ describe('CorrectiveActionRepository', () => {
 
   describe('delete', () => {
     it('removes an action by id', async () => {
-      const saved = await CorrectiveActionRepository.save(makeAction());
+      const saved: CorrectiveAction = await CorrectiveActionRepository.save(makeAction());
       await CorrectiveActionRepository.delete(saved.id);
       expect(await CorrectiveActionRepository.getById(saved.id)).toBeUndefined();
     });

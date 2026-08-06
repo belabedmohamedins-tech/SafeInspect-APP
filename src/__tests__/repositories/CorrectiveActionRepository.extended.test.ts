@@ -24,15 +24,15 @@ describe('CorrectiveActionRepository extended', () => {
   });
 
   it('saves and retrieves by inspectionId', async () => {
-    const saved = await CorrectiveActionRepository.save(makeAction() as CorrectiveAction);
+    const saved: CorrectiveAction = await CorrectiveActionRepository.save(makeAction());
     expect(saved.inspectionId).toBe('insp-1');
     expect(saved.criteria).toBe('Fix');
   });
 
   it('saves with facilityId', async () => {
-    const saved = await CorrectiveActionRepository.save({
+    const saved: CorrectiveAction = await CorrectiveActionRepository.save({
       ...makeAction({ facilityId: 'fac-1', facilityName: 'F', criteria: 'Fix' }),
-    } as CorrectiveAction);
+    });
     expect(saved.facilityId).toBe('fac-1');
   });
 });
