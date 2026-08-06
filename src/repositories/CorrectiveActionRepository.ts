@@ -2,6 +2,9 @@
 //
 // Z5: migrated from AsyncStorage to expo-sqlite.
 // All business logic preserved: overdue escalation, ring-sort, stats, CAP lifecycle.
+//
+// save() returns Promise<string> (the generated/provided id) so tests can
+// chain directly: const id = await CorrectiveActionRepository.save(...);
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
@@ -189,10 +192,15 @@ export const CorrectiveActionRepository = {
     }
   },
 
+  /**
+   * Upserts a corrective action and returns the record id (string).
+   * Return type is Promise<string> so callers can do:
+   *   const id = await CorrectiveActionRepository.save(data);
+   */
   async save(
     action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> &
             Partial<Pick<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>>,
-  ): Promise<CorrectiveAction> {
+  ): Promise<string> {
     const db = await getDb();
     const now = new Date().toISOString();
     const id  = /* istanbul ignore next */ action.id ?? makeId();
@@ -225,7 +233,7 @@ export const CorrectiveActionRepository = {
         record.createdAt, record.updatedAt, record.closedAt ?? null,
       ],
     );
-    return record;
+    return id;
   },
 
   async updateStatus(
@@ -255,5 +263,9 @@ export const CorrectiveActionRepository = {
     await (await getDb()).runAsync(
       'DELETE FROM corrective_actions WHERE inspection_id = ?', [inspectionId],
     );
+  },
+
+  async clear(): Promise<void> {
+    await (await getDb()).runAsync('DELETE FROM corrective_actions');
   },
 };

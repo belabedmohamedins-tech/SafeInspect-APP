@@ -250,6 +250,16 @@ export const InspectionRepository = {
     return row ? rowToInspection(row) : null;
   },
 
+  async getByFacility(facilityId: string): Promise<SavedInspection[]> {
+    await ensureMigrated();
+    const db = await getDb();
+    const rows = await db.getAllAsync<InspectionRow>(
+      'SELECT * FROM inspections WHERE facility_id = ? ORDER BY date DESC',
+      [facilityId],
+    );
+    return rows.map(rowToInspection);
+  },
+
   async updateStatus(id: string, status: SavedInspection['status']): Promise<void> {
     await ensureMigrated();
     const db = await getDb();
@@ -344,5 +354,9 @@ export const InspectionRepository = {
       'system',
       { detail: `حذف ${ids.length} تقارير` },
     );
+  },
+
+  async clear(): Promise<void> {
+    await (await getDb()).runAsync('DELETE FROM inspections');
   },
 };

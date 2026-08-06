@@ -103,6 +103,13 @@ export const NotificationRepository = {
     );
   },
 
+  async delete(id: string): Promise<void> {
+    await (await getDb()).runAsync(
+      'DELETE FROM notifications WHERE id = ?',
+      [id],
+    );
+  },
+
   async clear(): Promise<void> {
     await (await getDb()).runAsync('DELETE FROM notifications');
   },

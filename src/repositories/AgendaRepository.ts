@@ -60,6 +60,24 @@ export const AgendaRepository = {
     return row ? rowToItem(row) : null;
   },
 
+  async getByStatus(status: AgendaItem['status']): Promise<AgendaItem[]> {
+    const db = await getDb();
+    const rows = await db.getAllAsync<AgendaRow>(
+      'SELECT * FROM agenda WHERE status = ? ORDER BY date ASC',
+      [status],
+    );
+    return rows.map(rowToItem);
+  },
+
+  async getByFacility(facilityId: string): Promise<AgendaItem[]> {
+    const db = await getDb();
+    const rows = await db.getAllAsync<AgendaRow>(
+      'SELECT * FROM agenda WHERE facility_id = ? ORDER BY date ASC',
+      [facilityId],
+    );
+    return rows.map(rowToItem);
+  },
+
   async save(item: AgendaItem): Promise<void> {
     const db = await getDb();
     const now = new Date().toISOString();
@@ -118,5 +136,9 @@ export const AgendaRepository = {
       [inspectionId, now, agendaId],
     );
     await cancelForAgendaItem(agendaId);
+  },
+
+  async clear(): Promise<void> {
+    await (await getDb()).runAsync('DELETE FROM agenda');
   },
 };
