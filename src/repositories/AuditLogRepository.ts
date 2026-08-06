@@ -1,15 +1,10 @@
 // src/repositories/AuditLogRepository.ts
 //
-// Append-only audit log for all data-mutating operations in the app.
-// Every write action (inspection saved/deleted, agenda changed, settings
-// changed, backup restored) produces an AuditEntry that is persisted under
-// the AUDIT_LOG AsyncStorage key.
-//
-// The log is a ring-buffer capped at MAX_ENTRIES to prevent unbounded growth.
-// Oldest entries are dropped first when the cap is reached.
+// Z5: migrated from AsyncStorage to expo-sqlite.
+// Ring-buffer of MAX_ENTRIES preserved. Append-only contract preserved.
+// Audit failures must never crash the app — all writes are wrapped in try/catch.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from './keys';
+import { getDb } from '../db/schema';
 
 const MAX_ENTRIES = 500;
 
@@ -23,42 +18,38 @@ export type AuditAction =
   | 'BACKUP_RESTORED';
 
 export interface AuditEntry {
-  id: string;             // uuid-style: timestamp + random suffix
-  timestamp: string;      // ISO datetime
+  id: string;
+  timestamp: string;
   action: AuditAction;
   inspectorName: string;
   inspectionId?: string;
   facilityName?: string;
-  /** Human-readable detail string (optional, for context). */
   detail?: string;
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────────
+type AuditRow = {
+  id: number;
+  action: string;
+  inspection_id: string | null;
+  facility_name: string | null;
+  inspector_name: string;
+  detail: string | null;
+  created_at: string;
+};
 
-function makeId(): string {
-  return `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+function rowToEntry(row: AuditRow): AuditEntry {
+  return {
+    id: String(row.id),
+    timestamp: row.created_at,
+    action: row.action as AuditAction,
+    inspectorName: row.inspector_name,
+    inspectionId: row.inspection_id ?? undefined,
+    facilityName: row.facility_name ?? undefined,
+    detail: row.detail ?? undefined,
+  };
 }
-
-async function readLog(): Promise<AuditEntry[]> {
-  try {
-    const raw = await AsyncStorage.getItem(StorageKeys.AUDIT_LOG);
-    return raw ? (JSON.parse(raw) as AuditEntry[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-async function writeLog(entries: AuditEntry[]): Promise<void> {
-  await AsyncStorage.setItem(StorageKeys.AUDIT_LOG, JSON.stringify(entries));
-}
-
-// ─── Public API ───────────────────────────────────────────────────────────────────
 
 export const AuditLogRepository = {
-  /**
-   * Append a new entry to the audit log.
-   * The log is trimmed to MAX_ENTRIES (oldest first) after every append.
-   */
   async append(
     action: AuditAction,
     inspectorName: string,
@@ -69,45 +60,56 @@ export const AuditLogRepository = {
     },
   ): Promise<void> {
     try {
-      const entry: AuditEntry = {
-        id: makeId(),
-        timestamp: new Date().toISOString(),
-        action,
-        inspectorName,
-        inspectionId: opts?.inspectionId,
-        facilityName: opts?.facilityName,
-        detail: opts?.detail,
-      };
-      const log = await readLog();
-      log.push(entry);
-      // Ring-buffer: keep only the most recent MAX_ENTRIES
-      const trimmed = log.length > MAX_ENTRIES ? log.slice(log.length - MAX_ENTRIES) : log;
-      await writeLog(trimmed);
+      const db = await getDb();
+      await db.runAsync(
+        `INSERT INTO audit_log (action, inspection_id, facility_name, inspector_name, detail)
+         VALUES (?,?,?,?,?)`,
+        [
+          action,
+          opts?.inspectionId ?? null,
+          opts?.facilityName ?? null,
+          inspectorName,
+          opts?.detail ?? null,
+        ],
+      );
+      // Ring-buffer: delete oldest rows beyond MAX_ENTRIES
+      await db.runAsync(
+        `DELETE FROM audit_log WHERE id NOT IN
+         (SELECT id FROM audit_log ORDER BY id DESC LIMIT ?)`,
+        [MAX_ENTRIES],
+      );
     } catch {
-      // Audit log failures must never crash the app
+      // Audit failures must never crash the app
     }
   },
 
-  /** Return all audit entries, newest-first. */
   async getAll(): Promise<AuditEntry[]> {
-    const log = await readLog();
-    return [...log].reverse();
+    const db = await getDb();
+    const rows = await db.getAllAsync<AuditRow>(
+      'SELECT * FROM audit_log ORDER BY id DESC',
+    );
+    return rows.map(rowToEntry);
   },
 
-  /** Return entries filtered by action type. */
   async getByAction(action: AuditAction): Promise<AuditEntry[]> {
-    const log = await readLog();
-    return [...log].reverse().filter(e => e.action === action);
+    const db = await getDb();
+    const rows = await db.getAllAsync<AuditRow>(
+      'SELECT * FROM audit_log WHERE action = ? ORDER BY id DESC',
+      [action],
+    );
+    return rows.map(rowToEntry);
   },
 
-  /** Return entries related to a specific inspection. */
   async getByInspection(inspectionId: string): Promise<AuditEntry[]> {
-    const log = await readLog();
-    return [...log].reverse().filter(e => e.inspectionId === inspectionId);
+    const db = await getDb();
+    const rows = await db.getAllAsync<AuditRow>(
+      'SELECT * FROM audit_log WHERE inspection_id = ? ORDER BY id DESC',
+      [inspectionId],
+    );
+    return rows.map(rowToEntry);
   },
 
-  /** Wipe the entire audit log (admin / testing only). */
   async clear(): Promise<void> {
-    await AsyncStorage.removeItem(StorageKeys.AUDIT_LOG);
+    await (await getDb()).runAsync('DELETE FROM audit_log');
   },
 };

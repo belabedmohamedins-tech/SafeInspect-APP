@@ -1,31 +1,14 @@
 // src/repositories/FacilityRepository.ts
 //
-// Thin AsyncStorage wrapper for the user-added facilities list.
-// Mirrors the pattern used by InspectionRepository and AgendaRepository.
-// The hardcoded facilities in facilitiesData.ts are read-only and are NOT
-// managed here — see facilitiesService.ts for the merged read helpers.
-//
-// 1B fix: lat/lng values are coerced to numbers (or undefined) before every
-// write so that string coordinates from map-picker callbacks (e.g. from
-// expo-location or a text input) can never corrupt the stored geometry.
+// Z5: migrated from AsyncStorage to expo-sqlite.
+// Public API is unchanged — all callers continue to work without modification.
+// Coord sanitization (1B fix) is preserved.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getDb } from '../db/schema';
 import { Facility } from '../types';
-import { StorageKeys } from './keys';
 
-const KEY = StorageKeys.USER_FACILITIES;
+// ─── Coord guard (preserved from AsyncStorage version) ───────────────────────
 
-// ─── Guard: coerce lat/lng to valid floats ────────────────────────────────────
-
-/**
- * Parses a lat or lng value that may arrive as a string (e.g. from a
- * TextInput or expo-location string coercion) and returns a valid float,
- * or undefined when the value is missing / NaN / out-of-range.
- *
- * Valid ranges:
- *  latitude  : –90 … 90
- *  longitude : –180 … 180
- */
 function parseCoord(
   raw: number | string | undefined | null,
   axis: 'lat' | 'lng',
@@ -33,15 +16,11 @@ function parseCoord(
   if (raw === undefined || raw === null || raw === '') return undefined;
   const n = typeof raw === 'number' ? raw : parseFloat(raw as string);
   if (!isFinite(n)) return undefined;
-  if (axis === 'lat'  && (n < -90  || n > 90))  return undefined;
-  if (axis === 'lng'  && (n < -180 || n > 180)) return undefined;
+  if (axis === 'lat' && (n < -90 || n > 90)) return undefined;
+  if (axis === 'lng' && (n < -180 || n > 180)) return undefined;
   return n;
 }
 
-/**
- * Applies the lat/lng guard to a partial Facility before it is stored.
- * All other fields are passed through unchanged.
- */
 function sanitizeCoords<T extends Partial<Pick<Facility, 'lat' | 'lng'>>>(data: T): T {
   const out = { ...data };
   if ('lat' in data) out.lat = parseCoord(data.lat as number | string | undefined, 'lat');
@@ -49,75 +28,134 @@ function sanitizeCoords<T extends Partial<Pick<Facility, 'lat' | 'lng'>>>(data: 
   return out;
 }
 
-// ─── Storage helpers ─────────────────────────────────────────────────────────
+// ─── Row mapper ───────────────────────────────────────────────────────────────
 
-async function readAll(): Promise<Facility[]> {
-  const json = await AsyncStorage.getItem(KEY);
-  return json ? (JSON.parse(json) as Facility[]) : [];
+type FacilityRow = {
+  id: string;
+  project_name: string;
+  owner_name: string;
+  activity: string;
+  address: string;
+  lat: number | null;
+  lng: number | null;
+  license_type: string | null;
+  license_details: string | null;
+  year: string | null;
+  category: string | null;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+function rowToFacility(row: FacilityRow): Facility {
+  return {
+    id: row.id,
+    projectName: row.project_name,
+    ownerName: row.owner_name,
+    activity: row.activity,
+    address: row.address,
+    lat: row.lat ?? undefined,
+    lng: row.lng ?? undefined,
+    licenseType: row.license_type ?? undefined,
+    licenseDetails: row.license_details ?? undefined,
+    year: row.year ?? undefined,
+    category: row.category ?? undefined,
+    notes: row.notes ?? undefined,
+  };
 }
 
-async function writeAll(facilities: Facility[]): Promise<void> {
-  await AsyncStorage.setItem(KEY, JSON.stringify(facilities));
-}
-
-// ─── Repository ──────────────────────────────────────────────────────────────
+// ─── Repository ───────────────────────────────────────────────────────────────
 
 export const FacilityRepository = {
-  /** Returns all user-created facilities (does NOT include hardcoded ones). */
-  getAll: readAll,
-
-  /** Looks up a single user-created facility by id. Returns null if not found. */
-  getById: async (id: string): Promise<Facility | null> => {
-    const all = await readAll();
-    return all.find(f => f.id === id) ?? null;
+  async getAll(): Promise<Facility[]> {
+    const db = await getDb();
+    const rows = await db.getAllAsync<FacilityRow>(
+      'SELECT * FROM facilities ORDER BY created_at DESC',
+    );
+    return rows.map(rowToFacility);
   },
 
-  /**
-   * Adds a new facility. Generates a unique id prefixed with 'U'.
-   * lat/lng are validated and coerced to numbers before storage (1B fix).
-   */
-  add: async (facility: Omit<Facility, 'id'>): Promise<Facility> => {
-    const all = await readAll();
-    const newFacility: Facility = {
-      ...sanitizeCoords(facility),
-      id: 'U' + Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7),
-    };
-    await writeAll([...all, newFacility]);
-    return newFacility;
+  async getById(id: string): Promise<Facility | null> {
+    const db = await getDb();
+    const row = await db.getFirstAsync<FacilityRow>(
+      'SELECT * FROM facilities WHERE id = ?',
+      [id],
+    );
+    return row ? rowToFacility(row) : null;
   },
 
-  /**
-   * Merges updatedData into an existing user facility.
-   * lat/lng are validated and coerced to numbers before storage (1B fix).
-   * Returns the updated facility, or null if the id was not found.
-   */
-  update: async (
+  async add(facility: Omit<Facility, 'id'>): Promise<Facility> {
+    const db = await getDb();
+    const safe = sanitizeCoords(facility);
+    const id = 'U' + Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7);
+    const now = new Date().toISOString();
+    await db.runAsync(
+      `INSERT INTO facilities
+         (id, project_name, owner_name, activity, address,
+          lat, lng, license_type, license_details, year, category, notes,
+          created_at, updated_at)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+      [
+        id,
+        safe.projectName ?? '',
+        safe.ownerName ?? '',
+        safe.activity ?? '',
+        safe.address ?? '',
+        safe.lat ?? null,
+        safe.lng ?? null,
+        safe.licenseType ?? null,
+        safe.licenseDetails ?? null,
+        safe.year ?? null,
+        safe.category ?? null,
+        safe.notes ?? null,
+        now,
+        now,
+      ],
+    );
+    return { ...safe, id } as Facility;
+  },
+
+  async update(
     id: string,
-    updatedData: Partial<Omit<Facility, 'id'>>
-  ): Promise<Facility | null> => {
-    const all = await readAll();
-    const idx = all.findIndex(f => f.id === id);
-    if (idx === -1) return null;
-    const updated: Facility = { ...all[idx], ...sanitizeCoords(updatedData) };
-    all[idx] = updated;
-    await writeAll(all);
-    return updated;
+    updatedData: Partial<Omit<Facility, 'id'>>,
+  ): Promise<Facility | null> {
+    const existing = await FacilityRepository.getById(id);
+    if (!existing) return null;
+    const safe = sanitizeCoords(updatedData);
+    const merged: Facility = { ...existing, ...safe, id };
+    const now = new Date().toISOString();
+    await (await getDb()).runAsync(
+      `UPDATE facilities SET
+         project_name = ?, owner_name = ?, activity = ?, address = ?,
+         lat = ?, lng = ?, license_type = ?, license_details = ?,
+         year = ?, category = ?, notes = ?, updated_at = ?
+       WHERE id = ?`,
+      [
+        merged.projectName ?? '',
+        merged.ownerName ?? '',
+        merged.activity ?? '',
+        merged.address ?? '',
+        merged.lat ?? null,
+        merged.lng ?? null,
+        merged.licenseType ?? null,
+        merged.licenseDetails ?? null,
+        merged.year ?? null,
+        merged.category ?? null,
+        merged.notes ?? null,
+        now,
+        id,
+      ],
+    );
+    return merged;
   },
 
-  /**
-   * Removes a user facility by id.
-   * Returns true on success, false if not found.
-   */
-  remove: async (id: string): Promise<boolean> => {
-    const all = await readAll();
-    const filtered = all.filter(f => f.id !== id);
-    if (filtered.length === all.length) return false;
-    await writeAll(filtered);
-    return true;
+  async remove(id: string): Promise<boolean> {
+    const db = await getDb();
+    const result = await db.runAsync('DELETE FROM facilities WHERE id = ?', [id]);
+    return result.changes > 0;
   },
 
-  /** Wipes all user-added facilities. */
-  clear: async (): Promise<void> => {
-    await AsyncStorage.removeItem(KEY);
+  async clear(): Promise<void> {
+    await (await getDb()).runAsync('DELETE FROM facilities');
   },
 } as const;

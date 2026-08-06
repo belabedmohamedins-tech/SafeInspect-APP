@@ -1,14 +1,12 @@
 // src/repositories/CorrectiveActionRepository.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { CorrectiveAction } from '../types';
-import { StorageKeys } from './keys';
+//
+// Z5: migrated from AsyncStorage to expo-sqlite.
+// All business logic preserved: overdue escalation, ring-sort, stats, CAP lifecycle.
 
-async function writeAll(actions: CorrectiveAction[]): Promise<void> {
-  await AsyncStorage.setItem(
-    StorageKeys.CORRECTIVE_ACTIONS,
-    JSON.stringify(actions),
-  );
-}
+import { getDb } from '../db/schema';
+import { CorrectiveAction } from '../types';
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function makeId(): string {
   return `cap-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -20,38 +18,68 @@ function defaultDeadline(): string {
   return d.toISOString().slice(0, 10);
 }
 
-async function readAll(): Promise<CorrectiveAction[]> {
-  try {
-    const raw = await AsyncStorage.getItem(StorageKeys.CORRECTIVE_ACTIONS);
-    if (!raw) return [];
+// ─── Row mapper ───────────────────────────────────────────────────────────────
 
-    const actions = JSON.parse(raw) as CorrectiveAction[];
-    const today   = new Date().toISOString().slice(0, 10);
-    let   dirty   = false;
+type CapRow = {
+  id: string;
+  inspection_id: string;
+  inspection_item_id: string;
+  facility_id: string;
+  facility_name: string;
+  criteria: string;
+  severity: string;
+  deadline: string;
+  assigned_to: string;
+  status: string;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  closed_at: string | null;
+};
 
-    const escalated = actions.map(a => {
-      if (
-        (a.status === 'open' || a.status === 'in-progress') &&
-        a.deadline < today
-      ) {
-        dirty = true;
-        return { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() };
-      }
-      return a;
-    });
-
-    if (dirty) {
-      await writeAll(escalated).catch(() => { /* non-fatal */ });
-    }
-
-    // newest first — tests assert all[0] is the most recently created record
-    return escalated.slice().sort(
-      (a, b) => (b.createdAt ?? '').localeCompare(a.createdAt ?? ''),
-    );
-  } catch {
-    return [];
-  }
+function rowToCap(row: CapRow): CorrectiveAction {
+  return {
+    id: row.id,
+    inspectionId: row.inspection_id,
+    inspectionItemId: row.inspection_item_id,
+    facilityId: row.facility_id,
+    facilityName: row.facility_name,
+    criteria: row.criteria,
+    severity: row.severity as CorrectiveAction['severity'],
+    deadline: row.deadline,
+    assignedTo: row.assigned_to,
+    status: row.status as CorrectiveAction['status'],
+    notes: row.notes ?? undefined,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+    closedAt: row.closed_at ?? undefined,
+  };
 }
+
+// ─── Overdue escalation (same logic as AsyncStorage version) ─────────────────
+
+async function escalateOverdue(): Promise<void> {
+  const db = await getDb();
+  const today = new Date().toISOString().slice(0, 10);
+  const now = new Date().toISOString();
+  await db.runAsync(
+    `UPDATE corrective_actions
+     SET status = 'overdue', updated_at = ?
+     WHERE status IN ('open', 'in-progress') AND deadline < ?`,
+    [now, today],
+  );
+}
+
+async function readAll(): Promise<CorrectiveAction[]> {
+  await escalateOverdue();
+  const db = await getDb();
+  const rows = await db.getAllAsync<CapRow>(
+    'SELECT * FROM corrective_actions ORDER BY created_at DESC',
+  );
+  return rows.map(rowToCap);
+}
+
+// ─── Public stats type ────────────────────────────────────────────────────────
 
 export interface CapStats {
   open:              number;
@@ -62,97 +90,100 @@ export interface CapStats {
   nearDeadlineCount: number;
 }
 
+// ─── Repository ───────────────────────────────────────────────────────────────
+
 export const CorrectiveActionRepository = {
   async getAll(): Promise<CorrectiveAction[]> {
     return readAll();
   },
 
   async getById(id: string): Promise<CorrectiveAction | undefined> {
-    const all = await readAll();
-    return all.find(a => a.id === id);
+    await escalateOverdue();
+    const db = await getDb();
+    const row = await db.getFirstAsync<CapRow>(
+      'SELECT * FROM corrective_actions WHERE id = ?',
+      [id],
+    );
+    return row ? rowToCap(row) : undefined;
   },
 
   async getByInspection(inspectionId: string): Promise<CorrectiveAction[]> {
-    const all = await readAll();
-    return all.filter(a => a.inspectionId === inspectionId);
+    await escalateOverdue();
+    const db = await getDb();
+    const rows = await db.getAllAsync<CapRow>(
+      'SELECT * FROM corrective_actions WHERE inspection_id = ? ORDER BY created_at DESC',
+      [inspectionId],
+    );
+    return rows.map(rowToCap);
   },
 
   async getByFacility(facilityId: string): Promise<CorrectiveAction[]> {
-    const all = await readAll();
-    return all.filter(a => a.facilityId === facilityId);
+    await escalateOverdue();
+    const db = await getDb();
+    const rows = await db.getAllAsync<CapRow>(
+      'SELECT * FROM corrective_actions WHERE facility_id = ? ORDER BY created_at DESC',
+      [facilityId],
+    );
+    return rows.map(rowToCap);
   },
 
   async getOpen(): Promise<CorrectiveAction[]> {
-    const all = await readAll();
-    return all.filter(
-      a => a.status === 'open' ||
-           a.status === 'in-progress' ||
-           a.status === 'overdue',
+    await escalateOverdue();
+    const db = await getDb();
+    const rows = await db.getAllAsync<CapRow>(
+      `SELECT * FROM corrective_actions
+       WHERE status IN ('open','in-progress','overdue')
+       ORDER BY created_at DESC`,
     );
+    return rows.map(rowToCap);
   },
 
   async getOverdue(): Promise<CorrectiveAction[]> {
-    const all = await readAll();
-    return all.filter(a => a.status === 'overdue');
+    await escalateOverdue();
+    const db = await getDb();
+    const rows = await db.getAllAsync<CapRow>(
+      `SELECT * FROM corrective_actions WHERE status = 'overdue' ORDER BY deadline ASC`,
+    );
+    return rows.map(rowToCap);
   },
 
   async getStats(nearDays = 7): Promise<CapStats> {
-    const all   = await readAll();
+    const all = await readAll();
     const today = new Date().toISOString().slice(0, 10);
-
     const cutoff = new Date();
     cutoff.setDate(cutoff.getDate() + nearDays);
     const cutoffStr = cutoff.toISOString().slice(0, 10);
 
     const stats: CapStats = {
-      open:              0,
-      inProgress:        0,
-      overdue:           0,
-      resolved:          0,
-      total:             all.length,
-      nearDeadlineCount: 0,
+      open: 0, inProgress: 0, overdue: 0, resolved: 0,
+      total: all.length, nearDeadlineCount: 0,
     };
-
     for (const a of all) {
       if      (a.status === 'open')        stats.open++;
       else if (a.status === 'in-progress') stats.inProgress++;
       else if (a.status === 'overdue')     stats.overdue++;
       else                                 stats.resolved++;
-
       if (
         a.status !== 'resolved' &&
         a.deadline >= today &&
         a.deadline <= cutoffStr
-      ) {
-        stats.nearDeadlineCount++;
-      }
+      ) stats.nearDeadlineCount++;
     }
-
     return stats;
   },
 
   async persistOverdueEscalation(): Promise<number> {
     try {
-      const raw = await AsyncStorage.getItem(StorageKeys.CORRECTIVE_ACTIONS);
-      if (!raw) return 0;
-
-      const actions = JSON.parse(raw) as CorrectiveAction[];
-      const today   = new Date().toISOString().slice(0, 10);
-      let   count   = 0;
-
-      const updated = actions.map(a => {
-        if (
-          (a.status === 'open' || a.status === 'in-progress') &&
-          a.deadline < today
-        ) {
-          count++;
-          return { ...a, status: 'overdue' as const, updatedAt: new Date().toISOString() };
-        }
-        return a;
-      });
-
-      if (count > 0) await writeAll(updated);
-      return count;
+      const db = await getDb();
+      const today = new Date().toISOString().slice(0, 10);
+      const now = new Date().toISOString();
+      const result = await db.runAsync(
+        `UPDATE corrective_actions
+         SET status = 'overdue', updated_at = ?
+         WHERE status IN ('open', 'in-progress') AND deadline < ?`,
+        [now, today],
+      );
+      return result.changes;
     } catch /* istanbul ignore next */ {
       return 0;
     }
@@ -162,11 +193,9 @@ export const CorrectiveActionRepository = {
     action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> &
             Partial<Pick<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>>,
   ): Promise<CorrectiveAction> {
-    const all = await readAll();
+    const db = await getDb();
     const now = new Date().toISOString();
     const id  = /* istanbul ignore next */ action.id ?? makeId();
-
-    const existing = all.findIndex(a => a.id === id);
     const record: CorrectiveAction = {
       ...action,
       id,
@@ -175,47 +204,56 @@ export const CorrectiveActionRepository = {
       createdAt:  /* istanbul ignore next */ action.createdAt  ?? now,
       updatedAt:  now,
     };
-
-    if (existing >= 0) {
-      all[existing] = record;
-    } else {
-      all.push(record);
-    }
-
-    await writeAll(all);
+    await db.runAsync(
+      `INSERT INTO corrective_actions
+         (id, inspection_id, inspection_item_id, facility_id, facility_name,
+          criteria, severity, deadline, assigned_to, status, notes,
+          created_at, updated_at, closed_at)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+       ON CONFLICT(id) DO UPDATE SET
+         status = excluded.status,
+         notes = excluded.notes,
+         deadline = excluded.deadline,
+         assigned_to = excluded.assigned_to,
+         updated_at = excluded.updated_at,
+         closed_at = excluded.closed_at`,
+      [
+        record.id, record.inspectionId, record.inspectionItemId,
+        record.facilityId, record.facilityName, record.criteria,
+        record.severity, record.deadline, record.assignedTo,
+        record.status, record.notes ?? null,
+        record.createdAt, record.updatedAt, record.closedAt ?? null,
+      ],
+    );
     return record;
   },
 
   async updateStatus(
-    id:     string,
+    id: string,
     status: CorrectiveAction['status'],
     notes?: string,
   ): Promise<void> {
-    const all   = await readAll();
-    const index = all.findIndex(a => a.id === id);
-    if (index < 0) return;
-
-    const now    = new Date().toISOString();
-    const prev   = all[index];
-
-    all[index] = {
-      ...prev,
-      status,
-      notes:    /* istanbul ignore next */ notes ?? prev.notes,
-      updatedAt: now,
-      closedAt:  status === 'resolved' ? now : prev.closedAt,
-    };
-
-    await writeAll(all);
+    const db = await getDb();
+    const now = new Date().toISOString();
+    const closedAt = status === 'resolved' ? now : null;
+    await db.runAsync(
+      `UPDATE corrective_actions
+       SET status = ?, notes = COALESCE(?, notes), updated_at = ?,
+           closed_at = COALESCE(?, closed_at)
+       WHERE id = ?`,
+      [status, notes ?? null, now, closedAt, id],
+    );
   },
 
   async delete(id: string): Promise<void> {
-    const all = await readAll();
-    await writeAll(all.filter(a => a.id !== id));
+    await (await getDb()).runAsync(
+      'DELETE FROM corrective_actions WHERE id = ?', [id],
+    );
   },
 
   async deleteByInspection(inspectionId: string): Promise<void> {
-    const all = await readAll();
-    await writeAll(all.filter(a => a.inspectionId !== inspectionId));
+    await (await getDb()).runAsync(
+      'DELETE FROM corrective_actions WHERE inspection_id = ?', [inspectionId],
+    );
   },
 };

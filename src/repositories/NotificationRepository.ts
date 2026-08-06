@@ -1,72 +1,109 @@
 // src/repositories/NotificationRepository.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//
+// Z5: migrated from AsyncStorage to expo-sqlite.
+// Ring-buffer of MAX_NOTIFICATIONS preserved.
+
+import { getDb } from '../db/schema';
 import { NotificationItem } from '../types';
-import { KEYS } from './keys';
 
 const MAX_NOTIFICATIONS = 200;
 
-async function load(): Promise<NotificationItem[]> {
-  const raw = await AsyncStorage.getItem(KEYS.NOTIFICATIONS);
-  return raw ? (JSON.parse(raw) as NotificationItem[]) : [];
-}
+type NotifRow = {
+  id: string;
+  type: string;
+  title: string;
+  body: string;
+  created_at: string;
+  read_at: string | null;
+  dismissed: number;
+  link_json: string | null;
+};
 
-async function save(items: NotificationItem[]): Promise<void> {
-  await AsyncStorage.setItem(KEYS.NOTIFICATIONS, JSON.stringify(items));
+function rowToItem(row: NotifRow): NotificationItem {
+  return {
+    id: row.id,
+    type: row.type as NotificationItem['type'],
+    title: row.title,
+    body: row.body,
+    createdAt: row.created_at,
+    readAt: row.read_at ?? undefined,
+    dismissed: row.dismissed === 1,
+    link: row.link_json ? JSON.parse(row.link_json) : undefined,
+  };
 }
 
 export const NotificationRepository = {
-  /** Prepend a new notification. Ring-buffer: keeps latest MAX_NOTIFICATIONS. */
   async append(item: Omit<NotificationItem, 'id' | 'createdAt'>): Promise<void> {
-    const all = await load();
-    const next: NotificationItem = {
-      ...item,
-      id: `notif_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
-      createdAt: new Date().toISOString(),
-    };
-    const trimmed = [next, ...all].slice(0, MAX_NOTIFICATIONS);
-    await save(trimmed);
+    const db = await getDb();
+    const id = `notif_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+    const now = new Date().toISOString();
+    await db.runAsync(
+      `INSERT INTO notifications (id, type, title, body, created_at, link_json)
+       VALUES (?,?,?,?,?,?)`,
+      [
+        id,
+        item.type,
+        item.title,
+        item.body,
+        now,
+        item.link ? JSON.stringify(item.link) : null,
+      ],
+    );
+    // Ring-buffer: keep latest MAX_NOTIFICATIONS
+    await db.runAsync(
+      `DELETE FROM notifications WHERE id NOT IN
+       (SELECT id FROM notifications ORDER BY created_at DESC LIMIT ?)`,
+      [MAX_NOTIFICATIONS],
+    );
   },
 
   async getAll(): Promise<NotificationItem[]> {
-    return load();
+    const db = await getDb();
+    const rows = await db.getAllAsync<NotifRow>(
+      'SELECT * FROM notifications ORDER BY created_at DESC',
+    );
+    return rows.map(rowToItem);
   },
 
   async getUnread(): Promise<NotificationItem[]> {
-    const all = await load();
-    return all.filter(n => !n.readAt && !n.dismissed);
+    const db = await getDb();
+    const rows = await db.getAllAsync<NotifRow>(
+      `SELECT * FROM notifications WHERE read_at IS NULL AND dismissed = 0
+       ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToItem);
   },
 
   async getUnreadCount(): Promise<number> {
-    const all = await load();
-    return all.filter(n => !n.readAt && !n.dismissed).length;
+    const db = await getDb();
+    const row = await db.getFirstAsync<{ cnt: number }>(
+      'SELECT COUNT(*) as cnt FROM notifications WHERE read_at IS NULL AND dismissed = 0',
+    );
+    return row?.cnt ?? 0;
   },
 
   async markRead(id: string): Promise<void> {
-    const all = await load();
-    const updated = all.map(n =>
-      n.id === id ? { ...n, readAt: new Date().toISOString() } : n
+    await (await getDb()).runAsync(
+      'UPDATE notifications SET read_at = ? WHERE id = ?',
+      [new Date().toISOString(), id],
     );
-    await save(updated);
   },
 
   async markAllRead(): Promise<void> {
-    const all = await load();
-    const now = new Date().toISOString();
-    const updated = all.map(n =>
-      n.readAt ? n : { ...n, readAt: now }
+    await (await getDb()).runAsync(
+      'UPDATE notifications SET read_at = ? WHERE read_at IS NULL',
+      [new Date().toISOString()],
     );
-    await save(updated);
   },
 
   async dismiss(id: string): Promise<void> {
-    const all = await load();
-    const updated = all.map(n =>
-      n.id === id ? { ...n, dismissed: true } : n
+    await (await getDb()).runAsync(
+      'UPDATE notifications SET dismissed = 1 WHERE id = ?',
+      [id],
     );
-    await save(updated);
   },
 
   async clear(): Promise<void> {
-    await save([]);
+    await (await getDb()).runAsync('DELETE FROM notifications');
   },
 };
