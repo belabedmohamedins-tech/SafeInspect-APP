@@ -4,6 +4,7 @@
  *   - FacilityRepository has no save()/delete(); use add()/update()/remove().
  *   - Facility has no 'name' field; use projectName.
  *   - makeFacility now supplies all required Facility fields.
+ * Z11: added rubrique coverage tests.
  */
 import { FacilityRepository } from '../../src/repositories/FacilityRepository';
 import type { Facility } from '../../src/types';
@@ -65,5 +66,20 @@ describe('FacilityRepository', () => {
     await FacilityRepository.add(makeFacility({ id: '1' }));
     await FacilityRepository.clear();
     expect(await FacilityRepository.getAll()).toHaveLength(0);
+  });
+
+  // ── Z11: rubrique field ────────────────────────────────────────────────────
+
+  it('persists and retrieves rubrique', async () => {
+    await FacilityRepository.add(makeFacility({ id: 'r1', rubrique: '2.1.1' }));
+    const found = await FacilityRepository.getById('r1');
+    expect(found?.rubrique).toBe('2.1.1');
+  });
+
+  it('updates rubrique', async () => {
+    await FacilityRepository.add(makeFacility({ id: 'r2', rubrique: '1.3.2' }));
+    await FacilityRepository.update('r2', { rubrique: '3.4.5' });
+    const found = await FacilityRepository.getById('r2');
+    expect(found?.rubrique).toBe('3.4.5');
   });
 });
