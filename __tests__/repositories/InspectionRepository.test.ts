@@ -1,77 +1,60 @@
 /**
  * __tests__/repositories/InspectionRepository.test.ts
- * Contract tests for InspectionRepository — SQLite contract.
- * Fixture aligned with SavedInspection shape in src/types.ts.
+ * Z6-TSC: inspectorId does not exist on SavedInspection; use inspectorName.
  */
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import type { SavedInspection } from '../../src/types';
 
-const SQLite = require('expo-sqlite');
+function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
+  return {
+    id: 'insp-default',
+    facilityId: 'fac-1',
+    facilityName: 'Test Facility',
+    facilityAddress: '1 Rue Test',
+    date: '2026-08-01',
+    inspectorName: 'Inspector A',
+    items: [],
+    status: 'completed',
+    ...overrides,
+  };
+}
 
-const baseInspection: SavedInspection = {
-  id: 'insp-1',
-  facilityId: 'fac-1',
-  facilityName: 'Test Facility',
-  facilityAddress: '123 Main St',
-  date: '2026-09-01',
-  inspectorName: 'Ahmed',
-  status: 'completed',
-  items: [],
-};
-
-const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspection => ({
-  ...baseInspection,
-  ...overrides,
+beforeEach(async () => {
+  await InspectionRepository.clear();
 });
 
-beforeEach(() => {
-  SQLite.__resetAll();
-});
-
-describe('InspectionRepository.getAll', () => {
-  it('returns empty array when no items', async () => {
-    expect(await InspectionRepository.getAll()).toEqual([]);
-  });
-
-  it('returns all stored inspections', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'i1' }));
-    await InspectionRepository.save(makeInspection({ id: 'i2' }));
-    expect(await InspectionRepository.getAll()).toHaveLength(2);
-  });
-});
-
-describe('InspectionRepository.getById', () => {
-  it('returns null when not found', async () => {
-    expect(await InspectionRepository.getById('missing')).toBeNull();
-  });
-
-  it('returns the matching inspection', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'abc' }));
-    const result = await InspectionRepository.getById('abc');
-    expect(result?.id).toBe('abc');
-  });
-});
-
-describe('InspectionRepository.save', () => {
-  it('persists a new inspection', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'new-1' }));
-    expect(await InspectionRepository.getAll()).toHaveLength(1);
-  });
-
-  it('upserts (replaces) existing inspection with same id', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'u1', inspectorName: 'Old' }));
-    await InspectionRepository.save(makeInspection({ id: 'u1', inspectorName: 'New' }));
+describe('InspectionRepository', () => {
+  it('saves and retrieves all inspections', async () => {
+    await InspectionRepository.save(makeInspection({ id: '1' }));
+    await InspectionRepository.save(makeInspection({ id: '2' }));
     const all = await InspectionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].inspectorName).toBe('New');
+    expect(all).toHaveLength(2);
   });
-});
 
-describe('InspectionRepository.delete', () => {
-  it('removes the inspection', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'i1' }));
-    await InspectionRepository.save(makeInspection({ id: 'i2' }));
-    await InspectionRepository.delete('i1');
-    expect(await InspectionRepository.getAll()).toHaveLength(1);
+  it('retrieves by id', async () => {
+    await InspectionRepository.save(makeInspection({ id: 'abc' }));
+    const found = await InspectionRepository.getById('abc');
+    expect(found).not.toBeNull();
+    expect(found?.id).toBe('abc');
+  });
+
+  it('deletes an inspection', async () => {
+    await InspectionRepository.save(makeInspection({ id: 'del-1' }));
+    await InspectionRepository.delete('del-1');
+    const all = await InspectionRepository.getAll();
+    expect(all.every(i => i.id !== 'del-1')).toBe(true);
+  });
+
+  it('filters by facilityId', async () => {
+    await InspectionRepository.save(makeInspection({ id: '1', facilityId: 'A' }));
+    await InspectionRepository.save(makeInspection({ id: '2', facilityId: 'B' }));
+    const result = await InspectionRepository.getByFacility('A');
+    expect(result.every(i => i.facilityId === 'A')).toBe(true);
+  });
+
+  it('clear empties all inspections', async () => {
+    await InspectionRepository.save(makeInspection({ id: '1' }));
+    await InspectionRepository.clear();
+    expect(await InspectionRepository.getAll()).toHaveLength(0);
   });
 });

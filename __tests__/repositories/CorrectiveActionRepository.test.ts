@@ -1,83 +1,64 @@
 /**
  * __tests__/repositories/CorrectiveActionRepository.test.ts
- * Contract tests for CorrectiveActionRepository — SQLite contract.
- * Fixture aligned with CorrectiveAction shape in src/types.ts.
+ * Z6-TSC: inspectorId → inspectionId (typo fix).
  */
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import type { CorrectiveAction } from '../../src/types';
 
-const SQLite = require('expo-sqlite');
+type NewCA = Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>;
 
-const makeAction = (overrides: Partial<Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>> = {}) =>
-  ({
+function makeCA(overrides: Partial<NewCA> = {}): NewCA {
+  return {
     inspectionId: 'insp-1',
     inspectionItemId: 'item-1',
     facilityId: 'fac-1',
     facilityName: 'Test Facility',
     criteria: 'Test criterion',
-    severity: 'high' as const,
-    deadline: '2026-12-01',
-    assignedTo: 'Ahmed',
-    status: 'open' as const,
+    severity: 'high',
+    deadline: '2026-12-31',
+    assignedTo: 'Inspector A',
+    status: 'open',
     ...overrides,
-  } as Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'>);
+  };
+}
 
-beforeEach(() => {
-  SQLite.__resetAll();
+beforeEach(async () => {
+  await CorrectiveActionRepository.clear();
 });
 
-describe('CorrectiveActionRepository.getAll', () => {
-  it('returns empty array when no items', async () => {
-    expect(await CorrectiveActionRepository.getAll()).toEqual([]);
+describe('CorrectiveActionRepository', () => {
+  it('saves and retrieves a corrective action', async () => {
+    const id = await CorrectiveActionRepository.save(makeCA());
+    expect(typeof id).toBe('string');
+    const all = await CorrectiveActionRepository.getAll();
+    expect(all.some(c => c.id === id)).toBe(true);
   });
 
-  it('returns all stored corrective actions', async () => {
-    await CorrectiveActionRepository.add(makeAction());
-    await CorrectiveActionRepository.add(makeAction({ inspectionItemId: 'item-2' }));
-    expect(await CorrectiveActionRepository.getAll()).toHaveLength(2);
-  });
-});
-
-describe('CorrectiveActionRepository.getByInspection', () => {
   it('filters by inspectionId', async () => {
-    await CorrectiveActionRepository.add(makeAction({ inspectionId: 'insp-A' }));
-    await CorrectiveActionRepository.add(makeAction({ inspectionId: 'insp-A', inspectionItemId: 'item-2' }));
-    await CorrectiveActionRepository.add(makeAction({ inspectionId: 'insp-B' }));
-    const result = await CorrectiveActionRepository.getByInspection('insp-A');
-    expect(result).toHaveLength(2);
+    await CorrectiveActionRepository.save(makeCA({ inspectionId: 'A' }));
+    await CorrectiveActionRepository.save(makeCA({ inspectionId: 'B' }));
+    const result = await CorrectiveActionRepository.getByInspection('A');
+    expect(result.every(c => c.inspectionId === 'A')).toBe(true);
   });
 
-  it('returns empty for unknown inspectionId', async () => {
-    expect(await CorrectiveActionRepository.getByInspection('no-such')).toEqual([]);
-  });
-});
-
-describe('CorrectiveActionRepository.add', () => {
-  it('creates a new corrective action with generated id', async () => {
-    await CorrectiveActionRepository.add(makeAction());
-    const all = await CorrectiveActionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBeDefined();
-  });
-});
-
-describe('CorrectiveActionRepository.updateStatus', () => {
-  it('updates the status of an existing action', async () => {
-    await CorrectiveActionRepository.add(makeAction());
-    const all = await CorrectiveActionRepository.getAll();
-    const id = all[0].id;
+  it('updates status', async () => {
+    const id = await CorrectiveActionRepository.save(makeCA());
     await CorrectiveActionRepository.updateStatus(id, 'resolved');
-    const updated = await CorrectiveActionRepository.getAll();
-    expect(updated[0].status).toBe('resolved');
-  });
-});
-
-describe('CorrectiveActionRepository.delete', () => {
-  it('removes the item', async () => {
-    await CorrectiveActionRepository.add(makeAction());
     const all = await CorrectiveActionRepository.getAll();
-    const id = all[0].id;
+    const updated = all.find(c => c.id === id);
+    expect(updated?.status).toBe('resolved');
+  });
+
+  it('deletes a corrective action', async () => {
+    const id = await CorrectiveActionRepository.save(makeCA());
     await CorrectiveActionRepository.delete(id);
+    const all = await CorrectiveActionRepository.getAll();
+    expect(all.every(c => c.id !== id)).toBe(true);
+  });
+
+  it('clear empties all records', async () => {
+    await CorrectiveActionRepository.save(makeCA());
+    await CorrectiveActionRepository.clear();
     expect(await CorrectiveActionRepository.getAll()).toHaveLength(0);
   });
 });

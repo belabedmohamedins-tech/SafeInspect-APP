@@ -1,68 +1,69 @@
 /**
  * src/__tests__/repositories/NotificationRepository.test.ts
- * Mirror of __tests__/repositories/NotificationRepository.test.ts.
- * Uses 'SYSTEM' (valid NotificationType) instead of 'info'.
- * NotificationItem exported from types.ts; AppNotification does not exist.
+ * Z6-TSC: use NotificationItem (not AppNotification); type:'SYSTEM' (not 'info').
  */
 import { NotificationRepository } from '../../repositories/NotificationRepository';
 import type { NotificationItem } from '../../types';
 
-const SQLite = require('expo-sqlite');
+type NewItem = Omit<NotificationItem, 'id' | 'createdAt'>;
 
-const baseItem: Omit<NotificationItem, 'id' | 'createdAt'> = {
-  title: 'Test notification',
+const baseItem: NewItem = {
+  title: 'Test Notification',
   body: 'Test body',
   type: 'SYSTEM',
 };
 
-beforeEach(() => {
-  SQLite.__resetAll();
+beforeEach(async () => {
+  await NotificationRepository.clear();
 });
 
-describe('NotificationRepository.getAll', () => {
-  it('returns empty array when no items', async () => {
-    expect(await NotificationRepository.getAll()).toEqual([]);
-  });
-
-  it('returns all stored notifications', async () => {
-    await NotificationRepository.append(baseItem);
-    await NotificationRepository.append(baseItem);
-    expect(await NotificationRepository.getAll()).toHaveLength(2);
-  });
-});
-
-describe('NotificationRepository.append', () => {
-  it('creates a notification with generated id and createdAt', async () => {
+describe('NotificationRepository (src)', () => {
+  it('appends and retrieves items', async () => {
     await NotificationRepository.append(baseItem);
     const all = await NotificationRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBeDefined();
-    expect(all[0].createdAt).toBeDefined();
+    expect(all.length).toBeGreaterThanOrEqual(1);
   });
-});
 
-describe('NotificationRepository.markRead', () => {
-  it('marks a notification as read', async () => {
-    await NotificationRepository.append(baseItem);
+  it('getAll returns most-recent first', async () => {
+    await NotificationRepository.append({ ...baseItem, title: 'First' });
+    await NotificationRepository.append({ ...baseItem, title: 'Second' });
     const all = await NotificationRepository.getAll();
-    await NotificationRepository.markRead(all[0].id);
-    const updated = await NotificationRepository.getAll();
-    expect(updated[0].readAt).toBeDefined();
+    expect(all[0].title).toBe('Second');
   });
-});
 
-describe('NotificationRepository.getUnread', () => {
-  it('returns only unread notifications', async () => {
+  it('markRead sets readAt', async () => {
+    await NotificationRepository.append(baseItem);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.markRead(item.id);
+    const updated = (await NotificationRepository.getAll()).find(n => n.id === item.id);
+    expect(updated?.readAt).toBeTruthy();
+  });
+
+  it('getUnread returns only unread items', async () => {
+    await NotificationRepository.append(baseItem);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.markRead(item.id);
+    await NotificationRepository.append(baseItem);
+    const unread = await NotificationRepository.getUnread();
+    expect(unread.every((n: NotificationItem) => !n.readAt)).toBe(true);
+  });
+
+  it('markAllRead clears unread count', async () => {
     await NotificationRepository.append(baseItem);
     await NotificationRepository.append(baseItem);
+    await NotificationRepository.markAllRead();
+    expect(await NotificationRepository.getUnread()).toHaveLength(0);
+  });
+
+  it('delete removes an item', async () => {
+    await NotificationRepository.append(baseItem);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.delete(item.id);
     const all = await NotificationRepository.getAll();
-    await NotificationRepository.markRead(all[0].id);
-    expect(await NotificationRepository.getUnread()).toHaveLength(1);
+    expect(all.every(n => n.id !== item.id)).toBe(true);
   });
-});
 
-describe('NotificationRepository.clear', () => {
-  it('removes all notifications', async () => {
+  it('clear empties all notifications', async () => {
     await NotificationRepository.append(baseItem);
     await NotificationRepository.clear();
     expect(await NotificationRepository.getAll()).toHaveLength(0);

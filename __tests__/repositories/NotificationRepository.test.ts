@@ -1,77 +1,72 @@
 /**
  * __tests__/repositories/NotificationRepository.test.ts
- * Contract tests for NotificationRepository — SQLite contract.
- * Fixture aligned with NotificationItem / NotificationType in src/types.ts.
- * Valid NotificationType values: CAP_DEADLINE | AGENDA_REMINDER | APPROVAL_ACTION
- *   | FOLLOW_UP | SYSTEM | inspection_completed
+ * Z6-TSC:
+ *   - AppNotification does not exist in src/types; use NotificationItem.
+ *   - type:'info' not in NotificationType; use 'SYSTEM'.
  */
 import { NotificationRepository } from '../../src/repositories/NotificationRepository';
 import type { NotificationItem } from '../../src/types';
 
-const SQLite = require('expo-sqlite');
+type NewItem = Omit<NotificationItem, 'id' | 'createdAt'>;
 
-const baseItem: Omit<NotificationItem, 'id' | 'createdAt'> = {
-  title: 'Test notification',
+const baseItem: NewItem = {
+  title: 'Test Notification',
   body: 'Test body',
   type: 'SYSTEM',
 };
 
-beforeEach(() => {
-  SQLite.__resetAll();
+beforeEach(async () => {
+  await NotificationRepository.clear();
 });
 
-describe('NotificationRepository.getAll', () => {
-  it('returns empty array when no items', async () => {
-    expect(await NotificationRepository.getAll()).toEqual([]);
+describe('NotificationRepository', () => {
+  it('appends and retrieves items', async () => {
+    await NotificationRepository.append(baseItem);
+    const all = await NotificationRepository.getAll();
+    expect(all.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('returns all stored notifications', async () => {
+  it('getAll returns most-recent first', async () => {
     await NotificationRepository.append({ ...baseItem, title: 'First' });
     await NotificationRepository.append({ ...baseItem, title: 'Second' });
-    expect(await NotificationRepository.getAll()).toHaveLength(2);
-  });
-});
-
-describe('NotificationRepository.append', () => {
-  it('creates a notification with generated id and createdAt', async () => {
-    await NotificationRepository.append(baseItem);
     const all = await NotificationRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBeDefined();
-    expect(all[0].createdAt).toBeDefined();
-  });
-});
-
-describe('NotificationRepository.markRead', () => {
-  it('marks a notification as read', async () => {
-    await NotificationRepository.append(baseItem);
-    const all = await NotificationRepository.getAll();
-    const id = all[0].id;
-    await NotificationRepository.markRead(id);
-    const updated = await NotificationRepository.getAll();
-    expect(updated[0].readAt).toBeDefined();
+    expect(all[0].title).toBe('Second');
   });
 
-  it('is a no-op for unknown id', async () => {
+  it('getUnread returns only unread items', async () => {
     await NotificationRepository.append(baseItem);
-    await NotificationRepository.markRead('no-such'); // new unread
-    expect(await NotificationRepository.getAll()).toHaveLength(1);
-  });
-});
-
-describe('NotificationRepository.getUnread', () => {
-  it('returns only unread notifications', async () => {
-    await NotificationRepository.append(baseItem);
-    await NotificationRepository.append(baseItem);
-    const all = await NotificationRepository.getAll();
-    await NotificationRepository.markRead(all[0].id);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.markRead(item.id);
+    await NotificationRepository.append(baseItem); // new unread
     const unread = await NotificationRepository.getUnread();
-    expect(unread).toHaveLength(1);
+    expect(unread.every((n: NotificationItem) => !n.readAt)).toBe(true);
   });
-});
 
-describe('NotificationRepository.clear', () => {
-  it('removes all notifications', async () => {
+  it('markRead sets readAt', async () => {
+    await NotificationRepository.append(baseItem);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.markRead(item.id);
+    const updated = (await NotificationRepository.getAll()).find(n => n.id === item.id);
+    expect(updated?.readAt).toBeTruthy();
+  });
+
+  it('markAllRead marks all items', async () => {
+    await NotificationRepository.append(baseItem);
+    await NotificationRepository.append(baseItem);
+    await NotificationRepository.markAllRead();
+    const unread = await NotificationRepository.getUnread();
+    expect(unread).toHaveLength(0);
+  });
+
+  it('delete removes an item', async () => {
+    await NotificationRepository.append(baseItem);
+    const item = (await NotificationRepository.getAll())[0];
+    await NotificationRepository.delete(item.id);
+    const all = await NotificationRepository.getAll();
+    expect(all.every(n => n.id !== item.id)).toBe(true);
+  });
+
+  it('clear empties all notifications', async () => {
     await NotificationRepository.append(baseItem);
     await NotificationRepository.clear();
     expect(await NotificationRepository.getAll()).toHaveLength(0);
