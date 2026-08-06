@@ -40,14 +40,25 @@
 | Z2 | Fix wrong 85 dB noise citation — UAB-AX7-07 | 2026-08-06 | Confirmed by live read: already fixed. [INTL] flag applied. No code change needed. |
 | Z3 | Resolve 3 duplicate license criteria | 2026-08-06 | Confirmed by live read: BAK-10-01, CLD-17-01, PRD-01-01 NOT duplicates. No change. |
 | Z4 | Fix PRD-02-01 missing numericField | 2026-08-06 | Confirmed by live read: already split (PRD-02-01 + PRD-02-01b). No change. |
-| **Z5** | **SQLite repository swap — 5 repositories** | **2026-08-06** | **Confirmed by direct code read of all 5 repo files. FacilityRepository ✅, AgendaRepository ✅, CorrectiveActionRepository ✅, InspectionRepository ✅ (+ AsyncStorage READ fallback for migration), AuditLogRepository ✅. notifications table in schema.ts ✅. All have Z5 comment headers. No code change needed. SettingsRepository (AsyncStorage) and AuthRepository (SecureStore) intentionally outside Z5 scope.** |
-| Z7 | `facilityCategoriesFull.json` domain review | 2026-08-06 | Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144. File unused in production — ready for Z11 rubrique-picker integration. |
+| Z5 | SQLite repository swap — 5 repositories | 2026-08-06 | All 5 repos confirmed on SQLite. Commits: bbe9c5f + f656e4e (Z5-FIX1/2/3). |
+| Z7 | `facilityCategoriesFull.json` domain review | 2026-08-06 | Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144. |
+| **Z10** | **AsyncStorage fallback removal — InspectionRepository + SettingsRepository** | **2026-08-06** | **Commit `4ff351c`. `_migrated`/`ensureMigrated()` removed from InspectionRepository. SettingsRepository fully rewritten to SQLite (`settings` table). `002_create_settings` migration added to schema.ts. Gate: Claude TSC + Jest.** |
 
 ---
 
-### 🟢 ALL ACTIVE PHASES CLOSED
+### 🟡 OPEN Phases
 
-As of **2026-08-06 02:20 WAT**, all phases A through Z7 (excluding Z6, Z8–Z10 which remain deferred) are **closed**.
+| ID | Title | Priority |
+|---|---|---|
+| **Z11** | **Wire `facilityCategoriesFull.json` into rubrique picker UI** | **#1 — Next** |
+
+**Z11 Spec:**
+1. Add migration `003_facilities_add_rubrique` — `ALTER TABLE facilities ADD COLUMN rubrique TEXT` (nullable, backward-compatible).
+2. Update `FacilityRepository` — add `rubrique?: string` to facility type and upsert SQL.
+3. New `RubriquePicker` component — flat list with search input filtering on rubrique number + Arabic label. Data source: `src/facilityCategoriesFull.json` (622 entries).
+4. Wire into facility creation/edit screen — picker replaces or supplements free-text `category` field.
+5. Optionally pre-fill `inspectionCause` from rubrique regime when creating a new inspection.
+6. TSC 0 errors + Jest passing before close.
 
 ---
 
@@ -58,26 +69,17 @@ As of **2026-08-06 02:20 WAT**, all phases A through Z7 (excluding Z6, Z8–Z10 
 | Z6 | Décret 09-19 rollout across all "approved operator" criteria (G9) | Full criteria audit needed first. |
 | Z8 | `BGN-03-06` septic pumping frequency legal source (G11) | ≤90 days/80% capacity has no stated legal basis — find or remove. |
 | Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server. |
-| Z10 | AsyncStorage fallback removal from InspectionRepository + SettingsRepository SQLite migration | Depends on Z5 stable for ≥1 release cycle. InspectionRepository has `_migrated` guard that reads from AsyncStorage on first run — remove after production validation. |
 
 ---
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7 are closed.
-- Z6, Z8, Z9, Z10 are deferred (open).
-- **Next new phase identifier: Z11**
+- Letters A–Z + Z2–Z5, Z7, Z10 are closed.
+- Z6, Z8, Z9 are deferred.
+- Z11 is open.
+- **Next new phase identifier: Z12**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
-
----
-
-## Suggested Next Tasks (priority order)
-
-1. **Z10** — Remove AsyncStorage read-fallback from `InspectionRepository.ts` (the `ensureMigrated()` guard + `_migrated` flag). Migrate SettingsRepository to SQLite. Run TSC + Jest.
-2. **Z11** — Wire `facilityCategoriesFull.json` into `FacilityRepository` / rubrique picker UI so inspectors can select an establishment category from the 622-entry Décret 07-144 list.
-3. **Z6** — Audit all criteria files for "approved operator" language; apply Décret 09-19 accreditation reference wherever missing.
-4. **Z8** — Resolve `BGN-03-06` legal basis for septic pumping interval (≤90 days / 80% capacity).
 
 ---
 
