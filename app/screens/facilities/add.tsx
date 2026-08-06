@@ -66,6 +66,7 @@ export default function AddFacilityScreen() {
         year,
         category,
         notes,
+        rubrique: selected.rubrique,  // Z11: persist the rubrique code separately
       });
       Alert.alert('نجاح', 'تمت إضافة المنشأة بنجاح');
       router.back();

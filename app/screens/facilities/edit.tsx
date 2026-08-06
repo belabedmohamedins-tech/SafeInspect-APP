@@ -1,6 +1,8 @@
 // app/screens/facilities/edit.tsx
 // Pre-fills all editable fields from the existing user facility and saves
 // via FacilityRepository.update().
+// Z11: pre-fills rubrique from f.rubrique (or falls back to parsing the activity string);
+//      saves it back on update.
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useEffect, useState } from 'react';
@@ -66,11 +68,16 @@ export default function EditFacilityScreen() {
       setLicenseDetails(f.licenseDetails ?? '');
       setYear(f.year ?? '');
       setNotes(f.notes ?? '');
-      // Pre-select activity category
-      const idx = facilityCategories.findIndex(c => {
-        const label = `${c.rubrique} - ${c.label} (${c.regime})`;
-        return f.activity === label || f.activity?.startsWith(`${c.rubrique} - ${c.label}`);
-      });
+
+      // Pre-select activity category.
+      // Z11: prefer the stored rubrique code for an exact match; fall back to
+      // matching against the full activity display string (legacy records).
+      const idx = f.rubrique
+        ? facilityCategories.findIndex(c => c.rubrique === f.rubrique)
+        : facilityCategories.findIndex(c => {
+            const label = `${c.rubrique} - ${c.label} (${c.regime})`;
+            return f.activity === label || f.activity?.startsWith(`${c.rubrique} - ${c.label}`);
+          });
       if (idx !== -1) setSelectedCategoryIndex(idx);
       setLoading(false);
     })();
@@ -102,6 +109,7 @@ export default function EditFacilityScreen() {
         licenseDetails,
         year,
         notes,
+        rubrique: selected.rubrique,  // Z11: persist structured rubrique code
       });
       Alert.alert('نجاح', 'تم تحديث بيانات المنشأة');
       router.back();

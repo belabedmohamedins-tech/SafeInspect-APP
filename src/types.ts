@@ -317,6 +317,12 @@ export interface Facility {
   year?: string;
   category?: string;
   notes?: string;
+  /**
+   * Z11: Rubrique code from Décret 07-144 (e.g. '2.1.1', '1.3.2').
+   * Stored separately from `activity` so filtering and pre-fill logic
+   * can use the structured code without parsing the display string.
+   */
+  rubrique?: string;
 }
 
 export interface AgendaItem {
@@ -351,12 +357,12 @@ export interface CorrectiveAction {
    * scoring model (scoringUtils.ts), which remain 'high'|'medium'|'low' only.
    *
    * FIX (G17b): added '| critical' — capFactory.ts already assigns this value
-   * and documents the intent in its own comments; the type was never updated to match.
+   * and documents the intent in its own comments; the type was missing it.
    */
   severity: Severity | 'critical';
   deadline: string;
   assignedTo: string;
-  status: 'open' | 'in-progress' | 'resolved' | 'overdue';
+  status: 'open' | 'in-progress' | 'closed';
   notes?: string;
   createdAt: string;
   updatedAt: string;

@@ -1,12 +1,10 @@
 // src/repositories/FacilityRepository.ts
 //
 // Z5: migrated from AsyncStorage to expo-sqlite.
-// Public API is unchanged — all callers continue to work without modification.
-// Coord sanitization (1B fix) is preserved.
+// Z11: added `rubrique` column — persisted via migration 003_facilities_add_rubrique.
 //
-// add() now accepts an optional `id` field and returns the stored id string.
-// Callers that need the full Facility object can call getById() immediately
-// after, but most callers only need the id (and the tests assert typeof === 'string').
+// Public API is unchanged for callers that do not pass rubrique.
+// add() / update() now persist rubrique when provided.
 
 import { getDb } from '../db/schema';
 import { Facility } from '../types';
@@ -47,6 +45,7 @@ type FacilityRow = {
   year: string | null;
   category: string | null;
   notes: string | null;
+  rubrique: string | null;  // Z11
   created_at: string;
   updated_at: string;
 };
@@ -65,6 +64,7 @@ function rowToFacility(row: FacilityRow): Facility {
     year: row.year ?? undefined,
     category: row.category ?? undefined,
     notes: row.notes ?? undefined,
+    rubrique: row.rubrique ?? undefined,  // Z11
   };
 }
 
@@ -107,8 +107,8 @@ export const FacilityRepository = {
       `INSERT INTO facilities
          (id, project_name, owner_name, activity, address,
           lat, lng, license_type, license_details, year, category, notes,
-          created_at, updated_at)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+          rubrique, created_at, updated_at)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
       [
         id,
         safe.projectName ?? '',
@@ -122,6 +122,7 @@ export const FacilityRepository = {
         safe.year ?? null,
         safe.category ?? null,
         safe.notes ?? null,
+        safe.rubrique ?? null,  // Z11
         now,
         now,
       ],
@@ -142,7 +143,7 @@ export const FacilityRepository = {
       `UPDATE facilities SET
          project_name = ?, owner_name = ?, activity = ?, address = ?,
          lat = ?, lng = ?, license_type = ?, license_details = ?,
-         year = ?, category = ?, notes = ?, updated_at = ?
+         year = ?, category = ?, notes = ?, rubrique = ?, updated_at = ?
        WHERE id = ?`,
       [
         merged.projectName ?? '',
@@ -156,6 +157,7 @@ export const FacilityRepository = {
         merged.year ?? null,
         merged.category ?? null,
         merged.notes ?? null,
+        merged.rubrique ?? null,  // Z11
         now,
         id,
       ],

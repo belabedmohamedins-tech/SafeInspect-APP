@@ -194,6 +194,12 @@ const MIGRATIONS: Migration[] = [
     name: '002_corrective_actions_add_index_inspection',
     sql: `CREATE INDEX IF NOT EXISTS idx_corrective_actions_inspection_id ON corrective_actions(inspection_id);`,
   },
+  {
+    // Z11: add rubrique column — backward-compatible (nullable, defaults to NULL).
+    // Existing rows keep rubrique = NULL; new rows get the Décret 07-144 code.
+    name: '003_facilities_add_rubrique',
+    sql: `ALTER TABLE facilities ADD COLUMN rubrique TEXT;`,
+  },
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
