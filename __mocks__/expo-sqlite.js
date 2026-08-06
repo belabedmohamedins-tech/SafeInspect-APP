@@ -2,32 +2,46 @@
  * __mocks__/expo-sqlite.js
  *
  * In-memory mock for expo-sqlite used by Jest (Node environment).
- * Implements the subset of the expo-sqlite API used by SafeInspect repositories.
  *
- * ISOLATION — CRITICAL DESIGN NOTE:
- *   openDatabaseAsync() returns a DB object whose closure captures a `store`
- *   reference at open time.  If __resetAll() replaced that store in the Map,
- *   the cached reference would still point to the old (stale) store.
+ * CRITICAL DESIGN CONSTRAINT — jest.resetModules() survival
+ * ──────────────────────────────────────────────────────────
+ * InspectionRepository.test.ts calls jest.resetModules() in its beforeEach.
+ * This causes Node/Jest to re-evaluate this file, producing a NEW module
+ * instance with a NEW `_stores` Map.  The statically-imported
+ * InspectionRepository (top-level import) holds a DB handle whose store
+ * reference points to the OLD Map — rows written before resetModules() are
+ * invisible to queries that use the NEW Map, and vice-versa.  The result is
+ * cross-test data leakage that makes getCompleted/getDrafts return wrong
+ * row counts.
  *
- *   FIX (W1 rev 2): __resetAll() mutates each existing store IN PLACE —
- *   it clears the tables Map and resets seqs on the same object.  This way
- *   any DB handle opened before the reset automatically sees an empty store.
+ * FIX: anchor _stores and _insertionCounters on `global` (which Jest never
+ * re-creates across resetModules()).  The first evaluation seeds the Map;
+ * every subsequent evaluation (after resetModules()) re-uses the same object.
+ * __resetAll() mutates the existing store objects IN PLACE so all DB handles
+ * — old and new module instances alike — see the cleared state.
  *
- *   schema.__resetDb() still nulls the singleton handle so getDb() reopens,
- *   but even without that the in-place clear is sufficient for isolation.
- *
- * OTHER FIXES in this revision:
- *   1. eq / upsert conflict checks use == (loose equality).
- *   2. runAsync return value always includes { lastInsertRowId, changes }.
- *   3. __resetStore() alias added for backward-compat.
- *   4. DELETE WHERE string equality matches regardless of stored id type.
- *   5. ORDER BY on string columns sorts correctly (stable, locale-aware).
+ * OTHER BEHAVIOUR:
+ *   • ORDER BY … DESC tiebreaker: rows with equal sort-key are returned in
+ *     reverse insertion order (DESC) so "most recent insert" wins in ties.
+ *   • IN (?) with ?-placeholders: expanded against the params array.
+ *   • COALESCE(?, existing) partial-update pattern supported in SET.
  */
 
 'use strict';
 
-// One store per database name.  Never replaced — mutated in place on reset.
-const _stores = new Map();
+// ─── Global-pinned store (survives jest.resetModules()) ───────────────────────
+
+if (!global.__sqliteMockStores) {
+  global.__sqliteMockStores = new Map();
+}
+const _stores = global.__sqliteMockStores;
+
+// Per-table insertion counter — used as tiebreaker in ORDER BY sorts.
+// Also pinned globally so it survives resetModules().
+if (!global.__sqliteMockInsertSeq) {
+  global.__sqliteMockInsertSeq = { n: 0 };
+}
+const _insertSeq = global.__sqliteMockInsertSeq;
 
 function getStore(dbName) {
   if (!_stores.has(dbName)) {
@@ -58,6 +72,18 @@ function parseWhere(whereClause, paramStart, params) {
 
     if (/\bNOT\s+IN\s*\(\s*SELECT/i.test(p)) continue;
 
+    // IN (?, ?, …) — consume one param per ?
+    const inParamM = p.match(/^([\w.]+)\s+IN\s*\((\s*\?\s*(?:,\s*\?\s*)*)\)/i);
+    if (inParamM) {
+      const col = colName(inParamM[1]);
+      const count = (inParamM[2].match(/\?/g) || []).length;
+      const values = params.slice(pi, pi + count).map(v => String(v));
+      pi += count;
+      conds.push({ type: 'in', col, values });
+      continue;
+    }
+
+    // IN ('lit', 'lit', …) — literal strings
     const inLitM = p.match(/^([\w.]+)\s+IN\s*\(([^)]+)\)/i);
     if (inLitM) {
       const values = inLitM[2].split(',').map(v => v.trim().replace(/^['"](.*)['"]$/, '$1'));
@@ -162,14 +188,19 @@ function applyOrderBy(rows, clauseText) {
   return [...rows].sort((a, b) => {
     const av = a[col] ?? '';
     const bv = b[col] ?? '';
-    // Use localeCompare for strings so ISO datetime strings sort correctly.
+    let cmp;
     if (typeof av === 'string' && typeof bv === 'string') {
-      const cmp = av.localeCompare(bv);
-      return dir === 'ASC' ? cmp : -cmp;
+      cmp = av.localeCompare(bv);
+    } else {
+      cmp = av < bv ? -1 : av > bv ? 1 : 0;
     }
-    if (av < bv) return dir === 'ASC' ? -1 : 1;
-    if (av > bv) return dir === 'ASC' ? 1 : -1;
-    return 0;
+    if (cmp !== 0) return dir === 'ASC' ? cmp : -cmp;
+    // Tiebreaker: for DESC use reverse insertion order so the most-recently
+    // inserted row wins (matches "ORDER BY created_at DESC" semantics when
+    // two rows share the same timestamp in fast tests).
+    const ai = a.__insertSeq ?? 0;
+    const bi = b.__insertSeq ?? 0;
+    return dir === 'ASC' ? ai - bi : bi - ai;
   });
 }
 
@@ -228,12 +259,17 @@ function execStatement(store, sql, params) {
       newRow.id = nextId(store, tbl);
     }
 
+    // Stamp insertion order for ORDER BY tiebreaking (hidden field).
+    newRow.__insertSeq = ++_insertSeq.n;
+
     const isUpsert    = /ON CONFLICT\s*\([^)]+\)\s*DO UPDATE/i.test(s);
     const isOrReplace = /^INSERT\s+OR\s+REPLACE/i.test(s);
 
     if ((isUpsert || isOrReplace) && newRow.id !== undefined && newRow.id !== null) {
       const idx = rows.findIndex(r => r.id == newRow.id);
       if (idx >= 0) {
+        // Preserve original __insertSeq on upsert so ORDER BY is stable.
+        newRow.__insertSeq = rows[idx].__insertSeq ?? newRow.__insertSeq;
         Object.assign(rows[idx], newRow);
       } else {
         rows.push(newRow);
@@ -343,7 +379,6 @@ function execStatement(store, sql, params) {
 // ─── DB factory ──────────────────────────────────────────────────────────────
 
 function makeSQLiteDatabase(dbName) {
-  // Capture reference at open time — __resetAll mutates this object in place.
   const store = getStore(dbName);
   return {
     async runAsync(sql, params = []) {
@@ -374,19 +409,12 @@ async function openDatabaseAsync(name) {
 }
 
 /**
- * __resetAll — wipes every store IN PLACE.
+ * __resetAll — wipes every store IN PLACE and resets the insertion counter.
  *
- * Why in-place?  DB handles returned by openDatabaseAsync() capture a
- * reference to the store object at open time.  If we did _stores.clear()
- * (removing the entry from the Map) the cached reference in the DB closure
- * would still point to the old object with all its data.  By mutating the
- * object itself (clearing .tables and .seqs) every existing DB handle
- * automatically sees an empty database on the next operation.
- *
- * jest.setup.ts calls this in afterEach alongside schema.__resetDb() so that:
- *   1. All table data is gone (this function).
- *   2. The schema module's singleton handle is nulled so the next getDb()
- *      call re-runs migrations against the (now empty) store.
+ * Must clear tables and seqs on the SAME objects (not replace them) so that
+ * DB handles cached in modules that were loaded before resetModules() still
+ * see an empty database after the reset.  The global _stores Map and each
+ * store object survive jest.resetModules() because they live on `global`.
  */
 function __resetAll() {
   for (const store of _stores.values()) {
@@ -394,9 +422,10 @@ function __resetAll() {
     store.seqs.clear();
     store._txActive = false;
   }
+  // Reset insertion counter so ORDER BY tiebreaker restarts from 0.
+  _insertSeq.n = 0;
 }
 
-// Alias for backward-compat with older test files.
 const __resetStore = __resetAll;
 
 module.exports = {
