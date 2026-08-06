@@ -36,41 +36,48 @@
 | W | Legal document verification (5 source gaps) | 2026-08-06 | All 5 docs/legal_sources/ files read. 0 [À VÉRIFIER] in codebase. |
 | X | i18n screen wire-up (5 screens) | 2026-08-06 | TSC 0 errors + Jest 119/0. User-confirmed 01:32 WAT. |
 | Y | Air-emissions criteria — 5 factory types | 2026-08-06 | All criteria already present: PNT/MRB/CRP/PRT/BSM -07-xx. No code change needed. |
-| **Z** | **Fix wrong Décret 22-167 citation — UAB-AX6-01** | **2026-08-06** | **Confirmed by live read: UAB-AX6-01 already fixed in prior session (2026-07-30 comment). Décret 22-167 already removed. Citation is Loi 03-10 + [À VÉRIFIER] note. No code change needed.** |
-| **Z2** | **Fix wrong 85 dB noise citation — UAB-AX7-07** | **2026-08-06** | **Confirmed by live read: UAB-AX7-07 already fixed (2026-07-30 comment). Décret 93-120 removed. [INTL] flag + Loi 18-11 + Loi 90-11. No code change needed.** |
-| **Z3** | **Resolve 3 duplicate license criteria** | **2026-08-06** | **Confirmed by live read: BAK-10-01, CLD-17-01, PRD-01-01 are NOT plain duplicates — each adds facility-specific content (activity type, capacity, product types). No change needed.** |
-| **Z4** | **Fix PRD-02-01 missing numericField** | **2026-08-06** | **Confirmed by live read: PRD-02-01 already has numericField (0–5°C vegetables) + PRD-02-01b (7–15°C olives). Split was already done in a prior session. No code change needed.** |
-| **Z7** | **`facilityCategoriesFull.json` domain review** | **2026-08-06** | **Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144 (rubriques 1110–2922). 4 regime values match JO hierarchy. File is unused in production — ready for Z5 SQLite integration. No code change needed.** |
+| Z | Fix wrong Décret 22-167 citation — UAB-AX6-01 | 2026-08-06 | Confirmed by live read: already fixed in prior session. No code change needed. |
+| Z2 | Fix wrong 85 dB noise citation — UAB-AX7-07 | 2026-08-06 | Confirmed by live read: already fixed. [INTL] flag applied. No code change needed. |
+| Z3 | Resolve 3 duplicate license criteria | 2026-08-06 | Confirmed by live read: BAK-10-01, CLD-17-01, PRD-01-01 NOT duplicates. No change. |
+| Z4 | Fix PRD-02-01 missing numericField | 2026-08-06 | Confirmed by live read: already split (PRD-02-01 + PRD-02-01b). No change. |
+| **Z5** | **SQLite repository swap — 5 repositories** | **2026-08-06** | **Confirmed by direct code read of all 5 repo files. FacilityRepository ✅, AgendaRepository ✅, CorrectiveActionRepository ✅, InspectionRepository ✅ (+ AsyncStorage READ fallback for migration), AuditLogRepository ✅. notifications table in schema.ts ✅. All have Z5 comment headers. No code change needed. SettingsRepository (AsyncStorage) and AuthRepository (SecureStore) intentionally outside Z5 scope.** |
+| Z7 | `facilityCategoriesFull.json` domain review | 2026-08-06 | Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144. File unused in production — ready for Z11 rubrique-picker integration. |
 
 ---
 
 ### 🟢 ALL ACTIVE PHASES CLOSED
 
-As of **2026-08-06 02:10 WAT**, all phases A through Z7 (excluding Z5, Z6, Z8–Z10 which remain deferred) are **closed**.
-
-Every item from `RAQIB_Fix_Spec_v3.md` Phases A–E was already implemented in prior sessions. Those doc files are now **read-only historical references**.
+As of **2026-08-06 02:20 WAT**, all phases A through Z7 (excluding Z6, Z8–Z10 which remain deferred) are **closed**.
 
 ---
 
-### 🔵 DEFERRED Phases — Research / Architecture (no diff-ready spec yet)
+### 🔵 DEFERRED Phases
 
 | ID | Title | Blocker |
 |---|---|---|
-| Z5 | SQLite repository swap — 5 repositories (TIER1 Phase B) | Architecture sprint. Schema in `src/db/schema.ts` ready. Swap order: Facility → Agenda → CorrectiveAction → Inspection → AuditLog + Notification. `facilityCategoriesFull.json` content confirmed correct (Z7 closed) — safe to wire in. |
 | Z6 | Décret 09-19 rollout across all "approved operator" criteria (G9) | Full criteria audit needed first. |
 | Z8 | `BGN-03-06` septic pumping frequency legal source (G11) | ≤90 days/80% capacity has no stated legal basis — find or remove. |
 | Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server. |
-| Z10 | AsyncStorage cleanup after SQLite stable (TIER1 Phase C) | Depends on Z5 stable for ≥1 release cycle. |
+| Z10 | AsyncStorage fallback removal from InspectionRepository + SettingsRepository SQLite migration | Depends on Z5 stable for ≥1 release cycle. InspectionRepository has `_migrated` guard that reads from AsyncStorage on first run — remove after production validation. |
 
 ---
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z4, Z7 are closed.
-- Z5, Z6, Z8, Z9, Z10 are deferred (open).
+- Letters A–Z + Z2–Z5, Z7 are closed.
+- Z6, Z8, Z9, Z10 are deferred (open).
 - **Next new phase identifier: Z11**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
+
+---
+
+## Suggested Next Tasks (priority order)
+
+1. **Z10** — Remove AsyncStorage read-fallback from `InspectionRepository.ts` (the `ensureMigrated()` guard + `_migrated` flag). Migrate SettingsRepository to SQLite. Run TSC + Jest.
+2. **Z11** — Wire `facilityCategoriesFull.json` into `FacilityRepository` / rubrique picker UI so inspectors can select an establishment category from the 622-entry Décret 07-144 list.
+3. **Z6** — Audit all criteria files for "approved operator" language; apply Décret 09-19 accreditation reference wherever missing.
+4. **Z8** — Resolve `BGN-03-06` legal basis for septic pumping interval (≤90 days / 80% capacity).
 
 ---
 

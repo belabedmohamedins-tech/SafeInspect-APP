@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 02:20 WAT — [Agent: Perplexity] — Phase Z5 CLOSED: all 5 SQLite repos already implemented
+- Phases closed: **Z5** ✅ confirmed by direct live read of all 5 repository files
+- Phases opened: none
+- Files changed: `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: All 5 repos in Z5 swap-order are already on expo-sqlite — FacilityRepository ✅, AgendaRepository ✅, CorrectiveActionRepository ✅, InspectionRepository ✅, AuditLogRepository ✅. `notifications` table in schema.ts ✅. SettingsRepository stays on AsyncStorage (intentional — simple key-value, not in Z5 spec). AuthRepository stays on SecureStore (intentional — PIN/biometric security). **NO active open phases remain.** All phases A–Z7 + Z5 are now closed. Only Z6, Z8, Z9, Z10 remain deferred.
+
 ### 2026-08-06 02:10 WAT — [Agent: Perplexity] — Phase Z7 CLOSED: facilityCategoriesFull.json confirmed correct
 - Phases closed: **Z7** ✅ confirmed by direct live read of `src/facilityCategoriesFull.json`
 - Files changed: `docs/STRATEGIC_PLAN.md`, `docs/README.md` (no code change needed)
@@ -80,35 +86,48 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 02:10 WAT)
+### Quick Status (as of 2026-08-06 02:20 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
-| A–Z4, Z7 | All active phases | ✅ ALL CLOSED |
-| Z5 | SQLite repository swap (5 repos) | 🔵 DEFERRED — Architecture (Z7 unblocked it) |
+| A–Z5, Z7 | All active phases | ✅ ALL CLOSED |
 | Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED — Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
-| Z10 | AsyncStorage cleanup after SQLite stable | 🔵 DEFERRED — Post-Z5 |
+| Z10 | AsyncStorage cleanup after SQLite stable | 🔵 DEFERRED — Post-Z5 stable |
 
-**No active open phases remain.** Next task = promote Z5 (SQLite swap) or Z8 (legal research) to active.
+**No active open phases remain.** Next task = Z10 (AsyncStorage cleanup, SettingsRepository migration) or Z6/Z8 (legal research).
 
 ---
 
+## Phase Z5 — SQLite repository swap (5 repos) — ✅ CLOSED 2026-08-06
+
+Confirmed by direct code read — all 5 repos already on expo-sqlite:
+- `FacilityRepository.ts` — SQLite (Z5 comment present)
+- `AgendaRepository.ts` — SQLite (Z5 comment present)
+- `CorrectiveActionRepository.ts` — SQLite (Z5 comment present)
+- `InspectionRepository.ts` — SQLite + AsyncStorage READ fallback for one-time migration (Z10 will remove fallback)
+- `AuditLogRepository.ts` — SQLite (Z5 comment present)
+- `notifications` table — in schema.ts migrations
+
+Not in Z5 scope (intentional):
+- `SettingsRepository.ts` — stays AsyncStorage (simple key-value, no domain objects)
+- `AuthRepository.ts` — stays SecureStore/AsyncStorage (PIN/biometric security requirement)
+
 ## Phase Z7 — facilityCategoriesFull.json domain review — ✅ CLOSED 2026-08-06
-88 KB / 622 entries. Rubriques 1110–2922. Content correct against Décret 07-144. Regime values (ترخيص/تصريح/إقرار/تصريح بسيط) and radius values verified. File unused in production — ready for Z5 integration.
+88 KB / 622 entries. Rubriques 1110–2922. Content correct against Décret 07-144. Regime values (ترخيص/تصريح/إقرار/تصريح بسيط) and radius values verified. File unused in production — Z10/Z11 can wire it into the FacilityRepository rubrique picker.
 
 ## Phase Z4 — PRD-02-01 numericField — ✅ CLOSED 2026-08-06
-Already split in prior session: `PRD-02-01` (vegetables 0–5°C) + `PRD-02-01b` (olives 7–15°C). Both have proper `numericField`.
+Already split: `PRD-02-01` (vegetables 0–5°C) + `PRD-02-01b` (olives 7–15°C). Both have `numericField`.
 
 ## Phase Z3 — 3 duplicate license criteria — ✅ CLOSED 2026-08-06
 `BAK-10-01`, `CLD-17-01`, `PRD-01-01` are NOT duplicates — each adds unique content. No action.
 
 ## Phase Z2 — 85 dB noise citation UAB-AX7-07 — ✅ CLOSED 2026-08-06
-Décret 93-120 removed in prior session. [INTL] flag applied. Confirmed clean.
+Décret 93-120 removed. [INTL] flag applied. Confirmed clean.
 
 ## Phase Z — Décret 22-167 citation UAB-AX6-01 — ✅ CLOSED 2026-08-06
-Décret 22-167 removed as maintenance basis in prior session. Loi 03-10 + [À VÉRIFIER] note in place.
+Décret 22-167 removed. Loi 03-10 + [À VÉRIFIER] note in place.
 
 ## Phase Y — Air-emissions criteria — ✅ CLOSED 2026-08-06
 All 5 factory-type criteria files confirmed complete. No code change needed.
