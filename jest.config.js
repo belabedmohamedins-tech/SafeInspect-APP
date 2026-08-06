@@ -68,9 +68,9 @@ module.exports = {
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo-crypto$':                          '<rootDir>/__mocks__/expo-crypto.js',
-    // ⚠️ expo-sqlite MUST come before the generic expo/* catch-all.
-    // expo-sqlite calls requireNativeModule (native only) — the mock replaces
-    // the entire module with an in-memory Map-based SQLite implementation.
+    // ⚠️ expo-sqlite: excluded from transformIgnorePatterns (see below) so Node
+    // module resolution hits this mapper entry and routes to the in-memory mock.
+    // Never add expo-sqlite back to the transform list.
     '^expo-sqlite$':                          '<rootDir>/__mocks__/expo-sqlite.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
@@ -92,8 +92,19 @@ module.exports = {
     '^expo-constants$':                       '<rootDir>/__mocks__/expo-constants.js',
   },
 
-  // ⚠️ FRAGILE — Last audited: June 2026 (RN 0.85, Expo SDK 56)
+  // ⚠️ FRAGILE — Last audited: August 2026 (RN 0.85, Expo SDK 56)
+  //
+  // expo-sqlite is intentionally EXCLUDED from this transform list.
+  // Reason: expo-sqlite/src/ExpoSQLite.ts calls requireNativeModule() at
+  // import time. If Jest transforms the package, that call executes in Node
+  // and throws "requireNativeModule is not a function". Keeping expo-sqlite
+  // out of transforms means Jest resolves it via moduleNameMapper instead,
+  // routing cleanly to __mocks__/expo-sqlite.js (the in-memory mock).
+  //
+  // If you ever need to add expo-sqlite back to transforms (e.g. for a
+  // non-mocked integration test), add a jest.mock('expo-sqlite') call in
+  // that test file instead.
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?(?!-sqlite)|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))',
   ],
 };
