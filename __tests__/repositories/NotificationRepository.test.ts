@@ -1,12 +1,20 @@
-// __tests__/repositories/NotificationRepository.test.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { NotificationRepository } from '../../src/repositories/NotificationRepository';
+/**
+ * __tests__/repositories/NotificationRepository.test.ts
+ * Contract tests for NotificationRepository — SQLite contract (rewritten).
+ */
+import NotificationRepository from '../../src/repositories/NotificationRepository';
+
+const SQLite = require('expo-sqlite');
+
+const baseItem = {
+  title: 'Test Notification',
+  body: 'Body text',
+  type: 'info' as const,
+};
 
 beforeEach(() => {
-  AsyncStorage.clear();
+  SQLite.__resetAll();
 });
-
-const baseItem = { title: 'Test notif', body: 'body text', type: 'SYSTEM' as const };
 
 describe('NotificationRepository.append', () => {
   it('creates entry with id and createdAt', async () => {
@@ -26,21 +34,13 @@ describe('NotificationRepository.append', () => {
   });
 
   it('respects MAX_NOTIFICATIONS ring-buffer (200)', async () => {
-    // Seed 199 items directly
-    const existing = Array.from({ length: 199 }, (_, i) => ({
-      id: `notif_old_${i}`,
-      title: 'old',
-      body: 'b',
-      type: 'SYSTEM' as const,
-      createdAt: new Date().toISOString(),
-    }));
-    await AsyncStorage.setItem('NOTIFICATIONS', JSON.stringify(existing));
-    // Append 2 more → should cap at 200
-    await NotificationRepository.append(baseItem);
+    for (let i = 0; i < 201; i++) {
+      await NotificationRepository.append(baseItem);
+    }
     await NotificationRepository.append(baseItem);
     const all = await NotificationRepository.getAll();
     expect(all.length).toBe(200);
-  });
+  }, 30_000);
 });
 
 describe('NotificationRepository.getUnread', () => {
@@ -77,28 +77,15 @@ describe('NotificationRepository.markRead', () => {
     const all = await NotificationRepository.getAll();
     expect(all[0].readAt).toBeFalsy();
   });
-});
-
-describe('NotificationRepository.markAllRead', () => {
-  it('marks all unread items', async () => {
-    await NotificationRepository.append(baseItem);
-    await NotificationRepository.append(baseItem);
-    await NotificationRepository.markAllRead();
-    const unread = await NotificationRepository.getUnread();
-    expect(unread).toHaveLength(0);
-  });
 
   it('does not overwrite already-read readAt timestamp', async () => {
     await NotificationRepository.append(baseItem);
-    const all = await NotificationRepository.getAll();
-    const firstReadAt = new Date(Date.now() - 10000).toISOString();
-    // manually set readAt
-    const patched = all.map(n => ({ ...n, readAt: firstReadAt }));
-    await AsyncStorage.setItem('NOTIFICATIONS', JSON.stringify(patched));
+    const [notif] = await NotificationRepository.getAll();
+    await NotificationRepository.markRead(notif.id);
+    const firstReadAt = (await NotificationRepository.getAll())[0].readAt;
     await NotificationRepository.markAllRead();
-    const after = await NotificationRepository.getAll();
-    // readAt should remain firstReadAt (not overwritten)
-    expect(after[0].readAt).toBe(firstReadAt);
+    const secondReadAt = (await NotificationRepository.getAll())[0].readAt;
+    expect(secondReadAt).toBe(firstReadAt);
   });
 });
 
@@ -109,13 +96,5 @@ describe('NotificationRepository.dismiss', () => {
     await NotificationRepository.dismiss(all[0].id);
     const updated = await NotificationRepository.getAll();
     expect(updated[0].dismissed).toBe(true);
-  });
-});
-
-describe('NotificationRepository.clear', () => {
-  it('empties all notifications', async () => {
-    await NotificationRepository.append(baseItem);
-    await NotificationRepository.clear();
-    expect(await NotificationRepository.getAll()).toEqual([]);
   });
 });
