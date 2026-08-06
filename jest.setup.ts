@@ -80,6 +80,21 @@
  *   Do NOT use Object.defineProperty with writable:false — jest itself needs
  *   to be able to override fetch in individual tests via jest.spyOn.
  *
+ * NOTE: global afterEach — storage reset
+ *
+ *   After every test, the three in-memory stores are wiped:
+ *     • AsyncStorage.__resetStore()  — clears the key-value map
+ *     • expo-sqlite.__resetAll()     — drops all in-memory DB tables
+ *     • schema.__resetDb()           — discards the singleton DB handle
+ *
+ *   This gives every test a clean slate without requiring each test file to
+ *   import and call these helpers manually. It is equivalent to calling all
+ *   three in a beforeEach, but afterEach is preferred so failures leave the
+ *   state intact for inspection (not cleared before you can see it).
+ *
+ *   Tests that need to persist state across calls within the same `it` block
+ *   are unaffected — the reset only fires between tests.
+ *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
@@ -374,4 +389,34 @@ beforeAll(() => {
 afterAll(() => {
   (console.error as jest.Mock).mockRestore?.();
   (console.warn  as jest.Mock).mockRestore?.();
+});
+
+// ─── Global afterEach — wipe all in-memory stores between tests ───────────────
+//
+// Resets three independent storage layers after every single test so no
+// state bleeds across `it` blocks, regardless of which test file is running.
+//
+// • AsyncStorage.__resetStore() — clears the key-value Map
+// • expo-sqlite.__resetAll()   — drops all in-memory table data
+// • schema.__resetDb()         — discards the singleton SQLiteDatabase handle
+//   so the next getDb() call opens a fresh connection against the empty store
+//
+// Using afterEach (not beforeEach) keeps failed-test state visible until after
+// Jest has captured and reported it, then clears for the next test.
+afterEach(() => {
+  try {
+    const AsyncStorageMock = require('@react-native-async-storage/async-storage');
+    const store = AsyncStorageMock.default ?? AsyncStorageMock;
+    if (typeof store.__resetStore === 'function') store.__resetStore();
+  } catch (_) { /* not loaded in this suite — skip */ }
+
+  try {
+    const sqliteMock = require('expo-sqlite');
+    if (typeof sqliteMock.__resetAll === 'function') sqliteMock.__resetAll();
+  } catch (_) { /* not loaded in this suite — skip */ }
+
+  try {
+    const schema = require('./src/db/schema');
+    if (typeof schema.__resetDb === 'function') schema.__resetDb();
+  } catch (_) { /* not loaded in this suite — skip */ }
 });

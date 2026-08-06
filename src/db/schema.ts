@@ -20,6 +20,20 @@ export async function initializeDatabase(): Promise<void> {
   await getDb();
 }
 
+/**
+ * __resetDb — TEST ONLY
+ *
+ * Discards the singleton DB handle so the next call to getDb() opens a
+ * fresh connection. Combined with expo-sqlite.__resetAll() this gives each
+ * test a completely empty database.
+ *
+ * Usage (in beforeEach or afterEach):
+ *   require('../../db/schema').__resetDb();
+ */
+export function __resetDb(): void {
+  _db = null;
+}
+
 interface Migration {
   name: string;
   sql: string;
