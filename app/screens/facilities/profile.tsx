@@ -44,12 +44,14 @@ const STATUS_LABEL: Record<CorrectiveAction['status'], string> = {
   'in-progress': 'جارٍ',
   resolved:      'محلول',
   overdue:       'متأخر',
+  closed:        'مغلق',
 };
 const STATUS_COLOR: Record<CorrectiveAction['status'], string> = {
   open:          Colors.warning,
   'in-progress': Colors.primary,
   resolved:      Colors.success,
   overdue:       Colors.danger,
+  closed:        '#7f8c8d',
 };
 
 const SEVERITY_LABEL: Record<CorrectiveAction['severity'], string> = {
