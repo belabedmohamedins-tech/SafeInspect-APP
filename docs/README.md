@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 01:52 WAT — [Agent: Perplexity] — docs/archive/ created, 8 historical files moved
+- Phases closed: none
+- Phases opened: none
+- Files changed: `docs/archive/README_ARCHIVE.md` (new), `docs/archive/Perplexity_Implementation_Spec.md`, `docs/archive/RAQIB_Fix_Spec_v2.md`, `docs/archive/RAQIB_Fix_Spec_v3.md`, `docs/archive/RAQIB_MASTER_MANUSCRIPT.md`, `docs/archive/RAQIB_Perplexity_Prompt_Ready.md`, `docs/archive/RAQIB_Citation_Verification_Protocol.md`, `docs/archive/RAQIB_SQLite_Migration_Plan.md`, `docs/archive/TIER1_MIGRATION.md`, `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: **Perplexity_Implementation_Spec.md confirmed safe to archive by direct code search — Phases 1–2 (duplicate removal + citation fixes) already implemented in live code. Phase 4 new-criteria proposals were never implemented and are logged as future work candidates (not blockers). docs/ is now clean: only README.md, STRATEGIC_PLAN.md, legal_sources/, and 8 manual chapters remain.**
+
 ### 2026-08-06 01:41 WAT — [Agent: Perplexity] — Roadmap reorganized: open phases Y–Z10 formally registered
 - Phases closed: none
 - Phases opened: **Y, Z, Z2, Z3, Z4** (active) + **Z5–Z10** (deferred)
@@ -101,11 +107,42 @@ When uncertain: search JORADP first, academic/thesis sources as corroboration on
 
 ---
 
+## docs/ Folder Structure
+
+```
+docs/
+├── README.md                          ← Primary handoff (this file)
+├── STRATEGIC_PLAN.md                  ← Phase registry + legal quick-reference
+├── legal_sources/                     ← 5 verified legal source PDFs (Phase W)
+├── Inspection_Manual_Chapter1_Wastewater.md
+├── Inspection_Manual_Chapter2_Solid_Hazardous_Waste.md
+├── Inspection_Manual_Chapter3_Fire_Safety.md
+├── Inspection_Manual_Chapter4_Food_Safety.md
+├── Inspection_Manual_Chapter5_Occupational_Health.md
+├── Inspection_Manual_Chapter6_Documentation_Licensing.md
+├── Inspection_Manual_Chapter7_Air_Quality.md
+├── Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md
+└── archive/                           ← READ-ONLY historical files (do not act on)
+    ├── README_ARCHIVE.md              ← Index + reason for each archived file
+    ├── Perplexity_Implementation_Spec.md
+    ├── RAQIB_Fix_Spec_v2.md
+    ├── RAQIB_Fix_Spec_v3.md
+    ├── RAQIB_MASTER_MANUSCRIPT.md
+    ├── RAQIB_Perplexity_Prompt_Ready.md
+    ├── RAQIB_Citation_Verification_Protocol.md
+    ├── RAQIB_SQLite_Migration_Plan.md
+    └── TIER1_MIGRATION.md
+```
+
+> **Rule:** agents must never act on files in `docs/archive/` without first verifying against live code. Archive files are audit trail only.
+
+---
+
 ## Working Roadmap
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with implementation specs.
 
-### Quick Status Summary (as of 2026-08-06 01:41 WAT)
+### Quick Status Summary (as of 2026-08-06 01:52 WAT)
 
 | Phase | Title | Status | Priority |
 |---|---|---|---|

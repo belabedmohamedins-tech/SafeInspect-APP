@@ -35,6 +35,7 @@
 | R | Jest + smoke tests | 2026-08-06 | `npx jest` → 119 passed / 0 failed / 1315 tests. User-confirmed 00:47 WAT. |
 | W | Legal document verification (5 source gaps) | 2026-08-06 | All 5 docs/legal_sources/ files read via MCP. 0 [À VÉRIFIER] in codebase. |
 | X | i18n screen wire-up (5 screens) | 2026-08-06 | TSC 0 errors + Jest 119/0. User-confirmed 01:32 WAT. |
+| ARCH-1 | docs/archive/ cleanup — 8 historical files moved | 2026-08-06 | Perplexity_Implementation_Spec Phase 1–2 confirmed done by code search (0 results for legacy 04-01, 01-01 series and wrong citations). Phase 4 new-criteria proposals logged as future candidates. |
 
 ---
 
@@ -46,7 +47,7 @@
 ---
 
 #### Phase Y — 🔴 HIGH: 5 missing air-emissions criteria
-**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase A
+**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase A
 **Owner:** Perplexity (code edit) → Claude (TSC + Jest gate)
 **Prerequisite:** Get a third independent confirmation of 50 mg/Nm³ (dust) and 150 mg/Nm³ (VOC) from Décret 06-138 Annex I before writing any code.
 
@@ -88,7 +89,7 @@
 ---
 
 #### Phase Z — 🔴 HIGH: Fix wrong citation in `UAB-AX6-01` (Décret 22-167)
-**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase C
+**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase C
 **Owner:** Perplexity
 
 **Problem:** `uabCriteria.ts` → `UAB-AX6-01` cites Décret 22-167 for "equipment maintenance". That decree actually modifies Décret 06-198's establishment categories — it says nothing about maintenance.
@@ -107,7 +108,7 @@ legalReference: 'المرسوم التنفيذي 06-198 المادة 13 (الت�
 ---
 
 #### Phase Z2 — 🟠 HIGH: Fix wrong 85 dB noise citation in `UAB-AX7-07`
-**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase B
+**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase B
 **Owner:** Perplexity
 
 **Problem:** `uabCriteria.ts` → `UAB-AX7-07` cites `المرسوم 93-120` for the 85 dB noise limit. Décret 93-120 covers medical exams — not noise. The 85 dB figure has no confirmed Algerian legislative source.
@@ -125,7 +126,7 @@ legalReference: 'الحد الأقصى للضجيج المهني (85 ديسيب�
 ---
 
 #### Phase Z3 — 🟡 MEDIUM: Resolve 3 duplicate license criteria
-**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase D
+**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase D
 **Owner:** Perplexity (design decision) → implementation
 
 **Problem:** Three criteria are plain duplicates of `BGN-01-01` (base operating-license check):
@@ -144,7 +145,7 @@ Document decision in `docs/decisions/DECISIONS.md` before committing the diff.
 ---
 
 #### Phase Z4 — 🟡 MEDIUM: Fix `PRD-02-01` missing `numericField`
-**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase E
+**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase E
 **Owner:** Perplexity
 
 **Problem:** `produceStorageCriteria.ts` → `PRD-02-01` is `controlType: 'measurement'` with no `numericField`. It mentions two numeric ranges (vegetables 0–5°C, olives 7–15°C) in prose — one `numericField` can't hold both.
@@ -174,7 +175,7 @@ Option A is preferred for data quality.
 
 ## Phase Numbering Convention
 
-- Letters A–X are closed.
+- Letters A–X are closed. ARCH-1 closed.
 - **Y** = next open phase (highest priority).
 - After Z: use Z2, Z3, Z4 … (already registered above).
 - Never reuse a closed phase letter.
