@@ -6,6 +6,9 @@
 //          computeScoreAndGrade) + diffView rather than the raw items array.
 // Phase-U: empty-checklist guard — shows a clear error state when no criteria
 //          load for the selected activity, instead of a blank list + Finish.
+// Z12-04: removed duplicate createCapItemsFromInspection call from doFinish();
+//         InspectionRepository.save() already calls it via capFactory.
+// Z12-05: autosave draft on cancel so progress is never silently lost.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -39,7 +42,6 @@ import {
   DifferentialView,
 } from '../../../src/services/differentialView';
 import { suggestDecision, DecisionSuggestion } from '../../../src/services/decisionSupport';
-import { createCapItemsFromInspection } from '../../../src/services/capFactory';
 import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../../src/types';
 import { computeScoreAndGrade } from '../../../src/utils/scoringUtils';
@@ -107,6 +109,7 @@ export default function ChecklistScreen() {
     handlePhotoTake,
     handleNumericChange,
     handleFinish: _handleFinish,
+    saveDraft,
   } = useChecklistData(checklistParams, signature);
 
   const { isCollapsed, toggleSection, getSectionProgress } = useCollapsibleSections(
@@ -180,24 +183,15 @@ export default function ChecklistScreen() {
     setShowClosingGate(false);
   };
 
+  // Z12-04: doFinish no longer calls createCapItemsFromInspection directly.
+  // InspectionRepository.save() already invokes capFactory internally on first
+  // completion, so calling it again here was creating duplicate CAP entries.
   const doFinish = async () => {
     await _handleFinish();
-    try {
-      let saved: SavedInspection | undefined;
-      if (checklistParams.draftId) {
-        saved = (await InspectionRepository.getById(checklistParams.draftId)) ?? undefined;
-      } else {
-        const all = await InspectionRepository.getAll();
-        saved = all
-          .filter(i => i.facilityId === checklistParams.facilityId && i.status === 'completed')
-          .sort((a, b) => b.date.localeCompare(a.date))[0];
-      }
-      if (saved) await createCapItemsFromInspection(saved);
-    } catch (err) {
-      console.warn('[CAP] Failed to auto-create corrective actions:', err);
-    }
   };
 
+  // Z12-05: autosave current items as a draft before navigating away,
+  // so no progress is silently lost when the inspector cancels mid-session.
   const handleCancel = () => {
     Alert.alert(
       'تأكيد الإلغاء',
@@ -207,7 +201,14 @@ export default function ChecklistScreen() {
         {
           text: 'إلغاء التفتيش',
           style: 'destructive',
-          onPress: () => router.replace('/(tabs)/inspection'),
+          onPress: async () => {
+            try {
+              await saveDraft?.();
+            } catch {
+              // non-fatal — navigate regardless
+            }
+            router.replace('/(tabs)/inspection');
+          },
         },
       ]
     );

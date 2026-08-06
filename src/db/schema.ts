@@ -2,6 +2,16 @@
  * src/db/schema.ts
  *
  * SQLite schema definitions for SafeInspect.
+ *
+ * MIGRATION NAMING CONVENTION (Z12-15)
+ * ------------------------------------
+ * Each migration name is a unique string used as the PRIMARY KEY in the
+ * _migrations table. The numeric prefix groups migrations by release batch
+ * (001 = initial tables, 002 = indexes + settings, 003+ = additive changes)
+ * but the full name is what SQLite keys on — duplicate prefixes are safe
+ * because every name is distinct. Do NOT rename existing entries; doing so
+ * would cause already-applied migrations to re-run on existing installs.
+ * New migrations must use a name that has never appeared before.
  */
 
 import * as SQLite from 'expo-sqlite';
