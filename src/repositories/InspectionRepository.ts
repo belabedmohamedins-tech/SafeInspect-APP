@@ -1,16 +1,12 @@
 // src/repositories/InspectionRepository.ts
 //
 // Z5: migrated to SQLite as primary storage.
-// AsyncStorage kept as a READ fallback during this migration cycle — if
-// SQLite returns no rows on first run, we attempt a one-time migration from
-// AsyncStorage via schema.ts:migrateAsyncStorageToSQLite().
-// AsyncStorage writes are removed — SQLite is now the single write source.
-// All business logic (integrity hash, repeat-violation annotation, CAP factory,
-// follow-up, approval enqueue) is preserved untouched.
-//
-// Z10 will remove the AsyncStorage fallback once SQLite is stable in prod.
+// Z10: AsyncStorage read-fallback (ensureMigrated / _migrated) removed.
+//      SQLite is now the sole storage layer. migrateAsyncStorageToSQLite()
+//      still exists in schema.ts for manual one-time migration tooling but
+//      is no longer called automatically from this repository.
 
-import { getDb, migrateAsyncStorageToSQLite } from '../db/schema';
+import { getDb } from '../db/schema';
 import { SavedInspection, InspectionItem, InspectionType } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
@@ -18,20 +14,6 @@ import { createCapItemsFromInspection } from '../services/capFactory';
 import { createFollowUpIfNeeded } from '../services/followUpService';
 import { ApprovalRepository } from './ApprovalRepository';
 import { annotateRepeatViolations } from '../services/violationHistory';
-
-// ─── Migration guard ──────────────────────────────────────────────────────────
-
-let _migrated = false;
-
-async function ensureMigrated(): Promise<void> {
-  if (_migrated) return;
-  _migrated = true;
-  try {
-    await migrateAsyncStorageToSQLite();
-  } catch {
-    // Non-fatal — if AsyncStorage had no data this is a no-op
-  }
-}
 
 // ─── Numeric sanitizer (T0.11 — preserved) ───────────────────────────────────
 
@@ -214,7 +196,6 @@ async function upsert(db: Awaited<ReturnType<typeof getDb>>, i: SavedInspection)
 
 export const InspectionRepository = {
   async getAll(): Promise<SavedInspection[]> {
-    await ensureMigrated();
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
       'SELECT * FROM inspections ORDER BY date DESC, created_at DESC',
@@ -223,7 +204,6 @@ export const InspectionRepository = {
   },
 
   async getCompleted(): Promise<SavedInspection[]> {
-    await ensureMigrated();
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
       `SELECT * FROM inspections WHERE status = 'completed' ORDER BY date DESC`,
@@ -232,7 +212,6 @@ export const InspectionRepository = {
   },
 
   async getDrafts(): Promise<SavedInspection[]> {
-    await ensureMigrated();
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
       `SELECT * FROM inspections WHERE status IN ('in-progress','draft') ORDER BY date DESC`,
@@ -241,7 +220,6 @@ export const InspectionRepository = {
   },
 
   async getById(id: string): Promise<SavedInspection | null> {
-    await ensureMigrated();
     const db = await getDb();
     const row = await db.getFirstAsync<InspectionRow>(
       'SELECT * FROM inspections WHERE id = ?',
@@ -251,7 +229,6 @@ export const InspectionRepository = {
   },
 
   async getByFacility(facilityId: string): Promise<SavedInspection[]> {
-    await ensureMigrated();
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
       'SELECT * FROM inspections WHERE facility_id = ? ORDER BY date DESC',
@@ -261,7 +238,6 @@ export const InspectionRepository = {
   },
 
   async updateStatus(id: string, status: SavedInspection['status']): Promise<void> {
-    await ensureMigrated();
     const db = await getDb();
     const now = new Date().toISOString();
     await db.runAsync(
@@ -271,7 +247,6 @@ export const InspectionRepository = {
   },
 
   async save(inspection: SavedInspection): Promise<void> {
-    await ensureMigrated();
     const db = await getDb();
 
     const existingRow = await db.getFirstAsync<{ status: string }>(
@@ -328,7 +303,6 @@ export const InspectionRepository = {
   },
 
   async delete(id: string): Promise<void> {
-    await ensureMigrated();
     const db = await getDb();
     const target = await InspectionRepository.getById(id);
     await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
@@ -342,7 +316,6 @@ export const InspectionRepository = {
   },
 
   async deleteMany(ids: string[]): Promise<void> {
-    await ensureMigrated();
     const db = await getDb();
     await db.withTransactionAsync(async () => {
       for (const id of ids) {

@@ -174,6 +174,15 @@ const MIGRATIONS: Migration[] = [
     `,
   },
   {
+    name: '002_create_settings',
+    sql: `
+      CREATE TABLE IF NOT EXISTS settings (
+        key    TEXT PRIMARY KEY NOT NULL,
+        value  TEXT NOT NULL DEFAULT ''
+      );
+    `,
+  },
+  {
     name: '002_inspections_add_index_facility',
     sql: `CREATE INDEX IF NOT EXISTS idx_inspections_facility_id ON inspections(facility_id);`,
   },
@@ -212,6 +221,12 @@ export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
   }
 }
 
+/**
+ * migrateAsyncStorageToSQLite
+ *
+ * One-time migration helper. No longer called automatically — kept here
+ * for manual tooling / upgrade scripts on existing installs (Z10).
+ */
 export async function migrateAsyncStorageToSQLite(
   onProgress?: (step: string) => void,
 ): Promise<void> {
