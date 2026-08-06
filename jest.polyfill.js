@@ -26,9 +26,29 @@
  *
  * We use `writable: true` so individual test files can still do
  * jest.spyOn(global, 'fetch') without hitting "Cannot assign to read only".
+ *
+ * WHY EXPO_PUBLIC_SYNC_API_URL IS SET HERE
+ * ─────────────────────────────────────────
+ * babel-preset-expo includes transform-inline-environment-variables, which
+ * resolves process.env.EXPO_PUBLIC_* at Babel compile time (when Jest loads
+ * each module), not at test runtime. Setting the variable inside a test's
+ * beforeEach() is too late — Babel has already folded it to '' by the time
+ * the test runs, causing getApiUrl() to throw and every fetch call in
+ * serverAuth.ts to land in the catch block → 'Network error'.
+ *
+ * The Array.join() trick in serverAuth.ts defeats static key analysis, but
+ * process.env must still hold the value when the module is first evaluated.
+ * setupFiles runs before any module is transformed, so assigning here
+ * guarantees the value is present for the entire jest worker lifetime.
  */
 
 'use strict';
+
+// ── Env vars required by source modules ──────────────────────────────────────
+// Set before any module is transformed so Babel inline-env substitution
+// (babel-preset-expo) sees the value at compile time for the test worker.
+process.env.EXPO_PUBLIC_SYNC_API_URL =
+  process.env.EXPO_PUBLIC_SYNC_API_URL || 'https://test.safeinspect.api';
 
 function defineFetchGlobal(name, value) {
   if (value === undefined) return;

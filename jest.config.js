@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════════════════
 // MOCK ARCHITECTURE CONTRACT — 4 layers, see TESTING.md
 // ═══════════════════════════════════════════════════════════════════════════════
-//  L1  jest.polyfill.js          — global polyfills before preset
+//  L1  jest.polyfill.js          — global polyfills + required env vars before preset
 //  L2  moduleNameMapper (below)  — redirect native imports to __mocks__/
 //  L3  jest.setup.ts             — behavioral overrides (react-native Proxy)
 //  L4  test files                — domain-specific mocks only
@@ -25,6 +25,18 @@ module.exports = {
     '<rootDir>/__tests__/**/*.test.ts',
     '<rootDir>/__tests__/**/*.test.tsx',
   ],
+
+  // ─── Env vars ──────────────────────────────────────────────────────────────
+  // These are injected into the Jest worker process environment before any
+  // module is loaded or transformed. This defeats babel-preset-expo's
+  // transform-inline-environment-variables plugin, which folds
+  // process.env.EXPO_PUBLIC_* at compile time — the value must be present
+  // when Babel first processes the file, not just at test runtime.
+  testEnvironmentOptions: {
+    env: {
+      EXPO_PUBLIC_SYNC_API_URL: 'https://test.safeinspect.api',
+    },
+  },
 
   // ─── Coverage ──────────────────────────────────────────────────────────────
   collectCoverageFrom: [
