@@ -44,13 +44,56 @@
 | Z7 | `facilityCategoriesFull.json` domain review | 2026-08-06 | Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144. |
 | Z10 | AsyncStorage fallback removal — InspectionRepository + SettingsRepository | 2026-08-06 | Commit `4ff351c`. `_migrated`/`ensureMigrated()` removed. SettingsRepository rewritten to SQLite. |
 | Z10-FIX | Test drift — SettingsRepository test + schema migration count | 2026-08-06 | Commit `83db48c`. `__tests__/repositories/SettingsRepository.test.ts` rewritten. `git pull` fixed stale local copies. **All green — user-confirmed 13:07 WAT.** |
-| Z11 | Wire `facilityCategoriesFull.json` rubrique into DB + screens | 2026-08-06 | Migration `003_facilities_add_rubrique` added. `Facility.rubrique?: string` in types. FacilityRepository + add.tsx + edit.tsx updated. |
+| Z11 | Wire `facilityCategoriesFull.json` rubrique into DB + screens | 2026-08-06 | Migration `003_facilities_add_rubrique` added. `Facility.rubrique?: string` in types. FacilityRepository + add.tsx + edit.tsx updated. Gate closed 13:22 WAT — 25/25 Jest, TSC 0. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-_No open phases. Next new phase: **Z12**._
+| ID | Title | Priority |
+|---|---|---|
+| **Z12** | **Audit Findings Closure (F-01 to F-18)** | **#1 — Next** |
+
+---
+
+**Z12 Spec — Audit Findings Closure (F-01 to F-18)**
+
+Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06-1.md` (Claude, independent QA).
+
+### Z12-IMMEDIATE (safe code fixes, no design debate)
+
+| Sub-ID | Finding | Severity | Action |
+|---|---|---|---|
+| **Z12-01** | **F-12 — Integrity hash not persisted** | CRITICAL | Add `IntegrityService.hashAndStore(toSave)` in `InspectionRepository.save()`'s `isNewCompletion` branch. Add test: complete inspection → `verifyInspection()` returns `ok: true`. |
+| **Z12-02** | **F-15 — No follow-up for "unable-to-verify"** | HIGH | In `createFollowUpIfNeeded()`, also trigger follow-up when any item has `complianceStatus === 'unable-to-verify'`. |
+| **Z12-03** | **F-10 — New facility categories invisible in start flow** | HIGH | Change `categories.tsx` to derive category list from `facilitiesService.getAllFacilities()` instead of static `src/facilitiesData`. |
+| **Z12-04** | **F-08 — Redundant CAP-creation call** | LOW | Remove the second `createCapItemsFromInspection()` call in `checklist.tsx`'s `doFinish()`. |
+| **Z12-05** | **F-09 — No autosave on app-kill/background** | MEDIUM | Add `AppState` listener and/or periodic autosave in `useChecklistData.ts`. |
+| **Z12-06** | **F-01 — `.env` not gitignored** | MEDIUM | Add `.env` to `.gitignore`. |
+| **Z12-07** | **F-05 — Prod API URL falls back to localhost** | LOW | Remove or gate the `localhost` fallback in `getApiUrl()`. |
+
+### Z12-DESIGN-NEEDED (implement after short product/UX decision)
+
+| Sub-ID | Finding | Severity | Decision needed |
+|---|---|---|---|
+| **Z12-08** | **F-11 — Approved inspections not immutable** | CRITICAL | Decide: hard block on edits/deletes for `approvalStatus === 'approved'`, or allow supervisor override workflow? Implement guard in `save()`/`delete()` accordingly. |
+| **Z12-09** | **F-18 — Local/server approval workflows disconnected** | HIGH | Decide: wire `serverAuth.approveInspection()`/`rejectInspection()` into `ApprovalRepository`, or remove server endpoints as dead code? Resolve together with Z12-08. |
+| **Z12-10** | **F-13 — Reinspection can link wrong facility** | HIGH | Decide: skip facility re-selection entirely for reinspection, or add facility-match guard in `buildDifferentialView()`? |
+| **Z12-11** | **F-14 — Inconsistent "evaluated" definitions + mislabeling** | MEDIUM-HIGH | Confirm intended definition of "evaluated" and desired labels/colors for `observation-only`/`unable-to-verify`. |
+| **Z12-12** | **F-17 — Server/mobile schema mismatch** | HIGH (pre-sync) | Confirm current server schema; write explicit mapping functions before enabling real sync. |
+
+### Z12-LEGAL (legal-review only, no code change until verified)
+
+| Sub-ID | Finding | Severity | Action |
+|---|---|---|---|
+| **Z12-13** | **F-16 — HACCP legal citation (Décret 17-140)** | MEDIUM | Route to legal expert with primary-source access; update comment/citation if needed. |
+
+**Implementation order:**
+1. Z12-01 → Z12-07 (IMMEDIATE, in any order; Z12-01 first as CRITICAL).
+2. Z12-08 → Z12-12 (after product/UX decisions).
+3. Z12-13 (parallel legal review).
+
+**Close condition:** All 13 sub-items marked ✅ in this section, TSC 0 errors, Jest passing.
 
 ---
 
@@ -68,8 +111,8 @@ _No open phases. Next new phase: **Z12**._
 
 - Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11 are closed.
 - Z6, Z8, Z9 are deferred.
-- No open phases.
-- **Next new phase identifier: Z12**
+- **Z12 is now OPEN — Audit Findings Closure (F-01 to F-18).**
+- **Next new phase identifier after Z12 closes: Z13.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
