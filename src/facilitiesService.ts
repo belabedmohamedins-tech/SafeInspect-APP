@@ -10,7 +10,7 @@ import { facilities as hardcodedFacilities } from './facilitiesData';
 import { FacilityRepository } from './repositories/FacilityRepository';
 import { Facility } from './types';
 
-// ─── Helpers ────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────
 
 /**
  * Strips Arabic tashkeel (diacritics) so that مَطْعَم and مطعم match.
@@ -19,7 +19,7 @@ import { Facility } from './types';
 const normaliseArabic = (s: string): string =>
   s.normalize('NFC').replace(/[\u064B-\u065F]/g, '').toLowerCase();
 
-// ─── Read ──────────────────────────────────────────────────────
+// ─── Read ───────────────────────────────────────────────────────
 
 /** Returns all facilities: hardcoded registry first, then user-added. */
 export const getAllFacilities = async (): Promise<Facility[]> => {
@@ -51,7 +51,7 @@ export const getUserFacilities = async (): Promise<Facility[]> => {
   }
 };
 
-// ─── Search & Filter ─────────────────────────────────────────────
+// ─── Search & Filter ─────────────────────────────────────────────────
 
 /**
  * Full-text search across projectName, ownerName, address, and activity.
@@ -109,16 +109,21 @@ export const searchAndFilter = async (
   return searched.filter(f => normaliseArabic(f.activity) === target);
 };
 
-// ─── Write (delegates to FacilityRepository) ────────────────────
+// ─── Write (delegates to FacilityRepository) ────────────────────────────────
 
 /**
  * Appends a new user facility. Assigns a unique id prefixed with 'U'.
- * Returns the saved facility (with the generated id).
+ * Returns the saved Facility (with the generated or provided id).
  */
 export const addUserFacility = async (
   facility: Omit<Facility, 'id'>
 ): Promise<Facility> => {
-  return FacilityRepository.add(facility);
+  // add() now returns the id string; fetch the full record so callers still
+  // receive a Facility object with all fields populated from the database.
+  const id = await FacilityRepository.add(facility);
+  const saved = await FacilityRepository.getById(id);
+  // getById can only return null if the INSERT failed, which would have thrown.
+  return saved!;
 };
 
 /**
