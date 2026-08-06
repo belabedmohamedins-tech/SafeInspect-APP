@@ -8,6 +8,13 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 04:28 WAT — [Agent: Perplexity] — Z5-FIX3: ALL GREEN — 120/120 suites, 0 failures, TSC 0 errors
+- Phases closed: **Z5-FIX3** ✅ committed `f656e4e`
+- Files changed: `src/__tests__/repositories/FacilityRepository.test.ts`
+- Fix: replaced `await import('../../db/schema')` (dynamic — requires `--experimental-vm-modules`) with top-level static `require()` inside `beforeEach`. Babel/CommonJS Jest transforms `require()` correctly; dynamic `import()` crashes without the Node flag.
+- Gate result (user-confirmed): TSC 0 errors | Jest 120/120 suites passed, 1 skipped, 0 failed, 1234 tests passing
+- **Repo is now fully green. No active open phases.**
+
 ### 2026-08-06 03:30 WAT — [Agent: Perplexity] — Phase Z5-FIX2: All 9 failing test files fixed (TS2613/TS2322/TS7006)
 - Phases closed: Z5-FIX2 ✅ committed `5b59b87`
 - Phases opened: none
@@ -105,18 +112,18 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 03:30 WAT)
+### Quick Status (as of 2026-08-06 04:28 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
 | A–Z5, Z7 | All active phases | ✅ ALL CLOSED |
-| Z5-FIX2 | TS2613/TS2322/TS7006 test fixes | ✅ CLOSED 2026-08-06 03:30 |
+| Z5-FIX, FIX2, FIX3 | SQLite mock + TS + dynamic import | ✅ CLOSED 2026-08-06 04:28 |
 | Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED — Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
 | Z10 | AsyncStorage cleanup after SQLite stable | 🔵 DEFERRED — Post-Z5 stable |
 
-**No active open phases remain.**
+**✅ Repo fully green: TSC 0 errors | Jest 120/120 suites | 1234 tests passing**
 
 ---
 
