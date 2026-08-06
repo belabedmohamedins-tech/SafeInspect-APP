@@ -43,7 +43,8 @@
 | Z5 | SQLite repository swap — 5 repositories | 2026-08-06 | All 5 repos confirmed on SQLite. Commits: bbe9c5f + f656e4e (Z5-FIX1/2/3). |
 | Z7 | `facilityCategoriesFull.json` domain review | 2026-08-06 | Direct read: 88 KB, 622 entries. Content confirmed correct against Décret 07-144. |
 | Z10 | AsyncStorage fallback removal — InspectionRepository + SettingsRepository | 2026-08-06 | Commit `4ff351c`. `_migrated`/`ensureMigrated()` removed. SettingsRepository rewritten to SQLite. |
-| **Z11** | **Wire `facilityCategoriesFull.json` rubrique into DB + screens** | **2026-08-06** | **Migration `003_facilities_add_rubrique` added. `Facility.rubrique?: string` added to types. `FacilityRepository` add/update/rowMapper handle rubrique. `add.tsx` + `edit.tsx` save & pre-fill rubrique. Gate: Claude TSC + Jest.** |
+| Z10-FIX | Test drift — SettingsRepository test + schema migration count | 2026-08-06 | Commit `83db48c`. `__tests__/repositories/SettingsRepository.test.ts` rewritten. `git pull` fixed stale local copies. **All green — user-confirmed 13:07 WAT.** |
+| Z11 | Wire `facilityCategoriesFull.json` rubrique into DB + screens | 2026-08-06 | Migration `003_facilities_add_rubrique` added. `Facility.rubrique?: string` in types. FacilityRepository + add.tsx + edit.tsx updated. |
 
 ---
 
@@ -65,7 +66,7 @@ _No open phases. Next new phase: **Z12**._
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z11 are closed.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11 are closed.
 - Z6, Z8, Z9 are deferred.
 - No open phases.
 - **Next new phase identifier: Z12**
@@ -93,6 +94,6 @@ _No open phases. Next new phase: **Z12**._
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
 | Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED |
 | Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED |
-| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. periodicité | ✅ VERIFIED |
+| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
