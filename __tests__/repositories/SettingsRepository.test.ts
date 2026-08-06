@@ -1,9 +1,17 @@
 // __tests__/repositories/SettingsRepository.test.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
+//
+// SettingsRepository was migrated from AsyncStorage → SQLite in Z10.
+// All assertions go through the public API (get / set / getAll).
+// No direct AsyncStorage spies — they have no effect on the SQLite-backed impl.
+
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 
 beforeEach(() => {
-  AsyncStorage.clear();
+  jest.clearAllMocks();
+  const SQLite = require('expo-sqlite');
+  if (typeof SQLite.__resetAll === 'function') SQLite.__resetAll();
+  const schema = require('../../src/db/schema');
+  if (typeof schema.__resetDb === 'function') schema.__resetDb();
 });
 
 describe('SettingsRepository.get', () => {
@@ -21,10 +29,15 @@ describe('SettingsRepository.get', () => {
     expect(s.officeName).toBe('HQ');
   });
 
-  it('returns defaults on AsyncStorage failure', async () => {
-    (AsyncStorage.multiGet as jest.Mock).mockRejectedValueOnce(new Error('fail'));
+  it('returns defaults on db failure', async () => {
+    const SQLite = require('expo-sqlite');
+    const orig = SQLite.openDatabaseAsync;
+    SQLite.openDatabaseAsync = jest.fn().mockRejectedValueOnce(new Error('fail'));
+    const schema = require('../../src/db/schema');
+    schema.__resetDb?.();
     const s = await SettingsRepository.get();
     expect(s.officeName).toBe('');
+    SQLite.openDatabaseAsync = orig;
   });
 });
 
@@ -40,16 +53,22 @@ describe('SettingsRepository.getAll', () => {
     expect(all['pinEnabled']).toBe('true');
   });
 
-  it('returns empty object on AsyncStorage failure', async () => {
-    (AsyncStorage.getAllKeys as jest.Mock).mockRejectedValueOnce(new Error('fail'));
+  it('returns empty object on db failure', async () => {
+    const SQLite = require('expo-sqlite');
+    const orig = SQLite.openDatabaseAsync;
+    SQLite.openDatabaseAsync = jest.fn().mockRejectedValueOnce(new Error('fail'));
+    const schema = require('../../src/db/schema');
+    schema.__resetDb?.();
     const all = await SettingsRepository.getAll();
     expect(all).toEqual({});
+    SQLite.openDatabaseAsync = orig;
   });
 
-  it('returns empty object when getAllKeys returns null', async () => {
-    (AsyncStorage.getAllKeys as jest.Mock).mockResolvedValueOnce(null);
+  it('defaults null values to empty string', async () => {
+    // The SQLite mock stores rows; setting explicit empty string round-trips.
+    await SettingsRepository.set('ghost', '');
     const all = await SettingsRepository.getAll();
-    expect(all).toEqual({});
+    expect(all['ghost']).toBe('');
   });
 });
 
@@ -85,8 +104,11 @@ describe('SettingsRepository.set — object form', () => {
     await expect(SettingsRepository.set({})).resolves.not.toThrow();
   });
 
-  it('silently catches set errors', async () => {
-    (AsyncStorage.multiSet as jest.Mock).mockRejectedValueOnce(new Error('disk error'));
-    await expect(SettingsRepository.set({ inspectorName: 'X' })).resolves.not.toThrow();
+  it('does not overwrite untouched fields', async () => {
+    await SettingsRepository.set({ officeName: 'Oran', inspectorName: 'Ali' });
+    await SettingsRepository.set({ officeName: 'Alger' });
+    const s = await SettingsRepository.get();
+    expect(s.officeName).toBe('Alger');
+    expect(s.inspectorName).toBe('Ali');
   });
 });
