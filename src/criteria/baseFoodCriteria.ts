@@ -125,20 +125,20 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // =====================================================================
   // المحور 5: نظام HACCP
-  // N4 ✅ (2026-07-29): legalReference pinned to Décret 17-140 Art. 9 (confirmed
-  // primary-source review, Chapter 4 manual). Primary-production exclusion confirmed:
-  // HACCP obligation does NOT apply to couvoir or UPD (primary production) —
-  // those facility types must NOT receive this criterion.
+  // Z12-13 ✅ (2026-08-06): legalReference corrected from Art. 9 → Art. 5.
+  // JORADP-confirmed by project owner (primary-source read, 2026-08-06 18:29 WAT).
+  // Art. 5 is the article that establishes the HACCP obligation for classified
+  // food establishments. Primary-production exclusion (couvoir, UPD) still applies.
   // =====================================================================
   {
     id: 'BFD-05-01',
     axis: 'HACCP ونظام السلامة الغذائية',
     category: 'غذائية',
-    // Verified: Décret 17-140 Art. 9 is the confirmed legal basis for the HACCP
-    // obligation in classified food establishments. Primary-production facilities
-    // (couvoir, UPD) are explicitly excluded from this obligation per Art. 9's scope.
+    // Z12-13 ✅: Décret 17-140 Art. 5 confirmed as HACCP obligation article (JORADP, 2026-08-06).
+    // Previous N4 note (2026-07-29) cited Art. 9 — superseded by this primary-source confirmation.
+    // Primary-production facilities (couvoir, UPD) remain explicitly excluded per Art. 5 scope.
     criteria: 'وجود نظام HACCP مطبَّق وموثَّق (تحليل المخاطر، نقاط التحكم الحرجة CCP، حدود حرجة، مراقبة، تصحيح، توثيق) في المنشآت التي تُلزَم به قانوناً. ملاحظة: مرافق الإنتاج الأولي (كوفوير، UPD) مستثناة صراحةً من هذا الالتزام.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 9 (إلزامية نظام HACCP في المنشآت الغذائية المصنفة — لا تشمل الإنتاج الأولي).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (إلزامية نظام HACCP في المنشآت الغذائية المصنفة — لا تشمل الإنتاج الأولي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
