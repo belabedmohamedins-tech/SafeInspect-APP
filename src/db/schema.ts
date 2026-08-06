@@ -27,18 +27,42 @@
  *   • DML  → db.runAsync(sql, params)   — no outer transaction needed for
  *             single-row inserts; withTransactionAsync only for multi-step
  *             DML batches that must be atomic together.
+ *
+ * WHY getDb() USES AN INIT-PROMISE GUARD
+ * ----------------------------------------
+ * expo-sqlite v15 (SDK 56) shares a native database handle via reference
+ * counting. If two callers both hit `getDb()` before the first `await
+ * openDatabaseAsync()` resolves, each receives a separate NativeDatabase
+ * object pointing at the same file. When Android's GC later collects one
+ * of those objects it closes the underlying SQLite handle, making all
+ * remaining references throw NullPointerException on the next
+ * `prepareAsync` call.
+ *
+ * The guard: `_initPromise` stores the in-flight init promise. Concurrent
+ * callers all await the same promise instead of each calling
+ * openDatabaseAsync independently. Once resolved, `_db` is set and every
+ * subsequent call short-circuits immediately.
  */
 
 import * as SQLite from 'expo-sqlite';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let _db: SQLite.SQLiteDatabase | null = null;
+let _initPromise: Promise<SQLite.SQLiteDatabase> | null = null;
 
 export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   if (_db) return _db;
-  _db = await SQLite.openDatabaseAsync('safeinspect.db');
-  await runMigrations(_db);
-  return _db;
+  // Reuse the in-flight promise so concurrent callers never call
+  // openDatabaseAsync more than once (prevents the GC-NPE race on Android).
+  if (!_initPromise) {
+    _initPromise = (async () => {
+      const db = await SQLite.openDatabaseAsync('safeinspect.db');
+      await runMigrations(db);
+      _db = db;
+      return db;
+    })();
+  }
+  return _initPromise;
 }
 
 export async function initializeDatabase(): Promise<void> {
@@ -57,6 +81,7 @@ export async function initializeDatabase(): Promise<void> {
  */
 export function __resetDb(): void {
   _db = null;
+  _initPromise = null;
 }
 
 interface Migration {
