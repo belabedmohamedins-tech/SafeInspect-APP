@@ -7,6 +7,11 @@
 //   InspectionRepository migrated to SQLite in Z5/Z10. AsyncStorage.__resetStore()
 //   has no effect on the SQLite in-memory store, so inspections from one test
 //   persisted into the next, causing assertion failures.
+//
+// FIX (2026-08-06): jest.clearAllMocks() in beforeEach clears mock implementations
+//   set via jest.fn().mockResolvedValue() in factory closures — same issue as
+//   InspectionRepository.test.ts. Re-apply hashAndStore + annotateRepeatViolations
+//   implementations explicitly in beforeEach after clearAllMocks.
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import type { SavedInspection } from '../../types';
@@ -29,18 +34,33 @@ jest.mock('../../repositories/ApprovalRepository', () => ({
 }));
 jest.mock('../../services/IntegrityService', () => ({
   IntegrityService: {
-    computeHash:  jest.fn().mockResolvedValue('hash-abc'),
-    hashAndStore: jest.fn().mockResolvedValue('hash-abc'),
+    computeHash:  jest.fn(),
+    hashAndStore: jest.fn(),
   },
 }));
 
+import { IntegrityService } from '../../services/IntegrityService';
 import { annotateRepeatViolations } from '../../services/violationHistory';
+import { createFollowUpIfNeeded } from '../../services/followUpService';
+import { AuditLogRepository } from '../../repositories/AuditLogRepository';
+import { createCapItemsFromInspection } from '../../services/capFactory';
+import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
 beforeEach(() => {
   // Reset the in-memory SQLite store — repository is SQLite-backed since Z5.
   const SQLiteMock = jest.requireMock('expo-sqlite') as any;
   if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
   jest.clearAllMocks();
+  // Re-apply Promise-returning implementations after clearAllMocks wipes them.
+  // jest.clearAllMocks() clears mock.calls AND implementations set via
+  // mockResolvedValue — even when set in the factory. Must re-apply here.
+  (IntegrityService.hashAndStore as jest.Mock).mockResolvedValue('hash-abc');
+  (IntegrityService.computeHash  as jest.Mock).mockResolvedValue('hash-abc');
+  (annotateRepeatViolations       as jest.Mock).mockResolvedValue([]);
+  (createFollowUpIfNeeded         as jest.Mock).mockResolvedValue(undefined);
+  (AuditLogRepository.append      as jest.Mock).mockResolvedValue(undefined);
+  (createCapItemsFromInspection   as jest.Mock).mockResolvedValue(undefined);
+  (ApprovalRepository.enqueue     as jest.Mock).mockResolvedValue(undefined);
 });
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {

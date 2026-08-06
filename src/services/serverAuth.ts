@@ -13,16 +13,23 @@
 //     Uses expo-secure-store on device, AsyncStorage fallback on web.
 // Z12-07: removed localhost:3000 fallback from getApiUrl() — missing env var
 //         now throws clearly instead of silently hitting a dev server.
+// FIX (2026-08-06): defeat Babel constant-folding of the env key.
+//   babel-plugin-transform-inline-environment-variables resolves module-level
+//   const declarations at transpile time, so process.env[SYNC_API_URL_KEY]
+//   was folded to process.env[''] → '' regardless of runtime assignments.
+//   Splitting the key across Array.join() produces a runtime expression that
+//   Babel cannot statically evaluate.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 import { StorageKeys } from '../repositories/keys';
 
-// Computed key — defeats babel-plugin-transform-inline-environment-variables
-const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 function getApiUrl(): string {
-  const url = ((process.env[SYNC_API_URL_KEY] ?? '').trim());
+  // Key is assembled at runtime — defeats babel-plugin-transform-inline-
+  // environment-variables which cannot fold Array.join() expressions.
+  const key = ['EXPO_PUBLIC', 'SYNC', 'API', 'URL'].join('_');
+  const url = ((process.env as Record<string, string | undefined>)[key] ?? '').trim();
   if (!url) {
     throw new Error(
       'EXPO_PUBLIC_SYNC_API_URL is not set. Configure it in your .env file before using server features.',
