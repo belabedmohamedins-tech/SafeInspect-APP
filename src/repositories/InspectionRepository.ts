@@ -5,6 +5,10 @@
 //      SQLite is now the sole storage layer. migrateAsyncStorageToSQLite()
 //      still exists in schema.ts for manual one-time migration tooling but
 //      is no longer called automatically from this repository.
+// Z12-01: replaced computeHash with hashAndStore so the hash is persisted
+//         to AsyncStorage and verifyInspection() can find it.
+// Z12-02: createFollowUpIfNeeded also triggered for 'unable-to-verify' items
+//         (handled inside followUpService — repo change: none needed here).
 
 import { getDb } from '../db/schema';
 import { SavedInspection, InspectionItem, InspectionType } from '../types';
@@ -280,7 +284,9 @@ export const InspectionRepository = {
         // Non-fatal
       }
 
-      const hash = await IntegrityService.computeHash(toSave);
+      // Z12-01: use hashAndStore so the hash is persisted in AsyncStorage
+      // and IntegrityService.verifyInspection() can find it.
+      const hash = await IntegrityService.hashAndStore(toSave);
       toSave = {
         ...toSave,
         integrityHash: hash,

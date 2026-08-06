@@ -11,6 +11,8 @@
 //
 // ⚠️  No localStorage / sessionStorage — app runs in sandboxed context.
 //     Uses expo-secure-store on device, AsyncStorage fallback on web.
+// Z12-07: removed localhost:3000 fallback from getApiUrl() — missing env var
+//         now throws clearly instead of silently hitting a dev server.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
@@ -20,7 +22,13 @@ import { StorageKeys } from '../repositories/keys';
 // Computed key — defeats babel-plugin-transform-inline-environment-variables
 const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 function getApiUrl(): string {
-  return ((process.env[SYNC_API_URL_KEY] ?? '').trim()) || 'http://localhost:3000';
+  const url = ((process.env[SYNC_API_URL_KEY] ?? '').trim());
+  if (!url) {
+    throw new Error(
+      'EXPO_PUBLIC_SYNC_API_URL is not set. Configure it in your .env file before using server features.',
+    );
+  }
+  return url;
 }
 
 const SECURE_OPTIONS: SecureStore.SecureStoreOptions = {

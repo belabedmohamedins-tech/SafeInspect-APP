@@ -1,6 +1,7 @@
 // src/services/followUpService.ts
 // Auto follow-up agenda creation (FR-025)
 // Called by InspectionRepository.save() when an inspection is completed.
+// Z12-02: also triggers follow-up when any item has complianceStatus === 'unable-to-verify'.
 import { SavedInspection } from '../types';
 import { AgendaRepository } from '../repositories/AgendaRepository';
 import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
@@ -15,15 +16,21 @@ function addDays(dateStr: string, days: number): string {
 /**
  * Creates a follow-up agenda item 30 days after the inspection date if:
  *  - The inspection grade is 'D', OR
- *  - There is at least one open CAP item for this inspection.
+ *  - There is at least one open CAP item for this inspection, OR
+ *  - At least one item has complianceStatus === 'unable-to-verify' (Z12-02).
  *
  * Idempotent: only creates one follow-up per inspection (checks by inspectionId note tag).
  */
 export async function createFollowUpIfNeeded(inspection: SavedInspection): Promise<void> {
   if (inspection.status !== 'completed') return;
 
+  const hasUnableToVerify = inspection.items.some(
+    item => item.complianceStatus === 'unable-to-verify',
+  );
+
   const needsFollowUp =
     inspection.grade === 'D' ||
+    hasUnableToVerify ||
     (await CorrectiveActionRepository.getByInspection(inspection.id)).length > 0;
 
   if (!needsFollowUp) return;
@@ -38,7 +45,12 @@ export async function createFollowUpIfNeeded(inspection: SavedInspection): Promi
   if (alreadyExists) return;
 
   const followUpDate = addDays(inspection.date, 30);
-  const gradeReason = inspection.grade === 'D' ? 'درجة D' : 'إجراءات تصحيحية مفتوحة';
+  const gradeReason =
+    inspection.grade === 'D'
+      ? 'درجة D'
+      : hasUnableToVerify
+        ? 'بنود لم يتمكن المفتش من التحقق منها'
+        : 'إجراءات تصحيحية مفتوحة';
 
   await AgendaRepository.save({
     id: `followup-${inspection.id}-${Date.now()}`,
