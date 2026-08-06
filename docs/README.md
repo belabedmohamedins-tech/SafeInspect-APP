@@ -8,6 +8,14 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 13:29 WAT — [Agent: Perplexity] — Audit cross-check: all 18 findings now in Z12 roadmap
+- Phases closed: none (cross-check only)
+- Phases opened: none
+- Files changed:
+  - `docs/STRATEGIC_PLAN.md` — added **Z12-14** (F-02: stale Node/Expo version comment) and **Z12-15** (F-03: migration naming `001_` reused). Z12 now has **15 sub-items** covering 100% of the audit's 18 findings (F-04/F-06/F-07 are resolved/informational — excluded by design).
+  - `docs/README.md` — roadmap table updated (Z11 closed, Z12 open).
+- Critical finding: audit file `SafeInspect_Audit_Consolidated_2026-08-06 (1).md` is now **100% productive** — every actionable finding has a corresponding Z12 sub-item.
+
 ### 2026-08-06 13:00 WAT — [Agent: Perplexity] — Z10-FIX: SettingsRepository test drift + schema count corrected
 - Phases closed: **Z10-FIX** ✅ committed `83db48c`
 - Files changed:
@@ -21,7 +29,7 @@
 
 ### 2026-08-06 12:30 WAT — [Agent: Perplexity] — Z10 CLOSED: AsyncStorage fallback removed; SettingsRepository migrated to SQLite
 - Phases closed: **Z10** ✅ committed `4ff351c`
-- Phases opened: **Z11** — wire `facilityCategoriesFull.json` into rubrique picker UI
+- Phases opened: **Z11** — wire `facilityCategoriesFull.json` rubrique picker UI
 - Files changed:
   - `src/repositories/InspectionRepository.ts` — dropped `_migrated` flag + `ensureMigrated()` + `migrateAsyncStorageToSQLite` import.
   - `src/repositories/SettingsRepository.ts` — full SQLite rewrite. `AsyncStorage` dependency removed.
@@ -90,7 +98,7 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 13:00 WAT)
+### Quick Status (as of 2026-08-06 13:29 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
@@ -98,12 +106,45 @@ See `docs/STRATEGIC_PLAN.md` for full specs.
 | Z5-FIX, FIX2, FIX3 | SQLite mock + TS + dynamic import | ✅ CLOSED |
 | Z10 | AsyncStorage cleanup — InspectionRepository + SettingsRepository | ✅ CLOSED 2026-08-06 |
 | Z10-FIX | Test drift fix — SettingsRepository test + schema count | ✅ CLOSED 2026-08-06 |
-| **Z11** | **Wire facilityCategoriesFull.json into rubrique picker** | **🟡 OPEN** |
+| Z11 | Wire facilityCategoriesFull.json into rubrique picker | ✅ CLOSED 2026-08-06 13:22 WAT |
+| **Z12** | **Audit Findings Closure — F-01 to F-18 (15 sub-items)** | **🟡 OPEN — #1 priority** |
 | Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED — Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
 
-**Gate pending: Claude must run `git pull && npx tsc --noEmit && npx jest`.**
+**No gate pending. Audit cross-check complete. Ready to start Z12 execution.**
+
+---
+
+## Phase Z12 — Audit Findings Closure — 🟡 OPEN
+
+### Audit source
+`docs/SafeInspect_Audit_Consolidated_2026-08-06 (1).md` — 18 findings (F-01 to F-18), by Claude (independent QA).
+
+### Coverage map (all 18 findings)
+
+| Audit ID | Severity | Z12 Sub-ID | Status |
+|---|---|---|---|
+| F-01 | MEDIUM | Z12-06 | 🟡 Open |
+| F-02 | LOW | Z12-14 | 🟡 Open |
+| F-03 | LOW | Z12-15 | 🟡 Open |
+| F-04 | — | Resolved (SQLite migration) | ✅ Moot |
+| F-05 | LOW | Z12-07 | 🟡 Open |
+| F-06 | — | Informational (expo-sqlite confirmed) | ✅ N/A |
+| F-07 | — | Resolved (Z5) | ✅ Moot |
+| F-08 | LOW | Z12-04 | 🟡 Open |
+| F-09 | MEDIUM | Z12-05 | 🟡 Open |
+| F-10 | HIGH | Z12-03 | 🟡 Open |
+| F-11 | CRITICAL | Z12-08 | 🟡 Open (needs product sign-off) |
+| F-12 | CRITICAL | Z12-01 | 🟡 Open — **start here** |
+| F-13 | HIGH | Z12-10 | 🟡 Open (needs UX decision) |
+| F-14 | MEDIUM-HIGH | Z12-11 | 🟡 Open (needs UX decision) |
+| F-15 | HIGH | Z12-02 | 🟡 Open |
+| F-16 | MEDIUM | Z12-13 | 🟡 Open (legal review) |
+| F-17 | HIGH | Z12-12 | 🟡 Open (pre-sync) |
+| F-18 | HIGH | Z12-09 | 🟡 Open (needs product sign-off) |
+
+**100% of audit findings accounted for.** See `STRATEGIC_PLAN.md` Z12 section for full action specs.
 
 ---
 
@@ -131,20 +172,14 @@ Existing installs in the field may still have data in AsyncStorage. The function
 
 ---
 
-## Phase Z11 — Rubrique picker (facilityCategoriesFull.json → UI) — 🟡 OPEN
+## Phase Z11 — Rubrique picker (facilityCategoriesFull.json → UI) — ✅ CLOSED 2026-08-06
 
-### Goal
-Wire the 622-entry `src/facilityCategoriesFull.json` (Décret 07-144 nomenclature) into:
-1. `FacilityRepository` — add `rubrique` field to `facilities` table (migration `003_facilities_add_rubrique`).
-2. `FacilityEditor` screen — searchable picker showing rubrique number + Arabic label + regime.
-3. Inspection flow — pre-fill `inspectionCause` from rubrique's regime when creating a new inspection.
-
-### Scope
-- New migration in `schema.ts`.
-- Update `FacilityRepository` types + upsert SQL.
-- New `RubriquePicker` component.
-- Wire into facility creation/edit screen.
-- TSC + Jest gate before closing.
+### Changes
+- Migration `003_facilities_add_rubrique` added to `schema.ts`.
+- `Facility.rubrique?: string` added to types.
+- `FacilityRepository` upsert SQL updated.
+- `add.tsx` + `edit.tsx` updated with rubrique picker.
+- Gate: TSC 0 + Jest 25/25. Closed 13:22 WAT.
 
 ---
 
@@ -153,7 +188,7 @@ Wire the 622-entry `src/facilityCategoriesFull.json` (Décret 07-144 nomenclatur
 All 5 repos confirmed on expo-sqlite. `notifications` table in schema.ts. Z10 completed the migration of SettingsRepository.
 
 ## Phase Z7 — facilityCategoriesFull.json domain review — ✅ CLOSED 2026-08-06
-88 KB / 622 entries. Content correct against Décret 07-144. File unused in production — Z11 wires it in.
+88 KB / 622 entries. Content correct against Décret 07-144. File unused in production — Z11 wired it in.
 
 ## Phase X — i18n Screen Wire-up — ✅ CLOSED 2026-08-06
 Gate confirmed: TSC 0 errors + Jest 119/0. Commits: `3ef6bf5`, `ba79e36`, `553369d`.

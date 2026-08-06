@@ -58,7 +58,8 @@
 
 **Z12 Spec — Audit Findings Closure (F-01 to F-18)**
 
-Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06-1.md` (Claude, independent QA).
+Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06 (1).md` (Claude, independent QA).
+**Cross-check confirmed by Perplexity 2026-08-06 13:29 WAT — all 18 findings now tracked (F-02 and F-03 added below, completing 100% coverage).**
 
 ### Z12-IMMEDIATE (safe code fixes, no design debate)
 
@@ -69,8 +70,10 @@ Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06-1.md` (Claude, independe
 | **Z12-03** | **F-10 — New facility categories invisible in start flow** | HIGH | Change `categories.tsx` to derive category list from `facilitiesService.getAllFacilities()` instead of static `src/facilitiesData`. |
 | **Z12-04** | **F-08 — Redundant CAP-creation call** | LOW | Remove the second `createCapItemsFromInspection()` call in `checklist.tsx`'s `doFinish()`. |
 | **Z12-05** | **F-09 — No autosave on app-kill/background** | MEDIUM | Add `AppState` listener and/or periodic autosave in `useChecklistData.ts`. |
-| **Z12-06** | **F-01 — `.env` not gitignored** | MEDIUM | Add `.env` to `.gitignore`. |
-| **Z12-07** | **F-05 — Prod API URL falls back to localhost** | LOW | Remove or gate the `localhost` fallback in `getApiUrl()`. |
+| **Z12-06** | **F-01 — `.env` not gitignored** | MEDIUM | Add `.env` (without suffix) to `.gitignore`. |
+| **Z12-07** | **F-05 — Prod API URL falls back to localhost** | LOW | Remove or gate the `localhost` fallback in `getApiUrl()` in `serverAuth.ts`. |
+| **Z12-14** | **F-02 — Stale Node/Expo version comment** | LOW | Update version comment in `package.json` or wherever the stale Node/Expo version string lives to match the current actual versions used. Cosmetic — no logic change. |
+| **Z12-15** | **F-03 — Migration naming (`001_` reused)** | LOW | Rename any duplicated migration prefix so each migration file has a unique sequential prefix (e.g. `001_`, `002_`, `003_` — no gaps or repeats). Not a functional bug today but will cause ordering issues as the migration count grows. |
 
 ### Z12-DESIGN-NEEDED (implement after short product/UX decision)
 
@@ -89,11 +92,11 @@ Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06-1.md` (Claude, independe
 | **Z12-13** | **F-16 — HACCP legal citation (Décret 17-140)** | MEDIUM | Route to legal expert with primary-source access; update comment/citation if needed. |
 
 **Implementation order:**
-1. Z12-01 → Z12-07 (IMMEDIATE, in any order; Z12-01 first as CRITICAL).
+1. Z12-01 → Z12-07, Z12-14, Z12-15 (IMMEDIATE, in any order; Z12-01 first as CRITICAL).
 2. Z12-08 → Z12-12 (after product/UX decisions).
 3. Z12-13 (parallel legal review).
 
-**Close condition:** All 13 sub-items marked ✅ in this section, TSC 0 errors, Jest passing.
+**Close condition:** All 15 sub-items marked ✅ in this section, TSC 0 errors, Jest passing.
 
 ---
 
@@ -111,7 +114,7 @@ Source: `docs/SafeInspect_Audit_Consolidated_2026-08-06-1.md` (Claude, independe
 
 - Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11 are closed.
 - Z6, Z8, Z9 are deferred.
-- **Z12 is now OPEN — Audit Findings Closure (F-01 to F-18).**
+- **Z12 is now OPEN — Audit Findings Closure (F-01 to F-18). 15 sub-items (Z12-01 to Z12-15).**
 - **Next new phase identifier after Z12 closes: Z13.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
