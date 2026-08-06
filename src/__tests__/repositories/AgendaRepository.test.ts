@@ -1,6 +1,7 @@
 /**
  * src/__tests__/repositories/AgendaRepository.test.ts
- * Mirrors __tests__/repositories/AgendaRepository.test.ts — named import fix.
+ * Mirror of __tests__/repositories/AgendaRepository.test.ts.
+ * Fixture aligned with AgendaItem shape in src/types.ts.
  */
 import { AgendaRepository } from '../../repositories/AgendaRepository';
 
@@ -8,14 +9,11 @@ const SQLite = require('expo-sqlite');
 
 const makeAgendaItem = (overrides: Record<string, unknown> = {}) => ({
   id: 'agenda-1',
-  title: 'Test Meeting',
-  scheduledDate: '2026-09-01',
-  status: 'scheduled',
   facilityId: 'fac-1',
   facilityName: 'Test Facility',
-  inspectorId: 'insp-1',
-  inspectorName: 'Ahmed',
+  date: '2026-09-01',
   notes: '',
+  status: 'pending' as const,
   ...overrides,
 });
 
@@ -35,18 +33,28 @@ describe('AgendaRepository.getAll', () => {
   });
 });
 
-describe('AgendaRepository.save', () => {
-  it('persists and upserts', async () => {
-    await AgendaRepository.save(makeAgendaItem({ id: 'u1', title: 'Old' }));
-    await AgendaRepository.save(makeAgendaItem({ id: 'u1', title: 'New' }));
+describe('AgendaRepository.getById', () => {
+  it('returns null when not found', async () => {
+    expect(await AgendaRepository.getById('missing')).toBeNull();
+  });
+
+  it('returns the matching item', async () => {
+    await AgendaRepository.save(makeAgendaItem({ id: 'u1' }));
+    const result = await AgendaRepository.getById('u1');
+    expect(result?.id).toBe('u1');
+  });
+
+  it('upserts (replaces) existing item with same id', async () => {
+    await AgendaRepository.save(makeAgendaItem({ id: 'u1', notes: 'Old' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'u1', notes: 'New' }));
     const all = await AgendaRepository.getAll();
     expect(all).toHaveLength(1);
-    expect(all[0].title).toBe('New');
+    expect(all[0].notes).toBe('New');
   });
 });
 
 describe('AgendaRepository.delete', () => {
-  it('removes the item', async () => {
+  it('removes the item with the given id', async () => {
     await AgendaRepository.save(makeAgendaItem({ id: 'd1' }));
     await AgendaRepository.delete('d1');
     expect(await AgendaRepository.getAll()).toHaveLength(0);

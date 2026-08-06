@@ -1,9 +1,10 @@
 /**
  * __tests__/repositories/AuditLogRepository.test.ts
- * Contract tests for AuditLogRepository — SQLite contract (rewritten).
+ * Contract tests for AuditLogRepository — SQLite contract.
+ * append() signature: (action, inspectorName, opts?)
  */
 import { AuditLogRepository } from '../../src/repositories/AuditLogRepository';
-import type { AuditEntry } from '../../src/types';
+import type { AuditEntry } from '../../src/repositories/AuditLogRepository';
 
 const SQLite = require('expo-sqlite');
 
@@ -17,17 +18,17 @@ describe('AuditLogRepository.getAll', () => {
   });
 
   it('returns all stored entries', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-1', userId: 'u1', details: {} });
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-2', userId: 'u1', details: {} });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-1' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-2' });
     expect(await AuditLogRepository.getAll()).toHaveLength(2);
   });
 });
 
 describe('AuditLogRepository.getByInspection', () => {
   it('filters by inspectionId', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-Y', userId: 'u1', details: {} });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-X' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-X' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-Y' });
     const saved = await AuditLogRepository.getByInspection('insp-X');
     expect(saved).toHaveLength(2);
     expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
@@ -41,7 +42,7 @@ describe('AuditLogRepository.getByInspection', () => {
 
 describe('AuditLogRepository.clear', () => {
   it('removes all entries', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i', userId: 'u', details: {} });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'i' });
     await AuditLogRepository.clear();
     expect(await AuditLogRepository.getAll()).toHaveLength(0);
   });

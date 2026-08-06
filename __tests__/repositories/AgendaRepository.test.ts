@@ -1,7 +1,7 @@
 /**
  * __tests__/repositories/AgendaRepository.test.ts
- * Contract tests for AgendaRepository — SQLite contract (rewritten).
- * Seeds via repo public API; no AsyncStorage/mockStore dependency.
+ * Contract tests for AgendaRepository — SQLite contract.
+ * Fixtures aligned with AgendaItem shape in src/types.ts.
  */
 import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 
@@ -9,14 +9,11 @@ const SQLite = require('expo-sqlite');
 
 const makeAgendaItem = (overrides: Record<string, unknown> = {}) => ({
   id: 'agenda-1',
-  title: 'Test Meeting',
-  scheduledDate: '2026-09-01',
-  status: 'scheduled',
   facilityId: 'fac-1',
   facilityName: 'Test Facility',
-  inspectorId: 'insp-1',
-  inspectorName: 'Ahmed',
+  date: '2026-09-01',
   notes: '',
+  status: 'pending' as const,
   ...overrides,
 });
 
@@ -60,11 +57,11 @@ describe('AgendaRepository.save', () => {
   });
 
   it('upserts (replaces) existing item with same id', async () => {
-    await AgendaRepository.save(makeAgendaItem({ id: 'upsert-1', title: 'Old' }));
-    await AgendaRepository.save(makeAgendaItem({ id: 'upsert-1', title: 'New' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'upsert-1', notes: 'Old' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'upsert-1', notes: 'New' }));
     const all = await AgendaRepository.getAll();
     expect(all).toHaveLength(1);
-    expect(all[0].title).toBe('New');
+    expect(all[0].notes).toBe('New');
   });
 });
 
@@ -87,7 +84,7 @@ describe('AgendaRepository.delete', () => {
 
 describe('AgendaRepository.updateInspectionLink', () => {
   it('links an inspection id and marks the item completed', async () => {
-    await AgendaRepository.save(makeAgendaItem({ id: 'agenda-1', status: 'scheduled' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'agenda-1', status: 'pending' }));
     await AgendaRepository.updateInspectionLink('agenda-1', 'inspection-99');
     const updated = await AgendaRepository.getById('agenda-1');
     expect(updated?.inspectionId).toBe('inspection-99');

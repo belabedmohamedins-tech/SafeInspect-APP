@@ -1,9 +1,11 @@
 /**
  * src/__tests__/repositories/AuditLogRepository.test.ts
- * Named import fix + explicit callback types.
+ * Mirror of __tests__/repositories/AuditLogRepository.test.ts.
+ * append() signature: (action, inspectorName, opts?)
+ * AuditEntry exported from AuditLogRepository, not types.ts.
  */
 import { AuditLogRepository } from '../../repositories/AuditLogRepository';
-import type { AuditEntry } from '../../types';
+import type { AuditEntry } from '../../repositories/AuditLogRepository';
 
 const SQLite = require('expo-sqlite');
 
@@ -12,24 +14,28 @@ beforeEach(() => {
 });
 
 describe('AuditLogRepository.getAll', () => {
-  it('returns empty array initially', async () => {
+  it('returns empty array when no entries', async () => {
     expect(await AuditLogRepository.getAll()).toEqual([]);
   });
 
-  it('stores and retrieves entries', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i1', userId: 'u1', details: {} });
-    expect(await AuditLogRepository.getAll()).toHaveLength(1);
+  it('returns all stored entries', async () => {
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'i1' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'i1' });
+    expect(await AuditLogRepository.getAll()).toHaveLength(2);
   });
 });
 
 describe('AuditLogRepository.getByInspection', () => {
-  it('filters correctly', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-Y', userId: 'u1', details: {} });
+  it('filters by inspectionId', async () => {
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-X' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-X' });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'insp-Y' });
     const saved = await AuditLogRepository.getByInspection('insp-X');
     expect(saved).toHaveLength(2);
     expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
+  });
+
+  it('returns empty when inspectionId has no entries', async () => {
     const result = await AuditLogRepository.getByInspection('insp-X');
     expect(result.every((e: AuditEntry) => e.inspectionId === 'insp-X')).toBe(true);
   });
@@ -37,7 +43,7 @@ describe('AuditLogRepository.getByInspection', () => {
 
 describe('AuditLogRepository.clear', () => {
   it('removes all entries', async () => {
-    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i', userId: 'u', details: {} });
+    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'i' });
     await AuditLogRepository.clear();
     expect(await AuditLogRepository.getAll()).toHaveLength(0);
   });

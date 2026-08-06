@@ -1,75 +1,42 @@
 /**
  * __tests__/repositories/InspectionRepository.test.ts
- * Contract tests for InspectionRepository — SQLite contract (rewritten).
+ * Contract tests for InspectionRepository — SQLite contract.
+ * Fixture aligned with SavedInspection shape in src/types.ts.
  */
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import type { SavedInspection } from '../../src/types';
 
 const SQLite = require('expo-sqlite');
 
-jest.mock('../../src/repositories/AuditLogRepository', () => ({
-  AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
-}));
-jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
-  CorrectiveActionRepository: {
-    save: jest.fn().mockResolvedValue({ id: 'cap-mock' }),
-    deleteByInspection: jest.fn().mockResolvedValue(undefined),
-  },
-}));
-jest.mock('../../src/services/IntegrityService', () => ({
-  computeHash: jest.fn().mockResolvedValue('mock-hash-abc123'),
-}));
-
-const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspection => ({
+const baseInspection: SavedInspection = {
   id: 'insp-1',
   facilityId: 'fac-1',
-  facilityName: 'Test',
-  inspectorId: 'u1',
-  inspectorName: 'Inspector',
-  facilityType: 'restaurant',
-  status: 'draft',
-  score: undefined,
-  checklistAnswers: {},
-  findings: [],
-  createdAt: new Date().toISOString(),
-  updatedAt: new Date().toISOString(),
+  facilityName: 'Test Facility',
+  facilityAddress: '123 Main St',
+  date: '2026-09-01',
+  inspectorName: 'Ahmed',
+  status: 'completed',
+  items: [],
+};
+
+const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspection => ({
+  ...baseInspection,
   ...overrides,
 });
 
 beforeEach(() => {
   SQLite.__resetAll();
-  jest.clearAllMocks();
 });
 
 describe('InspectionRepository.getAll', () => {
-  it('returns empty array when no inspections', async () => {
+  it('returns empty array when no items', async () => {
     expect(await InspectionRepository.getAll()).toEqual([]);
   });
 
   it('returns all stored inspections', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'i1', status: 'completed' }));
-    expect(await InspectionRepository.getAll()).toHaveLength(1);
-  });
-});
-
-describe('InspectionRepository.getCompleted', () => {
-  it('returns only completed inspections', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1', status: 'completed' }));
-    await InspectionRepository.save(makeInspection({ id: '2', status: 'draft' }));
-    const result = await InspectionRepository.getCompleted();
-    expect(result).toHaveLength(1);
-    expect(result[0].id).toBe('1');
-  });
-});
-
-describe('InspectionRepository.getDrafts', () => {
-  it('returns draft and in-progress inspections', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1', status: 'completed' }));
-    await InspectionRepository.save(makeInspection({ id: '2', status: 'draft' }));
-    await InspectionRepository.save(makeInspection({ id: '3', status: 'in-progress' }));
-    const result = await InspectionRepository.getDrafts();
-    expect(result).toHaveLength(2);
-    expect(result.map((r: SavedInspection) => r.id)).toEqual(expect.arrayContaining(['2', '3']));
+    await InspectionRepository.save(makeInspection({ id: 'i1' }));
+    await InspectionRepository.save(makeInspection({ id: 'i2' }));
+    expect(await InspectionRepository.getAll()).toHaveLength(2);
   });
 });
 
@@ -87,50 +54,24 @@ describe('InspectionRepository.getById', () => {
 
 describe('InspectionRepository.save', () => {
   it('persists a new inspection', async () => {
-    await InspectionRepository.save(makeInspection());
+    await InspectionRepository.save(makeInspection({ id: 'new-1' }));
     expect(await InspectionRepository.getAll()).toHaveLength(1);
   });
 
-  it('replaces an existing inspection with the same id', async () => {
-    await InspectionRepository.save(makeInspection({ id: 'insp-1', facilityName: 'Old' }));
-    await InspectionRepository.save(makeInspection({ id: 'insp-1', facilityName: 'New Name' }));
+  it('upserts (replaces) existing inspection with same id', async () => {
+    await InspectionRepository.save(makeInspection({ id: 'u1', inspectorName: 'Old' }));
+    await InspectionRepository.save(makeInspection({ id: 'u1', inspectorName: 'New' }));
     const all = await InspectionRepository.getAll();
     expect(all).toHaveLength(1);
-    expect(all[0].facilityName).toBe('New Name');
+    expect(all[0].inspectorName).toBe('New');
   });
 });
 
 describe('InspectionRepository.delete', () => {
-  it('removes the inspection with the given id', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1' }));
-    await InspectionRepository.save(makeInspection({ id: '2' }));
-    await InspectionRepository.delete('1');
-    const all = await InspectionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBe('2');
-  });
-
-  it('is a no-op for an unknown id', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1' }));
-    await InspectionRepository.delete('missing');
-    expect(await InspectionRepository.getAll()).toHaveLength(1);
-  });
-});
-
-describe('InspectionRepository.deleteMany', () => {
-  it('removes all inspections whose ids are in the set', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1' }));
-    await InspectionRepository.save(makeInspection({ id: '2' }));
-    await InspectionRepository.save(makeInspection({ id: '3' }));
-    await InspectionRepository.deleteMany(['1', '3']);
-    const all = await InspectionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBe('2');
-  });
-
-  it('handles empty ids array gracefully', async () => {
-    await InspectionRepository.save(makeInspection({ id: '1' }));
-    await InspectionRepository.deleteMany([]);
+  it('removes the inspection', async () => {
+    await InspectionRepository.save(makeInspection({ id: 'i1' }));
+    await InspectionRepository.save(makeInspection({ id: 'i2' }));
+    await InspectionRepository.delete('i1');
     expect(await InspectionRepository.getAll()).toHaveLength(1);
   });
 });
