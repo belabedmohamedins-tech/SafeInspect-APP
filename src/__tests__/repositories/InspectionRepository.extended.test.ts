@@ -24,7 +24,10 @@ jest.mock('../../repositories/ApprovalRepository', () => ({
   ApprovalRepository: { enqueue: jest.fn().mockResolvedValue(undefined) },
 }));
 jest.mock('../../services/IntegrityService', () => ({
-  IntegrityService: { computeHash: jest.fn().mockResolvedValue('hash-abc') },
+  IntegrityService: {
+    computeHash:  jest.fn().mockResolvedValue('hash-abc'),
+    hashAndStore: jest.fn().mockResolvedValue('hash-abc'),
+  },
 }));
 
 import { annotateRepeatViolations } from '../../services/violationHistory';

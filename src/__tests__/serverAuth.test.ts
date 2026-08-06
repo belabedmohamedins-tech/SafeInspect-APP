@@ -7,6 +7,9 @@
 //
 // jest-expo preset runs under Platform.OS = 'ios' (native path),
 // so SecureStore is the active storage backend.
+//
+// EXPO_PUBLIC_SYNC_API_URL must be set so getApiUrl() does not throw
+// and swallow every fetch call into the catch → 'Network error' path.
 
 import * as SecureStore from 'expo-secure-store';
 
@@ -40,6 +43,10 @@ const EXPIRED_TOKEN = makeJwt(Math.floor(Date.now() / 1000) - 120);  // expired 
 // ── Setup ─────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
+  // Provide the API URL so getApiUrl() does not throw inside fetch wrappers,
+  // which would be caught and returned as 'Network error — check your connection'.
+  process.env.EXPO_PUBLIC_SYNC_API_URL = 'https://test.safeinspect.api';
+
   jest.clearAllMocks();
   // Default: SecureStore returns null (nothing stored)
   mockGet.mockResolvedValue(null);
@@ -47,6 +54,10 @@ beforeEach(() => {
   mockDelete.mockResolvedValue(undefined);
   // Default fetch — tests override as needed
   globalThis.fetch = jest.fn();
+});
+
+afterEach(() => {
+  delete process.env.EXPO_PUBLIC_SYNC_API_URL;
 });
 
 // ── saveTokens ────────────────────────────────────────────────────────────────

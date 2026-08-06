@@ -28,6 +28,7 @@ import { SavedInspection } from '../../types';
 jest.mock('../../services/IntegrityService', () => ({
   IntegrityService: {
     computeHash:      jest.fn(() => 'mock-hash-abc123'),
+    hashAndStore:     jest.fn(() => Promise.resolve('mock-hash-abc123')),
     verifyInspection: jest.fn(() => Promise.resolve({ ok: true, computedHash: 'mock-hash-abc123' })),
   },
 }));
@@ -62,11 +63,11 @@ import { createFollowUpIfNeeded } from '../../services/followUpService';
 import { ApprovalRepository } from '../../repositories/ApprovalRepository';
 
 // Typed handles — retrieved after module load, safe from TDZ.
-const mockComputeHash        = IntegrityService.computeHash          as jest.Mock;
-const mockAuditAppend        = AuditLogRepository.append             as jest.Mock;
-const mockCreateCapItems     = createCapItemsFromInspection          as jest.Mock;
-const mockCreateFollowUp     = createFollowUpIfNeeded                as jest.Mock;
-const mockEnqueue            = ApprovalRepository.enqueue            as jest.Mock;
+const mockHashAndStore       = IntegrityService.hashAndStore           as jest.Mock;
+const mockAuditAppend        = AuditLogRepository.append               as jest.Mock;
+const mockCreateCapItems     = createCapItemsFromInspection            as jest.Mock;
+const mockCreateFollowUp     = createFollowUpIfNeeded                  as jest.Mock;
+const mockEnqueue            = ApprovalRepository.enqueue              as jest.Mock;
 
 // ─── setup ────────────────────────────────────────────────────────────────────
 
@@ -78,7 +79,7 @@ beforeEach(() => {
   jest.resetModules();
   jest.clearAllMocks();
   // Re-apply Promise-returning implementations after clearAllMocks resets them.
-  mockComputeHash.mockReturnValue('mock-hash-abc123');
+  mockHashAndStore.mockResolvedValue('mock-hash-abc123');
   mockAuditAppend.mockResolvedValue(undefined);
   mockCreateCapItems.mockResolvedValue(undefined);
   mockCreateFollowUp.mockResolvedValue(undefined);
@@ -203,7 +204,7 @@ describe('InspectionRepository.save', () => {
 
   it('embeds the computed hash on completion', async () => {
     await InspectionRepository.save(makeInspection({ id: 'h1', status: 'completed' }));
-    expect(mockComputeHash).toHaveBeenCalled();
+    expect(mockHashAndStore).toHaveBeenCalled();
     const saved = await InspectionRepository.getById('h1');
     expect(saved?.integrityHash).toBe('mock-hash-abc123');
   });
