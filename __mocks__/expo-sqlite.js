@@ -4,22 +4,29 @@
  * In-memory mock for expo-sqlite used by Jest (Node environment).
  * Implements the subset of the expo-sqlite API used by SafeInspect repositories.
  *
- * ISOLATION:
- *   __resetAll() / __resetStore() are called in jest.setup.ts beforeEach.
- *   Individual test files don't need to call them manually.
+ * ISOLATION — CRITICAL DESIGN NOTE:
+ *   openDatabaseAsync() returns a DB object whose closure captures a `store`
+ *   reference at open time.  If __resetAll() replaced that store in the Map,
+ *   the cached reference would still point to the old (stale) store.
  *
- * FIXED in W1 revision:
- *   1. eq / upsert conflict checks use == (loose equality) so string params
- *      match numeric stored IDs and vice versa.
+ *   FIX (W1 rev 2): __resetAll() mutates each existing store IN PLACE —
+ *   it clears the tables Map and resets seqs on the same object.  This way
+ *   any DB handle opened before the reset automatically sees an empty store.
+ *
+ *   schema.__resetDb() still nulls the singleton handle so getDb() reopens,
+ *   but even without that the in-place clear is sufficient for isolation.
+ *
+ * OTHER FIXES in this revision:
+ *   1. eq / upsert conflict checks use == (loose equality).
  *   2. runAsync return value always includes { lastInsertRowId, changes }.
- *   3. __resetStore() alias added for backward-compat with older test files.
- *   4. DELETE WHERE string equality (id = ?) now matches regardless of
- *      whether the stored id is a number or a string.
+ *   3. __resetStore() alias added for backward-compat.
+ *   4. DELETE WHERE string equality matches regardless of stored id type.
+ *   5. ORDER BY on string columns sorts correctly (stable, locale-aware).
  */
 
 'use strict';
 
-// One store per database name, wiped between test suites via __resetAll().
+// One store per database name.  Never replaced — mutated in place on reset.
 const _stores = new Map();
 
 function getStore(dbName) {
@@ -35,10 +42,6 @@ function colName(raw) {
   return raw.trim().replace(/[`"']/g, '');
 }
 
-/**
- * Parse a WHERE clause into condition objects.
- * Returns { conds, nextPi } where nextPi is the next unused param index.
- */
 function parseWhere(whereClause, paramStart, params) {
   const parts = whereClause.split(/\s+AND\s+/i);
   let pi = paramStart;
@@ -47,17 +50,14 @@ function parseWhere(whereClause, paramStart, params) {
   for (const part of parts) {
     const p = part.trim();
 
-    // col IS NULL / IS NOT NULL
     const isNullM = p.match(/^([\w.]+)\s+IS\s+(NOT\s+)?NULL/i);
     if (isNullM) {
       conds.push({ type: isNullM[2] ? 'notnull' : 'null', col: colName(isNullM[1]) });
       continue;
     }
 
-    // col NOT IN (SELECT …) — skip; handled by dedicated ring-buffer path
     if (/\bNOT\s+IN\s*\(\s*SELECT/i.test(p)) continue;
 
-    // col IN ('val1','val2',...) — literal values
     const inLitM = p.match(/^([\w.]+)\s+IN\s*\(([^)]+)\)/i);
     if (inLitM) {
       const values = inLitM[2].split(',').map(v => v.trim().replace(/^['"](.*)['"]$/, '$1'));
@@ -65,31 +65,24 @@ function parseWhere(whereClause, paramStart, params) {
       continue;
     }
 
-    // col = ?
     const eqM = p.match(/^([\w.]+)\s*=\s*\?/);
     if (eqM) { conds.push({ type: 'eq', col: colName(eqM[1]), paramIdx: pi++ }); continue; }
 
-    // col != ? or col <> ?
     const neqM = p.match(/^([\w.]+)\s*(?:!=|<>)\s*\?/);
     if (neqM) { conds.push({ type: 'neq', col: colName(neqM[1]), paramIdx: pi++ }); continue; }
 
-    // col < ?
     const ltM = p.match(/^([\w.]+)\s*<\s*\?/);
     if (ltM) { conds.push({ type: 'lt', col: colName(ltM[1]), paramIdx: pi++ }); continue; }
 
-    // col > ?
     const gtM = p.match(/^([\w.]+)\s*>\s*\?/);
     if (gtM) { conds.push({ type: 'gt', col: colName(gtM[1]), paramIdx: pi++ }); continue; }
 
-    // col >= ?
     const gteM = p.match(/^([\w.]+)\s*>=\s*\?/);
     if (gteM) { conds.push({ type: 'gte', col: colName(gteM[1]), paramIdx: pi++ }); continue; }
 
-    // col <= ?
     const lteM = p.match(/^([\w.]+)\s*<=\s*\?/);
     if (lteM) { conds.push({ type: 'lte', col: colName(lteM[1]), paramIdx: pi++ }); continue; }
 
-    // col = 'literal'
     const litM = p.match(/^([\w.]+)\s*=\s*'([^']*)'/);
     if (litM) { conds.push({ type: 'lit', col: colName(litM[1]), val: litM[2] }); continue; }
   }
@@ -100,27 +93,22 @@ function parseWhere(whereClause, paramStart, params) {
 function rowMatches(row, conds, params) {
   for (const c of conds) {
     switch (c.type) {
-      // Use == (loose) so string param '1' matches stored number 1.
-      case 'eq':  if (row[c.col] != params[c.paramIdx]) return false; break;
-      case 'neq': if (row[c.col] == params[c.paramIdx]) return false; break;
-      case 'lt':  if (!(row[c.col] < params[c.paramIdx])) return false; break;
-      case 'gt':  if (!(row[c.col] > params[c.paramIdx])) return false; break;
-      case 'gte': if (!(row[c.col] >= params[c.paramIdx])) return false; break;
-      case 'lte': if (!(row[c.col] <= params[c.paramIdx])) return false; break;
-      case 'in':  if (!c.values.includes(String(row[c.col]))) return false; break;
+      case 'eq':      if (row[c.col] != params[c.paramIdx]) return false; break;
+      case 'neq':     if (row[c.col] == params[c.paramIdx]) return false; break;
+      case 'lt':      if (!(row[c.col] <  params[c.paramIdx])) return false; break;
+      case 'gt':      if (!(row[c.col] >  params[c.paramIdx])) return false; break;
+      case 'gte':     if (!(row[c.col] >= params[c.paramIdx])) return false; break;
+      case 'lte':     if (!(row[c.col] <= params[c.paramIdx])) return false; break;
+      case 'in':      if (!c.values.includes(String(row[c.col]))) return false; break;
       case 'null':    if (row[c.col] != null) return false; break;
       case 'notnull': if (row[c.col] == null) return false; break;
-      case 'lit': if (String(row[c.col]) !== c.val) return false; break;
+      case 'lit':     if (String(row[c.col]) !== c.val) return false; break;
       default: break;
     }
   }
   return true;
 }
 
-/**
- * Parse SET clause. Consumes params left-to-right starting at pi.
- * Returns { sets, nextPi }.
- */
 function parseSet(setClause, params, pi) {
   const pairs = [];
   let depth = 0, start = 0;
@@ -149,7 +137,6 @@ function parseSet(setClause, params, pi) {
 
     const litM = rhs.match(/^'([^']*)'$/);
     if (litM) { sets.push({ col, value: litM[1] }); continue; }
-    // ignored tokens (e.g. excluded.col in upsert SET clauses)
   }
 
   return { sets, nextPi: pi };
@@ -175,6 +162,11 @@ function applyOrderBy(rows, clauseText) {
   return [...rows].sort((a, b) => {
     const av = a[col] ?? '';
     const bv = b[col] ?? '';
+    // Use localeCompare for strings so ISO datetime strings sort correctly.
+    if (typeof av === 'string' && typeof bv === 'string') {
+      const cmp = av.localeCompare(bv);
+      return dir === 'ASC' ? cmp : -cmp;
+    }
     if (av < bv) return dir === 'ASC' ? -1 : 1;
     if (av > bv) return dir === 'ASC' ? 1 : -1;
     return 0;
@@ -217,11 +209,13 @@ function execStatement(store, sql, params) {
   }
 
   // ── INSERT
-  const insertM = s.match(/^INSERT\s+(?:OR\s+REPLACE\s+)?INTO\s+[`"']?(\w+)/i);
+  const insertM = s.match(/^INSERT\s+(?:OR\s+(?:REPLACE|IGNORE)\s+)?INTO\s+[`"']?(\w+)/i);
   if (insertM) {
     const tbl = insertM[1];
     if (!store.tables.has(tbl)) store.tables.set(tbl, []);
     const rows = store.tables.get(tbl);
+
+    const isIgnore = /^INSERT\s+OR\s+IGNORE/i.test(s);
 
     const colM = s.match(/\(([^)]+)\)\s*VALUES/i);
     if (!colM) return { rows: [], changes: 1, lastInsertRowId: rows.length };
@@ -230,7 +224,6 @@ function execStatement(store, sql, params) {
     const newRow = {};
     cols.forEach((col, i) => { newRow[col] = p[i] !== undefined ? p[i] : null; });
 
-    // Auto-increment: assign integer PK if INSERT did not supply an 'id' column.
     if (!cols.includes('id')) {
       newRow.id = nextId(store, tbl);
     }
@@ -239,14 +232,15 @@ function execStatement(store, sql, params) {
     const isOrReplace = /^INSERT\s+OR\s+REPLACE/i.test(s);
 
     if ((isUpsert || isOrReplace) && newRow.id !== undefined && newRow.id !== null) {
-      // Use == so string id matches numeric stored id and vice versa.
       const idx = rows.findIndex(r => r.id == newRow.id);
       if (idx >= 0) {
-        // Mutate in place so other references to the same row object see the update.
         Object.assign(rows[idx], newRow);
       } else {
         rows.push(newRow);
       }
+    } else if (isIgnore && newRow.id !== undefined && newRow.id !== null) {
+      const exists = rows.some(r => r.id == newRow.id);
+      if (!exists) rows.push(newRow);
     } else {
       rows.push(newRow);
     }
@@ -290,7 +284,7 @@ function execStatement(store, sql, params) {
       return { rows: [], changes: count, lastInsertRowId: 0 };
     }
 
-    // ── Ring-buffer: DELETE … WHERE id NOT IN (SELECT id FROM t ORDER BY col LIMIT N|?)
+    // Ring-buffer: DELETE … WHERE id NOT IN (SELECT id FROM t ORDER BY col LIMIT N|?)
     const ringM = whereClause.match(
       /id\s+NOT\s+IN\s*\(\s*SELECT\s+id\s+FROM\s+(\w+)\s+ORDER\s+BY\s+([\w.]+)(?:\s+(ASC|DESC))?\s+LIMIT\s+(\?|\d+)\s*\)/i
     );
@@ -314,7 +308,6 @@ function execStatement(store, sql, params) {
       return { rows: [], changes: before - kept.length, lastInsertRowId: 0 };
     }
 
-    // Generic WHERE — loose equality in rowMatches handles string vs number ids.
     const { conds } = parseWhere(whereClause, 0, p);
     const before = rows.length;
     const kept   = rows.filter(r => !rowMatches(r, conds, p));
@@ -350,6 +343,7 @@ function execStatement(store, sql, params) {
 // ─── DB factory ──────────────────────────────────────────────────────────────
 
 function makeSQLiteDatabase(dbName) {
+  // Capture reference at open time — __resetAll mutates this object in place.
   const store = getStore(dbName);
   return {
     async runAsync(sql, params = []) {
@@ -379,11 +373,30 @@ async function openDatabaseAsync(name) {
   return makeSQLiteDatabase(name || ':memory:');
 }
 
+/**
+ * __resetAll — wipes every store IN PLACE.
+ *
+ * Why in-place?  DB handles returned by openDatabaseAsync() capture a
+ * reference to the store object at open time.  If we did _stores.clear()
+ * (removing the entry from the Map) the cached reference in the DB closure
+ * would still point to the old object with all its data.  By mutating the
+ * object itself (clearing .tables and .seqs) every existing DB handle
+ * automatically sees an empty database on the next operation.
+ *
+ * jest.setup.ts calls this in afterEach alongside schema.__resetDb() so that:
+ *   1. All table data is gone (this function).
+ *   2. The schema module's singleton handle is nulled so the next getDb()
+ *      call re-runs migrations against the (now empty) store.
+ */
 function __resetAll() {
-  _stores.clear();
+  for (const store of _stores.values()) {
+    store.tables.clear();
+    store.seqs.clear();
+    store._txActive = false;
+  }
 }
 
-// Alias for backward-compat with older test files that call __resetStore().
+// Alias for backward-compat with older test files.
 const __resetStore = __resetAll;
 
 module.exports = {
