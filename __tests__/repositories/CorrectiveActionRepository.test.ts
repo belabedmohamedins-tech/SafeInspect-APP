@@ -1,6 +1,7 @@
 /**
  * __tests__/repositories/CorrectiveActionRepository.test.ts
  * Z6-TSC: inspectorId → inspectionId (typo fix).
+ * Z5-TSC2: save() returns CorrectiveAction — use saved.id throughout.
  */
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import type { CorrectiveAction } from '../../src/types';
@@ -28,10 +29,10 @@ beforeEach(async () => {
 
 describe('CorrectiveActionRepository', () => {
   it('saves and retrieves a corrective action', async () => {
-    const id = await CorrectiveActionRepository.save(makeCA());
-    expect(typeof id).toBe('string');
+    const saved = await CorrectiveActionRepository.save(makeCA());
+    expect(typeof saved.id).toBe('string');
     const all = await CorrectiveActionRepository.getAll();
-    expect(all.some(c => c.id === id)).toBe(true);
+    expect(all.some(c => c.id === saved.id)).toBe(true);
   });
 
   it('filters by inspectionId', async () => {
@@ -42,18 +43,18 @@ describe('CorrectiveActionRepository', () => {
   });
 
   it('updates status', async () => {
-    const id = await CorrectiveActionRepository.save(makeCA());
-    await CorrectiveActionRepository.updateStatus(id, 'resolved');
+    const saved = await CorrectiveActionRepository.save(makeCA());
+    await CorrectiveActionRepository.updateStatus(saved.id, 'resolved');
     const all = await CorrectiveActionRepository.getAll();
-    const updated = all.find(c => c.id === id);
+    const updated = all.find(c => c.id === saved.id);
     expect(updated?.status).toBe('resolved');
   });
 
   it('deletes a corrective action', async () => {
-    const id = await CorrectiveActionRepository.save(makeCA());
-    await CorrectiveActionRepository.delete(id);
+    const saved = await CorrectiveActionRepository.save(makeCA());
+    await CorrectiveActionRepository.delete(saved.id);
     const all = await CorrectiveActionRepository.getAll();
-    expect(all.every(c => c.id !== id)).toBe(true);
+    expect(all.every(c => c.id !== saved.id)).toBe(true);
   });
 
   it('clear empties all records', async () => {
