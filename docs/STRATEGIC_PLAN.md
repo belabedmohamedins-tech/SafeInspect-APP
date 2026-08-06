@@ -46,6 +46,8 @@
 | Z10-FIX | Test drift — SettingsRepository test + schema migration count | 2026-08-06 | Commit `83db48c`. `__tests__/repositories/SettingsRepository.test.ts` rewritten. **All green — user-confirmed 13:07 WAT.** |
 | Z11 | Wire `facilityCategoriesFull.json` rubrique into DB + screens | 2026-08-06 | Migration `003_facilities_add_rubrique` added. FacilityRepository + add.tsx + edit.tsx updated. Gate closed 13:22 WAT — 25/25 Jest, TSC 0. |
 | **Z12** | **Audit Findings Closure (F-01 to F-18, 15 sub-items)** | **2026-08-06** | **TSC 0 + Jest 1234/0 — user-confirmed 20:15 WAT. Commits: `9a5d3e7`, `9c78e3e`.** |
+| **Z6** | **Décret 09-19 rollout — BGN-04-06 legalRef + accreditation check** | **2026-08-06** | **BGN-04-06 criteria + legalReference updated. Commit `5ed564b`. Confirmed by direct code read.** |
+| **Z8** | **BGN-03-06 septic pumping — remove unverified 90d/80% figures** | **2026-08-06** | **Replaced with contract+receipts+no-overflow formulation. Commit `5ed564b`. Décret 17-140 confirmed unrelated (food hygiene). No Algerian legal source found for specific intervals.** |
 
 ---
 
@@ -59,16 +61,14 @@
 
 | ID | Title | Blocker |
 |---|---|---|
-| Z6 | Décret 09-19 rollout across all "approved operator" criteria (G9) | Full criteria audit needed first. |
-| Z8 | `BGN-03-06` septic pumping frequency legal source (G11) | ≤90 days/80% capacity has no stated legal basis — find or remove. |
 | Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server. |
 
 ---
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, **Z12** are closed.
-- Z6, Z8, Z9 are deferred.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, **Z6, Z8** are closed.
+- Z9 is deferred.
 - **No open phases. Next new phase identifier: Z13.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
@@ -83,7 +83,7 @@
 | Rubrique nomenclature (622 entries) | Décret 07-144 | Full annex | ✅ VERIFIED — `facilityCategoriesFull.json` confirmed correct |
 | Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
-| Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
+| Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified — added to BGN-04-06 legalReference (Z6) |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
 | Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | ✅ CLOSED — Ord. 76-04 = operational base. |
@@ -97,3 +97,5 @@
 | Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
+| Décret 17-140 | Food hygiene / human consumption conditions | N/A for BGN-03-06 | ✅ CONFIRMED — NOT septic pumping. BGN-03-06 revised without this source. |
+| BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as Z13+ if JORADP source is found. |
