@@ -9,12 +9,14 @@ import {
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import * as Location from 'expo-location';
 import { checkProximity, ProximityResult } from '../../src/services/geofencingService';
+import { useTranslation } from '../../src/i18n';
 
 I18nManager.forceRTL(true);
 
 type LocationState = 'idle' | 'requesting' | 'success' | 'error' | 'no-coords';
 
 export default function GeofenceCheckScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{
     facilityId: string;
@@ -55,7 +57,6 @@ export default function GeofenceCheckScreen() {
         return;
       }
       const loc = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-      // checkProximity takes two { latitude, longitude } objects
       const result = checkProximity(
         { latitude: facilityLat!, longitude: facilityLng! },
         { latitude: loc.coords.latitude, longitude: loc.coords.longitude },
@@ -83,7 +84,7 @@ export default function GeofenceCheckScreen() {
 
   const handleOverrideSubmit = () => {
     if (justification.trim().length < 10) {
-      setJustificationError('يرجى إدخال مبرر واضح (10 أحرف على الأقل)');
+      setJustificationError(t('geofence_modal_error'));
       return;
     }
     setShowOverrideModal(false);
@@ -95,13 +96,10 @@ export default function GeofenceCheckScreen() {
       return (
         <View style={styles.resultBox}>
           <Text style={styles.iconText}>📍</Text>
-          <Text style={styles.resultTitle}>لا توجد إحداثيات للمنشأة</Text>
-          <Text style={styles.resultSub}>
-            لم يتم تسجيل موقع GPS لهذه المنشأة بعد.
-            يمكنك المتابعة مباشرة أو تحديث بيانات المنشأة لاحقاً.
-          </Text>
+          <Text style={styles.resultTitle}>{t('geofence_no_coords_title')}</Text>
+          <Text style={styles.resultSub}>{t('geofence_no_coords_body')}</Text>
           <TouchableOpacity style={styles.primaryBtn} onPress={() => proceed()}>
-            <Text style={styles.primaryBtnText}>متابعة بدون تحقق جغرافي</Text>
+            <Text style={styles.primaryBtnText}>{t('geofence_no_coords_btn')}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -111,7 +109,7 @@ export default function GeofenceCheckScreen() {
       return (
         <View style={styles.resultBox}>
           <ActivityIndicator size="large" color="#1e40af" />
-          <Text style={styles.loadingText}>جارٍ تحديد موقعك…</Text>
+          <Text style={styles.loadingText}>{t('geofence_loading')}</Text>
         </View>
       );
     }
@@ -120,16 +118,16 @@ export default function GeofenceCheckScreen() {
       return (
         <View style={styles.resultBox}>
           <Text style={styles.iconText}>⚠️</Text>
-          <Text style={styles.resultTitle}>تعذّر الوصول إلى الموقع</Text>
-          <Text style={styles.resultSub}>يرجى التأكد من تفعيل GPS والصلاحيات.</Text>
+          <Text style={styles.resultTitle}>{t('geofence_error_title')}</Text>
+          <Text style={styles.resultSub}>{t('geofence_error_body')}</Text>
           <TouchableOpacity style={styles.retryBtn} onPress={checkLocation}>
-            <Text style={styles.retryBtnText}>إعادة المحاولة</Text>
+            <Text style={styles.retryBtnText}>{t('geofence_retry')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.primaryBtn, { marginTop: 10 }]}
             onPress={() => setShowOverrideModal(true)}
           >
-            <Text style={styles.primaryBtnText}>المتابعة مع ذكر مبرر</Text>
+            <Text style={styles.primaryBtnText}>{t('geofence_override_btn')}</Text>
           </TouchableOpacity>
         </View>
       );
@@ -142,28 +140,27 @@ export default function GeofenceCheckScreen() {
           <Text style={styles.statusIcon}>{inRange ? '✓' : '✗'}</Text>
         </View>
         <Text style={[styles.resultTitle, { color: inRange ? '#16a34a' : '#dc2626' }]}>
-          {inRange ? 'داخل النطاق الجغرافي' : 'خارج النطاق الجغرافي'}
+          {inRange ? t('geofence_in_range') : t('geofence_out_range')}
         </Text>
         <Text style={styles.distanceText}>
-          المسافة: {proximity?.distanceMetres} م
+          {t('geofence_distance')}: {proximity?.distanceMetres} م
           {'  |  '}
-          الحد المسموح: {proximity?.thresholdMetres} م
+          {t('geofence_threshold')}: {proximity?.thresholdMetres} م
         </Text>
         {inRange ? (
           <TouchableOpacity style={styles.primaryBtn} onPress={() => proceed()}>
-            <Text style={styles.primaryBtnText}>بدء التفتيش ←</Text>
+            <Text style={styles.primaryBtnText}>{t('geofence_start_btn')}</Text>
           </TouchableOpacity>
         ) : (
           <>
             <Text style={styles.warningNote}>
-              أنت خارج النطاق المحدد ({proximity?.thresholdMetres} م).
-              يمكنك المتابعة بعد تقديم مبرر كتابي يُسجَّل في التقرير.
+              {t('geofence_warning').replace('{threshold}', String(proximity?.thresholdMetres ?? ''))}
             </Text>
             <TouchableOpacity
               style={styles.overrideBtn}
               onPress={() => setShowOverrideModal(true)}
             >
-              <Text style={styles.overrideBtnText}>تجاوز مع مبرر</Text>
+              <Text style={styles.overrideBtnText}>{t('geofence_override_action')}</Text>
             </TouchableOpacity>
           </>
         )}
@@ -174,7 +171,7 @@ export default function GeofenceCheckScreen() {
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>التحقق الجغرافي</Text>
+        <Text style={styles.headerTitle}>{t('geofence_title')}</Text>
         <Text style={styles.headerSub}>{params.facilityName}</Text>
       </View>
 
@@ -183,16 +180,13 @@ export default function GeofenceCheckScreen() {
       <Modal visible={showOverrideModal} transparent animationType="slide">
         <View style={styles.modalOverlay}>
           <View style={styles.modalBox}>
-            <Text style={styles.modalTitle}>مبرر التجاوز الجغرافي</Text>
-            <Text style={styles.modalSub}>
-              يُرجى إدخال سبب واضح لتنفيذ التفتيش خارج النطاق.
-              سيُدرج هذا المبرر في التقرير الرسمي.
-            </Text>
+            <Text style={styles.modalTitle}>{t('geofence_modal_title')}</Text>
+            <Text style={styles.modalSub}>{t('geofence_modal_body')}</Text>
             <TextInput
               style={styles.justificationInput}
               value={justification}
-              onChangeText={t => { setJustification(t); setJustificationError(''); }}
-              placeholder="مثال: المنشأة في موقع ثانٍ / الإحداثيات غير محدّثة"
+              onChangeText={txt => { setJustification(txt); setJustificationError(''); }}
+              placeholder={t('geofence_modal_placeholder')}
               placeholderTextColor="#9ca3af"
               multiline
               textAlign="right"
@@ -206,10 +200,10 @@ export default function GeofenceCheckScreen() {
                 style={styles.cancelBtn}
                 onPress={() => setShowOverrideModal(false)}
               >
-                <Text style={styles.cancelBtnText}>إلغاء</Text>
+                <Text style={styles.cancelBtnText}>{t('cancel')}</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.submitBtn} onPress={handleOverrideSubmit}>
-                <Text style={styles.submitBtnText}>تأكيد والمتابعة</Text>
+                <Text style={styles.submitBtnText}>{t('geofence_modal_submit')}</Text>
               </TouchableOpacity>
             </View>
           </View>

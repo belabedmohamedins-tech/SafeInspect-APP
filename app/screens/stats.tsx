@@ -10,6 +10,7 @@ import { InspectionRepository } from '../../src/repositories/InspectionRepositor
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { SavedInspection } from '../../src/types';
 import { ApprovalRepository } from '../../src/repositories/ApprovalRepository';
+import { useTranslation } from '../../src/i18n';
 
 I18nManager.forceRTL(true);
 
@@ -33,7 +34,7 @@ function thisWeekRange(): [Date, Date] {
 }
 
 function monthKey(dateStr: string): string {
-  return dateStr.slice(0, 7); // YYYY-MM
+  return dateStr.slice(0, 7);
 }
 
 function last6Months(): string[] {
@@ -85,7 +86,6 @@ async function computeStats(): Promise<Stats> {
   const gradeDistribution: Record<string, number> = { A: 0, B: 0, C: 0, D: 0 };
   grades.forEach(g => { if (g in gradeDistribution) gradeDistribution[g]++; });
 
-  // Compliance rate: compliant items / evaluated items across all inspections
   let totalEval = 0, totalCompliant = 0;
   completed.forEach(ins => {
     ins.items.forEach(item => {
@@ -97,7 +97,6 @@ async function computeStats(): Promise<Stats> {
   });
   const complianceRate = totalEval > 0 ? Math.round((totalCompliant / totalEval) * 100) : 0;
 
-  // Top violations
   const violationMap: Record<string, number> = {};
   completed.forEach(ins => {
     ins.items.forEach(item => {
@@ -112,7 +111,6 @@ async function computeStats(): Promise<Stats> {
     .slice(0, 5)
     .map(([criteria, count]) => ({ criteria, count }));
 
-  // Monthly trend
   const months = last6Months();
   const monthlyMap: Record<string, number> = {};
   months.forEach(m => { monthlyMap[m] = 0; });
@@ -122,7 +120,6 @@ async function computeStats(): Promise<Stats> {
   });
   const monthlyTrend = months.map(m => ({ month: m, count: monthlyMap[m] }));
 
-  // Facility breakdown (last 5 unique facilities inspected)
   const seen = new Set<string>();
   const facilityBreakdown: Stats['facilityBreakdown'] = [];
   const sorted = [...completed].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
@@ -150,6 +147,7 @@ async function computeStats(): Promise<Stats> {
 }
 
 export default function StatsScreen() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -173,30 +171,30 @@ export default function StatsScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>لوحة الإحصاءيات</Text>
+        <Text style={styles.headerTitle}>{t('stats_header_title')}</Text>
         <TouchableOpacity onPress={load}>
-          <Text style={styles.refreshBtn}>↻ تحديث</Text>
+          <Text style={styles.refreshBtn}>{t('stats_refresh')}</Text>
         </TouchableOpacity>
       </View>
 
       {/* KPI Row */}
       <View style={styles.kpiRow}>
-        <KPI label="الإجمالي" value={String(stats.totalCompleted)} />
-        <KPI label="هذا الأسبوع" value={String(stats.thisWeek)} />
-        <KPI label="متوسط الدرجة" value={stats.avgGrade}
+        <KPI label={t('stats_total_label')} value={String(stats.totalCompleted)} />
+        <KPI label={t('stats_this_week')} value={String(stats.thisWeek)} />
+        <KPI label={t('stats_avg_grade')} value={stats.avgGrade}
           valueColor={GRADE_COLOR[stats.avgGrade] ?? '#374151'} />
-        <KPI label="نسبة الامتثال" value={`${stats.complianceRate}%`} />
+        <KPI label={t('stats_compliance')} value={`${stats.complianceRate}%`} />
       </View>
       <View style={styles.kpiRow}>
-        <KPI label="إجراءات مفتوحة" value={String(stats.openCAPs)} valueColor="#dc2626" />
-        <KPI label="بانتظار الاعتماد" value={String(stats.pendingApprovals)} valueColor="#d97706" />
-        <KPI label="متوسط النتيجة" value={`${stats.avgScore}%`} />
+        <KPI label={t('stats_open_caps')} value={String(stats.openCAPs)} valueColor="#dc2626" />
+        <KPI label={t('stats_pending_approvals')} value={String(stats.pendingApprovals)} valueColor="#d97706" />
+        <KPI label={t('stats_avg_score')} value={`${stats.avgScore}%`} />
         <View style={{ flex: 1 }} />
       </View>
 
       {/* Grade Distribution */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>توزيع الدرجات</Text>
+        <Text style={styles.cardTitle}>{t('stats_grade_distribution')}</Text>
         <View style={styles.barChart}>
           {['A', 'B', 'C', 'D'].map(g => (
             <View key={g} style={styles.barCol}>
@@ -218,7 +216,7 @@ export default function StatsScreen() {
 
       {/* Monthly Trend */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>الترند الشهري (6 أشهر)</Text>
+        <Text style={styles.cardTitle}>{t('stats_monthly_trend')}</Text>
         <View style={styles.trendChart}>
           {stats.monthlyTrend.map(m => (
             <View key={m.month} style={styles.trendCol}>
@@ -238,7 +236,7 @@ export default function StatsScreen() {
       {/* Top Violations */}
       {stats.topViolations.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>أكثر المخالفات تكراراً</Text>
+          <Text style={styles.cardTitle}>{t('stats_top_violations')}</Text>
           {stats.topViolations.map((v, i) => (
             <View key={i} style={styles.violationRow}>
               <View style={styles.violationBar}>
@@ -249,7 +247,7 @@ export default function StatsScreen() {
               </View>
               <View style={styles.violationText}>
                 <Text style={styles.violationCriteria} numberOfLines={1}>{v.criteria}</Text>
-                <Text style={styles.violationCount}>{v.count} مرة</Text>
+                <Text style={styles.violationCount}>{v.count} {t('stats_times')}</Text>
               </View>
             </View>
           ))}
@@ -259,7 +257,7 @@ export default function StatsScreen() {
       {/* Facility Breakdown */}
       {stats.facilityBreakdown.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>آخر المنشآت المفتشة</Text>
+          <Text style={styles.cardTitle}>{t('stats_recent_facilities')}</Text>
           {stats.facilityBreakdown.map((f, i) => (
             <View key={i} style={styles.facilityRow}>
               <Text style={[styles.facilityGrade, { color: GRADE_COLOR[f.grade ?? ''] ?? '#374151' }]}>
@@ -312,28 +310,24 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.06, shadowRadius: 4, elevation: 2,
   },
   cardTitle: { fontSize: 15, fontWeight: '700', color: '#1e293b', textAlign: 'right', marginBottom: 16 },
-  // Grade distribution bar chart
   barChart: { flexDirection: 'row', gap: 12, height: 120, alignItems: 'flex-end' },
   barCol: { flex: 1, alignItems: 'center' },
   barValue: { fontSize: 12, color: '#374151', marginBottom: 4 },
   barTrack: { width: '100%', height: 80, backgroundColor: '#f1f5f9', borderRadius: 6, justifyContent: 'flex-end' },
   barFill: { width: '100%', borderRadius: 6, minHeight: 4 },
   barLabel: { fontSize: 16, fontWeight: '800', marginTop: 4 },
-  // Monthly trend
   trendChart: { flexDirection: 'row', gap: 6, height: 100, alignItems: 'flex-end' },
   trendCol: { flex: 1, alignItems: 'center' },
   trendValue: { fontSize: 11, color: '#374151', marginBottom: 2 },
   trendTrack: { width: '100%', height: 70, backgroundColor: '#f1f5f9', borderRadius: 4, justifyContent: 'flex-end' },
   trendFill: { width: '100%', backgroundColor: '#1e40af', borderRadius: 4, minHeight: 4 },
   trendLabel: { fontSize: 10, color: '#64748b', marginTop: 3 },
-  // Top violations
   violationRow: { marginBottom: 10 },
   violationBar: { height: 8, backgroundColor: '#f1f5f9', borderRadius: 4, overflow: 'hidden', marginBottom: 4 },
   violationFill: { height: '100%', backgroundColor: '#dc2626', borderRadius: 4 },
   violationText: { flexDirection: 'row', justifyContent: 'space-between' },
   violationCriteria: { fontSize: 12, color: '#374151', flex: 1 },
   violationCount: { fontSize: 12, color: '#64748b', marginStart: 8 },
-  // Facility breakdown
   facilityRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: '#f1f5f9' },
   facilityGrade: { fontSize: 24, fontWeight: '800', width: 32, textAlign: 'center' },
   facilityInfo: { flex: 1 },

@@ -9,32 +9,20 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { BriefData, buildBrief } from '../../src/services/briefService';
+import { useTranslation } from '../../src/i18n';
 
 I18nManager.forceRTL(true);
-
-const EQUIPMENT_ITEMS = [
-  'بطاقة المفتش الرسمية',
-  'نموذج قائمة الفحص المطبوع',
-  'قلم + دفتر ملاحظات',
-  'هاتف مشحون (كاميرا + GPS)',
-  'مقياس الإضاءة / الضجيج (إن لزم)',
-  'معدات الحماية الشخصية (خوذة، سترة)',
-  'نسخة من القرار التنظيمي',
-  'ختم المكتب (إن وُجد)',
-];
 
 const GRADE_COLOR: Record<string, string> = {
   A: '#16a34a', B: '#2563eb', C: '#d97706', D: '#dc2626',
 };
 
-const SEVERITY_LABEL: Record<string, string> = {
-  high: 'حرج', medium: 'متوسط', low: 'منخفض',
-};
 const SEVERITY_COLOR: Record<string, string> = {
   high: '#dc2626', medium: '#d97706', low: '#2563eb',
 };
 
 export default function BriefScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{
     facilityId: string;
@@ -47,19 +35,31 @@ export default function BriefScreen() {
 
   const [brief, setBrief] = useState<BriefData | null>(null);
   const [loading, setLoading] = useState(true);
-  const [equipment, setEquipment] = useState<boolean[]>(EQUIPMENT_ITEMS.map(() => false));
+  const [equipment, setEquipment] = useState<boolean[]>([]);
   const [committee, setCommittee] = useState<string>('');
+
+  // Equipment items from locale so they switch language too
+  const EQUIPMENT_ITEMS = [
+    t('brief_equip_badge'),
+    t('brief_equip_form'),
+    t('brief_equip_pen'),
+    t('brief_equip_phone'),
+    t('brief_equip_meter'),
+    t('brief_equip_ppe'),
+    t('brief_equip_decree'),
+    t('brief_equip_stamp'),
+  ];
 
   useEffect(() => {
     buildBrief(params.facilityId)
       .then(data => {
         setBrief(data);
-        // Pre-fill committee from last visit
         if (data.lastInspection?.committeeMembers?.length) {
           setCommittee(data.lastInspection.committeeMembers.join('، '));
         }
       })
       .finally(() => setLoading(false));
+    setEquipment(Array(8).fill(false));
   }, [params.facilityId]);
 
   const toggleEquipment = useCallback((idx: number) => {
@@ -70,11 +70,11 @@ export default function BriefScreen() {
     const missing = equipment.filter(v => !v).length;
     if (missing > 0) {
       Alert.alert(
-        'تحقق من المعدات',
-        `لم يتم تأكيد ${missing} عناصر من قائمة المعدات. هل تريد المتابعة على أي حال؟`,
+        t('brief_equip_alert_title'),
+        t('brief_equip_alert_body').replace('{count}', String(missing)),
         [
-          { text: 'مراجعة', style: 'cancel' },
-          { text: 'متابعة', onPress: proceed },
+          { text: t('brief_equip_alert_review'), style: 'cancel' },
+          { text: t('brief_equip_alert_proceed'), onPress: proceed },
         ]
       );
     } else {
@@ -109,13 +109,13 @@ export default function BriefScreen() {
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>موجز ما قبل التفتيش</Text>
+        <Text style={styles.headerTitle}>{t('brief_title')}</Text>
         <Text style={styles.headerSub}>{params.facilityName}</Text>
       </View>
 
       {/* Last Visit Summary */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>آخر زيارة تفتيشية</Text>
+        <Text style={styles.cardTitle}>{t('brief_last_visit')}</Text>
         {brief?.lastInspection ? (
           <View style={styles.row}>
             <View style={styles.gradeBox}>
@@ -125,29 +125,29 @@ export default function BriefScreen() {
               ]}>
                 {brief.previousGrade ?? '—'}
               </Text>
-              <Text style={styles.gradeLabel}>التقييم</Text>
+              <Text style={styles.gradeLabel}>{t('brief_grade_label')}</Text>
             </View>
             <View style={styles.infoCol}>
               <Text style={styles.infoLine}>
-                النتيجة: {brief.previousScore !== null ? `${brief.previousScore}%` : '—'}
+                {t('brief_score_label')}: {brief.previousScore !== null ? `${brief.previousScore}%` : '—'}
               </Text>
               <Text style={styles.infoLine}>
-                التاريخ: {brief.previousDate ?? '—'}
+                {t('brief_date_label')}: {brief.previousDate ?? '—'}
               </Text>
               <Text style={styles.infoLine}>
-                المفتش: {brief.previousInspectorName ?? '—'}
+                {t('brief_inspector_label')}: {brief.previousInspectorName ?? '—'}
               </Text>
             </View>
           </View>
         ) : (
-          <Text style={styles.noData}>لا توجد زيارة سابقة لهذه المنشأة</Text>
+          <Text style={styles.noData}>{t('brief_no_previous')}</Text>
         )}
       </View>
 
       {/* Top Violations */}
       {(brief?.topViolations?.length ?? 0) > 0 && (
         <View style={styles.card}>
-          <Text style={styles.cardTitle}>أبرز المخالفات السابقة</Text>
+          <Text style={styles.cardTitle}>{t('brief_top_violations')}</Text>
           {brief!.topViolations.map((item, idx) => (
             <View key={item.id} style={styles.violationRow}>
               <View style={[
@@ -158,7 +158,7 @@ export default function BriefScreen() {
                   styles.severityText,
                   { color: SEVERITY_COLOR[item.severity] }
                 ]}>
-                  {SEVERITY_LABEL[item.severity]}
+                  {t(`brief_severity_${item.severity}`)}
                 </Text>
               </View>
               <Text style={styles.violationCriteria} numberOfLines={2}>
@@ -171,7 +171,7 @@ export default function BriefScreen() {
 
       {/* Equipment Checklist */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>قائمة المعدات والمستلزمات</Text>
+        <Text style={styles.cardTitle}>{t('brief_equipment_title')}</Text>
         {EQUIPMENT_ITEMS.map((item, idx) => (
           <TouchableOpacity
             key={idx}
@@ -194,13 +194,13 @@ export default function BriefScreen() {
 
       {/* Committee Members */}
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>أعضاء لجنة التفتيش</Text>
-        <Text style={styles.inputHint}>أدخل أسماء الأعضاء مفصولة بفاصلة</Text>
+        <Text style={styles.cardTitle}>{t('brief_committee_title')}</Text>
+        <Text style={styles.inputHint}>{t('brief_committee_hint')}</Text>
         <TextInput
           style={styles.textInput}
           value={committee}
           onChangeText={setCommittee}
-          placeholder="مثال: أحمد علي، محمد سعيد"
+          placeholder={t('brief_committee_placeholder')}
           placeholderTextColor="#9ca3af"
           multiline
           textAlign="right"
@@ -209,7 +209,7 @@ export default function BriefScreen() {
 
       {/* Confirm Button */}
       <TouchableOpacity style={styles.confirmBtn} onPress={handleConfirm}>
-        <Text style={styles.confirmBtnText}>تأكيد والمتابعة إلى التفتيش ←</Text>
+        <Text style={styles.confirmBtnText}>{t('brief_confirm_btn')}</Text>
       </TouchableOpacity>
     </ScrollView>
   );

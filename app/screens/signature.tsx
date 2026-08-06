@@ -8,10 +8,12 @@ import {
 } from 'react-native';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import SignaturePad, { SignaturePadHandle } from '../../components/inspection/SignaturePad';
+import { useTranslation } from '../../src/i18n';
 
 I18nManager.forceRTL(true);
 
 export default function SignatureScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const push = router.push as (href: any) => void;
@@ -42,7 +44,7 @@ export default function SignatureScreen() {
 
   const handleConfirm = () => {
     if (!hasSigned || !signatureData) {
-      Alert.alert('التوقيع مطلوب', 'يرجى التوقيع قبل المتابعة.');
+      Alert.alert(t('signature_required_title'), t('signature_required_body'));
       return;
     }
     push({
@@ -67,19 +69,17 @@ export default function SignatureScreen() {
     <SafeAreaView style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>توقيع المفتش</Text>
+        <Text style={styles.headerTitle}>{t('signature_title')}</Text>
         <Text style={styles.headerSub}>{params.facilityName}</Text>
       </View>
 
-      <Text style={styles.instruction}>
-        يرجى التوقيع أدناه بإصبعك. سيظهر التوقيع في التقرير الرسمي.
-      </Text>
+      <Text style={styles.instruction}>{t('signature_instruction')}</Text>
 
       {/* Signature Canvas */}
       <View style={styles.canvasWrapper}>
         <SignaturePad
           ref={padRef}
-          label="توقيع المفتش المسؤول"
+          label={t('signature_pad_label')}
           onSignature={handleSignature}
         />
       </View>
@@ -87,19 +87,19 @@ export default function SignatureScreen() {
       {/* Action Buttons */}
       <View style={styles.actions}>
         <TouchableOpacity style={styles.clearBtn} onPress={handleClear}>
-          <Text style={styles.clearBtnText}>مسح التوقيع</Text>
+          <Text style={styles.clearBtnText}>{t('signature_clear')}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.confirmBtn, !hasSigned && styles.confirmBtnDisabled]}
           onPress={() => { handleExport(); setTimeout(handleConfirm, 300); }}
         >
-          <Text style={styles.confirmBtnText}>تأكيد والمتابعة ←</Text>
+          <Text style={styles.confirmBtnText}>{t('signature_confirm')}</Text>
         </TouchableOpacity>
       </View>
 
       {hasSigned && (
-        <Text style={styles.signedBadge}>✓ تم التوقيع — يمكنك المتابعة</Text>
+        <Text style={styles.signedBadge}>{t('signature_signed_badge')}</Text>
       )}
     </SafeAreaView>
   );

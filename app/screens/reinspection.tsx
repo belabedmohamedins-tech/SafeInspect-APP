@@ -32,8 +32,8 @@ import { Colors, Radius, Spacing } from '../../constants';
 import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../src/types';
+import { useTranslation } from '../../src/i18n';
 
-// ─── Grade badge colours (mirrors pdfService logic) ───────────────────────────────────
 const GRADE_COLORS: Record<string, string> = {
   A: '#27ae60',
   B: '#2980b9',
@@ -42,6 +42,7 @@ const GRADE_COLORS: Record<string, string> = {
 };
 
 export default function ReinspectionScreen() {
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{
     priorInspectionId: string;
@@ -55,34 +56,28 @@ export default function ReinspectionScreen() {
   const [loading, setLoading]     = useState(true);
   const [error, setError]         = useState<string | null>(null);
 
-  // Inspector editable fields
   const [reference, setReference]           = useState('');
   const [members, setMembers]               = useState<string[]>([]);
   const [newMember, setNewMember]           = useState('');
   const [writer, setWriter]                 = useState('');
 
-  // ── Load prior inspection on mount ────────────────────────────────────────────
   useEffect(() => {
     (async () => {
       try {
         const id = params.priorInspectionId;
-        if (!id) throw new Error('priorInspectionId مانق');
+        if (!id) throw new Error(t('reinspection_error_missing'));
 
         const saved = await InspectionRepository.getById(id);
-        if (!saved) throw new Error('التفتيش السابق غير موجود في قاعدة البيانات');
+        if (!saved) throw new Error(t('reinspection_error_not_found'));
 
         const caps = await CorrectiveActionRepository.getByInspection(id);
-        // FIX(reinspection:75): 'closed' is not a valid CorrectiveAction status.
-        // Valid statuses: 'open' | 'in-progress' | 'resolved' | 'overdue'
-        // Open CAPs = anything that is NOT yet resolved.
         const openCaps = caps.filter(c => c.status === 'open' || c.status === 'in-progress' || c.status === 'overdue');
 
         setPrior(saved);
         setCapCount(openCaps.length);
-        // Pre-fill writer if available
         if (saved.inspectorName) setWriter(saved.inspectorName);
       } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : 'خطأ غير معروف';
+        const msg = err instanceof Error ? err.message : t('reinspection_error_unknown');
         setError(msg);
       } finally {
         setLoading(false);
@@ -90,36 +85,29 @@ export default function ReinspectionScreen() {
     })();
   }, [params.priorInspectionId]);
 
-  // ── Member helpers ──────────────────────────────────────────────────────
   const addMember = () => {
-    const t = newMember.trim();
-    if (t) { setMembers(prev => [...prev, t]); setNewMember(''); }
+    const trimmed = newMember.trim();
+    if (trimmed) { setMembers(prev => [...prev, trimmed]); setNewMember(''); }
   };
   const removeMember = (i: number) =>
     setMembers(prev => prev.filter((_, idx) => idx !== i));
 
-  // ── Launch reinspection ──────────────────────────────────────────────
   const handleLaunch = () => {
     if (!prior) return;
-
     if (!writer.trim()) {
-      Alert.alert('تنبيه', 'الرجاء إدخال اسم المحرر');
+      Alert.alert(t('reinspection_alert_label'), t('reinspection_alert_writer'));
       return;
     }
     if (members.length === 0) {
-      Alert.alert('تنبيه', 'الرجاء إضافة عضو واحد على الأقل في اللجنة');
+      Alert.alert(t('reinspection_alert_label'), t('reinspection_alert_members'));
       return;
     }
-
     router.push({
       pathname: '/(tabs)/inspection/categories',
       params: {
         facilityId:       prior.facilityId,
         facilityName:     prior.facilityName,
         facilityAddress:  prior.facilityAddress,
-        // FIX(reinspection:117): SavedInspection has no 'activity' field.
-        // The activity string is not stored on SavedInspection; pass empty
-        // string to stay backwards-compatible with the categories screen.
         activity:         '',
         cause:            'followup',
         inspectionType:   'follow-up',
@@ -131,12 +119,11 @@ export default function ReinspectionScreen() {
     });
   };
 
-  // ── Render states ──────────────────────────────────────────────────
   if (loading) {
     return (
       <SafeAreaView style={styles.centered}>
         <ActivityIndicator size="large" color={Colors.primary} />
-        <Text style={styles.loadingText}>جاري تحميل بيانات التفتيش...</Text>
+        <Text style={styles.loadingText}>{t('reinspection_loading')}</Text>
       </SafeAreaView>
     );
   }
@@ -145,9 +132,9 @@ export default function ReinspectionScreen() {
     return (
       <SafeAreaView style={styles.centered}>
         <FontAwesome name="exclamation-circle" size={40} color={Colors.danger} />
-        <Text style={styles.errorText}>{error ?? 'تعذّر تحميل التفتيش السابق'}</Text>
+        <Text style={styles.errorText}>{error ?? t('reinspection_error_unknown')}</Text>
         <TouchableOpacity style={styles.backButton} onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>العودة</Text>
+          <Text style={styles.backButtonText}>{t('reinspection_back')}</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -164,33 +151,32 @@ export default function ReinspectionScreen() {
     <SafeAreaView style={styles.container}>
       <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
 
-        {/* ── Header ──────────────────────────────────────────────────── */}
+        {/* Header */}
         <View style={styles.header}>
-          {/* RTL: arrow-left points toward the start of the reading direction = "go back" */}
           <TouchableOpacity onPress={() => router.back()} hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}>
             <FontAwesome name="arrow-left" size={20} color={Colors.textPrimary} />
           </TouchableOpacity>
-          <Text style={styles.headerTitle}>إطلاق تفتيش متابعة</Text>
+          <Text style={styles.headerTitle}>{t('reinspection_header')}</Text>
         </View>
 
-        {/* ── Prior inspection summary card ────────────────────────────────── */}
+        {/* Prior inspection summary card */}
         <View style={styles.summaryCard}>
           <Text style={styles.facilityName}>{prior.facilityName}</Text>
           <Text style={styles.facilityAddress}>{prior.facilityAddress}</Text>
 
           <View style={styles.summaryRow}>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>التفتيش السابق</Text>
+              <Text style={styles.summaryLabel}>{t('reinspection_prior_label')}</Text>
               <Text style={styles.summaryValue}>{priorDateFormatted}</Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>الدرجة</Text>
+              <Text style={styles.summaryLabel}>{t('reinspection_grade_label')}</Text>
               <Text style={[styles.gradeBadge, { color: gradeColor, borderColor: gradeColor }]}>
                 {prior.grade ?? '—'}
               </Text>
             </View>
             <View style={styles.summaryItem}>
-              <Text style={styles.summaryLabel}>إجراءات مفتوحة</Text>
+              <Text style={styles.summaryLabel}>{t('reinspection_open_caps')}</Text>
               <Text style={[
                 styles.summaryValue,
                 capCount > 0 && { color: Colors.danger, fontWeight: '700' },
@@ -200,49 +186,48 @@ export default function ReinspectionScreen() {
             </View>
           </View>
 
-          {/* Trigger reason banner */}
           <View style={styles.triggerBanner}>
             <FontAwesome name="info-circle" size={13} color="#2980b9" />
             <Text style={styles.triggerText}>
               {prior.grade === 'D' && capCount > 0
-                ? `تفتيش متابعة إلزامي — درجة D و${capCount} إجراء تصحيحي مفتوح`
+                ? t('reinspection_trigger_d_caps').replace('{count}', String(capCount))
                 : prior.grade === 'D'
-                  ? 'تفتيش متابعة إلزامي — الدرجة السابقة D'
-                  : `تفتيش متابعة — ${capCount} إجراء تصحيحي مفتوح`}
+                  ? t('reinspection_trigger_d')
+                  : t('reinspection_trigger_caps').replace('{count}', String(capCount))}
             </Text>
           </View>
         </View>
 
-        {/* ── Inspector fields ────────────────────────────────────────────── */}
-        <Text style={styles.sectionTitle}>بيانات التفتيش الجديد</Text>
+        {/* Inspector fields */}
+        <Text style={styles.sectionTitle}>{t('reinspection_section_new')}</Text>
 
-        <Text style={styles.label}>المحرر (حامل الجهاز)</Text>
+        <Text style={styles.label}>{t('reinspection_writer_label')}</Text>
         <TextInput
           style={styles.input}
           value={writer}
           onChangeText={setWriter}
-          placeholder="الاسم الكامل"
+          placeholder={t('reinspection_writer_placeholder')}
           placeholderTextColor={Colors.textTertiary}
           textAlign="right"
         />
 
-        <Text style={styles.label}>مرجع المستند (اختياري)</Text>
+        <Text style={styles.label}>{t('reinspection_ref_label')}</Text>
         <TextInput
           style={styles.input}
           value={reference}
           onChangeText={setReference}
-          placeholder="رقم الإشعار / الإنذار / ..."
+          placeholder={t('reinspection_ref_placeholder')}
           placeholderTextColor={Colors.textTertiary}
           textAlign="right"
         />
 
-        <Text style={styles.label}>أعضاء اللجنة</Text>
+        <Text style={styles.label}>{t('reinspection_members_label')}</Text>
         <View style={styles.memberRow}>
           <TextInput
             style={[styles.input, styles.memberInput]}
             value={newMember}
             onChangeText={setNewMember}
-            placeholder="اسم العضو"
+            placeholder={t('reinspection_member_placeholder')}
             placeholderTextColor={Colors.textTertiary}
             textAlign="right"
             onSubmitEditing={addMember}
@@ -253,9 +238,8 @@ export default function ReinspectionScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Empty member list hint */}
         {members.length === 0 && (
-          <Text style={styles.memberEmptyHint}>أدخل اسم عضو (مطلوب عضو واحد على الأقل)</Text>
+          <Text style={styles.memberEmptyHint}>{t('reinspection_member_empty')}</Text>
         )}
 
         {members.map((m, i) => (
@@ -270,10 +254,9 @@ export default function ReinspectionScreen() {
           </View>
         ))}
 
-        {/* ── Launch button ────────────────────────────────────────────── */}
         <TouchableOpacity style={styles.launchButton} onPress={handleLaunch}>
           <FontAwesome name="search" size={16} color={Colors.textInverse} />
-          <Text style={styles.launchButtonText}>إطلاق تفتيش المتابعة</Text>
+          <Text style={styles.launchButtonText}>{t('reinspection_launch_btn')}</Text>
         </TouchableOpacity>
 
       </ScrollView>
@@ -285,8 +268,6 @@ const styles = StyleSheet.create({
   container:        { flex: 1, backgroundColor: Colors.background },
   centered:         { flex: 1, justifyContent: 'center', alignItems: 'center', gap: Spacing.md, padding: Spacing.lg },
   content:          { padding: Spacing.lg, paddingBottom: Spacing.xxl },
-
-  // Header
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -300,8 +281,6 @@ const styles = StyleSheet.create({
     color: Colors.textPrimary,
     textAlign: 'right',
   },
-
-  // Summary card
   summaryCard: {
     backgroundColor: Colors.surface,
     borderRadius: Radius.md,
@@ -340,8 +319,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     textAlign: 'center',
   },
-
-  // Trigger banner
   triggerBanner: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -359,8 +336,6 @@ const styles = StyleSheet.create({
     textAlign: 'right',
     lineHeight: 18,
   },
-
-  // Form fields
   sectionTitle: {
     fontSize: 15,
     fontWeight: '700',
@@ -415,8 +390,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xs,
   },
   memberText: { fontSize: 14, color: Colors.textPrimary, textAlign: 'right', flex: 1 },
-
-  // Launch button
   launchButton: {
     backgroundColor: Colors.primary,
     flexDirection: 'row',
@@ -428,8 +401,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   launchButtonText: { color: Colors.textInverse, fontSize: 16, fontWeight: 'bold' },
-
-  // Error / loading
   loadingText: { fontSize: 14, color: Colors.textSecondary, marginTop: Spacing.sm },
   errorText:   { fontSize: 14, color: Colors.danger, textAlign: 'center', marginTop: Spacing.sm },
   backButton: {
