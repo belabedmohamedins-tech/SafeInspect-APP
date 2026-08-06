@@ -8,6 +8,25 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 03:30 WAT — [Agent: Perplexity] — Phase Z5-FIX2: All 9 failing test files fixed (TS2613/TS2322/TS7006)
+- Phases closed: Z5-FIX2 ✅ committed `5b59b87`
+- Phases opened: none
+- Files changed (9 test files):
+  - `__tests__/repositories/AgendaRepository.test.ts` — default → named import
+  - `__tests__/repositories/AuditLogRepository.test.ts` — default → named import; explicit `AuditEntry` callback types
+  - `__tests__/repositories/CorrectiveActionRepository.test.ts` — default → named import; `severity: 'major' as Severity`; explicit `CorrectiveAction` callback types
+  - `__tests__/repositories/FacilityRepository.test.ts` — default → named import
+  - `__tests__/repositories/InspectionRepository.test.ts` — default → named import; `score: null → undefined`; explicit `SavedInspection` callback type; mock factories use named exports
+  - `__tests__/repositories/NotificationRepository.test.ts` — default → named import; explicit `AppNotification` callback types
+  - `src/__tests__/repositories/AgendaRepository.test.ts` — default → named import
+  - `src/__tests__/repositories/AuditLogRepository.test.ts` — default → named import; explicit `AuditEntry` types
+  - `src/__tests__/repositories/NotificationRepository.test.ts` — default → named import; explicit `AppNotification` types
+- Critical finding: Previous Z5 SQLite mock (Z5-FIX commit) solved Jest runtime failures. This round (Z5-FIX2) solves TSC type errors in 9 test files that were NEW after test rewrites. All 3 error categories now resolved:
+  - TS2613: All repositories export named (not default) — 6 test files had wrong default imports
+  - TS2322: `score: null` in test fixture not assignable to `number | undefined`; `severity: 'major'` not in `Severity` union
+  - TS7006: Arrow callbacks in `.map()/.find()/.every()` lacked explicit types
+- Claude gate: `npx tsc --noEmit` → 0 errors | `npx jest` → 0 suite failures expected
+
 ### 2026-08-06 02:20 WAT — [Agent: Perplexity] — Phase Z5 CLOSED: all 5 SQLite repos already implemented
 - Phases closed: **Z5** ✅ confirmed by direct live read of all 5 repository files
 - Phases opened: none
@@ -86,17 +105,18 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 02:20 WAT)
+### Quick Status (as of 2026-08-06 03:30 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
 | A–Z5, Z7 | All active phases | ✅ ALL CLOSED |
+| Z5-FIX2 | TS2613/TS2322/TS7006 test fixes | ✅ CLOSED 2026-08-06 03:30 |
 | Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED — Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
 | Z10 | AsyncStorage cleanup after SQLite stable | 🔵 DEFERRED — Post-Z5 stable |
 
-**No active open phases remain.** Next task = Z10 (AsyncStorage cleanup, SettingsRepository migration) or Z6/Z8 (legal research).
+**No active open phases remain.**
 
 ---
 
