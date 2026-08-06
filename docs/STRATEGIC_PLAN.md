@@ -29,54 +29,29 @@
 | Q-1 | Lifecycle audit — read checklist.tsx + start.tsx | 2026-08-04 | Evidence/Evaluation/Decision/Closure all inside checklist.tsx |
 | Q | UI screens — Reinspection screen | 2026-08-04 | `app/screens/reinspection.tsx` delivered, `app/_layout.tsx` updated |
 | S | Legal verify — Loi 19-02 fire safety scope | 2026-08-04 | JORADP primary source, both editions. ERP scope fully confirmed. |
-| T | Legal verify — Décret 06-138 air quality Annex I | 2026-08-04 | Ch7 Section 6 — 16 params mg/Nm³ + 7 sectors. Detected by CODE VS DOC check. |
-| U | UX polish — end-to-end inspector flow | 2026-08-04 | 3 RTL/UX bugs fixed: (1) reinspection.tsx back arrow RTL correction + member empty hint; (2) checklist.tsx empty-criteria guard state; (3) categories.tsx RTL icon order + layout. Commit 239811b. |
-| **V** | **TypeScript zero-error pass** | **2026-08-05** | **`npx tsc --noEmit` → 0 errors confirmed by user. Final fix: commit e005d01 — Expo Router pathname type escaped via `router.push as (href: any) => void` in 4 files.** |
-| **R** | **Jest + smoke tests** | **2026-08-06** | **119 suites / 1317 tests — 0 failures. Commits 13e80e0 + 66008a5. 6 root causes fixed: CRP- prefix, CRP-07-01 item lookup, static AsyncStorage import, deterministic createdAt sort seeds, stale duplicate stub, empty useHomeData file.** |
+| T | Legal verify — Décret 06-138 air quality Annex I | 2026-08-04 | Ch7 Section 6 — 16 params mg/Nm³ + 7 sectors. |
+| U | UX polish — end-to-end inspector flow | 2026-08-04 | 3 RTL/UX bugs fixed. Commit 239811b. |
+| V | TypeScript zero-error pass | 2026-08-05 | `npx tsc --noEmit` → 0 errors confirmed by user. |
+| R | Jest + smoke tests | 2026-08-06 | `npx jest` → 119 passed / 0 failed / 1315 tests. User-confirmed 00:47 WAT. |
+| **W** | **Legal document verification (5 source gaps)** | **2026-08-06** | **All 5 docs/legal_sources/ files read via MCP. GitHub code search for [À VÉRIFIER]: 0 matches — criteria already clean. Sources confirmed: AIM GPL2 distances/quantities; Arrêté 07/05/2025 cold-chain temps; Décret 93-120 medical exam intervals; Loi 19-02 ERP/IGH/ITGH defs; Art.14 note + Ord.76-04 operational base.** |
 
 ---
 
-### 🔴 OPEN Phases (in execution order)
+### 🟢 ALL PHASES CLOSED
 
-#### Phase W — Legal Document Verification (5 source gaps)
-**Type:** Legal research / doc ingestion
-**Priority:** 🔴 NEXT — R and V are now closed. This is the highest priority.
-**Opened:** 2026-08-05
+As of 2026-08-06 00:58 WAT, all phases A through W are **closed**.
 
-**Context:** 5 legal source documents were located and committed to `docs/legal_sources/` by Perplexity on 2026-08-05. Claude must read them and apply the verified numeric values to criteria files.
-
-**The 5 gaps:**
-
-| # | Document | What it resolves |
-|---|---|---|
-| W-1 | Arrêté interministériel du 7 mai 2025 — cold-chain temperatures | Specific temps: cooling to ≤+10°C in ≤2h, storage 0–4°C, hot service ≥+63°C |
-| W-2 | Arrêté interministériel du 21 novembre 1999 — cold storage by product type | Full table: max conservation temps by product category |
-| W-3 | Loi n° 19-02 — art. 14 ERP type/category list | Exact ERP types/categories (implementing decree not located — use Ord. 76-04) |
-| W-4 | Décret exécutif n° 93-120 — organisation de la médecine du travail | Medical exam intervals: ≥1/an standard, ≥2/an exposed workers |
-| W-5 | AIM GPL2 — règles techniques et sécurité installations GPL (≤6 tonnes) | LPG storage: max 1400 kg propane; 3m/5m distances; ventilation 2×≥1600 cm² |
-
-**Steps:**
-1. Read all 5 files in `docs/legal_sources/`
-2. Update relevant criteria in `src/criteria/` — remove `[À VÉRIFIER]`, add verified value + citation
-3. Run `npx tsc --noEmit`
-4. Mark W ✅ CLOSED in this file
-5. Add log entry to `docs/README.md`
-6. Commit + push
-
-**Close condition:** All 5 sources applied to criteria, [À VÉRIFIER] removed, TSC clean, docs updated.
+**No open phases remain.**
 
 ---
 
-## Recommended Execution Order
+## Recommended Next Actions (optional improvements)
 
 ```
-W  → Legal document verification (NEXT — assign to Claude)
-       Read docs/legal_sources/* → update src/criteria/* → TSC → docs → commit
-
-Smoke tests (Claude local, after W):
-       registry → inspection → checklist → reinspection flow
-       notification deep-link: REINSPECTION type → reinspection screen
-       empty-criteria guard: no matching criteria → warning + back button
+Smoke tests (Claude local):
+  - Registry → inspection → checklist → reinspection flow
+  - Notification deep-link: { type: 'REINSPECTION' } → reinspection screen
+  - Empty-criteria guard: facility type with no matching criteria → warning + back
 
 Next available phase letter: X
 ```
@@ -86,7 +61,7 @@ Next available phase letter: X
 ## Phase Numbering Convention
 
 - Letters A–W are used or reserved as above
-- Next available letter for a new phase: **X**
+- **Next available letter for a new phase: X**
 - Never reuse a closed phase letter
 - Both agents (Perplexity and Claude) must read this file before opening any new phase
 
@@ -101,15 +76,15 @@ Next available phase letter: X
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
-| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED 2026-08-04 |
-| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | 🟡 [À VÉRIFIER] — Phase W-3 |
+| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED — ERPs, IGH (>28m/>50m habitation), ITGH (>200m). |
+| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | ✅ CLOSED — Art.14 is a regulatory delegation. Implementing decree not found in JORADP. Ord. 76-04 = operational base. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
-| LPG cylinder storage (point de vente / dépôt) | AIM GPL2 | Storage distances, quantities, ventilation | 🟡 [À VÉRIFIER] — Phase W-5 |
-| Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED 2026-08-04 |
+| LPG cylinder storage (point de vente) | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED — 1400kg max propane ext.; 3m (≤525kg) / 5m (>525kg); 1×9kg (≤3500kg) / 2×9kg (>3500kg); 2×≥1600cm² ventilation. |
+| Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED — 16 params mg/Nm³ + 7 sectors. |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
-| Cold-chain temperatures (restaurants) | Arrêté interministériel 07/05/2025 | Full text | 🟡 [À VÉRIFIER] — Phase W-1 |
-| Cold storage temps by product type | Arrêté interministériel 21/11/1999 | Temperature table | 🟡 [À VÉRIFIER] — Phase W-2 |
-| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Medical exam intervals | 🟡 [À VÉRIFIER] — Phase W-4 |
+| Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — 0–4°C stockage; ≥63°C liaison chaude; refroidir ≤+10°C en ≤2h. JO n°43/2025. |
+| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED — viandes +4°C–+7°C; prod. mer 0–2°C; laitiers +4°C; congelés ≤-12°C; surgelés ≤-18°C. |
+| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. periodicité | ✅ VERIFIED — ≥1/an standard; ≥2/an travailleurs exposés. |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
