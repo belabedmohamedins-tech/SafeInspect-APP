@@ -40,8 +40,9 @@ const TABS: { key: FilterTab; label: string }[] = [
 const STATUS_LABEL: Record<CorrectiveAction['status'], string> = {
   open:          'مفتوح',
   'in-progress': 'جارٍ',
-  resolved:      'مغلق',
+  resolved:      'محلول',
   overdue:       'متأخر',
+  closed:        'مغلق',
 };
 
 const STATUS_COLOR: Record<CorrectiveAction['status'], string> = {
@@ -49,6 +50,7 @@ const STATUS_COLOR: Record<CorrectiveAction['status'], string> = {
   'in-progress': '#2980b9',
   resolved:      '#27ae60',
   overdue:       '#e74c3c',
+  closed:        '#7f8c8d',
 };
 
 const SEVERITY_COLOR: Record<CorrectiveAction['severity'], string> = {
@@ -105,7 +107,7 @@ export default function CapScreen() {
     if (filter === 'all')      return true;
     if (filter === 'open')     return item.status === 'open' || item.status === 'in-progress' || item.status === 'overdue';
     if (filter === 'overdue')  return item.status === 'overdue';
-    if (filter === 'resolved') return item.status === 'resolved';
+    if (filter === 'resolved') return item.status === 'resolved' || item.status === 'closed';
     return true;
   });
 
@@ -150,7 +152,7 @@ export default function CapScreen() {
   };
 
   const renderItem = ({ item }: { item: CorrectiveAction }) => {
-    const overdue = item.status === 'overdue' || (item.status !== 'resolved' && isOverdueDate(item.deadline));
+    const overdue = item.status === 'overdue' || (item.status !== 'resolved' && item.status !== 'closed' && isOverdueDate(item.deadline));
     return (
       <TouchableOpacity
         style={styles.card}
@@ -192,7 +194,7 @@ export default function CapScreen() {
         </View>
 
         {/* quick actions */}
-        {item.status !== 'resolved' && (
+        {item.status !== 'resolved' && item.status !== 'closed' && (
           <TouchableOpacity style={styles.quickAction} onPress={() => handleResolve(item.id)}>
             <FontAwesome name="check" size={16} color={Colors.success ?? '#27ae60'} />
           </TouchableOpacity>

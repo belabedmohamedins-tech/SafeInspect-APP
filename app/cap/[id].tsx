@@ -32,14 +32,16 @@ import { CorrectiveAction } from '../../src/types';
 const STATUS_LABEL: Record<CorrectiveAction['status'], string> = {
   open:          'مفتوح',
   'in-progress': 'جارٍ',
-  resolved:      'مغلق',
+  resolved:      'محلول',
   overdue:       'متأخر',
+  closed:        'مغلق',
 };
 const STATUS_COLOR: Record<CorrectiveAction['status'], string> = {
   open:          '#f39c12',
   'in-progress': '#2980b9',
   resolved:      '#27ae60',
   overdue:       '#e74c3c',
+  closed:        '#7f8c8d',
 };
 const SEVERITY_COLOR: Record<CorrectiveAction['severity'], string> = {
   low:      '#27ae60',
@@ -142,7 +144,7 @@ export default function CapDetailScreen() {
   }
 
   const overdueFlag = item.status === 'overdue' ||
-    (item.status !== 'resolved' && item.deadline < new Date().toISOString().slice(0, 10));
+    (item.status !== 'resolved' && item.status !== 'closed' && item.deadline < new Date().toISOString().slice(0, 10));
 
   return (
     <SafeAreaView style={styles.safeArea}>

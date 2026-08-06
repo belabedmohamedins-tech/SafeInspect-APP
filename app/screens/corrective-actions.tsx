@@ -25,8 +25,9 @@ type ActionStatus = CorrectiveAction['status'];
 const STATUS_META: Record<ActionStatus, { label: string; bg: string; fg: string; next?: ActionStatus }> = {
   open:          { label: 'مفتوح',    bg: '#e3f2fd', fg: '#1565c0', next: 'in-progress' },
   'in-progress': { label: 'جارٍ',      bg: '#fff9c4', fg: '#f57f17', next: 'resolved'    },
-  resolved:      { label: 'محلول',    bg: '#e8f5e9', fg: '#2e7d32', next: undefined     },
+  resolved:      { label: 'محلول',    bg: '#e8f5e9', fg: '#2e7d32', next: 'closed'      },
   overdue:       { label: 'متأخر ⚠', bg: '#ffebee', fg: '#c62828', next: 'in-progress' },
+  closed:        { label: 'مغلق',     bg: '#eceff1', fg: '#546e7a', next: undefined     },
 };
 
 const SEVERITY_COLOR: Record<Severity, string> = {
@@ -162,7 +163,6 @@ export default function CorrectiveActionsScreen() {
   const [actions,      setActions]      = useState<CorrectiveAction[]>([]);
   const [search,       setSearch]       = useState('');
   const [filterTab,    setFilterTab]    = useState<FilterTab>('all');
-  // Phase-17: dedicated overdue count from getStats() — accurate from first render
   const [overdueCount, setOverdueCount] = useState(0);
 
   const load = useCallback(async () => {
@@ -171,7 +171,6 @@ export default function CorrectiveActionsScreen() {
         CorrectiveActionRepository.getAll(),
         CorrectiveActionRepository.getStats(),
       ]);
-      // Newest first
       setActions([...all].sort((a, b) => b.createdAt.localeCompare(a.createdAt)));
       setOverdueCount(stats.overdue);
     } catch (e) {
@@ -203,12 +202,11 @@ export default function CorrectiveActionsScreen() {
     ]);
   };
 
-  // Derive filtered list only — overdueCount comes from getStats() above
   const displayed = useMemo(() => {
     let list = actions;
     if (filterTab === 'open')     list = actions.filter(a => a.status === 'open' || a.status === 'in-progress');
     if (filterTab === 'overdue')  list = actions.filter(a => a.status === 'overdue');
-    if (filterTab === 'resolved') list = actions.filter(a => a.status === 'resolved');
+    if (filterTab === 'resolved') list = actions.filter(a => a.status === 'resolved' || a.status === 'closed');
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(a =>

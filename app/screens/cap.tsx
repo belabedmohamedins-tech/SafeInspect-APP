@@ -31,6 +31,7 @@ const STATUS_LABELS: Record<CorrectiveAction['status'], string> = {
   'in-progress': 'جارٍ',
   resolved:      'محلول',
   overdue:       'متأخر',
+  closed:        'مغلق',
 };
 
 const SEVERITY_COLORS: Record<CorrectiveAction['severity'], string> = {
@@ -52,6 +53,7 @@ const STATUS_CHIP_COLOR: Record<CorrectiveAction['status'], string> = {
   'in-progress': Colors.warning,
   resolved:      Colors.success,
   overdue:       Colors.danger,
+  closed:        '#7f8c8d',
 };
 
 const FILTERS: { label: string; value: StatusFilter }[] = [
@@ -60,9 +62,10 @@ const FILTERS: { label: string; value: StatusFilter }[] = [
   { label: 'جارٍ',   value: 'in-progress' },
   { label: 'متأخر',  value: 'overdue' },
   { label: 'محلول',  value: 'resolved' },
+  { label: 'مغلق',   value: 'closed' },
 ];
 
-const NEW_STATUSES: CorrectiveAction['status'][] = ['open', 'in-progress', 'resolved'];
+const NEW_STATUSES: CorrectiveAction['status'][] = ['open', 'in-progress', 'resolved', 'closed'];
 
 export default function CAPScreen() {
   const router = useRouter();
@@ -96,23 +99,12 @@ export default function CAPScreen() {
   };
 
   // ── Status update ──────────────────────────────────────────────────────────
-  //
-  // Phase 20: when an item is resolved (or manually moved out of a deadline-
-  // bearing status), cancel its per-item scheduled alert immediately so the
-  // user is never notified about a deadline they already closed.
-  //
-  // Additionally, if this resolve brings the total open+overdue count to zero,
-  // cancel the daily digest too — there is nothing left to remind about.
   const handleUpdateStatus = async (newStatus: CorrectiveAction['status']) => {
     if (!selected) return;
 
-    // 1. Persist the status change
     await repo.updateStatus(selected.id, newStatus);
 
-    // 2. Cancel the per-item deadline alert whenever the item is resolved
-    //    (or moved back to open/in-progress — the alert will be rescheduled
-    //    the next time scheduleCapDeadlineNotifications() runs at app start).
-    if (newStatus === 'resolved') {
+    if (newStatus === 'resolved' || newStatus === 'closed') {
       try {
         await cancelCapNotification(selected.id);
       } catch (err) {
@@ -120,9 +112,8 @@ export default function CAPScreen() {
       }
     }
 
-    // 3. Check if all items are now resolved — cancel the digest if so
     try {
-      const remaining = await repo.getOpen(); // returns open + in-progress + overdue
+      const remaining = await repo.getOpen();
       if (remaining.length === 0) {
         await cancelCapDigestNotification();
       }
@@ -143,7 +134,6 @@ export default function CAPScreen() {
         {
           text: 'حذف', style: 'destructive',
           onPress: async () => {
-            // Also cancel any pending notification for the deleted item
             try { await cancelCapNotification(item.id); } catch { /* ok */ }
             await repo.delete(item.id);
             load();
