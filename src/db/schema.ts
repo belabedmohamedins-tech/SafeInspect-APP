@@ -12,6 +12,21 @@
  * because every name is distinct. Do NOT rename existing entries; doing so
  * would cause already-applied migrations to re-run on existing installs.
  * New migrations must use a name that has never appeared before.
+ *
+ * WHY NO withTransactionAsync AROUND DDL (expo-sqlite ≥15 / SDK 56)
+ * ------------------------------------------------------------------
+ * execAsync() for DDL statements (CREATE TABLE, ALTER TABLE, CREATE INDEX)
+ * runs each statement inside its own implicit transaction. Wrapping that
+ * inside withTransactionAsync produces a nested transaction which SQLite
+ * does not support — it throws "cannot rollback - no transaction is active"
+ * when the outer wrapper tries to roll back after the inner implicit tx has
+ * already committed or rolled back independently.
+ *
+ * Correct pattern for expo-sqlite v15:
+ *   • DDL  → db.execAsync(sql)          — no outer transaction
+ *   • DML  → db.runAsync(sql, params)   — no outer transaction needed for
+ *             single-row inserts; withTransactionAsync only for multi-step
+ *             DML batches that must be atomic together.
  */
 
 import * as SQLite from 'expo-sqlite';
@@ -213,6 +228,8 @@ const MIGRATIONS: Migration[] = [
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
+  // Create the migrations tracking table directly — no transaction wrapper.
+  // execAsync runs DDL in its own implicit transaction in expo-sqlite ≥15.
   await db.execAsync(`
     CREATE TABLE IF NOT EXISTS _migrations (
       name       TEXT PRIMARY KEY NOT NULL,
@@ -227,13 +244,17 @@ export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
     );
     if (existing) continue;
 
-    await db.withTransactionAsync(async () => {
-      await db.execAsync(migration.sql);
-      await db.runAsync(
-        'INSERT INTO _migrations (name) VALUES (?)',
-        [migration.name] as SQLite.SQLiteBindValue[],
-      );
-    });
+    // Run DDL directly — no withTransactionAsync wrapper.
+    // expo-sqlite ≥15 execAsync() for DDL runs an implicit transaction
+    // internally; nesting it inside withTransactionAsync causes SQLite to
+    // throw "cannot rollback - no transaction is active".
+    await db.execAsync(migration.sql);
+
+    // Record the migration as applied (single DML — no transaction needed).
+    await db.runAsync(
+      'INSERT INTO _migrations (name) VALUES (?)',
+      [migration.name] as SQLite.SQLiteBindValue[],
+    );
   }
 }
 
