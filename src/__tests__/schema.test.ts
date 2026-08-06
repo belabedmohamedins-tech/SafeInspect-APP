@@ -14,6 +14,35 @@
 //    touching SQLite. We therefore use jest.isolateModulesAsync() inside every
 //    describe block so each group starts with a fresh module (_db = null) and
 //    a fresh set of mock call counts.
+//
+// MIGRATION COUNT = 11 (update this comment when adding migrations):
+//   001_create_inspections
+//   001_create_facilities
+//   001_create_agenda
+//   001_create_corrective_actions
+//   001_create_audit_log
+//   001_create_notifications
+//   002_create_settings
+//   002_inspections_add_index_facility
+//   002_inspections_add_index_status
+//   002_corrective_actions_add_index_inspection
+//   003_facilities_add_rubrique
+
+const MIGRATION_COUNT = 11;
+
+const ALL_MIGRATION_NAMES = [
+  '001_create_inspections',
+  '001_create_facilities',
+  '001_create_agenda',
+  '001_create_corrective_actions',
+  '001_create_audit_log',
+  '001_create_notifications',
+  '002_create_settings',
+  '002_inspections_add_index_facility',
+  '002_inspections_add_index_status',
+  '002_corrective_actions_add_index_inspection',
+  '003_facilities_add_rubrique',
+];
 
 let mockAppliedMigrations: Set<string> = new Set();
 let mockCurrentDbStub: ReturnType<typeof mockMakeDbStub>;
@@ -103,15 +132,15 @@ describe('initializeDatabase — happy path', () => {
     );
   });
 
-  it('runs all 9 MIGRATIONS (withTransactionAsync called 9 times)', async () => {
+  it(`runs all ${MIGRATION_COUNT} MIGRATIONS (withTransactionAsync called ${MIGRATION_COUNT} times)`, async () => {
     await jest.isolateModulesAsync(async () => {
       const { initializeDatabase } = require('../db/schema');
       await initializeDatabase();
     });
-    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(9);
+    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(MIGRATION_COUNT);
   });
 
-  it('records each migration name via INSERT INTO _migrations', async () => {
+  it(`records each migration name via INSERT INTO _migrations`, async () => {
     await jest.isolateModulesAsync(async () => {
       const { initializeDatabase } = require('../db/schema');
       await initializeDatabase();
@@ -119,7 +148,7 @@ describe('initializeDatabase — happy path', () => {
     const insertCalls = (mockCurrentDbStub.runAsync as jest.Mock).mock.calls.filter(
       ([sql]: [string]) => sql.includes('INSERT INTO _migrations'),
     );
-    expect(insertCalls).toHaveLength(9);
+    expect(insertCalls).toHaveLength(MIGRATION_COUNT);
   });
 });
 
@@ -155,18 +184,7 @@ describe('initializeDatabase — idempotency', () => {
 
 describe('runMigrations — skips already-applied migrations', () => {
   it('does not call withTransactionAsync when all migrations are present', async () => {
-    const allNames = [
-      '001_create_inspections',
-      '001_create_facilities',
-      '001_create_agenda',
-      '001_create_corrective_actions',
-      '001_create_audit_log',
-      '001_create_notifications',
-      '002_inspections_add_index_facility',
-      '002_inspections_add_index_status',
-      '002_corrective_actions_add_index_inspection',
-    ];
-    allNames.forEach(n => mockAppliedMigrations.add(n));
+    ALL_MIGRATION_NAMES.forEach(n => mockAppliedMigrations.add(n));
 
     await jest.isolateModulesAsync(async () => {
       const { runMigrations } = require('../db/schema');
