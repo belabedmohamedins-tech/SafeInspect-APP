@@ -68,6 +68,10 @@ module.exports = {
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo-crypto$':                          '<rootDir>/__mocks__/expo-crypto.js',
+    // ⚠️ expo-sqlite MUST come before the generic expo/* catch-all.
+    // expo-sqlite calls requireNativeModule (native only) — the mock replaces
+    // the entire module with an in-memory Map-based SQLite implementation.
+    '^expo-sqlite$':                          '<rootDir>/__mocks__/expo-sqlite.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
     '^expo/src/winter/installGlobal(.*)$':    '<rootDir>/__mocks__/expoInstallGlobal.js',

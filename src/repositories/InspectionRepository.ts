@@ -11,7 +11,7 @@
 // Z10 will remove the AsyncStorage fallback once SQLite is stable in prod.
 
 import { getDb, migrateAsyncStorageToSQLite } from '../db/schema';
-import { SavedInspection, InspectionItem } from '../types';
+import { SavedInspection, InspectionItem, InspectionType } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
 import { createCapItemsFromInspection } from '../services/capFactory';
@@ -98,14 +98,18 @@ function rowToInspection(row: InspectionRow): SavedInspection {
     date: row.date,
     inspectorName: row.inspector_name,
     status: row.status as SavedInspection['status'],
-    inspectionType: row.inspection_type ?? undefined,
+    inspectionType: row.inspection_type != null
+      ? (row.inspection_type as InspectionType)
+      : undefined,
     priorInspectionId: row.prior_inspection_id ?? undefined,
     openingMeetingDone: row.opening_meeting_done === 1,
     closingMeetingDone: row.closing_meeting_done === 1,
     reportSequenceNumber: row.report_sequence_number ?? undefined,
     score: row.score ?? undefined,
     grade: row.grade ?? undefined,
-    riskLevel: row.risk_level ?? undefined,
+    riskLevel: row.risk_level != null
+      ? (row.risk_level as 1 | 2 | 3 | 4)
+      : undefined,
     criticalOverride: row.critical_override === 1,
     incomplete: row.incomplete === 1,
     nextInspectionDays: row.next_inspection_days ?? undefined,
