@@ -12,6 +12,13 @@
 import { FacilityRepository } from '../../repositories/FacilityRepository';
 import SQLite from 'expo-sqlite';
 
+// Static require — dynamic import() is not supported under Babel/CommonJS Jest.
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const schema = require('../../db/schema') as {
+  __resetDb: () => void;
+  initializeDatabase: () => Promise<void>;
+};
+
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
 function makeFacility(overrides: Record<string, unknown> = {}) {
@@ -33,9 +40,8 @@ async function storedFacilities() {
 beforeEach(async () => {
   // Reset in-memory DB and reinitialise schema.
   (SQLite as any).__resetAll?.();
-  const { __resetDb, initializeDatabase } = await import('../../db/schema');
-  __resetDb();
-  await initializeDatabase();
+  schema.__resetDb();
+  await schema.initializeDatabase();
 });
 
 // ─── getAll ───────────────────────────────────────────────────────────────────
