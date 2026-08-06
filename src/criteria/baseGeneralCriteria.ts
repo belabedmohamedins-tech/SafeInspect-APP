@@ -161,12 +161,15 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 4.4: upgraded with pumping frequency — no more than every 90 days or at 80% capacity
+    // Z8: removed unverified "90 days / 80% capacity" figures (no Algerian legal source found).
+    // Criterion now relies solely on verified instruments: القانون 01-19 + المرسوم 01-102 (ONA) + القانون 05-12.
+    // Inspector verifies: valid contract + pumping receipts as evidence + no overflow/leakage.
+    // If a specific regulatory frequency is later found in JORADP, reopen as Z13+ and add it then.
     id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
-    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري (لا تتجاوز دورية الشفط 90 يوماً أو كلما بلغت الحفرة 80% من طاقتها)، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي، وعدم الفيضان أو التسرب نحو الباطن الأرضي.',
-    legalReference: 'القانون 01-19 + المرسوم 01-102 (ONA) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
+    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري المفعول مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي. يتحقق المفتش ميدانياً من غياب أي فيضان أو تسرب نحو الباطن الأرضي أو المحيط المجاور.',
+    legalReference: 'القانون 01-19 المادة 14 (وجوب تسيير المخلفات السائلة دون الإضرار بالصحة والوسط) + المرسوم التنفيذي 01-102 المتعلق بإنشاء الديوان الوطني للتطهير ONA وصلاحياته (إلزامية التعاقد مع ONA أو متعامل معتمد لعمليات الشفط) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -224,11 +227,15 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // Phase 5.1 — وثيقة نقل النفايات
   {
+    // Z6: added Décret 09-19 Art. 4–8 — mandatory accreditation check for waste collection operator.
+    // Inspector must verify: (1) operator holds a valid accreditation (وثيقة اعتماد) issued by the
+    // competent authority covering the specific waste type being transported; (2) the accreditation
+    // is not expired; (3) the bordereau matches the accredited operator named on that document.
     id: 'BGN-04-06',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
-    criteria: 'وجود بورديرو (وثيقة نقل النفايات الخاصة الخطرة) عند كل عملية تسليم لنفايات خاصة خطرة لمتعامل معتمد، مع الاحتفاظ بنسخة منها لمدة لا تقل عن خمس سنوات.',
-    legalReference: 'القانون 01-19 المادة 32 + المرسوم التنفيذي 05-315 (بورديرو نقل النفايات الخاصة الخطرة — إلزامي لكل شحنة).',
+    criteria: 'وجود بورديرو (وثيقة نقل النفايات الخاصة الخطرة) عند كل عملية تسليم لنفايات خاصة خطرة لمتعامل معتمد، مع الاحتفاظ بنسخة منها لمدة لا تقل عن خمس سنوات. يتحقق المفتش إضافةً من أن المتعامل الجامع والناقل يحمل وثيقة اعتماد سارية المفعول صادرة عن السلطة المختصة وتُغطي نوع النفايات المنقولة فعلياً، وأن اسمه مطابق لما ورد في البورديرو.',
+    legalReference: 'القانون 01-19 المادة 32 + المرسوم التنفيذي 05-315 (بورديرو نقل النفايات الخاصة الخطرة — إلزامي لكل شحنة) + المرسوم التنفيذي 09-19 المواد 4–8 (اشتراط حصول المتعامل الجامع والناقل للنفايات الخاصة الخطرة على اعتماد من السلطة المختصة، وإلزامية التحقق من صحة هذا الاعتماد عند كل تعاقد).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
