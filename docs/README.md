@@ -8,6 +8,14 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 20:57 WAT — [Agent: Perplexity] — Z12 RE-GATE CONFIRMED: Jest 1233/0 after git pull — ALL GREEN
+- Phases closed: none (gate re-confirmation only)
+- Files changed: none
+- Root cause of prior failures: Claude's local checkout was stale (pre-Z12 commits). All three failing test files (`InspectionRepository.test.ts`, `InspectionRepository.extended.test.ts`, `serverAuth.test.ts`) were already correct on GitHub. `git pull` pulled 22 objects (eff2600..81adc72) including the Z12 test fixes.
+- Gate: TSC 0 errors + Jest **1233 tests passing / 0 failures** (1 skipped) — user-confirmed 20:57 WAT
+- Verify: `git pull && npx tsc --noEmit && npx jest` → all green
+- **No open phases. Next: Z13 (to be defined).**
+
 ### 2026-08-06 20:19 WAT — [Agent: Perplexity] — Z12 GATE CONFIRMED: Jest 1233/0, TSC 0 errors — ALL GREEN
 - Phases closed: **Z12** ✅ GATE CONFIRMED by user
 - Files changed: none (gate confirmation only)
@@ -125,7 +133,7 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 20:19 WAT)
+### Quick Status (as of 2026-08-06 20:57 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
@@ -134,7 +142,7 @@ See `docs/STRATEGIC_PLAN.md` for full specs.
 | Z10 | AsyncStorage cleanup — InspectionRepository + SettingsRepository | ✅ CLOSED 2026-08-06 |
 | Z10-FIX | Test drift fix — SettingsRepository test + schema count | ✅ CLOSED 2026-08-06 |
 | Z11 | Wire facilityCategoriesFull.json into rubrique picker | ✅ CLOSED 2026-08-06 13:22 WAT |
-| **Z12** | **Audit Findings Closure — F-01 to F-18 (15 sub-items)** | **✅ CLOSED + GATE CONFIRMED 2026-08-06 20:19 WAT** |
+| **Z12** | **Audit Findings Closure — F-01 to F-18 (15 sub-items)** | **✅ CLOSED + GATE CONFIRMED 2026-08-06 20:57 WAT** |
 | Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED — Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
@@ -143,7 +151,7 @@ See `docs/STRATEGIC_PLAN.md` for full specs.
 
 ---
 
-## Phase Z12 — Audit Findings Closure — ✅ CLOSED + GATE CONFIRMED 2026-08-06 20:19 WAT
+## Phase Z12 — Audit Findings Closure — ✅ CLOSED + GATE CONFIRMED 2026-08-06 20:57 WAT
 
 ### Sub-item closure summary
 
@@ -165,7 +173,7 @@ See `docs/STRATEGIC_PLAN.md` for full specs.
 | Z12-14 | F-02 — Stale Node/Expo version comment | LOW | ✅ Version comment updated |
 | Z12-15 | F-03 — Migration naming (`001_` reused) | LOW | ✅ Migration prefixes made unique |
 
-**Gate: TSC 0 errors + Jest 1233 tests / 0 failures (1 skipped) — user-confirmed 2026-08-06 20:19 WAT.**
+**Gate: TSC 0 errors + Jest 1233 tests / 0 failures (1 skipped) — user-confirmed 2026-08-06 20:57 WAT.**
 
 ---
 
@@ -191,29 +199,4 @@ Z10 rewrote `SettingsRepository` from AsyncStorage → SQLite and updated three 
 ### Why `migrateAsyncStorageToSQLite()` is NOT deleted
 Existing installs in the field may still have data in AsyncStorage. The function is kept as an explicit upgrade tool callable from a setup screen or CLI. It is simply no longer auto-invoked at app startup.
 
----
-
-## Phase Z11 — Rubrique picker (facilityCategoriesFull.json → UI) — ✅ CLOSED 2026-08-06
-
-### Changes
-- Migration `003_facilities_add_rubrique` added to `schema.ts`.
-- `Facility.rubrique?: string` added to types.
-- `FacilityRepository` upsert SQL updated.
-- `add.tsx` + `edit.tsx` updated with rubrique picker.
-- Gate: TSC 0 + Jest 25/25. Closed 13:22 WAT.
-
----
-
-## Phase Z5 — SQLite repository swap (5 repos) — ✅ CLOSED 2026-08-06
-
-All 5 repos confirmed on expo-sqlite. `notifications` table in schema.ts. Z10 completed the migration of SettingsRepository.
-
-## Phase Z7 — facilityCategoriesFull.json domain review — ✅ CLOSED 2026-08-06
-88 KB / 622 entries. Content correct against Décret 07-144. File unused in production — Z11 wired it in.
-
-## Phase X — i18n Screen Wire-up — ✅ CLOSED 2026-08-06
-Gate confirmed: TSC 0 errors + Jest 119/0. Commits: `3ef6bf5`, `ba79e36`, `553369d`.
-
-## Phase W — Legal Document Verification — ✅ CLOSED 2026-08-06
-## Phase R — Jest Gate — ✅ CLOSED 2026-08-06 (119/0 user-confirmed)
-## Phase V — TSC Zero-Error Pass — ✅ CLOSED 2026-08-05
+--
