@@ -337,6 +337,28 @@ export interface AgendaItem {
   inspectionId?: string;
 }
 
+/**
+ * Persisted status of a corrective action.
+ *
+ * - 'open'        — created, not yet started
+ * - 'in-progress' — facility is working on it
+ * - 'resolved'    — facility reports it is fixed (pending inspector verification)
+ * - 'closed'      — inspector verified and closed the action
+ * - 'overdue'     — computed virtual status: deadline passed while open/in-progress.
+ *                   Stored in DB for queries; also derived at runtime for display.
+ *
+ * FIX (Z5b): expanded from 'open'|'in-progress'|'closed' — 'resolved' and 'overdue'
+ * were already in use across the entire codebase (14 files, 50 TS errors). The type
+ * was narrower than reality. DB column is TEXT, no migration needed.
+ */
+export type ActionStatus = 'open' | 'in-progress' | 'resolved' | 'overdue' | 'closed';
+
+/**
+ * Filter values used in CAP list screens.
+ * Extends ActionStatus with the synthetic 'all' catch-all.
+ */
+export type StatusFilter = ActionStatus | 'all';
+
 export interface CorrectiveAction {
   id: string;
   inspectionId: string;
@@ -362,7 +384,8 @@ export interface CorrectiveAction {
   severity: Severity | 'critical';
   deadline: string;
   assignedTo: string;
-  status: 'open' | 'in-progress' | 'closed';
+  /** @see ActionStatus */
+  status: ActionStatus;
   notes?: string;
   createdAt: string;
   updatedAt: string;
