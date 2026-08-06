@@ -8,6 +8,15 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 18:14 WAT — [Agent: Perplexity] — Doc cleanup: 3 stale/conflicting docs tombstoned
+- Phases closed: none (housekeeping only)
+- Files changed:
+  - `docs/RAQIB_Fix_Spec_v2.md` — ⛔ SUPERSEDED header added. All phases confirmed closed. Historical only.
+  - `docs/RAQIB_Fix_Spec_v3.md` — ⛔ SUPERSEDED header added with closure table (Phases A–F all closed by Y/Z/Z2/Z3/Z4/Z5/Z7/Z10). Historical only.
+  - `docs/TIER1_MIGRATION.md` — ⚠️ Phase C contradiction fixed: banner added explicitly stating `migrateAsyncStorageToSQLite()` must NOT be deleted (Z10 decision). Phases A+B marked ✅ COMPLETED.
+- Commit: `e98bc42`
+- **Repo is now conflict-free.** Single source of truth: `docs/STRATEGIC_PLAN.md`. Ready to start Z12 fixes.
+
 ### 2026-08-06 13:29 WAT — [Agent: Perplexity] — Audit cross-check: all 18 findings now in Z12 roadmap
 - Phases closed: none (cross-check only)
 - Phases opened: none
@@ -98,7 +107,7 @@ Registry → Planning → Preparation → Inspection → Evidence
 
 See `docs/STRATEGIC_PLAN.md` for full specs.
 
-### Quick Status (as of 2026-08-06 13:29 WAT)
+### Quick Status (as of 2026-08-06 18:14 WAT)
 
 | Phase | Title | Status |
 |---|---|---|
@@ -112,7 +121,7 @@ See `docs/STRATEGIC_PLAN.md` for full specs.
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED — Research |
 | Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED — Needs server |
 
-**No gate pending. Audit cross-check complete. Ready to start Z12 execution.**
+**No gate pending. Repo conflict-free. Ready to start Z12 execution.**
 
 ---
 
