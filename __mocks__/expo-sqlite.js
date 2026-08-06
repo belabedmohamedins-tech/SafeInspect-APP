@@ -4,17 +4,24 @@
  * In-memory mock for expo-sqlite used by Jest (Node environment).
  * Implements the subset of the expo-sqlite API used by SafeInspect repositories:
  *   openDatabaseAsync, SQLiteDatabase (runAsync, getFirstAsync, getAllAsync,
- *   withTransactionAsync, closeAsync).
+ *   withTransactionAsync, execAsync, closeAsync).
  *
- * Storage is keyed per database name so tests that call openDatabaseAsync(':memory:')
- * or a named DB get isolated, predictable state within the same test run.
- * Each test file should call jest.clearAllMocks() or reset state via the
- * exported __resetAll helper if needed.
+ * ISOLATION:
+ *   _stores is keyed by db name.  Call __resetAll() in beforeEach to wipe all
+ *   tables between tests.  schema.ts must also expose __resetDb() so the
+ *   singleton db handle is discarded and re-opened against the fresh store.
+ *
+ * BUGS FIXED vs previous version:
+ *   1. UPDATE WHERE pointer: SET params were counted but `pi` was not reset
+ *      before reading the WHERE param, so wrong rows were matched.
+ *      Fix: capture `whereParamStart = pi` after SET parsing.
+ *   2. UPDATE multi-word column names with backtick aliases: strip via regex
+ *      before splitting on '='.
  */
 
 'use strict';
 
-// Per-db in-memory stores: dbName → Map<table, rows[]>
+// Per-db in-memory stores: dbName → { tables: Map<string, row[]> }
 const _stores = new Map();
 
 function getStore(dbName) {
@@ -22,11 +29,13 @@ function getStore(dbName) {
   return _stores.get(dbName);
 }
 
-// Very small SQL parser — handles only the patterns our repositories emit.
+// ─── Tiny SQL interpreter ─────────────────────────────────────────────────────
+
 function execStatement(store, sql, params) {
   const s = sql.trim().replace(/\s+/g, ' ');
+  const p = Array.isArray(params) ? [...params] : [];
 
-  // CREATE TABLE (any variant) — ensure table exists
+  // ── CREATE TABLE
   const createMatch = s.match(/^CREATE TABLE(?:\s+IF NOT EXISTS)?\s+[`"']?(\w+)/i);
   if (createMatch) {
     const tbl = createMatch[1];
@@ -34,33 +43,29 @@ function execStatement(store, sql, params) {
     return { rows: [], changes: 0, lastInsertRowId: 0 };
   }
 
-  // CREATE INDEX — no-op
-  if (/^CREATE(?:\s+UNIQUE)?\s+INDEX/i.test(s)) {
-    return { rows: [], changes: 0, lastInsertRowId: 0 };
-  }
+  // ── CREATE INDEX / PRAGMA / BEGIN / COMMIT / ROLLBACK → no-op
+  if (/^CREATE(?:\s+UNIQUE)?\s+INDEX/i.test(s)) return { rows: [], changes: 0, lastInsertRowId: 0 };
+  if (/^PRAGMA/i.test(s))                        return { rows: [], changes: 0, lastInsertRowId: 0 };
+  if (/^(BEGIN|COMMIT|ROLLBACK)/i.test(s))       return { rows: [], changes: 0, lastInsertRowId: 0 };
 
-  // PRAGMA — no-op
-  if (/^PRAGMA/i.test(s)) {
-    return { rows: [], changes: 0, lastInsertRowId: 0 };
-  }
-
-  // INSERT ... ON CONFLICT(id) DO UPDATE
-  const upsertMatch = s.match(/^INSERT\s+INTO\s+[`"']?(\w+)/i);
-  if (upsertMatch) {
-    const tbl = upsertMatch[1];
+  // ── INSERT (plain or UPSERT)
+  const insertMatch = s.match(/^INSERT\s+(?:OR\s+REPLACE\s+)?INTO\s+[`"']?(\w+)/i);
+  if (insertMatch) {
+    const tbl = insertMatch[1];
     if (!store.tables.has(tbl)) store.tables.set(tbl, []);
     const rows = store.tables.get(tbl);
 
-    // Extract column list
     const colMatch = s.match(/\(([^)]+)\)\s*VALUES/i);
     if (!colMatch) return { rows: [], changes: 1, lastInsertRowId: rows.length };
+
     const cols = colMatch[1].split(',').map(c => c.trim().replace(/[`"']/g, ''));
-    const p = Array.isArray(params) ? [...params] : [];
     const newRow = {};
     cols.forEach((col, i) => { newRow[col] = p[i] !== undefined ? p[i] : null; });
 
-    const isUpsert = /ON CONFLICT\(id\) DO UPDATE/i.test(s);
-    if (isUpsert && newRow.id !== undefined) {
+    const isUpsert = /ON CONFLICT\s*\([^)]+\)\s*DO UPDATE/i.test(s);
+    const isOrReplace = /^INSERT\s+OR\s+REPLACE/i.test(s);
+
+    if ((isUpsert || isOrReplace) && newRow.id !== undefined) {
       const idx = rows.findIndex(r => r.id === newRow.id);
       if (idx >= 0) {
         rows[idx] = { ...rows[idx], ...newRow };
@@ -73,59 +78,86 @@ function execStatement(store, sql, params) {
     return { rows: [], changes: 1, lastInsertRowId: rows.length - 1 };
   }
 
-  // UPDATE
-  const updateMatch = s.match(/^UPDATE\s+[`"']?(\w+)\s+SET\s+(.+?)(?:\s+WHERE\s+(.+))?$/i);
+  // ── UPDATE table SET col=?, … WHERE col=?
+  const updateMatch = s.match(/^UPDATE\s+[`"']?(\w+)\s+SET\s+(.+?)\s+WHERE\s+(.+)$/i);
   if (updateMatch) {
-    const tbl = updateMatch[1];
-    const setClauses = updateMatch[2];
-    const whereClause = updateMatch[3];
+    const tbl          = updateMatch[1];
+    const setClause    = updateMatch[2];
+    const whereClause  = updateMatch[3];
     if (!store.tables.has(tbl)) return { rows: [], changes: 0, lastInsertRowId: 0 };
     const rows = store.tables.get(tbl);
-    const p = Array.isArray(params) ? [...params] : [];
 
-    // Parse SET col = ?, ...
-    const setPairs = setClauses.split(',').map(s2 => s2.trim());
-    const setMap = {};
+    // Parse SET: build map col→paramIndex, count how many ? are consumed
+    const setPairs = setClause.split(',').map(x => x.trim());
+    const setMap   = {}; // col → index into p[]
     let pi = 0;
     for (const pair of setPairs) {
-      const [col] = pair.split('=').map(x => x.trim().replace(/[`"']/g, ''));
-      setMap[col] = p[pi++];
+      const eqIdx = pair.indexOf('=');
+      const col   = pair.slice(0, eqIdx).trim().replace(/[`"']/g, '');
+      setMap[col] = pi++; // store the param index, not the value yet
     }
+    // pi now points at the first WHERE param
+    const whereParamStart = pi;
 
-    // Parse WHERE col = ?
+    // Parse WHERE — support: col=? and col=? AND col=?
+    const wParts = whereClause.split(/\s+AND\s+/i);
+    const whereConditions = wParts.map((part, i) => {
+      const eqIdx = part.indexOf('=');
+      const col   = part.slice(0, eqIdx).trim().replace(/[`"']/g, '');
+      return { col, paramIdx: whereParamStart + i };
+    });
+
     let changes = 0;
     for (const row of rows) {
-      let match = true;
-      if (whereClause) {
-        const wParts = whereClause.split(/AND/i);
-        for (const part of wParts) {
-          const [wCol] = part.split('=').map(x => x.trim().replace(/[`"']/g, ''));
-          if (row[wCol] !== p[pi]) { match = false; break; }
-          pi++;
+      const matches = whereConditions.every(cond => row[cond.col] === p[cond.paramIdx]);
+      if (matches) {
+        // Apply SET values
+        for (const [col, pidx] of Object.entries(setMap)) {
+          row[col] = p[pidx];
         }
+        changes++;
       }
-      if (match) { Object.assign(row, setMap); changes++; }
     }
     return { rows: [], changes, lastInsertRowId: 0 };
   }
 
-  // DELETE FROM table WHERE id = ?
+  // ── UPDATE without WHERE (full table update)
+  const updateNoWhereMatch = s.match(/^UPDATE\s+[`"']?(\w+)\s+SET\s+(.+)$/i);
+  if (updateNoWhereMatch) {
+    const tbl       = updateNoWhereMatch[1];
+    const setClause = updateNoWhereMatch[2];
+    if (!store.tables.has(tbl)) return { rows: [], changes: 0, lastInsertRowId: 0 };
+    const rows = store.tables.get(tbl);
+    const setPairs = setClause.split(',').map(x => x.trim());
+    const setMap   = {};
+    let pi = 0;
+    for (const pair of setPairs) {
+      const eqIdx = pair.indexOf('=');
+      const col   = pair.slice(0, eqIdx).trim().replace(/[`"']/g, '');
+      setMap[col]  = p[pi++];
+    }
+    for (const row of rows) Object.assign(row, setMap);
+    return { rows: [], changes: rows.length, lastInsertRowId: 0 };
+  }
+
+  // ── DELETE
   const deleteMatch = s.match(/^DELETE\s+FROM\s+[`"']?(\w+)(?:\s+WHERE\s+(.+))?$/i);
   if (deleteMatch) {
-    const tbl = deleteMatch[1];
+    const tbl         = deleteMatch[1];
     const whereClause = deleteMatch[2];
     if (!store.tables.has(tbl)) return { rows: [], changes: 0, lastInsertRowId: 0 };
     const rows = store.tables.get(tbl);
-    const p = Array.isArray(params) ? [...params] : [];
+
     if (!whereClause) {
       const count = rows.length;
       rows.length = 0;
       return { rows: [], changes: count, lastInsertRowId: 0 };
     }
-    // Simple WHERE col = ?
-    const colMatch2 = whereClause.match(/^([\w.]+)\s*=\s*\?/);
-    if (colMatch2) {
-      const col = colMatch2[1].replace(/[`"']/g, '');
+
+    // WHERE id = ?
+    const simpleWhere = whereClause.match(/^([\w.]+)\s*=\s*\?/);
+    if (simpleWhere) {
+      const col = simpleWhere[1].replace(/[`"']/g, '');
       const val = p[0];
       const before = rows.length;
       const filtered = rows.filter(r => r[col] !== val);
@@ -133,38 +165,44 @@ function execStatement(store, sql, params) {
       rows.push(...filtered);
       return { rows: [], changes: before - rows.length, lastInsertRowId: 0 };
     }
-    // DELETE ... NOT IN (SELECT ...) — ring buffer pattern, just clear oldest
-    const notInMatch = whereClause.match(/id\s+NOT\s+IN/i);
-    if (notInMatch) {
-      // no-op in tests — ring buffer pruning is fire-and-forget
+
+    // DELETE … WHERE id NOT IN (SELECT …) — ring buffer pruning, fire-and-forget
+    if (/id\s+NOT\s+IN/i.test(whereClause)) {
       return { rows: [], changes: 0, lastInsertRowId: 0 };
     }
+
     return { rows: [], changes: 0, lastInsertRowId: 0 };
   }
 
-  // SELECT
+  // ── SELECT
   const selectMatch = s.match(/^SELECT\s+.+\s+FROM\s+[`"']?(\w+)/i);
   if (selectMatch) {
-    const tbl = selectMatch[1];
+    const tbl  = selectMatch[1];
     const rows = store.tables.get(tbl) || [];
-    const p = Array.isArray(params) ? [...params] : [];
 
     // WHERE col = ?
-    const whereMatch = s.match(/WHERE\s+([\w.]+)\s*=\s*\?/i);
-    if (whereMatch) {
-      const col = whereMatch[1].replace(/[`"']/g, '');
+    const simpleWhere = s.match(/WHERE\s+([\w.]+)\s*=\s*\?/i);
+    if (simpleWhere) {
+      const col = simpleWhere[1].replace(/[`"']/g, '');
       const val = p[0];
       return { rows: rows.filter(r => r[col] === val), changes: 0, lastInsertRowId: 0 };
     }
-    // WHERE status IN (...) — simplified: return all
-    if (/WHERE\s+status\s+IN/i.test(s)) {
+    // WHERE status IN (...) — return all (simplified, good enough for tests)
+    if (/WHERE\s+\w+\s+IN\s*\(/i.test(s)) {
       return { rows: [...rows], changes: 0, lastInsertRowId: 0 };
     }
-    // WHERE status = 'completed'
-    const statusMatch = s.match(/WHERE\s+status\s*=\s*'(\w[^']*)'/);
-    if (statusMatch) {
-      const val = statusMatch[1];
-      return { rows: rows.filter(r => r.status === val), changes: 0, lastInsertRowId: 0 };
+    // WHERE status = 'literal'
+    const litWhere = s.match(/WHERE\s+(\w+)\s*=\s*'([^']+)'/);
+    if (litWhere) {
+      const col = litWhere[1];
+      const val = litWhere[2];
+      return { rows: rows.filter(r => r[col] === val), changes: 0, lastInsertRowId: 0 };
+    }
+    // WHERE col IS NULL
+    const isNullWhere = s.match(/WHERE\s+([\w.]+)\s+IS\s+NULL/i);
+    if (isNullWhere) {
+      const col = isNullWhere[1].replace(/[`"']/g, '');
+      return { rows: rows.filter(r => r[col] == null), changes: 0, lastInsertRowId: 0 };
     }
     return { rows: [...rows], changes: 0, lastInsertRowId: 0 };
   }
@@ -172,42 +210,28 @@ function execStatement(store, sql, params) {
   return { rows: [], changes: 0, lastInsertRowId: 0 };
 }
 
+// ─── DB factory ──────────────────────────────────────────────────────────────
+
 function makeSQLiteDatabase(dbName) {
   const store = getStore(dbName);
-
   return {
     async runAsync(sql, params = []) {
-      const result = execStatement(store, sql, params);
-      return result;
+      return execStatement(store, sql, params);
     },
-
     async getFirstAsync(sql, params = []) {
-      const result = execStatement(store, sql, params);
-      return result.rows.length > 0 ? result.rows[0] : null;
+      const { rows } = execStatement(store, sql, params);
+      return rows.length > 0 ? rows[0] : null;
     },
-
     async getAllAsync(sql, params = []) {
-      const result = execStatement(store, sql, params);
-      return result.rows;
+      return execStatement(store, sql, params).rows;
     },
-
     async withTransactionAsync(fn) {
       store._txActive = true;
-      try {
-        await fn();
-      } finally {
-        store._txActive = false;
-      }
+      try { await fn(); } finally { store._txActive = false; }
     },
-
-    async closeAsync() {
-      // no-op in tests
-    },
-
+    async closeAsync() { /* no-op */ },
     async execAsync(sql) {
-      // Multi-statement exec — split on ;
-      const statements = sql.split(';').map(s => s.trim()).filter(Boolean);
-      for (const stmt of statements) {
+      for (const stmt of sql.split(';').map(x => x.trim()).filter(Boolean)) {
         execStatement(store, stmt, []);
       }
     },
@@ -218,7 +242,6 @@ async function openDatabaseAsync(name) {
   return makeSQLiteDatabase(name || ':memory:');
 }
 
-// Helper for tests that want a clean slate
 function __resetAll() {
   _stores.clear();
 }
@@ -226,6 +249,5 @@ function __resetAll() {
 module.exports = {
   openDatabaseAsync,
   __resetAll,
-  // Named export alias used by some Expo SDK versions
   SQLiteDatabase: class SQLiteDatabase {},
 };

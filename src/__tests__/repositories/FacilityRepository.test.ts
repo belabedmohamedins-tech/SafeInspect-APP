@@ -1,17 +1,10 @@
 // src/__tests__/repositories/FacilityRepository.test.ts
 //
-// Layer-2 contract: @react-native-async-storage/async-storage is mocked
-// globally via moduleNameMapper → __mocks__/@react-native-async-storage/
-// async-storage.js. Do NOT add an inline jest.mock() factory for it here.
-// Call AsyncStorage.__resetStore() in beforeEach to wipe the in-memory store.
-//
-// FacilityRepository manages user-created facilities only.
-// It stores them as a JSON array under StorageKeys.USER_FACILITIES.
-// The hardcoded facilities in facilitiesData.ts are NOT involved here.
+// Z5: FacilityRepository was migrated from AsyncStorage → expo-sqlite.
+// All storage verification now goes through FacilityRepository.getAll()
+// (the SQLite source of truth). AsyncStorage is no longer involved.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FacilityRepository } from '../../repositories/FacilityRepository';
-import { StorageKeys }         from '../../repositories/keys';
 import { Facility }            from '../../types';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -26,16 +19,21 @@ function makeFacility(overrides: Partial<Facility> = {}): Omit<Facility, 'id'> {
   };
 }
 
+/** Read persisted rows directly from the DB (same as the repo itself). */
 async function storedFacilities(): Promise<Facility[]> {
-  const json = await AsyncStorage.getItem(StorageKeys.USER_FACILITIES);
-  return json ? JSON.parse(json) : [];
+  return FacilityRepository.getAll();
 }
 
 // ─── Setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
   jest.clearAllMocks();
-  (AsyncStorage as any).__resetStore();
+  // Reset the in-memory SQLite mock so each test starts with an empty DB.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('expo-sqlite').__resetAll();
+  // Also reset the db singleton so getDb() opens a fresh connection.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  require('../../db/schema').__resetDb();
 });
 
 // ─── getAll ───────────────────────────────────────────────────────────────────
@@ -139,7 +137,6 @@ describe('FacilityRepository.update', () => {
 
     expect(result).not.toBeNull();
     expect(result!.projectName).toBe('New Name');
-    // Untouched field is preserved
     expect(result!.ownerName).toBe('Owner One');
   });
 
@@ -217,14 +214,13 @@ describe('FacilityRepository.clear', () => {
     expect(stored).toHaveLength(0);
   });
 
-  it('calls AsyncStorage.removeItem with the correct key', async () => {
-    const removeItemSpy = jest.spyOn(AsyncStorage, 'removeItem');
-    await FacilityRepository.clear();
-    expect(removeItemSpy).toHaveBeenCalledWith(StorageKeys.USER_FACILITIES);
-    removeItemSpy.mockRestore();
+  it('is idempotent when storage is already empty (does not throw)', async () => {
+    await expect(FacilityRepository.clear()).resolves.toBeUndefined();
   });
 
-  it('is a no-op when storage is already empty (does not throw)', async () => {
-    await expect(FacilityRepository.clear()).resolves.toBeUndefined();
+  it('getAll returns empty array after clear', async () => {
+    await FacilityRepository.add(makeFacility());
+    await FacilityRepository.clear();
+    expect(await FacilityRepository.getAll()).toEqual([]);
   });
 });
