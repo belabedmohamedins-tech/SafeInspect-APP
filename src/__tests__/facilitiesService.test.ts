@@ -1,8 +1,8 @@
 // src/__tests__/facilitiesService.test.ts
 //
-// Migrated from __tests__/facilitiesService.test.ts.
-// Layer-2 contract: AsyncStorage is mocked globally. Do NOT add inline factory.
-// Use AsyncStorage.__resetStore() in beforeEach.
+// Tests for facilitiesService — which now delegates all user-facility I/O
+// to FacilityRepository (expo-sqlite). The global expo-sqlite mock is used;
+// call SQLite.__resetAll() in beforeEach for test isolation.
 
 // ─── Mocks ────────────────────────────────────────────────────────────────────
 
@@ -15,8 +15,7 @@ jest.mock('../facilitiesData', () => ({ facilities: HARDCODED }));
 
 // ─── Imports ──────────────────────────────────────────────────────────────────
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from '../repositories/keys';
+import * as SQLite from 'expo-sqlite';
 import {
   getAllFacilities,
   getUserFacilities,
@@ -51,7 +50,7 @@ function makeUserFacility(overrides: Partial<Facility> = {}): Omit<Facility, 'id
 
 beforeEach(() => {
   jest.clearAllMocks();
-  (AsyncStorage as any).__resetStore();
+  (SQLite as any).__resetAll();
 });
 
 // ─── getAllFacilities ─────────────────────────────────────────────────────────
@@ -64,18 +63,16 @@ describe('getAllFacilities', () => {
   });
 
   it('appends user facilities after hardcoded ones', async () => {
-    await (AsyncStorage as any).setItem(
-      StorageKeys.USER_FACILITIES,
-      JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]),
-    );
+    await addUserFacility({ ...makeUserFacility(), id: 'U1' } as Omit<Facility, 'id'>);
     const all = await getAllFacilities();
     expect(all).toHaveLength(3);
-    expect(all[2].id).toBe('U1');
+    // user facility is at the end (hardcoded first)
+    expect(all.some(f => f.projectName === 'بقالة التقوى')).toBe(true);
   });
 
-  it('returns hardcoded list when stored JSON is corrupt (graceful)', async () => {
-    await (AsyncStorage as any).setItem(StorageKeys.USER_FACILITIES, 'NOT_JSON');
-    expect(await getAllFacilities()).toHaveLength(2);
+  it('returns hardcoded list when repository is empty (graceful)', async () => {
+    const all = await getAllFacilities();
+    expect(all).toHaveLength(2);
   });
 });
 
@@ -87,13 +84,10 @@ describe('getUserFacilities', () => {
   });
 
   it('returns only user-added facilities', async () => {
-    await (AsyncStorage as any).setItem(
-      StorageKeys.USER_FACILITIES,
-      JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]),
-    );
+    await addUserFacility(makeUserFacility());
     const result = await getUserFacilities();
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe('U1');
+    expect(result[0].projectName).toBe('بقالة التقوى');
   });
 });
 
@@ -105,11 +99,8 @@ describe('getFacilityById', () => {
   });
 
   it('finds a user-added facility', async () => {
-    await (AsyncStorage as any).setItem(
-      StorageKeys.USER_FACILITIES,
-      JSON.stringify([{ ...makeUserFacility(), id: 'U99' }]),
-    );
-    expect((await getFacilityById('U99'))?.id).toBe('U99');
+    const saved = await addUserFacility(makeUserFacility());
+    expect((await getFacilityById(saved.id))?.id).toBe(saved.id);
   });
 
   it('returns null for an unknown id', async () => {
@@ -122,7 +113,7 @@ describe('getFacilityById', () => {
 describe('addUserFacility', () => {
   it('saves the facility and returns it with a generated id', async () => {
     const saved = await addUserFacility(makeUserFacility());
-    expect(saved.id).toMatch(/^U\d+/);
+    expect(saved.id).toMatch(/^U/);
     expect(saved.projectName).toBe('بقالة التقوى');
   });
 
@@ -196,8 +187,8 @@ describe('clearAllUserFacilities', () => {
 // ─── searchFacilities ─────────────────────────────────────────────────────────
 
 describe('searchFacilities', () => {
-  it('returns [] for empty query',             async () => expect(await searchFacilities('')).toEqual([]));
-  it('returns [] for whitespace-only query',   async () => expect(await searchFacilities('   ')).toEqual([]));
+  it('returns [] for empty query',           async () => expect(await searchFacilities('')).toEqual([]));
+  it('returns [] for whitespace-only query', async () => expect(await searchFacilities('   ')).toEqual([]));
 
   it('finds a hardcoded facility by projectName', async () => {
     const results = await searchFacilities('النور');

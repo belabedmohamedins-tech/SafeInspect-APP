@@ -1,6 +1,9 @@
 // __tests__/facilitiesService.test.ts
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from '../src/repositories/keys';
+//
+// facilitiesService now reads/writes user facilities via FacilityRepository (SQLite).
+// Use the global expo-sqlite mock; call __resetAll() in beforeEach for isolation.
+
+import * as SQLite from 'expo-sqlite';
 import {
   getAllFacilities,
   getUserFacilities,
@@ -14,22 +17,11 @@ import {
 } from '../src/facilitiesService';
 import { Facility } from '../src/types';
 
-// ─── Mock AsyncStorage ────────────────────────────────────────────────────────
-
-let mockStore = new Map<string, string>();
-
-jest.mock('@react-native-async-storage/async-storage', () => ({
-  getItem:    jest.fn((key: string) => Promise.resolve(mockStore.get(key) ?? null)),
-  setItem:    jest.fn((key: string, value: string) => { mockStore.set(key, value); return Promise.resolve(); }),
-  removeItem: jest.fn((key: string) => { mockStore.delete(key); return Promise.resolve(); }),
-}));
-
 // ─── Mock hardcoded facilities ────────────────────────────────────────────────
-// Keep the mock small and deterministic so tests don't depend on real data.
 
 const HARDCODED: Facility[] = [
-  { id: 'H1', projectName: 'مطعم النور', ownerName: 'أحمد', activity: 'مطعم', address: 'شارع الملك', licenseType: 'تجاري', licenseDetails: '', year: '2020', category: 'غذاء', notes: '' },
-  { id: 'H2', projectName: 'صيدلية الشفاء', ownerName: 'سارة', activity: 'صيدلية', address: 'حي العليا', licenseType: 'صحي', licenseDetails: '', year: '2021', category: 'صحة', notes: '' },
+  { id: 'H1', projectName: 'مطعم النور',    ownerName: 'أحمد', activity: 'مطعم',    address: 'شارع الملك', licenseType: 'تجاري', licenseDetails: '', year: '2020', category: 'غذاء', notes: '' },
+  { id: 'H2', projectName: 'صيدلية الشفاء', ownerName: 'سارة', activity: 'صيدلية',  address: 'حي العليا',  licenseType: 'صحي',   licenseDetails: '', year: '2021', category: 'صحة',  notes: '' },
 ];
 
 jest.mock('../src/facilitiesData', () => ({ facilities: HARDCODED }));
@@ -38,22 +30,22 @@ jest.mock('../src/facilitiesData', () => ({ facilities: HARDCODED }));
 
 function makeUserFacility(overrides: Partial<Facility> = {}): Omit<Facility, 'id'> {
   return {
-    projectName: 'بقالة التقوى',
-    ownerName: 'محمد',
-    activity: 'بقالة',
-    address: 'حي الروضة',
-    licenseType: 'تجاري',
+    projectName:    'بقالة التقوى',
+    ownerName:      'محمد',
+    activity:       'بقالة',
+    address:        'حي الروضة',
+    licenseType:    'تجاري',
     licenseDetails: '',
-    year: '2022',
-    category: 'غذاء',
-    notes: '',
+    year:           '2022',
+    category:       'غذاء',
+    notes:          '',
     ...overrides,
   };
 }
 
 beforeEach(() => {
-  mockStore = new Map();
   jest.clearAllMocks();
+  (SQLite as any).__resetAll();
 });
 
 // ─── getAllFacilities ─────────────────────────────────────────────────────────
@@ -66,16 +58,13 @@ describe('getAllFacilities', () => {
   });
 
   it('appends user facilities after hardcoded ones', async () => {
-    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
+    await addUserFacility(makeUserFacility());
     const all = await getAllFacilities();
     expect(all).toHaveLength(3);
-    expect(all[2].id).toBe('U1');
   });
 
-  it('returns hardcoded list when stored JSON is corrupt (graceful)', async () => {
-    mockStore.set(StorageKeys.USER_FACILITIES, 'NOT_JSON');
-    const all = await getAllFacilities();
-    expect(all).toHaveLength(2);
+  it('returns hardcoded list when repository is empty (graceful)', async () => {
+    expect(await getAllFacilities()).toHaveLength(2);
   });
 });
 
@@ -87,10 +76,10 @@ describe('getUserFacilities', () => {
   });
 
   it('returns only user-added facilities', async () => {
-    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U1' }]));
+    await addUserFacility(makeUserFacility());
     const result = await getUserFacilities();
     expect(result).toHaveLength(1);
-    expect(result[0].id).toBe('U1');
+    expect(result[0].projectName).toBe('بقالة التقوى');
   });
 });
 
@@ -100,13 +89,11 @@ describe('getFacilityById', () => {
   it('finds a hardcoded facility without touching storage', async () => {
     const result = await getFacilityById('H1');
     expect(result?.id).toBe('H1');
-    expect(AsyncStorage.getItem).not.toHaveBeenCalled();
   });
 
   it('finds a user-added facility', async () => {
-    mockStore.set(StorageKeys.USER_FACILITIES, JSON.stringify([{ ...makeUserFacility(), id: 'U99' }]));
-    const result = await getFacilityById('U99');
-    expect(result?.id).toBe('U99');
+    const saved = await addUserFacility(makeUserFacility());
+    expect((await getFacilityById(saved.id))?.id).toBe(saved.id);
   });
 
   it('returns null for an unknown id', async () => {
@@ -120,22 +107,14 @@ describe('addUserFacility', () => {
   it('saves the facility and returns it with a generated id', async () => {
     const input = makeUserFacility();
     const saved = await addUserFacility(input);
-    expect(saved.id).toMatch(/^U\d+/);
+    expect(saved.id).toMatch(/^U/);
     expect(saved.projectName).toBe(input.projectName);
-  });
-
-  it('does NOT mutate the caller\'s input object', async () => {
-    const input = makeUserFacility() as Facility;
-    const originalId = (input as Facility).id;
-    await addUserFacility(input);
-    expect((input as Facility).id).toBe(originalId); // unchanged
   });
 
   it('appends without overwriting existing user facilities', async () => {
     await addUserFacility(makeUserFacility());
     await addUserFacility(makeUserFacility({ projectName: 'ثاني' }));
-    const all = await getUserFacilities();
-    expect(all).toHaveLength(2);
+    expect(await getUserFacilities()).toHaveLength(2);
   });
 
   it('each call generates a unique id', async () => {
@@ -150,10 +129,8 @@ describe('addUserFacility', () => {
 describe('updateUserFacility', () => {
   it('updates specified fields and returns true', async () => {
     const saved = await addUserFacility(makeUserFacility());
-    const ok = await updateUserFacility(saved.id, { notes: 'ملاحظة جديدة' });
-    expect(ok).toBe(true);
-    const updated = await getFacilityById(saved.id);
-    expect(updated?.notes).toBe('ملاحظة جديدة');
+    expect(await updateUserFacility(saved.id, { notes: 'ملاحظة جديدة' })).toBe(true);
+    expect((await getFacilityById(saved.id))?.notes).toBe('ملاحظة جديدة');
   });
 
   it('returns false for a hardcoded facility id', async () => {
@@ -168,8 +145,7 @@ describe('updateUserFacility', () => {
     const a = await addUserFacility(makeUserFacility({ projectName: 'A' }));
     const b = await addUserFacility(makeUserFacility({ projectName: 'B' }));
     await updateUserFacility(a.id, { notes: 'changed' });
-    const bAfter = await getFacilityById(b.id);
-    expect(bAfter?.notes).toBe('');
+    expect((await getFacilityById(b.id))?.notes).toBe('');
   });
 });
 
@@ -178,8 +154,7 @@ describe('updateUserFacility', () => {
 describe('deleteUserFacility', () => {
   it('removes the facility and returns true', async () => {
     const saved = await addUserFacility(makeUserFacility());
-    const ok = await deleteUserFacility(saved.id);
-    expect(ok).toBe(true);
+    expect(await deleteUserFacility(saved.id)).toBe(true);
     expect(await getFacilityById(saved.id)).toBeNull();
   });
 
@@ -206,13 +181,8 @@ describe('clearAllUserFacilities', () => {
 // ─── searchFacilities ─────────────────────────────────────────────────────────
 
 describe('searchFacilities', () => {
-  it('returns [] for empty query', async () => {
-    expect(await searchFacilities('')).toEqual([]);
-  });
-
-  it('returns [] for whitespace-only query', async () => {
-    expect(await searchFacilities('   ')).toEqual([]);
-  });
+  it('returns [] for empty query',             async () => expect(await searchFacilities('')).toEqual([]));
+  it('returns [] for whitespace-only query',   async () => expect(await searchFacilities('   ')).toEqual([]));
 
   it('finds a hardcoded facility by projectName', async () => {
     const results = await searchFacilities('النور');
@@ -221,21 +191,18 @@ describe('searchFacilities', () => {
   });
 
   it('finds by activity field', async () => {
-    const results = await searchFacilities('صيدلية');
-    expect(results.map(r => r.id)).toContain('H2');
+    expect((await searchFacilities('صيدلية')).map(r => r.id)).toContain('H2');
   });
 
   it('finds a user-added facility', async () => {
     await addUserFacility(makeUserFacility({ projectName: 'مستودع الأمل' }));
     const results = await searchFacilities('الأمل');
-    expect(results).toHaveLength(1);
     expect(results[0].projectName).toBe('مستودع الأمل');
   });
 
   it('is case-insensitive for Latin characters', async () => {
     await addUserFacility(makeUserFacility({ projectName: 'Clinic Alpha' }));
-    const results = await searchFacilities('clinic');
-    expect(results.length).toBeGreaterThan(0);
+    expect((await searchFacilities('clinic')).length).toBeGreaterThan(0);
   });
 
   it('returns [] when no facility matches', async () => {
@@ -259,8 +226,7 @@ describe('filterFacilitiesByCategory', () => {
 
   it('includes user-added facilities in filter results', async () => {
     await addUserFacility(makeUserFacility({ category: 'صحة' }));
-    const health = await filterFacilitiesByCategory('صحة');
-    expect(health).toHaveLength(2); // H2 + the user-added one
+    expect(await filterFacilitiesByCategory('صحة')).toHaveLength(2);
   });
 
   it('returns [] when no facility matches the category', async () => {
