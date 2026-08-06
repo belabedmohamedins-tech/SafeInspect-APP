@@ -153,8 +153,24 @@ describe('enqueue', () => {
 });
 
 // ─── flush — no API URL ───────────────────────────────────────────────────────────────────
+//
+// WHY beforeEach/afterEach DELETE the env var here
+// ─────────────────────────────────────────────────
+// jest.polyfill.js (setupFiles) now sets EXPO_PUBLIC_SYNC_API_URL for the
+// entire Jest worker so that serverAuth.ts can read it at Babel compile time.
+// Without explicitly clearing it in this suite, getSyncApiUrl() finds the
+// value, flush() proceeds, and the test receives 1 instead of 0.
+// The 'flush — with API URL' suite already used this pattern; mirroring it
+// here makes both suites symmetric and self-contained.
 
 describe('flush — no API URL configured', () => {
+  beforeEach(() => {
+    delete process.env.EXPO_PUBLIC_SYNC_API_URL;
+  });
+  afterEach(() => {
+    delete process.env.EXPO_PUBLIC_SYNC_API_URL;
+  });
+
   it('returns 0 without calling apiClient', async () => {
     await enqueue(makeInspection('i1'));
     const synced = await flush();
