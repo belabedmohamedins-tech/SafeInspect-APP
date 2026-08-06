@@ -1,7 +1,8 @@
-> **ARCHIVED 2026-08-06** — Original 102 KB design manuscript from project inception. Superseded by current live code in `src/` and the 8 inspection manual chapters in `docs/`. Do NOT use this as a specification — it describes an earlier design that may differ from the current implementation.
+> ⛔ ARCHIVED 2026-08-06 — Original 102 KB design manuscript. Superseded by:
+> - Current live code in the repo
+> - `docs/Inspection_Manual_Chapter1–8_*.md` (8 domain chapters)
+> - `docs/STRATEGIC_PLAN.md` (execution roadmap)
+> - `docs/SafeInspect_Audit_Consolidated_2026-08-06 (1).md` (independent QA audit)
+> Do not act on proposals in this file without cross-checking against live code.
 
----
-
-# Original content preserved below for audit trail
-
-*(Content of RAQIB_MASTER_MANUSCRIPT.md — 102 KB original design document.)*
+*Full manuscript kept for historical reference only.*

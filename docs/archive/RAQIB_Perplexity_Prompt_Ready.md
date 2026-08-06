@@ -1,7 +1,3 @@
-> **ARCHIVED 2026-08-06** — Session-start prompt template. Obsolete — the SafeInspect Space instructions now serve this role. This file has no actionable content for current agents.
+> ⛔ ARCHIVED 2026-08-06 — Session-start prompt template. Obsolete — Space instructions serve this role. Do not act on this file.
 
----
-
-# Original content preserved below for audit trail
-
-*(Content of RAQIB_Perplexity_Prompt_Ready.md — 6.6 KB prompt template.)*
+*This was a prompt template used to bootstrap early sessions. Superseded by the SafeInspect Space instructions.*

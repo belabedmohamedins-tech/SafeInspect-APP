@@ -1,7 +1,10 @@
-> **ARCHIVED 2026-08-06** — Open phases A–F from this spec have been formally registered as Phases Y–Z10 in `docs/STRATEGIC_PLAN.md` (entry 2026-08-06 01:41 WAT). This file is now read-only audit trail. Do NOT act on its proposals — consult STRATEGIC_PLAN.md instead.
+> ⛔ ARCHIVED 2026-08-06 — All phases A–F confirmed closed:
+> Phase A → Y (air emissions criteria already present)
+> Phase B → Z2 (UAB-AX7-07 noise citation fixed)
+> Phase C → Z (UAB-AX6-01 Décret 22-167 fixed)
+> Phase D → Z3 (license criteria confirmed NOT duplicates)
+> Phase E → Z4 (PRD-02-01 already split)
+> Phase F (G9/G10/G11/G12) → Z6 deferred / Z7+Z11 closed / Z8 deferred / Z5+Z10 closed
+> Single source of truth: `docs/STRATEGIC_PLAN.md` → Z12 for all remaining open items.
 
----
-
-# Original content preserved below for audit trail
-
-*(Content of RAQIB_Fix_Spec_v3.md — 13 KB fix specification. Its actionable proposals are now tracked as Phases Y, Z, Z2, Z3, Z4, Z5–Z10 in STRATEGIC_PLAN.md.)*
+*Historical fix specification. Do not re-implement anything from this document.*
