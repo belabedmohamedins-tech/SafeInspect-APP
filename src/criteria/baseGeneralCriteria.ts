@@ -164,12 +164,17 @@ export const baseGeneralCriteria: InspectionItem[] = [
     // Z8: removed unverified "90 days / 80% capacity" figures (no Algerian legal source found).
     // Criterion now relies solely on verified instruments: القانون 01-19 + المرسوم 01-102 (ONA) + القانون 05-12.
     // Inspector verifies: valid contract + pumping receipts as evidence + no overflow/leakage.
-    // If a specific regulatory frequency is later found in JORADP, reopen as Z13+ and add it then.
+    //
+    // Z13-PENDING [حكم مهني]: A 12-month threshold has been added as a professional judgment rule
+    // (NOT a legal requirement — no Algerian regulatory source was found specifying a pumping interval).
+    // If a JORADP source (arrêté or décret) is later found that sets a specific pumping frequency,
+    // open phase Z13, cite the exact article, replace [حكم مهني] tag with the legal citation,
+    // and remove this comment.
     id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
-    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري المفعول مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي. يتحقق المفتش ميدانياً من غياب أي فيضان أو تسرب نحو الباطن الأرضي أو المحيط المجاور.',
-    legalReference: 'القانون 01-19 المادة 14 (وجوب تسيير المخلفات السائلة دون الإضرار بالصحة والوسط) + المرسوم التنفيذي 01-102 المتعلق بإنشاء الديوان الوطني للتطهير ONA وصلاحياته (إلزامية التعاقد مع ONA أو متعامل معتمد لعمليات الشفط) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
+    criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري المفعول مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي. يتحقق المفتش ميدانياً من غياب أي فيضان أو تسرب نحو الباطن الأرضي أو المحيط المجاور. [حكم مهني]: إذا كان تاريخ آخر وصل شفط يتجاوز 12 شهراً من تاريخ التفتيش، يُسجَّل ذلك كملاحظة ويُوصى بعملية شفط وقائية — هذا الأجل حكم مهني لا مرجع قانوني محدداً له في التشريع الجزائري حتى الآن.',
+    legalReference: 'القانون 01-19 المادة 14 (وجوب تسيير المخلفات السائلة دون الإضرار بالصحة والوسط) + المرسوم التنفيذي 01-102 المتعلق بإنشاء الديوان الوطني للتطهير ONA وصلاحياته (إلزامية التعاقد مع ONA أو متعامل معتمد لعمليات الشفط) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية). [حكم مهني — لا مصدر قانوني جزائري محدد لأجل الشفط حتى الآن: يُراجع JORADP لتحديد أي مرسوم أو قرار يُحدد الترددية — إن وُجد يُفتح Z13 لتحديث المرجع القانوني].',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
