@@ -5,21 +5,16 @@
  * Implements the subset of the expo-sqlite API used by SafeInspect repositories.
  *
  * ISOLATION:
- *   __resetAll() is called automatically in a global beforeEach via
- *   jest.config.js → setupFilesAfterFramework, so individual test files
- *   don't need to call it manually (though it's safe to call it explicitly).
+ *   __resetAll() / __resetStore() are called in jest.setup.ts beforeEach.
+ *   Individual test files don't need to call them manually.
  *
- * FIXED in this revision:
- *   1. Ring-buffer DELETE supports both LIMIT N (literal) and LIMIT ? (param).
- *   2. Test isolation: every openDatabaseAsync returns a FRESH store so
- *      parallel test suites never share state.
- *   3. FacilityRepository.add() returns a plain string id — the mock's
- *      runAsync result is not used for the return value, but the INSERT
- *      lastInsertRowId is now always a primitive (string or number).
- *   4. UPDATE param ordering bug fixed: SET params are consumed before
- *      WHERE params, matching real SQLite left-to-right binding.
- *   5. SELECT WHERE clause extraction regex is greedy-fixed so ORDER BY
- *      tokens inside subqueries don't truncate the WHERE.
+ * FIXED in W1 revision:
+ *   1. eq / upsert conflict checks use == (loose equality) so string params
+ *      match numeric stored IDs and vice versa.
+ *   2. runAsync return value always includes { lastInsertRowId, changes }.
+ *   3. __resetStore() alias added for backward-compat with older test files.
+ *   4. DELETE WHERE string equality (id = ?) now matches regardless of
+ *      whether the stored id is a number or a string.
  */
 
 'use strict';
@@ -62,17 +57,21 @@ function parseWhere(whereClause, paramStart, params) {
     // col NOT IN (SELECT …) — skip; handled by dedicated ring-buffer path
     if (/\bNOT\s+IN\s*\(\s*SELECT/i.test(p)) continue;
 
-    // col IN ('val1','val2',...)
-    const inM = p.match(/^([\w.]+)\s+IN\s*\(([^)]+)\)/i);
-    if (inM) {
-      const values = inM[2].split(',').map(v => v.trim().replace(/^['"](.*)['"]$/, '$1'));
-      conds.push({ type: 'in', col: colName(inM[1]), values });
+    // col IN ('val1','val2',...) — literal values
+    const inLitM = p.match(/^([\w.]+)\s+IN\s*\(([^)]+)\)/i);
+    if (inLitM) {
+      const values = inLitM[2].split(',').map(v => v.trim().replace(/^['"](.*)['"]$/, '$1'));
+      conds.push({ type: 'in', col: colName(inLitM[1]), values });
       continue;
     }
 
     // col = ?
     const eqM = p.match(/^([\w.]+)\s*=\s*\?/);
     if (eqM) { conds.push({ type: 'eq', col: colName(eqM[1]), paramIdx: pi++ }); continue; }
+
+    // col != ? or col <> ?
+    const neqM = p.match(/^([\w.]+)\s*(?:!=|<>)\s*\?/);
+    if (neqM) { conds.push({ type: 'neq', col: colName(neqM[1]), paramIdx: pi++ }); continue; }
 
     // col < ?
     const ltM = p.match(/^([\w.]+)\s*<\s*\?/);
@@ -101,7 +100,9 @@ function parseWhere(whereClause, paramStart, params) {
 function rowMatches(row, conds, params) {
   for (const c of conds) {
     switch (c.type) {
-      case 'eq':  if (row[c.col] !== params[c.paramIdx]) return false; break;
+      // Use == (loose) so string param '1' matches stored number 1.
+      case 'eq':  if (row[c.col] != params[c.paramIdx]) return false; break;
+      case 'neq': if (row[c.col] == params[c.paramIdx]) return false; break;
       case 'lt':  if (!(row[c.col] < params[c.paramIdx])) return false; break;
       case 'gt':  if (!(row[c.col] > params[c.paramIdx])) return false; break;
       case 'gte': if (!(row[c.col] >= params[c.paramIdx])) return false; break;
@@ -117,7 +118,7 @@ function rowMatches(row, conds, params) {
 }
 
 /**
- * Parse SET clause.  Consumes params left-to-right starting at pi.
+ * Parse SET clause. Consumes params left-to-right starting at pi.
  * Returns { sets, nextPi }.
  */
 function parseSet(setClause, params, pi) {
@@ -148,17 +149,16 @@ function parseSet(setClause, params, pi) {
 
     const litM = rhs.match(/^'([^']*)'$/);
     if (litM) { sets.push({ col, value: litM[1] }); continue; }
-    // ignored tokens (e.g. excluded.col in upsert SET)
+    // ignored tokens (e.g. excluded.col in upsert SET clauses)
   }
 
   return { sets, nextPi: pi };
 }
 
-function applySet(row, sets, currentRow) {
+function applySet(row, sets) {
   for (const s of sets) {
     if (s.coalesce) {
       if (s.paramVal !== null && s.paramVal !== undefined) row[s.col] = s.paramVal;
-      // else keep existing value — no-op
     } else {
       row[s.col] = s.value;
     }
@@ -182,7 +182,6 @@ function applyOrderBy(rows, clauseText) {
 }
 
 function applyLimit(rows, clauseText, params, pi) {
-  // LIMIT ? (param) or LIMIT N (literal)
   const mParam = clauseText.match(/LIMIT\s+\?/i);
   if (mParam) {
     const n = parseInt(params[pi], 10);
@@ -231,7 +230,7 @@ function execStatement(store, sql, params) {
     const newRow = {};
     cols.forEach((col, i) => { newRow[col] = p[i] !== undefined ? p[i] : null; });
 
-    // Auto-increment: if INSERT did not supply an 'id' column assign integer PK.
+    // Auto-increment: assign integer PK if INSERT did not supply an 'id' column.
     if (!cols.includes('id')) {
       newRow.id = nextId(store, tbl);
     }
@@ -240,14 +239,18 @@ function execStatement(store, sql, params) {
     const isOrReplace = /^INSERT\s+OR\s+REPLACE/i.test(s);
 
     if ((isUpsert || isOrReplace) && newRow.id !== undefined && newRow.id !== null) {
-      const idx = rows.findIndex(r => r.id === newRow.id);
-      if (idx >= 0) rows[idx] = { ...rows[idx], ...newRow };
-      else rows.push(newRow);
+      // Use == so string id matches numeric stored id and vice versa.
+      const idx = rows.findIndex(r => r.id == newRow.id);
+      if (idx >= 0) {
+        // Mutate in place so other references to the same row object see the update.
+        Object.assign(rows[idx], newRow);
+      } else {
+        rows.push(newRow);
+      }
     } else {
       rows.push(newRow);
     }
 
-    // lastInsertRowId should always be a primitive
     const lid = newRow.id !== undefined ? newRow.id : rows.length;
     return { rows: [], changes: 1, lastInsertRowId: lid };
   }
@@ -263,14 +266,13 @@ function execStatement(store, sql, params) {
 
     let changes = 0;
     for (const row of rows) {
-      // Parse SET first to know how many params it consumed, then parse WHERE.
       const { sets, nextPi } = parseSet(setClause, p, 0);
       let matches = true;
       if (whereClause) {
         const { conds } = parseWhere(whereClause, nextPi, p);
         matches = rowMatches(row, conds, p);
       }
-      if (matches) { applySet(row, sets, row); changes++; }
+      if (matches) { applySet(row, sets); changes++; }
     }
     return { rows: [], changes, lastInsertRowId: 0 };
   }
@@ -288,7 +290,7 @@ function execStatement(store, sql, params) {
       return { rows: [], changes: count, lastInsertRowId: 0 };
     }
 
-    // ── Ring-buffer: DELETE … WHERE id NOT IN (SELECT id FROM t ORDER BY col [ASC|DESC] LIMIT N|?)
+    // ── Ring-buffer: DELETE … WHERE id NOT IN (SELECT id FROM t ORDER BY col LIMIT N|?)
     const ringM = whereClause.match(
       /id\s+NOT\s+IN\s*\(\s*SELECT\s+id\s+FROM\s+(\w+)\s+ORDER\s+BY\s+([\w.]+)(?:\s+(ASC|DESC))?\s+LIMIT\s+(\?|\d+)\s*\)/i
     );
@@ -296,7 +298,6 @@ function execStatement(store, sql, params) {
       const subTbl   = ringM[1];
       const orderCol = colName(ringM[2]);
       const dir      = (ringM[3] || 'ASC').toUpperCase();
-      // LIMIT value: param '?' or literal number
       const limitRaw = ringM[4];
       const limit    = limitRaw === '?' ? parseInt(p[0], 10) : parseInt(limitRaw, 10);
       const subRows  = store.tables.get(subTbl) || [];
@@ -313,7 +314,7 @@ function execStatement(store, sql, params) {
       return { rows: [], changes: before - kept.length, lastInsertRowId: 0 };
     }
 
-    // Generic WHERE
+    // Generic WHERE — loose equality in rowMatches handles string vs number ids.
     const { conds } = parseWhere(whereClause, 0, p);
     const before = rows.length;
     const kept   = rows.filter(r => !rowMatches(r, conds, p));
@@ -322,21 +323,18 @@ function execStatement(store, sql, params) {
   }
 
   // ── SELECT
-  // Extract table name and everything after it, being careful with subqueries.
   const selectM = s.match(/^SELECT\s+.+?\s+FROM\s+[`"']?(\w+)(.*)?$/i);
   if (selectM) {
     const tbl  = selectM[1];
     const rest = (selectM[2] || '').trim();
     let rows   = [...(store.tables.get(tbl) || [])];
 
-    // Extract WHERE clause (stop at ORDER BY or LIMIT at the top level, not inside parens).
     const whereM = rest.match(/WHERE\s+(.+?)(?:\s+ORDER\s+BY|\s+LIMIT|$)/i);
     if (whereM) {
       const { conds } = parseWhere(whereM[1].trim(), 0, p);
       rows = rows.filter(r => rowMatches(r, conds, p));
     }
 
-    // Find the param index consumed by WHERE (count '?' in WHERE clause)
     let wherePi = 0;
     if (whereM) { const qmarks = whereM[1].match(/\?/g); wherePi = qmarks ? qmarks.length : 0; }
 
@@ -385,8 +383,12 @@ function __resetAll() {
   _stores.clear();
 }
 
+// Alias for backward-compat with older test files that call __resetStore().
+const __resetStore = __resetAll;
+
 module.exports = {
   openDatabaseAsync,
   __resetAll,
+  __resetStore,
   SQLiteDatabase: class SQLiteDatabase {},
 };

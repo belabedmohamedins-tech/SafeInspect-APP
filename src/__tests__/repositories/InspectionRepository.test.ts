@@ -10,24 +10,17 @@
 //
 // WHY followUpService AND ApprovalRepository USE STATIC IMPORTS IN SOURCE
 // ───────────────────────────────────────────────────────────────────────
-// The source previously used await import() (lazy) for these two modules to
-// avoid circular dependencies. With jest-expo + node --experimental-vm-modules,
-// Babel transforms await import() to require() inside an async wrapper — but
-// this does NOT reliably hit the Jest module registry in all execution contexts.
-// The dynamic require resolves to the real (unmocked) module, which may throw,
-// and the try/catch { } swallows the error silently. Result: 0 mock calls.
+// The source uses static top-level imports for these two modules. Jest
+// intercepts static imports deterministically via its module registry.
 //
-// Converted to static top-level imports. Jest intercepts static imports
-// deterministically via its module registry. The circular-dep concern is
-// mitigated by the fact that neither followUpService nor ApprovalRepository
-// imports InspectionRepository directly.
-//
-// FIX (G17c): CorrectiveActionRepository.createFromInspection was a dead call
-// in the old source — the method never existed. The source now calls
-// createCapItemsFromInspection from capFactory. The mock below reflects that.
+// W1 REWRITE: Removed all AsyncStorage.setItem/getItem seeding/assertion
+// patterns. InspectionRepository now writes ONLY to SQLite, so:
+//   - Seeding uses InspectionRepository.save()
+//   - Assertions use InspectionRepository.getAll() / getById()
+//   - Corrupt-storage test removed (not meaningful with SQLite backend)
+//   - 'draft' status test migrated to save() pattern
+//   - deleteMany assertions rewritten to use getAll()
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { StorageKeys } from '../../repositories/keys';
 import { SavedInspection } from '../../types';
 
 // ─── mock factories — jest.fn() INSIDE the factory (never outside) ────────────
@@ -43,8 +36,6 @@ jest.mock('../../repositories/AuditLogRepository', () => ({
   AuditLogRepository: { append: jest.fn(() => Promise.resolve()) },
 }));
 
-// FIX (G17c): mock capFactory.createCapItemsFromInspection (replaces dead
-// CorrectiveActionRepository.createFromInspection mock).
 jest.mock('../../services/capFactory', () => ({
   createCapItemsFromInspection: jest.fn(() => Promise.resolve()),
 }));
@@ -80,7 +71,11 @@ const mockEnqueue            = ApprovalRepository.enqueue            as jest.Moc
 // ─── setup ────────────────────────────────────────────────────────────────────
 
 beforeEach(() => {
-  (AsyncStorage as any).__resetStore();
+  // Reset the in-memory SQLite store between tests.
+  const SQLiteMock = jest.requireMock('expo-sqlite') as any;
+  if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
+  // Reset the schema migration guard so each test starts with a fresh DB.
+  jest.resetModules();
   jest.clearAllMocks();
   // Re-apply Promise-returning implementations after clearAllMocks resets them.
   mockComputeHash.mockReturnValue('mock-hash-abc123');
@@ -109,15 +104,6 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
   } as SavedInspection;
 }
 
-// ─── corrupt storage ──────────────────────────────────────────────────────────
-
-describe('InspectionRepository — corrupt storage', () => {
-  it('getAll returns [] when stored JSON is corrupt', async () => {
-    await AsyncStorage.setItem(StorageKeys.INSPECTIONS, 'CORRUPT{{{');
-    expect(await InspectionRepository.getAll()).toEqual([]);
-  });
-});
-
 // ─── getAll ───────────────────────────────────────────────────────────────────
 
 describe('InspectionRepository.getAll', () => {
@@ -126,7 +112,7 @@ describe('InspectionRepository.getAll', () => {
   });
 
   it('returns all stored inspections', async () => {
-    await AsyncStorage.setItem(StorageKeys.INSPECTIONS, JSON.stringify([makeInspection()]));
+    await InspectionRepository.save(makeInspection());
     const result = await InspectionRepository.getAll();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('insp-1');
@@ -170,10 +156,7 @@ describe('InspectionRepository.getDrafts', () => {
   });
 
   it('returns inspections with status "draft"', async () => {
-    await AsyncStorage.setItem(
-      StorageKeys.INSPECTIONS,
-      JSON.stringify([makeInspection({ id: 'd1', status: 'draft' as any })])
-    );
+    await InspectionRepository.save(makeInspection({ id: 'd1', status: 'draft' as any }));
     const result = await InspectionRepository.getDrafts();
     expect(result).toHaveLength(1);
     expect(result[0].id).toBe('d1');
@@ -185,17 +168,17 @@ describe('InspectionRepository.getDrafts', () => {
 describe('InspectionRepository.save', () => {
   it('persists a new inspection', async () => {
     await InspectionRepository.save(makeInspection());
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
-    expect(stored).toHaveLength(1);
-    expect(stored[0].id).toBe('insp-1');
+    const all = await InspectionRepository.getAll();
+    expect(all).toHaveLength(1);
+    expect(all[0].id).toBe('insp-1');
   });
 
   it('replaces an existing inspection with the same id', async () => {
     await InspectionRepository.save(makeInspection({ facilityName: 'Old Name' }));
     await InspectionRepository.save(makeInspection({ facilityName: 'New Name' }));
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
-    expect(stored).toHaveLength(1);
-    expect(stored[0].facilityName).toBe('New Name');
+    const all = await InspectionRepository.getAll();
+    expect(all).toHaveLength(1);
+    expect(all[0].facilityName).toBe('New Name');
   });
 
   it('triggers AuditLog + capFactory on first completion', async () => {
@@ -221,18 +204,15 @@ describe('InspectionRepository.save', () => {
   it('embeds the computed hash on completion', async () => {
     await InspectionRepository.save(makeInspection({ id: 'h1', status: 'completed' }));
     expect(mockComputeHash).toHaveBeenCalled();
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
-    expect(stored[0].integrityHash).toBe('mock-hash-abc123');
+    const saved = await InspectionRepository.getById('h1');
+    expect(saved?.integrityHash).toBe('mock-hash-abc123');
   });
 
   it('does NOT trigger side-effects on re-save of already-completed inspection', async () => {
-    // First save — becomes completed
     await InspectionRepository.save(makeInspection({ id: 'rc-1', status: 'completed' }));
     jest.clearAllMocks();
-    // Re-apply mocks after clearAllMocks
     mockCreateCapItems.mockResolvedValue(undefined);
     mockAuditAppend.mockResolvedValue(undefined);
-    // Second save — already completed, should not re-trigger side-effects
     await InspectionRepository.save(makeInspection({ id: 'rc-1', status: 'completed' }));
     expect(mockCreateCapItems).not.toHaveBeenCalled();
   });
@@ -244,18 +224,21 @@ describe('InspectionRepository.delete', () => {
   it('removes the inspection by id', async () => {
     await InspectionRepository.save(makeInspection());
     await InspectionRepository.delete('insp-1');
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]');
-    expect(stored).toHaveLength(0);
+    expect(await InspectionRepository.getAll()).toHaveLength(0);
   });
 
   it('is a no-op when id does not exist', async () => {
     await InspectionRepository.delete('nonexistent');
-    expect(JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS)) ?? '[]')).toHaveLength(0);
+    expect(await InspectionRepository.getAll()).toHaveLength(0);
   });
 
   it('does NOT append audit log when deleting non-existent id', async () => {
     await InspectionRepository.delete('ghost-id');
-    expect(mockAuditAppend).not.toHaveBeenCalledWith('INSPECTION_DELETED', expect.anything(), expect.anything());
+    expect(mockAuditAppend).not.toHaveBeenCalledWith(
+      'INSPECTION_DELETED',
+      expect.anything(),
+      expect.anything(),
+    );
   });
 });
 
@@ -267,20 +250,21 @@ describe('InspectionRepository.deleteMany', () => {
     await InspectionRepository.save(makeInspection({ id: 'a2', status: 'in-progress' }));
     await InspectionRepository.save(makeInspection({ id: 'a3', status: 'in-progress' }));
     await InspectionRepository.deleteMany(['a1', 'a3']);
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
-    expect(stored).toHaveLength(1);
-    expect(stored[0].id).toBe('a2');
+    const all = await InspectionRepository.getAll();
+    expect(all).toHaveLength(1);
+    expect(all[0].id).toBe('a2');
   });
 
   it('appends a INSPECTION_BULK_DELETED audit entry', async () => {
     await InspectionRepository.deleteMany(['x1', 'x2']);
-    expect(mockAuditAppend.mock.calls.some((c: any[]) => c[0] === 'INSPECTION_BULK_DELETED')).toBe(true);
+    expect(
+      mockAuditAppend.mock.calls.some((c: any[]) => c[0] === 'INSPECTION_BULK_DELETED'),
+    ).toBe(true);
   });
 
   it('is a no-op when the id list is empty', async () => {
     await InspectionRepository.save(makeInspection({ id: 'keep-1', status: 'in-progress' }));
     await InspectionRepository.deleteMany([]);
-    const stored = JSON.parse((await AsyncStorage.getItem(StorageKeys.INSPECTIONS))!);
-    expect(stored).toHaveLength(1);
+    expect(await InspectionRepository.getAll()).toHaveLength(1);
   });
 });
