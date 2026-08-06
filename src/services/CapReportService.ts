@@ -23,8 +23,9 @@ type ExportFilter = 'open' | 'overdue' | 'all';
 const STATUS_AR: Record<CorrectiveAction['status'], string> = {
   open:          'مفتوح',
   'in-progress': 'جارٍ',
-  resolved:      'مغلق',
+  resolved:      'محلول',
   overdue:       'متأخر',
+  closed:        'مغلق',
 };
 
 const SEVERITY_AR: Record<CorrectiveAction['severity'], string> = {
@@ -39,6 +40,7 @@ const STATUS_COLOR: Record<CorrectiveAction['status'], string> = {
   'in-progress': '#2980b9',
   resolved:      '#27ae60',
   overdue:       '#e74c3c',
+  closed:        '#7f8c8d',
 };
 
 const SEVERITY_COLOR: Record<CorrectiveAction['severity'], string> = {
@@ -72,8 +74,9 @@ function buildCapHTML(
   const inProgCount   = items.filter(i => i.status === 'in-progress').length;
   const overdueCount  = items.filter(i => i.status === 'overdue').length;
   const resolvedCount = items.filter(i => i.status === 'resolved').length;
+  const closedCount   = items.filter(i => i.status === 'closed').length;
   const total         = items.length;
-  const resolutionPct = total > 0 ? ((resolvedCount / total) * 100).toFixed(0) : '0';
+  const resolutionPct = total > 0 ? (((resolvedCount + closedCount) / total) * 100).toFixed(0) : '0';
 
   // Summary pills
   const summaryHTML = `
@@ -81,7 +84,8 @@ function buildCapHTML(
       <div class="pill" style="background:#fff3cd;color:#856404">مفتوح: <strong>${openCount}</strong></div>
       <div class="pill" style="background:#cce5ff;color:#004085">جارٍ: <strong>${inProgCount}</strong></div>
       <div class="pill" style="background:#f8d7da;color:#721c24">متأخر: <strong>${overdueCount}</strong></div>
-      <div class="pill" style="background:#d4edda;color:#155724">مغلق: <strong>${resolvedCount}</strong></div>
+      <div class="pill" style="background:#d4edda;color:#155724">محلول: <strong>${resolvedCount}</strong></div>
+      <div class="pill" style="background:#e2e3e5;color:#383d41">مغلق: <strong>${closedCount}</strong></div>
     </div>
     <div class="progress-wrap">
       <div class="progress-bar" style="width:${resolutionPct}%"></div>
@@ -312,7 +316,7 @@ export const CapReportService = {
           UTI: 'com.adobe.pdf',
         });
       } else {
-        // Android: system print dialog → “Save as PDF”
+        // Android: system print dialog → "Save as PDF"
         await Print.printAsync({ html });
       }
     } catch (error) {
