@@ -12,14 +12,21 @@ const CryptoDigestAlgorithm = {
   MD5:    'MD5',
 };
 
+// CodingType is the internal enum name in some expo-crypto versions.
+// Production code (IntegrityService.ts) uses Crypto.CryptoEncoding.HEX,
+// so we export BOTH names pointing to the same object.
 const CodingType = {
   HEX:    'hex',
   BASE64: 'base64',
 };
 
+// Alias used by IntegrityService.ts: Crypto.CryptoEncoding.HEX
+const CryptoEncoding = CodingType;
+
 module.exports = {
   CryptoDigestAlgorithm,
   CodingType,
+  CryptoEncoding,
   getRandomBytes:      jest.fn((size) => new Uint8Array(size).fill(0)),
   getRandomBytesAsync: jest.fn((size) => Promise.resolve(new Uint8Array(size).fill(0))),
   digestStringAsync:   jest.fn((_alg, data, _opts) =>
