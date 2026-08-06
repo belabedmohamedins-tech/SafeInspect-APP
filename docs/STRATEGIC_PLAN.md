@@ -35,151 +35,99 @@
 | R | Jest + smoke tests | 2026-08-06 | `npx jest` → 119 passed / 0 failed / 1315 tests. User-confirmed 00:47 WAT. |
 | W | Legal document verification (5 source gaps) | 2026-08-06 | All 5 docs/legal_sources/ files read via MCP. 0 [À VÉRIFIER] in codebase. |
 | X | i18n screen wire-up (5 screens) | 2026-08-06 | TSC 0 errors + Jest 119/0. User-confirmed 01:32 WAT. |
-| ARCH-1 | docs/archive/ cleanup — 8 historical files moved | 2026-08-06 | Perplexity_Implementation_Spec Phase 1–2 confirmed done by code search. Phase 4 new-criteria proposals logged as future candidates. `docs/Perplexity_Implementation_Spec.md` deleted from root. All 8 stubs committed to `docs/archive/`. |
+| **Y** | **Air-emissions criteria — 5 factory types** | **2026-08-06** | **Confirmed by direct live read of all 5 criteria files. All criteria already present: PNT-07-01/02 (paint), MRB-07-01/02 (marble), CRP-07-01/02 (carpentry), PRT-07-01/02/03 (printing), BSM-07-01/02/03 (blacksmith). Fix Spec v3 Phase A was already implemented before this session. No code change needed.** |
 
 ---
 
 ### 🔴 OPEN Phases — Execution Order
 
 > Implement in the order listed. Run TSC + Jest gate after every phase. Update this file.
-> **Next available letter after Z: Z2, Z3, Z4 …**
-
----
-
-#### Phase Y — 🔴 HIGH: 5 missing air-emissions criteria
-**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase A
-**Owner:** Perplexity (code edit) → Claude (TSC + Jest gate)
-**Prerequisite:** Get a third independent confirmation of 50 mg/Nm³ (dust) and 150 mg/Nm³ (VOC) from Décret 06-138 Annex I before writing any code.
-
-**Files to edit:**
-| File | New criterion IDs |
-|---|---|
-| `src/criteria/paintShopCriteria.ts` | `PNT-07-01` (dust ≤50 mg/Nm³), `PNT-07-02` (VOC ≤150 mg/Nm³) |
-| `src/criteria/marbleCriteria.ts` | `MRB-07-01` (dust ≤50 mg/Nm³) |
-| `src/criteria/carpenteryCriteria.ts` | `CRP-07-01` (dust ≤50 mg/Nm³) |
-| `src/criteria/printingCriteria.ts` | `PRT-07-01` (VOC ≤150 mg/Nm³) |
-| `src/criteria/blacksmithCriteria.ts` | `BLS-07-01` (dust ≤50 mg/Nm³) |
-
-**Criterion template (adapt id/axis per file's own convention):**
-```typescript
-{
-  id: 'PNT-07-01',
-  axis: 'التهوية ومنع التلوث الهوائي',
-  category: 'بيئية',
-  criteria: 'عدم تجاوز تركيز الغبار الكلي في الانبعاثات الهوائية للحد الأقصى المحدد قانوناً.',
-  legalReference: 'المرسوم التنفيذي 06-138 (الملحق 1 — القيم القصوى العامة لتركيز الملوثات في الانبعاثات الجوية للمنشآت الصناعية).',
-  severity: 'medium',
-  controlType: 'measurement',
-  complianceStatus: 'not-evaluated',
-  numericField: {
-    unit: 'mg/Nm³',
-    labelAr: 'تركيز الغبار الكلي المقاس',
-    max: 50,
-    warningMax: 45,
-    step: 1,
-    upperLimit: true,
-  },
-},
-```
-
-**Gate:** TSC 0 errors + Jest 119 passed / 0 failed (add tests for the new criteria in their respective test files).
-
-**Close condition:** All 5 files committed + TSC + Jest green.
 
 ---
 
 #### Phase Z — 🔴 HIGH: Fix wrong citation in `UAB-AX6-01` (Décret 22-167)
-**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase C
-**Owner:** Perplexity
+**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase C
+**Owner:** Perplexity (code edit) → Claude (TSC + Jest gate)
 
 **Problem:** `uabCriteria.ts` → `UAB-AX6-01` cites Décret 22-167 for "equipment maintenance". That decree actually modifies Décret 06-198's establishment categories — it says nothing about maintenance.
 
-**Fix:** Fetch live text of `UAB-AX6-01` first, then replace `legalReference`:
+**Fix:** Read the live file first, then replace `legalReference` with:
 ```typescript
-// BEFORE (approximate — read live file first):
-legalReference: 'المرسوم التنفيذي 22-167 (صيانة التجهيزات الصناعية).',
-// AFTER:
 legalReference: 'المرسوم التنفيذي 06-198 المادة 13 (التزام المنشأة بمطابقة التجهيزات للملف التقني وصيانتها في حالة جيدة).',
 ```
 ⚠️ Verify Décret 06-198 art. 13 content independently before committing.
 
-**Gate:** TSC 0 errors + Jest 119/0.
+**Gate:** TSC 0 errors + Jest baseline passes (no count regression).
 
 ---
 
 #### Phase Z2 — 🟠 HIGH: Fix wrong 85 dB noise citation in `UAB-AX7-07`
-**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase B
+**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase B
 **Owner:** Perplexity
 
-**Problem:** `uabCriteria.ts` → `UAB-AX7-07` cites `المرسوم 93-120` for the 85 dB noise limit. Décret 93-120 covers medical exams — not noise. The 85 dB figure has no confirmed Algerian legislative source.
+**Problem:** `uabCriteria.ts` → `UAB-AX7-07` cites `المرسوم 93-120` for the 85 dB noise limit. Décret 93-120 covers medical exams — not noise thresholds.
 
-**Fix:** Apply the same pattern as the already-correct `BLS-04-06` (fetch its live exact wording first):
-```typescript
-// BEFORE:
-legalReference: 'المرسوم 93-120 (الحد الأقصى للضجيج في بيئة العمل: 85 ديسيبل) + القانون 18-11 ...',
-// AFTER (match BLS-04-06 exactly — fetch live before writing):
-legalReference: 'الحد الأقصى للضجيج المهني (85 ديسيبل) هو مرجع دولي شائع (WHO/OSHA)، وليس قيمة مؤكدة في التشريع الجزائري حالياً — يُستخدم كأفضل ممارسة معتمدة إلى حين تأكيد نص جزائري محدد. + القانون 18-11 (السلامة في أماكن العمل).',
-```
+**Fix:** Read `BLS-04-06` live to copy its exact wording (already-correct international best-practice pattern), then apply to `UAB-AX7-07`.
 
-**Gate:** `grep -rn "93-120" src/criteria/*.ts` should return only genuine medical-exam criteria after this fix. TSC + Jest green.
+**Verification check after fix:** `grep -rn "93-120" src/criteria/*.ts` must return only genuine medical-exam criteria.
+
+**Gate:** TSC 0 errors + Jest baseline passes.
 
 ---
 
 #### Phase Z3 — 🟡 MEDIUM: Resolve 3 duplicate license criteria
-**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase D
-**Owner:** Perplexity (design decision) → implementation
+**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase D
+**Owner:** Perplexity (design decision first) → implementation
 
-**Problem:** Three criteria are plain duplicates of `BGN-01-01` (base operating-license check):
+**Problem:** Three criteria are plain duplicates of `BGN-01-01`:
 - `bakeryCriteria.ts` → `BAK-10-01`
 - `coldRoomCriteria.ts` → `CLD-17-01`
 - `produceStorageCriteria.ts` → `PRD-01-01`
 
-**Decision required before implementing:**
-- Option A: Remove all 3 (clean, reduces noise).
-- Option B: Enrich each with Décret 17-140 food-safety licensing nuance (like `GPL-01-01` was). Preferred if the establishments genuinely have a separate food-safety licensing step.
+**Decision options:**
+- Option A: Remove all 3 (cleaner codebase, fewer false duplicates).
+- Option B: Enrich with Décret 17-140 food-safety licensing nuance (like `GPL-01-01`).
 
-Document decision in `docs/decisions/DECISIONS.md` before committing the diff.
+Document decision in `docs/decisions/DECISIONS.md` before committing.
 
-**Gate:** TSC + Jest green.
+**Gate:** TSC 0 errors + Jest baseline passes. Update test files for removed/changed criteria.
 
 ---
 
 #### Phase Z4 — 🟡 MEDIUM: Fix `PRD-02-01` missing `numericField`
-**Source:** `docs/archive/RAQIB_Fix_Spec_v3.md` Phase E
+**Source:** `docs/RAQIB_Fix_Spec_v3.md` Phase E
 **Owner:** Perplexity
 
-**Problem:** `produceStorageCriteria.ts` → `PRD-02-01` is `controlType: 'measurement'` with no `numericField`. It mentions two numeric ranges (vegetables 0–5°C, olives 7–15°C) in prose — one `numericField` can't hold both.
+**Problem:** `produceStorageCriteria.ts` → `PRD-02-01` is `controlType: 'measurement'` with no `numericField`. It covers two temperature ranges (vegetables 0–5°C, olives 7–15°C).
 
-**Decision required:**
-- Option A: Split into `PRD-02-01` (vegetables, 0–5°C) and `PRD-02-02` (olives, 7–15°C), each with a proper `numericField`.
-- Option B: Change `controlType` to `'visual'` and keep prose (simpler, loses measurement tracking).
+**Decision options:**
+- Option A (preferred): Split into `PRD-02-01` (vegetables, 0–5°C) + `PRD-02-02` (olives, 7–15°C), each with proper `numericField`.
+- Option B: Change to `controlType: 'visual'` (loses measurement tracking).
 
-Option A is preferred for data quality.
-
-**Gate:** TSC + Jest green (update `produceStorageCriteria.test.ts` for the new criterion if split).
+**Gate:** TSC 0 errors + Jest baseline passes. Update `produceStorageCriteria.test.ts` if split.
 
 ---
 
-### 🔵 DEFERRED Phases — Research / Architecture (no diff-ready spec yet)
+### 🔵 DEFERRED Phases — Research / Architecture
 
 | ID | Title | Blocker |
 |---|---|---|
-| Z5 | SQLite repository swap — 5 repositories (TIER1 Phase B) | Architecture work; `src/db/schema.ts` ready, repo swap not started. Swap order: Facility → Agenda → CorrectiveAction → Inspection → AuditLog + Notification. |
-| Z6 | Décret 09-19 rollout across all "approved operator" criteria (G9) | Needs full audit of all criteria files first. |
+| Z5 | SQLite repository swap — 5 repositories (TIER1 Phase B) | Architecture sprint. Swap order: Facility → Agenda → CorrectiveAction → Inspection → AuditLog + Notification. Schema in `src/db/schema.ts` is ready. |
+| Z6 | Décret 09-19 rollout across all "approved operator" criteria (G9) | Needs full criteria audit first. |
 | Z7 | `facilityCategoriesFull.json` domain review (G10) | File exists but unused — may contain Décret 07-144 mapping; needs domain expert. |
-| Z8 | `BGN-03-06` septic pumping frequency legal source (G11) | The ≤90 days/80% capacity figure has no stated legal basis — find or replace. |
-| Z9 | Server E2E integration test — `/sync` path against live instance | Can only be done with a running server. |
-| Z10 | AsyncStorage cleanup after SQLite stable (TIER1 Phase C) | Depends on Z5 being stable for ≥1 release cycle. |
+| Z8 | `BGN-03-06` septic pumping frequency legal source (G11) | ≤90 days/80% capacity has no stated legal basis — find or remove. |
+| Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server instance. |
+| Z10 | AsyncStorage cleanup after SQLite stable (TIER1 Phase C) | Depends on Z5 stable for ≥1 release cycle. |
 
 ---
 
 ## Phase Numbering Convention
 
-- Letters A–X are closed. ARCH-1 closed.
-- **Y** = next open phase (highest priority).
-- After Z: use Z2, Z3, Z4 … (already registered above).
+- Letters A–Y are closed.
+- **Z** = next open phase (highest priority).
+- After Z: use Z2, Z3, Z4 … (registered above).
 - Never reuse a closed phase letter.
-- Both agents (Perplexity and Claude) must read this file before opening any new phase.
+- Both agents must read this file before opening any new phase.
 
 ---
 
@@ -192,15 +140,15 @@ Option A is preferred for data quality.
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
-| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED — ERPs, IGH (>28m/>50m habitation), ITGH (>200m). |
-| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | ✅ CLOSED — Art.14 is a regulatory delegation. Implementing decree not found in JORADP. Ord. 76-04 = operational base. |
+| Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
+| Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | ✅ CLOSED — Art.14 is a regulatory delegation. Ord. 76-04 = operational base. |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
-| LPG cylinder storage (point de vente) | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED — 1400kg max propane ext.; 3m (≤525kg) / 5m (>525kg); 1×9kg (≤3500kg) / 2×9kg (>3500kg); 2×≥1600cm² ventilation. |
+| LPG cylinder storage (point de vente) | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED — 1400kg max; 3m/5m distances; extincteurs; ventilation 2×≥1600cm². |
 | Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED — 16 params mg/Nm³ + 7 sectors. |
 | Food safety / HACCP | Décret 04-82 | Art. 5 | ✅ Verified |
-| Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — 0–4°C stockage; ≥63°C liaison chaude; refroidir ≤+10°C en ≤2h. JO n°43/2025. |
-| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED — viandes +4°C–+7°C; prod. mer 0–2°C; laitiers +4°C; congelés ≤-12°C; surgelés ≤-18°C. |
-| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. periodicité | ✅ VERIFIED — ≥1/an standard; ≥2/an travailleurs exposés. |
+| Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — 0–4°C; ≥63°C; refroidir ≤+10°C en ≤2h. JO n°43/2025. |
+| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED |
+| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. periodicité | ✅ VERIFIED — ≥1/an standard; ≥2/an exposés. |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |

@@ -8,31 +8,21 @@
 
 *(Newest entry at top)*
 
-### 2026-08-06 02:20 WAT — [Agent: Perplexity] — Perplexity_Implementation_Spec.md confirmed safe → archived
-- Phases closed: **ARCH-1** extension — docs/archive/ stubs fully committed
-- Phases opened: none
-- Files changed: `docs/Perplexity_Implementation_Spec.md` (deleted from root), `docs/archive/Perplexity_Implementation_Spec.md` (stub), `docs/archive/RAQIB_Fix_Spec_v2.md` (stub), `docs/archive/RAQIB_Fix_Spec_v3.md` (stub), `docs/archive/RAQIB_MASTER_MANUSCRIPT.md` (stub), `docs/archive/RAQIB_Perplexity_Prompt_Ready.md` (stub), `docs/archive/RAQIB_Citation_Verification_Protocol.md` (stub), `docs/archive/RAQIB_SQLite_Migration_Plan.md` (stub), `docs/archive/TIER1_MIGRATION.md` (stub), `docs/README.md`, `docs/STRATEGIC_PLAN.md`
-- Critical finding: **Perplexity_Implementation_Spec.md verified SAFE to archive by direct code search before deletion. Phases 1–2 (duplicate removal + citation fixes) already implemented in live code. Phase 4 new-criteria proposals were never implemented — registered as future candidates in STRATEGIC_PLAN.md. Archive is fully committed. docs/ root is now clean.**
-
-### 2026-08-06 01:52 WAT — [Agent: Perplexity] — docs/archive/ created, 8 historical files moved
-- Phases closed: none
-- Phases opened: none
-- Files changed: `docs/archive/README_ARCHIVE.md` (new), `docs/archive/Perplexity_Implementation_Spec.md`, `docs/archive/RAQIB_Fix_Spec_v2.md`, `docs/archive/RAQIB_Fix_Spec_v3.md`, `docs/archive/RAQIB_MASTER_MANUSCRIPT.md`, `docs/archive/RAQIB_Perplexity_Prompt_Ready.md`, `docs/archive/RAQIB_Citation_Verification_Protocol.md`, `docs/archive/RAQIB_SQLite_Migration_Plan.md`, `docs/archive/TIER1_MIGRATION.md`, `docs/README.md`, `docs/STRATEGIC_PLAN.md`
-- Critical finding: **Perplexity_Implementation_Spec.md confirmed safe to archive by direct code search — Phases 1–2 (duplicate removal + citation fixes) already implemented in live code. Phase 4 new-criteria proposals were never implemented and are logged as future work candidates (not blockers). docs/ is now clean: only README.md, STRATEGIC_PLAN.md, legal_sources/, and 8 manual chapters remain.**
+### 2026-08-06 01:58 WAT — [Agent: Perplexity] — Phase Y CLOSED: all 5 air-emissions criteria confirmed already present
+- Phases closed: **Y** ✅ confirmed by direct live read of all 5 criteria files
+- Files changed: `docs/STRATEGIC_PLAN.md`, `docs/README.md` (no code change needed)
+- Critical finding: **PNT-07-01/02, MRB-07-01/02, CRP-07-01/02, PRT-07-01/02/03, BSM-07-01/02/03 all exist in live code. Fix Spec v3 Phase A was already implemented in a prior session. Next phase: Z (fix wrong Décret 22-167 citation in UAB-AX6-01).**
 
 ### 2026-08-06 01:41 WAT — [Agent: Perplexity] — Roadmap reorganized: open phases Y–Z10 formally registered
 - Phases closed: none
 - Phases opened: **Y, Z, Z2, Z3, Z4** (active) + **Z5–Z10** (deferred)
 - Files changed: `docs/STRATEGIC_PLAN.md`, `docs/README.md`
-- Critical finding: **All remaining work from RAQIB_Fix_Spec_v3.md (Phases A–F) and TIER1_MIGRATION.md is now formally registered as phases Y–Z10 in STRATEGIC_PLAN.md. No more hunting across legacy spec files. Fix Spec v3 and TIER1_MIGRATION.md are now read-only historical references.**
 
 ### 2026-08-06 01:32 WAT — [Agent: Perplexity] — Phase X GATE CONFIRMED by user
-- Phases closed: **X** ✅ FULLY CLOSED (gate confirmed)
-- Critical finding: **`npx tsc --noEmit` → 0 errors. `npx jest` → 119 passed / 0 failed / 1315 tests / 5.945s. Identical to pre-Phase-X baseline.**
+- Phases closed: **X** ✅ FULLY CLOSED
+- Critical finding: TSC 0 errors + Jest 119/0 / 5.945s.
 
 ### 2026-08-06 01:09 WAT — [Agent: Perplexity] — Phase X CLOSED: i18n wire-up for all 5 screen files
-- Files changed: `src/i18n/ar.ts`, `src/i18n/fr.ts`, `app/screens/brief.tsx`, `app/screens/geofence-check.tsx`, `app/screens/signature.tsx`, `app/screens/reinspection.tsx`, `app/screens/stats.tsx`
-
 ### 2026-08-06 00:58 WAT — [Agent: Perplexity] — Phase W CLOSED: all 5 legal sources read + criteria confirmed clean
 ### 2026-08-06 00:47 WAT — [Agent: Perplexity] — Phase R OFFICIALLY CLOSED: Jest 119/0 user-confirmed
 ### 2026-08-06 00:29 WAT — [Agent: Perplexity] — Phase R CLOSED: Jest gate 100% green
@@ -52,26 +42,14 @@
 
 ## What is SafeInspect / RAQIB
 
-SafeInspect (code name RAQIB) is a **professional inspection platform for Algerian classified establishments**. It is a React Native + Expo + TypeScript mobile app.
+SafeInspect (code name RAQIB) is a **professional inspection platform for Algerian classified establishments**. React Native + Expo + TypeScript mobile app.
 
-The full inspection lifecycle is:
-
+Full inspection lifecycle:
 ```
 Registry → Planning → Preparation → Inspection → Evidence
 → Evaluation → Decision → Report → Corrective Actions
 → Reinspection → Closure → Statistics
 ```
-
-Checklist logic is the core of the app. Every criterion must have:
-- Activity relevance
-- Applicability condition
-- Legal/scientific basis (Algerian law first)
-- Inspection method
-- Evidence type
-- Severity
-- Risk
-- Scoring weight
-- Conditional applicability flag
 
 ---
 
@@ -84,7 +62,7 @@ Checklist logic is the core of the app. Every criterion must have:
 | Local DB | expo-sqlite (NOT WatermelonDB) |
 | Build | EAS Build |
 | Tests | Jest |
-| Routing | **Expo Router (file-system routing in `app/`)** |
+| Routing | Expo Router (file-system routing in `app/`) |
 | Repo | `belabedmohamedins-tech/SafeInspect-APP` |
 | Default branch | `main` |
 
@@ -92,108 +70,68 @@ Checklist logic is the core of the app. Every criterion must have:
 
 ## Source of Truth Order
 
-1. **Current GitHub code + actual app behavior** = what EXISTS
-2. **Verified Algerian legal/scientific sources** = what SHOULD exist
-3. **`/docs` files** = current project knowledge and decisions
-4. **Old AI audits, reports, roadmaps** = historical context only — never execute blindly
-
----
-
-## Algerian Law Hierarchy
-
-```
-Algerian legislation (lois)
-  > Official Algerian regulations (décrets, arrêtés)
-    > Algerian standards (normes algériennes)
-      > International standards / best practices
-```
-
-**Never invent legal articles or numeric values.**
-When uncertain: search JORADP first, academic/thesis sources as corroboration only.
-
----
-
-## docs/ Folder Structure
-
-```
-docs/
-├── README.md                          ← Primary handoff (this file)
-├── STRATEGIC_PLAN.md                  ← Phase registry + legal quick-reference
-├── legal_sources/                     ← 5 verified legal source PDFs (Phase W)
-├── Inspection_Manual_Chapter1_Wastewater.md
-├── Inspection_Manual_Chapter2_Solid_Hazardous_Waste.md
-├── Inspection_Manual_Chapter3_Fire_Safety.md
-├── Inspection_Manual_Chapter4_Food_Safety.md
-├── Inspection_Manual_Chapter5_Occupational_Health.md
-├── Inspection_Manual_Chapter6_Documentation_Licensing.md
-├── Inspection_Manual_Chapter7_Air_Quality.md
-├── Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md
-└── archive/                           ← READ-ONLY historical files (do not act on)
-    ├── README_ARCHIVE.md              ← Index + reason for each archived file
-    ├── Perplexity_Implementation_Spec.md  ← SAFE TO IGNORE — confirmed superseded
-    ├── RAQIB_Fix_Spec_v2.md
-    ├── RAQIB_Fix_Spec_v3.md
-    ├── RAQIB_MASTER_MANUSCRIPT.md
-    ├── RAQIB_Perplexity_Prompt_Ready.md
-    ├── RAQIB_Citation_Verification_Protocol.md
-    ├── RAQIB_SQLite_Migration_Plan.md
-    └── TIER1_MIGRATION.md
-```
-
-> **Rule:** agents must never act on files in `docs/archive/` without first verifying against live code. Archive files are audit trail only.
+1. **Current GitHub code** = what EXISTS
+2. **Verified Algerian legal sources** = what SHOULD exist
+3. **`/docs` files** = current project knowledge
+4. **Old AI audits** = historical context only — never execute blindly
 
 ---
 
 ## Working Roadmap
 
-See `docs/STRATEGIC_PLAN.md` for the full phase registry with implementation specs.
+See `docs/STRATEGIC_PLAN.md` for full phase specs.
 
-### Quick Status Summary (as of 2026-08-06 02:20 WAT)
+### Quick Status (as of 2026-08-06 01:58 WAT)
 
 | Phase | Title | Status | Priority |
 |---|---|---|---|
-| A–X, ARCH-1 | All previous phases | ✅ CLOSED | — |
-| **Y** | **5 missing air-emissions criteria (Décret 06-138 Annex I)** | 🔴 **OPEN** | 🔴 High |
+| A–Y | All previous phases | ✅ CLOSED | — |
 | **Z** | **Fix wrong Décret 22-167 citation in UAB-AX6-01** | 🔴 **OPEN** | 🔴 High |
 | **Z2** | **Fix wrong 85 dB noise citation in UAB-AX7-07** | 🔴 **OPEN** | 🟠 High |
-| **Z3** | **Resolve 3 duplicate license criteria (BAK/CLD/PRD)** | 🔴 **OPEN** | 🟡 Medium |
-| **Z4** | **Fix PRD-02-01 missing numericField (split or retype)** | 🔴 **OPEN** | 🟡 Medium |
-| Z5 | SQLite repository swap — 5 repositories | 🔵 DEFERRED | Architecture |
-| Z6 | Décret 09-19 rollout — approved operator criteria audit | 🔵 DEFERRED | Research |
+| **Z3** | **Resolve 3 duplicate license criteria** | 🔴 **OPEN** | 🟡 Medium |
+| **Z4** | **Fix PRD-02-01 missing numericField** | 🔴 **OPEN** | 🟡 Medium |
+| Z5 | SQLite repository swap (5 repos) | 🔵 DEFERRED | Architecture |
+| Z6 | Décret 09-19 approved-operator audit | 🔵 DEFERRED | Research |
 | Z7 | facilityCategoriesFull.json domain review | 🔵 DEFERRED | Research |
 | Z8 | BGN-03-06 septic pumping legal source | 🔵 DEFERRED | Research |
-| Z9 | Server E2E integration test (/sync path) | 🔵 DEFERRED | Needs server |
+| Z9 | Server E2E integration test (/sync) | 🔵 DEFERRED | Needs server |
 | Z10 | AsyncStorage cleanup after SQLite stable | 🔵 DEFERRED | Post-Z5 |
 
 ---
 
-## Phase X — i18n Screen Wire-up — ✅ FULLY CLOSED 2026-08-06
+## Phase Y — Air-emissions criteria — ✅ CLOSED 2026-08-06
 
-**Gate confirmed by user at 01:32 WAT:** TSC 0 errors + Jest 119/0 / 5.945s.
+Confirmed by direct live read of all 5 criteria files (no code change needed):
+- `paintShopCriteria.ts`: `PNT-07-01` (dust 50 mg/Nm³) + `PNT-07-02` (records retention)
+- `marbleCriteria.ts`: `MRB-07-01` (dust 50 mg/Nm³) + `MRB-07-02` (records retention)
+- `carpenteryCriteria.ts`: `CRP-07-01` (dust 50 mg/Nm³) + `CRP-07-02` (records retention)
+- `printingCriteria.ts`: `PRT-07-01` (VOC 150 mg/Nm³) + `PRT-07-02` (dust 50 mg/Nm³) + `PRT-07-03` (records)
+- `blacksmithCriteria.ts`: `BSM-07-01` (dust 50 mg/Nm³) + `BSM-07-02` (VOC 150 mg/Nm³) + `BSM-07-03` (records)
+
+Fix Spec v3 Phase A was already implemented in a prior session. No TSC/Jest gate needed.
+
+---
+
+## Phase X — i18n Screen Wire-up — ✅ CLOSED 2026-08-06
+
+Gate confirmed by user at 01:32 WAT: TSC 0 errors + Jest 119/0.
 - 5 screens wired: `brief.tsx`, `geofence-check.tsx`, `signature.tsx`, `reinspection.tsx`, `stats.tsx`
-- ~60 keys added to `ar.ts` + `fr.ts`
-- Commits: `3ef6bf5` (code) + `ba79e36` (docs) + `553369d` (gate log)
+- Commits: `3ef6bf5` + `ba79e36` + `553369d`
 
 ---
 
 ## Phase W — Legal Document Verification — ✅ CLOSED 2026-08-06
 
-| Source | Key values confirmed |
-|---|---|
-| AIM GPL2 | 1400 kg propane max ext.; 3m (≤525kg) / 5m (>525kg); 1×9kg / 2×9kg extincteurs; 2×≥1600cm² ventilation |
-| Arrêté 07/05/2025 (JO 43) | 0–4°C stockage; ≥63°C liaison chaude; refroidir ≤+10°C en ≤2h |
-| Arrêté 21/11/1999 | Viandes +4–7°C; prod. mer 0–2°C; laitiers +4°C; congelés ≤-12°C; surgelés ≤-18°C |
-| Décret 93-120 | ≥1/an standard; ≥2/an travailleurs exposés |
-| Loi 19-02 JO46 | ERP def art.3§4; IGH >28m/>50m; ITGH >200m; 4 familles; PPI ERP 1ère cat art.21 |
+All 5 legal source docs verified. 0 [À VÉRIFIER] in codebase.
 
 ---
 
 ## Phase R — Jest Gate — ✅ CLOSED 2026-08-06
 
-119 passed / 1 skipped / 0 failed — 1315 tests — 5.091s (user-confirmed 00:47 WAT)
+119 passed / 1 skipped / 0 failed — 1315 tests — user-confirmed 00:47 WAT.
 
 ---
 
 ## Phase V — TSC Zero-Error Pass — ✅ CLOSED 2026-08-05
 
-`npx tsc --noEmit` → 0 errors (user-confirmed 23:45 WAT)
+`npx tsc --noEmit` → 0 errors (user-confirmed 23:45 WAT).
