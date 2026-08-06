@@ -2,17 +2,19 @@
  * __tests__/repositories/InspectionRepository.test.ts
  * Contract tests for InspectionRepository — SQLite contract (rewritten).
  */
-import InspectionRepository from '../../src/repositories/InspectionRepository';
+import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import type { SavedInspection } from '../../src/types';
 
 const SQLite = require('expo-sqlite');
 
 jest.mock('../../src/repositories/AuditLogRepository', () => ({
-  append: jest.fn().mockResolvedValue(undefined),
+  AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
 }));
 jest.mock('../../src/repositories/CorrectiveActionRepository', () => ({
-  save: jest.fn().mockResolvedValue({ id: 'cap-mock' }),
-  deleteByInspection: jest.fn().mockResolvedValue(undefined),
+  CorrectiveActionRepository: {
+    save: jest.fn().mockResolvedValue({ id: 'cap-mock' }),
+    deleteByInspection: jest.fn().mockResolvedValue(undefined),
+  },
 }));
 jest.mock('../../src/services/IntegrityService', () => ({
   computeHash: jest.fn().mockResolvedValue('mock-hash-abc123'),
@@ -26,7 +28,7 @@ const makeInspection = (overrides: Partial<SavedInspection> = {}): SavedInspecti
   inspectorName: 'Inspector',
   facilityType: 'restaurant',
   status: 'draft',
-  score: null,
+  score: undefined,
   checklistAnswers: {},
   findings: [],
   createdAt: new Date().toISOString(),
@@ -67,7 +69,7 @@ describe('InspectionRepository.getDrafts', () => {
     await InspectionRepository.save(makeInspection({ id: '3', status: 'in-progress' }));
     const result = await InspectionRepository.getDrafts();
     expect(result).toHaveLength(2);
-    expect(result.map(r => r.id)).toEqual(expect.arrayContaining(['2', '3']));
+    expect(result.map((r: SavedInspection) => r.id)).toEqual(expect.arrayContaining(['2', '3']));
   });
 });
 

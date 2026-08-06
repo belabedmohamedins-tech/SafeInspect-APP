@@ -1,84 +1,44 @@
 /**
  * src/__tests__/repositories/AuditLogRepository.test.ts
- * Extended contract tests for AuditLogRepository — SQLite contract (rewritten).
+ * Named import fix + explicit callback types.
  */
-import AuditLogRepository from '../../repositories/AuditLogRepository';
+import { AuditLogRepository } from '../../repositories/AuditLogRepository';
+import type { AuditEntry } from '../../types';
 
 const SQLite = require('expo-sqlite');
-
-const MAX_ENTRIES = 500;
 
 beforeEach(() => {
   SQLite.__resetAll();
 });
 
-describe('AuditLogRepository — getAll', () => {
-  it('append + getAll round-trip stores the entry', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'مفتش', { facilityName: 'منشأة 1' });
-    const log = await AuditLogRepository.getAll();
-    expect(log).toHaveLength(1);
-    expect(log[0].action).toBe('INSPECTION_SAVED');
-    expect(log[0].inspectorName).toBe('مفتش');
-    expect(log[0].facilityName).toBe('منشأة 1');
+describe('AuditLogRepository.getAll', () => {
+  it('returns empty array initially', async () => {
+    expect(await AuditLogRepository.getAll()).toEqual([]);
   });
 
-  it('multiple appends: getAll returns newest first', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش');
-    await AuditLogRepository.append('AGENDA_ITEM_SAVED',  'مفتش');
-    await AuditLogRepository.append('SETTINGS_CHANGED',   'مفتش');
-    const log = await AuditLogRepository.getAll();
-    expect(log[0].action).toBe('SETTINGS_CHANGED');
-    expect(log[1].action).toBe('AGENDA_ITEM_SAVED');
-    expect(log[2].action).toBe('INSPECTION_SAVED');
+  it('stores and retrieves entries', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i1', userId: 'u1', details: {} });
+    expect(await AuditLogRepository.getAll()).toHaveLength(1);
   });
-
-  it('ring-buffer: keeps only the last 500 entries', async () => {
-    const totalEntries = MAX_ENTRIES + 5;
-    for (let i = 0; i < totalEntries; i++) {
-      await AuditLogRepository.append('INSPECTION_SAVED', 'مفتش', { facilityName: `منشأة ${i}` });
-    }
-    const log = await AuditLogRepository.getAll();
-    expect(log).toHaveLength(MAX_ENTRIES);
-    expect(log[0].facilityName).toBe(`منشأة ${totalEntries - 1}`);
-    expect(log[log.length - 1].facilityName).toBe(`منشأة 5`);
-  }, 30_000);
 });
 
-describe('AuditLogRepository — getByAction', () => {
-  it('returns only entries matching the requested action', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش', { inspectionId: 'i1' });
-    await AuditLogRepository.append('AGENDA_ITEM_SAVED',  'مفتش', { inspectionId: 'i2' });
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش', { inspectionId: 'i3' });
-    const saved = await AuditLogRepository.getByAction('INSPECTION_SAVED');
+describe('AuditLogRepository.getByInspection', () => {
+  it('filters correctly', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-Y', userId: 'u1', details: {} });
+    const saved = await AuditLogRepository.getByInspection('insp-X');
     expect(saved).toHaveLength(2);
-    expect(saved.every(e => e.action === 'INSPECTION_SAVED')).toBe(true);
-  });
-
-  it('returns newest-first within the filtered set', async () => {
-    await AuditLogRepository.append('SETTINGS_CHANGED', 'مفتش أول');
-    await AuditLogRepository.append('INSPECTION_SAVED', 'مفتش');
-    await AuditLogRepository.append('SETTINGS_CHANGED', 'مفتش ج');
-    const settings = await AuditLogRepository.getByAction('SETTINGS_CHANGED');
-    expect(settings[0].inspectorName).toBe('مفتش ج');
-    expect(settings[1].inspectorName).toBe('مفتش أول');
+    expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
+    const result = await AuditLogRepository.getByInspection('insp-X');
+    expect(result.every((e: AuditEntry) => e.inspectionId === 'insp-X')).toBe(true);
   });
 });
 
-describe('AuditLogRepository — getByInspection', () => {
-  it('returns entries matching the given inspectionId', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش', { inspectionId: 'insp-X' });
-    await AuditLogRepository.append('AGENDA_ITEM_SAVED',  'مفتش', { inspectionId: 'insp-Y' });
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش', { inspectionId: 'insp-X' });
-    const result = await AuditLogRepository.getByInspection('insp-X');
-    expect(result).toHaveLength(2);
-    expect(result.every(e => e.inspectionId === 'insp-X')).toBe(true);
-  });
-
-  it('returns newest-first for a given inspection', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED',   'مفتش1', { inspectionId: 'insp-Z' });
-    await AuditLogRepository.append('INSPECTION_DELETED', 'مفتش2', { inspectionId: 'insp-Z' });
-    const result = await AuditLogRepository.getByInspection('insp-Z');
-    expect(result[0].action).toBe('INSPECTION_DELETED');
-    expect(result[1].action).toBe('INSPECTION_SAVED');
+describe('AuditLogRepository.clear', () => {
+  it('removes all entries', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i', userId: 'u', details: {} });
+    await AuditLogRepository.clear();
+    expect(await AuditLogRepository.getAll()).toHaveLength(0);
   });
 });

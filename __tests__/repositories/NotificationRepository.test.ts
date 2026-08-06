@@ -2,7 +2,8 @@
  * __tests__/repositories/NotificationRepository.test.ts
  * Contract tests for NotificationRepository — SQLite contract (rewritten).
  */
-import NotificationRepository from '../../src/repositories/NotificationRepository';
+import { NotificationRepository } from '../../src/repositories/NotificationRepository';
+import type { AppNotification } from '../../src/types';
 
 const SQLite = require('expo-sqlite');
 
@@ -80,8 +81,9 @@ describe('NotificationRepository.markRead', () => {
 
   it('does not overwrite already-read readAt timestamp', async () => {
     await NotificationRepository.append(baseItem);
-    const [notif] = await NotificationRepository.getAll();
-    await NotificationRepository.markRead(notif.id);
+    const all = await NotificationRepository.getAll();
+    const target = all.find((n: AppNotification) => n.title === 'Test Notification')!;
+    await NotificationRepository.markRead(target.id);
     const firstReadAt = (await NotificationRepository.getAll())[0].readAt;
     await NotificationRepository.markAllRead();
     const secondReadAt = (await NotificationRepository.getAll())[0].readAt;

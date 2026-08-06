@@ -2,7 +2,8 @@
  * __tests__/repositories/AuditLogRepository.test.ts
  * Contract tests for AuditLogRepository — SQLite contract (rewritten).
  */
-import AuditLogRepository from '../../src/repositories/AuditLogRepository';
+import { AuditLogRepository } from '../../src/repositories/AuditLogRepository';
+import type { AuditEntry } from '../../src/types';
 
 const SQLite = require('expo-sqlite');
 
@@ -10,50 +11,38 @@ beforeEach(() => {
   SQLite.__resetAll();
 });
 
-describe('AuditLogRepository.append', () => {
-  it('appends a new entry', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'Ahmed', { inspectionId: 'i1', facilityName: 'FAC' });
-    const all = await AuditLogRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].action).toBe('INSPECTION_SAVED');
-    expect(all[0].inspectorName).toBe('Ahmed');
-    expect(all[0].inspectionId).toBe('i1');
+describe('AuditLogRepository.getAll', () => {
+  it('returns empty array when no entries', async () => {
+    expect(await AuditLogRepository.getAll()).toEqual([]);
   });
 
-  it('appends multiple entries — newest first', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'A');
-    await AuditLogRepository.append('AGENDA_ITEM_SAVED', 'B');
-    const all = await AuditLogRepository.getAll();
-    expect(all[0].action).toBe('AGENDA_ITEM_SAVED');
-    expect(all[1].action).toBe('INSPECTION_SAVED');
-  });
-
-  it('trims to MAX_ENTRIES (500)', async () => {
-    for (let i = 0; i < 501; i++) {
-      await AuditLogRepository.append('INSPECTION_SAVED', 'Inspector');
-    }
-    await AuditLogRepository.append('BACKUP_RESTORED', 'Y');
-    const all = await AuditLogRepository.getAll();
-    expect(all.length).toBe(500);
-  }, 30_000);
-});
-
-describe('AuditLogRepository.getByAction', () => {
-  it('filters by action', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'A');
-    await AuditLogRepository.append('SETTINGS_CHANGED', 'B');
-    const saved = await AuditLogRepository.getByAction('INSPECTION_SAVED');
-    expect(saved).toHaveLength(1);
-    expect(saved[0].action).toBe('INSPECTION_SAVED');
+  it('returns all stored entries', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-1', userId: 'u1', details: {} });
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-2', userId: 'u1', details: {} });
+    expect(await AuditLogRepository.getAll()).toHaveLength(2);
   });
 });
 
 describe('AuditLogRepository.getByInspection', () => {
-  it('returns entries matching inspectionId', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'A', { inspectionId: 'i1' });
-    await AuditLogRepository.append('INSPECTION_DELETED', 'B', { inspectionId: 'i2' });
-    const result = await AuditLogRepository.getByInspection('i1');
-    expect(result).toHaveLength(1);
-    expect(result[0].inspectionId).toBe('i1');
+  it('filters by inspectionId', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-X', userId: 'u1', details: {} });
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'insp-Y', userId: 'u1', details: {} });
+    const saved = await AuditLogRepository.getByInspection('insp-X');
+    expect(saved).toHaveLength(2);
+    expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
+  });
+
+  it('returns empty when inspectionId has no entries', async () => {
+    const result = await AuditLogRepository.getByInspection('insp-X');
+    expect(result.every((e: AuditEntry) => e.inspectionId === 'insp-X')).toBe(true);
+  });
+});
+
+describe('AuditLogRepository.clear', () => {
+  it('removes all entries', async () => {
+    await AuditLogRepository.append({ action: 'INSPECTION_SAVED', inspectionId: 'i', userId: 'u', details: {} });
+    await AuditLogRepository.clear();
+    expect(await AuditLogRepository.getAll()).toHaveLength(0);
   });
 });

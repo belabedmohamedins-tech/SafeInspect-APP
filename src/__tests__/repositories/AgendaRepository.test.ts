@@ -1,39 +1,54 @@
-// src/__tests__/repositories/AgendaRepository.test.ts
+/**
+ * src/__tests__/repositories/AgendaRepository.test.ts
+ * Mirrors __tests__/repositories/AgendaRepository.test.ts — named import fix.
+ */
 import { AgendaRepository } from '../../repositories/AgendaRepository';
-import { AgendaItem } from '../../types';
 
-const tomorrow = () => new Date(Date.now() + 86_400_000).toISOString();
+const SQLite = require('expo-sqlite');
 
-const makeItem = (overrides: Partial<AgendaItem> = {}): AgendaItem => ({
+const makeAgendaItem = (overrides: Record<string, unknown> = {}) => ({
   id: 'agenda-1',
+  title: 'Test Meeting',
+  scheduledDate: '2026-09-01',
+  status: 'scheduled',
   facilityId: 'fac-1',
   facilityName: 'Test Facility',
-  date: tomorrow(),
+  inspectorId: 'insp-1',
+  inspectorName: 'Ahmed',
   notes: '',
-  status: 'pending',
   ...overrides,
 });
 
-describe('AgendaRepository', () => {
-  beforeEach(async () => {
-    const all = await AgendaRepository.getAll();
-    for (const a of all) await AgendaRepository.delete(a.id);
+beforeEach(() => {
+  SQLite.__resetAll();
+});
+
+describe('AgendaRepository.getAll', () => {
+  it('returns empty array when no items', async () => {
+    expect(await AgendaRepository.getAll()).toEqual([]);
   });
 
-  it('saves and retrieves an agenda item', async () => {
-    await AgendaRepository.save(makeItem());
-    const all = await AgendaRepository.getAll();
-    expect(all.length).toBeGreaterThan(0);
-    expect(all[0].facilityName).toBe('Test Facility');
+  it('returns all stored agenda items', async () => {
+    await AgendaRepository.save(makeAgendaItem({ id: '1' }));
+    await AgendaRepository.save(makeAgendaItem({ id: '2' }));
+    expect(await AgendaRepository.getAll()).toHaveLength(2);
   });
+});
 
-  it('updates status', async () => {
-    const item = makeItem();
-    await AgendaRepository.save(item);
-    // 'completed' is a valid AgendaItem status (pending | completed | cancelled)
-    await AgendaRepository.save({ ...item, status: 'completed' });
+describe('AgendaRepository.save', () => {
+  it('persists and upserts', async () => {
+    await AgendaRepository.save(makeAgendaItem({ id: 'u1', title: 'Old' }));
+    await AgendaRepository.save(makeAgendaItem({ id: 'u1', title: 'New' }));
     const all = await AgendaRepository.getAll();
-    const found = all.find(a => a.id === item.id);
-    expect(found?.status).toBe('completed');
+    expect(all).toHaveLength(1);
+    expect(all[0].title).toBe('New');
+  });
+});
+
+describe('AgendaRepository.delete', () => {
+  it('removes the item', async () => {
+    await AgendaRepository.save(makeAgendaItem({ id: 'd1' }));
+    await AgendaRepository.delete('d1');
+    expect(await AgendaRepository.getAll()).toHaveLength(0);
   });
 });

@@ -2,8 +2,8 @@
  * __tests__/repositories/CorrectiveActionRepository.test.ts
  * Contract tests for CorrectiveActionRepository — SQLite contract (rewritten).
  */
-import CorrectiveActionRepository from '../../src/repositories/CorrectiveActionRepository';
-import type { CorrectiveAction } from '../../src/types';
+import { CorrectiveActionRepository } from '../../src/repositories/CorrectiveActionRepository';
+import type { CorrectiveAction, Severity } from '../../src/types';
 
 const SQLite = require('expo-sqlite');
 
@@ -24,7 +24,7 @@ const BASE_ACTION: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> = {
   description: 'Fix this',
   status: 'open',
   deadline: daysFromNow(30),
-  severity: 'major',
+  severity: 'major' as Severity,
 };
 
 beforeEach(() => {
@@ -95,7 +95,7 @@ describe('getOpen', () => {
     await CorrectiveActionRepository.save({ ...BASE_ACTION, inspectionId: 'insp-od', deadline: daysFromNow(-1), status: 'open' });
     await CorrectiveActionRepository.save({ ...BASE_ACTION, inspectionId: 'insp-res', status: 'resolved' });
     const result = await CorrectiveActionRepository.getOpen();
-    const ids = result.map(r => r.inspectionId);
+    const ids = result.map((r: CorrectiveAction) => r.inspectionId);
     expect(ids).toContain('insp-1');
     expect(ids).toContain('insp-ip');
     expect(ids).not.toContain('insp-res');
@@ -108,7 +108,7 @@ describe('getOverdue', () => {
     await CorrectiveActionRepository.save({ ...BASE_ACTION, inspectionId: 'past', deadline: daysFromNow(-1), status: 'open' });
     const result = await CorrectiveActionRepository.getOverdue();
     expect(result.length).toBeGreaterThanOrEqual(1);
-    expect(result.every(r => r.status === 'overdue')).toBe(true);
+    expect(result.every((r: CorrectiveAction) => r.status === 'overdue')).toBe(true);
   });
 });
 
@@ -167,7 +167,7 @@ describe('updateStatus', () => {
     const saved = await CorrectiveActionRepository.save(BASE_ACTION);
     await CorrectiveActionRepository.updateStatus(saved.id, 'resolved');
     const all = await CorrectiveActionRepository.getAll();
-    const item = all.find(a => a.id === saved.id);
+    const item = all.find((a: CorrectiveAction) => a.id === saved.id);
     expect(item?.status).toBe('resolved');
     expect(item?.updatedAt).toBeTruthy();
   });
@@ -176,7 +176,7 @@ describe('updateStatus', () => {
     const saved = await CorrectiveActionRepository.save(BASE_ACTION);
     await CorrectiveActionRepository.updateStatus(saved.id, 'resolved');
     const all = await CorrectiveActionRepository.getAll();
-    const item = all.find(a => a.id === saved.id);
+    const item = all.find((a: CorrectiveAction) => a.id === saved.id);
     expect(item?.closedAt).toBeTruthy();
   });
 });
@@ -195,6 +195,6 @@ describe('deleteByInspection', () => {
     await CorrectiveActionRepository.save({ ...BASE_ACTION, inspectionId: 'other' });
     await CorrectiveActionRepository.deleteByInspection('insp-1');
     const all = await CorrectiveActionRepository.getAll();
-    expect(all.every(a => a.inspectionId !== 'insp-1')).toBe(true);
+    expect(all.every((a: CorrectiveAction) => a.inspectionId !== 'insp-1')).toBe(true);
   });
 });

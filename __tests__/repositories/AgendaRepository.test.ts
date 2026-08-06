@@ -3,7 +3,7 @@
  * Contract tests for AgendaRepository — SQLite contract (rewritten).
  * Seeds via repo public API; no AsyncStorage/mockStore dependency.
  */
-import AgendaRepository from '../../src/repositories/AgendaRepository';
+import { AgendaRepository } from '../../src/repositories/AgendaRepository';
 
 const SQLite = require('expo-sqlite');
 
