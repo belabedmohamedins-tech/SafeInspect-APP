@@ -8,6 +8,12 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 02:20 WAT — [Agent: Perplexity] — Perplexity_Implementation_Spec.md confirmed safe → archived
+- Phases closed: **ARCH-1** extension — docs/archive/ stubs fully committed
+- Phases opened: none
+- Files changed: `docs/Perplexity_Implementation_Spec.md` (deleted from root), `docs/archive/Perplexity_Implementation_Spec.md` (stub), `docs/archive/RAQIB_Fix_Spec_v2.md` (stub), `docs/archive/RAQIB_Fix_Spec_v3.md` (stub), `docs/archive/RAQIB_MASTER_MANUSCRIPT.md` (stub), `docs/archive/RAQIB_Perplexity_Prompt_Ready.md` (stub), `docs/archive/RAQIB_Citation_Verification_Protocol.md` (stub), `docs/archive/RAQIB_SQLite_Migration_Plan.md` (stub), `docs/archive/TIER1_MIGRATION.md` (stub), `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- Critical finding: **Perplexity_Implementation_Spec.md verified SAFE to archive by direct code search before deletion. Phases 1–2 (duplicate removal + citation fixes) already implemented in live code. Phase 4 new-criteria proposals were never implemented — registered as future candidates in STRATEGIC_PLAN.md. Archive is fully committed. docs/ root is now clean.**
+
 ### 2026-08-06 01:52 WAT — [Agent: Perplexity] — docs/archive/ created, 8 historical files moved
 - Phases closed: none
 - Phases opened: none
@@ -124,7 +130,7 @@ docs/
 ├── Inspection_Manual_Chapter8_Site_Hygiene_Pest_Control.md
 └── archive/                           ← READ-ONLY historical files (do not act on)
     ├── README_ARCHIVE.md              ← Index + reason for each archived file
-    ├── Perplexity_Implementation_Spec.md
+    ├── Perplexity_Implementation_Spec.md  ← SAFE TO IGNORE — confirmed superseded
     ├── RAQIB_Fix_Spec_v2.md
     ├── RAQIB_Fix_Spec_v3.md
     ├── RAQIB_MASTER_MANUSCRIPT.md
@@ -142,11 +148,11 @@ docs/
 
 See `docs/STRATEGIC_PLAN.md` for the full phase registry with implementation specs.
 
-### Quick Status Summary (as of 2026-08-06 01:52 WAT)
+### Quick Status Summary (as of 2026-08-06 02:20 WAT)
 
 | Phase | Title | Status | Priority |
 |---|---|---|---|
-| A–X | All previous phases | ✅ CLOSED | — |
+| A–X, ARCH-1 | All previous phases | ✅ CLOSED | — |
 | **Y** | **5 missing air-emissions criteria (Décret 06-138 Annex I)** | 🔴 **OPEN** | 🔴 High |
 | **Z** | **Fix wrong Décret 22-167 citation in UAB-AX6-01** | 🔴 **OPEN** | 🔴 High |
 | **Z2** | **Fix wrong 85 dB noise citation in UAB-AX7-07** | 🔴 **OPEN** | 🟠 High |

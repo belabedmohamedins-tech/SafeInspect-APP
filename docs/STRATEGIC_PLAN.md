@@ -35,7 +35,7 @@
 | R | Jest + smoke tests | 2026-08-06 | `npx jest` → 119 passed / 0 failed / 1315 tests. User-confirmed 00:47 WAT. |
 | W | Legal document verification (5 source gaps) | 2026-08-06 | All 5 docs/legal_sources/ files read via MCP. 0 [À VÉRIFIER] in codebase. |
 | X | i18n screen wire-up (5 screens) | 2026-08-06 | TSC 0 errors + Jest 119/0. User-confirmed 01:32 WAT. |
-| ARCH-1 | docs/archive/ cleanup — 8 historical files moved | 2026-08-06 | Perplexity_Implementation_Spec Phase 1–2 confirmed done by code search (0 results for legacy 04-01, 01-01 series and wrong citations). Phase 4 new-criteria proposals logged as future candidates. |
+| ARCH-1 | docs/archive/ cleanup — 8 historical files moved | 2026-08-06 | Perplexity_Implementation_Spec Phase 1–2 confirmed done by code search. Phase 4 new-criteria proposals logged as future candidates. `docs/Perplexity_Implementation_Spec.md` deleted from root. All 8 stubs committed to `docs/archive/`. |
 
 ---
 
