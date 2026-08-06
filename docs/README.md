@@ -8,6 +8,24 @@
 
 *(Newest entry at top)*
 
+### 2026-08-06 22:48 WAT — [Agent: Perplexity] — W1: getDb() race guard + __resetDb() in tests + Babel env fix
+- Phases closed: **W1** ✅ (pending Claude gate)
+- Files changed:
+  - `src/db/schema.ts` — `getDb()` now stores the in-flight `openDatabaseAsync` promise in `_initPromise`. Concurrent callers all await the same promise instead of each calling `openDatabaseAsync` independently. Prevents Android GC-NPE (`NullPointerException: NativeDatabase.prepareAsync`) caused by multiple native handles to the same SQLite file. `__resetDb()` now also clears `_initPromise`.
+  - `src/__tests__/repositories/InspectionRepository.test.ts` — added `jest.requireActual('../../db/schema').__resetDb()` to `beforeEach` after `SQLiteMock.__resetAll()`, so the schema singleton is cleared and migrations re-run against the fresh mock store on each test.
+  - `src/__tests__/repositories/InspectionRepository.extended.test.ts` — same `__resetDb()` call added to `beforeEach`.
+  - `jest.polyfill.js` — set `process.env.EXPO_PUBLIC_SYNC_API_URL` at top of file (before any `require()`), so Babel's `transform-inline-environment-variables` sees the value at compile time when processing `serverAuth.ts` for the test worker.
+  - `jest.config.js` — added `testEnvironmentOptions.env.EXPO_PUBLIC_SYNC_API_URL` as belt-and-suspenders guard.
+- Root cause (Android NPE): multiple `openDatabaseAsync` calls returned separate `NativeDatabase` handles to the same file; GC collected one, closing the shared SQLite handle, making all subsequent `prepareAsync` calls throw.
+- Root cause (serverAuth tests): `babel-preset-expo` folds `process.env.EXPO_PUBLIC_*` at transpile time. `beforeEach` assignments run after transpilation, so `getApiUrl()` still saw an empty string, threw, and every fetch landed in the catch block returning `'Network error'`.
+- Root cause (InspectionRepository tests): `SQLiteMock.__resetAll()` wiped the in-memory store but `_db`/`_initPromise` singletons in `schema.ts` still pointed at the empty handle — migrations never re-ran, tables were gone, causing opaque failures.
+- Gate: **TSC + Jest required — hand off to Claude.**
+- Commits: `a6c9a40` (schema.ts), `5caf6b1` (test files), `4b4c0e5` (jest config + polyfill), this docs commit.
+- Verify:
+  1. `npx tsc --noEmit` — 0 errors
+  2. `npx jest` — all tests passing, 0 failures
+  3. Android device/emulator: open the app — no `NullPointerException` on `prepareAsync`
+
 ### 2026-08-06 21:39 WAT — [Agent: Perplexity] — GATE CONFIRMED: expo-sqlite DDL fix + schema test rewrite — all green
 - Phases closed: none (runtime crash fix + test sync — not a named phase)
 - Files changed: none (gate confirmation only)
@@ -28,7 +46,7 @@
 ### 2026-08-06 20:57 WAT — [Agent: Perplexity] — Z6+Z8 CLOSED: BGN-04-06 Décret 09-19 added + BGN-03-06 unverified figures removed
 - Phases closed: **Z6** ✅ CLOSED, **Z8** ✅ CLOSED
 - Files changed:
-  - `src/criteria/baseGeneralCriteria.ts` — BGN-04-06: added Décret 09-19 Art.4–8 to legalReference + accreditation verification step to criteria text. BGN-03-06: removed Phase 4.4 unverified "90 days / 80% capacity" figures; replaced with legally clean contract+receipts+no-overflow formulation.
+  - `src/criteria/baseGeneralCriteria.ts` — BGN-04-06: added Décret 09-19 Art.4–8 to legalReference + accreditation verification step to criteria text. BGN-03-06: removed Phase 4.4 unverified “90 days / 80% capacity” figures; replaced with legally clean contract+receipts+no-overflow formulation.
 - Gate: TSC + Jest NOT re-run (criteria-only string changes — no logic touched). Hand off to Claude for gate if required.
 - Commit: `5ed564b` (criteria), docs update this commit.
 - Critical finding: Décret 17-140 confirmed as food hygiene law (human consumption), NOT septic pumping. BGN-03-06 revised accordingly. No Algerian legal source found for specific pumping intervals — reopen as Z13+ if JORADP source discovered.
