@@ -20,6 +20,13 @@
 //   - Corrupt-storage test removed (not meaningful with SQLite backend)
 //   - 'draft' status test migrated to save() pattern
 //   - deleteMany assertions rewritten to use getAll()
+//
+// Z13: removed jest.resetModules() from beforeEach.
+//   jest.mock() factories execute at parse time and register mocks into the
+//   module registry. Calling jest.resetModules() inside beforeEach tears the
+//   registry down, so the next require/import of IntegrityService returns the
+//   REAL module (which has no hashAndStore in the test environment) instead
+//   of the mock. SQLiteMock.__resetAll() is sufficient to isolate tests.
 
 import { SavedInspection } from '../../types';
 
@@ -75,8 +82,9 @@ beforeEach(() => {
   // Reset the in-memory SQLite store between tests.
   const SQLiteMock = jest.requireMock('expo-sqlite') as any;
   if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
-  // Reset the schema migration guard so each test starts with a fresh DB.
-  jest.resetModules();
+  // NOTE: jest.resetModules() was intentionally removed here.
+  // It would tear down the mock registry, causing subsequent requires of
+  // IntegrityService to return the real module (no hashAndStore in tests).
   jest.clearAllMocks();
   // Re-apply Promise-returning implementations after clearAllMocks resets them.
   mockHashAndStore.mockResolvedValue('mock-hash-abc123');

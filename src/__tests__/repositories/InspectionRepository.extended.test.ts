@@ -2,8 +2,12 @@
 // Targets:
 //   line 64  — catch block when annotateRepeatViolations throws
 //   idx !== -1 branch in save()
+//
+// Z13: replaced AsyncStorage.__resetStore() with SQLiteMock.__resetAll().
+//   InspectionRepository migrated to SQLite in Z5/Z10. AsyncStorage.__resetStore()
+//   has no effect on the SQLite in-memory store, so inspections from one test
+//   persisted into the next, causing assertion failures.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import type { SavedInspection } from '../../types';
 
@@ -32,8 +36,12 @@ jest.mock('../../services/IntegrityService', () => ({
 
 import { annotateRepeatViolations } from '../../services/violationHistory';
 
-const { __resetStore } = AsyncStorage as any;
-beforeEach(() => { __resetStore(); jest.clearAllMocks(); });
+beforeEach(() => {
+  // Reset the in-memory SQLite store — repository is SQLite-backed since Z5.
+  const SQLiteMock = jest.requireMock('expo-sqlite') as any;
+  if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
+  jest.clearAllMocks();
+});
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {

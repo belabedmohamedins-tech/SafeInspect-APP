@@ -10,6 +10,11 @@
 //
 // EXPO_PUBLIC_SYNC_API_URL must be set so getApiUrl() does not throw
 // and swallow every fetch call into the catch → 'Network error' path.
+//
+// Z13: fixed import path '../../src/services/serverAuth' → '../services/serverAuth'.
+//   This file lives at src/__tests__/serverAuth.test.ts. The extra 'src/' segment
+//   made every function import resolve to undefined, causing all calls to land in
+//   the catch block and return 'Network error — check your connection'.
 
 import * as SecureStore from 'expo-secure-store';
 
@@ -27,7 +32,7 @@ import {
   isLoggedIn,
   getServerUserId,
   registerPushToken,
-} from '../../src/services/serverAuth';
+} from '../services/serverAuth';
 
 // ── JWT helpers ──────────────────────────────────────────────────────────────
 
