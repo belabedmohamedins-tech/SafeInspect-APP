@@ -1,3 +1,13 @@
+> ⚠️ **PHASE C WARNING — READ BEFORE ACTING**
+> Phase C of this guide recommends removing `@react-native-async-storage/async-storage` and `migrateAsyncStorageToSQLite()`.
+> **DO NOT do this.** Per the Z10 decision (2026-08-06, logged in `docs/README.md`):
+> `migrateAsyncStorageToSQLite()` is intentionally kept as an explicit field-upgrade tool for existing installs
+> that may still have data in AsyncStorage. It is no longer auto-invoked at startup, but must not be deleted.
+> Phases A and B of this guide are ✅ fully completed (Z5 + Z10). Phase C is superseded by the Z10 decision.
+> **Single source of truth: `docs/STRATEGIC_PLAN.md`**
+
+---
+
 # Tier 1 — SQLite Migration Guide
 
 This document covers everything the team needs to know to move SafeInspect
@@ -16,84 +26,37 @@ from AsyncStorage (JSON blobs) to a proper SQLite relational store.
 
 ---
 
-## Phase A — Install (do this now)
+## Phase A — ✅ COMPLETED (Z5, 2026-08-06)
 
-```bash
-# 1. Add expo-sqlite
-npx expo install expo-sqlite
-
-# 2. Verify it appears in package.json dependencies
-grep expo-sqlite package.json
-```
-
-`expo-sqlite` ships with Expo 50+ and works on Android, iOS, and web
-(web uses an Origin-Private FileSystem OPFS backend).
+expo-sqlite installed and all 5 repositories confirmed on SQLite.
 
 ---
 
-## Phase B — Initialise DB at app startup
+## Phase B — ✅ COMPLETED (Z5 + Z10, 2026-08-06)
 
-Call `getDb()` once at startup (e.g. in `app/_layout.tsx`) so that migrations
-run before any screen renders:
-
-```tsx
-// app/_layout.tsx
-import { getDb } from '../src/db/schema';
-
-useEffect(() => {
-  getDb().catch(console.error);
-}, []);
-```
-
-This is **additive only** — no existing AsyncStorage reads are broken.
+All repositories swapped to SQLite. `getDb()` wired into app startup.
+One-time migration function retained as explicit upgrade tool (see Phase C warning above).
 
 ---
 
-## Phase B — One-time data migration
+## Phase C — ⛔ SUPERSEDED BY Z10 DECISION
 
-Run `migrateAsyncStorageToSQLite()` from a dedicated migration screen shown
-once to the user on first launch after the upgrade:
-
-```tsx
-import { migrateAsyncStorageToSQLite } from '../src/db/schema';
-
-await migrateAsyncStorageToSQLite(step => {
-  setProgress(step); // update a progress bar
-});
-```
-
-The function uses `INSERT OR IGNORE` so running it twice is safe.
-Old AsyncStorage data is **not deleted** — it remains as a fallback until
-Phase C.
+> **Do NOT remove AsyncStorage or `migrateAsyncStorageToSQLite()`.**
+> See Z10 decision in `docs/README.md` (2026-08-06 12:30 WAT entry).
+> Existing field installs may still have AsyncStorage data; the migration function
+> must remain available as an explicit upgrade path.
 
 ---
 
-## Phase B — Repository swap order (recommended)
+## Phase B — Repository swap order (completed)
 
-Swap repositories one at a time, test each before moving to the next:
+All repositories swapped in this order per original plan:
 
-1. `FacilityRepository` — simplest shape, no linked tables
-2. `AgendaRepository` — no FK constraints yet
-3. `CorrectiveActionRepository` — references `inspections.id`
-4. `InspectionRepository` — most complex; swap last
-5. `AuditLogRepository` + `NotificationRepository` — append-only, low risk
-
-The `_migrations` table ensures that adding new columns via `ALTER TABLE`
-in future migrations will not affect rows written today.
-
----
-
-## Phase C — Cleanup (after SQLite is stable)
-
-Once all repositories have been verified on SQLite for at least one release cycle:
-
-```bash
-# Remove AsyncStorage from dependencies if nothing else uses it
-npm uninstall @react-native-async-storage/async-storage
-```
-
-Also remove the `migrateAsyncStorageToSQLite` function from `schema.ts` and
-the one-time migration screen.
+1. `FacilityRepository` ✅
+2. `AgendaRepository` ✅
+3. `CorrectiveActionRepository` ✅
+4. `InspectionRepository` ✅
+5. `AuditLogRepository` + `NotificationRepository` ✅
 
 ---
 
