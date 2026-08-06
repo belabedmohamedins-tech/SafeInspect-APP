@@ -15,6 +15,16 @@
 //    describe block so each group starts with a fresh module (_db = null) and
 //    a fresh set of mock call counts.
 //
+// WHY withTransactionAsync IS NO LONGER CALLED FOR MIGRATIONS
+// ─────────────────────────────────────────────────────────────
+// expo-sqlite ≥15 (SDK 56) runs execAsync DDL statements (CREATE TABLE,
+// ALTER TABLE, CREATE INDEX) inside their own implicit transaction. Wrapping
+// them in withTransactionAsync creates a nested transaction, causing SQLite to
+// throw "cannot rollback - no transaction is active" on app start.
+// runMigrations() now calls db.execAsync(sql) directly; the migration record
+// is written via db.runAsync(INSERT INTO _migrations …).
+// Tests therefore assert execAsync call counts rather than withTransactionAsync.
+//
 // MIGRATION COUNT = 11 (update this comment when adding migrations):
 //   001_create_inspections
 //   001_create_facilities
@@ -132,12 +142,17 @@ describe('initializeDatabase — happy path', () => {
     );
   });
 
-  it(`runs all ${MIGRATION_COUNT} MIGRATIONS (withTransactionAsync called ${MIGRATION_COUNT} times)`, async () => {
+  it(`runs all ${MIGRATION_COUNT} MIGRATIONS (execAsync called once per migration)`, async () => {
     await jest.isolateModulesAsync(async () => {
       const { initializeDatabase } = require('../db/schema');
       await initializeDatabase();
     });
-    expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(MIGRATION_COUNT);
+    // execAsync is called once for the _migrations bootstrap table, then once
+    // per migration SQL. Filter out the bootstrap call.
+    const migrationExecCalls = (mockCurrentDbStub.execAsync as jest.Mock).mock.calls.filter(
+      ([sql]: [string]) => !sql.includes('CREATE TABLE IF NOT EXISTS _migrations'),
+    );
+    expect(migrationExecCalls).toHaveLength(MIGRATION_COUNT);
   });
 
   it(`records each migration name via INSERT INTO _migrations`, async () => {
@@ -169,13 +184,15 @@ describe('initializeDatabase — idempotency', () => {
     await jest.isolateModulesAsync(async () => {
       const { initializeDatabase } = require('../db/schema');
       await initializeDatabase();
-      const countAfterFirst =
-        (mockCurrentDbStub.withTransactionAsync as jest.Mock).mock.calls.length;
+      const migrationExecCountAfterFirst = (mockCurrentDbStub.execAsync as jest.Mock).mock.calls.filter(
+        ([sql]: [string]) => !sql.includes('CREATE TABLE IF NOT EXISTS _migrations'),
+      ).length;
       await initializeDatabase();
-      // No new transactions should have been started.
-      expect(mockCurrentDbStub.withTransactionAsync).toHaveBeenCalledTimes(
-        countAfterFirst,
-      );
+      // No new migration execAsync calls should have been added.
+      const migrationExecCountAfterSecond = (mockCurrentDbStub.execAsync as jest.Mock).mock.calls.filter(
+        ([sql]: [string]) => !sql.includes('CREATE TABLE IF NOT EXISTS _migrations'),
+      ).length;
+      expect(migrationExecCountAfterSecond).toBe(migrationExecCountAfterFirst);
     });
   });
 });
@@ -183,7 +200,7 @@ describe('initializeDatabase — idempotency', () => {
 // ─── runMigrations — skips already-applied ───────────────────────────────────
 
 describe('runMigrations — skips already-applied migrations', () => {
-  it('does not call withTransactionAsync when all migrations are present', async () => {
+  it('does not call execAsync for migration SQL when all migrations are present', async () => {
     ALL_MIGRATION_NAMES.forEach(n => mockAppliedMigrations.add(n));
 
     await jest.isolateModulesAsync(async () => {
@@ -192,7 +209,12 @@ describe('runMigrations — skips already-applied migrations', () => {
       await runMigrations(db);
     });
 
-    expect(mockCurrentDbStub.withTransactionAsync).not.toHaveBeenCalled();
+    // Only the _migrations bootstrap execAsync call should exist (if any).
+    // No per-migration DDL execAsync calls.
+    const migrationExecCalls = (mockCurrentDbStub.execAsync as jest.Mock).mock.calls.filter(
+      ([sql]: [string]) => !sql.includes('CREATE TABLE IF NOT EXISTS _migrations'),
+    );
+    expect(migrationExecCalls).toHaveLength(0);
   });
 });
 
