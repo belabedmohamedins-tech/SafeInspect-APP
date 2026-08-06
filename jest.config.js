@@ -68,9 +68,12 @@ module.exports = {
       '<rootDir>/__mocks__/expo-modules-core-dangerous-internal.js',
     '^expo-modules-core$':                    '<rootDir>/__mocks__/expo-modules-core.js',
     '^expo-crypto$':                          '<rootDir>/__mocks__/expo-crypto.js',
-    // ⚠️ expo-sqlite: excluded from transformIgnorePatterns (see below) so Node
-    // module resolution hits this mapper entry and routes to the in-memory mock.
-    // Never add expo-sqlite back to the transform list.
+    // ⚠️ expo-sqlite MUST be intercepted here before Jest ever tries to load or
+    // transform node_modules/expo-sqlite. expo-sqlite/src/ExpoSQLite.ts calls
+    // requireNativeModule() at import time; if that file is transformed and
+    // executed in Node the call throws "requireNativeModule is not a function".
+    // Keeping expo-sqlite OUT of transformIgnorePatterns (see below) ensures
+    // Jest never touches the real package — it hits this mapper entry first.
     '^expo-sqlite$':                          '<rootDir>/__mocks__/expo-sqlite.js',
     '^expo/src/winter/fetch/ExpoFetchModule$': '<rootDir>/__mocks__/expoFetchModule.js',
     '^expo/src/winter/fetch(.*)$':            '<rootDir>/__mocks__/expoFetch.js',
@@ -94,17 +97,22 @@ module.exports = {
 
   // ⚠️ FRAGILE — Last audited: August 2026 (RN 0.85, Expo SDK 56)
   //
-  // expo-sqlite is intentionally EXCLUDED from this transform list.
-  // Reason: expo-sqlite/src/ExpoSQLite.ts calls requireNativeModule() at
-  // import time. If Jest transforms the package, that call executes in Node
-  // and throws "requireNativeModule is not a function". Keeping expo-sqlite
-  // out of transforms means Jest resolves it via moduleNameMapper instead,
-  // routing cleanly to __mocks__/expo-sqlite.js (the in-memory mock).
+  // expo-sqlite is intentionally ABSENT from the transform-include list below.
   //
-  // If you ever need to add expo-sqlite back to transforms (e.g. for a
-  // non-mocked integration test), add a jest.mock('expo-sqlite') call in
-  // that test file instead.
+  // HOW THIS WORKS:
+  //   transformIgnorePatterns tells Jest which node_modules to SKIP (not transform).
+  //   The pattern below is a negative lookahead: "ignore everything in node_modules
+  //   EXCEPT the listed packages". expo-sqlite is NOT in that exception list, so
+  //   Jest leaves it alone (does not transform it). Because Jest never loads the
+  //   real expo-sqlite source, moduleNameMapper intercepts the import first and
+  //   routes it to __mocks__/expo-sqlite.js.
+  //
+  //   If expo-sqlite were added to the exception list it would be transformed, Node
+  //   would execute requireNativeModule() at import time, and tests would crash with
+  //   "requireNativeModule is not a function".
+  //
+  // ⚠️ Do NOT add expo-sqlite to the package list inside the lookahead below.
   transformIgnorePatterns: [
-    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?(?!-sqlite)|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router))',
+    'node_modules/(?!((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|expo-modules-core|react-native-svg|react-native-reanimated|react-native-worklets|expo-router)(?!/)|expo-sqlite/)',
   ],
 };
