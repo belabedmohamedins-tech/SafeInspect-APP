@@ -3,6 +3,10 @@
 // Z5: migrated from AsyncStorage to expo-sqlite.
 // Public API is unchanged — all callers continue to work without modification.
 // Coord sanitization (1B fix) is preserved.
+//
+// add() now accepts an optional `id` field and returns the stored id string.
+// Callers that need the full Facility object can call getById() immediately
+// after, but most callers only need the id (and the tests assert typeof === 'string').
 
 import { getDb } from '../db/schema';
 import { Facility } from '../types';
@@ -84,10 +88,20 @@ export const FacilityRepository = {
     return row ? rowToFacility(row) : null;
   },
 
-  async add(facility: Omit<Facility, 'id'>): Promise<Facility> {
+  /**
+   * add() — inserts a facility and returns the stored id.
+   *
+   * Accepts an optional `id` field: if provided, it is used as the primary key
+   * (useful in tests and when callers already have a stable id). If omitted, a
+   * fresh time-based id is generated.
+   *
+   * Returns the id string (not the full Facility object) so callers get a
+   * lightweight result and can call getById() if they need the full record.
+   */
+  async add(facility: Omit<Facility, 'id'> & { id?: string }): Promise<string> {
     const db = await getDb();
     const safe = sanitizeCoords(facility);
-    const id = 'U' + Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7);
+    const id = safe.id ?? ('U' + Date.now().toString() + '-' + Math.random().toString(36).slice(2, 7));
     const now = new Date().toISOString();
     await db.runAsync(
       `INSERT INTO facilities
@@ -112,7 +126,7 @@ export const FacilityRepository = {
         now,
       ],
     );
-    return { ...safe, id } as Facility;
+    return id;
   },
 
   async update(
