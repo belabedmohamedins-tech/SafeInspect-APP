@@ -12,9 +12,10 @@
 // field, which already exists on every criterion and reflects the legal
 // gravity of the obligation it enforces:
 //
-//   high   → 3  (immediate risk to health / safety / environment)
-//   medium → 2  (significant operational non-compliance)
-//   low    → 1  (administrative / documentary non-compliance)
+//   critical → 4  (immediate, life-threatening risk — court-referral tier)
+//   high     → 3  (immediate risk to health / safety / environment)
+//   medium   → 2  (significant operational non-compliance)
+//   low      → 1  (administrative / documentary non-compliance)
 //
 // The score is the severity-weighted compliance rate (0–100 %).
 // The grade (A / B / C / D) is a *prioritisation tool only* — it carries no
@@ -37,14 +38,19 @@
 //
 // All thresholds are exported constants so administrators can tune them
 // without editing business logic.
+//
+// W5: added 'critical' weight = 4 (above high=3). Fixes TS2741 exhaustive
+//     Record<Severity,number> check. getSeverityWeight() ?? fallback now
+//     unreachable — all four severity tiers are explicitly mapped.
 
 import { InspectionItem, Severity } from '../types';
 
 // ── Configurable thresholds ───────────────────────────────────────────────────
 export const SEVERITY_WEIGHTS: Record<Severity, number> = {
-  high:   3,
-  medium: 2,
-  low:    1,
+  critical: 4,
+  high:     3,
+  medium:   2,
+  low:      1,
 } as const;
 
 export const GRADE_A_MIN = 85;   // score >= this → A (when no ceiling applies)

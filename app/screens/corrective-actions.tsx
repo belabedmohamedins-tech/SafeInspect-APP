@@ -1,6 +1,7 @@
 // app/screens/corrective-actions.tsx
 // Phase-12 + Phase-17: Corrective Action Tracker
 // Phase-17: header overdue badge uses getStats() instead of re-filtering actions list
+// W5: added 'critical' to SEVERITY_COLOR + SEVERITY_LABEL — Record<Severity,…> exhaustive.
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import React, { useCallback, useMemo, useState } from 'react';
@@ -31,10 +32,16 @@ const STATUS_META: Record<ActionStatus, { label: string; bg: string; fg: string;
 };
 
 const SEVERITY_COLOR: Record<Severity, string> = {
-  high: '#c62828', medium: '#e65100', low: '#2e7d32',
+  critical: '#7b0000',
+  high:     '#c62828',
+  medium:   '#e65100',
+  low:      '#2e7d32',
 };
 const SEVERITY_LABEL: Record<Severity, string> = {
-  high: 'خطير', medium: 'متوسط', low: 'بسيط',
+  critical: 'بالغ الخطورة',
+  high:     'خطير',
+  medium:   'متوسط',
+  low:      'بسيط',
 };
 
 // ── Filter tabs ───────────────────────────────────────────────────────────────────
