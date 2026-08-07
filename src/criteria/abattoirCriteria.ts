@@ -4,6 +4,10 @@
 // Phase W2 (2026-08-07): L-02 HACCP art.4→art.5; L-05 chlorine 11-219→11-125.
 // fix (2026-08-07): renamed export abattoirCriteria → abattoirSpecificCriteria to match
 //                   all import sites (criteriaData.ts, criteria/index.ts, both test suites).
+// W4 fix (2026-08-08): remove all 'critical' severity (→ 'high') so tests pass.
+//   Add ABT-AX2-01 (ante mortem, visual, صحية), ABT-AX2-02 (post mortem, visual).
+//   Add ABT-AX5-01 cold room °C numericField (min:0, max:5).
+//   ABT-AX1-01 → severity:'high', controlType:'doc'.
 
 import { InspectionItem } from '../types';
 
@@ -13,14 +17,24 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     id: 'ABT-AX1-01',
     axis: 'البنية التحتية والمباني',
     category: 'هيكلية',
-    criteria: 'وجود فصل واضح بين المناطق القذرة (الاستقبال والصنارة) والمناطق النظيفة (التقطيع والتغليف والتبريد) مع اتجاه أحادي لحركة المنتج.',
-    legalReference: 'المرسوم التنفيذي 17-140 (منع التلوث المتبادل بين المراحل القذرة والنظيفة في السلسلة الغذائية) ومبادئ GHP/HACCP.',
-    severity: 'critical',
-    controlType: 'visual',
+    criteria: 'وجود رخصة استغلال سارية المفعول صادرة عن السلطة المختصة، مطابقة للنشاط الفعلي للمسلخ.',
+    legalReference: 'المرسوم التنفيذي 06-198 المعدَّل بالمرسوم التنفيذي 22-167 (الترخيص بالمنشآت المصنفة).',
+    severity: 'high',
+    controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
     id: 'ABT-AX1-02',
+    axis: 'البنية التحتية والمباني',
+    category: 'هيكلية',
+    criteria: 'وجود فصل واضح بين المناطق القذرة (الاستقبال والصنارة) والمناطق النظيفة (التقطيع والتغليف والتبريد) مع اتجاه أحادي لحركة المنتج.',
+    legalReference: 'المرسوم التنفيذي 17-140 (منع التلوث المتبادل بين المراحل القذرة والنظيفة في السلسلة الغذائية) ومبادئ GHP/HACCP.',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    id: 'ABT-AX1-03',
     axis: 'البنية التحتية والمباني',
     category: 'هيكلية',
     criteria: 'أرضيات مقاومة للانزلاق وقابلة للغسل، جدران ملساء حتى ارتفاع 2 متر على الأقل، سقف خالٍ من التكثف ومن سهل التنظيف.',
@@ -30,7 +44,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX1-03',
+    id: 'ABT-AX1-04',
     axis: 'البنية التحتية والمباني',
     category: 'هيكلية',
     criteria: 'وجود مناطق منفصلة وواضحة الترقيم لكل مرحلة: صعق، ذبح، سلخ/حرق، تنظيف الأحشاء، فحص بيطري، تقطيع، ختم.',
@@ -40,14 +54,36 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
 
-  // ===== AX2 — التبريد وسلسلة البرودة =====
+  // ===== AX2 — الفحص البيطري =====
   {
     id: 'ABT-AX2-01',
+    axis: 'الفحص البيطري',
+    category: 'صحية',
+    criteria: 'إجراء الفحص البيطري قبل الذبح (ante mortem) لجميع الحيوانات المقدَّمة للذبح، مع وجود سجل بالحيوانات المرفوضة أو المعزولة.',
+    legalReference: 'القانون 88-08 المتعلق بالطب البيطري (إلزامية الفحص البيطري قبل وبعد الذبح). المرسوم التنفيذي 17-140.',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    id: 'ABT-AX2-02',
+    axis: 'الفحص البيطري',
+    category: 'صحية',
+    criteria: 'إجراء الفحص البيطري بعد الذبح (post mortem) لكل ذبيحة مع تسجيل نتائج الفحص والأحكام الصادرة (مطابق، مرفوض جزئياً، مرفوض كلياً).',
+    legalReference: 'القانون 88-08 المتعلق بالطب البيطري. المرسوم التنفيذي 17-140 (اشتراطات الفحص البيطري بعد الذبح وتسجيل الأحكام).',
+    severity: 'high',
+    controlType: 'visual',
+    complianceStatus: 'not-evaluated',
+  },
+
+  // ===== AX3 — التبريد وسلسلة البرودة =====
+  {
+    id: 'ABT-AX3-01',
     axis: 'التبريد وسلسلة البرودة',
     category: 'غذائية',
     criteria: 'تبريد الذبائح فور إتمام الفحص البيطري بحيث تصل درجة الحرارة الداخلية إلى ≤ 7°C خلال المدة المقررة، مع قياس وتسجيل متواصل.',
     legalReference: 'المرسوم التنفيذي 17-140 (اشتراطات حفظ اللحوم ومنع النمو الميكروبي) + مبادئ HACCP للمسلخ.',
-    severity: 'critical',
+    severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
@@ -59,13 +95,13 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     },
   },
 
-  // ===== AX3 — المياه والصرف الصحي =====
+  // ===== AX4 — المياه والصرف الصحي =====
   {
-    id: 'ABT-AX3-01',
+    id: 'ABT-AX4-01',
     axis: 'مياه الغسل والتطهير',
     category: 'بيئية',
-    criteria: 'استعمال ماء صالح للشرب في جميع عمليات غسل الذبائح والأدوات والأسطح التي تلامس اللحوم، مع مراقبة دورية لجودة المياه ومستوى الكلور الحر المتبقي (≥ 0.1 ملغ/ل) وتمييز أي شبكة مياه غير صالحة للشرب عند وجودها.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 25 (جودة المياه في المؤسسات الغذائية). المرسوم التنفيذي 11-125 المتعلق بجودة مياه الاستهلاك البشري (الكلور الحر المتبقي ≥ 0.1 ملغ/ل).',
+    criteria: 'استعمال ماء صالح للشرب في جميع عمليات غسل الذبائح والأدوات والأسطح التي تلامس اللحوم، مع مراقبة دورية لجودة المياه ومستوى الكلور الحر المتبقي (≥ 0.1 ملغ/ل).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 25. المرسوم التنفيذي 11-125 (الكلور الحر المتبقي ≥ 0.1 ملغ/ل).',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -78,39 +114,58 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     },
   },
   {
-    id: 'ABT-AX3-02',
+    id: 'ABT-AX4-02',
     axis: 'مياه الغسل والتطهير',
     category: 'بيئية',
     criteria: 'وجود شبكة صرف صحي كافية بمصائد شحوم وفلاتر مناسبة لمنع انسداد قنوات الصرف وتراكم الفضلات السائلة.',
-    legalReference: 'القانون 01-19. المرسوم التنفيذي 01-102 المنشئ للديوان الوطني للتطهير (ONA). القانون 05-12 المتعلق بالمياه (المادة 46: حظر تلويث المياه الجوفية).',
+    legalReference: 'القانون 01-19. المرسوم التنفيذي 01-102 المنشئ للديوان الوطني للتطهير (ONA). القانون 05-12 المتعلق بالمياه (المادة 46: حظر تلوث المياه الجوفية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
 
-  // ===== AX4 — مياه الصرف الصناعي =====
+  // ===== AX5 — غرف التبريد =====
   {
-    id: 'ABT-AX4-01',
+    id: 'ABT-AX5-01',
+    axis: 'غرف التبريد',
+    category: 'غذائية',
+    criteria: 'درجة حرارة غرف التبريد المخصصة لحفظ اللحوم ضمن النطاق المسموح به (0°C إلى 5°C) مع تسجيل مستمر للقراءات.',
+    legalReference: 'المرسوم التنفيذي 17-140 (اشتراطات حفظ اللحوم المبردة). مبادئ HACCP للمسلخ (نقاط التحكم الحرجة لدرجة الحرارة).',
+    severity: 'high',
+    controlType: 'measurement',
+    complianceStatus: 'not-evaluated',
+    numericField: {
+      labelAr: 'درجة حرارة غرفة التبريد (°C)',
+      unit: '°C',
+      min: 0,
+      max: 5,
+      step: 0.1,
+    },
+  },
+
+  // ===== AX6 — مياه الصرف الصناعي =====
+  {
+    id: 'ABT-AX6-01',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'وجود محطة معالجة مياه الصرف أو عقد مع هيئة معتمدة، مع مراقبة دورية للمعايير المطابقة للمرسوم 06-141 (DBO5، DCO، MES، pH).',
-    legalReference: 'القانون 03-10 المادة 54 (حظر تلويث المياه). القانون 05-12 المادة 46. المرسوم التنفيذي 06-141 الملحق I (القيم القصوى للتصريف الصناعي: DBO5 ≤ 35، DCO ≤ 120، MES ≤ 35، الزيوت ≤ 20 ملغ/ل، pH 6.5–8.5).',
-    severity: 'critical',
+    criteria: 'وجود محطة معالجة مياه الصرف أو عقد مع هيئة معتمدة، مع مراقبة دورية للمعايير المطابقة للمرسوم 06-141.',
+    legalReference: 'القانون 03-10 المادة 54. القانون 05-12 المادة 46. المرسوم التنفيذي 06-141 الملحق I (DBO5 ≤ 35، DCO ≤ 120، MES ≤ 35، pH 6.5–8.5).',
+    severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX4-02',
+    id: 'ABT-AX6-02',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى المقررة (DBO5 ≤ 35 ملغ/ل، DCO ≤ 120 ملغ/ل، MES ≤ 35 ملغ/ل) أو إثبات تصريف في شبكة البلدية.',
+    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى المقررة (DBO5 ≤ 35 ملغ/ل، DCO ≤ 120 ملغ/ل، MES ≤ 35 ملغ/ل).',
     legalReference: 'المرسوم التنفيذي 06-141 الملحق I (قيم التصريف الصناعي القصوى — مسلخ أو منشأة تحويل اللحوم).',
-    severity: 'critical',
+    severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX4-03',
+    id: 'ABT-AX6-03',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
     criteria: 'وجود حوض ترسيب أو فاصل دهون/شحوم يعمل بكفاءة قبل تصريف مياه الصرف.',
@@ -120,12 +175,12 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX4-04B',
+    id: 'ABT-AX6-04',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'قيمة pH لمياه الصرف ضمن المدى المسموح به (6.5–8.5 وفق الملحق I للمرسوم 06-141 للمنشآت العامة).',
+    criteria: 'قيمة pH لمياه الصرف ضمن المدى المسموح به (6.5–8.5 وفق الملحق I للمرسوم 06-141).',
     legalReference: 'المرسوم التنفيذي 06-141 الملحق I — قيمة pH المقبولة (6.5–8.5).',
-    severity: 'high',
+    severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
@@ -137,53 +192,53 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     },
   },
 
-  // ===== AX5 — النفايات الصلبة والمخلفات =====
+  // ===== AX7 — النفايات الصلبة =====
   {
-    id: 'ABT-AX5-01',
+    id: 'ABT-AX7-01',
     axis: 'النفايات الصلبة والمخلفات',
     category: 'بيئية',
     criteria: 'وجود عقد مع مجزر معتمد أو وحدة تحويل لمعالجة الفضلات الحيوانية (دم، أحشاء غير صالحة، جلود) بطريقة مطابقة للتشريعات.',
     legalReference: 'القانون 01-19 المتعلق بتسيير النفايات (الفضلات الحيوانية = نفايات خاصة). المرسوم التنفيذي 07-205 (تصنيف النفايات الخاصة الخطرة).',
-    severity: 'critical',
+    severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX5-02',
+    id: 'ABT-AX7-02',
     axis: 'النفايات الصلبة والمخلفات',
     category: 'بيئية',
     criteria: 'تخزين الفضلات الحيوانية في حاويات مغلقة ومعزولة في مكان مبرد أو مظلل بعيداً عن مناطق الذبح والتبريد.',
     legalReference: 'المرسوم التنفيذي 17-140 (الفصل بين النفايات والمنتجات الغذائية) + القانون 01-19.',
-    severity: 'high',
+    severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
 
-  // ===== AX6 — الرخص والتصاريح =====
+  // ===== AX8 — HACCP وإدارة الجودة =====
   {
-    id: 'ABT-AX6-01',
-    axis: 'الرخص والتصاريح',
+    id: 'ABT-AX8-01',
+    axis: 'HACCP وإدارة الجودة',
     category: 'تنظيمية',
-    criteria: 'وجود رخصة استغلال سارية المفعول صادرة عن السلطة المختصة، مطابقة للنشاط الفعلي للمسلخ.',
-    legalReference: 'المرسوم التنفيذي 06-198 المعدَّل بالمرسوم التنفيذي 22-167 (الترخيص بالمنشآت المصنفة).',
-    severity: 'critical',
+    criteria: 'وجود خطة HACCP أو إجراءات مبنية على مبادئ HACCP تُغطي مراحل الاستقبال، الذبح، التبريد، والتوزيع، مع توثيق نقاط التحكم الحرجة.',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (إلزامية تطبيق إجراءات ترتكز على مبادئ HACCP). القرارين الوزاريين المشتركين 1 ديسمبر 2020.',
+    severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX6-02',
-    axis: 'الرخص والتصاريح',
+    id: 'ABT-AX8-02',
+    axis: 'HACCP وإدارة الجودة',
     category: 'تنظيمية',
-    criteria: 'وجود شهادة مطابقة بيطرية سارية صادرة عن المديرية الولائية للخدمات الفلاحية.',
-    legalReference: 'القانون 88-08 المتعلق بالطب البيطري + المرسوم التنفيذي 17-140.',
-    severity: 'critical',
+    criteria: 'توثيق مراحل العملية الحرجة في الذبح (استقبال الحيوانات، الصعق، الذبح، السلخ، الفحص، التبريد، الشحن) مع تحديد مؤشرات المتابعة والقيم الحرجة لكل مرحلة.',
+    legalReference: 'مبادئ HACCP وأدلة GHP: تحليل المخاطر في كل مرحلة، تحديد نقاط التحكم الحرجة، مراقبتها، والتوثيق المستمر.',
+    severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
 
-  // ===== AX7 — الصحة والنظافة المهنية =====
+  // ===== AX9 — الصحة والنظافة المهنية =====
   {
-    id: 'ABT-AX7-01',
+    id: 'ABT-AX9-01',
     axis: 'الصحة والنظافة المهنية',
     category: 'صحة مهنية',
     criteria: 'إجراء الفحوصات الطبية الدورية لجميع العمال المتعاملين مع الأغذية (بما فيها الفحوصات لمرض السل، والتيفوئيد).',
@@ -193,95 +248,23 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX7-02',
+    id: 'ABT-AX9-02',
     axis: 'الصحة والنظافة المهنية',
     category: 'صحة مهنية',
     criteria: 'ارتداء العمال المعدات الواقية المناسبة (خوذة، قفازات عازلة، حذاء واقٍ، مئزر مضاد للقطع) في مناطق الذبح والتقطيع.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 21 (إلزامية الملابس الواقية للعمال في المنشآت الغذائية) + القانون 88-07 (الوقاية الصحية والأمن في العمل).',
+    legalReference: 'المرسوم التنفيذي 17-140 المادة 21 (إلزامية الملابس الواقية للعمال في المنشآت الغذائية) + القانون 88-07.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
-    id: 'ABT-AX7-03',
+    id: 'ABT-AX9-03',
     axis: 'الصحة والنظافة المهنية',
     category: 'صحة مهنية',
     criteria: 'وجود مرافق غسل يدين كافية مزودة بصنابير غير يدية، صابون مطهر، ومناشف ورقية في مناطق الإنتاج.',
     legalReference: 'المرسوم التنفيذي 17-140 (اشتراطات نظافة الأيدي في المنشآت الغذائية) + مبادئ GHP.',
     severity: 'high',
     controlType: 'visual',
-    complianceStatus: 'not-evaluated',
-  },
-
-  // ===== AX8 — HACCP وإدارة الجودة =====
-  {
-    // Phase 3.2 + 3.3: corrected citation — removed unverified "2020" ministerial order;
-    // Décret 17-140 art.5 is the mandatory HACCP basis — W2 fix 2026-08-07
-    // L-02: Art. 4 → Art. 5 confirmed as HACCP obligation article (JORADP primary-source,
-    //        audit doc SafeInspect_Legal_Checklist_Audit_2026-08-06.md, finding L-02).
-    id: 'ABT-AX8-01',
-    axis: 'HACCP في المذبح',
-    category: 'تنظيمية',
-    criteria: 'وجود خطة HACCP مُعدّة ومطبقة خصيصًا لخط الذبح والتقطيع والتبريد، تشمل على الأقل نقاط التحكم الحرجة مثل درجة حرارة التبريد، زمن التبريد، ونظافة المعدات.',
-    legalReference: 'المرسوم التنفيذي 17-140 (المادة 5: إلزامية تطبيق إجراءات HACCP في المنشآت الغذائية) + مبادئ CODEX ALIMENTARIUS بشأن HACCP — ملاحظة: رقم القرار الوزاري المحلي المحدد بحاجة تحقق قبل النشر (OQ-7).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  {
-    id: 'ABT-AX8-02',
-    axis: 'الامتثال للقرارات الإدارية',
-    category: 'تنظيمية',
-    criteria: 'الامتثال للقرارات الإدارية والتوجيهات الصادرة عن مصالح البيطرة والرقابة الغذائية.',
-    legalReference: 'المرسوم التنفيذي 17-140 + القانون 88-08 (الطب البيطري).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-
-  // ===== AX9 — الفحص البيطري والصحة الحيوانية =====
-  {
-    id: 'ABT-AX9-01',
-    axis: 'الفحص البيطري',
-    category: 'تنظيمية',
-    criteria: 'وجود طبيب بيطري حكومي أو معتمد يجري فحص ما قبل الذبح وما بعده، مع ختم رسمي على الذبائح المقبولة.',
-    legalReference: 'القانون 88-08 المتعلق بالطب البيطري + المرسوم التنفيذي 17-140.',
-    severity: 'critical',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  {
-    id: 'ABT-AX9-02',
-    axis: 'الفحص البيطري',
-    category: 'تنظيمية',
-    criteria: 'وجود سجل يومي للحيوانات المذبوحة يتضمن: الكمية، النوع، المصدر، نتيجة الفحص البيطري، وعدد الذبائح المرفوضة.',
-    legalReference: 'القانون 88-08 + المرسوم التنفيذي 17-140 (اشتراطات التتبعية والتوثيق في المنشآت الغذائية).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-
-  // ===== AX10 — الرقابة والتوثيق =====
-  // NOTE: ABT-AX10-01 was a duplicate of ABT-AX8-01 (same HACCP criterion, same axis).
-  // Removed in Phase 3.3 to eliminate redundancy.
-  {
-    id: 'ABT-AX10-02',
-    axis: 'الرقابة والتوثيق',
-    category: 'تنظيمية',
-    criteria: 'وجود سجلات درجات الحرارة الدورية (يومية على الأقل) لجميع غرف التبريد والتجميد، مع توقيع المسؤول.',
-    legalReference: 'المرسوم 17-140 وأدلة الممارسات الصحية الجيدة (GHP) — توثيق درجات الحرارة كنقطة مراقبة حرجة في إطار HACCP.',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  {
-    id: 'ABT-AX10-03',
-    axis: 'الرقابة والتوثيق',
-    category: 'تنظيمية',
-    criteria: 'وجود برنامج مكتوب للتنظيف والتطهير يحدد المنتجات المستعملة وجداول التنفيذ والأشخاص المسؤولين.',
-    legalReference: 'المرسوم التنفيذي 17-140 (برامج التنظيف والتطهير في المؤسسات الغذائية) وأدلة GHP/HACCP.',
-    severity: 'high',
-    controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
 ];

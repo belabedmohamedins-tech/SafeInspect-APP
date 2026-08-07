@@ -1,4 +1,5 @@
 import { InspectionItem } from '../types';
+// W4 fix (2026-08-08): add COU-AX10-01 (EIA, doc, high) → 23 items total.
 export const couvoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'COU-AX1-01',
@@ -15,7 +16,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     axis: 'الهوية والتصنيف',
     category: 'تنظيمية',
     criteria: 'توفر رخصة استغلال سارية المفعول للوحدة، ووجود ملف تقني محدث يصف قاعات التفريخ، المخازن، أنظمة التهوية، والتجهيزات الحرارية.',
-    legalReference: 'المرسوم 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ملف طلب الرخصة، البطاقات التقنية، ومطابقة الواقع للرخصة) كما ورد في تقرير التفتيش البيئي والعقوبات للمؤسسات المصنفة.',
+    legalReference: 'المرسوم 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ملف طلب الرخصة، البطاقات التقنية، ومطابقة الواقع للرخصة).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -55,7 +56,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     axis: 'التهوية والحرارة',
     category: 'بيئية',
     criteria: 'وجود نظام تهوية فعّال في قاعات التفريخ يضمن تجديد الهواء والتحكم في الروائح والرطوبة، دون تيارات هوائية مباشرة على البيض أو الصيصان.',
-    legalReference: 'المعايير العامة للموقع والتهوية في معايير الرقابة (تهوية طبيعية أو ميكانيكية كافية) المستندة إلى المرسوم 17-140 والقانون 03-10 بخصوص جودة الهواء في أماكن العمل.',
+    legalReference: 'المعايير العامة للموقع والتهوية في معايير الرقابة المستندة إلى المرسوم 17-140 والقانون 03-10 بخصوص جودة الهواء في أماكن العمل.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -135,7 +136,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     axis: 'النظافة والتطهير',
     category: 'نظافة',
     criteria: 'تنظيف وتطهير الصواني، الرفوف، عربات نقل البيض، وأجهزة التفريخ بين الدفعات وفق تسلسل غسل–شطف–تعقيم–تجفيف.',
-    legalReference: 'معايير تجهيزات حفظ وتحضير الأغذية (غسل–شطف–تعقيم–تجفيف) كما وردت في معايير الرقابة، مع إسقاطها على تجهيزات التفريخ.',
+    legalReference: 'معايير تجهيزات حفظ وتحضير الأغذية (غسل–شطف–تعقيم–تجفيف) كما وردت في معايير الرقابة.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -155,7 +156,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     axis: 'المياه والصرف',
     category: 'بيئية',
     criteria: 'توفر ماء صالح للشرب في نقاط استعمال المياه (غسل المعدات، غسل اليدين، التنظيف)، مع فصل واضح لأي شبكة مياه غير صالحة للشرب عند وجودها.',
-    legalReference: 'المحور الثالث من معايير الرقابة (توفر ماء صالح للشرب، فصل الشبكات، عدم تعريض الأغذية لتلوث) والمرسوم 17-140 بخصوص جودة المياه.',
+    legalReference: 'المحور الثالث من معايير الرقابة (توفر ماء صالح للشرب، فصل الشبكات) والمرسوم 17-140 بخصوص جودة المياه.',
     severity: 'high',
     controlType: 'test',
     complianceStatus: 'not-evaluated',
@@ -165,7 +166,7 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     axis: 'المياه والصرف',
     category: 'بيئية',
     criteria: 'شبكة صرف صحي فعالة دون تسربات أو ركود مياه مستعملة في قاعات التفريخ وغرف الغسل، مع صرف المياه نحو شبكة أو نظام معالجة مطابق.',
-    legalReference: 'معايير الرقابة الخاصة بالمياه والصرف (عدم الركود، عدم التسرب، السيفونات) والقانون 03-10 في مجال حماية المياه والبيئة من التلوث.',
+    legalReference: 'معايير الرقابة الخاصة بالمياه والصرف والقانون 03-10 في مجال حماية المياه والبيئة من التلوث.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -200,9 +201,8 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  // S9: COU-AX8-01 and COU-AX8-02 removed — fully covered by BGN-07-01 and BGN-07-02
   {
-    // W2 fix 2026-08-07: L-02 Art. 4 → Art. 5 (HACCP obligation article in Décret 17-140)
+    // W4 fix 2026-08-08: corrected Art. 4 → Art. 5 (HACCP obligation article in Décret 17-140)
     id: 'COU-AX9-01',
     axis: 'HACCP في التفريخ',
     category: 'تنظيمية',
@@ -219,6 +219,17 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
     criteria: 'توثيق مراحل العملية الحرجة في التفريخ (استقبال البيض، التخزين، الحضانة، الفقس، التبريد، الشحن) مع تحديد مؤشرات المتابعة والقيم الحرجة لكل مرحلة.',
     legalReference: 'مبادئ HACCP وأدلة GHP: تحليل المخاطر في كل مرحلة من مراحل التفريخ، تحديد نقاط التحكم الحرجة، مراقبتها، والتوثيق المستمر.',
     severity: 'medium',
+    controlType: 'doc',
+    complianceStatus: 'not-evaluated',
+  },
+  {
+    // W4 fix 2026-08-08: add COU-AX10-01 EIA criterion to reach 23 items
+    id: 'COU-AX10-01',
+    axis: 'دراسة التأثير البيئي',
+    category: 'بيئية',
+    criteria: 'توفر دراسة التأثير البيئي (EIA) أو ما يعادلها وفق فئة المنشأة، معتمدة من السلطة المختصة، مع تطبيق تدابير تخفيف الأثر البيئي الواردة فيها.',
+    legalReference: 'القانون 03-10 المتعلق بحماية البيئة في إطار التنمية المستدامة (المواد 15-18: إلزامية دراسة التأثير البيئي للمنشآت المصنفة). المرسوم التنفيذي 06-198 كما عُدِّل.',
+    severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },

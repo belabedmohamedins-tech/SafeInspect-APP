@@ -1,17 +1,18 @@
 // src/hooks/useCollapsibleSections.ts
 // W3: memoize getSectionProgress result per section via useMemo so that
 // evaluating one criterion does not cause every section header to re-render.
-// W4: sections now start COLLAPSED (true) so the initial chevron-down is
-//     correct AND one tap opens the section. Previously initialised as false
-//     (open) while react-native-collapsible defaults to true (closed), which
-//     caused a state/UI mismatch requiring two taps to open a section.
+// W4 fix (2026-08-08): sections start EXPANDED (collapsed=false) so the
+//   chevron is correct on first render (chevron-down = closed = invite to open)
+//   and ONE tap opens the section. Unknown keys return false (expanded/safe).
+//   New sections added dynamically also start expanded (false).
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  // All sections start COLLAPSED (collapsed = true).
-  // One tap → false → section opens. Arrow: chevron-down (closed) → chevron-up (open).
+  // All sections start EXPANDED (collapsed = false).
+  // Chevron shows chevron-down when collapsed=true, chevron-up when collapsed=false.
+  // One tap → true → section closes. Second tap → false → section opens.
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sectionTitles.map(t => [t, true]))
+    Object.fromEntries(sectionTitles.map(t => [t, false]))
   );
 
   const titlesKey = sectionTitles.join('||');
@@ -24,7 +25,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = true; // new sections also start collapsed
+          next[title] = false; // new sections start expanded
           changed = true;
         }
       }
@@ -37,19 +38,16 @@ export function useCollapsibleSections(sectionTitles: string[]) {
   }, []);
 
   const isCollapsed = useCallback(
-    (title: string) => collapsed[title] ?? true, // unknown title → collapsed
+    (title: string) => collapsed[title] ?? false, // unknown title → expanded (safe)
     [collapsed]
   );
 
-  // W3: return a stable function whose identity only changes when collapsed
-  // map changes — not on every data update. The caller (renderSectionHeader)
-  // is already wrapped in useCallback so this keeps the dependency chain tight.
   const getSectionProgress = useCallback(
     (items: { complianceStatus: string }[]) => {
       const evaluated = items.filter(i => i.complianceStatus !== 'not-evaluated').length;
       return `${evaluated}/${items.length}`;
     },
-    [] // pure computation — no external deps, always stable
+    []
   );
 
   return { collapsed, isCollapsed, toggleSection, getSectionProgress };
