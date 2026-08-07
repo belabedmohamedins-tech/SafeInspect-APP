@@ -9,6 +9,8 @@
 // Z12-04: removed duplicate createCapItemsFromInspection call from doFinish();
 //         InspectionRepository.save() already calls it via capFactory.
 // Z12-05: autosave draft on cancel so progress is never silently lost.
+// W2: fix chevron direction — chevron-down when collapsed (invite to open),
+//     chevron-up when expanded (invite to close). Matches standard UX convention.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -298,7 +300,7 @@ export default function ChecklistScreen() {
             onPress={() => toggleSection(title)}
           >
             <FontAwesome
-              name={isCollapsed(title) ? 'chevron-right' : 'chevron-down'}
+              name={isCollapsed(title) ? 'chevron-down' : 'chevron-up'}
               size={14}
               color={Colors.textPrimary}
               style={{ marginLeft: Spacing.sm }}
