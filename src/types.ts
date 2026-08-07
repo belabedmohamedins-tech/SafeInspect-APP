@@ -1,5 +1,13 @@
 // src/types.ts
-export type Severity = 'low' | 'medium' | 'high';
+/**
+ * FIX (G18): added 'critical' to Severity — used by abattoirCriteria and bakeryCriteria
+ * for highest-risk criteria (cold-chain, wastewater, veterinary cert).
+ * CorrectiveAction.severity was already Severity | 'critical'; now the base type
+ * includes it so InspectionItem criteria can also express criticality directly.
+ * NOTE: scoringUtils weight for 'critical' = 3 (same as 'high') until a dedicated
+ * weight tier is decided. The criticalOverride grade-cap flag covers escalation intent.
+ */
+export type Severity = 'low' | 'medium' | 'high' | 'critical';
 export type ControlType = 'visual' | 'doc' | 'test' | 'measurement';
 
 /**
@@ -9,12 +17,14 @@ export type ControlType = 'visual' | 'doc' | 'test' | 'measurement';
  * compatible since TS const enums compile to their literal values.
  *
  * Numeric values align with the scoring model in scoringUtils.ts:
- *   high=3, medium=2, low=1
+ *   critical=3, high=3, medium=2, low=1
+ * (critical shares weight=3 with high; grade capping via criticalOverride handles escalation)
  */
 export const enum SeverityLevel {
-  Low    = 'low',
-  Medium = 'medium',
-  High   = 'high',
+  Low      = 'low',
+  Medium   = 'medium',
+  High     = 'high',
+  Critical = 'critical',
 }
 
 /**
@@ -43,8 +53,22 @@ export type ComplianceStatus =
  * added 'غذائية' which baseFoodCriteria uses but was never declared here.
  * The criteria files themselves do NOT need editing — the data was consistent,
  * the type declaration was wrong.
+ *
+ * FIX (G18): added 'هيكلية' (structural — abattoir + bakery infrastructure axes) and
+ * 'صحة مهنية' (occupational health — abattoir + bakery worker hygiene axes).
+ * Both values were already present in abattoirCriteria.ts and bakeryCriteria.ts;
+ * the type was narrower than the data.
  */
-export type Category = 'تنظيمية' | 'بيئية' | 'صحية' | 'سلامة' | 'نظافة' | 'عامة' | 'غذائية';
+export type Category =
+  | 'تنظيمية'
+  | 'بيئية'
+  | 'صحية'
+  | 'سلامة'
+  | 'نظافة'
+  | 'عامة'
+  | 'غذائية'
+  | 'هيكلية'
+  | 'صحة مهنية';
 export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
 
 /**
@@ -372,16 +396,15 @@ export interface CorrectiveAction {
    */
   finding?: string;
   /**
-   * CAP-level severity. Usually mirrors the source criterion's Severity, but
-   * can be independently escalated to 'critical' for items whose
-   * sanctionTier === 'court-referral' (see capFactory.ts). This is a CAP-only
-   * escalation tier — it does not exist on InspectionItem.severity or in the
-   * scoring model (scoringUtils.ts), which remain 'high'|'medium'|'low' only.
+   * CAP-level severity. Mirrors InspectionItem.severity (now includes 'critical').
+   * 'critical' is assigned by capFactory.ts for items whose
+   * sanctionTier === 'court-referral'. See capFactory.ts for details.
    *
-   * FIX (G17b): added '| critical' — capFactory.ts already assigns this value
-   * and documents the intent in its own comments; the type was missing it.
+   * FIX (G17b): added '| critical' — capFactory.ts already assigns this value.
+   * FIX (G18): 'critical' is now part of base Severity, so this field is simply Severity.
+   * Kept as Severity here (no breaking change — superset is compatible).
    */
-  severity: Severity | 'critical';
+  severity: Severity;
   deadline: string;
   assignedTo: string;
   /** @see ActionStatus */
