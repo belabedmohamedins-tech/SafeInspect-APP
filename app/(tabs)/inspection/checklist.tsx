@@ -11,10 +11,13 @@
 // Z12-05: autosave draft on cancel so progress is never silently lost.
 // W2: fix chevron direction — chevron-down when collapsed (invite to open),
 //     chevron-up when expanded (invite to close). Matches standard UX convention.
+// W3: fix scroll-jump on slow upward scroll — maintainVisibleContentPosition +
+//     stickySectionHeadersEnabled=false + stable renderItem/renderSectionHeader
+//     callbacks so VirtualizedList skips unnecessary row re-renders.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -44,9 +47,11 @@ import {
   DifferentialView,
 } from '../../../src/services/differentialView';
 import { suggestDecision, DecisionSuggestion } from '../../../src/services/decisionSupport';
-import { InspectionRepository } from '../../../src/repositories/InspectionRepository';
 import { SavedInspection } from '../../../src/types';
 import { computeScoreAndGrade } from '../../../src/utils/scoringUtils';
+
+// Stable minIndexForVisible so the object reference never changes between renders.
+const MAINTAIN_VISIBLE = { minIndexForVisible: 0, autoscrollToTopThreshold: 10 };
 
 function parseStringArray(raw: string | string[] | undefined): string[] {
   if (!raw) return [];
@@ -185,15 +190,10 @@ export default function ChecklistScreen() {
     setShowClosingGate(false);
   };
 
-  // Z12-04: doFinish no longer calls createCapItemsFromInspection directly.
-  // InspectionRepository.save() already invokes capFactory internally on first
-  // completion, so calling it again here was creating duplicate CAP entries.
   const doFinish = async () => {
     await _handleFinish();
   };
 
-  // Z12-05: autosave current items as a draft before navigating away,
-  // so no progress is silently lost when the inspector cancels mid-session.
   const handleCancel = () => {
     Alert.alert(
       'تأكيد الإلغاء',
@@ -215,6 +215,54 @@ export default function ChecklistScreen() {
       ]
     );
   };
+
+  // Stable render callbacks — prevent VirtualizedList from re-rendering every
+  // visible row when unrelated state (e.g. diffView, suggestedDecision) changes.
+  const renderItem = useCallback(
+    ({ item, section }: { item: any; section: any }) => {
+      const diffEntry = isFollowUp
+        ? diffView?.all.find((e: any) => e.item.id === item.id)
+        : undefined;
+      return (
+        <Collapsible collapsed={isCollapsed(section.title)}>
+          <View>
+            <InspectionItem
+              item={item}
+              onStatusChange={handleStatusChange}
+              onCommentChange={handleCommentChange}
+              onPhotoTake={handlePhotoTake}
+              onNumericChange={handleNumericChange}
+            />
+            {diffEntry && (
+              <View style={styles.diffPipContainer}>
+                <DiffStatusIndicator diffStatus={diffEntry.diffStatus} />
+              </View>
+            )}
+          </View>
+        </Collapsible>
+      );
+    },
+    [isCollapsed, isFollowUp, diffView, handleStatusChange, handleCommentChange, handlePhotoTake, handleNumericChange]
+  );
+
+  const renderSectionHeader = useCallback(
+    ({ section: { title, data: sectionData } }: { section: { title: string; data: any[] } }) => (
+      <TouchableOpacity
+        style={styles.sectionHeader}
+        onPress={() => toggleSection(title)}
+      >
+        <FontAwesome
+          name={isCollapsed(title) ? 'chevron-down' : 'chevron-up'}
+          size={14}
+          color={Colors.textPrimary}
+          style={{ marginLeft: Spacing.sm }}
+        />
+        <Text style={styles.sectionTitle}>{title}</Text>
+        <Text style={styles.sectionProgress}>{getSectionProgress(sectionData)}</Text>
+      </TouchableOpacity>
+    ),
+    [isCollapsed, toggleSection, getSectionProgress]
+  );
 
   if (isLoading) {
     return (
@@ -263,6 +311,15 @@ export default function ChecklistScreen() {
       <SectionList
         sections={sections}
         keyExtractor={item => item.id}
+        // W3: prevents layout-shift-induced scroll-jumps when items above the
+        // visible area change height (e.g. Collapsible open/close, status update).
+        maintainVisibleContentPosition={MAINTAIN_VISIBLE}
+        // W3: sticky headers force re-measurement on every render cycle which
+        // compounds the scroll-jump. Disable them — section headers are still
+        // visible as normal rows.
+        stickySectionHeadersEnabled={false}
+        renderItem={renderItem}
+        renderSectionHeader={renderSectionHeader}
         ListHeaderComponent={
           isFollowUp ? (
             <DifferentialBanner
@@ -271,44 +328,6 @@ export default function ChecklistScreen() {
             />
           ) : null
         }
-        renderItem={({ item, section }) => {
-          const diffEntry = isFollowUp
-            ? diffView?.all.find(e => e.item.id === item.id)
-            : undefined;
-          return (
-            <Collapsible collapsed={isCollapsed(section.title)}>
-              <View>
-                <InspectionItem
-                  item={item}
-                  onStatusChange={handleStatusChange}
-                  onCommentChange={handleCommentChange}
-                  onPhotoTake={handlePhotoTake}
-                  onNumericChange={handleNumericChange}
-                />
-                {diffEntry && (
-                  <View style={styles.diffPipContainer}>
-                    <DiffStatusIndicator diffStatus={diffEntry.diffStatus} />
-                  </View>
-                )}
-              </View>
-            </Collapsible>
-          );
-        }}
-        renderSectionHeader={({ section: { title, data: sectionData } }) => (
-          <TouchableOpacity
-            style={styles.sectionHeader}
-            onPress={() => toggleSection(title)}
-          >
-            <FontAwesome
-              name={isCollapsed(title) ? 'chevron-down' : 'chevron-up'}
-              size={14}
-              color={Colors.textPrimary}
-              style={{ marginLeft: Spacing.sm }}
-            />
-            <Text style={styles.sectionTitle}>{title}</Text>
-            <Text style={styles.sectionProgress}>{getSectionProgress(sectionData)}</Text>
-          </TouchableOpacity>
-        )}
         contentContainerStyle={{ paddingBottom: Spacing.xl }}
         ListFooterComponent={
           <>

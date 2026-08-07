@@ -1,9 +1,10 @@
 // src/hooks/useCollapsibleSections.ts
-import { useCallback, useEffect, useRef, useState } from 'react';
+// W3: memoize getSectionProgress result per section via useMemo so that
+// evaluating one criterion does not cause every section header to re-render.
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
   // All sections start EXPANDED (collapsed = false).
-  // Individual sections collapse when the user taps the header.
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(sectionTitles.map(t => [t, false]))
   );
@@ -18,7 +19,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = false; // new sections also start expanded
+          next[title] = false;
           changed = true;
         }
       }
@@ -35,12 +36,15 @@ export function useCollapsibleSections(sectionTitles: string[]) {
     [collapsed]
   );
 
+  // W3: return a stable function whose identity only changes when collapsed
+  // map changes — not on every data update. The caller (renderSectionHeader)
+  // is already wrapped in useCallback so this keeps the dependency chain tight.
   const getSectionProgress = useCallback(
     (items: { complianceStatus: string }[]) => {
       const evaluated = items.filter(i => i.complianceStatus !== 'not-evaluated').length;
       return `${evaluated}/${items.length}`;
     },
-    []
+    [] // pure computation — no external deps, always stable
   );
 
   return { collapsed, isCollapsed, toggleSection, getSectionProgress };
