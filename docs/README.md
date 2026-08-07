@@ -8,6 +8,19 @@
 
 *(Newest entry at top)*
 
+### 2026-08-07 19:35 WAT — [Agent: Perplexity] — fix: abattoirSpecificCriteria export rename — 4 test suites restored
+- Phases closed: none (hotfix)
+- Files changed:
+  - `src/criteria/abattoirCriteria.ts` — renamed export `abattoirCriteria` → `abattoirSpecificCriteria` to match every import site (`criteriaData.ts`, `criteria/index.ts`, `src/__tests__/abattoirCriteria.test.ts`, `__tests__/criteria/abattoirCriteria.test.ts`).
+- Root cause: export name mismatch — file exported `abattoirCriteria` but all consumers imported `abattoirSpecificCriteria`. This caused `abattoirSpecificCriteria` to be `undefined` at runtime, breaking 4 test suites (abattoirCriteria ×2, criteriaData ×2) and the production spread in `criteriaData.ts` + `criteria/index.ts`.
+- Gate: TSC + Jest — hand off to Claude to confirm all 4 suites now pass.
+- Commit: `452d72f`
+- Verify: `npx jest --testPathPattern abattoir` and `npx jest --testPathPattern criteriaData` should both be green.
+
+### 2026-08-07 19:10 WAT — [Agent: Perplexity] — W2/W3 checklist chevron bug investigation
+- Phases closed: none (investigation)
+- Finding: checklist.tsx renderSectionHeader already uses correct chevron convention (chevron-down when collapsed, chevron-up when expanded). W2 comment is present. The user-reported double-click bug needs runtime confirmation by Claude — sections initialize as collapsed=false (all open) from useCollapsibleSections hook. If sections visually appear closed on first render, the cause may be a SectionList render-ordering issue or a second Collapsible wrapping. Claude to verify with device/simulator.
+
 ### 2026-08-06 23:15 WAT — [Agent: Perplexity] — W1 GATE CONFIRMED: Jest 1234/0, TSC 0 errors — ALL GREEN
 - Phases closed: **W1** ✅ GATE CONFIRMED by user
 - Files changed: none (gate confirmation + final SyncService test fix)
@@ -50,7 +63,7 @@
 ### 2026-08-06 20:57 WAT — [Agent: Perplexity] — Z6+Z8 CLOSED: BGN-04-06 Décret 09-19 added + BGN-03-06 unverified figures removed
 - Phases closed: **Z6** ✅ CLOSED, **Z8** ✅ CLOSED
 - Files changed:
-  - `src/criteria/baseGeneralCriteria.ts` — BGN-04-06: added Décret 09-19 Art.4–8 to legalReference + accreditation verification step to criteria text. BGN-03-06: removed Phase 4.4 unverified “90 days / 80% capacity” figures; replaced with legally clean contract+receipts+no-overflow formulation.
+  - `src/criteria/baseGeneralCriteria.ts` — BGN-04-06: added Décret 09-19 Art.4–8 to legalReference + accreditation verification step to criteria text. BGN-03-06: removed Phase 4.4 unverified "90 days / 80% capacity" figures; replaced with legally clean contract+receipts+no-overflow formulation.
 - Gate: TSC + Jest NOT re-run (criteria-only string changes — no logic touched).
 - Commit: `5ed564b`
 
