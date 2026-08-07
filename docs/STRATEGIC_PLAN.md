@@ -45,9 +45,10 @@
 | Z10 | AsyncStorage fallback removal — InspectionRepository + SettingsRepository | 2026-08-06 | Commit `4ff351c`. `_migrated`/`ensureMigrated()` removed. SettingsRepository rewritten to SQLite. |
 | Z10-FIX | Test drift — SettingsRepository test + schema migration count | 2026-08-06 | Commit `83db48c`. `__tests__/repositories/SettingsRepository.test.ts` rewritten. **All green — user-confirmed 13:07 WAT.** |
 | Z11 | Wire `facilityCategoriesFull.json` rubrique into DB + screens | 2026-08-06 | Migration `003_facilities_add_rubrique` added. FacilityRepository + add.tsx + edit.tsx updated. Gate closed 13:22 WAT — 25/25 Jest, TSC 0. |
-| **Z12** | **Audit Findings Closure (F-01 to F-18, 15 sub-items)** | **2026-08-06** | **TSC 0 + Jest 1234/0 — user-confirmed 20:15 WAT. Commits: `9a5d3e7`, `9c78e3e`.** |
-| **Z6** | **Décret 09-19 rollout — BGN-04-06 legalRef + accreditation check** | **2026-08-06** | **BGN-04-06 criteria + legalReference updated. Commit `5ed564b`. Confirmed by direct code read.** |
-| **Z8** | **BGN-03-06 septic pumping — remove unverified 90d/80% figures** | **2026-08-06** | **Replaced with contract+receipts+no-overflow formulation. Commit `5ed564b`. Décret 17-140 confirmed unrelated (food hygiene). No Algerian legal source found for specific intervals.** |
+| Z12 | Audit Findings Closure (F-01 to F-18, 15 sub-items) | 2026-08-06 | TSC 0 + Jest 1234/0 — user-confirmed 20:15 WAT. Commits: `9a5d3e7`, `9c78e3e`. |
+| Z6 | Décret 09-19 rollout — BGN-04-06 legalRef + accreditation check | 2026-08-06 | BGN-04-06 criteria + legalReference updated. Commit `5ed564b`. Confirmed by direct code read. |
+| Z8 | BGN-03-06 septic pumping — remove unverified 90d/80% figures | 2026-08-06 | Replaced with contract+receipts+no-overflow formulation. Commit `5ed564b`. Décret 17-140 confirmed unrelated (food hygiene). No Algerian legal source found for specific intervals. |
+| **W1** | **getDb() race guard + SyncService test env fix + serverAuth Babel env fix** | **2026-08-07** | **Commits: `a6c9a40`, `5caf6b1`, `4b4c0e5`, `bee6b60`. Jest 1234/0 + TSC 0 + Android runtime — all confirmed by user 17:54 WAT.** |
 
 ---
 
@@ -67,9 +68,9 @@
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, **Z6, Z8** are closed.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, **W1** are closed.
 - Z9 is deferred.
-- **No open phases. Next new phase identifier: Z13.**
+- **No open phases. Next new phase identifier: W2.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
