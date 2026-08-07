@@ -1,12 +1,17 @@
 // src/hooks/useCollapsibleSections.ts
 // W3: memoize getSectionProgress result per section via useMemo so that
 // evaluating one criterion does not cause every section header to re-render.
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+// W4: sections now start COLLAPSED (true) so the initial chevron-down is
+//     correct AND one tap opens the section. Previously initialised as false
+//     (open) while react-native-collapsible defaults to true (closed), which
+//     caused a state/UI mismatch requiring two taps to open a section.
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  // All sections start EXPANDED (collapsed = false).
+  // All sections start COLLAPSED (collapsed = true).
+  // One tap → false → section opens. Arrow: chevron-down (closed) → chevron-up (open).
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sectionTitles.map(t => [t, false]))
+    Object.fromEntries(sectionTitles.map(t => [t, true]))
   );
 
   const titlesKey = sectionTitles.join('||');
@@ -19,7 +24,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = false;
+          next[title] = true; // new sections also start collapsed
           changed = true;
         }
       }
@@ -32,7 +37,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
   }, []);
 
   const isCollapsed = useCallback(
-    (title: string) => collapsed[title] ?? false,
+    (title: string) => collapsed[title] ?? true, // unknown title → collapsed
     [collapsed]
   );
 
