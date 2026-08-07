@@ -9,9 +9,9 @@
 // Z12-04: removed duplicate createCapItemsFromInspection call from doFinish();
 //         InspectionRepository.save() already calls it via capFactory.
 // Z12-05: autosave draft on cancel so progress is never silently lost.
-// W2: fix chevron direction — chevron-right when collapsed (invite to open),
-//     chevron-down when expanded (invite to close). Matches standard UX
-//     convention: down arrow = section is open, right arrow = section is closed.
+// W2: fix chevron direction — chevron-down when collapsed (invite to open),
+//     chevron-up when expanded (invite to close). Standard accordion UX:
+//     the arrow always points toward the action (down = more below, up = less).
 // W3: fix scroll-jump on slow upward scroll — maintainVisibleContentPosition +
 //     stickySectionHeadersEnabled=false + stable renderItem/renderSectionHeader
 //     callbacks so VirtualizedList skips unnecessary row re-renders.
@@ -246,8 +246,9 @@ export default function ChecklistScreen() {
     [isCollapsed, isFollowUp, diffView, handleStatusChange, handleCommentChange, handlePhotoTake, handleNumericChange]
   );
 
-  // W2: chevron-right = collapsed (section closed, tap to open)
-  //     chevron-down  = expanded  (section open,   tap to close)
+  // W2: chevron-down = collapsed (section closed, one tap opens it)
+  //     chevron-up   = expanded  (section open,   one tap closes it)
+  // Standard accordion convention: arrow points toward the action.
   const renderSectionHeader = useCallback(
     ({ section: { title, data: sectionData } }: { section: { title: string; data: any[] } }) => (
       <TouchableOpacity
@@ -255,7 +256,7 @@ export default function ChecklistScreen() {
         onPress={() => toggleSection(title)}
       >
         <FontAwesome
-          name={isCollapsed(title) ? 'chevron-right' : 'chevron-down'}
+          name={isCollapsed(title) ? 'chevron-down' : 'chevron-up'}
           size={14}
           color={Colors.textPrimary}
           style={{ marginLeft: Spacing.sm }}
