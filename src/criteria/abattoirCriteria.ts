@@ -2,10 +2,12 @@
 // Phase 3.2: abattoirCriteria based on HACCP + Algerian slaughterhouse-specific regs
 // Phase 3.3: Corrected HACCP basis citation; removed unverified ministerial order ref.
 // Phase W2 (2026-08-07): L-02 HACCP art.4→art.5; L-05 chlorine 11-219→11-125.
+// fix (2026-08-07): renamed export abattoirCriteria → abattoirSpecificCriteria to match
+//                   all import sites (criteriaData.ts, criteria/index.ts, both test suites).
 
 import { InspectionItem } from '../types';
 
-export const abattoirCriteria: InspectionItem[] = [
+export const abattoirSpecificCriteria: InspectionItem[] = [
   // ===== AX1 — البنية التحتية والمباني =====
   {
     id: 'ABT-AX1-01',
