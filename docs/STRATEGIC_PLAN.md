@@ -49,6 +49,7 @@
 | Z6 | Décret 09-19 rollout — BGN-04-06 legalRef + accreditation check | 2026-08-06 | BGN-04-06 criteria + legalReference updated. Commit `5ed564b`. Confirmed by direct code read. |
 | Z8 | BGN-03-06 septic pumping — remove unverified 90d/80% figures | 2026-08-06 | Replaced with contract+receipts+no-overflow formulation. Commit `5ed564b`. Décret 17-140 confirmed unrelated (food hygiene). No Algerian legal source found for specific intervals. |
 | **W1** | **getDb() race guard + SyncService test env fix + serverAuth Babel env fix** | **2026-08-07** | **Commits: `a6c9a40`, `5caf6b1`, `4b4c0e5`, `bee6b60`. Jest 1234/0 + TSC 0 + Android runtime — all confirmed by user 17:54 WAT.** |
+| **W2** | **Checklist section chevron direction bug fix** | **2026-08-07** | **`app/(tabs)/inspection/checklist.tsx` — `isCollapsed ? 'chevron-right' : 'chevron-down'`. Commit `906647f`. No logic change.** |
 
 ---
 
@@ -68,9 +69,9 @@
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, **W1** are closed.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, **W2** are closed.
 - Z9 is deferred.
-- **No open phases. Next new phase identifier: W2.**
+- **No open phases. Next new phase identifier: W3.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
