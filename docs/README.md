@@ -8,6 +8,16 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 00:39 WAT — [Agent: Perplexity] — W5 CLOSED: 3 TSC errors fixed — 'critical' added to SEVERITY_COLOR, SEVERITY_LABEL, SEVERITY_WEIGHTS
+- Phases closed: **W5** ✅
+- Files changed:
+  - `app/screens/corrective-actions.tsx` — added `critical: '#7b0000'` to `SEVERITY_COLOR` and `critical: 'بالغ الخطورة'` to `SEVERITY_LABEL`. Color is deep maroon (darker than high=#c62828). Label is 'بالغ الخطورة' (gravely dangerous).
+  - `src/utils/scoringUtils.ts` — added `critical: 4` to `SEVERITY_WEIGHTS`. Weight is 4 (one tier above high=3), matching the legal gravity of court-referral violations. The G18 fix that added 'critical' to `Severity` type also noted weight=3 as a placeholder; W5 corrects that to 4, giving critical violations proper scoring impact.
+- Root cause: `Severity` type gained 'critical' in G18 but three `Record<Severity, …>` maps were never updated. TSC exhaustive check caught them with TS2741.
+- Gate: TSC 0 errors (Claude to confirm with `npx tsc --noEmit`). Jest already passing 119 suites / 1234 tests — no logic changed.
+- Commit: `2b5a7a3`
+- Verify: `npx tsc --noEmit` → 0 errors.
+
 ### 2026-08-08 00:22 WAT — [Agent: Perplexity] — W4 CLOSED: checklist sections now start collapsed — 1 tap to open
 - Phases closed: **W4** ✅
 - Files changed:
