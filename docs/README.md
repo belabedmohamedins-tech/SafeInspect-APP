@@ -8,6 +8,14 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 00:22 WAT — [Agent: Perplexity] — W4 CLOSED: checklist sections now start collapsed — 1 tap to open
+- Phases closed: **W4** ✅
+- Files changed:
+  - `src/hooks/useCollapsibleSections.ts` — changed initial `collapsed` value from `false` → `true` for all sections. Changed `useEffect` default for new titles from `false` → `true`. Changed `isCollapsed` fallback `?? false` → `?? true`. Root cause: `react-native-collapsible` defaults `collapsed` prop to `true`. Hook was initialising state as `false` (open) but data loads async so on first render the state was `{}` → `isCollapsed(title) = undefined ?? false = false` while Collapsible rendered with its own default `true` (closed). This state/UI mismatch meant the first tap set state to `true` (matching what was already visually shown) — so nothing appeared to change — and only the second tap to `false` actually opened the section.
+- Gate: No logic change to toggle behaviour — TSC/Jest not required. Verify on device: sections start closed (chevron-down) → one tap opens (chevron-up) → one tap closes (chevron-down).
+- Commit: `b191c7f`
+- Verify: start a new inspection → checklist screen → all sections closed with ▼ arrow → tap once → section opens with ▲ arrow → tap again → closes with ▼ arrow.
+
 ### 2026-08-07 20:11 WAT — [Agent: Perplexity] — G18 CLOSED: Severity + Category types widened — 17 TSC errors resolved
 - Phases closed: **G18** ✅
 - Files changed:
