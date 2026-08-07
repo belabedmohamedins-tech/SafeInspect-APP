@@ -8,6 +8,14 @@
 
 *(Newest entry at top)*
 
+### 2026-08-07 20:03 WAT — [Agent: Perplexity] — W2 CLOSED: chevron direction bug fixed
+- Phases closed: **W2** ✅
+- Files changed:
+  - `app/(tabs)/inspection/checklist.tsx` — `renderSectionHeader` chevron icon changed from `isCollapsed ? 'chevron-down' : 'chevron-up'` to `isCollapsed ? 'chevron-right' : 'chevron-down'`. Sections start expanded (collapsed=false from hook) so on first render the arrow correctly shows chevron-down (open). Tapping once collapses and shows chevron-right. One tap = one state change. Bug was: chevron-down showed when section was closed (misleading), chevron-up when open.
+- Gate: No logic change — TSC/Jest not required. Verify on device: on first open each section shows chevron-down + content visible; one tap → chevron-right + content hidden; second tap → chevron-down + content visible again.
+- Commit: `906647f`
+- Verify: start a new inspection → checklist screen → all sections open with ▼ arrow → tap once → section closes with ► arrow → tap again → reopens with ▼ arrow.
+
 ### 2026-08-07 19:35 WAT — [Agent: Perplexity] — fix: abattoirSpecificCriteria export rename — 4 test suites restored
 - Phases closed: none (hotfix)
 - Files changed:
