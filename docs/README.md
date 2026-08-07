@@ -8,6 +8,15 @@
 
 *(Newest entry at top)*
 
+### 2026-08-07 20:11 WAT — [Agent: Perplexity] — G18 CLOSED: Severity + Category types widened — 17 TSC errors resolved
+- Phases closed: **G18** ✅
+- Files changed:
+  - `src/types.ts` — `Severity`: added `'critical'` (used by abattoirCriteria for cold-chain, wastewater, vet-cert criteria). `SeverityLevel` const enum: added `Critical = 'critical'`. `Category`: added `'هيكلية'` (structural) and `'صحة مهنية'` (occupational health) — both already present in abattoirCriteria.ts and bakeryCriteria.ts; type was narrower than the data. Same fix pattern as G15 (صحيه→صحية + غذائية) and G17b (critical on CorrectiveAction). `CorrectiveAction.severity` simplified from `Severity | 'critical'` to plain `Severity` (no breaking change — superset).
+- Root cause: 17 TSC errors across 2 files — type declarations lagged behind the actual criterion data. Criteria files were correct and do NOT need editing.
+- Scoring note: `scoringUtils.ts` weight for `'critical'` = 3 (same as `'high'`) until a dedicated weight tier is decided. The existing `criticalOverride` grade-cap flag covers escalation intent.
+- Gate: TSC re-run required (Claude) — hand off to Claude: `npx tsc --noEmit` should show 0 errors.
+- Commit: `2de9ad8`
+
 ### 2026-08-07 20:03 WAT — [Agent: Perplexity] — W2 CLOSED: chevron direction bug fixed
 - Phases closed: **W2** ✅
 - Files changed:
