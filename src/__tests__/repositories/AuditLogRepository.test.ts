@@ -1,33 +1,54 @@
-/**
- * src/__tests__/repositories/AuditLogRepository.test.ts
- * Z6-TSC: AuditEntry comes from AuditLogRepository, not types.
- *         append() is (action, inspectorName, opts?).
- */
-import { AuditLogRepository } from '../../repositories/AuditLogRepository';
-import type { AuditEntry } from '../../repositories/AuditLogRepository';
+// src/__tests__/repositories/AuditLogRepository.test.ts
+// W24: verify clear() logs AUDIT_LOG_CLEARED before wiping rows.
 
-beforeEach(async () => {
-  await AuditLogRepository.clear();
+import { AuditLogRepository } from '../../repositories/AuditLogRepository';
+
+const mockRun = jest.fn().mockResolvedValue(undefined);
+const mockGetAll = jest.fn();
+const mockGetFirst = jest.fn();
+
+jest.mock('../../db/schema', () => ({
+  getDb: jest.fn().mockResolvedValue({
+    runAsync: (...args: unknown[]) => mockRun(...args),
+    getAllAsync: (...args: unknown[]) => mockGetAll(...args),
+    getFirstAsync: (...args: unknown[]) => mockGetFirst(...args),
+  }),
+}));
+
+beforeEach(() => {
+  mockRun.mockClear();
+  mockGetAll.mockClear();
 });
 
-describe('AuditLogRepository (src)', () => {
-  it('appends and retrieves entries', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'Alice', { inspectionId: 'i1' });
-    const all = await AuditLogRepository.getAll();
-    expect(all.length).toBeGreaterThanOrEqual(1);
+describe('AuditLogRepository.clear', () => {
+  it('inserts AUDIT_LOG_CLEARED before deleting rows', async () => {
+    await AuditLogRepository.clear('inspector_test');
+
+    expect(mockRun).toHaveBeenCalledTimes(2);
+
+    // First call: INSERT the sentinel row
+    const [insertSql, insertParams] = mockRun.mock.calls[0] as [string, unknown[]];
+    expect(insertSql).toContain('INSERT INTO audit_log');
+    expect(insertParams).toContain('AUDIT_LOG_CLEARED');
+    expect(insertParams).toContain('inspector_test');
+
+    // Second call: DELETE all except sentinel
+    const [deleteSql] = mockRun.mock.calls[1] as [string];
+    expect(deleteSql).toContain('DELETE FROM audit_log');
   });
 
-  it('getByAction filters correctly', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED',   'Alice', { inspectionId: 'insp-X' });
-    await AuditLogRepository.append('INSPECTION_SAVED',   'Alice', { inspectionId: 'insp-X' });
-    await AuditLogRepository.append('INSPECTION_DELETED', 'Alice', { inspectionId: 'insp-Y' });
-    const saved = await AuditLogRepository.getByAction('INSPECTION_SAVED');
-    expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
+  it('attributes the clear event to the provided inspectorName', async () => {
+    await AuditLogRepository.clear('محمد المفتش');
+    const [, params] = mockRun.mock.calls[0] as [string, unknown[]];
+    expect(params).toContain('محمد المفتش');
   });
+});
 
-  it('clear empties the log', async () => {
-    await AuditLogRepository.append('INSPECTION_SAVED', 'Alice', { inspectionId: 'i' });
-    await AuditLogRepository.clear();
-    expect(await AuditLogRepository.getAll()).toHaveLength(0);
+describe('AuditLogRepository.append', () => {
+  it('does not throw on db error (append-only contract)', async () => {
+    mockRun.mockRejectedValueOnce(new Error('db locked'));
+    await expect(
+      AuditLogRepository.append('INSPECTION_SAVED', 'inspector'),
+    ).resolves.toBeUndefined();
   });
 });

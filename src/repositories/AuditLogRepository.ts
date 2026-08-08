@@ -3,6 +3,9 @@
 // Z5: migrated from AsyncStorage to expo-sqlite.
 // Ring-buffer of MAX_ENTRIES preserved. Append-only contract preserved.
 // Audit failures must never crash the app — all writes are wrapped in try/catch.
+//
+// W24: clear() now logs AUDIT_LOG_CLEARED BEFORE deleting rows so the
+//      wipe is always traceable (legal defensibility requirement).
 
 import { getDb } from '../db/schema';
 
@@ -15,7 +18,8 @@ export type AuditAction =
   | 'AGENDA_ITEM_SAVED'
   | 'AGENDA_ITEM_DELETED'
   | 'SETTINGS_CHANGED'
-  | 'BACKUP_RESTORED';
+  | 'BACKUP_RESTORED'
+  | 'AUDIT_LOG_CLEARED';
 
 export interface AuditEntry {
   id: string;
@@ -109,7 +113,20 @@ export const AuditLogRepository = {
     return rows.map(rowToEntry);
   },
 
-  async clear(): Promise<void> {
-    await (await getDb()).runAsync('DELETE FROM audit_log');
+  // W24: inspectorName is required so the clearing event is always attributed.
+  // The AUDIT_LOG_CLEARED entry is inserted BEFORE the DELETE so it is never
+  // included in the rows being wiped.
+  async clear(inspectorName: string): Promise<void> {
+    const db = await getDb();
+    await db.runAsync(
+      `INSERT INTO audit_log (action, inspection_id, facility_name, inspector_name, detail)
+       VALUES (?,?,?,?,?)`,
+      ['AUDIT_LOG_CLEARED', null, null, inspectorName, null],
+    );
+    // Delete everything EXCEPT the sentinel row we just inserted (highest id).
+    await db.runAsync(
+      `DELETE FROM audit_log WHERE id NOT IN
+       (SELECT id FROM audit_log ORDER BY id DESC LIMIT 1)`,
+    );
   },
 };

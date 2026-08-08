@@ -9,6 +9,9 @@
 //         to AsyncStorage and verifyInspection() can find it.
 // Z12-02: createFollowUpIfNeeded also triggered for 'unable-to-verify' items
 //         (handled inside followUpService — repo change: none needed here).
+// W22: save() throws 'INSPECTION_LOCKED' if the existing row already has
+//      approval_status = 'approved'. Callers must not silently overwrite
+//      approved records; a dedicated reopen flow is required.
 
 import { getDb } from '../db/schema';
 import { SavedInspection, InspectionItem, InspectionType } from '../types';
@@ -253,10 +256,17 @@ export const InspectionRepository = {
   async save(inspection: SavedInspection): Promise<void> {
     const db = await getDb();
 
-    const existingRow = await db.getFirstAsync<{ status: string }>(
-      'SELECT status FROM inspections WHERE id = ?',
+    const existingRow = await db.getFirstAsync<{ status: string; approval_status: string | null }>(
+      'SELECT status, approval_status FROM inspections WHERE id = ?',
       [inspection.id],
     );
+
+    // W22: block any save() that would overwrite an approved inspection.
+    // Throw before any write so no partial state is possible.
+    if (existingRow?.approval_status === 'approved') {
+      throw new Error('INSPECTION_LOCKED');
+    }
+
     const isNewCompletion =
       inspection.status === 'completed' &&
       existingRow?.status !== 'completed';
