@@ -8,6 +8,19 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 01:56 WAT — [Agent: Perplexity] — W6/W7/W8/W9 CLOSED: all confirmed clean by direct code read — W11 opened
+- Phases closed: **W6** ✅ **W7** ✅ **W8** ✅ **W9** ✅
+- Files changed: none — all 4 phases already implemented in prior commits
+- Evidence:
+  - W6 (HACCP Art.5): `baseFoodCriteria.ts` BFD-05-01 → Art.5 ✅. `bakeryCriteria.ts` BAK-10-10 → Art.5 ✅. `couvoirCriteria.ts` + `abattoirCriteria.ts` ABT-AX8-01 → Art.5 ✅. Comment `W6 ✅: confirmed clean by direct code read (2026-08-08)` present in baseFoodCriteria.
+  - W7 (cold-chain arrêté 07/05/2025): `baseFoodCriteria.ts` BFD-04-01 + BFD-04-02 → Arrêté 07/05/2025 ✅. Comment `W7: corrected from Décret 17-140 Art.7/8` present.
+  - W8 (BGN-03-01 Décret 11-125): `baseGeneralCriteria.ts` BGN-03-01 already cites Décret 11-125 ✅.
+  - W9 (abattoir chlorine Décret 11-125): `abattoirCriteria.ts` ABT-AX4-01 → Décret 11-125 ✅. Comment `W2 fix 2026-08-07: L-05 chlorine 11-219→11-125` confirmed.
+- Gate: No code changed — no TSC/Jest required.
+- Commit: this doc update only.
+- Next phase: **W11** — identify correct Algerian ventilation decree for BGN-02-06 (Décret 93-120 is medical exams, not ventilation).
+- Verify: `grep -r '11-219' src/criteria/` should return empty. `grep -r 'Art. 4' src/criteria/abattoirCriteria.ts | grep HACCP` should return empty.
+
 ### 2026-08-08 01:19 WAT — [Agent: Perplexity] — W4-fix CLOSED: sections start collapsed=true — 1 tap opens correctly
 - Phases closed: **W4-fix** ✅
 - Files changed:
@@ -87,47 +100,3 @@
 - Root cause (serverAuth tests): `babel-preset-expo` folds `process.env.EXPO_PUBLIC_*` at transpile time. `beforeEach` assignments run after transpilation, so `getApiUrl()` still saw an empty string, threw, and every fetch landed in the catch block returning `'Network error'`.
 - Root cause (InspectionRepository tests): `SQLiteMock.__resetAll()` wiped the in-memory store but `_db`/`_initPromise` singletons in `schema.ts` still pointed at the empty handle — migrations never re-ran, tables were gone, causing opaque failures.
 - Commits: `a6c9a40` (schema.ts), `5caf6b1` (test files), `4b4c0e5` (jest config + polyfill)
-
-### 2026-08-06 21:39 WAT — [Agent: Perplexity] — GATE CONFIRMED: expo-sqlite DDL fix + schema test rewrite — all green
-- Phases closed: none (runtime crash fix + test sync — not a named phase)
-- Files changed: none (gate confirmation only)
-- Gate: TSC + Jest **all green** — user-confirmed 21:39 WAT
-- Commits: `71dee944` (schema.ts DDL fix), `017748a8` (schema.test.ts assertions updated)
-- Verify: cold-start the app — `[RAQIB] Database initialization failed` error should be gone.
-- **No open phases. Next: Z13 (to be defined).**
-
-### 2026-08-06 21:36 WAT — [Agent: Perplexity] — fix(db): remove withTransactionAsync from DDL migrations — expo-sqlite v15 crash
-- Phases closed: none (runtime crash fix)
-- Files changed:
-  - `src/db/schema.ts` — removed `withTransactionAsync` wrapper from every migration in `runMigrations()`. DDL now runs via `db.execAsync(sql)` directly; migration record via `db.runAsync(INSERT)`. Added comment block explaining why `withTransactionAsync` must not wrap DDL in expo-sqlite ≥15.
-  - `src/__tests__/schema.test.ts` — replaced all `withTransactionAsync` call-count assertions with `execAsync` call-count assertions (filtering out the bootstrap `CREATE TABLE IF NOT EXISTS _migrations` call).
-- Root cause: expo-sqlite ≥15 (SDK 56) runs `execAsync` DDL with its own implicit transaction. Wrapping it inside `withTransactionAsync` produced a nested transaction; SQLite threw `cannot rollback - no transaction is active` on app start, crashing `initializeDatabase()` and all repositories.
-- Gate: TSC 0 errors + Jest **all green** — user-confirmed 21:39 WAT
-- Commits: `71dee944` (fix), `017748a8` (tests)
-
-### 2026-08-06 20:57 WAT — [Agent: Perplexity] — Z6+Z8 CLOSED: BGN-04-06 Décret 09-19 added + BGN-03-06 unverified figures removed
-- Phases closed: **Z6** ✅ CLOSED, **Z8** ✅ CLOSED
-- Files changed:
-  - `src/criteria/baseGeneralCriteria.ts` — BGN-04-06: added Décret 09-19 Art.4–8 to legalReference + accreditation verification step to criteria text. BGN-03-06: removed Phase 4.4 unverified "90 days / 80% capacity" figures; replaced with legally clean contract+receipts+no-overflow formulation.
-- Gate: TSC + Jest NOT re-run (criteria-only string changes — no logic touched).
-- Commit: `5ed564b`
-
-### 2026-08-06 20:19 WAT — [Agent: Perplexity] — Z12 GATE CONFIRMED: Jest 1233/0, TSC 0 errors — ALL GREEN
-- Phases closed: **Z12** ✅ GATE CONFIRMED by user
-- Gate: TSC 0 errors + Jest **1233 tests passing / 0 failures** (1 skipped) — user-confirmed 20:19 WAT
-
-### 2026-08-06 20:15 WAT — [Agent: Perplexity] — Z12 CLOSED: all 15 sub-items complete, Jest 0 failures
-- Phases closed: **Z12** ✅
-- Commits: `9a5d3e7` (useChecklistData saveDraft), `9c78e3e` (test mock fixes)
-
-### 2026-08-06 18:14 WAT — [Agent: Perplexity] — Doc cleanup: 3 stale/conflicting docs tombstoned
-- Phases closed: none (housekeeping only)
-
-### 2026-08-06 13:22 WAT — [Agent: Perplexity] — Z11 CLOSED: rubrique wired into DB + screens
-- Phases closed: **Z11** ✅
-- Gate: TSC 0 + Jest 25/0 — confirmed by user 13:22 WAT
-
-### 2026-08-06 13:07 WAT — [Agent: Perplexity] — Z10-FIX CLOSED: SettingsRepository test rewritten, all green
-- Phases closed: **Z10-FIX** ✅
-- Gate: TSC 0 + Jest all green — user-confirmed 13:07 WAT
-- Commit: `83db48c`
