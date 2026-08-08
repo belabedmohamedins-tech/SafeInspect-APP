@@ -59,16 +59,17 @@
 | W9 | L-05: Abattoir chlorine Décret 11-125 confirmed clean | 2026-08-08 | Direct code read — no change needed. |
 | W18 | BGN-08-01 + BGN-08-02: add Art.5 + Art.13 to Loi 19-02 citation | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
 | W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
-| W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — `differentialView.ts` and `violationHistory.ts` do not exist in repo. Doc artefact. No action taken. |
-| W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — `app/screens/categories.tsx` does not exist. Doc artefact. No action taken. |
+| W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — files do not exist in repo. Doc artefact. No action taken. |
+| W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — file does not exist. Doc artefact. No action taken. |
 | W27 | F-14: statusUtils.ts — observation-only + unable-to-verify explicit labels+colors | 2026-08-08 | `src/utils/statusUtils.ts`. Commit `e2791f7`. TSC + Jest gate pending Claude. |
 | W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | `src/hooks/useChecklistData.ts`. Commit `e2791f7`. TSC + Jest gate pending Claude. |
+| W19-CODE | baseGeneralCriteria article-citation corrections (8 wrong refs + 2 À VÉRIFIER resolved) | 2026-08-08 | Commits `10b51b0`, `d8cc8b5`. legalReference strings only — no logic change. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W19** → **W22** → **W23** → **W24** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W15** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
+> Execution order: **W19** (in progress — parallel session) → **W22** → **W23** → **W24** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W15** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
@@ -77,10 +78,10 @@
 | **W12** | 🟠 P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
 | **W13** | 🟡 P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
 | **W14** | 🟡 P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet |
-| **W15** | 🟠 P1 (enhancement) | criteriaByActivity — add rubrique-based fallback lookup as secondary key | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | NOT a present bug — activity-string keying works. Enhancement: if activity key misses, try rubrique. |
+| **W15** | 🟠 P1 (enhancement) | criteriaByActivity — add rubrique-based fallback lookup as secondary key | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | NOT a present bug — activity-string keying works. Enhancement only. |
 | **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required |
 | **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification required |
-| **W19** | 🟠 P1 — **NEXT UP** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicates, spot-check ≥3 files | `legal_refs/` (24 files) | Perplexity-only. Blocks all future citation audit sessions. |
+| **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicates, spot-check ≥3 files | `legal_refs/` (24 files) | ⚠️ Do NOT touch — user is working on this in another conversation. |
 | **W20** | 🟡 P2 | Close 3 open legal unverifieds + delete `allCriteria` dead-code export | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. |
 | **W22** | 🔴 P0 | F-11: Approved inspection immutability — `approvalStatus` guard in InspectionRepository | `src/repositories/InspectionRepository.ts`, `app/screens/reports.tsx`, `src/hooks/useChecklistData.ts` | ⚠️ Needs product sign-off: reopen-for-correction workflow? |
 | **W23** | 🔴 P0 | F-18: Wire local approval to server OR remove dead server endpoints | `src/repositories/ApprovalRepository.ts`, `src/services/serverAuth.ts` | ⚠️ Needs product decision: wire up or delete. |
@@ -100,9 +101,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18, W21, W25–W28.
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18, W19-CODE, W21, W25–W28.
 - Z9 deferred.
-- **Open: W10–W17, W19–W20, W22–W24, W29–W30. Next new phase identifier: W31.**
+- **Open: W10–W17, W19 (parallel), W20, W22–W24, W29–W30. Next new phase identifier: W31.**
 - Never reuse a closed phase letter.
 
 ---
@@ -142,3 +143,4 @@
 | Audit log self-tamper gap | AuditLogRepository.clear() leaves no trace | — | ⚠️ W24 OPEN |
 | Server↔mobile schema mismatches | No sync mappers | — | ⚠️ W29 OPEN |
 | decisionSupport.ts test coverage | 1 trivial test | — | ⚠️ W30 OPEN |
+| legal_refs/ stub files | Fabricated stubs not yet replaced | — | ⚠️ W19 IN PROGRESS (parallel) |
