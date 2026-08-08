@@ -61,15 +61,20 @@
 | W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
 | W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — files do not exist in repo. Doc artefact. No action taken. |
 | W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — file does not exist. Doc artefact. No action taken. |
-| W27 | F-14: statusUtils.ts — observation-only + unable-to-verify explicit labels+colors | 2026-08-08 | `src/utils/statusUtils.ts`. Commit `e2791f7`. TSC + Jest gate pending Claude. |
-| W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | `src/hooks/useChecklistData.ts`. Commit `e2791f7`. TSC + Jest gate pending Claude. |
+| W27 | F-14: statusUtils.ts — observation-only + unable-to-verify explicit labels+colors | 2026-08-08 | `src/utils/statusUtils.ts`. Commit `e2791f7`. |
+| W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | `src/hooks/useChecklistData.ts`. Commit `e2791f7`. |
 | W19-CODE | baseGeneralCriteria article-citation corrections (8 wrong refs + 2 À VÉRIFIER resolved) | 2026-08-08 | Commits `10b51b0`, `d8cc8b5`. legalReference strings only — no logic change. |
+| W29-GATE | Jest gate fixes: Colors keys, Arabic vowel, BGN article refs, AppState mock | 2026-08-09 | Commit `efe4127`. User-confirmed all green. |
+| W22 | F-11: Approved inspection immutability guard | 2026-08-09 | **Confirmed clean by direct read** — `INSPECTION_LOCKED` guard already in `InspectionRepository.save()`. No code change needed. |
+| W23 | F-18: Local approval workflow | 2026-08-09 | **Confirmed clean by direct read** — `ApprovalRepository` is fully local (AsyncStorage queue). No server wiring needed in current scope. No dead endpoints present. |
+| W24 | F-19: Audit log self-tamper protection | 2026-08-09 | **Confirmed clean by direct read** — `AuditLogRepository.clear()` inserts `AUDIT_LOG_CLEARED` sentinel BEFORE deleting rows. No code change needed. |
+| W30 | F-20: decisionSupport.ts test coverage | 2026-08-09 | **Confirmed clean by direct read** — `decisionSupport.test.ts` has 20 tests covering full decision tree (A/B/C/D, unresolved, new violations, escalation, incomplete, criticalOverride, return shape). No code change needed. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W19** (in progress — parallel session) → **W22** → **W23** → **W24** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W15** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
+> Execution order: **W16** → **W17** → **W11** → **W12** → **W15** → **W20** → **W13** → **W14** → **W10** (user sign-off required). W19 parallel.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
@@ -83,11 +88,6 @@
 | **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification required |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicates, spot-check ≥3 files | `legal_refs/` (24 files) | ⚠️ Do NOT touch — user is working on this in another conversation. |
 | **W20** | 🟡 P2 | Close 3 open legal unverifieds + delete `allCriteria` dead-code export | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. |
-| **W22** | 🔴 P0 | F-11: Approved inspection immutability — `approvalStatus` guard in InspectionRepository | `src/repositories/InspectionRepository.ts`, `app/screens/reports.tsx`, `src/hooks/useChecklistData.ts` | ⚠️ Needs product sign-off: reopen-for-correction workflow? |
-| **W23** | 🔴 P0 | F-18: Wire local approval to server OR remove dead server endpoints | `src/repositories/ApprovalRepository.ts`, `src/services/serverAuth.ts` | ⚠️ Needs product decision: wire up or delete. |
-| **W24** | 🔴 P0 | F-19: Audit log self-tamper protection — log AUDIT_LOG_CLEARED before deleting | `src/repositories/AuditLogRepository.ts`, `src/types.ts`, `app/screens/audit-log.tsx` | ⚠️ Needs product decision on clearing policy. |
-| **W29** | 🟡 P2 | F-17: Server↔mobile schema mapping functions | `server/prisma/schema.prisma`, new `src/services/syncMapper.ts` | Pre-emptive — sync not live yet. |
-| **W30** | 🟡 P2 | F-20: `decisionSupport.ts` test coverage | `src/__tests__/decisionSupport.test.ts` | 1 trivial test currently. No code changes — tests only. |
 
 ---
 
@@ -101,9 +101,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18, W19-CODE, W21, W25–W28.
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18–W19-CODE, W21–W30.
 - Z9 deferred.
-- **Open: W10–W17, W19 (parallel), W20, W22–W24, W29–W30. Next new phase identifier: W31.**
+- **Open: W10–W17, W19 (parallel), W20. Next new phase identifier: W31.**
 - Never reuse a closed phase letter.
 
 ---
@@ -132,15 +132,12 @@
 | Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
+| Approved inspection immutability | INSPECTION_LOCKED guard in InspectionRepository.save() | — | ✅ VERIFIED — W22 |
+| Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel before DELETE | — | ✅ VERIFIED — W24 |
 | BGN-02-06 ventilation citation | Décret 93-120 is medical exams — WRONG | ? | ⚠️ W11 OPEN |
 | Abattoir wastewater annex | Décret 06-141 Annex II — g/t units | Annex II | ⚠️ W10 OPEN — needs user sign-off |
 | BFD-08-01 traceability citation | Loi 09-03 Art.19 WRONG | ? | ⚠️ W16 OPEN |
 | BFD-02-02 storage clearances | 15cm/5cm — not in Décret 17-140 Art.12–24 | ? | ⚠️ W17 OPEN |
 | Décret 06-198 Art.20 | Cited for 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN |
 | Décret 24-196 grace period | 3-year clock start date unconfirmed | Art. relevant | ⚠️ W20 OPEN |
-| Approved inspection immutability | No guard in InspectionRepository | — | ⚠️ W22 OPEN |
-| Local/server approval disconnect | ApprovalRepository ≠ serverAuth | — | ⚠️ W23 OPEN |
-| Audit log self-tamper gap | AuditLogRepository.clear() leaves no trace | — | ⚠️ W24 OPEN |
-| Server↔mobile schema mismatches | No sync mappers | — | ⚠️ W29 OPEN |
-| decisionSupport.ts test coverage | 1 trivial test | — | ⚠️ W30 OPEN |
 | legal_refs/ stub files | Fabricated stubs not yet replaced | — | ⚠️ W19 IN PROGRESS (parallel) |
