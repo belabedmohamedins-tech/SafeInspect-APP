@@ -81,19 +81,22 @@ export const baseFoodCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   // =====================================================================
-  // المحور 4: سلسلة البرودة — درجات الحرارة مُتحقَّق منها بموجب
-  //           المرسوم التنفيذي 17-140 المواد 7/8/9 (Phase 3.5 ✅)
-  //           مبرد: 0–5°C | مجمد: ≤ −18°C
-  //           Phase 13 ✅: numericField aligned to NumericFieldSpec interface
-  //           (labelAr replaces label; max/warningMax replace threshold+comparisonOperator)
+  // المحور 4: سلسلة البرودة
+  // W7 (2026-08-08): BFD-04-01 + BFD-04-02 — legalReference corrected.
+  //   Previous refs cited Décret 17-140 Art.7 / Art.8 — those articles cover
+  //   general food hygiene conditions, NOT cold-chain temperature limits.
+  //   Correct instrument: Arrêté interministériel du 07/05/2025 fixant les
+  //   conditions de température de conservation des denrées alimentaires
+  //   (already verified in docs/legal_sources/ — JORADP primary source).
+  //   Temperatures unchanged: chilled 0–5°C, frozen ≤ −18°C.
   // =====================================================================
   {
     id: 'BFD-04-01',
     axis: 'سلسلة البرودة',
     category: 'غذائية',
-    // Verified against Décret 17-140 arts. 7/8/9: chilled products 0–5°C ✅
     criteria: 'الحفاظ على سلسلة البرودة للمنتجات المبردة: درجة حرارة التخزين بين 0°C و5°C مع وجود مقياس حرارة معيَّر داخل كل وحدة تبريد.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 7 (درجة حرارة حفظ المنتجات المبردة: 0–5°C).',
+    // W7: corrected from Décret 17-140 Art.7 (general hygiene) to the specific cold-chain arrêté.
+    legalReference: 'القرار الوزاري المشترك المؤرخ في 07/05/2025 (اشتراطات درجة حرارة حفظ المواد الغذائية — المبردات: 0–5°C) + المرسوم التنفيذي 17-140 (السلامة الغذائية العامة).',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -109,9 +112,9 @@ export const baseFoodCriteria: InspectionItem[] = [
     id: 'BFD-04-02',
     axis: 'سلسلة البرودة',
     category: 'غذائية',
-    // Verified against Décret 17-140 arts. 8/9: frozen products ≤ −18°C ✅
     criteria: 'الحفاظ على سلسلة التجميد للمنتجات المجمدة: درجة حرارة التخزين ≤ −18°C مع وجود مقياس حرارة معيَّر داخل كل وحدة تجميد.',
-    legalReference: 'المرسوم التنفيذي 17-140 المادة 8 (درجة حرارة حفظ المنتجات المجمدة: ≤ −18°C).',
+    // W7: corrected from Décret 17-140 Art.8 (general hygiene) to the specific cold-chain arrêté.
+    legalReference: 'القرار الوزاري المشترك المؤرخ في 07/05/2025 (اشتراطات درجة حرارة حفظ المواد الغذائية — المجمدات: ≤ −18°C) + المرسوم التنفيذي 17-140 (السلامة الغذائية العامة).',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -126,17 +129,14 @@ export const baseFoodCriteria: InspectionItem[] = [
   // =====================================================================
   // المحور 5: نظام HACCP
   // Z12-13 ✅ (2026-08-06): legalReference corrected from Art. 9 → Art. 5.
-  // JORADP-confirmed by project owner (primary-source read, 2026-08-06 18:29 WAT).
-  // Art. 5 is the article that establishes the HACCP obligation for classified
-  // food establishments. Primary-production exclusion (couvoir, UPD) still applies.
+  // W6 (2026-08-08): confirmed clean by direct code read — Art.5 already correct.
   // =====================================================================
   {
     id: 'BFD-05-01',
     axis: 'HACCP ونظام السلامة الغذائية',
     category: 'غذائية',
     // Z12-13 ✅: Décret 17-140 Art. 5 confirmed as HACCP obligation article (JORADP, 2026-08-06).
-    // Previous N4 note (2026-07-29) cited Art. 9 — superseded by this primary-source confirmation.
-    // Primary-production facilities (couvoir, UPD) remain explicitly excluded per Art. 5 scope.
+    // W6 ✅: confirmed clean by direct read (2026-08-08).
     criteria: 'وجود نظام HACCP مطبَّق وموثَّق (تحليل المخاطر، نقاط التحكم الحرجة CCP، حدود حرجة، مراقبة، تصحيح، توثيق) في المنشآت التي تُلزَم به قانوناً. ملاحظة: مرافق الإنتاج الأولي (كوفوير، UPD) مستثناة صراحةً من هذا الالتزام.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (إلزامية نظام HACCP في المنشآت الغذائية المصنفة — لا تشمل الإنتاج الأولي).',
     severity: 'high',
@@ -169,8 +169,6 @@ export const baseFoodCriteria: InspectionItem[] = [
   // =====================================================================
   // المحور 7: مكافحة الآفات
   // Phase 8.4 ✅: BFD-07-01 و BFD-07-02 أُزيلا — المحور مُدمج في BGN-07-01/05
-  // شبكات واقية على النوافذ: غُطِّيت في BFD-07-02 كانت هيكلية خالصة.
-  // المفتش يرجع الآن إلى BGN-07-* لفحص مكافحة الآفات في المنشآت الغذائية.
   // =====================================================================
   // =====================================================================
   // المحور 8: التتبعية (Phase 3.4 ✅)

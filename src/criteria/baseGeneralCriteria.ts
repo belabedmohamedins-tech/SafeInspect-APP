@@ -1,4 +1,9 @@
 // src/baseGeneralCriteria.ts
+// W8 (2026-08-08): BGN-03-01 legalReference corrected.
+//   Previous ref: Décret 88-164 — unfindable in JORADP, likely superseded.
+//   Correct instrument: Décret exécutif 11-125 du 22/03/2011 fixant les
+//   caractéristiques et les normes techniques auxquelles doivent répondre
+//   les eaux destinées à la consommation humaine (JORADP-confirmed).
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -115,7 +120,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'توفر ماء صالح للشرب من شبكة عمومية أو خزان مراقَب في كل الأوقات وبضغط كافٍ.',
-    legalReference: 'المرسوم التنفيذي 88-164 المادة 3 (إلزامية مطابقة مياه الشرب للمعايير الصحية) + المادة 7 (المراقبة الصحية الدورية لمياه الاستهلاك البشري).',
+    // W8 (2026-08-08): corrected from Décret 88-164 (unfindable/superseded) to Décret 11-125
+    //   (Décret exécutif 11-125 du 22/03/2011 — potable water quality norms, JORADP-confirmed).
+    legalReference: 'المرسوم التنفيذي 11-125 المؤرخ في 22/03/2011 المتعلق بالخصائص والمعايير التقنية لمياه الاستهلاك البشري (مطابقة مياه الشرب للمعايير الصحية ومراقبتها الدورية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -162,14 +169,8 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   {
     // Z8: removed unverified "90 days / 80% capacity" figures (no Algerian legal source found).
-    // Criterion now relies solely on verified instruments: القانون 01-19 + المرسوم 01-102 (ONA) + القانون 05-12.
-    // Inspector verifies: valid contract + pumping receipts as evidence + no overflow/leakage.
-    //
-    // Z13-PENDING [حكم مهني]: A 12-month threshold has been added as a professional judgment rule
-    // (NOT a legal requirement — no Algerian regulatory source was found specifying a pumping interval).
-    // If a JORADP source (arrêté or décret) is later found that sets a specific pumping frequency,
-    // open phase Z13, cite the exact article, replace [حكم مهني] tag with the legal citation,
-    // and remove this comment.
+    // Z13-PENDING [حكم مهني]: 12-month threshold as professional judgment only.
+    // If JORADP source found later, open Z13 and replace [حكم مهني] with legal citation.
     id: 'BGN-03-06',
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
@@ -230,12 +231,8 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // Phase 5.1 — وثيقة نقل النفايات
   {
     // Z6: added Décret 09-19 Art. 4–8 — mandatory accreditation check for waste collection operator.
-    // Inspector must verify: (1) operator holds a valid accreditation (وثيقة اعتماد) issued by the
-    // competent authority covering the specific waste type being transported; (2) the accreditation
-    // is not expired; (3) the bordereau matches the accredited operator named on that document.
     id: 'BGN-04-06',
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
@@ -245,7 +242,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  // Phase 5.2 — حظر الحرق الداخلي للنفايات الخطرة
   {
     id: 'BGN-04-07',
     axis: 'النظافة العامة وتسيير النفايات',
@@ -256,7 +252,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // Phase 5.3 — سجل تصنيف النفايات
   {
     id: 'BGN-04-08',
     axis: 'النظافة العامة وتسيير النفايات',
@@ -282,7 +277,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-07-02',
     axis: 'مكافحة النواقل',
     category: 'نظافة',
-    // S9: upgraded with map/bait/trap/documentation detail from COU-AX8-02
     criteria: 'وجود برنامج دوري مكتوب لمكافحة القوارض والحشرات (تحقيق أولي، اختيار المواد، خرائط الطعوم والمصائد، تسجيل التدخلات) — سواء بتعاقد مع مؤسسة مختصة أو تدخل ذاتي موثق، مع التمييز بين المكافحة الوقائية والهجومية.',
     legalReference: 'القانون 03-10 + محور مكافحة النواقل في معايير الرقابة (الصراصير والقوارض، إلزامية التوثيق والخرائط).',
     severity: 'high',
@@ -350,7 +344,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // BGN-08-04 (anti-obstruction) moved to BGN-01-03 under هوية المنشأة والوثائق — correct axis per spec
   {
     id: 'BGN-08-05',
     axis: 'السلامة العامة والوقاية من الحوادث',
@@ -362,9 +355,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 6.4: Wilaya operating-user authorization for Class 1 classified establishments
-    // Phase 10.4: added non-substitution note — this authorization does NOT replace fire-safety
-    //   permit, discharge permit, or any other sectoral license (Décret 06-198 art. 4).
     id: 'BGN-08-06',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'تنظيمية',
@@ -395,7 +385,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     },
   },
   {
-    // Phase 9.3: PPE-use training — upgrades Session 6 audit gap from best-practice to [LOI]-grounded
     id: 'BGN-09-02',
     axis: 'الضجيج والانبعاثات البيئية',
     category: 'سلامة',
@@ -407,10 +396,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
   },
   // ===== المحور 10: دراسة التأثير البيئي (عام) =====
   {
-    // Phase 10.2: EIA trigger criterion — universal baseline for all classified facilities.
-    // Modeled on UPD-AX10-01. Applies to Cat. 1 & 2 facilities per Décret 07-145.
-    // Facility-type-to-category mapping (Décret 07-144) is a research gap (10.5) —
-    // inspector must verify category from the operating license or wilaya classification list.
     id: 'BGN-10-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
