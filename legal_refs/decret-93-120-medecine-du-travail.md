@@ -1,17 +1,57 @@
 # Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
 
-**Numéro :** Décret exécutif n° 93-120  
+---
+
+**Titre officiel :** Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail  
 **Date de signature :** 15 mai 1993  
-**Journal Officiel :** N° 33, 19 mai 1993  
-**Source PDF convertie :** decret-93-120-2.pdf (JORADP N° 33, 19 mai 1993)  
-**Date de conversion :** 2026-08-08  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ — Vérifier contre le texte original JORADP avant tout usage légal ou décision d'exécution.
+**Publication :** Journal Officiel de la République Algérienne (JORADP) n° 33 du 19 mai 1993, pages 7–11  
+**Source PDF :** `decret 93-120.pdf` (fourni par l'utilisateur, conversion du 09 août 2026)  
+**Date de conversion :** 09 août 2026  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ — à vérifier contre le texte original JORADP avant tout usage légal ou décisionnel.
+
+> ⚠️ **Avertissement :** Vérifier contre le texte original JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou d'inspection.
+
+---
+
+## Visa
+
+Le Chef du Gouvernement ;
+
+Sur le rapport conjoint du ministre de la Santé et de la population et du ministre du travail et des affaires sociales ;
+
+Vu la Constitution, notamment ses articles 51, 52, 81 et 116 ;
+
+Vu la loi n° 83-13 du 2 juillet 1983 relative aux accidents du travail et aux maladies professionnelles, en son article 68 ;
+
+Vu la loi n° 85-05 du 16 février 1985 relative à la protection à la promotion de la santé, modifiée et complétée ;
+
+Vu la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, à la sécurité et à la médecine du travail ;
+
+Vu la loi n° 90-03 du 6 février 1990 relative à l'inspection du travail ;
+
+Vu la loi n° 90-11 du 21 avril 1990 relative aux relations de travail modifiée et complétée, notamment ses articles 5 à 17 ;
+
+Vu le décret n° 81-242 du 5 septembre 1981 portant création et organisation des secteurs sanitaires, modifié ;
+
+Vu le décret n° 84-26 du 11 février 1984 portant dissolution de l'organisme national interentreprises de médecine du travail, notamment son article 8 ;
+
+Vu le décret n° 86-25 du 11 février 1986 portant statut type des centres hospitalo-universitaires, modifié par le décret n° 86-294 du 16 décembre 1986 ;
+
+Vu le décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail ;
+
+Vu le décret exécutif n° 91-106 du 27 avril 1991 portant statut particulier des praticiens médicaux généralistes de santé publique ;
+
+Vu le décret exécutif n° 91-471 du 7 décembre 1991 portant statut particulier des spécialistes hospitalo-universitaires, modifié ;
+
+Vu le décret exécutif n° 92-492 du 28 décembre 1992 modifiant et complétant le décret exécutif n° 91-472 du 7 décembre 1991 portant régime indemnitaire des spécialistes hospitalo-universitaires ;
+
+**Décrète :**
 
 ---
 
 ## Chapitre I — Organisation et financement de la médecine du travail
 
-**Article 1er.** — Le présent décret, pris en application de l'article 45-1 de la loi n° 88-07 du 26 janvier 1988 et de l'article 76 de la loi n° 85-05 du 16 février 1985 susvisées, a pour objet de fixer les règles générales d'organisation et de fonctionnement de la médecine du travail au sein de tout organisme employeur tel que prévu à l'article 2 de la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, à la sécurité et à la médecine du travail.
+**Art. 1er.** — Le présent décret, pris en application de l'article 45-1 de la loi n° 88-07 du 26 janvier 1988 et de l'article 76 de la loi n° 85-05 du 16 février 1985 susvisées, a pour objet de fixer les règles générales d'organisation et de fonctionnement de la médecine du travail au sein de tout organisme employeur tel que prévu à l'article 2 de la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, à la sécurité et à la médecine du travail.
 
 **Art. 2.** — En application des articles 13 et 14 de la loi n° 88-07 du 26 janvier 1988 susvisée, la création d'un service de médecine du travail au sein de tout organisme employeur est obligatoire lorsque le temps nécessaire à un médecin du travail pour exercer sa mission est égal ou supérieur à la durée mensuelle légale de travail applicable au corps médical, et ce, compte tenu des normes fixées à l'article 3 ci-dessous.
 
@@ -19,7 +59,7 @@
 
 — une heure de travail par mois pour dix travailleurs fortement exposés.
 
-— une heure de travail par mois pour quinze (15) travailleurs moyennement ou peu exposés.
+— une heure de travail par mois pour quinze (15) travailleurs moyennement ou peu exposés ;
 
 Les horaires prévus ci-dessus peuvent être augmentés, compte-tenu de critères ayant trait à la nature de l'activité, à la taille et à la situation géographique de l'organisme employeur et ce, conformément aux objectifs arrêtés en matière de planification sanitaire.
 
@@ -49,9 +89,9 @@ Cette habilitation peut être retirée par décision du ministre chargé de la s
 
 — de prendre en charge la totalité des frais d'équipement et de fonctionnement du service de médecine du travail créé en son sein ;
 
-— de participer, dans le cas prévu à l'article 4-1° ci-dessus, aux frais d'équipement et de fonctionnement du service interorganismes de médecine du travail au prorata du nombre de travailleurs qu'il emploie et ce conformément à une convention préalablement établie ;
+— de participer, dans le cas prévu à l'article 4-1 ci-dessus, aux frais d'équipement et de fonctionnement du service interorganismes de médecine du travail au *prorata* du nombre de travailleurs qu'il emploie et ce conformément à une convention préalablement établie ;
 
-— de participer, dans les cas prévus à l'article 4-2° et 3° ci-dessus, au financement de la médecine du travail selon les modalités fixées par la convention-type prévue à l'article 14 de la loi n° 88-07 du 26 janvier 1988 susvisée.
+— de participer, dans les cas prévus à l'article 4-2 et 3 ci-dessus au financement de la médecine du travail selon les modalités fixées par la convention-type prévue à l'article 14 de la loi n° 88-07 du 26 janvier 1988 susvisée.
 
 **Art. 10.** — Dans tous les cas énumérés à l'article 9 ci-dessus, l'organisme employeur prend en charge les frais occasionnés par les examens complémentaires et les analyses effectuées dans le cadre de la médecine du travail en application de l'article 18 de la loi n° 88-07 du 26 janvier 1988 susvisée.
 
@@ -67,7 +107,7 @@ Cette habilitation peut être retirée par décision du ministre chargé de la s
 
 ## Chapitre II — Prérogatives du médecin du travail
 
-**Art. 13.** — La visite médicale d'embauchage prévue à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée comporte un examen clinique complet et des examens para-cliniques appropriés. Elle a pour objet :
+**Art. 13.** — La visite médicale d'embauche prévue à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée comporte un examen clinique complet et des examens para-cliniques appropriés. Elle a pour objet :
 
 — de rechercher si le travailleur n'est pas atteint d'une affection dangereuse pour les autres travailleurs ;
 
@@ -93,7 +133,7 @@ Toutefois, pour les travailleurs prévus à l'article 16 ci-dessous, cette péri
 
 — les travailleurs âgés de moins de 18 ans ;
 
-— les travailleurs âgés de plus de cinquante-cinq ans ;
+— les travailleurs âgés de plus de cinquante cinq ans ;
 
 — le personnel chargé de la restauration ;
 
@@ -210,8 +250,11 @@ L'arrêté de nomination fixe la compétence territoriale du médecin chargé de
 **Art. 36.** — Conformément à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée, les avis du médecin du travail, que l'organisme employeur est tenu de prendre en considération, concernent notamment :
 
 — les décisions médicales ;
+
 — l'application de la législation relative aux emplois réservés aux handicapés ;
+
 — les mutations de postes consécutives à une altération de la santé du travailleur ;
+
 — l'amélioration des conditions du travail.
 
 Dans le cas où l'avis du médecin du travail n'est pas pris en considération, celui-ci saisit l'inspecteur du travail territorialement compétent qui instruit le dossier en relation avec le médecin chargé de la fonction de contrôle et d'inspection compétent.
@@ -226,7 +269,11 @@ Un rapport-type du médecin du travail est fixé par arrêté interministériel 
 
 **Art. 38.** — Le secteur sanitaire établit une synthèse de l'ensemble des activités de médecine du travail et la transmet aux ministres chargés respectivement de la santé et du travail.
 
-**Art. 39.** — En application des dispositions de l'article 31 de la loi n° 88-07 du 26 janvier 1988 susvisée, le délai fixé par l'inspection du travail à l'organisme employeur pour les prescriptions donnant lieu à l'application de la procédure de mise en demeure ne peut être inférieur aux délais minimaux d'exécution prévus ci-après :
+---
+
+## Chapitre V — Délais minimaux d'exécution
+
+**Art. 39.** — En application des dispositions de l'article 31 de la loi n° 88-07 du 26 janvier 1988 susvisée, le délai fixé par l'inspection du travail à l'organisme employeur pour les prescriptions donnant lieu, à l'application de la procédure de mise en demeure ne peut être inférieur aux délais minimaux d'exécution prévues ci-après :
 
 1° délai minimum de trois (3) mois pour les prescriptions prévues aux articles 2, 4, 9 et 11 ;
 
@@ -236,16 +283,27 @@ Un rapport-type du médecin du travail est fixé par arrêté interministériel 
 
 4° délai minimum d'un (1) jour pour les prescriptions prévues aux articles 26 et 36.
 
-**Art. 40.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
+---
+
+## Chapitre VI — Disposition finale
+
+**Art. 40.** — Le présent décret sera publié au *Journal officiel* de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 15 mai 1993.
 
-**Belaïd ABDESSELAM.**
+**Bélaïd ABDESSELAM.**
 
 ---
 
 ## Contrôle de séquence
 
-Articles présents : Art. 1 à 40 — séquence complète, aucun gap.
+Articles présents dans ce fichier : **Art. 1er, Art. 2–40**
 
-**Total : 40 articles.**
+- Art. 1–12 : Chapitre I (Organisation et financement de la médecine du travail)
+- Art. 13–29 : Chapitre II (Prérogatives du médecin du travail)
+- Art. 30–31 : Chapitre III (Auxiliaires médicaux et soins d'urgence)
+- Art. 32–38 : Chapitre IV (Contrôle des activités de médecine du travail)
+- Art. 39 : Chapitre V (Délais minimaux d'exécution)
+- Art. 40 : Chapitre VI (Disposition finale)
+
+**Séquence complète : Art. 1–40 présents, aucune lacune.**
