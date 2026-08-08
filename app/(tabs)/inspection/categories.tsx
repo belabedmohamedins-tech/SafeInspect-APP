@@ -3,6 +3,8 @@
 // getAllFacilities() loaded via useFocusEffect+useState. Unique activities
 // now come from the merged DB+hardcoded source so user-added facilities
 // are always reflected without a full app restart.
+// W29 (2026-08-09): TSC fix — Colors.cardBackground→Colors.background,
+//   Colors.text→Colors.textPrimary (neither key exists in constants/theme.ts).
 import { FontAwesome } from '@expo/vector-icons';
 import { useFocusEffect } from 'expo-router';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
@@ -79,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: Colors.cardBackground ?? '#fff',
+    backgroundColor: Colors.background,
     borderRadius: 8,
     padding: 16,
     marginBottom: 10,
@@ -91,10 +93,10 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 16,
-    color: Colors.text ?? '#333',
+    color: Colors.textPrimary,
     flex: 1,
     textAlign: 'right',
   },
   empty: { alignItems: 'center', marginTop: 40 },
-  emptyText: { color: Colors.textSecondary ?? '#888', fontSize: 14 },
+  emptyText: { color: Colors.textSecondary, fontSize: 14 },
 });

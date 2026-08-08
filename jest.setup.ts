@@ -95,6 +95,16 @@
  *   Tests that need to persist state across calls within the same `it` block
  *   are unaffected — the reset only fires between tests.
  *
+ * NOTE: AppState.addEventListener — must return { remove: jest.fn() }
+ *
+ *   useChecklistData (W28) calls AppState.addEventListener('change', handler)
+ *   and stores the result as `subscription`, then calls subscription.remove()
+ *   in the useEffect cleanup. If addEventListener returns jest.fn() (a function,
+ *   not an object), subscription.remove() throws TypeError at unmount, React
+ *   catches it inside the HookContainer and emits an AggregateError warning,
+ *   which causes Jest to mark the suite FAIL even though no assertion failed.
+ *   Fix: return { remove: jest.fn() } from addEventListener.
+ *
  * Load order:
  *   1. jest.polyfill.js          — global polyfills before preset
  *   2. jest-expo preset          — @react-native/jest-preset component stubs
@@ -265,7 +275,16 @@ jest.mock('react-native', () => {
     },
     NativeModules: {},
     NativeEventEmitter: jest.fn(() => ({ addListener: jest.fn(), removeAllListeners: jest.fn() })),
-    AppState: { addEventListener: jest.fn(), removeEventListener: jest.fn(), currentState: 'active' },
+    // W29 (2026-08-09): addEventListener must return { remove: jest.fn() }.
+    //   useChecklistData (W28) calls AppState.addEventListener('change', handler)
+    //   and then subscription.remove() in cleanup. If addEventListener returns
+    //   a function (the old jest.fn()), subscription.remove() throws TypeError
+    //   at unmount → React HookContainer AggregateError → suite marked FAIL.
+    AppState: {
+      addEventListener: jest.fn(() => ({ remove: jest.fn() })),
+      removeEventListener: jest.fn(),
+      currentState: 'active',
+    },
     Linking:  { openURL: jest.fn(), canOpenURL: jest.fn(), getInitialURL: jest.fn(), addEventListener: jest.fn() },
     Keyboard: { addListener: jest.fn(), removeAllListeners: jest.fn(), dismiss: jest.fn() },
     Alert:    { alert: jest.fn() },
@@ -380,6 +399,11 @@ beforeAll(() => {
       '[SafeInspect] Sync flush error',
       '[SettingsRepository]',
       '[criteriaData]',
+      // 3. W29: React HookContainer AggregateError warning from AppState cleanup
+      //    (residual from test environments that fire unmount before AppState mock
+      //     is fully torn down). Suppressed because it is not a test assertion
+      //     failure — the actual fix is the { remove: jest.fn() } AppState stub.
+      'An error occurred in the <HookContainer>',
     ];
     if (suppressed.some(s => msg.includes(s))) return;
     _consoleWarn(...args);

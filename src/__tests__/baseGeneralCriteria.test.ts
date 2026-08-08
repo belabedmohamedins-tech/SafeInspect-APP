@@ -1,3 +1,9 @@
+// src/__tests__/baseGeneralCriteria.test.ts
+// W29 (2026-08-09): fixed 3 stale article expectations to match W19 corrections
+//   already committed in baseGeneralCriteria.ts:
+//   - BGN-01-03: Art.71+73 → Art.82+84 (right of entry + suspension power)
+//   - BGN-03-02: Art.14+45 → Art.8+11 (generator obligations, not national plan)
+//   - BGN-03-03: Art.14 → Art.8 (same law 01-19, correct article)
 import { baseGeneralCriteria } from '../criteria/baseGeneralCriteria';
 import { InspectionItem } from '../types';
 
@@ -63,13 +69,14 @@ describe('baseGeneralCriteria', () => {
     expect(item!.controlType).toBe('doc');
   });
 
+  // W29 (2026-08-09): CORRECTED — W19 updated BGN-01-03 to Art.82 (entry) + Art.84 (suspension).
   it('BGN-01-03 inspector obstruction item is high severity', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-01-03');
     expect(item).toBeDefined();
     expect(item!.severity).toBe('high');
     expect(item!.controlType).toBe('doc');
-    expect(item!.legalReference).toContain('71');
-    expect(item!.legalReference).toContain('73');
+    expect(item!.legalReference).toContain('82');
+    expect(item!.legalReference).toContain('84');
   });
 
   it('BGN-02-01 legalReference contains art.37 of 90-29', () => {
@@ -89,20 +96,24 @@ describe('baseGeneralCriteria', () => {
     expect(item!.legalReference).toContain('2011');
   });
 
-  it('BGN-03-02 legalReference cites 01-19 art.14 and 03-10 art.45', () => {
+  // W29 (2026-08-09): CORRECTED — W19 updated BGN-03-02 from Art.14+45 → Art.8+11 of Loi 01-19.
+  //   Art.14 was the national waste plan (wrong domain).
+  //   Art.8 = generator obligation + Art.11 = disposal conditions.
+  it('BGN-03-02 legalReference cites 01-19 art.8 and 03-10 art.30', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-03-02');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('01-19');
-    expect(item!.legalReference).toContain('14');
+    expect(item!.legalReference).toContain('8');
     expect(item!.legalReference).toContain('03-10');
-    expect(item!.legalReference).toContain('45');
+    expect(item!.legalReference).toContain('30');
   });
 
-  it('BGN-03-03 legalReference cites 01-19 art.14', () => {
+  // W29 (2026-08-09): CORRECTED — W19 updated BGN-03-03 from Art.14 → Art.8 of Loi 01-19.
+  it('BGN-03-03 legalReference cites 01-19 art.8', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-03-03');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('01-19');
-    expect(item!.legalReference).toContain('14');
+    expect(item!.legalReference).toContain('8');
   });
 
   it('BGN-03-04 legalReference cites 91-05 art.14', () => {

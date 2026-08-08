@@ -1,4 +1,6 @@
 // __tests__/utils/statusUtils.test.ts
+// W29 (2026-08-09): updated fallback expectation لم يقيم → لم يقيَّم
+//   to match the correct vowelled Arabic in statusUtils.ts default branch.
 // statusUtils imports Colors from '../../constants' (real file, no mock needed)
 import { getStatusText, getStatusColor, getComplianceSummary } from '../../src/utils/statusUtils';
 
@@ -16,7 +18,7 @@ describe('getStatusText', () => {
     expect(getStatusText('partial')).toBe('جزئي');
   });
   it('returns default text for unknown status', () => {
-    expect(getStatusText('unknown' as any)).toBe('لم يقيم');
+    expect(getStatusText('unknown' as any)).toBe('لم يقيَّم');
   });
 });
 
