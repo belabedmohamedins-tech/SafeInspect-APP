@@ -1,19 +1,25 @@
 # Arrêté interministériel du 7 mai 2025
-## Relatif aux conditions d'hygiène dans la restauration (chaîne du froid / liaison chaude-froide)
+## Relatif aux conditions d’hygiène dans la restauration (chaîne du froid / liaison chaude-froide)
 
-**Source :** Journal officiel n° 43 (2025) — Ministère du Commerce  
-**URL JO :** https://www.joradp.dz/FTP/jo-francais/2025/F2025043.pdf  
-**URL Commerce :** https://www.commerce.gov.dz/fr/reglementation/arrete-interministeriel-du-7-mai-2025  
-**Statut Phase W :** ✅ Référence localisée — texte intégral disponible via JO PDF  
-**À récupérer :** Le PDF JO n° 43/2025 pour extraction des températures exactes
+| Champ | Valeur |
+|---|---|
+| **Titre officiel** | Arrêté interministériel du 7 mai 2025 relatif aux conditions d’hygiène dans la restauration |
+| **Date de signature** | 7 mai 2025 |
+| **Journal Officiel** | N° 43 du 2025 |
+| **Source PDF** | https://www.joradp.dz/FTP/jo-francais/2025/F2025043.pdf |
+| **URL Ministère** | https://www.commerce.gov.dz/fr/reglementation/arrete-interministeriel-du-7-mai-2025 |
+| **Converti le** | 2026-08-08 |
+| **Statut** | ⚠️ NON VÉRIFIÉ — valeurs de référence, texte intégral JO 43/2025 non encore intégré |
 
-> ⚠️ **Vérifier contre le texte JORADP original avant toute décision légale ou d'application.**
+> ⚠️ **Ce fichier contient des valeurs de référence issues du contexte réglementaire algérien. Le texte verbatim du JO n° 43/2025 n’a pas encore été extrait. Télécharger le PDF ci-dessus et reconvertir avant usage en conformité.**
+
+> ⚠️ **Vérifier contre le texte original JORADP avant toute décision légale ou d’application.**
 
 ---
 
 ## Ce que ce texte couvre
 
-Cet arrêté fixe les règles d'hygiène applicables à la restauration collective, incluant notamment la chaîne du froid et la liaison chaude-froide.
+Cet arrêté fixe les règles d’hygiène applicables à la restauration collective, incluant notamment la chaîne du froid et la liaison chaude-froide.
 
 ### Températures liaison froide (valeurs de référence — vérifier texte intégral JO 43/2025)
 
@@ -51,12 +57,24 @@ Ce texte fixe les **critères microbiologiques** des denrées alimentaires — d
 | Produits congelés | ≤ -12 °C |
 | Produits surgelés | ≤ -18 °C |
 
-⚠️ L'arrêté de 2025 est plus récent et peut modifier certaines valeurs — vérifier la primauté.
+⚠️ L’arrêté de 2025 est plus récent et peut modifier certaines valeurs — vérifier la primauté.
 
 ---
 
-## Note d'utilisation dans SafeInspect (Chapitre 4 — Sécurité alimentaire)
+## Note d’utilisation dans SafeInspect (Chapitre 4 — Sécurité alimentaire)
 
 1. **Base légale principale :** Arrêté interministériel du 7 mai 2025 (JO n° 43)
 2. **Base légale complémentaire :** Arrêté du 21 novembre 1999 (tableau températures par type de denrée)
 3. **Microbiologie :** Arrêté du 4 octobre 2016 (critères microbiologiques)
+
+---
+
+## Contrôle de séquence
+
+**Articles présents dans ce fichier :** Aucun article numéroté extrait.
+
+**Lacunes identifiées :**
+- Le texte intégral de l’arrêté du 7 mai 2025 (JO n° 43) n’a pas encore été extrait. Les articles numérotés sont inconnus.
+- [MANQUANT — télécharger JO n° 43/2025 et reconvertir verbatim]
+
+**Statut :** ⚠️ VALEURS DE RÉFÉRENCE UNIQUEMENT — ne pas utiliser pour citation d’articles avant reconversion complète.
