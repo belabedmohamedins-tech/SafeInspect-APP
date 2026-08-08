@@ -79,12 +79,14 @@ describe('baseGeneralCriteria', () => {
     expect(item!.legalReference).toContain('37');
   });
 
-  it('BGN-03-01 legalReference references art.3 and art.7 of 88-164', () => {
+  // W8 (2026-08-08): BGN-03-01 legalReference updated from Décret 88-164 (superseded/unfindable
+  // in JORADP) to Décret exécutif 11-125 du 22/03/2011 (potable water quality norms,
+  // JORADP-confirmed). Test updated accordingly — no specific articles cited in the new ref.
+  it('BGN-03-01 legalReference references Décret 11-125 (potable water norms)', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-03-01');
     expect(item).toBeDefined();
-    expect(item!.legalReference).toContain('88-164');
-    expect(item!.legalReference).toContain('3');
-    expect(item!.legalReference).toContain('7');
+    expect(item!.legalReference).toContain('11-125');
+    expect(item!.legalReference).toContain('2011');
   });
 
   it('BGN-03-02 legalReference cites 01-19 art.14 and 03-10 art.45', () => {
