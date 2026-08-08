@@ -8,6 +8,14 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 02:44 WAT — [Agent: Perplexity] — W4-refix GATE CONFIRMED: Jest all green — user-confirmed
+- Phases closed: **W4-refix** ✅ GATE CONFIRMED
+- Files changed: none (gate confirmation only)
+- Gate: `npx jest` → **all green** — user-confirmed 02:44 WAT
+- No logic was changed in W4-refix (pure render-path fix: `collapsed[key]` read instead of `isCollapsed(key)`). Jest passing confirms no regressions from the `useCollapsibleSections` destructure change.
+- **No open phases requiring immediate action.** Next pending phase: **W11** — identify correct Algerian ventilation decree for BGN-02-06 (Décret 93-120 is medical exams, not ventilation).
+- Verify on device: start a new inspection → checklist screen → all sections closed (▼) → 1 tap opens (▲) → 1 tap closes (▼).
+
 ### 2026-08-08 02:14 WAT — [Agent: Perplexity] — W4-refix: stale-closure fix in checklist.tsx — 1-tap-to-open now guaranteed
 - Phases closed: **W4-refix** ✅
 - Files changed:
@@ -15,7 +23,7 @@
 - Root cause: `renderItem` and `renderSectionHeader` each captured `isCollapsed` (a `useCallback`-wrapped function ref) as a dependency. React Native's `VirtualizedList` batches row updates — the section-header row and the item rows can update in different render cycles when the `isCollapsed` reference changes after `toggleSection`. In that intermediate cycle, the header showed the new chevron icon while the `Collapsible` inside the item rows still held the old `collapsed` prop — or vice versa — producing the one-extra-tap symptom even after the initial-state fix in W4.
 - Fix principle: both callbacks now read from the same `collapsed` object reference in the same render cycle. React guarantees a single consistent `collapsed` snapshot per render, so header icon and `Collapsible` prop are always in sync.
 - Gate: No logic change to toggle or scoring — TSC/Jest not required. Verify on device: start a new inspection → checklist screen → all sections closed (▼) → 1 tap opens (▲) → 1 tap closes (▼). No double-tap needed.
-- Commit: see this commit
+- Commit: `fae9da4`
 - Verify: start a new inspection → checklist screen → all sections closed with ▼ → tap once → section opens with ▲ → tap once → section closes with ▼.
 
 ### 2026-08-08 01:56 WAT — [Agent: Perplexity] — W6/W7/W8/W9 CLOSED: all confirmed clean by direct code read — W11 opened
