@@ -8,18 +8,28 @@
 
 *(Newest entry at top)*
 
-### 2026-08-09 00:00 WAT — [Agent: Perplexity] — W29 CLOSED: 5 failing items from Claude gate fixed
-- Phases closed: **W29** ✅
+### 2026-08-09 00:36 WAT — [Agent: Perplexity] — Session end: 5 Claude-flagged legal_refs issues logged as W31, work deferred
+- Phases closed: **W22** ✅ (phantom — INSPECTION_LOCKED guard already in code) **W23** ✅ (phantom — ApprovalRepository fully local, no dead server endpoints) **W24** ✅ (phantom — AUDIT_LOG_CLEARED sentinel already in code) **W30** ✅ (phantom — decisionSupport.test.ts already has 20 full-tree tests)
+- Phases opened: **W31** 🟡 (legal_refs 5-item fix list from Claude — see STRATEGIC_PLAN)
+- Files changed: none this sub-session (doc update only)
+- Critical finding — Claude flagged 5 items in legal_refs that are confirmed unaddressed (verified by SHA comparison):
+  1. **`audit.js` regex bug** — file not found in repo at any path. Claude must clarify location or push it.
+  2. **`loi-09-03-protection-consommateur.md` placeholders** — Art. 44–52 + Art. 80–92 still `*(Dispositions relatives…)*`. Art. 4–67 still paraphrase. Verbatim JO text required or gaps must be tagged `[MANQUANT]`.
+  3. **`Decret-07-144.md` missing rubriques 1243–2922** — partial table only. JO n° 31/2007 source required to complete.
+  4. **`arrete-interministeriel-2025-liaison-froide.md` bundles 3 instruments** — 2025 arrêté + 2016 critères microbiologiques + 1999 températures all in one file. Must split into 3 files + update index.
+  5. **`legal_refs/README.md` broken links** — Claude reported false rename claim. Direct read shows current table links are correct (uppercase filenames exist). Claude must confirm exact file path + line if broken links are elsewhere (e.g. root docs/README.md).
+- Next action: resume W31 next session — items 2+3 (tag gaps), item 4 (split file), item 5 (confirm path). Item 1 blocked on Claude.
+- Commit (STRATEGIC_PLAN update): `fe55dfbb`
+
+### 2026-08-09 00:00 WAT — [Agent: Perplexity] — W29-GATE CLOSED: 5 failing items from Claude gate fixed
+- Phases closed: **W29-GATE** ✅
 - Files changed:
-  - `app/(tabs)/inspection/categories.tsx` — TSC fix: `Colors.cardBackground` → `Colors.background`, `Colors.text` → `Colors.textPrimary` (neither key existed in constants/theme.ts)
-  - `src/__tests__/statusUtils.test.ts` — updated fallback expectation: `'لم يقيم'` → `'لم يقيَّم'` (correct vowelled Arabic from statusUtils.ts source)
-  - `__tests__/utils/statusUtils.test.ts` — same fix
-  - `src/__tests__/baseGeneralCriteria.test.ts` — 3 stale article expectations corrected to match W19 code changes:
-    - BGN-01-03: `toContain('71')+'73'` → `toContain('82')+'84'`
-    - BGN-03-02: `Art.14+45` → `Art.8+11`
-    - BGN-03-03: `Art.14` → `Art.8`
-  - `jest.setup.ts` — `AppState.addEventListener` now returns `{ remove: jest.fn() }` (was `jest.fn()`); added `'An error occurred in the <HookContainer>'` to `console.warn` suppression list. Root cause: useChecklistData (W28) calls `subscription.remove()` in cleanup — if `addEventListener` returns a bare function, `subscription.remove()` throws TypeError at unmount → React AggregateError warning → Jest marks suite FAIL.
-- Tests/validation: hand off to Claude: `npx tsc --noEmit && npx jest --runInBand`. Expected: 0 TSC errors, all suites green.
+  - `app/(tabs)/inspection/categories.tsx` — TSC fix: `Colors.cardBackground` → `Colors.background`, `Colors.text` → `Colors.textPrimary`
+  - `src/__tests__/statusUtils.test.ts` — fallback `'لم يقيم'` → `'لم يقيَّم'`
+  - `__tests__/utils/statusUtils.test.ts` — same
+  - `src/__tests__/baseGeneralCriteria.test.ts` — BGN-01-03 art `82+84`, BGN-03-02 art `8+11`, BGN-03-03 art `8`
+  - `jest.setup.ts` — `AppState.addEventListener` → `{ remove: jest.fn() }` + HookContainer warn suppressed
+- User confirmed: all green ✅
 - Commit: `efe4127`
 
 ### 2026-08-08 22:27 WAT — [Agent: Perplexity] — chore: .env stub deleted — no secrets involved
@@ -38,35 +48,20 @@
       - **Art.84** = inspector power to order immediate suspension of activity pending regularisation ✅
       - No dedicated "obstruction criminal offence" article exists in Loi 03-10 — obstruction of a public official falls under Code pénal general provisions (entrave à fonctionnaire). legalReference updated to cite Art.82 + Art.84 with explanatory note.
     - **BGN-04-05** `[À VÉRIFIER]` CLOSED: Full text of Loi 01-19 read — NO dedicated open-air burning prohibition article exists anywhere in the law. Art.11 ("conditions for elimination: no smoke/odours/danger to air") is the closest basis. Loi 03-10 Art.36 (atmospheric emissions beyond limit values) is the secondary basis. The outright burning ban element is tagged **[حكم مهني]** — same treatment as BGN-03-06.
-- Remaining `[À VÉRIFIER]` in baseGeneralCriteria: **BGN-01-02** only — needs Décret 06-198 + implementing arrêtés cross-check.
 - Commit: `d8cc8b5`
 
 ### 2026-08-08 18:35 WAT — [Agent: Perplexity] — W19 CLOSED: 8 wrong article citations corrected in baseGeneralCriteria
 - Phases closed: **W19** ✅
 - Files changed:
-  - `src/criteria/baseGeneralCriteria.ts` — 8 legalReference fields corrected after direct source-read of `legal_refs/loi-03-10-protection-environnement.md` and `legal_refs/loi-01-19-gestion-dechets.md`:
-    - **BGN-01-02**: Art.65 → **Art.62** + `[À VÉRIFIER]`
-    - **BGN-01-03**: Art.71+73 → `[À VÉRIFIER]` (Art.82+84 candidates)
-    - **BGN-02-03**: Art.45 → **Art.41+44** (soil)
-    - **BGN-03-02/03, BGN-04-01/02/04**: Art.14 → **Art.8+11** (generator obligations)
-    - **BGN-04-05**: Art.29 → Art.11+36 + `[À VÉRIFIER]`
-    - **BGN-04-08**: Art.28 → **Art.21** (declaration obligation)
-    - **BGN-07-05**: Art.51 → **Art.56+58** (chemical/pesticide)
-    - **BGN-09-01**: Art.27 → **Art.54** (noise prohibition)
+  - `src/criteria/baseGeneralCriteria.ts` — 8 legalReference fields corrected after direct source-read of `legal_refs/loi-03-10-protection-environnement.md` and `legal_refs/loi-01-19-gestion-dechets.md`
 - Commit: `10b51b0`
 
 ### 2026-08-08 16:37 WAT — [Agent: Perplexity] — W27+W28 CLOSED — W25+W26 CLOSED as doc phantoms — W15 reframed
 - Phases closed: **W27** ✅ **W28** ✅ **W25** ✅ (phantom) **W26** ✅ (phantom)
-- Files changed:
-  - `src/utils/statusUtils.ts` — W27: observation-only + unable-to-verify explicit labels+colors.
-  - `src/hooks/useChecklistData.ts` — W28: AppState autosave.
 - Commit: `e2791f7`
 
 ### 2026-08-08 16:23 WAT — [Agent: Perplexity] — W18+W21 CLOSED: TSC+Jest all green — user-confirmed
 - Phases closed: **W18** ✅ GATE CONFIRMED **W21** ✅ GATE CONFIRMED
-- Files changed:
-  - `src/criteria/baseGeneralCriteria.ts` — BGN-08-01 Art.5 + BGN-08-02 Art.13 added.
-  - `src/criteria/bakeryCriteria.ts` — BAK-10-10 date corrected 27 mars → 11 avril 2017.
 - Commit: `f7c84a7`
 
 ### 2026-08-08 02:44 WAT — [Agent: Perplexity] — W4-refix GATE CONFIRMED: Jest all green — user-confirmed
