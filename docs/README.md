@@ -8,6 +8,24 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 18:35 WAT — [Agent: Perplexity] — W19 CLOSED: 8 wrong article citations corrected in baseGeneralCriteria
+- Phases closed: **W19** ✅
+- Files changed:
+  - `src/criteria/baseGeneralCriteria.ts` — 8 legalReference fields corrected after direct source-read of `legal_refs/loi-03-10-protection-environnement.md` and `legal_refs/loi-01-19-gestion-dechets.md`:
+    - **BGN-01-02**: Art.65 (accident notification) ≠ record-keeping → corrected to **Art.62** (surveillance obligation) + `[À VÉRIFIER]` — no explicit register article found, cross-check Décret 06-198 needed
+    - **BGN-01-03**: Art.71 (waste import ban) + Art.73 (water discharge fine) ≠ inspector rights/obstruction → both replaced with `[À VÉRIFIER]` — candidates are **Art.82** (inspector right of entry) + **Art.84** (obstruction/suspension power), confirm by reading Arts.81–87 of Loi 03-10
+    - **BGN-02-03**: Art.45 (biodiversity/nature) ≠ soil pollution → corrected to **Art.41** (soil degradation prohibition) + **Art.44** (soil remediation obligation)
+    - **BGN-03-02, BGN-03-03, BGN-04-01, BGN-04-02, BGN-04-04**: Art.14 (national plan coordination) ≠ generator obligations → corrected to **Art.8** (elimination duty on generator) + **Art.11** (conditions: no danger to persons/water/soil/air)
+    - **BGN-04-05**: Art.29 (schéma communal = municipal plan) ≠ open-air burning ban → Art.11+Art.36 cited + `[À VÉRIFIER]` — no explicit open-air burning article found in Loi 01-19; check for specific arrêté or ministerial order
+    - **BGN-04-08**: Art.28 (export return obligation) ≠ inventory register → corrected to **Art.21** (declaration obligation: hazardous waste generators must declare nature/quantity/characteristics + periodic reporting)
+    - **BGN-07-05**: Art.51 (coastal ecosystem protection) ≠ pesticide/chemical licensing → corrected to **Art.56** (dangerous chemicals subject to specific regulations) + **Art.58** (import/manufacture/sale/use requires authorisation)
+    - **BGN-09-01**: Art.27 (public access to environmental information) ≠ noise ban → corrected to **Art.54** ("Il est interdit de produire des bruits ou des sons de nature à nuire à la santé ou à troubler de façon excessive les conditions normales de vie")
+- Root cause of all 8 errors: article *numbers* were plausible-sounding but not verified against actual article text — classic AI citation hallucination pattern
+- 2 items remain `[À VÉRIFIER]` (BGN-01-03, BGN-04-05): need human JORADP cross-check before closing
+- Gate: TSC + Jest not required (legalReference strings only, no logic change). Claude can confirm with `npx tsc --noEmit`.
+- Commit: `10b51b0`
+- Next open phases: **BGN-01-03** (Arts.81–87 Loi 03-10 — inspector rights/obstruction) + **BGN-04-05** (open-air burning source) + **W22/W23/W24** (immutability, approval, audit-log)
+
 ### 2026-08-08 16:37 WAT — [Agent: Perplexity] — W27+W28 CLOSED — W25+W26 CLOSED as doc phantoms — W15 reframed
 - Phases closed: **W27** ✅ **W28** ✅ **W25** ✅ (phantom) **W26** ✅ (phantom)
 - Files changed:
@@ -32,7 +50,6 @@
 - Phases closed: **W4-refix** ✅ GATE CONFIRMED
 - Files changed: none (gate confirmation only)
 - Gate: `npx jest` → **all green** — user-confirmed 02:44 WAT
-- No logic was changed in W4-refix (pure render-path fix: `collapsed[key]` read instead of `isCollapsed(key)`). Jest passing confirms no regressions from the `useCollapsibleSections` destructure change.
 
 ### 2026-08-08 02:14 WAT — [Agent: Perplexity] — W4-refix: stale-closure fix in checklist.tsx — 1-tap-to-open now guaranteed
 - Phases closed: **W4-refix** ✅
