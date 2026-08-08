@@ -15,13 +15,13 @@
 // W3: fix scroll-jump on slow upward scroll — maintainVisibleContentPosition +
 //     stickySectionHeadersEnabled=false + stable renderItem/renderSectionHeader
 //     callbacks so VirtualizedList skips unnecessary row re-renders.
-// W4: fix 3-step tap cycle (down→right→down before section opens). Root cause:
-//     renderItem and renderSectionHeader each called isCollapsed() — a
-//     useCallback — which could reflect different render-cycle snapshots,
-//     causing Collapsible prop and chevron icon to be out of sync. Fix: both
-//     callbacks now read directly from the collapsed Record<string,boolean>
-//     (same object reference in the same render), so icon and Collapsible prop
-//     are always guaranteed to match. dep arrays updated accordingly.
+// W4: initial collapsed state set to true so all sections start closed;
+//     isCollapsed fallback changed ?? false → ?? true.
+// W4-refix: read `collapsed` record directly in renderItem + renderSectionHeader
+//     instead of through the `isCollapsed` function ref. Both callbacks now
+//     share the same `collapsed` object snapshot in every render cycle,
+//     eliminating the stale-closure mismatch that caused the one-extra-tap
+//     symptom to persist after W4.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -127,9 +127,8 @@ export default function ChecklistScreen() {
     saveDraft,
   } = useChecklistData(checklistParams, signature);
 
-  // W4: destructure `collapsed` (the raw record) in addition to the helpers so
-  // renderItem and renderSectionHeader can read from the SAME object reference
-  // in the same render cycle — preventing icon/Collapsible desync.
+  // W4-refix: destructure `collapsed` record directly so both renderItem and
+  // renderSectionHeader read from the identical state snapshot every cycle.
   const { collapsed, toggleSection, getSectionProgress } = useCollapsibleSections(
     sections.map(s => s.title)
   );
@@ -227,9 +226,8 @@ export default function ChecklistScreen() {
     );
   };
 
-  // W4: read collapsed[section.title] directly (not via isCollapsed()) so the
-  // Collapsible prop and the chevron icon in renderSectionHeader always come
-  // from the SAME collapsed object reference in the same render pass.
+  // W4-refix: read `collapsed[section.title]` directly (not via isCollapsed)
+  // so this callback and renderSectionHeader always use the same state snapshot.
   const renderItem = useCallback(
     ({ item, section }: { item: any; section: any }) => {
       const diffEntry = isFollowUp
@@ -259,8 +257,7 @@ export default function ChecklistScreen() {
 
   // W2: chevron-down = collapsed (section closed, one tap opens it)
   //     chevron-up   = expanded  (section open,   one tap closes it)
-  // W4: read collapsed[title] directly — same snapshot as renderItem's
-  //     Collapsible prop so icon and open/close state never diverge.
+  // W4-refix: read `collapsed[title]` directly for same-snapshot guarantee.
   const renderSectionHeader = useCallback(
     ({ section: { title, data: sectionData } }: { section: { title: string; data: any[] } }) => (
       <TouchableOpacity

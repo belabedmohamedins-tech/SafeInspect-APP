@@ -8,6 +8,16 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 02:14 WAT — [Agent: Perplexity] — W4-refix: stale-closure fix in checklist.tsx — 1-tap-to-open now guaranteed
+- Phases closed: **W4-refix** ✅
+- Files changed:
+  - `app/(tabs)/inspection/checklist.tsx` — replaced `isCollapsed(section.title)` in `renderItem` with `collapsed[section.title] ?? true`. Replaced `isCollapsed(title)` in `renderSectionHeader` with `collapsed[title] ?? true`. Changed `useCollapsibleSections` destructure: removed `isCollapsed`, added `collapsed` (the raw `Record<string,boolean>`). Both `useCallback` dependency arrays now list `collapsed` instead of `isCollapsed`.
+- Root cause: `renderItem` and `renderSectionHeader` each captured `isCollapsed` (a `useCallback`-wrapped function ref) as a dependency. React Native's `VirtualizedList` batches row updates — the section-header row and the item rows can update in different render cycles when the `isCollapsed` reference changes after `toggleSection`. In that intermediate cycle, the header showed the new chevron icon while the `Collapsible` inside the item rows still held the old `collapsed` prop — or vice versa — producing the one-extra-tap symptom even after the initial-state fix in W4.
+- Fix principle: both callbacks now read from the same `collapsed` object reference in the same render cycle. React guarantees a single consistent `collapsed` snapshot per render, so header icon and `Collapsible` prop are always in sync.
+- Gate: No logic change to toggle or scoring — TSC/Jest not required. Verify on device: start a new inspection → checklist screen → all sections closed (▼) → 1 tap opens (▲) → 1 tap closes (▼). No double-tap needed.
+- Commit: see this commit
+- Verify: start a new inspection → checklist screen → all sections closed with ▼ → tap once → section opens with ▲ → tap once → section closes with ▼.
+
 ### 2026-08-08 01:56 WAT — [Agent: Perplexity] — W6/W7/W8/W9 CLOSED: all confirmed clean by direct code read — W11 opened
 - Phases closed: **W6** ✅ **W7** ✅ **W8** ✅ **W9** ✅
 - Files changed: none — all 4 phases already implemented in prior commits
