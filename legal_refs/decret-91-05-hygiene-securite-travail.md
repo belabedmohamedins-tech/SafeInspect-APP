@@ -1,13 +1,19 @@
 # Décret exécutif n° 91-05 du 19 janvier 1991
-## Relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail
+## Prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail
 
-> ⚠️ **Verify against the original JORADP text before relying on this for any legal or enforcement decision.**
+---
 
-**Titre officiel :** Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail  
-**Date de signature :** 19 janvier 1991  
-**Publication :** Journal Officiel de la République Algérienne Démocratique et Populaire, N° 04, 23 janvier 1991, pp. 63–70  
-**Source PDF converti :** decret 91-05.pdf (fourni par l'utilisateur, upload du 08 août 2026)  
-**Signataire :** Mouloud HAMROUCHE, Chef du Gouvernement
+**Titre officiel :** Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail.
+
+**Date de signature :** 19 janvier 1991
+
+**Date de publication :** 23 janvier 1991
+
+**Journal Officiel :** JORADP N° 04 du 23 janvier 1991, pages 63–70
+
+**Source PDF converti :** `decret 91-05.pdf` (transmis par l'utilisateur, août 2026)
+
+> ⚠️ **AVERTISSEMENT :** Vérifier contre le texte original du JORADP avant de s'appuyer sur ce fichier pour toute décision juridique ou d'application.
 
 ---
 
@@ -23,21 +29,21 @@ Vu l'ordonnance n° 71-74 du 16 novembre 1971 relative à la gestion socialiste 
 
 Vu l'ordonnance n° 75-33 du 29 avril 1975 relative aux attributions de l'inspection du travail et des affaires sociales.
 
-Vu la loi n° 78-12 du 5 août 1978 portant statut général du travailleur notamment son article 13;
+Vu la loi n° 78-12 du 5 août 1978 portant statut général du travailleur notamment son article 13 ;
 
-Vu la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement;
+Vu la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement ;
 
-Vu la loi n° 85-05 du 16 février 1985 relative à la protection et à la promotion de la santé, modifiée par la loi n° 90-17 du 31 juillet 1990;
+Vu la loi n° 85-05 du 16 février 1985 relative à la protection et à la promotion de la santé, modifiée par la loi n° 90-17 du 31 juillet 1990 ;
 
 Vu la loi n° 88-01 du 12 janvier 1988 portant loi d'orientation sur les entreprises publiques économiques,
 
 Vu la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, la sécurité et la médecine du travail,
 
-Vu la loi n° 90-03 du 6 février 1990 relative à l'inspection du travail;
+Vu la loi n° 90-03 du 6 février 1990 relative à l'inspection du travail ;
 
-Vu la loi n° 90-11 du 21 avril 1990 relative aux relations de travail;
+Vu la loi n° 90-11 du 21 avril 1990 relative aux relations de travail ;
 
-Vu le décret n° 86-132 du 27 mai 1986 fixant les règles de protection des travailleurs contre les risques de rayonnements ionisants ainsi que celles relatives au contrôle de la détention et de l'utilisation des substances radioactives et des appareils émettant des rayonnements ionisants;
+Vu le décret n° 86-132 du 27 mai 1986 fixant les règles de protection des travailleurs contre les risques de rayonnements ionisants ainsi que celles relatives au contrôle de la détention et de l'utilisation des substances radioactives et des appareils émettant des rayonnements ionisants ;
 
 Décrète :
 
@@ -65,7 +71,7 @@ Le nettoyage des murs et des plafonds ainsi que la réfection des enduits et des
 
 ### Article 4
 
-Dans les locaux de travail où sont entreposés ou mis en oeuvre, des matières altérables ou objets, présentant des risques de contamination, de nocivité, de corrosion ou d'irritation, le sol doit être lisse, imperméable, sans interstices et former une cuvette étanche de retenue.
+Dans les locaux de travail où sont entreposés ou mis en œuvre, des matières altérables ou objets, présentant des risques de contamination, de nocivité, de corrosion ou d'irritation, le sol doit être lisse, imperméable, sans interstices et former une cuvette étanche de retenue.
 
 Les murs doivent être lisses et lavables, le sol et les murs ainsi que les tables de travail doivent être lavés quotidiennement et au besoin désinfectés.
 
@@ -76,6 +82,8 @@ Les vidanges, nettoyages ou destructions de ces matières doivent être opérés
 ### Article 5
 
 Indépendamment des mesures de prophylaxie exigées par la nature des travaux, le nettoyage doit comporter des mesures de désinfection et de protection contre les maladies contagieuses.
+
+---
 
 ### Section 2 — Aération et assainissement des locaux
 
@@ -103,7 +111,7 @@ Les dispositifs d'évacuation des eaux résiduaires et des eaux de lavage doiven
 
 Lorsque les travaux réalisés entraînant la concentration de poussières ou le dégagement d'émanations nocives, insalubres ou incommodes ne peuvent être effectués dans des appareils clos et étanches, les poussières, les aérosols, ainsi que les gaz et vapeurs sont captés à leur source de protection et évacués directement au dehors des locaux de travail dans des conditions ne présentant aucun risque de pollution pour l'environnement et n'incommodant pas le voisinage.
 
-Dans le cas de dégagement de gaz lourds, l'aspiration doit s'effectuer de façon descendante; les tables ou appareils de travail doivent être en communication directe avec les moyens de ventilation.
+Dans le cas de dégagement de gaz lourds, l'aspiration doit s'effectuer de façon descendante ; les tables ou appareils de travail doivent être en communication directe avec les moyens de ventilation.
 
 Pour les poussières déterminées par des appareils mécaniques, il doit être installé, autour des appareils, des tambours en communication avec une ventilation aspirante.
 
@@ -126,6 +134,8 @@ Le renouvellement de l'air et l'extraction de l'air vicié, doivent être assur�
 Les travailleurs appelés à intervenir dans les espaces fermés visés à l'alinéa premier doivent être protégés par des dispositifs de sécurité adéquats en liaison avec le type de risque auquel ils sont exposés.
 
 En aucun cas, un travailleur exerçant dans ces conditions ne doit être laissé sans surveillance. Celle-ci doit être assurée par au moins un travailleur séjournant à l'extérieur de l'espace fermé.
+
+---
 
 ### Section 3 — Ambiances et éléments de confort
 
@@ -152,7 +162,7 @@ Les fumées et gaz de combustion provenant des moyens de chauffage utilisés, do
 
 ### Article 15
 
-Les organismes employeurs sont tenus de maintenir l'intensité des bruits supportés par les travailleurs à un niveau compatible avec leur santé par le réduction de l'intensité des bruits à leur source d'émission, l'isolement des ateliers bruyants, l'insonorisation des locaux ou la mise en oeuvre de techniques ou de tous autres moyens appropriés et ce, conformément aux normes fixées par la réglementation en vigueur en la matière.
+Les organismes employeurs sont tenus de maintenir l'intensité des bruits supportés par les travailleurs à un niveau compatible avec leur santé par le réduction de l'intensité des bruits à leur source d'émission, l'isolement des ateliers bruyants, l'insonorisation des locaux ou la mise en œuvre de techniques ou de tous autres moyens appropriés et ce, conformément aux normes fixées par la réglementation en vigueur en la matière.
 
 ### Article 16
 
@@ -163,6 +173,8 @@ L'organisme employeur doit prendre toutes mesures utiles pour que ces appareils 
 ### Article 17
 
 Indépendamment des mesures de protection intégrées aux machines et au processus de travail, les travailleurs dont les postes de travail sont exposés à des températures trop basses ou trop élevées doivent être dotés d'équipements spéciaux.
+
+---
 
 ### Section 4 — Installations sanitaires
 
@@ -180,7 +192,7 @@ Il doit être prévu au moins un cabinet d'aisance par tranche de 15 travailleur
 
 ### Article 19
 
-Des locaux affectés au vestiaires doivent être mis à la disposition des travailleurs et être dotés de sièges et d'armoires individuelles fermant à clé.
+Des locaux affectés aux vestiaires doivent être mis à la disposition des travailleurs et être dotés de sièges et d'armoires individuelles fermant à clé.
 
 ### Article 20
 
@@ -268,6 +280,8 @@ Des appareils de manutention et de transvasement appropriés doivent être mis �
 
 Les récipients en matériaux fragiles, indépendamment des moyens prévus pour leur transport et leur vidange doivent être pourvus d'enveloppe de protection résistant aux chocs.
 
+---
+
 ### Section 2 — Prévention des chutes d'un niveau supérieur
 
 ### Article 33
@@ -297,6 +311,8 @@ Les échelons doivent être rigides et solidement fixés aux montants. Le transp
 ### Article 37
 
 Sans préjudice des dispositions prévues aux articles 33 à 36 ci-dessus, l'utilisation d'escabeaux, échelles, planchers et échafaudages doit répondre aux normes de sécurité définies par la réglementation en vigueur.
+
+---
 
 ### Section 3 — Machines et mécanismes
 
@@ -328,11 +344,11 @@ Des dispositifs de protections tels que portières, caches, grilles, barrières,
 
 Sont notamment visés par les prescriptions des articles 40 et 41 ci-dessus :
 
-1° — les éléments de machines comportant des organes de transmissions et de commande, tels que volants, vis sans fin, bielles, coulisseaux, zones d'engrenage, cônes ou cylindres de friction, cames, courroies, chaînes, pignons;
+1. Les éléments de machines comportant des organes de transmissions et de commande, tels que volants, vis sans fin, bielles, coulisseaux, zones d'engrenage, cônes ou cylindres de friction, cames, courroies, chaînes, pignons ;
 
-2° — les éléments des machines comportant des pièces accessibles faisant saillie sur les parties en mouvement de ces machines tels que vis d'arrêt, boulons, clavettes, nervures, bassages;
+2. Les éléments des machines comportant des pièces accessibles faisant saillie sur les parties en mouvement de ces machines tels que vis d'arrêt, boulons, clavettes, nervures, bassages ;
 
-3° — les organes de travail de toute nature tels que bras de pétrins ou de mélangeurs, cylindres de calandres, cylindres d'entraînement, malaxeure, pignons et matrices de presse mues mécaniquement, dès lors que les opérateurs ou leurs aides, sont appelés à intervenir manuellement en utilisation normale, dans des zones dangereuses situées à proximité des organes en mouvement.
+3. Les organes de travail de toute nature tels que bras de pétrins ou de mélangeurs, cylindres de calandres, cylindres d'entraînement, malaxeure, pignons et matrices de presse mues mécaniquement, dès lors que les opérateurs ou leurs aides, sont appelés à intervenir manuellement en utilisation normale, dans des zones dangereuses situées à proximité des organes en mouvement.
 
 ### Article 43
 
@@ -374,13 +390,13 @@ Les travaux de maintenance effectués dans les locaux cités à l'alinéa premie
 
 Les matières inflammables sont classées en deux groupes :
 
-**Le premier groupe comprend :**
-- les matières émettant des vapeurs inflammables ;
-- les matières susceptibles de brûler sans apport d'oxygène ;
-- les matières dans un état physique de grande division, susceptibles de former avec l'air un mélange explosif.
+**Premier groupe :**
+- Les matières émettant des vapeurs inflammables ;
+- Les matières susceptibles de brûler sans apport d'oxygène ;
+- Les matières dans un état physique de grande division, susceptibles de former avec l'air un mélange explosif.
 
-**Le deuxième groupe comprend :**
-- les matières susceptibles de prendre feu au contact d'une flamme et de propager rapidement l'incendie.
+**Deuxième groupe :**
+- Les matières susceptibles de prendre feu au contact d'une flamme et de propager rapidement l'incendie.
 
 ### Article 48
 
@@ -390,16 +406,17 @@ Les locaux où sont entreposées ou manipulées des matières inflammables du pr
 
 Dans les zones présentant des risques d'explosion, les installations électriques doivent être :
 
-- réduites aux seuls éléments nécessaires aux besoins de l'exploitation ; tout appareil, machine ou canalisation devant être placé en dehors de ces zones ;
-- être conçues et réalisées de façon à ne comporter aucune source possible d'étincelle ou d'échauffement entraînant l'inflammation des atmosphères ou matières explosives.
+- Réduites aux seuls éléments nécessaires aux besoins de l'exploitation ; tout appareil, machine ou canalisation devant être placé en dehors de ces zones ;
+- Être conçues et réalisées de façon à ne comporter aucune source possible d'étincelle ou d'échauffement entraînant l'inflammation des atmosphères ou matières explosives.
 
 Les zones visées ci-dessus comprennent :
-- les locaux et emplacements de travail où peuvent se former des atmosphères explosives et ceux où des matières explosives sont entreposées, mises en oeuvre ou fabriquées.
-- à l'extérieur de ces locaux et emplacements tous endroits contigus qui sont en communication avec eux et qui ne sont pas ventilés efficacement pour empêcher la formation d'une atmosphère explosive.
+
+- Les locaux et emplacements de travail où peuvent se former des atmosphères explosives et ceux où des matières explosives sont entreposées, mises en œuvre ou fabriquées ;
+- À l'extérieur de ces locaux et emplacements tous endroits contigus qui sont en communication avec eux et qui ne sont pas ventilés efficacement pour empêcher la formation d'une atmosphère explosive.
 
 ### Article 50
 
-Les locaux où sont manipulées ou mises en oeuvre des matières inflammables du premier groupe ne doivent jamais contenir aucun foyer, aucune flamme, aucun appareil ni des parties susceptibles d'être portées à incandescence.
+Les locaux où sont manipulées ou mises en œuvre des matières inflammables du premier groupe ne doivent jamais contenir aucun foyer, aucune flamme, aucun appareil ni des parties susceptibles d'être portées à incandescence.
 
 Il est interdit d'y fumer et d'y apporter du feu sous une forme quelconque. Cette interdiction doit faire l'objet d'une information appropriée.
 
@@ -429,7 +446,9 @@ b) L'utilisation de conducteurs électriques nus ainsi que de pièces conductric
 
 c) Le matériel dont le fonctionnement provoque des arcs ou des étincelles ou l'incandescence, n'est autorisé que si ces sources de danger sont incluses dans des enveloppes appropriées.
 
-### Section 2 — Evacuation du personnel
+---
+
+### Section 2 — Évacuation du personnel
 
 ### Article 54
 
@@ -449,6 +468,8 @@ Les locaux de travail situés dans les étages et dans les sous-sols doivent êt
 
 Un bâtiment à plusieurs niveaux ne peut comporter moins de deux escaliers lorsque ceux-ci doivent donner passage à plus de cent (100) personnes à évacuer.
 
+---
+
 ### Section 3 — Lutte contre l'incendie
 
 ### Article 57
@@ -463,17 +484,17 @@ Toutefois, l'emploi de tétrachlorure de carbone et de bromure de méthyle est i
 
 Dans tous les cas, d'autres moyens d'extinction doivent être tenus à proximité des emplacements de travail comportant des risques particuliers d'apparition de feu.
 
-Dans les locaux, ateliers ou laboratoires où sont mis en oeuvre des liquides classés dans le premier groupe des matières inflammables, des couvertures ignifuges facilement accessibles doivent être mises à la disposition des travailleurs, le cas échéant, un dispositif d'arrosage est placé à la sortie du local.
+Dans les locaux, ateliers ou laboratoires où sont mis en œuvre des liquides classés dans le premier groupe des matières inflammables, des couvertures ignifuges facilement accessibles doivent être mises à la disposition des travailleurs, le cas échéant, un dispositif d'arrosage est placé à la sortie du local.
 
 ### Article 58
 
-Dans les entreprises où sont manipulées, mises en oeuvre ou entreposées d'importantes quantités de matières inflammables du premier groupe, l'organisme employeur doit mettre en place des moyens de secours supplémentaires appropriés aux risques d'incendie.
+Dans les entreprises où sont manipulées, mises en œuvre ou entreposées d'importantes quantités de matières inflammables du premier groupe, l'organisme employeur doit mettre en place des moyens de secours supplémentaires appropriés aux risques d'incendie.
 
-Ces moyens doivent être mis en oeuvre par une équipe entraînée à l'utilisation de ces matériels d'extinction.
+Ces moyens doivent être mis en œuvre par une équipe entraînée à l'utilisation de ces matériels d'extinction.
 
 ### Article 59
 
-Dans les locaux où sont manipulées ou mises en oeuvre des matières inflammables, des consignes prescrivant les opérations à effectuer en cas d'incendie, doivent être données au personnel.
+Dans les locaux où sont manipulées ou mises en œuvre des matières inflammables, des consignes prescrivant les opérations à effectuer en cas d'incendie, doivent être données au personnel.
 
 Dans chaque local de travail, une consigne doit indiquer la localisation du matériel d'extinction et de sauvetage, désigner le personnel chargé d'utiliser ce matériel ainsi que les personnes qui doivent diriger l'évacuation du personnel ou, le cas échéant, du public.
 
@@ -501,14 +522,14 @@ Les dispositions de l'article 7, troisième alinéa de la loi n° 88-07 du 26 ja
 
 Des visites, vérifications et entretiens périodiques doivent être prévus de façon particulière et selon les périodicités fixées par la réglementation en vigueur notamment dans les domaines suivants :
 
-1° — ambiance de travail et locaux de travail ;
-2° — moyens de protection collective et individuelle ;
-3° — installations de lutte contre l'incendie ;
-4° — véhicules de transport notamment ceux destinés au transport du personnel ;
-5° — appareils de levage, équipements et engins de manutention ;
-6° — installations électriques ;
-7° — appareils sous pression ;
-8° — sources radioactives et appareils émettant des rayonnements ionisants.
+1. Ambiance de travail et locaux de travail ;
+2. Moyens de protection collective et individuelle ;
+3. Installations de lutte contre l'incendie ;
+4. Véhicules de transport notamment ceux destinés au transport du personnel ;
+5. Appareils de levage, équipements et engins de manutention ;
+6. Installations électriques ;
+7. Appareils sous pression ;
+8. Sources radioactives et appareils émettant des rayonnements ionisants.
 
 ### Article 63
 
@@ -524,7 +545,7 @@ Les résultats des visites, vérifications, entretiens prévus aux articles 62 e
 
 Les visites, vérifications et entretiens doivent être effectués par un personnel habilité à cet effet, désigné par l'organisme employeur.
 
-Le recours aux organismes de contrôle technique ou aux personnes agréées à lieu dans les conditions fixées, par la réglementation en vigueur.
+Le recours aux organismes de contrôle technique ou aux personnes agréées a lieu dans les conditions fixées, par la réglementation en vigueur.
 
 ### Article 66
 
@@ -544,26 +565,24 @@ Dans le cas où des contraintes techniques s'opposent au respect des prescriptio
 
 En application des dispositions de l'article 31 de la loi n° 88-07 susvisée, le délai fixé par l'inspecteur du travail à l'organisme employeur pour les prescriptions donnant lieu à l'application de la procédure de mise en demeure ne peut être inférieur aux délais minimaux d'exécution prévus ci-après :
 
-1) — Délai minimum d'un mois pour les prescriptions prévues aux articles 3 (alinéa 2), 6, 7, 8, 9 (alinéa 2), 10, 11 (alinéas 1 et 2), 12 (alinéas 1 et 2), 15, 16, 18, 20, 21, 22, 23, 27, 28, 29, 39, 40, 41, 43, 44, 46, 56, 58.
+1. **Délai minimum d'un mois** pour les prescriptions prévues aux articles 3 (alinéa 2), 6, 7, 8, 9 (alinéa 2), 10, 11 (alinéas 1 et 2), 12 (alinéas 1 et 2), 15, 16, 18, 20, 21, 22, 23, 27, 28, 29, 39, 40, 41, 43, 44, 46, 56, 58.
 
-2) — Délai minimum de quinze (15) jours pour les prescriptions prévues aux articles 4, 13, 14, 17, 19, 26, 30, 31, 32, 48, 49, 53, 54, 55 (alinéa 2), 62.
+2. **Délai minimum de quinze (15) jours** pour les prescriptions prévues aux articles 4, 13, 14, 17, 19, 26, 30, 31, 32, 48, 49, 53, 54, 55 (alinéa 2), 62.
 
-3) — Délai minimum de cinq (5) jours pour les prescriptions prévues aux articles 3 (alinéa 1), 5, 9 (alinéa 1), 11 (alinéa 3), 12 (alinéa 3), 24, 33, 34, 35, 36, 50, 51, 52, 55 (alinéa 1), 57, 59, 60, 63, 64, 65.
+3. **Délai minimum de cinq (5) jours** pour les prescriptions prévues aux articles 3 (alinéa 1), 5, 9 (alinéa 1), 11 (alinéa 3), 12 (alinéa 3), 24, 33, 34, 35, 36, 50, 51, 52, 55 (alinéa 1), 57, 59, 60, 63, 64, 65.
 
-### Article 68
+---
+
+## Article 68
 
 Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 19 janvier 1991.
 
-Mouloud HAMROUCHE.
+**Mouloud HAMROUCHE**
 
 ---
 
-## Tableau récapitulatif des délais de mise en demeure (Art. 67)
+## Tableau récapitulatif des modifications
 
-| Délai | Articles concernés |
-|---|---|
-| **1 mois** | Art. 3 al.2, 6, 7, 8, 9 al.2, 10, 11 al.1–2, 12 al.1–2, 15, 16, 18, 20, 21, 22, 23, 27, 28, 29, 39, 40, 41, 43, 44, 46, 56, 58 |
-| **15 jours** | Art. 4, 13, 14, 17, 19, 26, 30, 31, 32, 48, 49, 53, 54, 55 al.2, 62 |
-| **5 jours** | Art. 3 al.1, 5, 9 al.1, 11 al.3, 12 al.3, 24, 33, 34, 35, 36, 50, 51, 52, 55 al.1, 57, 59, 60, 63, 64, 65 |
+*Aucune modification connue à la date de conversion (août 2026). Vérifier le JORADP pour toute modification ultérieure.*
