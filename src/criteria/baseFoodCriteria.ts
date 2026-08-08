@@ -42,7 +42,9 @@ export const baseFoodCriteria: InspectionItem[] = [
     axis: 'التخزين',
     category: 'غذائية',
     criteria: 'رفع المواد المخزنة عن الأرض (≥15 سم) وتباعدها عن الجدران (≥5 سم) لتسهيل التنظيف ومنع الرطوبة.',
-    legalReference: 'المرسوم التنفيذي 17-140 (اشتراطات التخزين الصحي).',
+    // W17: أرقام 15 سم / 5 سم غير واردة نصاً في المرسوم 17-140 — اشتراط مهني متعارف عليه.
+    // [حكم مهني] يُطبَّق إلى حين صدور نص تنظيمي جزائري صريح.
+    legalReference: 'المرسوم التنفيذي 17-140 (اشتراطات التخزين الصحي — متطلبات عامة) + [حكم مهني: الحدود الدنيا 15 سم/5 سم وفق الممارسة المهنية الغذائية المعتمدة — لا نص جزائري صريح بالأرقام].',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -83,19 +85,12 @@ export const baseFoodCriteria: InspectionItem[] = [
   // =====================================================================
   // المحور 4: سلسلة البرودة
   // W7 (2026-08-08): BFD-04-01 + BFD-04-02 — legalReference corrected.
-  //   Previous refs cited Décret 17-140 Art.7 / Art.8 — those articles cover
-  //   general food hygiene conditions, NOT cold-chain temperature limits.
-  //   Correct instrument: Arrêté interministériel du 07/05/2025 fixant les
-  //   conditions de température de conservation des denrées alimentaires
-  //   (already verified in docs/legal_sources/ — JORADP primary source).
-  //   Temperatures unchanged: chilled 0–5°C, frozen ≤ −18°C.
   // =====================================================================
   {
     id: 'BFD-04-01',
     axis: 'سلسلة البرودة',
     category: 'غذائية',
     criteria: 'الحفاظ على سلسلة البرودة للمنتجات المبردة: درجة حرارة التخزين بين 0°C و5°C مع وجود مقياس حرارة معيَّر داخل كل وحدة تبريد.',
-    // W7: corrected from Décret 17-140 Art.7 (general hygiene) to the specific cold-chain arrêté.
     legalReference: 'القرار الوزاري المشترك المؤرخ في 07/05/2025 (اشتراطات درجة حرارة حفظ المواد الغذائية — المبردات: 0–5°C) + المرسوم التنفيذي 17-140 (السلامة الغذائية العامة).',
     severity: 'high',
     controlType: 'measurement',
@@ -113,7 +108,6 @@ export const baseFoodCriteria: InspectionItem[] = [
     axis: 'سلسلة البرودة',
     category: 'غذائية',
     criteria: 'الحفاظ على سلسلة التجميد للمنتجات المجمدة: درجة حرارة التخزين ≤ −18°C مع وجود مقياس حرارة معيَّر داخل كل وحدة تجميد.',
-    // W7: corrected from Décret 17-140 Art.8 (general hygiene) to the specific cold-chain arrêté.
     legalReference: 'القرار الوزاري المشترك المؤرخ في 07/05/2025 (اشتراطات درجة حرارة حفظ المواد الغذائية — المجمدات: ≤ −18°C) + المرسوم التنفيذي 17-140 (السلامة الغذائية العامة).',
     severity: 'high',
     controlType: 'measurement',
@@ -128,15 +122,11 @@ export const baseFoodCriteria: InspectionItem[] = [
   },
   // =====================================================================
   // المحور 5: نظام HACCP
-  // Z12-13 ✅ (2026-08-06): legalReference corrected from Art. 9 → Art. 5.
-  // W6 (2026-08-08): confirmed clean by direct code read — Art.5 already correct.
   // =====================================================================
   {
     id: 'BFD-05-01',
     axis: 'HACCP ونظام السلامة الغذائية',
     category: 'غذائية',
-    // Z12-13 ✅: Décret 17-140 Art. 5 confirmed as HACCP obligation article (JORADP, 2026-08-06).
-    // W6 ✅: confirmed clean by direct read (2026-08-08).
     criteria: 'وجود نظام HACCP مطبَّق وموثَّق (تحليل المخاطر، نقاط التحكم الحرجة CCP، حدود حرجة، مراقبة، تصحيح، توثيق) في المنشآت التي تُلزَم به قانوناً. ملاحظة: مرافق الإنتاج الأولي (كوفوير، UPD) مستثناة صراحةً من هذا الالتزام.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (إلزامية نظام HACCP في المنشآت الغذائية المصنفة — لا تشمل الإنتاج الأولي).',
     severity: 'high',
@@ -171,14 +161,23 @@ export const baseFoodCriteria: InspectionItem[] = [
   // Phase 8.4 ✅: BFD-07-01 و BFD-07-02 أُزيلا — المحور مُدمج في BGN-07-01/05
   // =====================================================================
   // =====================================================================
-  // المحور 8: التتبعية (Phase 3.4 ✅)
+  // المحور 8: التتبعية
+  // W16 (2026-08-09): BFD-08-01 — المادة 19 من القانون 09-03 لا تتعلق بالتتبعية
+  //   (تتناول الحقوق المادية والمعنوية للمستهلك وحق الرجوع عن الشراء).
+  //   المادة الصحيحة: Art.12 (الرقابة الذاتية للمتدخل) + Art.6 (الالتزام بشروط
+  //   الحفظ والتوثيق) + المرسوم 17-140 (توثيق مسار المنتج الغذائي).
+  //   مدة الاحتفاظ بالسجلات (سنتان): [حكم مهني] — لا نص جزائري صريح بالمدة.
   // =====================================================================
   {
     id: 'BFD-08-01',
     axis: 'التتبعية والسجلات',
     category: 'غذائية',
     criteria: 'وجود نظام تتبعية فعّال يُمكِّن من تحديد مصدر كل مادة غذائية أولية وتتبع مسارها خلال الإنتاج والتوزيع، مع الاحتفاظ بسجلات الاستلام والإنتاج والتسليم لمدة لا تقل عن سنتين.',
-    legalReference: 'القانون 09-03 المادة 19 (إلزامية التتبعية في سلسلة الغذاء) + المرسوم التنفيذي 17-140 (توثيق مسار المنتج الغذائي).',
+    // W16: Art.19 (intérêts moraux + droit de rétractation) WRONG for traceability.
+    // Correct basis: Art.12 (autocontrôle — obligation to keep conformity records)
+    // + Art.6 (hygiene/storage documentation obligation) + Décret 17-140.
+    // The 2-year retention period has no explicit Algerian text — [حكم مهني].
+    legalReference: 'القانون 09-03 المادة 12 (الرقابة الذاتية وإلزامية الاحتفاظ بسجلات الامتثال) + المادة 6 (توثيق شروط الحفظ والمعالجة) + المرسوم التنفيذي 17-140 (توثيق مسار المنتج الغذائي) + [حكم مهني: مدة الاحتفاظ بالسجلات سنتان — لا نص جزائري صريح بالمدة].',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
