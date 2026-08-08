@@ -1,17 +1,29 @@
 // app/(tabs)/inspection/categories.tsx
+// F-10 fix (2026-08-08): replaced static `facilities` import from facilitiesData
+// with async getAllFacilities() from facilitiesService so that user-added
+// facilities stored in SQLite are included in the category list.
 import { FontAwesome } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants';
-import { facilities } from '../../../src/facilitiesData';
+import { getAllFacilities } from '../../../src/facilitiesService';
 
 export default function CategoriesScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
+  const [uniqueActivities, setUniqueActivities] = useState<string[]>([]);
 
-  const uniqueActivities = Array.from(new Set(facilities.map(f => f.activity))).sort();
+  useEffect(() => {
+    let cancelled = false;
+    getAllFacilities().then(facilities => {
+      if (cancelled) return;
+      const activities = Array.from(new Set(facilities.map(f => f.activity))).sort();
+      setUniqueActivities(activities);
+    });
+    return () => { cancelled = true; };
+  }, []);
 
   const renderCategory = ({ item }: { item: string }) => (
     <TouchableOpacity

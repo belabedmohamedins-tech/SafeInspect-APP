@@ -19,6 +19,12 @@
 //   BGN-04-08: Art.28(export return)→Art.21(declaration obligation)
 //   BGN-07-05: Art.51(coastal)→Art.56+58(chemical/pesticide control)
 //   BGN-09-01: Art.27(public info access)→Art.54(noise prohibition)
+// W11 fix (2026-08-08): BGN-02-06 legalReference corrected.
+//   Removed Décret 93-120 citation — that decree covers periodic medical exams,
+//   NOT ventilation requirements. Sole correct basis: Décret exécutif 91-05
+//   Art.11 (ventilation obligations in workplaces). Numeric thresholds tagged
+//   [حكم مهني] — no separate Algerian decree specifies ventilation rates by
+//   activity type.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -128,7 +134,13 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'تهوية طبيعية أو ميكانيكية كافية حسب طبيعة النشاط.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 11 (إلزامية التهوية الكافية في أماكن العمل) + المرسوم التنفيذي 93-120 المادة 11 (متطلبات التهوية في المنشآت الصناعية).',
+    // W11 fix (2026-08-08): Removed incorrect Décret 93-120 citation.
+    // Décret exécutif 93-120 du 15 mai 1993 concerns periodic medical examinations
+    // of workers — it has NO ventilation provisions. Sole correct legal basis is
+    // Décret exécutif 91-05 Art.11 (ventilation obligations in workplaces).
+    // [حكم مهني]: no Algerian decree specifies numeric ventilation rates by
+    // activity type — inspector applies professional judgment per activity.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 11 (إلزامية التهوية الكافية في أماكن العمل — طبيعية أو ميكانيكية — لضمان سلامة العمال وجودة الهواء الداخلي). [حكم مهني]: لا يوجد مرسوم جزائري يحدد معدلات تجديد الهواء حسب نوع النشاط — يُطبَّق حكم المفتش المهني بحسب طبيعة كل نشاط.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',

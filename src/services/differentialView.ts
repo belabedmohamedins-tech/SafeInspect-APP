@@ -10,6 +10,12 @@
 //   - The green "تم التصحيح" / red "لا يزال غير مطابق" per-item indicators (3.3, 3.4)
 //   - The PDF verification section (3.5)
 //   - The escalation suggestion when any violation is unresolved (3.6)
+//
+// F-13 fix (2026-08-08): added facilityId guard when resolving priorInspectionId.
+// Previously, any completed inspection with a matching id was accepted as prior
+// regardless of facility, which could corrupt the diff with data from a different
+// facility. Fix: only accept the specific prior when
+// specific.facilityId === currentInspection.facilityId.
 
 import { ComplianceStatus, InspectionItem, SavedInspection } from '../types';
 import { InspectionRepository } from '../repositories/InspectionRepository';
@@ -62,7 +68,8 @@ export interface DifferentialView {
  * appropriate prior completed inspection.
  *
  * Resolution order for the prior inspection:
- *   1. If `currentInspection.priorInspectionId` is set, use that specific record.
+ *   1. If `currentInspection.priorInspectionId` is set, use that specific record
+ *      — but only if it belongs to the same facility (F-13 guard).
  *   2. Otherwise use the most-recent completed inspection for the same facility,
  *      excluding `currentInspection.id`.
  *   3. If no prior exists, all items get diffStatus 'not-in-prior'.
@@ -80,7 +87,13 @@ export async function buildDifferentialView(
     const specific = await InspectionRepository.getById(
       currentInspection.priorInspectionId,
     );
-    if (specific?.status === 'completed') prior = specific;
+    // F-13 fix: guard both status AND facilityId to prevent cross-facility diff corruption
+    if (
+      specific?.status === 'completed' &&
+      specific.facilityId === currentInspection.facilityId
+    ) {
+      prior = specific;
+    }
   }
 
   if (!prior) {
