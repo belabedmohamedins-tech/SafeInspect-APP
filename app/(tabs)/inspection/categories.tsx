@@ -1,10 +1,12 @@
 // app/(tabs)/inspection/categories.tsx
-// F-10 fix (2026-08-08): replaced static `facilities` import from facilitiesData
-// with async getAllFacilities() from facilitiesService so that user-added
-// facilities stored in SQLite are included in the category list.
+// F-10 fix (2026-08-08): replaced static facilitiesData import with
+// getAllFacilities() loaded via useFocusEffect+useState. Unique activities
+// now come from the merged DB+hardcoded source so user-added facilities
+// are always reflected without a full app restart.
 import { FontAwesome } from '@expo/vector-icons';
+import { useFocusEffect } from 'expo-router';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors } from '../../../constants';
@@ -13,17 +15,19 @@ import { getAllFacilities } from '../../../src/facilitiesService';
 export default function CategoriesScreen() {
   const router = useRouter();
   const params = useLocalSearchParams();
-  const [uniqueActivities, setUniqueActivities] = useState<string[]>([]);
+  const [activities, setActivities] = useState<string[]>([]);
 
-  useEffect(() => {
-    let cancelled = false;
-    getAllFacilities().then(facilities => {
-      if (cancelled) return;
-      const activities = Array.from(new Set(facilities.map(f => f.activity))).sort();
-      setUniqueActivities(activities);
-    });
-    return () => { cancelled = true; };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      getAllFacilities().then(facilities => {
+        if (!active) return;
+        const unique = Array.from(new Set(facilities.map(f => f.activity))).sort();
+        setActivities(unique);
+      });
+      return () => { active = false; };
+    }, [])
+  );
 
   const renderCategory = ({ item }: { item: string }) => (
     <TouchableOpacity
@@ -54,7 +58,7 @@ export default function CategoriesScreen() {
         }}
       />
       <FlatList
-        data={uniqueActivities}
+        data={activities}
         keyExtractor={(item) => item}
         renderItem={renderCategory}
         contentContainerStyle={styles.list}
@@ -73,19 +77,24 @@ const styles = StyleSheet.create({
   list:         { padding: 10 },
   categoryCard: {
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: Colors.textInverse,
-    padding: 16,
+    alignItems: 'center',
+    backgroundColor: Colors.cardBackground ?? '#fff',
     borderRadius: 8,
-    marginBottom: 8,
+    padding: 16,
+    marginBottom: 10,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
-    elevation: 2,
   },
-  categoryText: { fontSize: 16, color: Colors.textPrimary, flex: 1, textAlign: 'right' },
-  empty:        { alignItems: 'center', padding: 20 },
-  emptyText:    { color: Colors.textTertiary, fontSize: 16 },
+  categoryText: {
+    fontSize: 16,
+    color: Colors.text ?? '#333',
+    flex: 1,
+    textAlign: 'right',
+  },
+  empty: { alignItems: 'center', marginTop: 40 },
+  emptyText: { color: Colors.textSecondary ?? '#888', fontSize: 14 },
 });

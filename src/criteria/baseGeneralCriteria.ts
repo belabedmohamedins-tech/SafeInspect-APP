@@ -19,12 +19,12 @@
 //   BGN-04-08: Art.28(export return)→Art.21(declaration obligation)
 //   BGN-07-05: Art.51(coastal)→Art.56+58(chemical/pesticide control)
 //   BGN-09-01: Art.27(public info access)→Art.54(noise prohibition)
-// W11 fix (2026-08-08): BGN-02-06 legalReference corrected.
-//   Removed Décret 93-120 citation — that decree covers periodic medical exams,
-//   NOT ventilation requirements. Sole correct basis: Décret exécutif 91-05
-//   Art.11 (ventilation obligations in workplaces). Numeric thresholds tagged
-//   [حكم مهني] — no separate Algerian decree specifies ventilation rates by
-//   activity type.
+// W11/L-04 fix (2026-08-08): BGN-02-06 legalReference — removed incorrect citation
+//   of Décret 93-120 (periodic medical exams — wrong domain, unrelated to ventilation).
+//   Ventilation obligation is fully covered by Décret exécutif 91-05 Art.11.
+//   No separate Algerian ventilation-specific decree exists in JORADP.
+//   Numeric thresholds (m³/h, air changes/h) tagged [حكم مهني] — no Algerian
+//   decree sets specific ventilation figures for general industrial premises.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -64,14 +64,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     category: 'تنظيمية',
     criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فوراً عند الطلب.',
     // W19 FINAL (2026-08-08): CONFIRMED by direct read of Loi 03-10 Arts.81-87.
-    //   Art.82: "Les agents habilités à rechercher et à constater les infractions ont accès aux
-    //     installations, terrains, véhicules et locaux dans lesquels sont réalisées des activités
-    //     susceptibles de porter atteinte à l'environnement." → RIGHT OF ENTRY ✅
-    //   Art.84: "En cas de constatation d'une infraction, l'agent compétent peut ordonner la
-    //     suspension de l'activité en cause jusqu'à régularisation de la situation." → SUSPENSION ✅
-    //   No dedicated "obstruction criminal offence" article exists in Loi 03-10 — obstructing
-    //   an inspector falls under Code pénal general provisions (entrave à fonctionnaire).
-    //   [À VÉRIFIER] CLOSED.
+    //   Art.82: right of entry. Art.84: suspension power. [À VÉRIFIER] CLOSED.
     legalReference: 'القانون 03-10 المادة 82 (حق المفتشين المؤهلين في الدخول إلى المنشآت والأماكن لأداء مهام البحث والتحقق من المخالفات) + المادة 84 (صلاحية المفتش في إصدار قرار تعليق النشاط فوراً عند ثبوت المخالفة حتى التسوية). ملاحظة: لا توجد مادة صريحة في القانون 03-10 تُجرِّم العرقلة جزائياً — الحالة تخضع لأحكام القانون العام في قانون العقوبات (عرقلة موظف عمومي في أداء مهامه).',
     severity: 'high',
     controlType: 'doc',
@@ -134,13 +127,15 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'تهوية طبيعية أو ميكانيكية كافية حسب طبيعة النشاط.',
-    // W11 fix (2026-08-08): Removed incorrect Décret 93-120 citation.
-    // Décret exécutif 93-120 du 15 mai 1993 concerns periodic medical examinations
-    // of workers — it has NO ventilation provisions. Sole correct legal basis is
-    // Décret exécutif 91-05 Art.11 (ventilation obligations in workplaces).
-    // [حكم مهني]: no Algerian decree specifies numeric ventilation rates by
-    // activity type — inspector applies professional judgment per activity.
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 11 (إلزامية التهوية الكافية في أماكن العمل — طبيعية أو ميكانيكية — لضمان سلامة العمال وجودة الهواء الداخلي). [حكم مهني]: لا يوجد مرسوم جزائري يحدد معدلات تجديد الهواء حسب نوع النشاط — يُطبَّق حكم المفتش المهني بحسب طبيعة كل نشاط.',
+    // W11/L-04 fix (2026-08-08): removed Décret 93-120 — that decree governs periodic
+    // medical examinations for workers, NOT ventilation requirements.
+    // Décret exécutif 91-05 Art.11 is the correct and sole Algerian legal basis for
+    // general workplace ventilation obligations. No separate ventilation-specific
+    // Algerian decree exists in JORADP.
+    // [حكم مهني]: numeric ventilation thresholds (air changes/h, m³/h per worker) have
+    // no explicit value in Algerian law — inspector applies professional judgment or
+    // references ISO 7730 / ASHRAE 62.1 as technical guidance only.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 11 (إلزامية التهوية الكافية في أماكن العمل). [حكم مهني]: لا يحدد التشريع الجزائري قيماً عددية صريحة لمعدلات تجديد الهواء في المنشآت العامة — يرجع المفتش إلى حكمه المهني أو المعايير التقنية الدولية (ISO 7730 / ASHRAE 62.1) كإرشادات مرجعية دون إلزامية قانونية.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -263,12 +258,6 @@ export const baseGeneralCriteria: InspectionItem[] = [
     category: 'بيئية',
     criteria: 'حظر حرق النفايات غير الخطرة في الهواء الطلق داخل أو خارج المنشأة، ووجوب تحويل المخلفات إلى جهات جمع معتمدة أو مرافق عمومية.',
     // W19 FINAL (2026-08-08): [À VÉRIFIER] CLOSED.
-    // Full read of Loi 01-19 confirms: NO dedicated open-air burning prohibition article exists
-    // anywhere in the law. Art.11 covers "no smoke/odours" as a condition on elimination methods,
-    // not an outright burning ban. Loi 03-10 Art.36 (atmospheric emissions beyond limits) is the
-    // closest general prohibition. No ministerial arrêté on open-air burning found in legal_refs/.
-    // CONCLUSION: The open-air burning ban is supported by Art.11 (Loi 01-19) + Art.36 (Loi 03-10)
-    // as indirect basis. The outright ban element is [حكم مهني] — same treatment as BGN-03-06.
     legalReference: 'القانون 01-19 المادة 11 (شروط التخلص من النفايات: دون إحداث دخان أو روائح أو تعريض الهواء للخطر) + القانون 03-10 المادة 36 (حظر انبعاث الملوثات الجوية فوق القيم الحدية المقررة). [حكم مهني — W19 مغلق]: لا توجد مادة صريحة تحظر الحرق في الهواء الطلق في القانون 01-19 (قُرئ النص كاملاً). المرجعان المذكوران هما أفضل أساس قانوني متاح — المادة 11 تمنع الإضرار بالهواء، والمادة 36 تحظر التجاوز عن القيم الحدية للانبعاثات. إن وُجد قرار وزاري أو مرسوم تطبيقي خاص لاحقاً يُفتح فصل جديد لتحديث المرجع.',
     severity: 'high',
     controlType: 'visual',
