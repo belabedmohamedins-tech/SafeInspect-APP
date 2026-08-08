@@ -1,22 +1,20 @@
 # Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
 
-**Titre officiel :** Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
+---
 
-**Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)
+> ⚠️ **NON VÉRIFIÉ** — Transcription verbatim depuis le PDF source ci-dessous.  
+> **Vérifier contre le texte original JORADP avant tout usage juridique ou décisionnel.**
 
-**Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006 (pages 8–14)
-
-**Source PDF convertie :** Decret-06-198.pdf (scan JORADP fourni par l'utilisateur, projet SafeInspect)
-
-**Date de conversion :** 2026-08-09
-
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ — converti verbatim depuis scan JORADP. Vérifier contre le texte original JORADP avant tout usage légal ou décision d'application.
-
-> ⚠️ **Avertissement :** Ce fichier remplace une version précédente générée par IA (fictive, 28 articles inventés). La présente version est transcrite verbatim depuis le scan JORADP officiel (Art. 1–50). Vérifier contre l'original JORADP avant toute décision légale ou d'application.
+**Titre officiel :** Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement  
+**Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)  
+**Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14  
+**Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
+**Date de cette conversion :** 2026-08-09  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ
 
 ---
 
-## Visa et références légales
+## Visas
 
 Le Chef du Gouvernement,
 
@@ -46,15 +44,17 @@ Vu le décret exécutif n° 99-253 du 28 Rajab 1420 correspondant au 7 novembre 
 
 Vu le décret exécutif n° 01-282 du 6 Rajab 1422 correspondant au 24 septembre 2001, modifié et complété, portant attributions, organisation et fonctionnement de l'agence nationale de développement de l'investissement ;
 
-Décrète :
+**Décrète :**
+
+---
+
+## Article 1er
+
+En application des dispositions des articles 19, 23 et 24 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, le présent décret a pour objet de définir la réglementation applicable aux établissements classés pour la protection de l'environnement et, notamment, les régimes d'autorisation et de déclaration d'exploitation des établissements classés, leurs modalités de délivrance, de suspension et de retrait, ainsi que les conditions et modalités de leur contrôle.
 
 ---
 
 ## CHAPITRE I — DISPOSITIONS PRÉLIMINAIRES
-
-### Article 1er
-
-En application des dispositions des articles 19, 23 et 24 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, le présent décret a pour objet de définir la réglementation applicable aux établissements classés pour la protection de l'environnement et, notamment, les régimes d'autorisation et de déclaration d'exploitation des établissements classés, leurs modalités de délivrance, de suspension et de retrait, ainsi que les conditions et modalités de leur contrôle.
 
 ### Article 2
 
@@ -180,11 +180,11 @@ L'étude de danger doit comporter les éléments suivants :
 
 2) la description de l'environnement immédiat du projet et du voisinage potentiellement affecté en cas d'accident comprenant :
 
-a) les données physiques : géologie, hydrologie, météorologie et les conditions naturelles (topographie, sismicité,...) ;
+a) les données physiques : géologie, hydrologie, météorologie et les conditions naturelles (topographie, sismicité,…) ;
 
 b) les données socio-économiques et culturelles : population, habitat, points d'eau, captage, occupation des sols, activités économiques, voies de communication ou de transport et aires protégées ;
 
-3) la description du projet et ses différentes installations (implantation, taille et capacité, accès, choix du procédé retenu, fonctionnement, produits et matières mis en oeuvre,...) en se servant au besoin de cartes (plan d'ensemble, plan de situation, plan de masse, plan de mouvement...) ;
+3) la description du projet et ses différentes installations (implantation, taille et capacité, accès, choix du procédé retenu, fonctionnement, produits et matières mis en oeuvre, …) en se servant au besoin de cartes (plan d'ensemble, plan de situation, plan de masse, plan de mouvement…) ;
 
 4) l'identification de tous les facteurs de risques générés par l'exploitation de chaque installation considérée. Cette évaluation doit tenir compte non seulement des facteurs intrinsèques mais également des facteurs extrinsèques auxquels la zone est exposée ;
 
@@ -298,7 +298,7 @@ Toute modification structurelle ou conjoncturelle dans l'exploitation, le foncti
 
 ### Article 28
 
-Il est institué, au niveau de chaque wilaya, une commission de contrôle des établissements classés de wilaya, dénommée dans le présent décret « la commission ».
+Il est institué, au niveau de chaque wilaya, une commission de contrôle des établissements classés de wilaya, dénommée dans le présent décret «la commission».
 
 ### Article 29
 
@@ -478,22 +478,33 @@ Le présent décret sera publié au Journal officiel de la République algérien
 
 Fait à Alger, le 4 Joumada El Oula 1427 correspondant au 31 mai 2006.
 
-**Abdelaziz BELKHADEM**
+**Abdelaziz BELKHADEM.**
 
 ---
 
 ## Contrôle de séquence
 
-**Articles présents :** Art. 1er, 2–50 — séquence complète, aucune lacune.
+Articles présents dans le PDF source (JORADP JO n° 37, pages 8–14) :
 
-**Structure :**
-- Chapitre I — Dispositions préliminaires : Art. 1–3
-- Chapitre II — Régime de l'autorisation d'exploitation : Art. 4–23 (Sections 1–6)
-- Chapitre III — Régime de déclaration (4ème catégorie) : Art. 24–27
-- Chapitre IV — Institution et contrôle : Art. 28–43 (Sections 1–3)
-- Chapitre V — Dispositions transitoires : Art. 44–48
-- Chapitre VI — Dispositions finales : Art. 49–50
+**Art. 1 à 50 — tous présents et transcrits dans l'ordre.**
 
-**Source :** JORADP n° 37 du 4 juin 2006, pages 8–14 (scan officiel fourni par l'utilisateur).
+Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — Art. 14 — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — Art. 24 — Art. 25 — Art. 26 — Art. 27 — Art. 28 — Art. 29 — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — Art. 44 — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50
 
-**⚠️ Note critique :** Le présent décret définit les régimes d'autorisation et de contrôle, mais **ne contient pas la nomenclature des établissements classés** (listes des activités et seuils). La nomenclature est fixée par voie réglementaire séparée (référencée à l'Art. 5 et Art. 3) — il s'agit d'un texte distinct à identifier et ajouter en tant qu'instrument séparé si nécessaire pour SafeInspect.
+Aucun article absent. Aucun gap dans la numérotation.
+
+**Structure du décret :**
+- Chapitre I (Dispositions préliminaires) : Art. 2–3
+- Chapitre II (Régime de l'autorisation d'exploitation) : Art. 4–23
+  - Section 1 (Dispositions générales) : Art. 4
+  - Section 2 (Demande d'autorisation) : Art. 5–10
+  - Section 3 (Études et notices d'impact) : Art. 11
+  - Section 4 (Études de danger) : Art. 12–15
+  - Section 5 (Accord préalable) : Art. 16–18
+  - Section 6 (Délivrance, suspension, retrait) : Art. 19–23
+- Chapitre III (Régime de déclaration — 4e catégorie) : Art. 24–27
+- Chapitre IV (Institution et contrôle) : Art. 28–43
+  - Section 1 (Commission de contrôle de wilaya) : Art. 28–34
+  - Section 2 (Contrôle des établissements classés) : Art. 35–40
+  - Section 3 (Arrêt d'exploitation) : Art. 41–43
+- Chapitre V (Dispositions transitoires) : Art. 44–48
+- Chapitre VI (Dispositions finales) : Art. 49–50
