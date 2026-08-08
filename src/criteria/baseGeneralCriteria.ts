@@ -8,6 +8,16 @@
 //   BGN-08-01: added Art. 5 (fire-fighting equipment technical requirements).
 //   BGN-08-02: added Art. 13 (evacuation routes and emergency exits).
 //   Both article numbers confirmed correct from AUDIT_STATE.md Session 5.
+// W19 (2026-08-08): 8 wrong article citations corrected after direct source-read
+//   of legal_refs/loi-03-10-protection-environnement.md and loi-01-19-gestion-dechets.md.
+//   BGN-01-02: Art.65→Art.62 + [À VÉRIFIER]
+//   BGN-01-03: Art.71+73→[À VÉRIFIER] (Art.82/84 candidates, unconfirmed)
+//   BGN-02-03: Art.45(biodiversity)→Art.41+44(soil)
+//   BGN-03-02/03, BGN-04-01/02/04: Art.14(national plan)→Art.8+11(generator obligations)
+//   BGN-04-05: Art.29(municipal plan)→[À VÉRIFIER] (open-air burning source not found in 01-19)
+//   BGN-04-08: Art.28(export return)→Art.21(declaration obligation)
+//   BGN-07-05: Art.51(coastal)→Art.56+58(chemical/pesticide control)
+//   BGN-09-01: Art.27(public info access)→Art.54(noise prohibition)
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -32,7 +42,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'وجود سجلات للتطهير، مراقبة درجات الحرارة (عند الاقتضاء)، نتائج التحاليل، والإعذارات السابقة محفوظة ومتاحة للمراقبة.',
-    legalReference: 'القانون 03-10 (حماية البيئة) المادة 65 (وجوب مسك السجلات البيئية) + القانون 09-03 (حماية المستهلك وقمع الغش) المادة 7 (إلزامية تتبع المنتج وحفظ الوثائق).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.65 (obligation to notify accidents) ≠ record-keeping.
+    // Art.62 (surveillance/control obligations for classified installations) is the closest match.
+    // [À VÉRIFIER]: no explicit "record-keeping register" article found in Loi 03-10 by direct read.
+    // Cross-check Décret 06-198 for specific register obligations before closing.
+    legalReference: 'القانون 03-10 (حماية البيئة) المادة 62 (إلزامية الرقابة والمراقبة على المنشآت المصنفة) [À VÉRIFIER: تحديد المادة الصريحة في مسك السجلات — مراجعة المرسوم 06-198 المعدَّل] + القانون 09-03 (حماية المستهلك وقمع الغش) المادة 7 (إلزامية تتبع المنتج وحفظ الوثائق).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -42,7 +56,13 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فوراً عند الطلب.',
-    legalReference: 'القانون 03-10 المادة 71 (حق الدخول والتفتيش للمفتشين) + المادة 73 (تجريم عرقلة المفتش أو التهديد، عقوبة جزائية).',
+    // W19 (2026-08-08): CORRECTED — previous refs were WRONG:
+    //   Art.71 = prohibition on importing waste (Loi 03-10) — unrelated.
+    //   Art.73 = fine for unauthorized water discharge — unrelated.
+    // Candidates: Art.82 (habilitation of inspectors to search/record infringements),
+    //   Art.84 (suspension/enforcement powers). [À VÉRIFIER]: confirm exact articles
+    //   for right-of-entry and obstruction offence by reading Loi 03-10 Arts.81-87.
+    legalReference: '[À VÉRIFIER — W19]: المادتان 71 و73 من القانون 03-10 المذكورتان سابقاً خاطئتان (71: حظر استيراد النفايات؛ 73: غرامة التفريغ في المياه). المرشحان الصحيحان هما المادة 82 (صلاحيات المفتشين في الدخول والتفتيش) والمادة 84 (تجريم العرقلة وسلطة التوقيف) — يجب التحقق بقراءة المواد 81–87 من القانون 03-10 مباشرةً من JORADP قبل إغلاق هذا البند.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -73,7 +93,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'نشاط المنشأة لا يسبب ضرراً للتربة الفلاحية أو المياه الجوفية.',
-    legalReference: 'القانون 03-10 المادة 45 (حظر تلويث التربة) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.45 (biodiversity/nature protection) ≠ soil pollution.
+    // Correct articles: Art.41 (prohibition on soil degradation) + Art.44 (remediation for soil pollution).
+    legalReference: 'القانون 03-10 المادة 41 (حظر كل نشاط يُدهور التربة أو يُعدِّل خصائصها سلباً) + المادة 44 (إلزامية معالجة التربة الملوثة وإعادة تأهيل الموقع) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -136,7 +158,10 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'وجود شبكة صرف صحي فعالة، دون تسربات أو ركود مياه مستعملة.',
-    legalReference: 'القانون 01-19 المادة 14 (وجوب تسيير المخلفات السائلة دون الإضرار بالصحة والوسط) + القانون 03-10 المادة 45 (منع طرح الملوثات بما يضر التربة والوسط المستقبل).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.14 (national plan for special waste) ≠ generator obligations.
+    // Correct articles: Art.8 (obligation to eliminate waste without harming health/environment)
+    //   + Art.11 (conditions for valorisation/elimination — no danger to persons/water/soil/air).
+    legalReference: 'القانون 01-19 المادة 8 (إلزامية التخلص من المخلفات السائلة على نفقة المُنشئ وبطريقة لا تضر بالصحة والوسط) + المادة 11 (شروط التخلص: عدم تعريض الأشخاص والمياه والتربة والهواء للخطر) + القانون 03-10 المادة 30 (حظر التفريغ في المياه دون معالجة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -146,7 +171,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'صرف مياه الغسل إلى شبكة الصرف الصحي أو محطة معالجة، وعدم طرحها مباشرة في الساحة أو التربة.',
-    legalReference: 'القانون 01-19 المادة 14 (منع التخلص غير المنظم من المخلفات السائلة) + رخصة التفريغ عند الاقتضاء وفق نظام التصريف المعتمد.',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.14 (national plan) ≠ wastewater discharge obligation.
+    // Correct: Art.8 (elimination duty) + Art.11 (conditions) + discharge permit reference retained.
+    legalReference: 'القانون 01-19 المادة 8 (وجوب التخلص من المخلفات السائلة بطريقة مراقَبة) + المادة 11 (شروط التخلص: عدم التسبب في أضرار للمياه والتربة والهواء) + رخصة التفريغ عند الاقتضاء وفق نظام التصريف المعتمد.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -179,7 +206,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'في حالة وجود حفرة متعفنة (fosse septique): تسييرها وفق عقد ساري المفعول مع الديوان الوطني للتطهير ONA أو متعامل معتمد لعمليات الشفط الدوري، مع الاحتفاظ بآخر وصل شفط كدليل على التنفيذ الفعلي. يتحقق المفتش ميدانياً من غياب أي فيضان أو تسرب نحو الباطن الأرضي أو المحيط المجاور. [حكم مهني]: إذا كان تاريخ آخر وصل شفط يتجاوز 12 شهراً من تاريخ التفتيش، يُسجَّل ذلك كملاحظة ويُوصى بعملية شفط وقائية — هذا الأجل حكم مهني لا مرجع قانوني محدداً له في التشريع الجزائري حتى الآن.',
-    legalReference: 'القانون 01-19 المادة 14 (وجوب تسيير المخلفات السائلة دون الإضرار بالصحة والوسط) + المرسوم التنفيذي 01-102 المتعلق بإنشاء الديوان الوطني للتطهير ONA وصلاحياته (إلزامية التعاقد مع ONA أو متعامل معتمد لعمليات الشفط) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية). [حكم مهني — لا مصدر قانوني جزائري محدد لأجل الشفط حتى الآن: يُراجع JORADP لتحديد أي مرسوم أو قرار يُحدد الترددية — إن وُجد يُفتح Z13 لتحديث المرجع القانوني].',
+    legalReference: 'القانون 01-19 المادة 8 (وجوب التخلص من المخلفات السائلة دون الإضرار بالصحة والوسط) + المرسوم التنفيذي 01-102 المتعلق بإنشاء الديوان الوطني للتطهير ONA وصلاحياته (إلزامية التعاقد مع ONA أو متعامل معتمد لعمليات الشفط) + القانون 05-12 المادة 46 (حظر تلويث المياه الجوفية). [حكم مهني — لا مصدر قانوني جزائري محدد لأجل الشفط حتى الآن: يُراجع JORADP لتحديد أي مرسوم أو قرار يُحدد الترددية — إن وُجد يُفتح Z13 لتحديث المرجع القانوني].',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -190,7 +217,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'وضع النفايات في حاويات مغلقة أو أكياس بلاستيكية مخصصة وعدم تركها مكشوفة.',
-    legalReference: 'القانون 01-19 المادة 14 (التزامات أصحاب المنشآت في تسيير نفاياتهم وعدم تركها مكشوفة).',
+    // W19 (2026-08-08): CORRECTED — Art.14 (national plan coordination) ≠ generator containment obligation.
+    // Correct: Art.8 (elimination duty on generator) + Art.11 (conditions: no danger, no odours).
+    legalReference: 'القانون 01-19 المادة 8 (إلزامية التخلص من النفايات على نفقة مُنشئها بطريقة لا تضر بالصحة والوسط) + المادة 11 (شروط التخلص: عدم تعريض الأشخاص للخطر، عدم إحداث روائح أو إضرار بالمناظر الطبيعية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -200,7 +229,8 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'تنظيف وتعقيم حاويات النفايات بعد التفريغ بانتظام.',
-    legalReference: 'القانون 01-19 المادة 14 (الالتزام بالحفاظ على نظافة أوعية وحاويات النفايات).',
+    // W19 (2026-08-08): CORRECTED — Art.14 ≠ container hygiene. Correct: Art.8 + Art.11.
+    legalReference: 'القانون 01-19 المادة 8 (التخلص من النفايات بطريقة لا تضر بالصحة) + المادة 11 (شروط التخلص: عدم التسبب في أضرار، عدم إحداث روائح أو تلوث).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -220,7 +250,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'عدم وجود تراكم للنفايات في محيط المبنى أو في الساحة المجاورة.',
-    legalReference: 'القانون 01-19 المادة 14 (منع التخلي عن النفايات أو تركها في المحيط الخارجي للمنشأة) + القانون 03-10 المادة 6.',
+    // W19 (2026-08-08): CORRECTED — Art.14 ≠ prohibition on accumulation outside premises.
+    // Correct: Art.8 + Art.11 (Loi 01-19) + Art.6 (Loi 03-10, precautionary principle).
+    legalReference: 'القانون 01-19 المادة 8 (إلزامية التخلص من النفايات دون تركها في المحيط الخارجي) + المادة 11 (شروط التخلص: عدم الإضرار بالمناظر والمواقع) + القانون 03-10 المادة 6 (مبدأ الوقاية).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -230,7 +262,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
     criteria: 'حظر حرق النفايات غير الخطرة في الهواء الطلق داخل أو خارج المنشأة، ووجوب تحويل المخلفات إلى جهات جمع معتمدة أو مرافق عمومية.',
-    legalReference: 'القانون 01-19 المادة 29 (حظر حرق النفايات غير الخطرة في الهواء الطلق).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.29 (schéma communal = municipal plan) ≠ open-air burning ban.
+    // No explicit open-air burning prohibition article found in Loi 01-19 by direct read.
+    // Art.11 (conditions for elimination: no danger, no smoke/odour) is closest.
+    // [À VÉRIFIER]: check Loi 03-10 Art.36 (atmospheric emissions ban) and any specific
+    //   arrêté on open-air burning. If found, replace [À VÉRIFIER] with confirmed citation.
+    legalReference: 'القانون 01-19 المادة 11 (شروط التخلص من النفايات: دون إحداث دخان أو روائح أو تعريض الهواء للخطر) + القانون 03-10 المادة 36 (حظر انبعاث الملوثات الجوية فوق القيم الحدية المقررة). [À VÉRIFIER — W19]: لم يُعثر على مادة صريحة تحظر الحرق في الهواء الطلق في القانون 01-19 — يراجع JORADP بحثاً عن قرار وزاري أو مرسوم تطبيقي خاص قبل إغلاق هذا البند.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -261,7 +298,10 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
     criteria: 'وجود سجل تصنيف وجرد النفايات المنتجة (عادية / خاصة / خطرة) مع تحديده دورياً، بما يُمكِّن من تقدير الكميات المنتجة وتتبع مسار كل صنف.',
-    legalReference: 'القانون 01-19 المادة 28 + المرسوم التنفيذي 05-315 (إلزامية مسك سجل النفايات الخاصة الخطرة).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.28 (export return obligation) ≠ inventory register.
+    // Correct: Art.21 (declaration obligation: generators of hazardous waste must declare
+    //   nature, quantity and characteristics to minister + periodic reporting on treatment).
+    legalReference: 'القانون 01-19 المادة 21 (إلزامية تصريح مُنشئي النفايات الخاصة الخطرة بالطبيعة والكميات والخصائص للوزير المختص، مع التقارير الدورية عن طرق المعالجة والتدابير المتخذة) + المرسوم التنفيذي 05-315 (إلزامية مسك سجل النفايات الخاصة الخطرة).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -292,7 +332,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'حاويات النفايات مغلقة ومحفوظة في مكان مناسب.',
-    legalReference: 'القانون 01-19 المادة 14.',
+    legalReference: 'القانون 01-19 المادة 8.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -312,7 +352,10 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'استعمال مبيدات حشرية مرخَّصة من طرف مؤسسات مؤهلة، واحترام فترات الغلق والتهوية.',
-    legalReference: 'القانون 03-10 المادة 51 (اشتراط الترخيص في استعمال المواد السامة والمبيدات).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.51 (coastal ecosystem protection) ≠ pesticide licensing.
+    // Correct: Art.56 (dangerous chemicals subject to specific regulations)
+    //   + Art.58 (import/manufacture/sale/use of dangerous chemicals requires authorisation).
+    legalReference: 'القانون 03-10 المادة 56 (إخضاع إنتاج وتسويق واستعمال وتسيير المواد الكيميائية الخطرة لأنظمة خاصة لحماية البيئة والصحة) + المادة 58 (اشتراط الحصول على ترخيص من السلطة المختصة لاستيراد وتصنيع وبيع واستعمال المواد الكيميائية الخطرة).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -378,7 +421,10 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الضجيج والانبعاثات البيئية',
     category: 'بيئية',
     criteria: 'قياس مستوى الضجيج الصادر عن المنشأة عند الحدود مع الجوار أو داخل أماكن العمل، والتحقق من عدم تجاوز الحد المقرر (70 ديسيبل في المحيط الحضري نهاراً) مع توثيق النتائج.',
-    legalReference: 'القانون 03-10 المادة 27 (حظر الضجيج المضر براحة الجوار والصحة العمومية) + المرسوم التنفيذي 91-05 المادة 9 (الحدود القصوى لمستويات الضجيج في أماكن العمل).',
+    // W19 (2026-08-08): CORRECTED — previous ref Art.27 (public access to environmental information) ≠ noise ban.
+    // Correct: Art.54 ("Il est interdit de produire des bruits ou des sons de nature à nuire à la santé
+    //   ou à troubler de façon excessive les conditions normales de vie.")
+    legalReference: 'القانون 03-10 المادة 54 (حظر إصدار ضوضاء أو أصوات من شأنها الإضرار بالصحة أو الإخلال بظروف الحياة الطبيعية) + المرسوم التنفيذي 91-05 المادة 9 (الحدود القصوى لمستويات الضجيج في أماكن العمل).',
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
