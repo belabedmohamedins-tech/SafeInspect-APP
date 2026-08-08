@@ -8,6 +8,16 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 01:19 WAT — [Agent: Perplexity] — W4-fix CLOSED: sections start collapsed=true — 1 tap opens correctly
+- Phases closed: **W4-fix** ✅
+- Files changed:
+  - `src/hooks/useCollapsibleSections.ts` — initial collapsed state changed `false → true` for all sections. `useEffect` default for new titles: `false → true`. `isCollapsed` fallback: `?? false → ?? true`.
+- Root cause: `react-native-collapsible` defaults its own `collapsed` prop to `true`. Hook was initialising state as `false` (open) but data loads asynchronously. On first render the state was `{}` → `isCollapsed(title) = undefined ?? false = false` while the Collapsible component rendered with its own internal default `true` (closed). This React state / native UI mismatch caused the first tap to set state to `true` — matching the visual that was already shown — so nothing appeared to change. Only the second tap to `false` actually opened the section. User reported: arrow shows ▼ (down) → tap → arrow shows ► (right, no change) → tap again → section opens with ▼.
+- Fix: start all sections as `collapsed=true` (closed). First render: ▼ arrow + content hidden. One tap → `collapsed=false` → ▲ arrow + content visible. One more tap → `collapsed=true` → ▼ + hidden.
+- Gate: No logic change to toggle or scoring — TSC/Jest not required. Verify on device: start a new inspection → checklist screen → all sections closed with ▼ arrow → tap once → section opens with ▲ arrow → tap again → closes with ▼ arrow.
+- Commit: `5479a54`
+- Verify: start a new inspection → checklist screen → all sections closed (▼) → 1 tap opens (▲) → 1 tap closes (▼).
+
 ### 2026-08-08 00:39 WAT — [Agent: Perplexity] — W5 CLOSED: 3 TSC errors fixed — 'critical' added to SEVERITY_COLOR, SEVERITY_LABEL, SEVERITY_WEIGHTS
 - Phases closed: **W5** ✅
 - Files changed:
