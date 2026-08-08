@@ -62,21 +62,31 @@
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W18** (ready now, no blocker) → **W19** (unblocks all citation audit) → **W15** (critical implementation fix) → **W16** → **W17** → **W11** → **W12** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
+> Execution order: **W18** → **W21** → **W19** → **W15** → **W22** → **W23** → **W24** → **W25** → **W26** → **W27** → **W28** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
 
-| Phase | Priority | Title | Files | Blocker |
+| Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W10** | P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
-| **W11** | P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct Algerian ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required — Perplexity to search and propose correct decree before Claude edits |
-| **W12** | P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
-| **W13** | P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
-| **W14** | P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet — upload to docs/legal_sources/ first |
-| **W15** | 🔴 P0 | F1 fix: re-key `criteriaByActivity` by `rubrique` + fallback warning in checklist UI | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts`, checklist UI | Perplexity designs + implements → Claude TSC + Jest gate. Opened from AUDIT_STATE.md F1. |
-| **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation (right of withdrawal ≠ traceability) | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required — find correct traceability article (likely Décret 17-140) or tag `[حكم مهني]`. Opened from AUDIT_STATE.md F3. |
-| **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances (figures not found in Décret 17-140 Art.12–24) | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification — find real Algerian legal source or retag `[حكم مهني]`. Opened from AUDIT_STATE.md F3. |
-| **W18** | 🟢 P2 — **READY NOW** | BGN-08-01 + BGN-08-02: add specific article numbers to Loi 19-02 citation (Art.5 and Art.13 confirmed correct) | `src/criteria/baseGeneralCriteria.ts` | No blocker — articles already confirmed. Quick fix. Opened from AUDIT_STATE.md F3. |
-| **W19** | 🟠 P1 — **BLOCKS AUDIT SESSIONS 8+** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicate pairs, flag incomplete articles, spot-check ≥3 files vs official JO text | `legal_refs/` (24 files) | Perplexity-only (document conversion + verification, no code). Blocks all future citation audit sessions. Opened from AUDIT_STATE.md Section 4. |
-| **W20** | 🟡 P2 | Close 3 open legal unverifieds (BGN-01-01 grace-period date, Décret 06-198 Art.20, BFD-02-02 figures) + delete `allCriteria` dead-code export from `src/criteria/index.ts` | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. Opened from AUDIT_STATE.md Section 5 + F2. |
+| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
+| **W11** | 🟠 P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct Algerian ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required — Perplexity to search and propose correct decree before Claude edits |
+| **W12** | 🟠 P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
+| **W13** | 🟡 P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
+| **W14** | 🟡 P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet — upload to docs/legal_sources/ first |
+| **W15** | 🔴 P0 | F1 fix: re-key `criteriaByActivity` by `rubrique` + fallback warning in checklist UI | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts`, checklist UI | Perplexity designs + implements → Claude TSC + Jest gate. Source: AUDIT_STATE.md F1. |
+| **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation (right of withdrawal ≠ traceability) | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required — find correct traceability article (likely Décret 17-140) or tag `[حكم مهني]`. Source: AUDIT_STATE.md F3. |
+| **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances (figures not found in Décret 17-140 Art.12–24) | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification — find real Algerian legal source or retag `[حكم مهني]`. Source: AUDIT_STATE.md F3. |
+| **W18** | 🟢 P2 — **READY NOW** | BGN-08-01 + BGN-08-02: add specific article numbers to Loi 19-02 citation (Art.5 and Art.13 confirmed correct) | `src/criteria/baseGeneralCriteria.ts` | No blocker — articles already confirmed. Quick fix. Source: AUDIT_STATE.md F3. |
+| **W19** | 🟠 P1 — **BLOCKS AUDIT SESSIONS 8+** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicate pairs, flag incomplete articles, spot-check ≥3 files vs official JO text | `legal_refs/` (24 files) | Perplexity-only (document conversion + verification, no code). Blocks all future citation audit sessions. Source: AUDIT_STATE.md Section 4. |
+| **W20** | 🟡 P2 | Close 3 open legal unverifieds (BGN-01-01 grace-period date, Décret 06-198 Art.20, BFD-02-02 figures) + delete `allCriteria` dead-code export from `src/criteria/index.ts` | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. Source: AUDIT_STATE.md Section 5 + F2. |
+| **W21** | 🟢 P3 — **READY NOW** | L-10: Fix bakery decree date typo — "27 mars 2017" → "11 avril 2017" in BAK-10-10 legalReference | `src/criteria/bakeryCriteria.ts` (BAK-10-10) | No blocker — correct date confirmed from primary document. Source: Legal Audit L-10. |
+| **W22** | 🔴 P0 | F-11: Approved inspection immutability — add `approvalStatus` guard in `InspectionRepository.save()` + `.delete()` + supervisor-override path | `src/repositories/InspectionRepository.ts`, `app/screens/reports.tsx`, `src/hooks/useChecklistData.ts` | ⚠️ Needs product sign-off: should a legitimate reopen-for-correction workflow exist? Resolve together with W23. Source: Consolidated Audit F-11. |
+| **W23** | 🔴 P0 | F-18: Wire local approval to server — `ApprovalRepository.approve()/returnForRevision()/escalate()` must call `serverAuth.ts` approve/reject endpoints, OR remove dead server endpoints | `src/repositories/ApprovalRepository.ts`, `src/services/serverAuth.ts` | ⚠️ Needs product decision: (a) wire it up or (b) delete server endpoints. Resolve together with W22. Source: Consolidated Audit F-18. |
+| **W24** | 🔴 P0 | F-19: Audit log self-tamper protection — log the clear action itself before deleting; add `AUDIT_LOG_CLEARED` action type; restrict who can clear | `src/repositories/AuditLogRepository.ts`, `src/types.ts`, `app/screens/audit-log.tsx` | ⚠️ Needs product decision on whether clearing is allowed at all given legal-defensibility purpose. Resolve alongside W22/W23. Source: Consolidated Audit F-19. |
+| **W25** | 🔴 P0 | F-13: Reinspection facility-match guard in `differentialView.ts` — copy the existing guard pattern from `violationHistory.ts` (facilityId match check before trusting priorInspectionId) | `src/utils/differentialView.ts` | Fix pattern already exists in sibling file `violationHistory.ts` — copy, don't re-derive. Add test: mock `getById` with mismatched facilityId, assert fallback. Source: Consolidated Audit F-13. |
+| **W26** | 🟠 P1 | F-10: `categories.tsx` data source swap — replace static `facilitiesData` import with `facilitiesService.getAllFacilities()` so user-added facilities appear in start-inspection flow | `app/screens/categories.tsx` | Re-confirm still needed before implementing (Claude: read file first). Source: Consolidated Audit F-10. |
+| **W27** | 🟠 P1 | F-14: Reconcile evaluated-status definitions + fix `statusUtils.ts` missing cases for `observation-only` and `unable-to-verify` (currently both show "لم يقيم" on printed report) | `src/utils/statusUtils.ts`, `src/utils/scoringUtils.ts`, `app/preview/index.tsx` | Add explicit label + color for both statuses; reconcile the 3 completion-rate formulas (progress bar / finish-gate / scoringUtils). Source: Consolidated Audit F-14. |
+| **W28** | 🟠 P1 | F-09: AppState autosave — add `AppState` change listener to `useChecklistData.ts` so OS-killed app saves in-progress work (distinct from cancel-button fix already in Z12-05) | `src/hooks/useChecklistData.ts` | Implement with `AppState.addEventListener('change', state => { if state !== 'active' → saveDraft() })`. Source: Consolidated Audit F-09. |
+| **W29** | 🟡 P2 | F-17: Server↔mobile schema mapping functions — write explicit mappers for all confirmed mismatches (status casing, violation counts, committeeMembers, inspectorId FK) before enabling real sync | `server/prisma/schema.prisma`, new `src/services/syncMapper.ts` | Pre-emptive — sync not live yet. Implement before enabling sync. Source: Consolidated Audit F-17. |
+| **W30** | 🟡 P2 | F-20: `decisionSupport.ts` test coverage — add real tests covering each decision branch, grade boundaries, and legal-citation-driven escalation thresholds | `src/__tests__/decisionSupport.test.ts` | Currently has exactly 1 test (`typeof suggestDecision === 'function'`). No code changes — tests only. Source: Consolidated Audit F-20. |
 
 ---
 
@@ -92,7 +102,7 @@
 
 - Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, W5, W6, W7, W8, W9 are closed.
 - Z9 is deferred.
-- **Open phases: W10–W20. Next new phase identifier: W21.**
+- **Open phases: W10–W30. Next new phase identifier: W31.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
@@ -121,12 +131,22 @@
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
 | Décret 17-140 | Food hygiene / human consumption conditions | N/A for BGN-03-06 | ✅ CONFIRMED — NOT septic pumping. BGN-03-06 revised without this source. |
-| BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as W21+ if JORADP source is found. |
+| BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as W31+ if JORADP source is found. |
 | Water supply (drinking water quality) | Décret 11-125 | Art. relevant | ✅ VERIFIED — W8 + W9 confirmed BGN-03-01 + ABT-AX4-01 already correct |
 | BGN-02-06 ventilation citation | Décret 93-120 is medical exams — WRONG decree | ? | ⚠️ W11 OPEN — correct Algerian ventilation decree to be identified |
 | Abattoir wastewater annex | Décret 06-141 Annex II abattoir-specific (not Annex I general) | Annex II — g/t units | ⚠️ W10 OPEN — needs user sign-off on values |
 | BFD-08-01 traceability citation | Loi 09-03 Art.19 WRONG — Art.19 = droit de rétractation (Loi 18-09 amendment) | ? | ⚠️ W16 OPEN — correct article to be found |
 | BFD-02-02 storage clearances | 15cm floor / 5cm wall — not found in Décret 17-140 Art.12–24 | ? | ⚠️ W17 OPEN — source verification required |
 | BGN-08-01 / BGN-08-02 | Loi 19-02 cited generically — missing Art.5 and Art.13 | Art.5, Art.13 | ⚠️ W18 OPEN — ready to fix now |
+| BAK-10-10 bakery decree date | "27 mars 2017" in code vs. actual "11 avril 2017" | Décret 17-140 date | ⚠️ W21 OPEN — ready to fix now |
 | Décret 06-198 Art.20 | Cited in types.ts for 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN — independent verification pending |
 | Décret 24-196 grace period | 3-year clock start date unconfirmed | Art. relevant | ⚠️ W20 OPEN — exact date to be found |
+| Approved inspection immutability | No guard in InspectionRepository.save()/.delete() | — | ⚠️ W22 OPEN — product sign-off required |
+| Local/server approval disconnect | ApprovalRepository never calls serverAuth endpoints | — | ⚠️ W23 OPEN — product decision required |
+| Audit log self-tamper gap | AuditLogRepository.clear() leaves no trace | — | ⚠️ W24 OPEN — product decision required |
+| differentialView.ts facility mismatch | No facilityId guard on priorInspectionId path | — | ⚠️ W25 OPEN — fix pattern in violationHistory.ts |
+| categories.tsx static data source | Uses facilitiesData not getAllFacilities() | — | ⚠️ W26 OPEN — re-confirm before implementing |
+| statusUtils.ts missing status cases | observation-only/unable-to-verify show "لم يقيم" | — | ⚠️ W27 OPEN |
+| AppState autosave on app-kill | No AppState listener in useChecklistData.ts | — | ⚠️ W28 OPEN |
+| Server↔mobile schema mismatches | No mapping functions for status/violations/etc. | — | ⚠️ W29 OPEN — pre-emptive, sync not live |
+| decisionSupport.ts test coverage | 1 trivial test, no branch coverage | — | ⚠️ W30 OPEN |
