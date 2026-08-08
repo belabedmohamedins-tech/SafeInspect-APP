@@ -57,12 +57,14 @@
 | W7 | L-02b: Cold-chain legal ref — Arrêté interminist. 07/05/2025 | 2026-08-08 | Confirmed clean by direct code read — BFD-04-01/02 already cite the 07/05/2025 arrêté. No code change needed. |
 | W8 | L-03: BGN-03-01 legal ref — Décret 11-125 | 2026-08-08 | Confirmed clean by direct code read — BGN-03-01 already cites Décret 11-125. No code change needed. |
 | W9 | L-05: Abattoir chlorine citation — Décret 11-125 (treated water) | 2026-08-08 | Confirmed clean by direct code read — ABT-AX4-01 already cites Décret 11-125. No code change needed. |
+| W18 | BGN-08-01 + BGN-08-02: add Art.5 + Art.13 to Loi 19-02 citation | 2026-08-08 | `src/criteria/baseGeneralCriteria.ts`. Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
+| W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | `src/criteria/bakeryCriteria.ts`. Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W18** → **W21** → **W19** → **W15** → **W22** → **W23** → **W24** → **W25** → **W26** → **W27** → **W28** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
+> Execution order: **W19** → **W15** → **W22** → **W23** → **W24** → **W25** → **W26** → **W27** → **W28** → **W16** → **W17** → **W11** → **W12** → **W29** → **W30** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
@@ -74,10 +76,8 @@
 | **W15** | 🔴 P0 | F1 fix: re-key `criteriaByActivity` by `rubrique` + fallback warning in checklist UI | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts`, checklist UI | Perplexity designs + implements → Claude TSC + Jest gate. Source: AUDIT_STATE.md F1. |
 | **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation (right of withdrawal ≠ traceability) | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required — find correct traceability article (likely Décret 17-140) or tag `[حكم مهني]`. Source: AUDIT_STATE.md F3. |
 | **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances (figures not found in Décret 17-140 Art.12–24) | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification — find real Algerian legal source or retag `[حكم مهني]`. Source: AUDIT_STATE.md F3. |
-| **W18** | 🟢 P2 — **READY NOW** | BGN-08-01 + BGN-08-02: add specific article numbers to Loi 19-02 citation (Art.5 and Art.13 confirmed correct) | `src/criteria/baseGeneralCriteria.ts` | No blocker — articles already confirmed. Quick fix. Source: AUDIT_STATE.md F3. |
-| **W19** | 🟠 P1 — **BLOCKS AUDIT SESSIONS 8+** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicate pairs, flag incomplete articles, spot-check ≥3 files vs official JO text | `legal_refs/` (24 files) | Perplexity-only (document conversion + verification, no code). Blocks all future citation audit sessions. Source: AUDIT_STATE.md Section 4. |
+| **W19** | 🟠 P1 — **NEXT UP** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicate pairs, flag incomplete articles, spot-check ≥3 files vs official JO text | `legal_refs/` (24 files) | Perplexity-only (document conversion + verification, no code). Blocks all future citation audit sessions. Source: AUDIT_STATE.md Section 4. |
 | **W20** | 🟡 P2 | Close 3 open legal unverifieds (BGN-01-01 grace-period date, Décret 06-198 Art.20, BFD-02-02 figures) + delete `allCriteria` dead-code export from `src/criteria/index.ts` | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. Source: AUDIT_STATE.md Section 5 + F2. |
-| **W21** | 🟢 P3 — **READY NOW** | L-10: Fix bakery decree date typo — "27 mars 2017" → "11 avril 2017" in BAK-10-10 legalReference | `src/criteria/bakeryCriteria.ts` (BAK-10-10) | No blocker — correct date confirmed from primary document. Source: Legal Audit L-10. |
 | **W22** | 🔴 P0 | F-11: Approved inspection immutability — add `approvalStatus` guard in `InspectionRepository.save()` + `.delete()` + supervisor-override path | `src/repositories/InspectionRepository.ts`, `app/screens/reports.tsx`, `src/hooks/useChecklistData.ts` | ⚠️ Needs product sign-off: should a legitimate reopen-for-correction workflow exist? Resolve together with W23. Source: Consolidated Audit F-11. |
 | **W23** | 🔴 P0 | F-18: Wire local approval to server — `ApprovalRepository.approve()/returnForRevision()/escalate()` must call `serverAuth.ts` approve/reject endpoints, OR remove dead server endpoints | `src/repositories/ApprovalRepository.ts`, `src/services/serverAuth.ts` | ⚠️ Needs product decision: (a) wire it up or (b) delete server endpoints. Resolve together with W22. Source: Consolidated Audit F-18. |
 | **W24** | 🔴 P0 | F-19: Audit log self-tamper protection — log the clear action itself before deleting; add `AUDIT_LOG_CLEARED` action type; restrict who can clear | `src/repositories/AuditLogRepository.ts`, `src/types.ts`, `app/screens/audit-log.tsx` | ⚠️ Needs product decision on whether clearing is allowed at all given legal-defensibility purpose. Resolve alongside W22/W23. Source: Consolidated Audit F-19. |
@@ -100,9 +100,9 @@
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, W5, W6, W7, W8, W9 are closed.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, W5, W6, W7, W8, W9, W18, W21 are closed.
 - Z9 is deferred.
-- **Open phases: W10–W30. Next new phase identifier: W31.**
+- **Open phases: W10–W17, W19–W20, W22–W30. Next new phase identifier: W31.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
@@ -120,11 +120,14 @@
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
 | Fire safety — ERP type/category list | Loi 19-02 | Art. 14 | ✅ CLOSED — Ord. 76-04 = operational base. |
+| Fire safety — equipment requirements | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 added to BGN-08-01 |
+| Fire safety — evacuation routes | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 added to BGN-08-02 |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
 | LPG cylinder storage (point de vente) | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
 | Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED — 16 params mg/Nm³ + 7 sectors. |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified — W6 confirmed correct in all food criteria files |
+| Décret 17-140 actual JO date | 11 avril 2017 (14 Rajab 1438H) | — | ✅ VERIFIED — W21 corrected BAK-10-10 from "27 mars" |
 | Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — W7 confirmed correct in BFD-04-01/02 |
 | Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED |
 | Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. périodicité | ✅ VERIFIED |
@@ -137,8 +140,6 @@
 | Abattoir wastewater annex | Décret 06-141 Annex II abattoir-specific (not Annex I general) | Annex II — g/t units | ⚠️ W10 OPEN — needs user sign-off on values |
 | BFD-08-01 traceability citation | Loi 09-03 Art.19 WRONG — Art.19 = droit de rétractation (Loi 18-09 amendment) | ? | ⚠️ W16 OPEN — correct article to be found |
 | BFD-02-02 storage clearances | 15cm floor / 5cm wall — not found in Décret 17-140 Art.12–24 | ? | ⚠️ W17 OPEN — source verification required |
-| BGN-08-01 / BGN-08-02 | Loi 19-02 cited generically — missing Art.5 and Art.13 | Art.5, Art.13 | ⚠️ W18 OPEN — ready to fix now |
-| BAK-10-10 bakery decree date | "27 mars 2017" in code vs. actual "11 avril 2017" | Décret 17-140 date | ⚠️ W21 OPEN — ready to fix now |
 | Décret 06-198 Art.20 | Cited in types.ts for 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN — independent verification pending |
 | Décret 24-196 grace period | 3-year clock start date unconfirmed | Art. relevant | ⚠️ W20 OPEN — exact date to be found |
 | Approved inspection immutability | No guard in InspectionRepository.save()/.delete() | — | ⚠️ W22 OPEN — product sign-off required |

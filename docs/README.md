@@ -8,6 +8,15 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 16:23 WAT — [Agent: Perplexity] — W18+W21 CLOSED: TSC+Jest all green — user-confirmed
+- Phases closed: **W18** ✅ GATE CONFIRMED **W21** ✅ GATE CONFIRMED
+- Files changed:
+  - `src/criteria/baseGeneralCriteria.ts` — BGN-08-01: `legalReference` now includes **(المادة 5)** (technical requirements for fire-fighting equipment per Loi 19-02). BGN-08-02: `legalReference` now includes **(المادة 13)** (evacuation routes and emergency exits per Loi 19-02).
+  - `src/criteria/bakeryCriteria.ts` — BAK-10-10: `legalReference` date corrected from **27 مارس 2017** → **11 أبريل 2017** (actual JO date of Décret 17-140, 14 Rajab 1438H). Article 5 was already correct.
+- Gate: TSC + Jest — **all green — user-confirmed 16:23 WAT**
+- Commit: `f7c84a7`
+- Next priority: **W19** (legal_refs/ maintenance — fabricated stubs, duplicate pairs) → then **W15** (criteriaByActivity re-key by rubrique).
+
 ### 2026-08-08 02:44 WAT — [Agent: Perplexity] — W4-refix GATE CONFIRMED: Jest all green — user-confirmed
 - Phases closed: **W4-refix** ✅ GATE CONFIRMED
 - Files changed: none (gate confirmation only)
