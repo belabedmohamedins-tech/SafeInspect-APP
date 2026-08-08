@@ -3,19 +3,19 @@
 
 ---
 
-**⚠️ Verify against the original JORADP text before relying on this for any legal or enforcement decision.**
+**Titre complet :** Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail  
+**Date de signature :** 19 janvier 1991  
+**Date de publication :** 23 janvier 1991  
+**Journal Officiel :** J.O.R.A. n° 04 du 23 janvier 1991, pp. 63–70  
+**Source PDF convertie :** `decret-91-05.pdf` (fourni le 2026-08-08)  
+**Date de conversion :** 2026-08-08  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ — à vérifier contre le texte original JORADP avant toute décision légale ou d'application.
 
-| Champ | Valeur |
-|---|---|
-| **Titre officiel** | Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail |
-| **Date de signature** | 19 janvier 1991 |
-| **Journal Officiel** | JORADP N° 04 du 23 janvier 1991, pages 63–70 |
-| **Source PDF** | `decret 91-05.pdf` (fourni dans ce projet) |
-| **Signataire** | Mouloud HAMROUCHE, Chef du Gouvernement |
+> ⚠️ **Avertissement :** Vérifier contre le texte original JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou de contrôle.
 
 ---
 
-## Visas
+## Préambule
 
 Le Chef du Gouvernement,
 
@@ -25,23 +25,23 @@ Vu la Constitution et notamment ses articles 51 (2°), 81 (alinéas 2, 3 et 4) e
 
 Vu l'ordonnance n° 71-74 du 16 novembre 1971 relative à la gestion socialiste des entreprises, modifiée, ensemble les textes pris pour son application,
 
-Vu l'ordonnance n° 75-33 du 29 avril 1975 relative aux attributions de l'inspection du travail et des affaires sociales.
+Vu l'ordonnance n° 75-33 du 29 avril 1975 relative aux attributions de l'inspection du travail et des affaires sociales,
 
-Vu la loi n° 78-12 du 5 août 1978 portant statut général du travailleur notamment son article 13 ;
+Vu la loi n° 78-12 du 5 août 1978 portant statut général du travailleur notamment son article 13,
 
-Vu la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement ;
+Vu la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement,
 
-Vu la loi n° 85-05 du 16 février 1985 relative à la protection et à la promotion de la santé, modifiée par la loi n° 90-17 du 31 juillet 1990 ;
+Vu la loi n° 85-05 du 16 février 1985 relative à la protection et à la promotion de la santé, modifiée par la loi n° 90-17 du 31 juillet 1990,
 
 Vu la loi n° 88-01 du 12 janvier 1988 portant loi d'orientation sur les entreprises publiques économiques,
 
 Vu la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, la sécurité et la médecine du travail,
 
-Vu la loi n° 90-03 du 6 février 1990 relative à l'inspection du travail ;
+Vu la loi n° 90-03 du 6 février 1990 relative à l'inspection du travail,
 
-Vu la loi n° 90-11 du 21 avril 1990 relative aux relations de travail ;
+Vu la loi n° 90-11 du 21 avril 1990 relative aux relations de travail,
 
-Vu le décret n° 86-132 du 27 mai 1986 fixant les règles de protection des travailleurs contre les risques de rayonnements ionisants ainsi que celles relatives au contrôle de la détention et de l'utilisation des substances radioactives et des appareils émettant des rayonnements ionisants ;
+Vu le décret n° 86-132 du 27 mai 1986 fixant les règles de protection des travailleurs contre les risques de rayonnements ionisants ainsi que celles relatives au contrôle de la détention et de l'utilisation des substances radioactives et des appareils émettant des rayonnements ionisants,
 
 Décrète :
 
@@ -49,7 +49,7 @@ Décrète :
 
 ## Article 1
 
-**Article. 1.** — Le présent décret a pour objet de fixer, en application de l'article 45 (1°), de la loi n° 88-07 du 26 janvier 1988 susvisée, les prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail à tout organisme employeur, tel que prévu à l'article 2 de la loi précitée.
+Art. 1. — Le présent décret a pour objet de fixer, en application de l'article 45 (1°), de la loi n° 88-07 du 26 janvier 1988 susvisée, les prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail à tout organisme employeur, tel que prévu à l'article 2 de la loi précitée.
 
 ---
 
@@ -63,7 +63,7 @@ Décrète :
 
 Le nettoyage des murs et des plafonds ainsi que la réfection des enduits et des revêtements, doit avoir lieu périodiquement et à chaque fois que cela est nécessaire.
 
-**Art. 4.** — Dans les locaux de travail où sont entreposés ou mis en œuvre, des matières altérables ou objets, présentant des risques de contamination, de nocivité, de corrosion ou d'irritation, le sol doit être lisse, imperméable, sans interstices et former une cuvette étanche de retenue.
+**Art. 4.** — Dans les locaux de travail où sont entreposés ou mis en oeuvre, des matières altérables ou objets, présentant des risques de contamination, de nocivité, de corrosion ou d'irritation, le sol doit être lisse, imperméable, sans interstices et former une cuvette étanche de retenue.
 
 Les murs doivent être lisses et lavables, le sol et les murs ainsi que les tables de travail doivent être lavés quotidiennement et au besoin désinfectés.
 
@@ -128,7 +128,7 @@ L'éclairage artificiel doit être d'une intensité adaptée à la nature des tr
 
 Les fumées et gaz de combustion provenant des moyens de chauffage utilisés, doivent être rejetés en dehors des locaux.
 
-**Art. 15.** — Les organismes employeurs sont tenus de maintenir l'intensité des bruits supportés par les travailleurs à un niveau compatible avec leur santé par la réduction de l'intensité des bruits à leur source d'émission, l'isolement des ateliers bruyants, l'insonorisation des locaux ou la mise en œuvre de techniques ou de tous autres moyens appropriés et ce, conformément aux normes fixées par la réglementation en vigueur en la matière.
+**Art. 15.** — Les organismes employeurs sont tenus de maintenir l'intensité des bruits supportés par les travailleurs à un niveau compatible avec leur santé par la réduction de l'intensité des bruits à leur source d'émission, l'isolement des ateliers bruyants, l'insonorisation des locaux ou la mise en oeuvre de techniques ou de tous autres moyens appropriés et ce, conformément aux normes fixées par la réglementation en vigueur en la matière.
 
 **Art. 16.** — Dans le cas où l'exécution des mesures de protection collectives, prévues à l'article 15 ci-dessus serait reconnue impossible, les appareils de protection individuelle appropriés doivent être mis à la disposition des travailleurs.
 
@@ -250,11 +250,11 @@ Des dispositifs de protections tels que portières, caches, grilles, barrières,
 
 **Art. 42.** — Sont notamment visés par les prescriptions des articles 40 et 41 ci-dessus :
 
-1° les éléments de machines comportant des organes de transmissions et de commande, tels que volants, vis sans fin, bielles, coulisseaux, zones d'engrenage, cônes ou cylindres de friction, cames, courroies, chaînes, pignons ;
+1 — les éléments de machines comportant des organes de transmissions et de commande, tels que volants, vis sans fin, bielles, coulisseaux, zones d'engrenage, cônes ou cylindres de friction, cames, courroies, chaînes, pignons ;
 
-2° les éléments des machines comportant des pièces accessibles faisant saillie sur les parties en mouvement de ces machines tels que vis d'arrêt, boulons, clavettes, nervures, bassages ;
+2 — les éléments des machines comportant des pièces accessibles faisant saillie sur les parties en mouvement de ces machines tels que vis d'arrêt, boulons, clavettes, nervures, bassages ;
 
-3° les organes de travail de toute nature tels que bras de pétrins ou de mélangeurs, cylindres de calandres, cylindres d'entraînement, malaxeure, pignons et matrices de presse mues mécaniquement, dès lors que les opérateurs ou leurs aides, sont appelés à intervenir manuellement en utilisation normale, dans des zones dangereuses situées à proximité des organes en mouvement.
+3 — les organes de travail de toute nature tels que bras de pétrins ou de mélangeurs, cylindres de calandres, cylindres d'entraînement, malaxeurs, pignons et matrices de presse mues mécaniquement, dès lors que les opérateurs ou leurs aides, sont appelés à intervenir manuellement en utilisation normale, dans des zones dangereuses situées à proximité des organes en mouvement.
 
 **Art. 43.** — Les machines à cylindre, doivent pouvoir être commandées, indifféremment par un opérateur travaillant sur l'un ou l'autre des cylindres.
 
@@ -286,12 +286,12 @@ Les travaux de maintenance effectués dans les locaux cités à l'alinéa premie
 
 **Art. 47.** — Les matières inflammables sont classées en deux groupes :
 
-- **Le premier groupe comprend :**
+* Le premier groupe comprend :
   - les matières émettant des vapeurs inflammables ;
   - les matières susceptibles de brûler sans apport d'oxygène ;
   - les matières dans un état physique de grande division, susceptibles de former avec l'air un mélange explosif.
 
-- **Le deuxième groupe comprend :**
+* Le deuxième groupe comprend :
   - les matières susceptibles de prendre feu au contact d'une flamme et de propager rapidement l'incendie.
 
 **Art. 48.** — Les locaux où sont entreposées ou manipulées des matières inflammables du premier groupe ne peuvent être éclairés que par des lampes électriques munies d'une double enveloppe étanche ou par des lampes extérieures sous verre dormant.
@@ -304,11 +304,11 @@ Les travaux de maintenance effectués dans les locaux cités à l'alinéa premie
 
 Les zones visées ci-dessus comprennent :
 
-— les locaux et emplacements de travail où peuvent se former des atmosphères explosives et ceux où des matières explosives sont entreposées, mises en œuvre ou fabriquées.
+— les locaux et emplacements de travail où peuvent se former des atmosphères explosives et ceux où des matières explosives sont entreposées, mises en oeuvre ou fabriquées ;
 
 — à l'extérieur de ces locaux et emplacements tous endroits contigus qui sont en communication avec eux et qui ne sont pas ventilés efficacement pour empêcher la formation d'une atmosphère explosive.
 
-**Art. 50.** — Les locaux où sont manipulées ou mises en œuvre des matières inflammables du premier groupe ne doivent jamais contenir aucun foyer, aucune flamme, aucun appareil ni des parties susceptibles d'être portées à incandescence.
+**Art. 50.** — Les locaux où sont manipulées ou mises en oeuvre des matières inflammables du premier groupe ne doivent jamais contenir aucun foyer, aucune flamme, aucun appareil ni des parties susceptibles d'être portées à incandescence.
 
 Il est interdit d'y fumer et d'y apporter du feu sous une forme quelconque. Cette interdiction doit faire l'objet d'une information appropriée.
 
@@ -318,7 +318,7 @@ Ces locaux doivent être parfaitement ventilés et leur accès réglementé.
 
 Les récipients et les moyens de transvasement des liquides visés à l'alinéa ci-dessus doivent présenter toutes les conditions d'étanchéité, et s'ils sont en verre, être conçus de manière à résister aux chocs et aux écrasements.
 
-**Art. 52.** — Dans les locaux où sont entreposées ou manipulées des matières inflammables du premier ou du deuxième groupe, aucun poste habituel de travail ne doit se trouver à plus de dix mètres d'une issue. Les portes des ces locaux doivent s'ouvrir dans le sens de la sortie.
+**Art. 52.** — Dans les locaux où sont entreposées ou manipulées des matières inflammables du premier ou du deuxième groupe, aucun poste habituel de travail ne doit se trouver à plus de dix mètres d'une issue. Les portes de ces locaux doivent s'ouvrir dans le sens de la sortie.
 
 Il est interdit de déposer et laisser séjourner des matières inflammables du premier ou du deuxième groupe dans les escaliers, passages, couloirs ainsi qu'à proximité des issues des locaux et bâtiments. Les chiffons, cotons, papiers, imprégnés de liquides inflammables ou de matières grasses doivent après usage être enfermés dans des récipients métalliques clos et étanches et à l'abri de toute source de chaleur.
 
@@ -332,7 +332,7 @@ b) L'utilisation de conducteurs électriques nus ainsi que de pièces conductric
 
 c) Le matériel dont le fonctionnement provoque des arcs ou des étincelles ou l'incandescence, n'est autorisé que si ces sources de danger sont incluses dans des enveloppes appropriées.
 
-### Section 2 — Évacuation du personnel
+### Section 2 — Evacuation du personnel
 
 **Art. 54.** — Dans tous les cas, les issues et dégagements des locaux et bâtiments de travail, doivent être répartis de façon à permettre une évacuation rapide en cas d'incendie.
 
@@ -358,13 +358,13 @@ Toutefois, l'emploi de tétrachlorure de carbone et de bromure de méthyle est i
 
 Dans tous les cas, d'autres moyens d'extinction doivent être tenus à proximité des emplacements de travail comportant des risques particuliers d'apparition de feu.
 
-Dans les locaux, ateliers ou laboratoires où sont mis en œuvre des liquides classés dans le premier groupe des matières inflammables, des couvertures ignifuges facilement accessibles doivent être mises à la disposition des travailleurs, le cas échéant, un dispositif d'arrosage est placé à la sortie du local.
+Dans les locaux, ateliers ou laboratoires où sont mis en oeuvre des liquides classés dans le premier groupe des matières inflammables, des couvertures ignifuges facilement accessibles doivent être mises à la disposition des travailleurs, le cas échéant, un dispositif d'arrosage est placé à la sortie du local.
 
-**Art. 58.** — Dans les entreprises où sont manipulées, mises en œuvre ou entreposées d'importantes quantités de matières inflammables du premier groupe, l'organisme employeur doit mettre en place des moyens de secours supplémentaires appropriés aux risques d'incendie.
+**Art. 58.** — Dans les entreprises où sont manipulées, mises en oeuvre ou entreposées d'importantes quantités de matières inflammables du premier groupe, l'organisme employeur doit mettre en place des moyens de secours supplémentaires appropriés aux risques d'incendie.
 
-Ces moyens doivent être mis en œuvre par une équipe entraînée à l'utilisation de ces matériels d'extinction.
+Ces moyens doivent être mis en oeuvre par une équipe entraînée à l'utilisation de ces matériels d'extinction.
 
-**Art. 59.** — Dans les locaux où sont manipulées ou mises en œuvre des matières inflammables, des consignes prescrivant les opérations à effectuer en cas d'incendie, doivent être données au personnel.
+**Art. 59.** — Dans les locaux où sont manipulées ou mises en oeuvre des matières inflammables, des consignes prescrivant les opérations à effectuer en cas d'incendie, doivent être données au personnel.
 
 Dans chaque local de travail, une consigne doit indiquer la localisation du matériel d'extinction et de sauvetage, désigner le personnel chargé d'utiliser ce matériel ainsi que les personnes qui doivent diriger l'évacuation du personnel ou, le cas échéant, du public.
 
@@ -386,14 +386,14 @@ La liste des essais et exercices et les observations auxquelles ils peuvent donn
 
 **Art. 62.** — Des visites, vérifications et entretiens périodiques doivent être prévus de façon particulière et selon les périodicités fixées par la réglementation en vigueur notamment dans les domaines suivants :
 
-1° ambiance de travail et locaux de travail ;
-2° moyens de protection collective et individuelle ;
-3° installations de lutte contre l'incendie ;
-4° véhicules de transport notamment ceux destinés au transport du personnel ;
-5° appareils de levage, équipements et engins de manutention ;
-6° installations électriques ;
-7° appareils sous pression ;
-8° sources radioactives et appareils émettant des rayonnements ionisants.
+1°) — ambiance de travail et locaux de travail ;
+2°) — moyens de protection collective et individuelle ;
+3°) — installations de lutte contre l'incendie ;
+4°) — véhicules de transport notamment ceux destinés au transport du personnel ;
+5°) — appareils de levage, équipements et engins de manutention ;
+6°) — installations électriques ;
+7°) — appareils sous pression ;
+8°) — sources radioactives et appareils émettant des rayonnements ionisants.
 
 **Art. 63.** — Les machines et mécanismes dangereux, doivent faire l'objet périodiquement, de visites, vérifications et entretiens particuliers dans le but d'assurer le bon fonctionnement des organes de commande et l'efficacité des dispositifs de sécurité.
 
@@ -419,15 +419,11 @@ Dans le cas où des contraintes techniques s'opposent au respect des prescriptio
 
 **Art. 67.** — En application des dispositions de l'article 31 de la loi n° 88-07 susvisée, le délai fixé par l'inspecteur du travail à l'organisme employeur pour les prescriptions donnant lieu à l'application de la procédure de mise en demeure ne peut être inférieur aux délais minimaux d'exécution prévus ci-après :
 
-1) Délai minimum d'**un mois** pour les prescriptions prévues aux articles 3 (alinéa 2), 6, 7, 8, 9 (alinéa 2), 10, 11 (alinéas 1 et 2), 12 (alinéas 1 et 2), 15, 16, 18, 20, 21, 22, 23, 27, 28, 29, 39, 40, 41, 43, 44, 46, 56, 58.
+1) — Délai minimum d'un mois pour les prescriptions prévues aux articles 3 (alinéa 2), 6, 7, 8, 9 (alinéa 2), 10, 11 (alinéas 1 et 2), 12 (alinéas 1 et 2), 15, 16, 18, 20, 21, 22, 23, 27, 28, 29, 39, 40, 41, 43, 44, 46, 56, 58.
 
-2) Délai minimum de **quinze (15) jours** pour les prescriptions prévues aux articles 4, 13, 14, 17, 19, 26, 30, 31, 32, 48, 49, 53, 54, 55 (alinéa 2), 62.
+2) — Délai minimum de quinze (15) jours pour les prescriptions prévues aux articles 4, 13, 14, 17, 19, 26, 30, 31, 32, 48, 49, 53, 54, 55 (alinéa 2), 62.
 
-3) Délai minimum de **cinq (5) jours** pour les prescriptions prévues aux articles 3 (alinéa 1), 5, 9 (alinéa 1), 11 (alinéa 3), 12 (alinéa 3), 24, 33, 34, 35, 36, 50, 51, 52, 55 (alinéa 1), 57, 59, 60, 63, 64, 65.
-
----
-
-## Article 68
+3) — Délai minimum de cinq (5) jours pour les prescriptions prévues aux articles 3 (alinéa 1), 5, 9 (alinéa 1), 11 (alinéa 3), 12 (alinéa 3), 24, 33, 34, 35, 36, 50, 51, 52, 55 (alinéa 1), 57, 59, 60, 63, 64, 65.
 
 **Art. 68.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
@@ -437,10 +433,17 @@ Fait à Alger, le 19 janvier 1991.
 
 ---
 
-## Tableau récapitulatif des modifications
+## Contrôle de séquence
 
-*Aucune modification connue à ce jour. Ce décret est en vigueur dans sa version originale de 1991.*
+Articles présents dans le PDF source : **Art. 1–68** (séquence complète, aucun gap détecté).
 
-| Instrument modificateur | Date | Articles affectés | Statut |
-|---|---|---|---|
-| — | — | — | Version originale, non modifiée |
+| Plage | Statut |
+|---|---|
+| Art. 1 | ✅ présent |
+| Art. 2–24 (Titre I) | ✅ présents |
+| Art. 25–44 (Titre II) | ✅ présents |
+| Art. 45–60 (Titre III) | ✅ présents |
+| Art. 61–66 (Titre IV) | ✅ présents |
+| Art. 67–68 (Titre V) | ✅ présents |
+
+**Total : 68 articles — séquence 1–68 complète, aucun article manquant.**
