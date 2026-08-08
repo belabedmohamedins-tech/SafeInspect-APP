@@ -15,8 +15,15 @@ export const getStatusText = (status: ComplianceStatus | 'partial'): string => {
       return 'غير معني';
     case 'partial':
       return 'جزئي';
+    // W27: explicit labels so printed report doesn't show "لم يقيم" for both
+    case 'observation-only':
+      return 'ملاحظة فقط';
+    case 'unable-to-verify':
+      return 'تعذّر التحقق';
+    case 'not-evaluated':
+      return 'لم يقيَّم';
     default:
-      return 'لم يقيم';
+      return 'لم يقيَّم';
   }
 };
 
@@ -31,6 +38,15 @@ export const getStatusColor = (status: ComplianceStatus | 'partial'): string => 
       return Colors.nonCompliant;
     case 'na':
       return '#9e9e9e';
+    case 'partial':
+      return Colors.warning;
+    // W27: distinct colours so the two statuses are visually distinguishable
+    case 'observation-only':
+      return '#1565c0'; // blue — informational, not a violation
+    case 'unable-to-verify':
+      return '#6a1e99'; // purple — uncertain, requires follow-up
+    case 'not-evaluated':
+      return Colors.warning;
     default:
       return Colors.warning;
   }

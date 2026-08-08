@@ -6,11 +6,14 @@
 //          always in sync with the numeric reading.
 // Z12-05: expose saveDraft() in return so checklist.tsx cancel handler
 //         can persist in-progress state before navigating away.
+// W28: AppState listener — auto-saves draft when app is backgrounded or
+//      the OS kills the foreground session (distinct from the beforeRemove
+//      listener which fires only on intentional navigation).
 
 import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, AppState, AppStateStatus } from 'react-native';
 import { criteriaByActivity } from '../criteriaData';
 import { AgendaRepository } from '../repositories/AgendaRepository';
 import { InspectionRepository } from '../repositories/InspectionRepository';
@@ -173,6 +176,21 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     });
     return unsubscribe;
   }, [navigation, isFinishing, saveInspection]);
+
+  // ─── W28: AppState autosave ──────────────────────────────────────────────────
+  // Saves draft whenever the app moves away from the active foreground state.
+  // This covers: home-button press, incoming call, OS task-killer, notification
+  // tray open — scenarios where beforeRemove never fires.
+  // Guard: skip if already finishing (completed save in flight) or still loading.
+  useEffect(() => {
+    const handleAppStateChange = async (nextState: AppStateStatus) => {
+      if (nextState !== 'active' && !isFinishing && !isLoading && inspectionId) {
+        await saveInspection('in-progress');
+      }
+    };
+    const subscription = AppState.addEventListener('change', handleAppStateChange);
+    return () => subscription.remove();
+  }, [isFinishing, isLoading, inspectionId, saveInspection]);
 
   // ─── Item handlers ────────────────────────────────────────────────────────────
   const handleStatusChange = useCallback((id: string, status: ComplianceStatus) => {
