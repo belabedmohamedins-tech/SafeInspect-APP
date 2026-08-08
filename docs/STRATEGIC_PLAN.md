@@ -52,13 +52,25 @@
 | W2 | Checklist section chevron direction bug fix | 2026-08-07 | `app/(tabs)/inspection/checklist.tsx` — chevron-down/up convention. Commit `906647f`. |
 | G18 | Severity + Category types widened ('critical', 'هيكلية', 'صحة مهنية') | 2026-08-07 | `src/types.ts`. Commit `2de9ad8`. 17 TSC errors resolved. |
 | W4 | Checklist sections start collapsed — 1-tap-to-open UX fixed | 2026-08-08 | `src/hooks/useCollapsibleSections.ts` — initial state `true`. Commit `b191c7f`. |
-| **W5** | **TSC fix — 'critical' added to SEVERITY_COLOR, SEVERITY_LABEL, SEVERITY_WEIGHTS** | **2026-08-08** | **`app/screens/corrective-actions.tsx` + `src/utils/scoringUtils.ts`. Commit `2b5a7a3`. TSC 0 pending Claude gate.** |
+| W5 | TSC fix — 'critical' added to SEVERITY_COLOR, SEVERITY_LABEL, SEVERITY_WEIGHTS | 2026-08-08 | `app/screens/corrective-actions.tsx` + `src/utils/scoringUtils.ts`. Commit `2b5a7a3`. TSC 0 pending Claude gate. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-*None. Repo is clean.*
+> Execution order: W6 → W7 → W8 → W9 (ready now, no blocker) → W10, W11, W12, W13, W14 (blocked — see notes).
+
+| Phase | Priority | Title | Files | Blocker |
+|---|---|---|---|---|
+| **W6** | P1 | L-02: Fix HACCP article citation — Art.4/9 → Art.5 of Décret 17-140 | `baseFoodCriteria.ts`, `abattoirCriteria.ts`, `couvoirCriteria.ts`, `bakeryCriteria.ts` | None — ready now |
+| **W7** | P1 | L-02b: Fix cold-chain legal ref — Art.7/8 → arrêté interminist. 07/05/2025 | `baseFoodCriteria.ts` (BFD-04-01, BFD-04-02) | None — arrêté already verified in repo |
+| **W8** | P1 | L-03: Fix BGN-03-01 legal ref — Décret 88-164 (unfindable) → Décret 11-125 | `baseGeneralCriteria.ts` (BGN-03-01) | None — ready now |
+| **W9** | P2 | L-05: Fix chlorine citation — Décret 11-219 (raw water) → Décret 11-125 (treated water) | `abattoirCriteria.ts` | None — ready now |
+| **W10** | P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
+| **W11** | P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ Need correct Algerian ventilation decree identified (JORADP search required) |
+| **W12** | P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
+| **W13** | P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
+| **W14** | P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet — upload to docs/legal_sources/ first |
 
 ---
 
@@ -72,9 +84,9 @@
 
 ## Phase Numbering Convention
 
-- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, **W5** are closed.
+- Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, W5 are closed.
 - Z9 is deferred.
-- **No open phases. Next new phase identifier: W6.**
+- **Open phases: W6–W14. Next new phase identifier after all closed: W15.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
@@ -104,3 +116,12 @@
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
 | Décret 17-140 | Food hygiene / human consumption conditions | N/A for BGN-03-06 | ✅ CONFIRMED — NOT septic pumping. BGN-03-06 revised without this source. |
 | BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as Z13+ if JORADP source is found. |
+| HACCP article | Décret 17-140 | Art. 5 (not Art. 4 or Art. 9) | ⚠️ W6 OPEN — fix pending in 4 criteria files |
+| Cold-chain legal ref | Arrêté interminist. 07/05/2025 | Full text | ⚠️ W7 OPEN — BFD-04-01/02 still cite Art.7/8 |
+| BGN-03-01 water supply ref | Décret 11-125 (not Décret 88-164) | Art. relevant | ⚠️ W8 OPEN |
+| Abattoir chlorine ref | Décret 11-125 treated water (not Décret 11-219 raw) | Art. relevant | ⚠️ W9 OPEN |
+| Abattoir wastewater annex | Décret 06-141 Annex II abattoir-specific (not Annex I general) | Annex II — g/t units | ⚠️ W10 OPEN — needs user sign-off on values |
+| BGN-02-06 ventilation ref | Unknown correct decree | — | ⚠️ W11 OPEN — JORADP search needed |
+| semiPharma hygiene ref | Loi 18-11 (not Décret 17-140 food-only) | Art. TBD | ⚠️ W12 OPEN — article number needed |
+| UPD-AX2-01 500m buffer | Rayon d'affichage vs. construction setback | — | ⚠️ W13 OPEN — product decision needed |
+| Décret 24-196 | Various criteria | Multiple | ⚠️ W14 OPEN — source doc needed |
