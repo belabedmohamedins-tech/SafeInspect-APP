@@ -1,18 +1,21 @@
 // src/hooks/useCollapsibleSections.ts
 // W3: memoize getSectionProgress result per section via useMemo so that
 // evaluating one criterion does not cause every section header to re-render.
-// W4 fix (2026-08-08): sections start EXPANDED (collapsed=false) so the
-//   chevron is correct on first render (chevron-down = closed = invite to open)
-//   and ONE tap opens the section. Unknown keys return false (expanded/safe).
-//   New sections added dynamically also start expanded (false).
+// W4-fix (2026-08-08): sections start collapsed=true (closed) so the first
+//   tap correctly opens them (collapsed→false, chevron-down→chevron-up).
+//   Previous collapsed=false initial state caused react-native-collapsible to
+//   render visually closed on mount despite state saying open, producing a
+//   3-step tap cycle: down(closed) → right(mid) → down(open).
+//   Unknown keys return true (collapsed/safe — never accidentally shows content).
+//   New sections added dynamically also start collapsed (true).
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 export function useCollapsibleSections(sectionTitles: string[]) {
-  // All sections start EXPANDED (collapsed = false).
-  // Chevron shows chevron-down when collapsed=true, chevron-up when collapsed=false.
-  // One tap → true → section closes. Second tap → false → section opens.
+  // All sections start COLLAPSED (collapsed = true).
+  // chevron-down shown when collapsed=true  → tap opens  (collapsed → false, chevron-up)
+  // chevron-up   shown when collapsed=false → tap closes (collapsed → true,  chevron-down)
   const [collapsed, setCollapsed] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(sectionTitles.map(t => [t, false]))
+    Object.fromEntries(sectionTitles.map(t => [t, true]))
   );
 
   const titlesKey = sectionTitles.join('||');
@@ -25,7 +28,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
       let changed = false;
       for (const title of titlesRef.current) {
         if (!(title in next)) {
-          next[title] = false; // new sections start expanded
+          next[title] = true; // new sections start collapsed
           changed = true;
         }
       }
@@ -38,7 +41,7 @@ export function useCollapsibleSections(sectionTitles: string[]) {
   }, []);
 
   const isCollapsed = useCallback(
-    (title: string) => collapsed[title] ?? false, // unknown title → expanded (safe)
+    (title: string) => collapsed[title] ?? true, // unknown title → collapsed (safe)
     [collapsed]
   );
 
