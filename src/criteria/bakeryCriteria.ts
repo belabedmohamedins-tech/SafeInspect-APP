@@ -5,6 +5,10 @@
 //   axes renamed to match test expectations; 12 items; no 'critical' severity;
 //   no pest control item (BAK-10-09 absent per test); add fire safety (BAK-10-12)
 //   and EIA (BAK-10-13).
+// W21 fix 2026-08-08: BAK-10-10 legalReference date corrected.
+//   Previous: "المؤرخ في 27 مارس 2017" — INCORRECT.
+//   Correct: "المؤرخ في 11 أبريل 2017" (14 Rajab 1438) — confirmed from primary document
+//   (Décret exécutif 17-140, actual JO date). Article number (Art. 5) was already correct.
 
 import { InspectionItem } from '../types';
 
@@ -95,7 +99,10 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     axis: 'HACCP وإدارة الجودة',
     category: 'تنظيمية',
     criteria: 'تطبيق نظام HACCP أو إجراءات مبنية على مبادئه لتحليل المخاطر وضبط نقاط التحكم الحرجة في عملية الخبز والتصنيع.',
-    legalReference: 'المادة 5 من المرسوم التنفيذي 17-140 المؤرخ في 27 مارس 2017 الذي يُلزم المنشآت الغذائية بتطبيق نظام HACCP وتوثيق إجراءاته.',
+    // W21 (2026-08-08): date corrected from "27 مارس 2017" to "11 أبريل 2017".
+    //   Actual JO date of Décret 17-140 is 11 April 2017 (14 Rajab 1438H).
+    //   The article number (Art. 5) was already correct — only the date was wrong.
+    legalReference: 'المادة 5 من المرسوم التنفيذي 17-140 المؤرخ في 11 أبريل 2017 الذي يُلزم المنشآت الغذائية بتطبيق نظام HACCP وتوثيق إجراءاته.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

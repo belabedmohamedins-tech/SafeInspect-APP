@@ -4,6 +4,10 @@
 //   Correct instrument: Décret exécutif 11-125 du 22/03/2011 fixant les
 //   caractéristiques et les normes techniques auxquelles doivent répondre
 //   les eaux destinées à la consommation humaine (JORADP-confirmed).
+// W18 (2026-08-08): BGN-08-01 + BGN-08-02 legalReference updated.
+//   BGN-08-01: added Art. 5 (fire-fighting equipment technical requirements).
+//   BGN-08-02: added Art. 13 (evacuation routes and emergency exits).
+//   Both article numbers confirmed correct from AUDIT_STATE.md Session 5.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -319,7 +323,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'توفر تجهيزات مكافحة الحريق (مطفآت، صنابير حريق...) في حالة عمل، بعدد ومواقع مناسبة لطبيعة المنشأة، مع التحقق من بطاقة الصيانة السنوية لكل مطفأة (تاريخ آخر فحص وتاريخ انتهاء الصلاحية).',
-    legalReference: 'القانون 19-02 المتعلق بالقواعد العامة للوقاية من أخطار الحريق والفزع + النصوص التطبيقية.',
+    // W18 (2026-08-08): added Art. 5 — confirmed correct per AUDIT_STATE.md Session 5 (Loi 19-02 Art.5
+    //   sets the technical requirements for fire-fighting equipment in classified establishments).
+    legalReference: 'القانون 19-02 المتعلق بالقواعد العامة للوقاية من أخطار الحريق والفزع (المادة 5 — الاشتراطات التقنية لتجهيزات الإطفاء وصيانتها) + النصوص التطبيقية.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -329,7 +335,9 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'مسارات الإخلاء خالية من العوائق ومخارج الطوارئ تفتح نحو الخارج ومشار إليها بوضوح.',
-    legalReference: 'القانون 19-02 (مخارج الطوارئ ومسارات الإخلاء).',
+    // W18 (2026-08-08): added Art. 13 — confirmed correct per AUDIT_STATE.md Session 5 (Loi 19-02 Art.13
+    //   specifies requirements for evacuation routes and emergency exit signage).
+    legalReference: 'القانون 19-02 المتعلق بالقواعد العامة للوقاية من أخطار الحريق والفزع (المادة 13 — مسارات الإخلاء ومخارج الطوارئ).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
