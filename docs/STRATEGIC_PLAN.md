@@ -62,15 +62,21 @@
 
 ### 🟡 OPEN Phases
 
-> Execution order: W11 (Perplexity JORADP research) → W12 → W13 → W14 → W10 (needs user sign-off).
+> Execution order: **W18** (ready now, no blocker) → **W19** (unblocks all citation audit) → **W15** (critical implementation fix) → **W16** → **W17** → **W11** → **W12** → **W13** → **W14** → **W20** → **W10** (user sign-off required).
 
 | Phase | Priority | Title | Files | Blocker |
 |---|---|---|---|---|
+| **W10** | P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
 | **W11** | P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct Algerian ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required — Perplexity to search and propose correct decree before Claude edits |
 | **W12** | P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
 | **W13** | P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
 | **W14** | P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet — upload to docs/legal_sources/ first |
-| **W10** | P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
+| **W15** | 🔴 P0 | F1 fix: re-key `criteriaByActivity` by `rubrique` + fallback warning in checklist UI | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts`, checklist UI | Perplexity designs + implements → Claude TSC + Jest gate. Opened from AUDIT_STATE.md F1. |
+| **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation (right of withdrawal ≠ traceability) | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required — find correct traceability article (likely Décret 17-140) or tag `[حكم مهني]`. Opened from AUDIT_STATE.md F3. |
+| **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances (figures not found in Décret 17-140 Art.12–24) | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification — find real Algerian legal source or retag `[حكم مهني]`. Opened from AUDIT_STATE.md F3. |
+| **W18** | 🟢 P2 — **READY NOW** | BGN-08-01 + BGN-08-02: add specific article numbers to Loi 19-02 citation (Art.5 and Art.13 confirmed correct) | `src/criteria/baseGeneralCriteria.ts` | No blocker — articles already confirmed. Quick fix. Opened from AUDIT_STATE.md F3. |
+| **W19** | 🟠 P1 — **BLOCKS AUDIT SESSIONS 8+** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicate pairs, flag incomplete articles, spot-check ≥3 files vs official JO text | `legal_refs/` (24 files) | Perplexity-only (document conversion + verification, no code). Blocks all future citation audit sessions. Opened from AUDIT_STATE.md Section 4. |
+| **W20** | 🟡 P2 | Close 3 open legal unverifieds (BGN-01-01 grace-period date, Décret 06-198 Art.20, BFD-02-02 figures) + delete `allCriteria` dead-code export from `src/criteria/index.ts` | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. Opened from AUDIT_STATE.md Section 5 + F2. |
 
 ---
 
@@ -86,7 +92,7 @@
 
 - Letters A–Z + Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4, W5, W6, W7, W8, W9 are closed.
 - Z9 is deferred.
-- **Open phases: W10–W14. Next new phase identifier: W15.**
+- **Open phases: W10–W20. Next new phase identifier: W21.**
 - Never reuse a closed phase letter.
 - Both agents must read this file before opening any new phase.
 
@@ -115,7 +121,12 @@
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
 | Décret 17-140 | Food hygiene / human consumption conditions | N/A for BGN-03-06 | ✅ CONFIRMED — NOT septic pumping. BGN-03-06 revised without this source. |
-| BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as W15+ if JORADP source is found. |
+| BGN-03-06 septic pumping frequency | No Algerian legal source found for 90d/80% rule | — | ⚠️ Z8 CLOSED — figures removed. Reopen as W21+ if JORADP source is found. |
 | Water supply (drinking water quality) | Décret 11-125 | Art. relevant | ✅ VERIFIED — W8 + W9 confirmed BGN-03-01 + ABT-AX4-01 already correct |
 | BGN-02-06 ventilation citation | Décret 93-120 is medical exams — WRONG decree | ? | ⚠️ W11 OPEN — correct Algerian ventilation decree to be identified |
 | Abattoir wastewater annex | Décret 06-141 Annex II abattoir-specific (not Annex I general) | Annex II — g/t units | ⚠️ W10 OPEN — needs user sign-off on values |
+| BFD-08-01 traceability citation | Loi 09-03 Art.19 WRONG — Art.19 = droit de rétractation (Loi 18-09 amendment) | ? | ⚠️ W16 OPEN — correct article to be found |
+| BFD-02-02 storage clearances | 15cm floor / 5cm wall — not found in Décret 17-140 Art.12–24 | ? | ⚠️ W17 OPEN — source verification required |
+| BGN-08-01 / BGN-08-02 | Loi 19-02 cited generically — missing Art.5 and Art.13 | Art.5, Art.13 | ⚠️ W18 OPEN — ready to fix now |
+| Décret 06-198 Art.20 | Cited in types.ts for 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN — independent verification pending |
+| Décret 24-196 grace period | 3-year clock start date unconfirmed | Art. relevant | ⚠️ W20 OPEN — exact date to be found |
