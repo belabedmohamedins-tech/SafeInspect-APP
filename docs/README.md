@@ -8,6 +8,20 @@
 
 *(Newest entry at top)*
 
+### 2026-08-08 19:09 WAT — [Agent: Perplexity] — W19 FULLY CLOSED: 2 remaining [À VÉRIFIER] tags resolved in baseGeneralCriteria
+- Phases closed: **W19** ✅ FULLY CLOSED
+- Files changed:
+  - `src/criteria/baseGeneralCriteria.ts` — commit `d8cc8b5`
+    - **BGN-01-03** `[À VÉRIFIER]` CLOSED: Loi 03-10 Arts.81–87 read directly.
+      - **Art.82** = inspector right of entry to installations, vehicles, premises ✅
+      - **Art.84** = inspector power to order immediate suspension of activity pending regularisation ✅
+      - No dedicated "obstruction criminal offence" article exists in Loi 03-10 — obstruction of a public official falls under Code pénal general provisions (entrave à fonctionnaire). legalReference updated to cite Art.82 + Art.84 with explanatory note.
+    - **BGN-04-05** `[À VÉRIFIER]` CLOSED: Full text of Loi 01-19 read — NO dedicated open-air burning prohibition article exists anywhere in the law. Art.11 ("conditions for elimination: no smoke/odours/danger to air") is the closest basis. Loi 03-10 Art.36 (atmospheric emissions beyond limit values) is the secondary basis. The outright burning ban element is tagged **[حكم مهني]** — same treatment as BGN-03-06. Note: if a ministerial arrêté on open-air burning is found later, open a new phase to update the reference.
+- Remaining `[À VÉRIFIER]` in baseGeneralCriteria: **BGN-01-02** only — needs Décret 06-198 + implementing arrêtés cross-check for explicit register obligation article.
+- Gate: TSC + Jest not required (legalReference strings only, no logic). Claude can confirm with `npx tsc --noEmit`.
+- Commit: `d8cc8b5`
+- Next open phases: **BGN-01-02** (Décret 06-198 register article) + **W22/W23/W24** (immutability, approval, audit-log — need product decisions)
+
 ### 2026-08-08 18:35 WAT — [Agent: Perplexity] — W19 CLOSED: 8 wrong article citations corrected in baseGeneralCriteria
 - Phases closed: **W19** ✅
 - Files changed:
