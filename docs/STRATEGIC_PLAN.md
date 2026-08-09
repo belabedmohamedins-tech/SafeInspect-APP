@@ -74,46 +74,68 @@
 | W31-4 | Split bundled arrêté file into 3 separate files + update legal_refs/README.md | 2026-08-09 | Commit `bc1eb6d`. 3 files: 2025 + 2016 + 1999. |
 | W31-1 | audit.js cross-ref false-positive fix | 2026-08-09 | Commit `4c79ed3`. File lives at `legal_refs/audit.js` — **DO NOT DELETE OR MOVE**. |
 | W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by Claude direct read. Both renamed files exist. No change needed. **W31 FULLY CLOSED.** |
-| W11 | BGN-02-06 ventilation: Décret 93-120 removed, Décret 91-05 Art.11 confirmed correct | 2026-08-09 | Confirmed clean by direct read of `baseGeneralCriteria.ts`. Comment `// W11/L-04 fix` present. No change needed. |
-| W12 | semiPharmaCriteria: Décret 17-140 scope correct; Loi 18-11 Arts.104/105/107 confirmed | 2026-08-09 | Confirmed clean by direct read of `semiPharmaCriteria.ts`. No wrong Décret 17-140 citations found. No change needed. |
-| W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct; Art.19 already removed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W16: Art.19 WRONG` present. No change needed. |
-| W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W17` present. No change needed. |
-| W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
-| W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain). `warningMin: 700` graduated alert in place. No change needed. |
-| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read. Décret 24-196 cited exclusively as amending decree to 06-198 — never standalone. No change needed. |
-| W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change this session. |
-| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read. `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` already present. No change needed. |
-| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines. Reverted via `cbe46ba8`. Superseded by W34-FIX.** |
-| W33 | Prevention protocol analysis + improved space instructions | 2026-08-09 | Analysis delivered in chat. No code change. |
-| W34 | ⚠️ FAILED — loi-09-03 Art.80–95 verbatim patch truncated (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Caught by diff gate. Superseded by W34-FIX. |
+| W11 | BGN-02-06 ventilation: Décret 93-120 removed, Décret 91-05 Art.11 confirmed correct | 2026-08-09 | Confirmed clean by direct read. Comment `// W11/L-04 fix` present. No change needed. |
+| W12 | semiPharmaCriteria: Décret 17-140 scope correct; Loi 18-11 Arts.104/105/107 confirmed | 2026-08-09 | Confirmed clean. No wrong Décret 17-140 citations found. No change needed. |
+| W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct; Art.19 already removed | 2026-08-09 | Confirmed clean. Comment `// W16: Art.19 WRONG` present. No change needed. |
+| W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean. Comment `// W17` present. No change needed. |
+| W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
+| W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean. Correct legal chain. `warningMin: 700` in place. No change needed. |
+| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean. Always cited as amending decree to 06-198. No change needed. |
+| W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change. |
+| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` confirmed present. **Note: map exists but is NOT wired into useChecklistData.ts — F1 (W38) tracks the wiring fix.** |
+| **W32** | **⚠️ RETRACTED** | **2026-08-09** | **Commit `1c49fb43` destructive. Reverted `cbe46ba8`. Superseded by W34-FIX.** |
+| W33 | Prevention protocol analysis + improved space instructions | 2026-08-09 | No code change. |
+| W34 | ⚠️ FAILED — loi-09-03 truncated (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Superseded by W34-FIX. |
 | W34-FIX | loi-09-03 Art.1–95 fully restored + Art.80–95 verbatim | 2026-08-09 | Commit `566a5e28`. Size 34,321 bytes. Diff +169/-76 ✅. |
 | W35-DOCS | STRATEGIC_PLAN sync — close W33/W34/W34-FIX | 2026-08-09 | Commit `980f8f4b`. |
+| W36 | `decret-06-141` stub created in legal_refs/ | 2026-08-09 | Commit `d901937d`. Verbatim conversion pending (other conversation). |
+| W37 | Full instrument cross-reference audit report | 2026-08-09 | `docs/AUDIT_COVERAGE_REPORT.md` pushed. 13 missing instruments catalogued. Commit `d0da8c0e`. |
 
 ---
 
 ### 🟠 OPEN Phases
 
-| Phase | Priority | Title | Files | Blocker / Source |
-|---|---|---|---|---|
-| **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
-| **W36** | 🟠 P1 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-industriels-liquides.md` | STUB exists. Other conversation converts PDF. Most-cited missing instrument. |
-| **W37** | 🟠 P2 | Convert 8 missing `legal_refs/` files (see AUDIT_COVERAGE_REPORT.md P1+P2 list) | `legal_refs/decret-06-138, decret-09-335, decret-05-315, decret-07-145, decret-11-125, decret-21-430, loi-18-11, decret-07-205` | Other conversation converts PDFs in priority order from AUDIT_COVERAGE_REPORT.md. |
+| Phase | Priority | Title | Files | Blocker / Source | Agent |
+|---|---|---|---|---|---|
+| **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
+| **W38** | 🟠 P1 — CRITICAL | F1: Wire `criteriaByRubriqueCategory` into `useChecklistData.ts` — every real facility gets wrong checklist | `src/hooks/useChecklistData.ts`, `src/criteriaData.ts`, `app/screens/facilities/add.tsx`, `edit.tsx` | Source: AUDIT_STATE.md F1. `criteriaByRubriqueCategory` 31-key map already exists (W15), never wired into the resolver. Also add visible inspector fallback warning when rubrique not in map. | Claude (TSC + Jest required) |
+| **W39** | 🟠 P1 | F3: Décret 91-05 citation cluster — 6 confirmed wrong articles in `baseGeneralCriteria.ts` | `src/criteria/baseGeneralCriteria.ts` | Source: AUDIT_STATE.md F3 (Session 9). Fix list: BGN-02-05 Art.14→Art.3–4; BGN-02-07 Art.16→Art.13; BGN-03-04 Art.14→Art.9; BGN-03-05 Art.14→Art.9; BGN-04-03 Art.7→Art.2–3; BGN-09-01 Art.9→Art.15. BGN-07-04 needs different source or `[حكم مهني]`. | Perplexity (legalRef string changes, no logic change) |
+| **W40** | 🟠 P1 | F4 + Legacy-F3: Loi 01-19 citation-offset cluster + BGN-04-06 Décret 09-19 article fix | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F4: BGN-04-06 Art.32→Art.19 or 21; BGN-04-07 Art.30→Art.15; SLH-05-04 Art.34→Loi 03-10 Art.30 (already there); SLH-05-05 Art.17→Art.15 or 16. Legacy-F3: BGN-04-06 Décret 09-19 Art.4–8→Art.2+6 (full citation rewrite needed — two independent errors in same criterion). | Perplexity (legalRef string changes) |
+| **W41** | 🟠 P2 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
+| **W42** | 🟠 P2 | F7: Cross-file consistency — abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | Resolve once: unify wastewater limit confidence tags ([À VÉRIFIER] or settled) across both files. Verify Décret 04-82 existence + Arts.6,9 (new instrument). If confirmed, upgrade `abattoirCriteria.ts` citations to match. | Perplexity (after decret-06-141 conversion in W36/W19) |
+| **W36** | 🟠 P2 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-industriels-liquides.md` | STUB exists. Verbatim pending. Unblocks W42. | Other conversation |
+| **W37** | 🟠 P3 | Convert 8 missing `legal_refs/` files (audit list) | `legal_refs/decret-06-138, decret-09-335, decret-05-315, decret-07-145, decret-11-125, decret-21-430, loi-18-11, etc.` | See `docs/AUDIT_COVERAGE_REPORT.md` for priority order. | Other conversation |
 
 ---
 
 ### 🔵 DEFERRED Phases
 
 | ID | Title | Blocker |
-|---|---|
-| Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server. |
+|---|---|---|
+| Z9 | Server E2E integration test | Needs a running server. |
+
+---
+
+## Execution Order
+
+```
+W38 (CRITICAL — Claude, wrong checklists in production)
+→ W39 (Perplexity, baseGeneralCriteria Décret 91-05 6-fix cluster)
+→ W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster)
+→ W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion)
+→ W36 (other conversation, decret-06-141 PDF conversion)
+→ W42 (Perplexity, unify abattoir/slaughterhouse after W36)
+→ W37 (other conversation, remaining 8 legal_refs files)
+→ W19 (ongoing parallel)
+```
 
 ---
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W35-DOCS (all sub-items).
-- Z9 deferred.
-- **Open: W19 (parallel), W36, W37. Next new phase identifier: W38.**
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W37 (all sub-items except W19/W36/W37 open).
+- **Open: W19, W36, W37, W38, W39, W40, W41, W42.**
+- **Next new phase identifier: W43.**
 - Never reuse a closed phase letter.
 
 ---
@@ -123,39 +145,51 @@
 | Topic | Instrument | Article/Annex | Status |
 |---|---|---|---|
 | Classified establishments | Décret 06-198 | Art. 2–5 | ✅ Verified |
-| Rubrique nomenclature (1000–1242 only) | Décret 07-144 | Partial annex | ⚠️ PARTIEL — W31-3 tagged, JO n° 31/2007 needed |
-| Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ⚠️ STUB — W36 OPEN. File created, verbatim pending. |
-| Abattoir wastewater annex | Décret 06-141 Annex II | Annex II | ⚠️ [À VÉRIFIER] — W10 CLOSED Option C. Switch to g/tonne after JORADP JO verified. |
+| Rubrique nomenclature (1000–1242 only) | Décret 07-144 | Partial annex | ⚠️ PARTIEL — W31-3 tagged |
+| Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ⚠️ STUB — W36 OPEN |
+| Abattoir wastewater annex | Décret 06-141 Annex II | Annex II g/tonne | ⚠️ [À VÉRIFIER] — W10 closed Option C |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
-| Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
-| Healthcare waste | Décret 03-478 | Art. 3 | ⚠️ NO FILE — W37. |
+| Waste collector accreditation | Décret 09-19 | Art. 2 (accreditation), Art. 6 (validity) | ⚠️ W40 — BGN-04-06 cites Art.4–8 — needs rewrite |
+| Healthcare waste | Décret 03-478 | Art. 3 | ⚠️ NO FILE — W37 |
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
-| Fire safety — equipment requirements | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 |
-| Fire safety — evacuation routes | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 |
-| Internal intervention plan | Décret 09-335 | Art. 4–6 | ⚠️ NO FILE — W37. Quick-Ref previously claimed ✅ in error. |
-| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ⚠️ NO FILE — W37. Quick-Ref previously claimed ✅ in error. |
+| Fire safety — equipment | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 |
+| Fire safety — evacuation | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 |
+| Internal intervention plan | Décret 09-335 | Art. 4–6 | ⚠️ NO FILE — W37 |
+| LPG/C accreditation | Décret 21-430 | Art. 4, 7, 8 | ⚠️ NO FILE — W37 |
 | LPG cylinder storage | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
-| Air emissions point source | Décret 06-138 | Annex I + II | ⚠️ NO FILE — W37. Phase T verified content but file was never created. |
+| Air emissions point source | Décret 06-138 | Annex I + II | ⚠️ NO FILE — W37 |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
-| Décret 17-140 actual JO date | 11 avril 2017 | — | ✅ VERIFIED — W21 |
-| Cold-chain temps (restaurants) | Arrêté interminst. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
-| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table | ⚠️ STUB — W19. |
-| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ STUB — W19. |
-| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 | ✅ W34-FIX — 34,321 bytes, commit `566a5e28`. NON VÉRIFIÉ against JO PDF (human review pending). |
+| Décret 17-140 JO date | 11 avril 2017 | — | ✅ VERIFIED — W21 |
+| Cold-chain temps | Arrêté 07/05/2025 | Full text | ✅ VERIFIED — W7 |
+| Cold storage temps | Arrêté 21/11/1999 | Temp. table | ⚠️ STUB — W19 |
+| Microbiological criteria | Arrêté 04/10/2016 | — | ⚠️ STUB — W19 |
+| Consumer protection | Loi 09-03 | Art. 1–95 | ✅ W34-FIX — 34,321 bytes. NON VÉRIFIÉ against JO PDF |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
-| Occupational health general | Loi 88-07 | Art. 12–14 | ⚠️ NO FILE — W37 (P3). |
+| Occupational health general | Loi 88-07 | Art. 12–14 | ⚠️ NO FILE — W37 (P3) |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
-| BGN-02-06 ventilation | Décret 91-05 Art.11 CORRECT | Art.11 | ✅ VERIFIED — W11 |
-| BFD-08-01 traceability citation | Loi 09-03 Art.12+6 CORRECT | Art.12+6 | ✅ VERIFIED — W16 |
-| BFD-02-02 storage clearances | 15cm/5cm — [حكم مهني] tagged | — | ✅ VERIFIED — W17 |
-| semiPharmaCriteria Loi 18-11 | Arts.104/105/107 correct — NO FILE yet | — | ⚠️ NO FILE — W37. |
-| Approved inspection immutability | INSPECTION_LOCKED guard | — | ✅ VERIFIED — W22 |
-| Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel | — | ✅ VERIFIED — W24 |
-| Décret 24-196 citation scope | Always cited as amending decree to 06-198 | Various | ✅ VERIFIED — W14 |
-| UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 chain | UPD-AX2-01 | ✅ VERIFIED — W13 |
-| criteriaByActivity rubrique fallback | `criteriaByRubriqueCategory` 31-key map | `src/criteriaData.ts` | ✅ VERIFIED — W15 |
-| Drinking water standards | Décret 11-125 | Standards table | ⚠️ NO FILE — W37. Criteria citation correct (W8), file missing. |
-| Hazardous waste bordereau | Décret 05-315 | Art. bordereau | ⚠️ NO FILE — W37. |
-| EIA procedures | Décret 07-145 | Art. EIA | ⚠️ NO FILE — W37. |
-| Worker OHS training | Décret 02-427 | Art. training | ⚠️ NO FILE — W37 (P3). |
-| Electrical safety | Décret 76-35 | Art. electrical | ⚠️ NO FILE — W37 (P3). Very old decree — verify not superseded. |
+| Décret 91-05 ventilation | Art. 6 (general) + Art. 11 (high-risk cabins) | BGN-02-06 | ✅ VERIFIED — W11; Art. 11 slightly narrow, Art. 6 is general |
+| Décret 91-05 floors/walls (BGN-02-05) | Art. 14 WRONG | Should be Art. 3–4 | ⚠️ W39 — fix pending |
+| Décret 91-05 lighting (BGN-02-07) | Art. 16 WRONG | Should be Art. 13 (lux table) | ⚠️ W39 — fix pending |
+| Décret 91-05 drainage design (BGN-03-04/05) | Art. 14 WRONG | Should be Art. 9 | ⚠️ W39 — fix pending |
+| Décret 91-05 cleaning program (BGN-04-03) | Art. 7 WRONG | Should be Art. 2–3 | ⚠️ W39 — fix pending |
+| Décret 91-05 noise limit (BGN-09-01) | Art. 9 WRONG | Should be Art. 15 | ⚠️ W39 — fix pending |
+| Loi 03-10 EIE range (BGN-10-01) | Art. 15–22 WRONG | Should be Art. 14–21 | ⚠️ W41 — fix pending |
+| Loi 03-10 Class-1 auth (BGN-08-06) | Art. 18 WRONG | Should be Art. 63 + Art. 77 | ⚠️ W41 — fix pending |
+| Loi 01-19 hazardous waste (BGN-04-06) | Art. 32 WRONG | Should be Art. 19 or 21 | ⚠️ W40 — fix pending |
+| Loi 01-19 self-incineration ban (BGN-04-07) | Art. 30 WRONG | Should be Art. 15 | ⚠️ W40 — fix pending |
+| Loi 01-19 SLH-05-05 container (slaughter) | Art. 17 WRONG | Should be Art. 15 or 16 | ⚠️ W40 — fix pending |
+| Décret 09-19 accreditation (BGN-04-06) | Art. 4–8 WRONG | Should be Art. 2 + Art. 6 | ⚠️ W40 — full citation rewrite |
+| BGN-02-06 ventilation | Décret 91-05 Art.11 | correct (narrow) | ✅ VERIFIED — W11 |
+| BFD-08-01 traceability | Loi 09-03 Art.12+6 | correct | ✅ VERIFIED — W16 |
+| semiPharmaCriteria Loi 18-11 | Arts.104/105/107 — NO FILE | — | ⚠️ NO FILE — W37 |
+| Approved inspection immutability | INSPECTION_LOCKED | — | ✅ VERIFIED — W22 |
+| Décret 24-196 citation scope | Amending decree to 06-198 only | Various | ✅ VERIFIED — W14 |
+| UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 | UPD-AX2-01 | ✅ VERIFIED — W13 |
+| criteriaByActivity rubrique map | 31-key map exists, NOT wired in useChecklistData.ts | — | ⚠️ F1 — W38 CRITICAL |
+| Drinking water standards | Décret 11-125 | Standards table | ⚠️ NO FILE — W37 |
+| Hazardous waste bordereau | Décret 05-315 | Art. bordereau | ⚠️ NO FILE — W37 |
+| EIA procedures | Décret 07-145 | Art. EIA | ⚠️ NO FILE — W37 |
+| Worker OHS training | Décret 02-427 | Art. training | ⚠️ NO FILE — W37 (P3) |
+| Electrical safety | Décret 76-35 | Art. electrical | ⚠️ NO FILE — W37 (P3). Verify not superseded. |
+| Décret 04-82 veterinary | Arts. 6, 9 — not yet verified | slaughter files | ⚠️ W42 — new instrument, not yet checked |
+| Loi 04-08 commercial conditions | Cited in paintShopCriteria.ts | paint shop | ⚠️ NOT AUDITED |
