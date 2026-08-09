@@ -22,6 +22,8 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Modalités de fonctionnement du système de management environnemental | ✅ Texte intégral |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ✅ Texte intégral |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ Texte intégral |
+| `aim-gpl2-regles-techniques-securite.md` | Arrêté interministériel — AIM GPL2 (version 14 mars 2022) | Règles techniques et de sécurité applicables aux installations et points de vente GPL ≤ 6 t | ⚠️ Partiel — valeurs numériques extraites, texte verbatim intégral manquant, source Scribd (non JORADP) |
+| `arrete-interministeriel-2025-liaison-froide.md` | Arrêté interministériel du 7 mai 2025 | Conditions d'hygiène dans la restauration — chaîne du froid / liaison chaude-froide | ⚠️ Partiel — valeurs de référence uniquement, texte verbatim JO n° 43/2025 non encore extrait |
 
 ---
 
@@ -29,3 +31,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 - Aucun fichier PDF ne doit être stocké dans ce dossier — les PDFs ne sont pas lisibles par les outils IA sur GitHub.
 - Pour ajouter un nouveau texte : transcrire verbatim depuis le PDF source, respecter la convention de nommage `{type}-{numéro}-{sujet-court}.md`, mettre à jour cet index.
+- Les fichiers marqués ⚠️ Partiel contiennent des données utiles mais **ne doivent pas être cités pour des numéros d'articles** avant reconversion complète depuis le JORADP officiel.
