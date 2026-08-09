@@ -80,17 +80,17 @@
 | W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W17` present. No change needed. |
 | W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
 | W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain — no specific distance decree exists). `warningMin: 700` graduated alert in place. No change needed. |
-| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 (“كما عُدِّل بالمرسومَيْن 22-167 و 24-196”) — never cited as a standalone authority. Citation chain is correct. No change needed. |
+| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 ("كما عُدِّل بالمرسومَيْن 22-167 و 24-196") — never cited as a standalone authority. Citation chain is correct. No change needed. |
+| **W10** | **L-01: Abattoir wastewater Annex II — Option C** | **2026-08-09** | **User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER] in `abattoirCriteria.ts` (tag already applied in prior session). Switch to Annex II g/tonne units only after JORADP JO verbatim verified. No code change this session.** |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> ⚠️ Only W10 remains actionable. All other open phases are either user-blocked or parallel.
+> ✅ No P0 items remain. All open phases are low-priority or parallel.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on Annex II g/t discharge limits |
 | **W15** | 🟡 P2 | criteriaByActivity rubrique-based fallback lookup | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | Enhancement only — not a bug. All 26 activity strings already mapped. |
 | **W32** | 🟡 P2 | loi-09-03: verbatim transcription Art.4–67 + source Art.44–52/80–92 from JO n°15/2009 | `legal_refs/loi-09-03-protection-consommateur.md` | File honest ([RÉSUMÉ]/[MANQUANT] tagged). Needs JORADP JO n°15/2009. Not deceptive — low urgency. |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
@@ -107,9 +107,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W11–W14, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items).
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W14, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items), **W10**.
 - Z9 deferred.
-- **Open: W10, W15, W19 (parallel), W32. Next new phase identifier: W33.**
+- **Open: W15, W19 (parallel), W32. Next new phase identifier: W33.**
 - Never reuse a closed phase letter.
 
 ---
@@ -121,6 +121,7 @@
 | Classified establishments | Décret 06-198 | Art. 2–5 | ✅ Verified |
 | Rubrique nomenclature (1000–1242 only) | Décret 07-144 | Partial annex | ⚠️ PARTIEL — W31-3 tagged, JO n° 31/2007 needed |
 | Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
+| Abattoir wastewater annex | Décret 06-141 Annex II — g/t units | Annex II | ⚠️ [À VÉRIFIER] — W10 CLOSED Option C. Switch to g/tonne after JORADP JO verified. |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
 | Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
@@ -143,7 +144,6 @@
 | Approved inspection immutability | INSPECTION_LOCKED guard | — | ✅ VERIFIED — W22 |
 | Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel | — | ✅ VERIFIED — W24 |
 | BGN-02-06 ventilation | Décret 91-05 Art.11 CORRECT; Décret 93-120 removed | Art.11 | ✅ VERIFIED — W11 |
-| Abattoir wastewater annex | Décret 06-141 Annex II — g/t units | Annex II | ⚠️ W10 OPEN — needs user sign-off |
 | BFD-08-01 traceability citation | Loi 09-03 Art.12+6 CORRECT; Art.19 removed | Art.12+6 | ✅ VERIFIED — W16 |
 | BFD-02-02 storage clearances | 15cm/5cm — [حكم مهني] tagged | — | ✅ VERIFIED — W17 |
 | semiPharmaCriteria Loi 18-11 | Arts.104/105/107 correct; Décret 17-140 in-scope uses valid | — | ✅ VERIFIED — W12 |

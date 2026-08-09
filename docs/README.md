@@ -1,5 +1,13 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 14:40 WAT — Perplexity — W10 closed (Option C — [À VÉRIFIER] tag)
+- **Phases closed:** W10
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already tagged in prior session)
+- **Decision:** User chose Option C — keep Annex I mg/L values as interim, tag ABT-AX6-02 with [À VÉRIFIER] in both `criteria` and `legalReference` fields. Switch to Annex II g/tonne units only after JORADP JO verbatim of Annex II is in hand.
+- **Code note:** `abattoirCriteria.ts` already carries the W10-C comment + inline tag from the previous session (commit `4c79ed3` vicinity). No code change needed this session.
+- **Queue status:** W10 closed. Remaining open: W15 (P2, enhancement), W19 (parallel, do not touch), W32 (P2, JORADP source needed). No P0 items remain.
+- **Next identifier: W33.**
+
 ## 2026-08-09 14:14 WAT — Perplexity — W13 W14 confirmed clean; closed. Queue exhausted.
 - **Phases closed:** W13, W14
 - **Files changed:** `docs/STRATEGIC_PLAN.md` only (doc sync)
@@ -40,7 +48,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W10** | 🔴 OPEN | P0 | Abattoir wastewater Annex II — **needs your expert sign-off** |
+| **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | W15 | 🟡 OPEN | P2 | criteriaByActivity rubrique fallback (enhancement only) |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | W32 | 🟡 OPEN | P2 | loi-09-03 verbatim transcription (JORADP source needed) |
