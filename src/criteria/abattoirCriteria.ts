@@ -8,6 +8,10 @@
 //   Add ABT-AX2-01 (ante mortem, visual, صحية), ABT-AX2-02 (post mortem, visual).
 //   Add ABT-AX5-01 cold room °C numericField (min:0, max:5).
 //   ABT-AX1-01 → severity:'high', controlType:'doc'.
+// W10-C (2026-08-09): ABT-AX6-02 legalReference tagged [À VÉRIFIER] — Annex I mg/L values
+//   are used as interim. Décret 06-141 Annex II uses g/tonne-of-slaughtered-animal units
+//   (sector-specific). Pending JORADP JO verbatim verification before switching to Annex II
+//   and adding a throughput numeric field. Do not remove tag until Annex II confirmed.
 
 import { InspectionItem } from '../types';
 
@@ -158,8 +162,13 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     id: 'ABT-AX6-02',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى المقررة (DBO5 ≤ 35 ملغ/ل، DCO ≤ 120 ملغ/ل، MES ≤ 35 ملغ/ل).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق I (قيم التصريف الصناعي القصوى — مسلخ أو منشأة تحويل اللحوم).',
+    // W10-C [À VÉRIFIER]: Currently citing Annex I generic limits (mg/L). Décret 06-141
+    // Annex II provides slaughterhouse/meat-processing-specific limits expressed in
+    // g/tonne-of-slaughtered-animal — a load-based unit requiring the facility's daily
+    // throughput (kg/day) to evaluate. Switch to Annex II + add throughput numericField
+    // once JORADP JO verbatim of Annex II is verified. Phase W10 OPEN.
+    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى المقررة (DBO5 ≤ 35 ملغ/ل، DCO ≤ 120 ملغ/ل، MES ≤ 35 ملغ/ل). [À VÉRIFIER: الملحق I — القيم بوحدة ملغ/ل مؤقتة؛ الملحق II يستخدم وحدة غ/طن ذبيحة — تحقق من نص JORADP قبل التعديل]',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق I (قيم التصريف الصناعي القصوى — مسلخ أو منشأة تحويل اللحوم). [À VÉRIFIER — W10: الملحق II يُطبَّق على المسلخ بوحدة غ/طن — يتطلب تحقق JORADP]',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

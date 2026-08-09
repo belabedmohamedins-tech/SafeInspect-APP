@@ -1,4 +1,13 @@
 // src/criteriaData.ts
+// W15 (2026-08-09): Added getRubriqueCategory() rubrique-based fallback.
+//   If a facilityType has no exact key in criteriaByActivity, the caller can
+//   pass the facility's rubrique category string to get the closest base
+//   checklist instead of silently falling back to baseGeneralCriteria.
+//   All 26 known activity strings still have exact keys — fallback is
+//   purely defensive for future facility types not yet in the map.
+//   Maintenance rule: after adding a new facilityType to facilitiesData.ts,
+//   add its activity string here first (exact match) before relying on fallback.
+
 import { abattoirSpecificCriteria } from './criteria/abattoirCriteria';
 import { bakerySpecificCriteria } from './criteria/bakeryCriteria';
 import { baseFoodCriteria } from './criteria/baseFoodCriteria';
@@ -185,3 +194,91 @@ export const criteriaByActivity: Record<string, InspectionItem[]> = {
   'ورشة حدادة (صناعة السياج)': blacksmithChecklist,
   'ورشة حدادة': blacksmithChecklist,
 };
+
+// ── W15: Rubrique-category fallback ─────────────────────────────────────────
+// Used when a facility's activity string has NO exact key in criteriaByActivity.
+// Maps the high-level rubrique category (from facilityCategoriesFull.json)
+// to the safest base checklist for that sector.
+// Rules:
+//   - Food / agri / cold-chain → baseFoodCriteria layer included.
+//   - Chemical / pharmaceutical → semiPharmaChecklist (closest regulated match).
+//   - Mechanical / automotive / metalwork → mechanicChecklist.
+//   - Combustible / gas → gplChecklist.
+//   - Printing / paper → printingChecklist.
+//   - All others → baseGeneralCriteria (safe universal minimum).
+// This map is intentionally conservative. It must never REDUCE the checklist
+// relative to baseGeneralCriteria — only add relevant layers.
+export const criteriaByRubriqueCategory: Record<string, InspectionItem[]> = {
+  // Food processing & agri
+  'industrie alimentaire': [...baseGeneralCriteria, ...baseFoodCriteria],
+  'صناعة غذائية': [...baseGeneralCriteria, ...baseFoodCriteria],
+  'agro-alimentaire': [...baseGeneralCriteria, ...baseFoodCriteria],
+  'stockage alimentaire': [...baseGeneralCriteria, ...baseFoodCriteria],
+  'تخزين غذائي': [...baseGeneralCriteria, ...baseFoodCriteria],
+  'abattage': abattoirChecklist,
+  'ذبح': abattoirChecklist,
+  'élevage avicole': updChecklist,
+  'تربية دواجن': updChecklist,
+  'couvoir': couvoirChecklist,
+  'مفرخة': couvoirChecklist,
+  'boulangerie': bakeryChecklist,
+  'مخبزة': bakeryChecklist,
+  'chambre froide': coldRoomChecklist,
+  'غرفة تبريد': coldRoomChecklist,
+  // Chemical / pharmaceutical
+  'industrie chimique': semiPharmaChecklist,
+  'صناعة كيميائية': semiPharmaChecklist,
+  'parapharmaceutique': semiPharmaChecklist,
+  'شبه صيدلاني': semiPharmaChecklist,
+  // Mechanical / automotive
+  'mécanique': mechanicChecklist,
+  'ميكانيك': mechanicChecklist,
+  'carrosserie': paintShopChecklist,
+  'طلاء سيارات': paintShopChecklist,
+  'lavage auto': carWashChecklist,
+  'غسيل سيارات': carWashChecklist,
+  // Metalwork / blacksmith
+  'ferronnerie': blacksmithChecklist,
+  'حدادة': blacksmithChecklist,
+  // Woodwork
+  'menuiserie': carpenteryChecklist,
+  'نجارة': carpenteryChecklist,
+  // Marble / stone
+  'marbrerie': marbleChecklist,
+  'رخام': marbleChecklist,
+  // Printing
+  'imprimerie': printingChecklist,
+  'طباعة': printingChecklist,
+  // Gas / combustible
+  'GPL': gplChecklist,
+  'gaz': gplChecklist,
+  'غاز': gplChecklist,
+};
+
+/**
+ * W15: Rubrique-category fallback lookup.
+ * Returns the most appropriate checklist for a facility whose activity string
+ * has no exact key in criteriaByActivity.
+ *
+ * @param rubriqueCategory - The category string from facilityCategoriesFull.json
+ *   (or any normalized sector label). Case-insensitive partial match.
+ * @returns The matched checklist, or baseGeneralCriteria if nothing matches.
+ */
+export function getCriteriaByRubriqueCategory(
+  rubriqueCategory: string
+): InspectionItem[] {
+  if (!rubriqueCategory) return baseGeneralCriteria;
+  const normalized = rubriqueCategory.trim().toLowerCase();
+  // Exact key match first (fastest path)
+  const exactKey = Object.keys(criteriaByRubriqueCategory).find(
+    (k) => k.toLowerCase() === normalized
+  );
+  if (exactKey) return criteriaByRubriqueCategory[exactKey];
+  // Partial match: return the first key that the input contains or is contained by
+  const partialKey = Object.keys(criteriaByRubriqueCategory).find(
+    (k) =>
+      normalized.includes(k.toLowerCase()) ||
+      k.toLowerCase().includes(normalized)
+  );
+  return partialKey ? criteriaByRubriqueCategory[partialKey] : baseGeneralCriteria;
+}
