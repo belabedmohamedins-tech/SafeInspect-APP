@@ -1,5 +1,6 @@
 <!-- ============================================================
      README mis à jour le 2026-08-09 — Audit grep corpus complet
+     README mis à jour le 2026-08-09 (2) — D22-167 + D24-196 ajoutés, D06-198 row corrigée
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -19,7 +20,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
-| ⚠️ NON VÉRIFIÉ | 12 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ | 14 | voir index ci-dessous |
 | 🔴 SOURCE NON-JORADP / STUB | 3 | `aim-gpl2`, `decret-06-141`, `arrete-2025-liaison-froide` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
@@ -42,7 +43,9 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-06-141-rejets-industriels-liquides.md` | Décret exécutif n° 06-141 | Rejets industriels liquides | 🔴 STUB — texte verbatim non extrait |
-| `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 + Décret n° 24-196 du 11 juin 2024 (intégré inline) | Établissements classés pour la protection de l'environnement | ⚠️ NON VÉRIFIÉ — texte Art. 1–50 présent, modifications D24-196 intégrées inline |
+| `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
+| `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
+| `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Modalités de fonctionnement du système de management environnemental | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
@@ -59,8 +62,10 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - Pour ajouter un nouveau texte : transcrire verbatim depuis le PDF source, respecter la convention de nommage `{type}-{numéro}-{sujet-court}.md`, mettre à jour cet index.
 - Un instrument = un fichier. Ne jamais regrouper plusieurs arrêtés ou décrets dans un seul fichier.
 - **Renommages effectués le 2026-08-09 :** `Decret-07-144.md` → `decret-07-144-nomenclature-installations-classees.md` ; `Decret-17-140.md` → `decret-17-140-hygiene-alimentaire.md`. Les anciens fichiers ont été supprimés.
-- **2026-08-09 :** Décret n° 24-196 du 11 juin 2024 (Art. 14, 24, 25, 26, 29, 44) intégré inline dans `decret-06-198-etablissements-classes.md` — commit 455e661.
 - **2026-08-09 :** `loi-90-29-urbanisme.md` ajouté — conversion complète Art. 1–81 depuis JO 52/1990 — commit 9eb34a5b.
 - **2026-08-09 :** `loi-04-20-risques-majeurs.md` ajouté — conversion complète Art. 1–75.
 - **2026-08-09 22:12 WAT :** Audit grep corpus complet — tableau de bord ajouté, statuts README alignés avec statuts réels dans chaque fichier. 5 fichiers corrigés de ✅ → ⚠️.
 - **2026-08-09 :** `loi-18-11-sante.md` — renommé manuellement depuis `loi 18-11.md`, Contrôle de séquence complet confirmé par l'utilisateur, statut README complété.
+- **2026-08-09 :** `decret-22-167-etablissements-classes-modification.md` ajouté — décret modificatif du D06-198 (structure un fichier par instrument).
+- **2026-08-09 :** `decret-24-196-etablissements-classes-modification.md` ajouté — Art. 14, 24, 25, 26, 29, 44 du D06-198 modifiés — commit 3413f5f pour patch renvoi dans D06-198.
+- **2026-08-09 :** `decret-06-198-etablissements-classes.md` patché (commit 3413f5f) — blocs D24-196 inline remplacés par notes de renvoi simples ; objet README corrigé pour refléter « texte original » uniquement.
