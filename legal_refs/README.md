@@ -1,3 +1,7 @@
+<!-- ============================================================
+     README mis à jour le 2026-08-09
+============================================================ -->
+
 # legal_refs — Index des textes légaux de référence SafeInspect
 
 > **Dossier canonique unique.** Tous les textes légaux de référence pour SafeInspect se trouvent ici et uniquement ici.  
@@ -13,6 +17,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | Fichier | Instrument | Objet | Statut |
 |---|---|---|---|
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ Texte intégral (Art. 1–130) |
+| `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme | ⚠️ NON VÉRIFIÉ — Texte intégral (Art. 1–81, JO 52/1990) |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ✅ Texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau | ⚠️ Partiel — Art. 1–2, 86–106, 126–183 absents (OCR pages 1, 9–11, 13–20 non restituées) |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ✅ Texte intégral |
@@ -33,8 +38,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 | Fichier cible | Instrument | PDF source disponible |
 |---|---|---|
-| `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 — Aménagement et urbanisme | `loi-90-29.pdf` ✅ |
-| `loi-04-20-eau.md` | Loi n° 04-20 du 25 décembre 2004 — Prévention des risques majeurs | `Loi-04-20.pdf` ✅ |
+| `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 — Prévention des risques majeurs | `Loi-04-20.pdf` ✅ |
 | `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 — Santé | `loi-18-11.pdf` ✅ |
 
 ---
@@ -46,3 +50,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - Un instrument = un fichier. Ne jamais regrouper plusieurs arrêtés ou décrets dans un seul fichier.
 - **Renommages effectués le 2026-08-09 :** `Decret-07-144.md` → `decret-07-144-nomenclature-installations-classees.md` ; `Decret-17-140.md` → `decret-17-140-hygiene-alimentaire.md`. Les anciens fichiers ont été supprimés.
 - **2026-08-09 :** Décret n° 24-196 du 11 juin 2024 (Art. 14, 24, 25, 26, 29, 44) intégré inline dans `decret-06-198-etablissements-classes.md` — commit 455e661.
+- **2026-08-09 :** `loi-90-29-urbanisme.md` ajouté — conversion complète Art. 1–81 depuis JO 52/1990.
