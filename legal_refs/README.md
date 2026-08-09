@@ -37,7 +37,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–75) |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau | ⚠️ NON VÉRIFIÉ — partiel (Art. 1–2, 86–106, 126–183 absents) |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) — contenu solide, relecteur humain requis |
-| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé | ⚠️ NON VÉRIFIÉ |
+| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé | ⚠️ NON VÉRIFIÉ — Texte intégral + Contrôle de séquence complet [CONVERTI 2026-08-09] |
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
@@ -63,3 +63,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-09 :** `loi-90-29-urbanisme.md` ajouté — conversion complète Art. 1–81 depuis JO 52/1990 — commit 9eb34a5b.
 - **2026-08-09 :** `loi-04-20-risques-majeurs.md` ajouté — conversion complète Art. 1–75.
 - **2026-08-09 22:12 WAT :** Audit grep corpus complet — tableau de bord ajouté, statuts README alignés avec statuts réels dans chaque fichier. 5 fichiers corrigés de ✅ → ⚠️.
+- **2026-08-09 :** `loi-18-11-sante.md` — renommé manuellement depuis `loi 18-11.md`, Contrôle de séquence complet confirmé par l'utilisateur, statut README complété.
