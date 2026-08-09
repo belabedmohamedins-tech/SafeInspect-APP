@@ -5,7 +5,7 @@
 > **PDF source converti :** `loi-09-03_compressed.pdf` (JO N° 15 intégral, texte extractible)
 > **Amendements intégrés :** Loi n° 18-09 du 10 juin 2018 (JO N° 35)
 > **Date de conversion :** 2026-08-09
-> **Statut :** ✅ VÉRIFIÉ — Art.1–95 intégral. Art.80–95 extraits verbatim PDF JO N°15 session 2026-08-09. W34-FIX.
+> **Statut :** ⚠️ NON VÉRIFIÉ — Contenu extrait du JO N°15, non relu par un relecteur humain désigné. Vérification humaine requise avant marquage VÉRIFIÉ.
 
 ---
 
@@ -224,7 +224,7 @@ Les conditions et les modalités d'offres en matière de crédits à la consomma
 
 **Art. 54.** — Le refus temporaire d'admission aux frontières est prononcé en cas de suspicion de non-conformité du produit concerné. Le refus définitif est prononcé en cas de confirmation de non-conformité.
 
-> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 3 :** Ajout de l’admission conditionnelle aux frontières.
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 3 :** Ajout de l'admission conditionnelle aux frontières.
 
 **Art. 55.** — La consignation consiste à suspendre la mise à la consommation d'un produit reconnu non conforme par constat direct. La levée de la consignation est prononcée après constatation de la mise en conformité.
 
@@ -291,41 +291,41 @@ Les conditions et les modalités d'offres en matière de crédits à la consomma
 
 > **Modification Loi n° 18-09 du 10 juin 2018 — Art. 9 :** Ajout de la mesure de fermeture administrative des locaux commerciaux.
 
-**Art. 80.** — Outre les sanctions prévues à l’article 79 ci-dessus, le montant de la vente des produits objets de ces infractions, est versé au Trésor public, évalué sur la base du prix de vente pratiqué par le contrevenant ou par référence au prix du marché.
+**Art. 80.** — Outre les sanctions prévues à l'article 79 ci-dessus, le montant de la vente des produits objets de ces infractions, est versé au Trésor public, évalué sur la base du prix de vente pratiqué par le contrevenant ou par référence au prix du marché.
 
-**Art. 81.** — Sous réserve des dispositions prévues par la législation en vigueur, est puni d’une amende de cinq cent mille dinars (500.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint aux obligations relatives aux offres de crédits à la consommation prévues à l’article 20 de la présente loi.
+**Art. 81.** — Sous réserve des dispositions prévues par la législation en vigueur, est puni d'une amende de cinq cent mille dinars (500.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint aux obligations relatives aux offres de crédits à la consommation prévues à l'article 20 de la présente loi.
 
-**Art. 82.** — Outre les peines prévues aux articles 68, 69, 70, 71, 73 et 78 ci-dessus, il est prononcé la confiscation des produits, des instruments et de tout autre objet utilisé à l’effet de commettre les infractions prévues par la présente loi.
+**Art. 82.** — Outre les peines prévues aux articles 68, 69, 70, 71, 73 et 78 ci-dessus, il est prononcé la confiscation des produits, des instruments et de tout autre objet utilisé à l'effet de commettre les infractions prévues par la présente loi.
 
-**Art. 83.** — Est puni des peines prévues par l’alinéa 1er de l’article 432 du code pénal quiconque falsifie, expose, met en vente ou vend tout produit falsifié, corrompu, toxique ou ne répondant pas à l’obligation de sécurité prévue à l’article 10 de la présente loi lorsque ce produit a entraîné pour le consommateur une maladie ou une incapacité de travail. Si ce produit a causé soit une maladie incurable, soit la perte de l’usage d’un organe, soit une infirmité permanente, les intervenants concernés sont punis de la réclusion à temps de dix (10) à vingt (20) ans et d’une amende d’un million de dinars (1.000.000 DA) à deux millions de dinars (2.000.000 DA). Lorsque cette maladie a causé le décès d’une ou de plusieurs personnes, ces intervenants encourent la peine de réclusion criminelle à perpétuité.
+**Art. 83.** — Est puni des peines prévues par l'alinéa 1er de l'article 432 du code pénal quiconque falsifie, expose, met en vente ou vend tout produit falsifié, corrompu, toxique ou ne répondant pas à l'obligation de sécurité prévue à l'article 10 de la présente loi lorsque ce produit a entraîné pour le consommateur une maladie ou une incapacité de travail. Si ce produit a causé soit une maladie incurable, soit la perte de l'usage d'un organe, soit une infirmité permanente, les intervenants concernés sont punis de la réclusion à temps de dix (10) à vingt (20) ans et d'une amende d'un million de dinars (1.000.000 DA) à deux millions de dinars (2.000.000 DA). Lorsque cette maladie a causé le décès d'une ou de plusieurs personnes, ces intervenants encourent la peine de réclusion criminelle à perpétuité.
 
-**Art. 84.** — Est puni des peines prévues par l’article 435 du code pénal quiconque commet toute entrave ou tout autre acte de nature à empêcher l’accomplissement des missions de contrôle menées par les agents prévus à l’article 25 de la présente loi.
+**Art. 84.** — Est puni des peines prévues par l'article 435 du code pénal quiconque commet toute entrave ou tout autre acte de nature à empêcher l'accomplissement des missions de contrôle menées par les agents prévus à l'article 25 de la présente loi.
 
-**Art. 85.** — Conformément aux dispositions de l’article 36 du code pénal, les amendes prévues par les dispositions de la présente loi sont cumulables. Elles sont portées au double en cas de récidive et la juridiction compétente peut prononcer la radiation du registre de commerce de l’intervenant incriMiné.
+**Art. 85.** — Conformément aux dispositions de l'article 36 du code pénal, les amendes prévues par les dispositions de la présente loi sont cumulables. Elles sont portées au double en cas de récidive et la juridiction compétente peut prononcer la radiation du registre de commerce de l'intervenant incriMiné.
 
 ---
 
 ## TITRE V — DE L'AMENDE TRANSACTIONNELLE
 
-**Art. 86.** — Les agents prévus à l’article 25 de la présente loi peuvent infliger une amende transactionnelle à l’auteur de l’infraction puni par les dispositions de la présente loi. A défaut de paiement de l’amende transactionnelle, dans le délai fixé à l’article 92 ci-dessous, le procès-verbal est transmis à la juridiction compétente. Dans ce cas, l’amende est majorée au maximum.
+**Art. 86.** — Les agents prévus à l'article 25 de la présente loi peuvent infliger une amende transactionnelle à l'auteur de l'infraction puni par les dispositions de la présente loi. A défaut de paiement de l'amende transactionnelle, dans le délai fixé à l'article 92 ci-dessous, le procès-verbal est transmis à la juridiction compétente. Dans ce cas, l'amende est majorée au maximum.
 
-**Art. 87.** — La procédure de l’amende transactionnelle ne peut intervenir : si l’infraction constatée expose son auteur soit à une autre sanction autre que pécuniaire, soit à une réparation de dommages causés aux personnes ou aux biens ; en cas d’infractions simultanées dont l’une au moins ne peut donner lieu à l’application de la procédure de l’amende transactionnelle ; en cas de récidive.
+**Art. 87.** — La procédure de l'amende transactionnelle ne peut intervenir : si l'infraction constatée expose son auteur soit à une autre sanction autre que pécuniaire, soit à une réparation de dommages causés aux personnes ou aux biens ; en cas d'infractions simultanées dont l'une au moins ne peut donner lieu à l'application de la procédure de l'amende transactionnelle ; en cas de récidive.
 
-**Art. 88.** — Le montant de l’amende transactionnelle est fixé conformément aux dispositions de la présente loi et des textes pris pour son application. Si plusieurs infractions ont été relevées sur le même procès-verbal, le contrevenant doit verser le montant total des amendes transactionnelles dont il est passible.
+**Art. 88.** — Le montant de l'amende transactionnelle est fixé conformément aux dispositions de la présente loi et des textes pris pour son application. Si plusieurs infractions ont été relevées sur le même procès-verbal, le contrevenant doit verser le montant total des amendes transactionnelles dont il est passible.
 
-**Art. 89.** — Lorsque l’auteur de l’infraction accepte la proposition d’amende transactionnelle, il doit verser son montant au receveur des contributions diverses territorialement compétent, dans un délai de trente (30) jours à compter de la date du constat de l’infraction.
+**Art. 89.** — Lorsque l'auteur de l'infraction accepte la proposition d'amende transactionnelle, il doit verser son montant au receveur des contributions diverses territorialement compétent, dans un délai de trente (30) jours à compter de la date de la notification de la proposition d'amende transactionnelle.
 
-**Art. 90.** — Le récépissé de versement de l’amende transactionnelle doit être remis dans le délai prévu à l’article 89 ci-dessus à l’agent ayant dressé le procès-verbal.
+**Art. 90.** — Le récépissé de versement de l'amende transactionnelle doit être remis dans le délai prévu à l'article 89 ci-dessus à l'agent ayant dressé le procès-verbal.
 
-**Art. 91.** — Le paiement de l’amende transactionnelle éteint l’action publique.
+**Art. 91.** — Le paiement de l'amende transactionnelle éteint l'action publique.
 
-**Art. 92.** — Les conditions et les modalités d’application des dispositions du présent titre sont fixées par voie réglementaire.
+**Art. 92.** — Les conditions et les modalités d'application des dispositions du présent titre sont fixées par voie réglementaire.
 
 ---
 
 ## TITRE VI — DISPOSITIONS DIVERSES ET FINALES
 
-**Art. 93.** — Les agents visés à l’article 25 ci-dessus sont tenus au secret professionnel pour les faits, actes et renseignements dont ils pourraient avoir connaissance dans le cadre de leurs fonctions.
+**Art. 93.** — Les agents visés à l'article 25 ci-dessus sont tenus au secret professionnel pour les faits, actes et renseignements dont ils pourraient avoir connaissance dans le cadre de leurs fonctions.
 
 **Art. 94.** — Sont abrogées toutes les dispositions contraires à la présente loi, notamment la loi n° 89-02 du 7 février 1989 relative aux règles générales de protection du consommateur et toutes dispositions contraires.
 
@@ -363,3 +363,7 @@ Les conditions et les modalités d'offres en matière de crédits à la consomma
 **Art. 80–85 source :** Extraits verbatim du PDF `loi-09-03_compressed.pdf` (JO N° 15, session 2026-08-09). Confirmed by CANNOT-SEE=CANNOT-CONFIRM rule.
 
 **Gaps :** Aucun. W34-FIX clôture le cycle de correction loi-09-03.
+
+---
+
+*Pour marquer ce fichier VÉRIFIÉ : un relecteur humain doit lire l'intégralité du texte contre le PDF JO N°15, puis remplacer la ligne Statut ci-dessus avec son nom et la date.*
