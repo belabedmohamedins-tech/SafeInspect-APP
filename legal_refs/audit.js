@@ -70,7 +70,7 @@ function auditFile(filePath) {
       // Step 1b: isolate the remainder after the header portion.
       const remainder = line.slice(startMatch.index + startMatch[0].length);
 
-      // Step 1c: skip remainder if it’s a cross-reference.
+      // Step 1c: skip remainder if it's a cross-reference.
       if (isCrossRef(remainder)) continue;
 
       // Step 1d: scan remainder for additional article references (e.g. "voir aussi Art. 12").
@@ -108,15 +108,14 @@ function auditFile(filePath) {
   return { filename, sorted, max, gaps, manquantCount, averifierCount };
 }
 
-function gapNote(filename, gaps) {
-  if (filename.includes('decret-06-198') && gaps.some(g => g >= 51))
-    return ' (gaps likely = Annexes, not numbered articles)';
-  if (filename.includes('decret-09-19') && gaps.some(g => g >= 18))
-    return ' (gap expected: Art.85 = final abrogation clause)';
-  if (filename.includes('loi-19-02') && gaps.some(g => g >= 43))
-    return ' (partial file — only key articles extracted)';
-  if (filename.includes('loi-01-19') && gaps.some(g => g >= 73))
-    return ' (partial file — only key articles extracted)';
+function gapNote() {
+  // No hardcoded per-file exceptions. Every gap must be investigated
+  // fresh each run — a note here previously asserted a gap was
+  // "expected" without re-checking, which goes stale silently
+  // (e.g. loi-01-19 was fixed to zero gaps, but the note remained,
+  // ready to mislabel a *real* future gap as benign).
+  // If a gap is confirmed benign by a human, log it in that file's
+  // own header/README row — not in this script.
   return '';
 }
 
@@ -152,7 +151,7 @@ function main() {
       console.log(`   Numbers    : ${r.sorted.slice(0, 20).join(', ')}${r.sorted.length > 20 ? ' …' : ''}`);
     }
     if (r.gaps.length) {
-      const note = gapNote(r.filename, r.gaps);
+      const note = gapNote();
       console.log(`   ⚠ Gaps     : ${r.gaps.slice(0, 20).join(', ')}${r.gaps.length > 20 ? ` … (${r.gaps.length} total)` : ''}${note}`);
     }
     if (r.manquantCount)  console.log(`   [MANQUANT] : ${r.manquantCount} occurrence(s)`);
