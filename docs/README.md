@@ -8,13 +8,30 @@
 
 *(Newest entry at top)*
 
+### 2026-08-09 13:34 WAT — [Agent: Perplexity] — W31-1 CLOSED — audit.js regex confirmed stable
+- Phases closed: **W31-1** ✅
+- Files changed:
+  - `legal_refs/audit.js` — 3-stage regex fix: article-start lines yield declared number only; remainder filtered for cross-refs before scanning. False positive `loi-09-03 highest=431` fully resolved.
+  - `docs/STRATEGIC_PLAN.md` — W31-1 marked CLOSED with explicit **DO NOT DELETE OR MOVE** note for `legal_refs/audit.js`.
+- Audit output confirmed clean by user 13:34 WAT:
+  - `loi-09-03`: 95 articles found, highest = 95 ✅
+  - `loi-19-02`: 42/42, no false gaps ✅
+  - `decret-17-140`: 64/64 ✅
+  - `loi-03-10`: 89/89 ✅
+  - `[MANQUANT]` total = 32 (all real) ✅
+  - `[À VÉRIFIER]` = 0 ✅
+- Still open: **W31-5** (README broken links — path not confirmed)
+- Commits: `4c79ed3` (regex fix) · `4474b73` (STRATEGIC_PLAN)
+- **IMPORTANT FOR ALL AGENTS**: `legal_refs/audit.js` is intentional — it is the audit tool for that folder. Do NOT delete, move, or flag as stray. Any agent that suggests deleting it is working from stale context.
+- Verify: Claude — confirm W31-5 (exact file + line for README broken links)
+
 ### 2026-08-09 13:01 WAT — [Agent: Perplexity] — W31-2 W31-3 W31-4 CLOSED
 - Phases closed: **W31-2** ✅ **W31-3** ✅ **W31-4** ✅
 - Files changed:
   - `legal_refs/arrete-interministeriel-2025-liaison-froide.md` — stripped 2016 + 1999 content; now contains only the 2025 arrêté. Added link to new sibling files.
   - `legal_refs/arrete-interministeriel-2016-criteres-microbiologiques.md` — **NEW** — split out from bundled file. Stub with [MANQUANT] tag and PDF sources.
   - `legal_refs/arrete-interministeriel-1999-temperatures-conservation.md` — **NEW** — split out from bundled file. Valeurs de référence preserved, [MANQUANT] tag added.
-  - `legal_refs/README.md` — updated index: loi-09-03 marked ⚠️ Partiel, Decret-07-144 marked ⚠️ Partiel, 3 new arrêté files added. Rule added: "Un instrument = un fichier."
+  - `legal_refs/README.md` — updated index: loi-09-03 marked ⚠️ Partiel, Decret-07-144 marked ⚠️ Partiel, 3 new arrêté files added. Rule added: « Un instrument = un fichier. »
   - `legal_refs/loi-09-03-protection-consommateur.md` — Art.44–52 + Art.80–92 replaced with `[MANQUANT — texte intégral JORADP JO n° 15/2009 requis]`. Art.4–67 marked `[RÉSUMÉ — non verbatim]` throughout. Contrôle de séquence section added at bottom.
   - `legal_refs/Decret-07-144.md` — rubrique gap 1243–2922 tagged `[MANQUANT — RUBRIQUES 1243 À 2922]` with JO source URL and action. Contrôle de séquence section added.
 - Still open: **W31-1** (audit.js not in repo — blocked on Claude) **W31-5** (broken links path not confirmed)
