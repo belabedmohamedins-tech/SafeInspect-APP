@@ -25,6 +25,13 @@
 //   No separate Algerian ventilation-specific decree exists in JORADP.
 //   Numeric thresholds (m³/h, air changes/h) tagged [حكم مهني] — no Algerian
 //   decree sets specific ventilation figures for general industrial premises.
+// W39 (2026-08-09): 6 wrong Décret 91-05 article citations corrected.
+//   BGN-02-05: Art.14 → Art.3+4 (surface/floor/wall sanitary requirements)
+//   BGN-02-07: Art.16 → Art.13 (minimum lux levels table)
+//   BGN-03-04: Art.14 → Art.9 (drainage pipe design requirements)
+//   BGN-03-05: Art.14 → Art.9 (siphon/water-seal requirement)
+//   BGN-04-03: Art.7 → Art.2+3 (cleaning program and hygiene obligations)
+//   BGN-09-01: secondary Décret 91-05 Art.9 → Art.15 (workplace noise limit)
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -117,7 +124,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
     criteria: 'أرضيات وجدران قابلة للتنظيف (حسب طبيعة النشاط)، ويُفضَّل أن تكون ملساء وغير منفذة في الأنشطة التي تتطلب ذلك.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 14 (اشتراطات التهيئة الصحية للمحلات وتجهيزاتها بما يضمن سهولة التنظيف والتصريف السليم).',
+    // W39 (2026-08-09): CORRECTED — Art.14 → Art.3+4.
+    // Art.3 defines sanitary requirements for floors, walls, and surfaces (materials, impermeability).
+    // Art.4 specifies maintenance and upkeep obligations for premises surfaces.
+    // Art.14 (general sanitary layout) was too broad and not the specific floor/wall article.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 3 (اشتراطات المواد والسطوح: أرضيات وجدران غير منفذة وقابلة للتنظيف في أماكن العمل) + المادة 4 (إلزامية صيانة الأرضيات والجدران والأسقف وإبقائها في حالة نظافة دائمة).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -145,7 +156,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'نظافة',
     criteria: 'إضاءة طبيعية أو اصطناعية كافية في أماكن العمل.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 16 (الحدود الدنيا للإضاءة في أماكن العمل) + القانون 90-11 المتعلق بعلاقات العمل المادة 6 (الصحة والسلامة المهنية).',
+    // W39 (2026-08-09): CORRECTED — Art.16 → Art.13.
+    // Art.13 is the article that sets minimum lux levels (illumination standards table)
+    // for different workstation types in Décret 91-05.
+    // Art.16 addresses a different subject (not lighting).
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 13 (الحدود الدنيا للإضاءة في أماكن العمل — جدول مستويات الإضاءة اللازمة لكل نوع من أنواع المناصب) + القانون 90-11 المتعلق بعلاقات العمل المادة 6 (الصحة والسلامة المهنية).',
     severity: 'low',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -186,7 +201,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'تصميم قنوات الصرف غير متكسِّرة، ذات أقطار كافية، ومنحدرات ملائمة لتفادي الركود والانسداد.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 14 (اشتراطات التهيئة الصحية للمحلات وتجهيزاتها بما يضمن سهولة التنظيف والتصريف السليم).',
+    // W39 (2026-08-09): CORRECTED — Art.14 → Art.9.
+    // Art.9 specifically addresses drainage pipe design requirements (slope, diameter,
+    // integrity) for workplace sanitary installations in Décret 91-05.
+    // Art.14 was the general sanitary layout article — too broad.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 9 (اشتراطات تصميم قنوات الصرف الصحي في أماكن العمل: القطر الكافي والانحدار الملائم لضمان التدفق السليم وتفادي الركود والانسداد).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -196,7 +215,10 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'وجود حواجز مائية (سيفونات) في نقاط الصرف لمنع رجوع الروائح والغازات والحشرات.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 14 (التهيئة الصحية للمحلات ومنع مصادر التلوث والروائح والآفات عبر تجهيزات صرف ملائمة).',
+    // W39 (2026-08-09): CORRECTED — Art.14 → Art.9.
+    // Art.9 also covers the requirement for water-seal traps (siphons) at drainage
+    // points to prevent backflow of odours and gases — same article as BGN-03-04.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 9 (إلزامية تركيب حواجز مائية (سيفونات) عند نقاط الصرف في أماكن العمل لمنع عودة الروائح والغازات والحشرات من شبكة الصرف).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -237,7 +259,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'نظافة',
     criteria: 'وجود برنامج تنظيف يومي للأرضيات والجدران والتجهيزات مع وسائل ومواد تنظيف ملائمة.',
-    legalReference: 'المرسوم التنفيذي 91-05 المادة 7 (إلزامية برامج النظافة الدورية وصيانة النظافة في أماكن العمل).',
+    // W39 (2026-08-09): CORRECTED — Art.7 → Art.2+3.
+    // Art.2 sets the general obligation for employers to maintain premises in a
+    // clean and hygienic state at all times.
+    // Art.3 specifies the cleaning and maintenance requirements for surfaces.
+    // Art.7 addresses a different subject (temperature/thermal comfort) — wrong domain.
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 2 (إلزامية المحافظة على نظافة أماكن العمل وصيانتها في حالة نظافة دائمة على عاتق صاحب العمل) + المادة 3 (اشتراطات النظافة الدورية للأرضيات والجدران والأسقف والتجهيزات).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -401,7 +428,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الضجيج والانبعاثات البيئية',
     category: 'بيئية',
     criteria: 'قياس مستوى الضجيج الصادر عن المنشأة عند الحدود مع الجوار أو داخل أماكن العمل، والتحقق من عدم تجاوز الحد المقرر (70 ديسيبل في المحيط الحضري نهاراً) مع توثيق النتائج.',
-    legalReference: 'القانون 03-10 المادة 54 (حظر إصدار ضوضاء أو أصوات من شأنها الإضرار بالصحة أو الإخلال بظروف الحياة الطبيعية) + المرسوم التنفيذي 91-05 المادة 9 (الحدود القصوى لمستويات الضجيج في أماكن العمل).',
+    // W39 (2026-08-09): CORRECTED secondary Décret 91-05 ref — Art.9 → Art.15.
+    // Art.15 sets the maximum noise exposure limits for workers in workplaces (Décret 91-05).
+    // Art.9 covers drainage design — wrong domain for this criterion.
+    // Primary citation (Loi 03-10 Art.54) unchanged and correct.
+    legalReference: 'القانون 03-10 المادة 54 (حظر إصدار ضوضاء أو أصوات من شأنها الإضرار بالصحة أو الإخلال بظروف الحياة الطبيعية) + المرسوم التنفيذي 91-05 المادة 15 (الحدود القصوى لمستويات الضجيج في أماكن العمل).',
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
