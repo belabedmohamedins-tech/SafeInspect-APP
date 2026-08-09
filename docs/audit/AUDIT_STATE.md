@@ -2,17 +2,28 @@
 
 **Purpose:** Track progress of the multi-session regulatory audit. This file is the single source of truth for what has been audited, what is pending, and what legal references remain unverified. Every session reads this file first and updates it before ending.
 
-**Status:** IN PROGRESS — Session 8 complete. W19 ✅ CLOSED. `legal_refs/` cleaned and usable.
-**Last updated:** 2026-08-08 (Session 8 — Perplexity)
+> **Note on this file's own history:** this document was briefly overwritten by a Perplexity
+> session ("Session 8", 2026-08-08) that logged only its own `legal_refs/` cleanup work and did
+> not carry forward the Claude-side findings from Sessions 1–7. This version merges both
+> histories and brings the `legal_refs/` inventory current against `legal_refs/CLEANUP_LOG.md`
+> (dated 2026-08-09, one day newer than this file's last Perplexity entry). **`CLEANUP_LOG.md`
+> is the authoritative source for `legal_refs/` file status — check it first if the two ever
+> disagree again.**
+
+**Status:** IN PROGRESS. `legal_refs/` cleaned and substantially expanded (20 content files as of 2026-08-09). Critical defect F1 confirmed. Large citation-error cluster found in Décret 91-05 references.
+**Last updated:** 2026-08-09 (Session 9)
 
 ---
 
 ## 1. Source-of-truth hierarchy
 
 1. GitHub code (this repo, branch `main`) — what the app currently does.
-2. `legal_refs/` (7 content files — see Section 4 for inventory) and `docs/legal_sources/` — legal texts. **`legal_refs/` is now CLEAN** — all empty stubs deleted 2026-08-08 (W19). See Section 4 for which instruments still lack source files.
-3. `docs/Inspection_Manual_Chapter1-8_*.md` — project's own methodology docs.
-4. `docs/SafeInspect_Audit_Consolidated_2026-08-06 (1).md`, `docs/STRATEGIC_PLAN.md` — prior AI/human audit work. Historical context only, not trusted as verified law.
+2. `legal_refs/` — canonical legal-text folder. `docs/legal_sources/` was deleted 2026-08-09
+   (per `CLEANUP_LOG.md`) — do not recreate it or look for sources there anymore.
+3. `docs/Inspection_Manual_Chapter1-8_*.md` — project's own methodology docs. Not yet
+   cross-checked against criteria files.
+4. `docs/SafeInspect_Audit_Consolidated_2026-08-06 (1).md`, `docs/STRATEGIC_PLAN.md` — prior
+   AI/human audit work. Historical context only, not trusted as verified law.
 
 ---
 
@@ -21,24 +32,24 @@
 ### 2a. Criteria files — `src/criteria/` (17 activity-specific + 3 base)
 | File | Size | Status |
 |---|---|---|
-| baseGeneralCriteria.ts | 31.7 KB | PARTIAL — 4/30 criteria audited (BGN-01-01, BGN-08-01, BGN-08-02, BGN-08-05) |
+| baseGeneralCriteria.ts | 31.7 KB | NEARLY DONE — see Section 3 for full per-criterion detail. ~24/30 have received real citation verification (own W18/W19 fixes + this audit's Décret 91-05 and Loi 03-10/01-19 checks); remainder listed in Section 3. |
 | baseFoodCriteria.ts | 10.7 KB | DONE — 12/12 criteria audited |
 | baseCompressedGasCriteria.ts | 2.8 KB | NOT AUDITED |
-| abattoirCriteria.ts | 20.4 KB | NOT AUDITED |
+| abattoirCriteria.ts | 20.4 KB | PARTIAL — read in full; cross-checked against slaughterhouseSmallCriteria.ts for redundancy/consistency (Section 3). Individual legal-reference verification not yet done except where noted. |
 | bakeryCriteria.ts | 8.6 KB | NOT AUDITED |
 | blacksmithCriteria.ts | 7.3 KB | NOT AUDITED |
-| carWashCriteria.ts | 10.1 KB | NOT AUDITED |
+| carWashCriteria.ts | 10.1 KB | PARTIAL — read in full, swept for the Loi 01-19 citation-offset pattern (none found). Individual citations not otherwise verified. |
 | carpenteryCriteria.ts | 6.0 KB | NOT AUDITED |
 | coldRoomCriteria.ts | 7.6 KB | NOT AUDITED |
 | couvoirCriteria.ts | 16.7 KB | NOT AUDITED |
 | gplCriteria.ts | 11.9 KB | NOT AUDITED |
 | marbleCriteria.ts | 10.0 KB | NOT AUDITED |
 | mechanicCriteria.ts | 6.2 KB | NOT AUDITED |
-| paintShopCriteria.ts | 8.7 KB | NOT AUDITED |
+| paintShopCriteria.ts | 8.7 KB | PARTIAL — read in full, swept for Loi 01-19 pattern (none found). Leans heavily on Décret 06-138 (industrial air emissions) — NOT yet verified, no source file. Also cites Loi 04-08, Loi 88-07 — not yet verified. |
 | printingCriteria.ts | 8.3 KB | NOT AUDITED |
 | produceStorageCriteria.ts | 5.5 KB | NOT AUDITED |
 | semiPharmaCriteria.ts | 7.6 KB | NOT AUDITED |
-| slaughterhouseSmallCriteria.ts | 12.9 KB | NOT AUDITED |
+| slaughterhouseSmallCriteria.ts | 12.9 KB | PARTIAL — read in full; cross-checked against abattoirCriteria.ts. Several Loi 01-19 citation errors found (Section 3). |
 | uabCriteria.ts | 25.8 KB | NOT AUDITED |
 | updCriteria.ts | 15.1 KB | NOT AUDITED |
 | src/criteria/index.ts | 3.0 KB (aggregator) | AUDITED — see Finding F2 (dead-code hazard) |
@@ -56,7 +67,7 @@
 ### 2c. Core model / logic
 | File | Status |
 |---|---|
-| src/types.ts (15.3 KB) | READ — see Session 1 notes below |
+| src/types.ts (15.3 KB) | READ — see Session 1 notes |
 | src/hooks/useChecklistData.ts | AUDITED — confirmed root cause of Finding F1 |
 | app/screens/facilities/add.tsx | AUDITED — confirmed source of Finding F1 |
 | app/screens/facilities/edit.tsx | AUDITED — confirmed same defect as add.tsx |
@@ -81,133 +92,171 @@
 (`facilityCategories.ts` / `facilityCategoriesFull.json`). `criteriaByActivity` in
 `src/criteriaData.ts` does a **strict exact-string match** against 26 hardcoded keys in a
 completely different plain-phrase format, inherited from static seed data
-(`src/facilitiesData.ts`) that predates the current UI — confirmed by the map's own comment:
-*"Keys are EXACT activity strings from src/facilitiesData.ts... Verified 2026-08-05: all 26
-distinct facility activity values have a key below."* `useChecklistData.ts` resolves with
+(`src/facilitiesData.ts`) that predates the current UI. `useChecklistData.ts` resolves with
 `criteriaByActivity[p.activity] ? ... : criteriaByActivity.default` — no normalization, no
 rubrique-based lookup, even though both `add.tsx` and `edit.tsx` already capture and persist
-`rubrique` as its own field (tagged "Z11" in code comments — a prior partial fix that was never
-wired into checklist selection).
+`rubrique` as its own field ("Z11" — a prior partial fix never wired into checklist selection).
 
-**Effect:** any real-world facility (i.e. the overwhelming majority going forward, since the
-seed data is static and finite) silently gets `criteriaByActivity.default`
-(`baseGeneralCriteria` only) instead of its correct activity-specific checklist — no error, no
-warning, no visible sign to the inspector that anything is missing.
+**Effect:** any real-world facility silently gets `baseGeneralCriteria` only instead of its
+correct activity-specific checklist — no warning to the inspector.
 
-**Verdict: MODIFY (implementation, not this audit's scope).**
-Recommended fix direction: re-key `criteriaByActivity` (or a new map) by `rubrique` instead of
-the free-text `activity` string; build coverage from `facilityCategoriesFull.json` rather than
-the 26 legacy seed values; add a visible fallback warning when a facility resolves to `default`.
+**Verdict: MODIFY (implementation, not this audit's scope).** Re-key `criteriaByActivity` by
+`rubrique`; build coverage from `facilityCategoriesFull.json`; add a visible fallback warning.
 
-**Evidence trail:** `app/screens/facilities/add.tsx`, `app/screens/facilities/edit.tsx`,
-`src/hooks/useChecklistData.ts`, `src/criteriaData.ts` (Session 7).
+**Evidence:** `app/screens/facilities/add.tsx`, `edit.tsx`, `src/hooks/useChecklistData.ts`,
+`src/criteriaData.ts`.
 
 ### F2 — Dead-code hazard: `allCriteria` (Section 6, low severity, live risk)
-`src/criteria/index.ts` exports `allCriteria`, a flat concatenation of every criterion from
-every activity file with no activity filtering. Confirmed unused by both real consumers of
-checklist data (`checklists.tsx` preview screen and `useChecklistData.ts` live-inspection flow),
-both of which correctly use `criteriaByActivity`. Not a live bug today, but a landmine: one
-accidental import away from silently bypassing all applicability logic. Recommend deleting or
-clearly marking test-only. (Session 3.)
+`src/criteria/index.ts` exports `allCriteria`, a flat concatenation of every criterion with no
+activity filtering. Confirmed unused by both real consumers (`checklists.tsx`,
+`useChecklistData.ts`). Not live today, but one accidental import from bypassing all
+applicability logic. Recommend deleting or clearly marking test-only.
 
-### F3 — Unverified/incorrect legal citations found so far
+### F3 — Décret 91-05 citation cluster (baseGeneralCriteria.ts) — NEW, Session 9
+Verified full 68-article text. Found the largest citation-error cluster in the audit so far:
+
+| Criterion | Cites | Real content of that article | Correct article |
+|---|---|---|---|
+| BGN-02-05 (cleanable floors/walls) | Art. 14 | Cold/weather + combustion-fume protection — unrelated | **Art. 3–4** (exact match: "le sol doit être lisse, imperméable... murs lisses et lavables") |
+| BGN-02-07 (minimum lighting) | Art. 16 | PPE for noise exposure — unrelated | **Art. 13** (exact match — contains the actual lux table: 40/60/120/200) |
+| BGN-03-04 (drainage channel design) | Art. 14 | Same unrelated article | **Art. 9** — reasonable fit (general evacuation-device rule), not a perfect textual match for diameter/slope specifically |
+| BGN-03-05 (water-trap siphons) | Art. 14 | Same unrelated article | **Art. 9** — near-exact match ("intercepteurs hydrauliques" = the siphon requirement) |
+| BGN-04-03 (daily cleaning program) | Art. 7 | Ventilation for basement/windowless rooms — unrelated | **Art. 2–3** (general propreté obligations) |
+| BGN-07-04 (sealing cracks against pests) | Art. 14 | Same unrelated article | No clean match found in this decree — needs a different source or `[حكم مهني]` |
+| BGN-09-01 (noise limit) | Art. 9 | Sewage/drainage odor prevention — unrelated | **Art. 15** (exact match: "maintenir l'intensité des bruits... à un niveau compatible avec leur santé") |
+| BGN-02-06 (ventilation) | Art. 11 | Ventilation for isolated *high-risk* cabins specifically — narrower than claim | **Art. 6** is the general ventilation obligation; Art. 11 isn't wrong, just narrower than ideal |
+
+**Pattern:** Article 14 alone is misapplied to four unrelated criteria (floors, drainage,
+siphons, pest-proofing) despite only covering cold/weather protection — looks like a default
+placeholder rather than four independently-checked citations. **6 confirmed MODIFY, 1 borderline
+improvement (BGN-02-06), 1 needs a different source entirely (BGN-07-04).**
+
+### F4 — Loi 01-19 citation-offset pattern (bounded, not codebase-wide) — Session 9
+Full 72-article text verified. Found 4 wrong citations, 3 of which land in the *same* wrong
+section (Titre III, Art. 29–36, municipal household-waste rules) despite describing
+special/hazardous-waste obligations that belong in Titre II (Art. 12–28):
+
+| Criterion | Cites | Should be |
+|---|---|---|
+| BGN-04-06 (hazardous waste bordereau) | Art. 32 (municipal waste responsibility) | Art. 19 or Art. 21 |
+| BGN-04-07 (self-incineration ban) | Art. 30 (municipal schema content) | Art. 15 (treatment only in authorized facilities) |
+| SLH-05-04 (separating blood/entrails from wash water) | Art. 34 (municipal sorting services) | Not really this law — Loi 03-10 Art. 30 already correctly cited alongside it |
+| SLH-05-05 (closed containers + accredited handler) | Art. 17 (ban on mixing hazardous waste with other waste — different subject) | Art. 15 or Art. 16 |
+
+Swept `carWashCriteria.ts` and `paintShopCriteria.ts` for the same pattern — **none found**.
+Pattern appears contained to these 4 criteria, not systemic across the codebase. No need to
+re-check every file for this specific issue; worth a final grep-style pass later if time allows,
+but not high priority.
+
+Also confirmed correct via this same source: BGN-03-02/03, BGN-04-01/02/04 (Art. 8 + 11),
+BGN-04-08 (Art. 21), and BGN-04-05's honest self-flag (no open-burning ban article exists in
+this law at all — confirmed by reading all 72 articles).
+
+### F5 — Loi 03-10 spot-checks (Session 9)
+Full 89-article text verified. 5 of 6 W19 corrections checked were exact matches (BGN-01-03 Art.
+82+84, BGN-02-03 Art. 41+44, BGN-09-01's Loi 03-10 half via Art. 54, BGN-07-05 Art. 56+58,
+BGN-01-02's honest `[À VÉRIFIER]` self-flag held up — no better article found).
+
+**New finding: BGN-10-01 citation range is off at both ends.** Cites "Art. 15–22" for the EIE
+(environmental impact study) requirement. Real structure: **Art. 14** is where the requirement
+itself is established (currently excluded from the cited range); **Art. 22** belongs to a
+different chapter entirely (fiscal/economic instruments, unrelated to EIE). **Verdict: MODIFY —
+change to "Art. 14–21."**
+
+**New finding: BGN-08-06 cites the wrong article entirely.** Claims "Loi 03-10 Art. 18" for
+mandatory Class-1 prior authorization + criminal penalties for violation. Real Art. 18 is about
+who may prepare an EIE study (accredited organizations) — unrelated. **Verdict: MODIFY — replace
+with Art. 63 (installations classées subject to authorization/declaration) + Art. 77 (penal
+article — imprisonment/fine for operating without authorization).**
+
+### F6 — Redundancy: SLH-08-01 duplicates BGN-10-01 (Section 6)
+`slaughterhouseSmallCriteria.ts`'s EIE criterion (`SLH-08-01`) cites nearly identical legal bases
+to the universal `BGN-10-01`, which already applies to every facility via the base-criteria
+merge. **Verdict: REMOVE `SLH-08-01`** — straight duplicate, not activity-specific content.
+
+### F7 — Cross-file consistency gaps, abattoir vs. slaughterhouse-small (Section 7)
+- Both cite identical Décret 06-141 wastewater limits (DBO5≤35, DCO≤120, MES≤35, pH 6.5–8.5),
+  but `abattoirCriteria.ts` flags them `[À VÉRIFIER]` (Annex I vs. sector-specific Annex II
+  units unresolved) while `slaughterhouseSmallCriteria.ts` presents the same numbers as settled.
+  Same open legal question, inconsistent confidence — resolve once, apply to both.
+- `slaughterhouseSmallCriteria.ts` cites specific articles of **Décret 04-82** (Art. 6, Art. 9)
+  for veterinary ante/post-mortem inspection; `abattoirCriteria.ts` cites only generic Loi 88-08
+  for the same obligation. Décret 04-82 itself is not yet independently verified — new
+  instrument. If verified correct, `abattoirCriteria.ts` should be upgraded to match.
+
+### Legacy F3 items (renumbered from prior version, still open)
 - `BGN-04-06` (Décret 09-19): cited "Articles 4–8" for the accreditation/verification
   requirement; actual accreditation clause is **Article 2**, validity period is **Article 6**.
-  Articles 4–8 are adjacent context (application file, insurance, register). MODIFY. (Session 6.)
-- `BFD-08-01` (Loi 09-03 Art. 19): claimed Article 19 establishes food-chain traceability.
-  **Confirmed INCORRECT** via official JO amendment text — Article 19 is actually about the
-  consumer's right of withdrawal (droit de rétractation), added by Loi 18-09 (2018). No
-  traceability provision found elsewhere in the 95-article law either. MODIFY — needs a correct
-  citation (likely Décret 17-140) or re-tagging as `[حكم مهني]`. (Session 7.)
+  (Note: this criterion now has *two* independent citation defects — this one plus the Loi 01-19
+  Art. 32 error in F4 above. Needs a full citation rewrite, not a tweak.)
+- `BFD-08-01` (Loi 09-03 Art. 19): **Confirmed INCORRECT** — Art. 19 is actually about the
+  consumer's right of withdrawal, not traceability. Needs a correct citation (likely Décret
+  17-140) or `[حكم مهني]` tag.
 - `BFD-02-02`: cites Décret 17-140 generically for specific storage clearances (≥15cm floor,
-  ≥5cm wall) — these exact figures not found in the decree's actual storage provisions
-  (Art. 12–24). Likely an unsourced industry-standard figure presented as decree-derived.
-  MODIFY — needs a real source or `[حكم مهني]` tag. (Session 7.)
-- `BGN-08-01` / `BGN-08-02` (Loi 19-02): correct subject matter but cite the law generically
-  instead of the specific article (Art. 5 and Art. 13 respectively, both confirmed correct via
-  local source). Sibling criterion `BGN-08-05` already does this correctly. Low-severity,
-  easy fix — bring 08-01/08-02 up to 08-05's standard. (Session 5.)
+  ≥5cm wall) not found in the decree's actual text. MODIFY.
+- `BGN-08-01` / `BGN-08-02`: **RESOLVED** — already fixed in a parallel Perplexity pass (W18),
+  now correctly cite Loi 19-02 Art. 5 and Art. 13 respectively, matching sibling BGN-08-05.
 
 ### Verified correct (positive findings, not exhaustive)
-- `BGN-01-01`: Décret 24-196 (2024) 3-year regularization grace period — confirmed real via
-  Ministry of Environment/APS statement. Exact end-date computation still open (press summary
-  doesn't specify which date the 3 years run from).
-- `BGN-08-05`: Loi 19-02 Art. 5 citation confirmed correct.
-- `BFD-05-01`: Décret 17-140 Art. 5 confirmed as the actual HACCP obligation article, including
-  the primary-production exclusion the criterion describes.
-- `BFD-04-01`/`BFD-04-02`: a prior in-code correction (tagged "W7") moving the cold-chain
-  temperature citation from Décret 17-140 Art. 7/8 to a separate 2025 arrêté is confirmed
-  legally sound — Décret 17-140 Art. 24 itself delegates exact temperatures to that separate
-  instrument.
-- `facilityCategoriesFull.json`: spot-checked against real Décret 07-144 text — high-fidelity,
-  correct rubrique codes, thresholds, and structure.
-- Décret 06-198, Décret 07-144, Décret 22-167, Décret 24-196, Décret 09-19: all confirmed real
-  and correctly identified (name, date, subject matter).
+- `BGN-01-01`: Décret 24-196 3-year regularization grace period — confirmed real via Ministry of
+  Environment/APS statement. Exact end-date computation still open.
+- `BGN-08-05`: Loi 19-02 Art. 5 — confirmed correct.
+- `BFD-05-01`: Décret 17-140 Art. 5 confirmed as the actual HACCP obligation article.
+- `BFD-04-01`/`BFD-04-02`: cold-chain citation correctly moved off Décret 17-140 Art. 7/8 (which
+  don't contain temperature figures) to a separate 2025 arrêté — Art. 24 of 17-140 itself
+  delegates exact temperatures to that instrument. Confirmed sound.
+- `facilityCategoriesFull.json`: spot-checked against real Décret 07-144 text — high fidelity.
+- Décret 06-198, 07-144, 22-167, 24-196, 09-19, 17-140: all confirmed real, correctly identified.
+- Loi 03-10 and Loi 01-19: both now fully verified as reliable sources (see F4, F5 for detail).
 
 ---
 
-## 4. `legal_refs/` — ✅ CLEANED 2026-08-08 (W19)
+## 4. `legal_refs/` — current inventory (per `CLEANUP_LOG.md`, 2026-08-09)
 
-**W19 completed by Perplexity, Session 8, 2026-08-08.**
+**✅ Complete, verified usable:** loi-09-03-protection-consommateur.md, loi-03-10-protection-environnement.md,
+loi-01-19-gestion-dechets.md, loi-19-02-incendie-panique.md, decret-17-140-hygiene-alimentaire.md,
+decret-06-198-etablissements-classes.md, decret-09-19.md, decret-91-05-hygiene-securite-milieu-travail.md,
+decret-93-120-medecine-du-travail.md, plus 4 arrêtés and aim-gpl2-regles-techniques-securite.md.
 
-All 17 zero-byte stub files deleted. Directory now contains 7 real content files + README + .cleanup marker.
+**⚠️ Partial:** decret-07-144-nomenclature-installations-classees.md — rubriques 1243–2922 missing
+(JO n° 31/2007 not yet supplied). Rubriques below that range (used for facilityCategoriesFull.json
+spot-checks so far) are confirmed accurate.
 
-### Current inventory (content files only)
+**Present in repo but not yet reflected in CLEANUP_LOG.md** (log is one day stale as of this
+writing — confirm status before trusting the log blindly): loi-90-11-relations-travail.md,
+loi-90-29-urbanisme.md, loi-05-12-ressources-en-eau.md, loi-04-20-risques-majeurs.md. All four
+exist with substantial content (40–52 KB) per direct listing — not yet individually verified by
+this audit, but available for use.
 
-| File | Instrument | Content state |
-|---|---|---|
-| `loi-03-10-protection-environnement.md` | Loi 03-10 (2003) | ✅ Full text (114 articles) |
-| `loi-09-03-protection-consommateur.md` | Loi 09-03 (2009) | ⚠️ Partial — Art. 43–52 and 80–92 are placeholders |
-| `loi-01-19-gestion-dechets.md` | Loi 01-19 (2001) | ✅ Full text |
-| `Decret-07-144.md` | Décret 07-144 | ✅ Full text (nomenclature établissements classés) |
-| `Decret-17-140.md` | Décret 17-140 (2017) | ✅ Full text |
-| `decret-06-198-etablissements-classes.md` | Décret 06-198 | ✅ Full text |
-| `decret-09-19.md` | Décret 09-19 | ✅ Full text |
+**Still missing entirely:** Loi 18-11 (santé publique — semiPharmaCriteria.ts), Décret 11-125
+(cross-check needed — used in abattoirCriteria.ts for chlorine levels, may already be covered by
+a different source), Décret 21-430 (GPL/C — gplCriteria.ts), Décret 06-141 (eaux usées — heavily
+cited in abattoir/slaughterhouse files, high priority), Décret 06-138 (industrial air emissions —
+paintShopCriteria.ts), Décret 04-82 (veterinary sanitary accreditation — slaughter files), Loi
+04-08 (commercial activity conditions), Loi 88-07 (occupational health/safety).
 
-### Instruments cited in criteria with NO source file yet
-
-These must be sourced (PDF → Markdown, verbatim, no circular reference) before citation verification can proceed for the files that use them.
-
-| Instrument | Used by | Priority |
-|---|---|---|
-| Loi 19-02 (incendie/panique) | BGN-08-xx | 🔴 P0 — partial stub exists in `docs/legal_sources/` |
-| Loi 18-11 (santé publique) | semiPharmaCriteria.ts | 🔴 P0 — blocks W12 |
-| Décret 11-125 (abattoirs) | abattoirCriteria.ts | 🟠 P1 |
-| Décret 21-430 (GPL/C) | gplCriteria.ts | 🟠 P1 |
-| Décret 06-141 (eaux usées) | abattoirCriteria, slaughterhouse | 🟠 P1 |
-| Loi 04-20 (risques majeurs) | baseGeneralCriteria.ts | 🟡 P2 |
-| Décret 02-427 (hygiène locaux) | baseGeneralCriteria.ts | 🟡 P2 |
-| Décret 05-315 (déchets hospitaliers) | baseGeneralCriteria.ts | 🟡 P2 |
-| Décret 07-145 (études d'impact) | baseGeneralCriteria.ts | 🟡 P2 |
-| Décret 91-05 (prévention risques) | baseGeneralCriteria.ts | 🟡 P2 |
-| Loi 05-12 (eau) | baseGeneralCriteria.ts | 🟡 P2 |
-| Loi 90-11 (travail) | baseGeneralCriteria.ts | 🟡 P2 |
-| Loi 90-29 (urbanisme) | updCriteria.ts | 🟡 P2 |
-| Loi 18-09 (amendement conso.) | corrects Loi 09-03 citations | 🟡 P2 |
-
-### Deleted stubs (2026-08-08, W19)
-`Decret-06-198.md`, `decret-02-427.md`, `decret-05-315.md`, `decret-07-145.md`,
-`decret-11-125.md`, `decret-21-430.md`, `decret-91-05.md`, `loi-01-19.md`, `loi-03-10.md`,
-`loi-04-20-prevention-risques-majeurs.md`, `loi-05-12.md`, `loi-09-03.md`,
-`loi-18-09-amendement-protection-consommateur.md`, `loi-18-11.md`, `loi-19-02.md`,
-`loi-90-11.md`, `loi-90-29.md`
+**docs/legal_sources/ was deleted 2026-08-09** — do not recreate, do not look for sources there.
 
 ---
 
 ## 5. Legal references — verification tracker
 
-Confirmed VERIFIED: Décret 06-198, Décret 07-144, Décret 22-167, Décret 24-196, Décret 09-19,
-Décret 17-140 (all: existence, identity, subject matter — see Section 3 for article-level
-detail). Loi 19-02 Art. 5 and Art. 13. Décret 17-140 Art. 5, Art. 24.
+**VERIFIED:** Décret 06-198, 07-144 (partial, see above), 22-167, 24-196, 09-19, 17-140, 91-05,
+Loi 03-10, Loi 01-19 (all: existence + identity + subject matter; article-level detail in
+Section 3). Specific articles confirmed: Loi 19-02 Art. 5 & 13; Décret 17-140 Art. 5 & 24; Loi
+03-10 Art. 41, 44, 54, 56, 58, 62, 82, 84; Loi 01-19 Art. 8, 11, 21; Décret 91-05 Art. 3–4, 9, 13,
+15.
 
-Confirmed INCORRECT: Loi 09-03 Art. 19 (as cited by `BFD-08-01`); `legal_refs/loi-09-03.md`
-stub file entirely — deleted (Art. 7 and Art. 19 both wrong; fabricated to match app claims).
+**CONFIRMED INCORRECT:** Loi 09-03 Art. 19 (BFD-08-01); Loi 01-19 Art. 32/30/17/34 (BGN-04-06,
+BGN-04-07, SLH-05-04, SLH-05-05 — see F4); Décret 91-05 Art. 14/7/16/9 misapplied across 6
+criteria (see F3); Loi 03-10 Art. 18 (BGN-08-06) and the Art. 15–22 range on BGN-10-01 (see F5).
 
-UNVERIFIED — DO NOT IMPLEMENT AS VERIFIED LAW:
+**UNVERIFIED — DO NOT IMPLEMENT AS VERIFIED LAW:**
 - BFD-02-02's 15cm/5cm storage clearance figures (no source found yet)
 - Exact end-date of the Décret 24-196 grace period (3 years from which date?)
-- Décret 06-198 Art. 20 (cited in a types.ts comment re: 'warning' sanction tier) — not yet
-  independently verified
+- Décret 06-198 Art. 20 (cited in a types.ts comment re: 'warning' sanction tier)
+- Décret 04-82 (veterinary accreditation, cited in slaughterhouseSmallCriteria.ts) — new
+  instrument, not yet independently checked at all
 
 ---
 
@@ -216,15 +265,22 @@ UNVERIFIED — DO NOT IMPLEMENT AS VERIFIED LAW:
 ### Session 1 (2026-08-07): Scope inventory, read types.ts. Flagged (later corrected) rubrique claim.
 ### Session 2: Traced criteriaData.ts/criteriaByActivity wiring. Verified 26-activity coverage claim (true, but only for old seed data — see F1). Found F2 (allCriteria dead code).
 ### Session 3: Continuation of Session 2 findings; confirmed F2 not live-wired.
-### Session 4: Read facilitiesData.ts. Withdrew Session 1 rubrique claim (field didn't exist in that file). Flagged classification-linkage gap (resolved in Session 7 as F1) and a PII-in-repo concern (out of scope, noted for user).
-### Session 5: Began criterion-by-criterion audit of baseGeneralCriteria.ts. Verified BGN-01-01 (Décret 24-196), BGN-08-01/02/05 (Loi 19-02).
-### Session 6: Full audit of baseFoodCriteria.ts (12/12). Verified Décret 09-19 full text; found BGN-04-06 citation imprecision.
-### Session 7 (2026-08-08): Discovered `/legal_refs/` (24 files); found and confirmed fabricated content in `loi-09-03.md` stub via independent JO verification; found BFD-08-01 incorrect citation and BFD-02-02 unsourced figures. User initiated Perplexity re-conversion of `/legal_refs/` — marked under maintenance (Section 4). Pivoted to non-legal-text thread: confirmed **F1**, the critical activity/checklist mismatch defect, via `add.tsx` + `edit.tsx` + `useChecklistData.ts` + `criteriaData.ts`.
-### Session 8 (2026-08-08) — Perplexity — W19 ✅ CLOSED
-- Confirmed `legal_refs/` exists at repo root (user correctly challenged phantom-directory claim from prior turn — confirmed by direct GitHub API listing).
-- Full inventory: 26 entries total — 17 were zero-byte stubs (SHA `e69de29b`), 7 had real content, 1 README, 1 `.cleanup` marker.
-- Deleted all 17 empty stubs. Updated `legal_refs/README.md` with accurate inventory and missing-source table.
-- **`legal_refs/` is now safe to use** for the 7 instruments listed in Section 4. Citation verification may resume against those files.
-- **Next priority:** supply source PDFs for P0 instruments (Loi 19-02 full text, Loi 18-11) before resuming W12 or BGN-08-xx audit. Then continue baseGeneralCriteria.ts (26/30 remaining).
+### Session 4: Read facilitiesData.ts. Withdrew Session 1 rubrique claim. Flagged classification-linkage gap (resolved Session 7 as F1) and a PII-in-repo concern (out of scope).
+### Session 5: Began baseGeneralCriteria.ts audit. Verified BGN-01-01, BGN-08-01/02/05.
+### Session 6: Full audit of baseFoodCriteria.ts (12/12). Verified Décret 09-19; found BGN-04-06 citation imprecision.
+### Session 7: Discovered legal_refs/ (pre-cleanup state); found fabricated loi-09-03.md stub; found BFD-08-01, BFD-02-02 issues. Confirmed **F1** critical defect.
+### Session 8 (Perplexity): Deleted 17 zero-byte stub files from legal_refs/. Updated README. legal_refs/ marked usable for the 7 files that had real content at that time.
+### Session 9 (this session): Confirmed legal_refs/ expanded further since Session 8 (20 files now, per CLEANUP_LOG.md dated 2026-08-09) — flagged that CLEANUP_LOG.md, not this file, is the live source of truth for legal_refs/ status. Verified Loi 03-10 and Loi 01-19 in full — found F4 (Loi 01-19 citation-offset pattern, bounded) and F5 (BGN-10-01 range fix, BGN-08-06 wrong-article fix). Verified Décret 91-05 in full — found F3, the largest citation-error cluster in the audit (6 confirmed wrong across baseGeneralCriteria.ts). Cross-checked abattoirCriteria.ts vs slaughterhouseSmallCriteria.ts — found F6 (SLH-08-01 redundancy) and F7 (cross-file consistency gaps). Swept carWashCriteria.ts and paintShopCriteria.ts for the F4 pattern — none found, confirming it's bounded. Merged this file with Perplexity's Session 8 version rather than overwriting.
 
-**Recommended next session:** Resume criterion-by-criterion audit of `baseGeneralCriteria.ts` (26/30 criteria remaining). For any criterion citing a P0/P1 instrument with no source file, tag `[À VÉRIFIER — source manquante]` and continue — do not block the entire audit on missing PDFs.
+**Recommended next session:**
+1. `baseGeneralCriteria.ts` is now close to fully triaged — finish the last few criteria still
+   pending a source (Loi 90-29 for BGN-02-04, Décret 76-35 for BGN-08-03, Décret 02-427 for
+   BGN-09-02 — all three source files may now already exist per Section 4, not yet checked).
+2. Décret 06-141 (eaux usées) is the single highest-leverage remaining gap — cited heavily
+   across abattoirCriteria.ts and slaughterhouseSmallCriteria.ts and would resolve F7's open
+   wastewater-unit question (Annex I vs Annex II) directly.
+3. F1 and F3 are the two highest-priority items to hand to whoever implements fixes — F1 for
+   severity (silently wrong checklists in production), F3 for volume (6 confirmed errors in one
+   pass).
+4. Move to a fresh, entirely-unaudited criteria file (e.g. gplCriteria.ts or mechanicCriteria.ts)
+   once the above are resolved, since 17 of 20 files have had zero direct audit attention so far.
