@@ -6,14 +6,18 @@
  * Usage:  node legal_refs/audit.js
  * NOTE:   Always run `git pull` before running to get the latest version.
  *
- * Strategy (per line):
- *   1. If line STARTS with an article declaration (**Art. N.** etc.):
- *      → capture ONLY the declared number (first match). Stop scanning that line.
- *      This prevents picking up inline cross-ref numbers like
- *      "**Art. 68.** — ... (article 429 du code pénal)".
+ * Per-line strategy:
+ *   1. Test whether line starts with an article declaration.
+ *      If yes:
+ *        a. Capture ONLY the declared number from the leading match.
+ *        b. Take the remainder of the line (after the match).
+ *        c. If the remainder contains a cross-ref pattern, discard it.
+ *        d. Otherwise scan the remainder for additional article numbers.
+ *      This prevents "**Art. 68.** — ... (article 429 du code pénal)"
+ *      from producing [68, 429] — it produces only [68].
  *   2. If line does NOT start with an article declaration:
- *      → apply cross-ref filter. If it’s a cross-reference, skip entirely.
- *      Otherwise scan full line (catches non-header article mentions if any).
+ *      Apply cross-ref filter to the whole line. Skip if matched.
+ *      Otherwise scan full line.
  */
 
 const fs   = require('fs');
@@ -21,14 +25,17 @@ const path = require('path');
 
 const DIR = path.resolve(__dirname);
 
-// Captures the declared article number at the START of a line.
-// Group 1 = the number.
+/**
+ * Matches an article declaration at or near the START of a line.
+ * Captures (group 1) = the declared article number.
+ * Returns the match object so we know where it ends (match.index + match[0].length).
+ */
 const ARTICLE_START_RE = /^[\s#*>|]*\*{0,2}art(?:icle)?s?[.:\s]\s*(\d+)/im;
 
-// Full-line scanner (used for non-header lines only).
+/** Full-line article scanner (used for non-header lines and header remainders). */
 const ARTICLE_RE = /\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/gim;
 
-// Cross-reference patterns — only applied to non-header lines.
+/** Cross-reference patterns — applied to non-header lines and article-header remainders. */
 const CROSS_REF_PATTERNS = [
   /code\s+pénal/i,
   /code\s+de\s+procédure/i,
@@ -39,8 +46,8 @@ const CROSS_REF_PATTERNS = [
   /article\s+\d+\s+(?:et\s+suivants\s+)?du\s+code/i,
 ];
 
-function isCrossRefOnly(line) {
-  return CROSS_REF_PATTERNS.some(p => p.test(line));
+function isCrossRef(text) {
+  return CROSS_REF_PATTERNS.some(p => p.test(text));
 }
 
 const MANQUANT_RE  = /\[MANQUANT/gi;
@@ -55,18 +62,33 @@ function auditFile(filePath) {
 
   for (const line of lines) {
     const startMatch = ARTICLE_START_RE.exec(line);
+
     if (startMatch) {
-      // Line is an article declaration — take ONLY the declared number.
+      // Step 1a: capture the declared number only.
       numbers.add(parseInt(startMatch[1], 10));
-      continue; // do not scan rest of line for more numbers
+
+      // Step 1b: isolate the remainder after the header portion.
+      const remainder = line.slice(startMatch.index + startMatch[0].length);
+
+      // Step 1c: skip remainder if it’s a cross-reference.
+      if (isCrossRef(remainder)) continue;
+
+      // Step 1d: scan remainder for additional article references (e.g. "voir aussi Art. 12").
+      let m;
+      ARTICLE_RE.lastIndex = 0;
+      while ((m = ARTICLE_RE.exec(remainder)) !== null) {
+        numbers.add(parseInt(m[1], 10));
+      }
+      continue;
     }
-    // Not an article-start line.
-    if (isCrossRefOnly(line)) continue;
-    // Scan body line for any article references.
-    let match;
+
+    // Step 2: non-header line — apply cross-ref filter to the whole line.
+    if (isCrossRef(line)) continue;
+
+    let m;
     ARTICLE_RE.lastIndex = 0;
-    while ((match = ARTICLE_RE.exec(line)) !== null) {
-      numbers.add(parseInt(match[1], 10));
+    while ((m = ARTICLE_RE.exec(line)) !== null) {
+      numbers.add(parseInt(m[1], 10));
     }
   }
 
