@@ -1,51 +1,69 @@
 # CLEANUP_LOG — legal_refs
 
-Ce fichier enregistre les opérations de nettoyage structurel effectuées sur le dépôt SafeInspect-APP, afin d'éviter de signaler des problèmes déjà résolus.
+> **LIRE EN PREMIER dans toute nouvelle session avant de faire quoi que ce soit.**
+> Ce fichier est la source de vérité sur l'état du dépôt. Il évite de repousser des fichiers déjà présents.
 
 ---
 
-## Historique des nettoyages
+## ⚠️ RÈGLE ANTI-BOUCLE
+
+Avant de pousser un fichier, vérifier ici s'il est déjà marqué ✅. Si oui, **ne pas le recréer**.
+Un fichier marqué ⚠️ Partiel peut être mis à jour seulement si un nouveau PDF comblant les lacunes est fourni dans la session en cours.
+
+---
+
+## État complet des fichiers — legal_refs/ (au 2026-08-09)
+
+| Fichier | Instrument | Statut | Lacunes connues |
+|---|---|---|---|
+| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 + amendements Loi 18-09 | ✅ Complet verbatim | Aucune |
+| `loi-03-10-protection-environnement.md` | Loi n° 03-10 | ✅ Complet | — |
+| `loi-01-19-gestion-dechets.md` | Loi n° 01-19 | ✅ Complet | — |
+| `loi-19-02-incendie-panique.md` | Loi n° 19-02 | ✅ Complet | — |
+| `decret-17-140-hygiene-alimentaire.md` | Décret n° 17-140 | ✅ Complet | — |
+| `decret-07-144-nomenclature-installations-classees.md` | Décret n° 07-144 | ⚠️ Partiel | Rubriques 1243–2922 manquantes — PDF JO n° 31/2007 non fourni |
+| `decret-06-198-etablissements-classes.md` | Décret n° 06-198 | ✅ Complet | — |
+| `decret-09-19.md` | Décret n° 09-19 | ✅ Complet | — |
+| `decret-91-05-hygiene-securite-milieu-travail.md` | Décret n° 91-05 | ✅ Complet | — |
+| `decret-93-120-medecine-du-travail.md` | Décret n° 93-120 | ✅ Complet | — |
+| `arrete-interministeriel-2025-liaison-froide.md` | Arrêté 2025 liaison froide | ✅ Présent | — |
+| `arrete-interministeriel-1999-temperatures-conservation.md` | Arrêté 1999 températures | ✅ Présent | — |
+| `arrete-interministeriel-2016-criteres-microbiologiques.md` | Arrêté 2016 critères micro | ✅ Présent | — |
+| `aim-gpl2-regles-techniques-securite.md` | AIM GPL2 | ✅ Présent | — |
+| `audit.js` | Script d'audit du dossier | ✅ Intentionnel — NE PAS SUPPRIMER | — |
+
+---
+
+## 🔴 Fichiers à créer — PDFs disponibles, pas encore poussés
+
+| Fichier cible | PDF source | Statut |
+|---|---|---|
+| `loi-90-11-relations-travail.md` | `LOI-90-11.pdf` | ❌ À créer |
+| `loi-90-29-urbanisme.md` | `loi-90-29.pdf` | ❌ À créer |
+| `loi-04-20-eau.md` | `Loi-04-20.pdf` | ❌ À créer |
+| `loi-05-12-eau-ressources.md` | `loi-05-12.pdf` | ❌ À créer |
+| `loi-18-11-sante.md` | `loi-18-11.pdf` | ❌ À créer |
+
+---
+
+## Historique des nettoyages structurels
 
 ### 2026-08-09 — Suppression de `docs/legal_sources/`
-
 **Statut : ✅ RÉSOLU — NE PLUS SIGNALER**
+- Le dossier `docs/legal_sources/` a été supprimé définitivement.
+- Le dossier canonique unique est `legal_refs/`.
+- Ne pas recréer `docs/legal_sources/`.
 
-- Le dossier `docs/legal_sources/` a été **supprimé définitivement** du dépôt.
-- Confirmé par inspection directe de l'arborescence du dépôt le 2026-08-09.
-- Le dossier canonique unique pour les textes légaux est **`legal_refs/`**.
-- Aucun conflit de doublon entre `docs/legal_sources/` et `legal_refs/` n'existe plus.
-- **Ne pas recréer `docs/legal_sources/`** sous quelque forme que ce soit.
-
-### 2026-08-09 — Renommage des fichiers en kebab-case
-
+### 2026-08-09 — Renommage kebab-case
 **Statut : ✅ RÉSOLU**
+- `Decret-07-144.md` → `decret-07-144-nomenclature-installations-classees.md`
+- `Decret-17-140.md` → `decret-17-140-hygiene-alimentaire.md`
 
-- `legal_refs/Decret-07-144.md` renommé en `legal_refs/decret-07-144-nomenclature-installations-classees.md`
-- `legal_refs/Decret-17-140.md` renommé en `legal_refs/decret-17-140-hygiene-alimentaire.md`
-- Ancien contenu préservé intégralement dans les nouveaux fichiers.
-- Anciens fichiers supprimés dans le même commit.
-- Convention de nommage cible : `{type}-{numéro}-{sujet-court}.md` en minuscules kebab-case.
+### 2026-08-08/09 — Boucle sur décret-91-05
+**Statut : ✅ RÉSOLU**
+- Le fichier `decret-91-05-hygiene-securite-milieu-travail.md` a été poussé 7 fois en raison de resets de session.
+- Il est **complet et définitif** depuis le 2026-08-09. Ne plus le repousser.
 
----
-
-## État actuel de la structure (au 2026-08-09)
-
-```
-legal_refs/
-  README.md                                          ← index canonique
-  CLEANUP_LOG.md                                     ← ce fichier
-  loi-09-03-protection-consommateur.md
-  loi-03-10-protection-environnement.md
-  loi-01-19-gestion-dechets.md
-  loi-19-02-incendie-panique.md
-  decret-17-140-hygiene-alimentaire.md               ← renommé
-  decret-07-144-nomenclature-installations-classees.md  ← renommé
-  decret-06-198-etablissements-classes.md
-  decret-09-19.md
-  decret-91-05-hygiene-securite-milieu-travail.md
-  decret-93-120-medecine-du-travail.md
-  arrete-interministeriel-2025-liaison-froide.md
-  aim-gpl2-regles-techniques-securite.md
-```
-
-**docs/legal_sources/ → N'EXISTE PLUS. RÉSOLU.**
+### audit.js dans legal_refs/
+**Statut : ✅ INTENTIONNEL — NE PAS SUPPRIMER**
+- `audit.js` appartient à `legal_refs/` car il audite ce dossier. Ne pas le déplacer ni le signaler comme stray.
