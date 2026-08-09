@@ -1,5 +1,18 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 22:57 WAT — Perplexity — W38 confirmed clean; closed
+- **Phases closed:** W38
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync only — no code change)
+- **Critical finding:**
+  - W38 goal: wire `criteriaByRubriqueCategory` fallback into the inspection flow so real facilities with unrecognised activity strings get the correct sector checklist instead of `baseGeneralCriteria`.
+  - Direct read of `app/(tabs)/inspection/facilities.tsx` (SHA `70f22d80`): `handleGateConfirmed` already passes `rubrique: pendingFacility.rubrique` in the `router.push` params to checklist. Header comment `// W38 (2026-08-09)` present.
+  - Direct read of `src/criteriaData.ts` (SHA `d80f316d`): `getCriteriaByRubriqueCategory()` function exists with exact-then-partial matching. 31-key bilingual map present.
+  - Direct read of `app/(tabs)/inspection/categories.tsx` + `start.tsx`: entire param chain confirmed — `start → categories → facilities → checklist`, with `...params` spread preserving `rubrique` at each hop.
+  - No code change needed. Confirmed clean by direct read.
+- **Docs updated:** README + STRATEGIC_PLAN W38 → ✅ CLOSED.
+- **Queue status:** W38 closed. Next up: W39 (Décret 91-05 article cluster, Perplexity).
+- **Next identifier: W43.**
+
 ## 2026-08-09 17:27 WAT — Perplexity — W34-FIX complete; loi-09-03 fully restored
 - **Phases closed:** W34 (FAILED then FIXED — see below)
 - **Files changed:** `legal_refs/loi-09-03-protection-consommateur.md` (commits `4e994e86`, `566a5e28`)
@@ -86,9 +99,13 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end — `facilities.tsx` passes `rubrique` to checklist; `getCriteriaByRubriqueCategory` called in resolver. Confirmed clean by direct read. |
 | **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete + amendment table. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |
+| W39 | 🟠 OPEN | P1 | Décret 91-05 article cluster — 6 wrong articles in baseGeneralCriteria.ts |
+| W40 | 🟠 OPEN | P1 | Loi 01-19 citation-offset + Décret 09-19 BGN-04-06 rewrite |
+| W41 | 🟠 OPEN | P2 | Loi 03-10 range fixes + SLH-08-01 deletion |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |
