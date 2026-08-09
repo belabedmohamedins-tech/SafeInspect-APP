@@ -1,6 +1,7 @@
 <!-- ============================================================
      README mis à jour le 2026-08-09 — Audit grep corpus complet
      README mis à jour le 2026-08-09 (2) — D22-167 + D24-196 ajoutés, D06-198 row corrigée
+     README mis à jour le 2026-08-09 (3) — decret-06-141 indexé (bon fichier : rejets-effluents-liquides)
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -20,8 +21,8 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
-| ⚠️ NON VÉRIFIÉ | 14 | voir index ci-dessous |
-| 🔴 SOURCE NON-JORADP / STUB | 3 | `aim-gpl2`, `decret-06-141`, `arrete-2025-liaison-froide` |
+| ⚠️ NON VÉRIFIÉ | 15 | voir index ci-dessous |
+| 🔴 SOURCE NON-JORADP / STUB | 2 | `aim-gpl2`, `arrete-2025-liaison-froide` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
 
@@ -42,7 +43,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
-| `decret-06-141-rejets-industriels-liquides.md` | Décret exécutif n° 06-141 | Rejets industriels liquides | 🔴 STUB — texte verbatim non extrait |
+| `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 26, 23 avril 2006) |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
@@ -69,3 +70,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-09 :** `decret-22-167-etablissements-classes-modification.md` ajouté — décret modificatif du D06-198 (structure un fichier par instrument).
 - **2026-08-09 :** `decret-24-196-etablissements-classes-modification.md` ajouté — Art. 14, 24, 25, 26, 29, 44 du D06-198 modifiés — commit 3413f5f pour patch renvoi dans D06-198.
 - **2026-08-09 :** `decret-06-198-etablissements-classes.md` patché (commit 3413f5f) — blocs D24-196 inline remplacés par notes de renvoi simples ; objet README corrigé pour refléter « texte original » uniquement.
+- **2026-08-09 :** `decret-06-141-rejets-industriels-liquides.md` (STUB) supprimé par l'utilisateur — `decret-06-141-rejets-effluents-liquides.md` conservé comme fichier canonique (texte intégral Art. 1–14 + Annexes I et II, JO N° 26/2006) — indexé dans le README.
