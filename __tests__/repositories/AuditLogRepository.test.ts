@@ -2,12 +2,15 @@
  * __tests__/repositories/AuditLogRepository.test.ts
  * Z6-TSC: AuditEntry lives in AuditLogRepository, not src/types.
  *         append() takes (action, inspectorName, opts?) — not a plain object.
+ * W39: clear() requires inspectorName arg (added W24).
+ *      'clear empties the log' expects length 1 — the sentinel AUDIT_LOG_CLEARED
+ *      row is intentionally kept so the wipe is always traceable (legal requirement).
  */
 import { AuditLogRepository } from '../../src/repositories/AuditLogRepository';
 import type { AuditEntry } from '../../src/repositories/AuditLogRepository';
 
 beforeEach(async () => {
-  await AuditLogRepository.clear();
+  await AuditLogRepository.clear('__test__');
 });
 
 describe('AuditLogRepository', () => {
@@ -26,10 +29,13 @@ describe('AuditLogRepository', () => {
     expect(saved.every((e: AuditEntry) => e.action === 'INSPECTION_SAVED')).toBe(true);
   });
 
-  it('clear empties the log', async () => {
+  it('clear leaves only the sentinel AUDIT_LOG_CLEARED entry', async () => {
     await AuditLogRepository.append('INSPECTION_SAVED', 'Alice', { inspectionId: 'i' });
-    await AuditLogRepository.clear();
+    await AuditLogRepository.clear('Alice');
     const all = await AuditLogRepository.getAll();
-    expect(all).toHaveLength(0);
+    // W24 contract: clear() keeps exactly 1 sentinel row for legal traceability.
+    expect(all).toHaveLength(1);
+    expect(all[0].action).toBe('AUDIT_LOG_CLEARED');
+    expect(all[0].inspectorName).toBe('Alice');
   });
 });

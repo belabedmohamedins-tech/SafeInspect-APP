@@ -1,5 +1,7 @@
 // app/screens/audit-log.tsx
 // Audit Log — read-only chronological event log with filter and clear
+// W39: added AUDIT_LOG_CLEARED to ACTION_LABELS/ICONS/COLORS;
+//      clear() now passes inspector name from settings (falls back to 'مفتش').
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -16,6 +18,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Colors, FontSize, FontWeight, Radius, Shadow, Spacing } from '../../constants';
 import { AuditAction, AuditEntry as AuditLogEntry, AuditLogRepository } from '../../src/repositories/AuditLogRepository';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 
 type FilterValue = 'all' | AuditAction;
 
@@ -27,6 +30,7 @@ const ACTION_LABELS: Record<AuditAction, string> = {
   AGENDA_ITEM_DELETED:    'حذف مهمة',
   SETTINGS_CHANGED:       'تغيير الإعدادات',
   BACKUP_RESTORED:        'استعادة نسخة احتياطية',
+  AUDIT_LOG_CLEARED:      'مسح سجل الأحداث',
 };
 
 const ACTION_ICONS: Record<AuditAction, string> = {
@@ -37,6 +41,7 @@ const ACTION_ICONS: Record<AuditAction, string> = {
   AGENDA_ITEM_DELETED:    'calendar-times-o',
   SETTINGS_CHANGED:       'cog',
   BACKUP_RESTORED:        'database',
+  AUDIT_LOG_CLEARED:      'eraser',
 };
 
 const ACTION_COLORS: Record<AuditAction, string> = {
@@ -47,6 +52,7 @@ const ACTION_COLORS: Record<AuditAction, string> = {
   AGENDA_ITEM_DELETED:    Colors.warning,
   SETTINGS_CHANGED:       Colors.textSecondary,
   BACKUP_RESTORED:        '#8e44ad',
+  AUDIT_LOG_CLEARED:      Colors.textSecondary,
 };
 
 const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
@@ -93,7 +99,10 @@ export default function AuditLogScreen() {
         {
           text: 'مسح', style: 'destructive',
           onPress: async () => {
-            await AuditLogRepository.clear();
+            // W39: pass inspectorName so the sentinel row is attributed.
+            const settings = await SettingsRepository.get();
+            const inspectorName = settings?.inspectorName?.trim() || 'مفتش';
+            await AuditLogRepository.clear(inspectorName);
             load();
           },
         },

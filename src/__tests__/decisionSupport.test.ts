@@ -1,5 +1,7 @@
 // src/__tests__/decisionSupport.test.ts
 // W30: full coverage of suggestDecision() decision tree.
+// W39: ViolationProfile requires `total` field — added to all violation objects.
+//      DifferentialView has no `persisted` field — renamed to `stillFailing`.
 import { suggestDecision } from '../services/decisionSupport';
 import type { ScoringResult } from '../utils/scoringUtils';
 import type { DifferentialView } from '../services/differentialView';
@@ -11,7 +13,7 @@ function scoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
     score: 85,
     grade: 'B',
     riskLevel: 2,
-    violations: { high: 0, medium: 0, low: 0 },
+    violations: { high: 0, medium: 0, low: 0, total: 0 },
     criticalOverride: false,
     nextInspectionDays: 180,
     incomplete: false,
@@ -21,10 +23,12 @@ function scoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
 
 function diff(overrides: Partial<DifferentialView> = {}): DifferentialView {
   return {
+    all: [],
     hasUnresolvedPriorViolations: false,
     resolved: [],
     newViolations: [],
-    persisted: [],
+    stillFailing: [],
+    priorInspection: null,
     ...overrides,
   };
 }
@@ -85,7 +89,7 @@ describe('suggestDecision', () => {
   // ─── Grade D — formal-warning (no unresolved) ────────────────────────────
   it('Grade D, no unresolved, <3 high → formal-warning', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', score: 45, violations: { high: 2, medium: 1, low: 0 } }),
+      scoring({ grade: 'D', score: 45, violations: { high: 2, medium: 1, low: 0, total: 3 } }),
       diff({ hasUnresolvedPriorViolations: false }),
     );
     expect(result.action).toBe('formal-warning');
@@ -95,7 +99,7 @@ describe('suggestDecision', () => {
   // ─── Grade D + unresolved — partial-closure ──────────────────────────────
   it('Grade D + unresolved prior → partial-closure', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 1, medium: 0, low: 0 } }),
+      scoring({ grade: 'D', violations: { high: 1, medium: 0, low: 0, total: 1 } }),
       diff({ hasUnresolvedPriorViolations: true }),
     );
     expect(result.action).toBe('partial-closure');
@@ -105,7 +109,7 @@ describe('suggestDecision', () => {
   // ─── Grade D + ≥3 high — immediate-closure ───────────────────────────────
   it('Grade D + 3 high violations → immediate-closure, urgency critical', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 3, medium: 2, low: 0 } }),
+      scoring({ grade: 'D', violations: { high: 3, medium: 2, low: 0, total: 5 } }),
     );
     expect(result.action).toBe('immediate-closure');
     expect(result.urgency).toBe('critical');
@@ -114,7 +118,7 @@ describe('suggestDecision', () => {
 
   it('Grade D + 5 high violations → immediate-closure (takes precedence over unresolved)', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 5, medium: 0, low: 0 } }),
+      scoring({ grade: 'D', violations: { high: 5, medium: 0, low: 0, total: 5 } }),
       diff({ hasUnresolvedPriorViolations: true, newViolations: [{ id: 'X', criteria: 'X', severity: 'high', complianceStatus: 'non-compliant' } as any] }),
     );
     expect(result.action).toBe('immediate-closure');
@@ -147,7 +151,7 @@ describe('suggestDecision', () => {
   });
 
   it('medium violations appear in reasons', () => {
-    const result = suggestDecision(scoring({ violations: { high: 0, medium: 3, low: 0 }, grade: 'B' }));
+    const result = suggestDecision(scoring({ violations: { high: 0, medium: 3, low: 0, total: 3 }, grade: 'B' }));
     expect(result.reasons.some(r => r.includes('متوسطة'))).toBe(true);
   });
 
@@ -174,7 +178,7 @@ describe('suggestDecision', () => {
   });
 
   it('actionLabel is always a non-empty string', () => {
-    const result = suggestDecision(scoring({ grade: 'D', violations: { high: 4, medium: 0, low: 0 } }));
+    const result = suggestDecision(scoring({ grade: 'D', violations: { high: 4, medium: 0, low: 0, total: 4 } }));
     expect(typeof result.actionLabel).toBe('string');
     expect(result.actionLabel.length).toBeGreaterThan(0);
   });
