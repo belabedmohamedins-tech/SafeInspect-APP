@@ -4,6 +4,10 @@
 //   - BGN-01-03: Art.71+73 → Art.82+84 (right of entry + suspension power)
 //   - BGN-03-02: Art.14+45 → Art.8+11 (generator obligations, not national plan)
 //   - BGN-03-03: Art.14 → Art.8 (same law 01-19, correct article)
+// W39 (2026-08-09): updated BGN-03-04 and BGN-03-05 expectations from art.14 → art.9
+//   Décret 91-05 Art.9 governs drainage channel design and P-trap requirements.
+//   Art.14 was the wrong article (covers a different topic). Code corrected in W39;
+//   these test assertions now match the correct legal source.
 import { baseGeneralCriteria } from '../criteria/baseGeneralCriteria';
 import { InspectionItem } from '../types';
 
@@ -116,18 +120,20 @@ describe('baseGeneralCriteria', () => {
     expect(item!.legalReference).toContain('8');
   });
 
-  it('BGN-03-04 legalReference cites 91-05 art.14', () => {
+  // W39 (2026-08-09): CORRECTED — Art.9 governs drainage channel design (pipe diameter,
+  // slope, flow requirements). Art.14 was wrong. Both BGN-03-04 and BGN-03-05 updated.
+  it('BGN-03-04 legalReference cites 91-05 art.9', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-03-04');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('91-05');
-    expect(item!.legalReference).toContain('14');
+    expect(item!.legalReference).toContain('9');
   });
 
-  it('BGN-03-05 legalReference cites 91-05 art.14', () => {
+  it('BGN-03-05 legalReference cites 91-05 art.9', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-03-05');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('91-05');
-    expect(item!.legalReference).toContain('14');
+    expect(item!.legalReference).toContain('9');
   });
 
   it('noise measurement criterion BGN-09-01 exists with numericField', () => {
