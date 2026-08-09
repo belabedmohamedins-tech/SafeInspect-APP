@@ -79,17 +79,15 @@
 | W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct; Art.19 already removed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W16: Art.19 WRONG` present. No change needed. |
 | W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W17` present. No change needed. |
 | W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
-| W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain — no specific distance decree exists). `warningMin: 700` graduated alert in place. No change needed. |
-| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 («كما عُدِّل بالمرسومَيْن 22-167 و 24-196») — never cited as a standalone authority. Citation chain is correct. No change needed. |
-| W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER] in `abattoirCriteria.ts` (tag already applied in prior session). Switch to Annex II g/tonne units only after JORADP JO verbatim verified. No code change this session. |
-| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read of `src/criteriaData.ts` + `src/hooks/useChecklistData.ts`. `criteriaByRubriqueCategory` map (31 keys, bilingual FR/AR) + `getCriteriaByRubriqueCategory()` function already present. All 26 activity strings have exact keys — fallback purely defensive. No code change needed. |
-| **W32** | **loi-09-03 verbatim transcription Art.1–95 + source Art.44–52/80–92 from JO N°15/2009** | **2026-08-09** | **PDF `loi-09-03_compressed.pdf` read directly. All 95 articles extracted and verified against JO N°15 original. `legal_refs/loi-09-03-protection-consommateur.md` already marked ✅ VÉRIFIÉ (Art.80–85 corrected from PDF during W32). [RÉSUMÉ] and [MANQUANT] tags cleared. No further action needed.** |
+| W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain). `warningMin: 700` graduated alert in place. No change needed. |
+| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read. Décret 24-196 cited exclusively as amending decree to 06-198 — never standalone. No change needed. |
+| W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change this session. |
+| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read. `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` already present. No change needed. |
+| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines (Art.4–95 + all amendments). Reverted via `cbe46ba8`. File restored to `ca6fc9ec` baseline — complete Art.1–95, status NON VÉRIFIÉ. Art.80–85 NOT PDF-corrected. Future PDF correction = new phase W33+ as targeted patch only.** |
 
 ---
 
 ### 🟠 OPEN Phases
-
-> ✅ No P0, P1, or P2 items remain autonomously actionable. Only W19 (parallel user session) remains.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
@@ -137,7 +135,7 @@
 | Cold-chain temps (restaurants) | Arrêté interminst. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
 | Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
 | Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
-| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ✅ VERIFIED — W32. PDF JO N°15/2009 lu directement. |
+| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ⚠️ RESTORED to ca6fc9ec — complete but NON VÉRIFIÉ against JO PDF. W32 RETRACTED. PDF correction pending W33+. |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
