@@ -12,11 +12,12 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 | Fichier | Instrument | Objet | Statut |
 |---|---|---|---|
-| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ Partiel — Art.44–52 + Art.80–92 manquants (voir [MANQUANT]) |
+| `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ Texte intégral (Art. 1–130) |
+| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ✅ Texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ✅ Texte intégral |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets | ✅ Texte intégral |
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ✅ Texte intégral |
-| `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ Texte intégral (Arts. 1–64) |
+| `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ Texte intégral (Art. 1–64) |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ⚠️ Partiel — rubriques 1243–2922 manquantes (voir [MANQUANT]) |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés pour la protection de l'environnement | ✅ Texte intégral |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Modalités de fonctionnement du système de management environnemental | ✅ Texte intégral |
@@ -24,6 +25,18 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ Texte intégral |
 | `arrete-interministeriel-2025-liaison-froide.md` | Arrêté interminist. du 7 mai 2025 | Conditions d'hygiène restauration — chaîne du froid / liaison chaude-froide | ⚠️ Valeurs de référence — texte intégral JO 43/2025 non extrait |
 | `aim-gpl2-regles-techniques-securite.md` | AIM GPL2 | Règles techniques de sécurité | ⚠️ À vérifier |
+
+---
+
+## Fichiers restant à créer
+
+| Fichier cible | Instrument | PDF source disponible |
+|---|---|---|
+| `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | `loi-90-29.pdf` ✅ |
+| `loi-04-20-eau.md` | Loi n° 04-20 du 25 décembre 2004 | `Loi-04-20.pdf` ✅ |
+| `loi-05-12-eau-ressources.md` | Loi n° 05-12 du 4 août 2005 | `loi-05-12.pdf` ✅ |
+| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | `loi-18-11.pdf` ✅ |
+| `decret-24-196.md` | Décret exécutif n° 24-196 | `decret-24-196.pdf` ✅ *(nouveau)* |
 
 ---
 
