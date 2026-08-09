@@ -9,7 +9,10 @@
 **Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)  
 **Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14  
 **Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
-**Modifié par :** Décret exécutif n° 24-196 du 5 Dhou El Hidja 1445 correspondant au 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés  
+**Modifié par :**
+- Décret exécutif n° 22-167 — voir `decret-22-167-etablissements-classes-modification.md`
+- Décret exécutif n° 24-196 du 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés — voir `decret-24-196-etablissements-classes-modification.md`
+
 **Date de cette conversion :** 2026-08-09  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ
 
@@ -175,7 +178,7 @@ Les études de danger sont réalisées, à la charge du promoteur, par des burea
 
 ### Article 14
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Les points 1 à 7 restent sans changement ; les points 8, 9 et 10 sont renumérotés et reformulés (ajout du mot « lisible » sur les cartes et plans).
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 L'étude de danger doit comporter les éléments suivants :
 
@@ -269,7 +272,7 @@ En cas de retrait de l'autorisation d'exploitation de l'établissement classé, 
 
 ### Article 24
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Suppression du délai de 60 jours avant mise en exploitation ; simplification des mentions obligatoires (suppression du volume d'activités et du numéro de rubrique dans la déclaration elle-même) ; ajout de la nature de la déclaration (établissement projeté, existant ou modifié).
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 La déclaration d'exploitation d'un établissement classé de quatrième catégorie, est adressée au président de l'assemblée populaire communale territorialement compétent.
 
@@ -285,7 +288,7 @@ Cette déclaration doit mentionner expressément :
 
 ### Article 25
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Les deux premiers documents (plan de situation et plan de masse) restent sans changement. Le rapport unique est restructuré en trois sous-points distincts : rubrique de nomenclature, procédés/produits dangereux, mode de traitement des rejets et déchets.
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 La déclaration d'exploitation d'un établissement classé de quatrième catégorie doit être accompagnée des documents suivants :
 
@@ -303,7 +306,7 @@ La déclaration d'exploitation d'un établissement classé de quatrième catégo
 
 ### Article 26
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Remplacement du régime de refus motivé par un régime d'acceptation par décision du président de l'APC après avis des services de l'environnement et du secteur concerné ; introduction d'un délai de réponse de 60 jours ; introduction d'un recours au wali dans un délai de 10 jours après notification du refus.
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 La déclaration d'exploitation de l'établissement classé de quatrième catégorie est acceptée par décision du président de l'assemblée populaire communale territorialement compétent, après avis des services de l'environnement et du secteur concerné par l'activité.
 
@@ -325,11 +328,11 @@ Toute modification structurelle ou conjoncturelle dans l'exploitation, le foncti
 
 ### Article 28
 
-Il est institué, au niveau de chaque wilaya, une commission de contrôle des établissements classés de wilaya, dénommée dans le présent décret «la commission».
+Il est institué, au niveau de chaque wilaya, une commission de contrôle des établissements classés de wilaya, dénommée dans le présent décret «laccommission».
 
 ### Article 29
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Deux membres modifiés : « directeur de la santé et de la population de wilaya » remplacé par « directeur de la santé de wilaya » ; « représentant de l'agence nationale de développement de l'investissement » remplacé par « représentant de l'agence algérienne de la promotion de l'investissement ». Les autres membres restent sans changement.
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 La commission, présidée par le wali territorialement compétent ou par son représentant, est composée :
 
@@ -469,7 +472,7 @@ La commission saisie du plan de dépollution en contrôle l'exécution et s'assu
 
 ### Article 44
 
-> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Suppression de l'obligation d'audit environnemental ; remplacement par une obligation de régularisation (autorisation ou déclaration) dans un délai de 3 ans à compter de la promulgation du décret 24-196 (soit jusqu'au 11 juin 2027 environ).
+> ⚠️ **Modifié par Décret n° 24-196 du 11 juin 2024** — voir `decret-24-196-etablissements-classes-modification.md`
 
 Tout exploitant d'un établissement classé existant n'ayant pas fait l'objet d'autorisation ou de déclaration d'exploitation, doit procéder à la régularisation de sa situation, dans un délai n'excédant pas trois (3) ans, à compter de la date de promulgation du présent décret.
 
@@ -511,40 +514,8 @@ Fait à Alger, le 4 Joumada El Oula 1427 correspondant au 31 mai 2006.
 
 ## Contrôle de séquence
 
-Articles présents dans le PDF source (JORADP JO n° 37, pages 8–14) et modifications intégrées (Décret 24-196, JORADP n° 42/2024) :
-
 **Art. 1 à 50 — tous présents et transcrits dans l'ordre.**
 
-Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — **Art. 14 ✏️** — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — **Art. 24 ✏️** — **Art. 25 ✏️** — **Art. 26 ✏️** — Art. 27 — Art. 28 — **Art. 29 ✏️** — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — **Art. 44 ✏️** — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50
+Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — **Art. 14 ⚠️** — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — **Art. 24 ⚠️** — **Art. 25 ⚠️** — **Art. 26 ⚠️** — Art. 27 — Art. 28 — **Art. 29 ⚠️** — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — **Art. 44 ⚠️** — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50
 
-✏️ = article modifié par le Décret n° 24-196 du 11 juin 2024. Aucun article absent. Aucun gap dans la numérotation.
-
-**Structure du décret :**
-- Chapitre I (Dispositions préliminaires) : Art. 2–3
-- Chapitre II (Régime de l'autorisation d'exploitation) : Art. 4–23
-  - Section 1 (Dispositions générales) : Art. 4
-  - Section 2 (Demande d'autorisation) : Art. 5–10
-  - Section 3 (Études et notices d'impact) : Art. 11
-  - Section 4 (Études de danger) : Art. 12–15
-  - Section 5 (Accord préalable) : Art. 16–18
-  - Section 6 (Délivrance, suspension, retrait) : Art. 19–23
-- Chapitre III (Régime de déclaration — 4e catégorie) : Art. 24–27
-- Chapitre IV (Institution et contrôle) : Art. 28–43
-  - Section 1 (Commission de contrôle de wilaya) : Art. 28–34
-  - Section 2 (Contrôle des établissements classés) : Art. 35–40
-  - Section 3 (Arrêt d'exploitation) : Art. 41–43
-- Chapitre V (Dispositions transitoires) : Art. 44–48
-- Chapitre VI (Dispositions finales) : Art. 49–50
-
----
-
-## Tableau des modifications
-
-| Article | Instrument modificatif | Date JO | Nature de la modification |
-|---|---|---|---|
-| Art. 14 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Ajout points 8, 9 et 10 (plans lisibles) ; points 1–7 inchangés |
-| Art. 24 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : suppression délai 60j avant exploitation ; simplification des mentions ; ajout nature de la déclaration |
-| Art. 25 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Restructuration du rapport en 3 sous-points distincts |
-| Art. 26 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : régime d'acceptation par décision APC ; délai de réponse 60j ; recours au wali sous 10j |
-| Art. 29 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Remplacement « santé et de la population » → « santé » ; ANDI → AAPI |
-| Art. 44 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : obligation de régularisation en 3 ans (vs. audit environnemental en 2 ans) |
+⚠️ = article modifié par Décret n° 24-196 du 11 juin 2024 — voir `decret-24-196-etablissements-classes-modification.md`. Aucun article absent. Aucun gap dans la numérotation.
