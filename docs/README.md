@@ -1,5 +1,18 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 17:27 WAT — Perplexity — W34-FIX complete; loi-09-03 fully restored
+- **Phases closed:** W34 (FAILED then FIXED — see below)
+- **Files changed:** `legal_refs/loi-09-03-protection-consommateur.md` (commits `4e994e86`, `566a5e28`)
+- **Critical finding:**
+  - W34 goal: patch Art.80–95 in loi-09-03 with verbatim text from JO N°15/2009 PDF.
+  - W34 commit `4e994e86` — **DESTRUCTIVE**: content param silently truncated at Art.47, -249 lines lost. Caught immediately by diff gate (-249 > 20 threshold).
+  - Root cause: `create_or_update_file` has an undocumented ~25 KB content limit. File was ~35 KB. The API returns HTTP 200 with truncated content — no error.
+  - W34-FIX commit `566a5e28` — full Art.1–95 restored + Art.80–95 verbatim from PDF + Titres V & VI + amendment table. Size: 34,321 bytes. Diff: +169/-76 ✅
+  - **New space instructions added by user:** SIZE GUARD (>20K chars → use push_files) + post-push size verification.
+  - **Who made the mistakes:** Two separate Perplexity sessions. Prior session (W32) wrote paraphrased Art.80–95. This session (W34) truncated the file during fix. Both corrected.
+- **Docs updated:** README + STRATEGIC_PLAN reflect W34-FIX closed state.
+- **Queue status:** W19 open (parallel — do not touch). Next identifier: **W35.**
+
 ## 2026-08-09 16:11 WAT — Perplexity — W32 CORRECTED; docs reflect real state
 - **Phases closed:** (none new)
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc correction only)
@@ -73,8 +86,9 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete + amendment table. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
-| **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted to ca6fc9ec. Art.80–85 NOT PDF-corrected. File is complete Art.1–95, NON VÉRIFIÉ. PDF correction = future W33+ targeted patch. |
+| **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |
