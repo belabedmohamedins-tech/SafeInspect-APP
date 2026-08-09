@@ -92,6 +92,7 @@
 | W37 | Full instrument cross-reference audit report | 2026-08-09 | `docs/AUDIT_COVERAGE_REPORT.md` pushed. 13 missing instruments catalogued. Commit `d0da8c0e`. |
 | **W38** | **F1: Wire rubrique fallback into inspection flow** | **2026-08-09** | **Confirmed clean by direct read. `facilities.tsx` passes `rubrique` (comment `// W38`). `getCriteriaByRubriqueCategory()` exists in `criteriaData.ts`. Param chain: start → categories → facilities → checklist confirmed. No code change needed.** |
 | **W39** | **F3: Décret 91-05 citation cluster — 6 articles corrected** | **2026-08-09** | **Code already in `baseGeneralCriteria.ts` with W39 comments. TSC 0 + Jest 0 failures — user-confirmed gate passed 23:11 WAT.** |
+| **W40** | **F4: Loi 01-19 citation cluster — BGN-04-06 + BGN-04-07** | **2026-08-09** | **BGN-04-06: Art.32→Art.19 + Décret 09-19 Arts.4-8→Art.2+Art.6. BGN-04-07: Art.30→Art.11+[À VÉRIFIER]+Décret 07-205. Code in `baseGeneralCriteria.ts` SHA `9d11384`. Confirmed by direct read. No code change needed.** |
 
 ---
 
@@ -100,8 +101,7 @@
 | Phase | Priority | Title | Files | Blocker / Source | Agent |
 |---|---|---|---|---|---|
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
-| **W40** | 🟠 P1 | F4 + Legacy-F3: Loi 01-19 citation-offset cluster + BGN-04-06 Décret 09-19 article fix | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F4: BGN-04-06 Art.32→Art.19 or 21; BGN-04-07 Art.30→Art.15; SLH-05-04 Art.34→Loi 03-10 Art.30 (already there); SLH-05-05 Art.17→Art.15 or 16. Legacy-F3: BGN-04-06 Décret 09-19 Art.4–8→Art.2+6 (full citation rewrite needed — two independent errors in same criterion). | Perplexity (legalRef string changes) |
-| **W41** | 🟠 P2 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
+| **W41** | 🟠 P1 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
 | **W42** | 🟠 P2 | F7: Cross-file consistency — abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | Resolve once: unify wastewater limit confidence tags ([À VÉRIFIER] or settled) across both files. Verify Décret 04-82 existence + Arts.6,9 (new instrument). If confirmed, upgrade `abattoirCriteria.ts` citations to match. | Perplexity (after decret-06-141 conversion in W36/W19) |
 | **W36** | 🟠 P2 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-industriels-liquides.md` | STUB exists. Verbatim pending. Unblocks W42. | Other conversation |
 | **W37** | 🟠 P3 | Convert 8 missing `legal_refs/` files (audit list) | `legal_refs/decret-06-138, decret-09-335, decret-05-315, decret-07-145, decret-11-125, decret-21-430, loi-18-11, etc.` | See `docs/AUDIT_COVERAGE_REPORT.md` for priority order. | Other conversation |
@@ -119,8 +119,7 @@
 ## Execution Order
 
 ```
-W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster) ← NEXT
-→ W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion)
+W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion) ← NEXT
 → W36 (other conversation, decret-06-141 PDF conversion)
 → W42 (Perplexity, unify abattoir/slaughterhouse after W36)
 → W37 (other conversation, remaining 8 legal_refs files)
@@ -131,8 +130,8 @@ W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster) ← NEXT
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W39 (all sub-items except W19/W36/W37 open).
-- **Open: W19, W36, W37, W40, W41, W42.**
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W40 (all sub-items except W19/W36/W37 open).
+- **Open: W19, W36, W37, W41, W42.**
 - **Next new phase identifier: W43.**
 - Never reuse a closed phase letter.
 
@@ -147,7 +146,7 @@ W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster) ← NEXT
 | Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ⚠️ STUB — W36 OPEN |
 | Abattoir wastewater annex | Décret 06-141 Annex II | Annex II g/tonne | ⚠️ [À VÉRIFIER] — W10 closed Option C |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
-| Waste collector accreditation | Décret 09-19 | Art. 2 (accreditation), Art. 6 (validity) | ⚠️ W40 — BGN-04-06 cites Art.4–8 — needs rewrite |
+| Waste collector accreditation | Décret 09-19 | Art. 2 (scope) + Art. 6 (conditions) | ✅ CLOSED — W40 |
 | Healthcare waste | Décret 03-478 | Art. 3 | ⚠️ NO FILE — W37 |
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
 | Fire safety — equipment | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 |
@@ -173,10 +172,10 @@ W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster) ← NEXT
 | Décret 91-05 noise limit (BGN-09-01) | Art. 15 | ✅ CLOSED — W39 | |
 | Loi 03-10 EIE range (BGN-10-01) | Art. 15–22 WRONG | Should be Art. 14–21 | ⚠️ W41 — fix pending |
 | Loi 03-10 Class-1 auth (BGN-08-06) | Art. 18 WRONG | Should be Art. 63 + Art. 77 | ⚠️ W41 — fix pending |
-| Loi 01-19 hazardous waste (BGN-04-06) | Art. 32 WRONG | Should be Art. 19 or 21 | ⚠️ W40 — fix pending |
-| Loi 01-19 self-incineration ban (BGN-04-07) | Art. 30 WRONG | Should be Art. 15 | ⚠️ W40 — fix pending |
-| Loi 01-19 SLH-05-05 container (slaughter) | Art. 17 WRONG | Should be Art. 15 or 16 | ⚠️ W40 — fix pending |
-| Décret 09-19 accreditation (BGN-04-06) | Art. 4–8 WRONG | Should be Art. 2 + Art. 6 | ⚠️ W40 — full citation rewrite |
+| Loi 01-19 hazardous waste producer (BGN-04-06) | Art. 19 (declaration obligation) | ✅ CLOSED — W40 |
+| Loi 01-19 self-incineration ban (BGN-04-07) | Art. 11 + [À VÉRIFIER] | ✅ CLOSED — W40 (explicit prohibition art. still open LEGAL-VERIFY) |
+| Décret 09-19 accreditation (BGN-04-06) | Art. 2 (scope) + Art. 6 (conditions) | ✅ CLOSED — W40 |
+| Loi 01-19 SLH-05-05 container (slaughter) | Art. 17 WRONG | Should be Art. 15 or 16 | ⚠️ W41 — fix pending |
 | BGN-02-06 ventilation | Décret 91-05 Art.11 | correct (narrow) | ✅ VERIFIED — W11 |
 | BFD-08-01 traceability | Loi 09-03 Art.12+6 | correct | ✅ VERIFIED — W16 |
 | semiPharmaCriteria Loi 18-11 | Arts.104/105/107 — NO FILE | — | ⚠️ NO FILE — W37 |

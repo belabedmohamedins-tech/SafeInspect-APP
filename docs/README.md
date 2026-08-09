@@ -1,5 +1,20 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 23:44 WAT — Perplexity — W40 closed (confirmed by direct code read)
+- **Phases closed:** W40
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already in `baseGeneralCriteria.ts`)
+- **Critical finding:**
+  - W40 goal: correct BGN-04-06 (Loi 01-19 Art.32→Art.19 + Décret 09-19 Arts.4-8→Art.2+Art.6) and BGN-04-07 (Loi 01-19 Art.30→Art.11+[À VÉRIFIER]).
+  - Direct read of `src/criteria/baseGeneralCriteria.ts` (SHA `9d11384066c1588f4b0239a83df5c53536c476c4`) confirms ALL W40 fixes present with `// W40 (2026-08-09)` comment block:
+    - BGN-04-06: `Art.19` (hazardous waste producer declaration) + Décret 09-19 `Art.2` (scope) + `Art.6` (accreditation conditions) ✅
+    - BGN-04-07: `Art.11` (disposal conditions — no emissions/danger) + `Décret 07-205` + `[À VÉRIFIER — W40 مفتوح]` open LEGAL-VERIFY tag ✅
+  - Code was already committed in the previous session. No code change needed this session.
+  - Confirmed clean by direct read — W40 CLOSED.
+- **Docs updated:** README + STRATEGIC_PLAN W40 → ✅ CLOSED.
+- **Queue status:** W40 closed. Next up: W41 (Loi 03-10 Art range fixes + SLH-08-01 deletion, Perplexity).
+- **Open LEGAL-VERIFY:** BGN-04-07 explicit prohibition article for unlicensed on-site incineration of hazardous/medical waste still not found. Must be resolved in W41 or dedicated sub-phase before [À VÉRIFIER] is cleared.
+- **Next identifier: W43.**
+
 ## 2026-08-09 23:11 WAT — Perplexity — W39 closed (TSC+Jest gate passed by user)
 - **Phases closed:** W39
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already committed in prior session)
@@ -116,13 +131,13 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W40** | ✅ CLOSED | — | F4: Loi 01-19 citation cluster — BGN-04-06 Art.19+Décret09-19 Art.2+6; BGN-04-07 Art.11+[À VÉRIFIER]. Confirmed by direct read SHA `9d11384`. |
 | **W39** | ✅ CLOSED | — | F3: Décret 91-05 — 6 wrong article citations corrected in `baseGeneralCriteria.ts`. TSC+Jest gate passed. |
 | **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end — `facilities.tsx` passes `rubrique` to checklist; `getCriteriaByRubriqueCategory` called in resolver. Confirmed clean by direct read. |
 | **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete + amendment table. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |
-| W40 | 🟠 OPEN | P1 | Loi 01-19 citation-offset cluster + Décret 09-19 BGN-04-06 rewrite |
-| W41 | 🟠 OPEN | P2 | Loi 03-10 range fixes + SLH-08-01 deletion |
+| W41 | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |
