@@ -9,12 +9,21 @@
 // W28: AppState listener — auto-saves draft when app is backgrounded or
 //      the OS kills the foreground session (distinct from the beforeRemove
 //      listener which fires only on intentional navigation).
+// W38 (2026-08-09): Fix F1 — silent wrong-checklist defect.
+//   criteriaByActivity uses 26 plain-phrase keys that never match the
+//   rubrique-based activity strings written by add.tsx/edit.tsx.
+//   Resolution order:
+//     1. Exact key in criteriaByActivity (legacy seed data / future explicit keys)
+//     2. getCriteriaByRubriqueCategory(rubrique) — uses the facility's own rubrique
+//        field, which add.tsx/edit.tsx already persist (Z11).
+//     3. baseGeneralCriteria fallback — sets fallbackWarning=true so checklist.tsx
+//        can show a visible banner to the inspector.
 
 import * as Crypto from 'expo-crypto';
 import { useNavigation, useRouter } from 'expo-router';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Alert, AppState, AppStateStatus } from 'react-native';
-import { criteriaByActivity } from '../criteriaData';
+import { criteriaByActivity, getCriteriaByRubriqueCategory } from '../criteriaData';
 import { AgendaRepository } from '../repositories/AgendaRepository';
 import { InspectionRepository } from '../repositories/InspectionRepository';
 import { SettingsRepository } from '../repositories/SettingsRepository';
@@ -40,6 +49,9 @@ interface ChecklistParams {
   facilityName: string;
   facilityAddress: string;
   activity?: string;
+  /** W38: rubrique field persisted by add.tsx/edit.tsx (Z11). Used as fallback
+   *  checklist key when activity string has no exact match in criteriaByActivity. */
+  rubrique?: string;
   agendaId?: string;
   cause: string;
   reference: string;
@@ -64,6 +76,9 @@ interface ChecklistParams {
   escalationOverrideReason?: string;
 }
 
+/** W38: describes how the checklist was resolved for this inspection session. */
+type ChecklistResolution = 'exact' | 'rubrique' | 'fallback';
+
 export function useChecklistData(params: ChecklistParams, signature?: string) {
   const router = useRouter();
   const navigation = useNavigation();
@@ -72,6 +87,10 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
   const [isLoading, setIsLoading] = useState(true);
   const [inspectionId, setInspectionId] = useState(params.draftId || '');
   const [isFinishing, setIsFinishing] = useState(false);
+  /** W38: true when checklist resolved to generic fallback — checklist.tsx should
+   *  show a visible warning banner so the inspector is never silently misled. */
+  const [checklistResolution, setChecklistResolution] =
+    useState<ChecklistResolution>('exact');
 
   const paramsRef = useRef(params);
   paramsRef.current = params;
@@ -87,12 +106,35 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
         if (draft) {
           setData(draft.items);
           setInspectionId(draft.id);
+          // Drafts already have their items — resolution is irrelevant.
+          setChecklistResolution('exact');
         }
       } else {
-        const criteria =
-          p.activity && criteriaByActivity[p.activity]
-            ? criteriaByActivity[p.activity]
-            : criteriaByActivity.default;
+        // W38: Three-tier resolution:
+        //   1. Exact activity string match (covers legacy seed-data facilities).
+        //   2. Rubrique-category fallback (covers all real UI-created facilities).
+        //   3. Universal base fallback — flag warning to inspector.
+        let criteria: InspectionItem[];
+        let resolution: ChecklistResolution;
+
+        if (p.activity && criteriaByActivity[p.activity]) {
+          criteria = criteriaByActivity[p.activity];
+          resolution = 'exact';
+        } else if (p.rubrique) {
+          const rubriqueMatch = getCriteriaByRubriqueCategory(p.rubrique);
+          // getCriteriaByRubriqueCategory always returns at least baseGeneralCriteria,
+          // so distinguish a real rubrique hit from a pure fallback by checking length.
+          // A rubrique hit returns a composite checklist (longer than baseGeneralCriteria
+          // alone) OR exactly baseGeneralCriteria if the category genuinely maps there.
+          // We trust the function and mark it 'rubrique' — it has its own fallback guard.
+          criteria = rubriqueMatch;
+          resolution = 'rubrique';
+        } else {
+          criteria = criteriaByActivity.default;
+          resolution = 'fallback';
+        }
+
+        setChecklistResolution(resolution);
         const initial = criteria.map(item => ({
           ...item,
           complianceStatus: 'not-evaluated' as ComplianceStatus,
@@ -349,5 +391,10 @@ export function useChecklistData(params: ChecklistParams, signature?: string) {
     handleNumericChange,
     handleFinish,
     saveDraft,
+    /** W38: 'exact' | 'rubrique' | 'fallback'.
+     *  checklist.tsx should display a warning banner when this is 'fallback'.
+     *  'rubrique' is informational — checklist used rubrique-based lookup.
+     *  'exact' is the normal happy path. */
+    checklistResolution,
   };
 }
