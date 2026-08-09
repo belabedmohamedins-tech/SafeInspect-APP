@@ -12,19 +12,13 @@
  *   - Lines tagged [MANQUANT] or [À VÉRIFIER]
  *
  * Regex design (W31-1 fix):
- *   Previous regex required whitespace before "art" — this caused bold
- *   markdown headers (**Art. N.**) to be missed entirely because the **
- *   sits directly against the word with no preceding space.
+ *   Tolerates bold markdown (**Art. N.**), *Article N :*, plain Article 12.
+ *   Excludes cross-references to OTHER laws inside body text, e.g.:
+ *     "article 429 du code pénal" — matched by checking the line does NOT
+ *     contain 'code pénal', 'code de procédure', 'code civil', etc.
  *
- *   Fixed regex tolerates:
- *     - Leading asterisks (bold markdown: **Art. or *Art.)
- *     - "Art." and "Article" and plural "Articles"
- *     - Period OR colon as terminator (Art. N. and Art. N :)
- *     - No terminator (Article 12 with no punctuation)
- *     - Case-insensitive
- *
- *   Regex: /(?:^|[\s*])\*{0,2}(article?s?)\.?\s*(\d+)/gim
- *   Simplified to:  /\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/gim
+ *   Per-line approach: split content by line, skip lines that are
+ *   cross-references to external codes before applying the regex.
  */
 
 const fs   = require('fs');
@@ -33,21 +27,39 @@ const path = require('path');
 const DIR = path.resolve(__dirname);
 
 // Matches: **Art. 12**, *Article 3 :*, Art.5, Article 12, Articles 3 à 7, etc.
-// Does NOT match bare numbers or unrelated occurrences of "art".
 const ARTICLE_RE = /\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/gim;
+
+// Lines containing these strings are cross-references to OTHER codes/laws— skip them.
+const CROSS_REF_PATTERNS = [
+  /code\s+pénal/i,
+  /code\s+de\s+procédure/i,
+  /code\s+civil/i,
+  /code\s+du\s+travail/i,
+  /code\s+de\s+commerce/i,
+  /loi\s+n[\u00b0°]?\s*\d{2}-\d{2}/i,   // references to other laws: "loi n° 18-09"
+  /décret\s+ex[eé]cutif\s+n[\u00b0°]?\s*\d{2}-\d{3}/i, // cross-dec refs in body
+];
+
+function isCrossRef(line) {
+  return CROSS_REF_PATTERNS.some(p => p.test(line));
+}
 
 const MANQUANT_RE  = /\[MANQUANT/gi;
 const AVERIFIER_RE = /\[À VÉRIFIER/gi;
 
 function auditFile(filePath) {
-  const content = fs.readFileSync(filePath, 'utf8');
+  const content  = fs.readFileSync(filePath, 'utf8');
   const filename = path.basename(filePath);
+  const lines    = content.split('\n');
 
   const numbers = new Set();
-  let match;
-  ARTICLE_RE.lastIndex = 0;
-  while ((match = ARTICLE_RE.exec(content)) !== null) {
-    numbers.add(parseInt(match[1], 10));
+  for (const line of lines) {
+    if (isCrossRef(line)) continue;   // skip cross-references to other codes
+    let match;
+    ARTICLE_RE.lastIndex = 0;
+    while ((match = ARTICLE_RE.exec(line)) !== null) {
+      numbers.add(parseInt(match[1], 10));
+    }
   }
 
   const sorted = Array.from(numbers).sort((a, b) => a - b);
@@ -65,6 +77,19 @@ function auditFile(filePath) {
   const averifierCount = (content.match(AVERIFIER_RE) || []).length;
 
   return { filename, sorted, max, gaps, manquantCount, averifierCount };
+}
+
+function gapNote(filename, gaps) {
+  // Known benign gap patterns — add notes so the reader doesn’t panic.
+  if (filename.includes('decret-06-198') && gaps.some(g => g >= 51))
+    return ' (gaps likely = Annexes, not numbered articles)';
+  if (filename.includes('decret-09-19') && gaps.some(g => g >= 18))
+    return ' (gap expected: Art.85 = final abrogation clause)';
+  if (filename.includes('loi-19-02') && gaps.some(g => g >= 43))
+    return ' (partial file — only key articles extracted)';
+  if (filename.includes('loi-01-19') && gaps.some(g => g >= 73))
+    return ' (partial file — only key articles extracted)';
+  return '';
 }
 
 function main() {
@@ -99,7 +124,8 @@ function main() {
       console.log(`   Numbers    : ${r.sorted.slice(0, 20).join(', ')}${r.sorted.length > 20 ? ' …' : ''}`);
     }
     if (r.gaps.length) {
-      console.log(`   ⚠ Gaps     : ${r.gaps.slice(0, 20).join(', ')}${r.gaps.length > 20 ? ` … (${r.gaps.length} total)` : ''}`);
+      const note = gapNote(r.filename, r.gaps);
+      console.log(`   ⚠ Gaps     : ${r.gaps.slice(0, 20).join(', ')}${r.gaps.length > 20 ? ` … (${r.gaps.length} total)` : ''}${note}`);
     }
     if (r.manquantCount)  console.log(`   [MANQUANT] : ${r.manquantCount} occurrence(s)`);
     if (r.averifierCount) console.log(`   [À VÉRIF.] : ${r.averifierCount} occurrence(s)`);
