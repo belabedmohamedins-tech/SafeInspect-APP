@@ -1,11 +1,14 @@
 // src/__tests__/criteriaData.test.ts
 // W39: allCriteria was removed in W20 (zero usages). This test file is updated
 // to import individual arrays and build a combined list for the same assertions.
+// W39b: corrected export names to match actual source files:
+//   abattoirCriteria → abattoirSpecificCriteria (renamed W2 2026-08-07)
+//   bakeryCriteria   → bakerySpecificCriteria   (renamed W4 2026-08-08)
 import {
-  abattoirCriteria,
+  abattoirSpecificCriteria,
 } from '../criteria/abattoirCriteria';
 import {
-  bakeryCriteria,
+  bakerySpecificCriteria,
 } from '../criteria/bakeryCriteria';
 import {
   baseGeneralCriteria,
@@ -21,8 +24,8 @@ import { InspectionItem } from '../types';
 // Aggregate here the same way the barrel would have — enough to verify the
 // contract without re-implementing the removed allCriteria export.
 const allCriteria: InspectionItem[] = [
-  ...abattoirCriteria,
-  ...bakeryCriteria,
+  ...abattoirSpecificCriteria,
+  ...bakerySpecificCriteria,
   ...baseGeneralCriteria,
   ...baseFoodCriteria,
   ...gplCriteria,

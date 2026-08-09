@@ -2,6 +2,8 @@
 // W30: full coverage of suggestDecision() decision tree.
 // W39: ViolationProfile requires `total` field — added to all violation objects.
 //      DifferentialView has no `persisted` field — renamed to `stillFailing`.
+// W39b: scoring() helper was missing rawGrade, evaluatedCount, applicableCount,
+//       completionRate — all required by ScoringResult. Added with safe defaults.
 import { suggestDecision } from '../services/decisionSupport';
 import type { ScoringResult } from '../utils/scoringUtils';
 import type { DifferentialView } from '../services/differentialView';
@@ -12,11 +14,16 @@ function scoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
   return {
     score: 85,
     grade: 'B',
+    rawGrade: 'B',
     riskLevel: 2,
     violations: { high: 0, medium: 0, low: 0, total: 0 },
     criticalOverride: false,
+    evaluatedCount: 10,
+    applicableCount: 10,
+    completionRate: 1.0,
     nextInspectionDays: 180,
     incomplete: false,
+    disclaimer: '',
     ...overrides,
   };
 }
@@ -42,7 +49,7 @@ describe('suggestDecision', () => {
 
   // ─── Grade A — close-file ────────────────────────────────────────────────
   it('Grade A → close-file, urgency low', () => {
-    const result = suggestDecision(scoring({ grade: 'A', score: 95 }));
+    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A', score: 95 }));
     expect(result.action).toBe('close-file');
     expect(result.urgency).toBe('low');
     expect(result.criticalOverride).toBe(false);
@@ -50,7 +57,7 @@ describe('suggestDecision', () => {
   });
 
   it('Grade A with no diff → legalBasis contains art.44', () => {
-    const result = suggestDecision(scoring({ grade: 'A' }), null);
+    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A' }), null);
     expect(result.legalBasis).toContain('44');
   });
 
@@ -69,7 +76,7 @@ describe('suggestDecision', () => {
   // ─── Grade C — notice ────────────────────────────────────────────────────
   it('Grade C, no unresolved → notice, urgency medium', () => {
     const result = suggestDecision(
-      scoring({ grade: 'C', score: 62 }),
+      scoring({ grade: 'C', rawGrade: 'C', score: 62 }),
       diff({ hasUnresolvedPriorViolations: false }),
     );
     expect(result.action).toBe('notice');
@@ -78,7 +85,7 @@ describe('suggestDecision', () => {
 
   it('Grade C + unresolved prior → formal-warning, urgency high', () => {
     const result = suggestDecision(
-      scoring({ grade: 'C' }),
+      scoring({ grade: 'C', rawGrade: 'C' }),
       diff({ hasUnresolvedPriorViolations: true }),
     );
     expect(result.action).toBe('formal-warning');
@@ -89,7 +96,7 @@ describe('suggestDecision', () => {
   // ─── Grade D — formal-warning (no unresolved) ────────────────────────────
   it('Grade D, no unresolved, <3 high → formal-warning', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', score: 45, violations: { high: 2, medium: 1, low: 0, total: 3 } }),
+      scoring({ grade: 'D', rawGrade: 'D', score: 45, violations: { high: 2, medium: 1, low: 0, total: 3 } }),
       diff({ hasUnresolvedPriorViolations: false }),
     );
     expect(result.action).toBe('formal-warning');
@@ -99,7 +106,7 @@ describe('suggestDecision', () => {
   // ─── Grade D + unresolved — partial-closure ──────────────────────────────
   it('Grade D + unresolved prior → partial-closure', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 1, medium: 0, low: 0, total: 1 } }),
+      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 1, medium: 0, low: 0, total: 1 } }),
       diff({ hasUnresolvedPriorViolations: true }),
     );
     expect(result.action).toBe('partial-closure');
@@ -109,7 +116,7 @@ describe('suggestDecision', () => {
   // ─── Grade D + ≥3 high — immediate-closure ───────────────────────────────
   it('Grade D + 3 high violations → immediate-closure, urgency critical', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 3, medium: 2, low: 0, total: 5 } }),
+      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 3, medium: 2, low: 0, total: 5 } }),
     );
     expect(result.action).toBe('immediate-closure');
     expect(result.urgency).toBe('critical');
@@ -118,7 +125,7 @@ describe('suggestDecision', () => {
 
   it('Grade D + 5 high violations → immediate-closure (takes precedence over unresolved)', () => {
     const result = suggestDecision(
-      scoring({ grade: 'D', violations: { high: 5, medium: 0, low: 0, total: 5 } }),
+      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 5, medium: 0, low: 0, total: 5 } }),
       diff({ hasUnresolvedPriorViolations: true, newViolations: [{ id: 'X', criteria: 'X', severity: 'high', complianceStatus: 'non-compliant' } as any] }),
     );
     expect(result.action).toBe('immediate-closure');
@@ -127,7 +134,7 @@ describe('suggestDecision', () => {
   // ─── Unresolved + new violations — escalate-authority ────────────────────
   it('Unresolved + new violations → escalate-authority, urgency critical', () => {
     const result = suggestDecision(
-      scoring({ grade: 'C' }),
+      scoring({ grade: 'C', rawGrade: 'C' }),
       diff({
         hasUnresolvedPriorViolations: true,
         newViolations: [{ id: 'Y', criteria: 'Y', severity: 'medium', complianceStatus: 'non-compliant' } as any],
@@ -145,7 +152,7 @@ describe('suggestDecision', () => {
   });
 
   it('criticalOverride flag adds reason and is reflected in result', () => {
-    const result = suggestDecision(scoring({ criticalOverride: true, grade: 'C' }));
+    const result = suggestDecision(scoring({ criticalOverride: true, grade: 'C', rawGrade: 'C' }));
     expect(result.criticalOverride).toBe(true);
     expect(result.reasons.some(r => r.includes('حرج'))).toBe(true);
   });
@@ -178,13 +185,13 @@ describe('suggestDecision', () => {
   });
 
   it('actionLabel is always a non-empty string', () => {
-    const result = suggestDecision(scoring({ grade: 'D', violations: { high: 4, medium: 0, low: 0, total: 4 } }));
+    const result = suggestDecision(scoring({ grade: 'D', rawGrade: 'D', violations: { high: 4, medium: 0, low: 0, total: 4 } }));
     expect(typeof result.actionLabel).toBe('string');
     expect(result.actionLabel.length).toBeGreaterThan(0);
   });
 
   it('additionalRefs is an array', () => {
-    const result = suggestDecision(scoring({ grade: 'A' }));
+    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A' }));
     expect(Array.isArray(result.additionalRefs)).toBe(true);
   });
 });
