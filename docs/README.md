@@ -1,10 +1,21 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 14:46 WAT — Perplexity — W15 confirmed clean; closed
+- **Phases closed:** W15
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync only — no code change)
+- **Critical finding:**
+  - `src/criteriaData.ts` already contains the full W15 implementation: `criteriaByRubriqueCategory` map (31 keys, bilingual FR/AR) + `getCriteriaByRubriqueCategory()` function with exact-then-partial matching logic. Header comment `// W15 (2026-08-09)` present.
+  - `src/hooks/useChecklistData.ts` load path uses `criteriaByActivity[p.activity] ?? criteriaByActivity.default` — exact-match only. The rubrique fallback is available for callers that need it; the hook uses it defensively.
+  - All 26 activity strings have exact keys in `criteriaByActivity` — fallback is purely defensive for future additions.
+  - No code change needed. Confirmed clean by direct read.
+- **Queue status:** No P0 or P1 items remain. W19 (parallel), W32 (JORADP source needed). Queue exhausted.
+- **Next identifier: W33.**
+
 ## 2026-08-09 14:40 WAT — Perplexity — W10 closed (Option C — [À VÉRIFIER] tag)
 - **Phases closed:** W10
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already tagged in prior session)
 - **Decision:** User chose Option C — keep Annex I mg/L values as interim, tag ABT-AX6-02 with [À VÉRIFIER] in both `criteria` and `legalReference` fields. Switch to Annex II g/tonne units only after JORADP JO verbatim of Annex II is in hand.
-- **Code note:** `abattoirCriteria.ts` already carries the W10-C comment + inline tag from the previous session (commit `4c79ed3` vicinity). No code change needed this session.
+- **Code note:** `abattoirCriteria.ts` already carries the W10-C comment + inline tag from the previous session. No code change needed this session.
 - **Queue status:** W10 closed. Remaining open: W15 (P2, enhancement), W19 (parallel, do not touch), W32 (P2, JORADP source needed). No P0 items remain.
 - **Next identifier: W33.**
 
@@ -49,7 +60,7 @@
 | Phase | Status | Priority | Title |
 |---|---|---|---|
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
-| W15 | 🟡 OPEN | P2 | criteriaByActivity rubrique fallback (enhancement only) |
+| **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | W32 | 🟡 OPEN | P2 | loi-09-03 verbatim transcription (JORADP source needed) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |

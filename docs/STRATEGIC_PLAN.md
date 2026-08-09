@@ -80,18 +80,18 @@
 | W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W17` present. No change needed. |
 | W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
 | W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain — no specific distance decree exists). `warningMin: 700` graduated alert in place. No change needed. |
-| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 ("كما عُدِّل بالمرسومَيْن 22-167 و 24-196") — never cited as a standalone authority. Citation chain is correct. No change needed. |
-| **W10** | **L-01: Abattoir wastewater Annex II — Option C** | **2026-08-09** | **User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER] in `abattoirCriteria.ts` (tag already applied in prior session). Switch to Annex II g/tonne units only after JORADP JO verbatim verified. No code change this session.** |
+| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 («كما عُدِّل بالمرسومَيْن 22-167 و 24-196») — never cited as a standalone authority. Citation chain is correct. No change needed. |
+| W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER] in `abattoirCriteria.ts` (tag already applied in prior session). Switch to Annex II g/tonne units only after JORADP JO verbatim verified. No code change this session. |
+| **W15** | **criteriaByActivity rubrique-based fallback lookup** | **2026-08-09** | **Confirmed clean by direct read of `src/criteriaData.ts` + `src/hooks/useChecklistData.ts`. `criteriaByRubriqueCategory` map (31 keys, bilingual FR/AR) + `getCriteriaByRubriqueCategory()` function already present. Header comment `// W15 (2026-08-09)` present. All 26 activity strings have exact keys — fallback purely defensive. No code change needed.** |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> ✅ No P0 items remain. All open phases are low-priority or parallel.
+> ✅ No P0 or P1 items remain autonomously actionable. Only W19 (parallel) and W32 (source-blocked) remain.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W15** | 🟡 P2 | criteriaByActivity rubrique-based fallback lookup | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | Enhancement only — not a bug. All 26 activity strings already mapped. |
 | **W32** | 🟡 P2 | loi-09-03: verbatim transcription Art.4–67 + source Art.44–52/80–92 from JO n°15/2009 | `legal_refs/loi-09-03-protection-consommateur.md` | File honest ([RÉSUMÉ]/[MANQUANT] tagged). Needs JORADP JO n°15/2009. Not deceptive — low urgency. |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
 
@@ -107,9 +107,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W14, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items), **W10**.
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W15, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items).
 - Z9 deferred.
-- **Open: W15, W19 (parallel), W32. Next new phase identifier: W33.**
+- **Open: W19 (parallel), W32. Next new phase identifier: W33.**
 - Never reuse a closed phase letter.
 
 ---
@@ -150,3 +150,4 @@
 | Décret 06-198 Art.20 warning tier | allCriteria dead-code removed; 0 [À VÉRIFIER] | — | ✅ CLOSED — W20 |
 | Décret 24-196 citation scope | Always cited as amending decree to 06-198 — never standalone | Various | ✅ VERIFIED — W14 |
 | UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 chain. warningMin:700 in place. | UPD-AX2-01 | ✅ VERIFIED — W13 |
+| criteriaByActivity rubrique fallback | `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` | `src/criteriaData.ts` | ✅ VERIFIED — W15 |
