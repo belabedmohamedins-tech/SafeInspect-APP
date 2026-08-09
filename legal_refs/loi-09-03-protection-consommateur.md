@@ -2,10 +2,10 @@
 ## Relative à la protection du consommateur et à la répression des fraudes
 
 > **Source officielle :** Journal Officiel de la République Algérienne (JORADP) N° 15 — 8 mars 2009
-> **PDF source :** `loi-09-03_compressed.pdf` (JO N° 15 intégral, texte extractible — lu directement 2026-08-09)
-> **Amendements intégrés :** Loi n° 18-09 du 10 juin 2018 (JO N° 35)
+> **PDF source converti :** `loi-09-03-2.pdf` (JO N° 15 intégral, texte extractible)
+> **Amendements intégrés :** Loi n° 18-09 du 10 juin 2018 (JO N° 35) — source : `loi-18-09fr.pdf`
 > **Date de conversion :** 2026-08-09
-> **Statut :** ✅ VÉRIFIÉ — Texte des Art. 1–95 contrôlé ligne à ligne contre le PDF JO N° 15 original. Art. 80–85 corrigés (base PDF) lors de la phase W32.
+> **Statut :** ⚠️ NON VÉRIFIÉ — Vérifier contre le texte JORADP original avant toute décision juridique ou d'application.
 
 ---
 
@@ -27,14 +27,492 @@
 - **étiquetage :** toutes mentions, écritures, indications, marques, labels, images, illustrations ou signes se rapportant à un bien, figurant sur tout emballage, document, écriteau, étiquette, fiche, carte, bague ou collerette accompagnant ou se référant à un produit, quel que soit la forme ou le support l'accompagnant, indépendamment du mode d'apposition ;
 - **exigences spécifiées :** ensemble des spécifications techniques d'un produit, liées à la santé et à la sécurité du consommateur et à la loyauté des échanges, fixées par la réglementation et dont le respect est obligatoire ;
 - **innocuité :** absence totale ou présence dans une denrée alimentaire à des niveaux acceptables et sans dangers, de contaminants, d'adultérants, de toxines naturelles ou de toute autre substance susceptible de rendre l'aliment nocif pour la santé de manière aiguë ou chronique ;
-- **intervenant :** toute personne physique ou morale intervenant dans le processus de mise à la consommation des produits ;
-- **processus de mise à la consommation :** ensemble des étapes de production, d'importation, de stockage, de transport et de distribution aux stades de gros et de détail ;
-- **production :** opérations consistant en l'élevage, la récolte, la cueillette, la pêche, l'abattage, le traitement, la fabrication, la transformation, le montage et le conditionnement d'un produit, y compris son stockage au cours de sa fabrication et avant sa première commercialisation ;
-- **produit :** tout bien ou service susceptible de faire l'objet d'une cession à titre onéreux ou gratuit ;
-- **produit sain, loyal et marchand :** produit exempt de tout défaut et/ou vice caché, présentant une garantie contre toute atteinte à la santé, à la sécurité et/ou aux intérêts matériels et moraux du consommateur ;
-- **produit sûr :** tout produit qui, dans des conditions d'utilisation normales ou raisonnablement prévisibles, y compris de durée, ne présente aucun risque ou seulement des risques réduits à un niveau bas, compatibles avec l'utilisation du produit et considérés comme acceptables dans le respect d'un niveau de protection élevé pour la santé et la sécurité des personnes ;
-- **produit dangereux :** tout produit ne répondant pas à la définition du produit sûr défini ci-dessus ;
-- **rappel du produit :** opération consistant à retirer un produit du processus de sa mise à la consommation par l'intervenant concerné ;
-- **sécurité :** recherche de l'équilibre optimum entre tous les facteurs concernés et visant à réduire les risques de blessures dans toute la mesure de ce qui est applicable ;
-- **service :** toute prestation fournie, autre que la remise d'un produit, même si cette remise peut être l'accessoire ou le support de ladite prestation ;
-- **bien :** tout objet matériel cessible à titre onéreux ou g
+- **intervenant :** tout opérateur économique, personne physique ou morale, qui participe à titre professionnel à un processus de mise à la consommation d'un bien ou d'un service ;
+- **produit :** tout bien ou service offert à la consommation ;
+- **sécurité du produit :** l'absence de tout risque ou la limitation du risque à un niveau bas acceptable lors de l'utilisation du produit ;
+- **conformité :** la satisfaction par un produit des exigences spécifiées ;
+- **garantie :** l'obligation faite à l'intervenant de répondre des défauts du produit vendu ;
+- **service après-vente :** l'ensemble des prestations assurées après la vente d'un produit ;
+- **fraude :** toute tromperie ou tentative de tromperie portant sur la nature, l'espèce, l'origine, la composition, la quantité ou la qualité d'un produit ;
+- **falsification :** l'altération intentionnelle de la nature, de la composition ou de la qualité d'un produit ;
+- **contrefaçon :** la reproduction, l'imitation ou l'utilisation totale ou partielle d'un produit protégé par un droit de propriété intellectuelle, sans l'autorisation de son titulaire.
+
+---
+
+## TITRE II — DE LA PROTECTION DU CONSOMMATEUR
+
+### Chapitre I — De l'obligation d'hygiène, de salubrité et d'innocuité des denrées alimentaires
+
+**Art. 4.** — Tout intervenant est tenu de ne mettre à la consommation que des denrées alimentaires présentant les conditions d'innocuité requises.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 5.** — Il est interdit de mettre à la consommation des denrées alimentaires contenant des contaminants en quantité inacceptable du point de vue de la santé publique et notamment ceux résultant d'une contamination lors de la production, de la fabrication, de la transformation, de la préparation, du traitement, du conditionnement, de l'emballage, du transport ou du stockage desdites denrées.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 6.** — Tout intervenant est tenu de respecter les conditions d'hygiène et de salubrité relatives aux personnels, aux lieux, aux locaux, aux matériels, aux équipements et aux moyens de transport mis en œuvre dans le cadre de son activité.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 7.** — Tout intervenant est tenu de s'assurer que les matériaux et objets entrant en contact avec les denrées alimentaires sont inertes afin de ne pas entraîner de contamination, d'altération ou de toute modification inacceptable de la composition desdites denrées.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 8.** — L'incorporation des additifs alimentaires dans les denrées alimentaires est réglementée.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+### Chapitre II — De l'obligation de la sécurité des produits
+
+**Art. 9.** — Tout intervenant est tenu de ne mettre à la consommation que des produits sûrs.
+
+**Art. 10.** — Tout intervenant est tenu au respect de l'obligation de sécurité du produit qu'il met à la consommation, en ce qui concerne :
+
+- ses caractéristiques, sa composition, son emballage et ses conditions d'assemblage et d'entretien ;
+- l'effet du produit sur d'autres produits au cas où l'on peut raisonnablement prévoir l'utilisation du premier avec les seconds ;
+- sa présentation, son étiquetage, les instructions éventuelles concernant son utilisation et son élimination ainsi que toute autre indication ou information émanant du producteur ;
+- les catégories de consommateurs se trouvant dans des conditions de risque grave au regard de l'utilisation du produit, en particulier les enfants.
+
+Les règles applicables en matière de sécurité des produits, sont fixées par voie réglementaire.
+
+### Chapitre III — De l'obligation de la conformité des produits
+
+**Art. 11.** — Tout produit mis à la consommation doit satisfaire à l'attente légitime du consommateur en ce qui concerne sa nature, son espèce, son origine, ses qualités substantielles, sa composition, sa teneur en principes utiles, son identité, ses quantités, son aptitude à l'emploi et les risques inhérents à son utilisation.
+
+Le produit doit également répondre à l'attente légitime du consommateur quant à sa provenance, aux résultats escomptés, aux spécifications réglementaires de ses emballages, à sa date de fabrication, à sa date limite de consommation, à son mode d'utilisation, aux conditions de sa conservation, aux précautions y afférentes et aux contrôles dont il a fait l'objet.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 :** Alinéa 3 ajouté :
+> « Les spécifications techniques des produits nécessitant un encadrement particulier sont fixées par voie réglementaire. »
+
+**Art. 12.** — Tout intervenant est tenu de procéder aux contrôles de conformité du produit, préalablement à sa mise à la consommation, conformément aux dispositions législatives et réglementaires en vigueur.
+
+Lesdits contrôles sont proportionnels à la nature des opérations à assurer par l'intervenant, au volume et à la variété des produits qu'il met à la consommation, aux moyens dont il doit disposer compte tenu de sa spécialité et des règles et usages communément admis en la matière.
+
+Le contrôle effectué par les agents prévus à l'article 25 de la présente loi ne libère pas l'intervenant de l'obligation de la vérification de la conformité du produit, préalablement à sa mise à la consommation, conformément aux dispositions réglementaires en vigueur.
+
+### Chapitre IV — De l'obligation de la garantie et du service après-vente
+
+**Art. 13.** — L'acquéreur de tout produit consistant en un appareil, un instrument, un véhicule, une machine, un outil ou tout autre bien d'équipement, bénéficie de plein droit d'une garantie.
+
+La garantie s'étend également aux services.
+
+Lorsque le produit présente un défaut, l'intervenant doit, au cours de la période garantie fixée, le remplacer ou rembourser son prix ou réparer le produit ou modifier la prestation à ses frais.
+
+La garantie prévue ci-dessus est due au consommateur et exécutée sans charges supplémentaires.
+
+Toute clause contraire est nulle et de nul effet.
+
+Les conditions et les modalités d'application des dispositions du présent article, sont fixées par voie réglementaire.
+
+**Art. 14.** — Toute autre garantie accordée par l'intervenant, à titre onéreux ou gratuit, n'exclut pas le bénéfice de la garantie légale citée à l'article 13 ci-dessus.
+
+Les clauses et les conditions d'exécution de ces garanties doivent figurer dans un document accompagnant le produit.
+
+**Art. 15.** — Tout acquéreur d'un produit visé à l'article 13 de la présente loi bénéficie du droit à l'essai du produit acquis.
+
+**Art. 16.** — Dans le cadre du service après-vente et après expiration de la période de garantie fixée par voie réglementaire ou dans tous les cas où la garantie ne peut pas jouer, l'intervenant concerné est tenu d'assurer l'entretien et la réparation du produit mis sur le marché.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 :** Alinéa 2 ajouté :
+> « Les conditions et les modalités du service après-vente sont fixées par voie réglementaire. »
+
+### Chapitre V — De l'obligation de l'information du consommateur
+
+**Art. 17.** — Tout intervenant doit porter à la connaissance du consommateur toutes les informations relatives au produit qu'il met à la consommation, par voie d'étiquetage, de marquage ou par tout autre moyen approprié.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 18.** — L'étiquetage, le mode d'emploi, le manuel d'utilisation, les conditions de garantie du produit et toute autre information prévue par la réglementation en vigueur, doivent être rédigés essentiellement en langue arabe et, accessoirement, dans une ou plusieurs autres langues accessibles aux consommateurs, de façon visible, lisible et indélébile.
+
+### Chapitre VI — Des intérêts matériels et moraux des consommateurs
+
+**Art. 19.** — Tout service offert au consommateur ne doit pas nuire à son intérêt matériel et ne doit pas lui causer de préjudice moral.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 :** Article complété, rédigé comme suit :
+> « Art. 19. — Tout produit offert au consommateur ne doit pas nuire à son intérêt matériel et ne doit pas lui causer de préjudice moral.
+>
+> La rétractation est le droit du consommateur à se rétracter, sans motif, pour l'acquisition d'un produit.
+>
+> Le consommateur a le droit de se rétracter sur l'acquisition d'un produit en respectant les conditions du contrat et sans avoir à payer des frais supplémentaires.
+>
+> Les conditions et les modalités d'exercer le droit de rétractation ainsi que les délais et la liste des produits concernés sont fixés par voie réglementaire. »
+
+**Art. 20.** — Sans préjudice des dispositions législatives en vigueur, les offres de crédits à la consommation doivent répondre à l'attente légitime du consommateur en ce qui concerne la transparence de l'offre préalable, la nature, la portée et la durée de l'engagement ainsi que les échéances de remboursement de l'offre ; un contrat en est établi.
+
+Les conditions et les modalités d'offres en matière de crédits à la consommation, sont définies par voie réglementaire.
+
+### Chapitre VII — Des associations de protection des consommateurs
+
+**Art. 21.** — Est association de protection des consommateurs toute association légalement constituée dont le but est d'assurer la protection du consommateur à travers son information, sa sensibilisation, son orientation et sa représentation.
+
+Les associations de protection des consommateurs visées à l'alinéa ci-dessus, peuvent être reconnues d'utilité publique selon les conditions et les modalités prévues par la législation et la réglementation en vigueur.
+
+**Art. 22.** — Nonobstant les dispositions de l'article 1er de l'ordonnance n° 71-57 du 5 août 1971 relative à l'assistance judiciaire, les associations de protection des consommateurs reconnues d'utilité publique peuvent bénéficier de l'assistance judiciaire.
+
+**Art. 23.** — Lorsqu'un ou plusieurs consommateurs ont subi des préjudices individuels, causés par le fait d'un même intervenant et ayant une origine commune, les associations de protection des consommateurs, peuvent se constituer partie civile.
+
+**Art. 24.** — Il est créé un conseil national pour la protection des consommateurs qui émet son avis et propose des mesures qui contribuent au développement et à la promotion de politiques de protection du consommateur.
+
+La composition et les compétences de ce conseil sont déterminées par voie réglementaire.
+
+---
+
+## TITRE III — DE LA RECHERCHE ET DE LA CONSTATATION DES INFRACTIONS
+
+### Chapitre I — Des agents de la répression des fraudes
+
+**Art. 25.** — Outre les officiers de police judiciaire et les autres agents autorisés par des textes spécifiques, sont habilités à rechercher et à constater les infractions aux dispositions de la présente loi, les agents de la répression des fraudes relevant du ministère chargé de la protection du consommateur.
+
+**Art. 26.** — Les agents de la répression des fraudes, visés à l'article 25 ci-dessus doivent être commissionnés conformément aux dispositions législatives et réglementaires en vigueur et prêter par devant le tribunal de leur résidence administrative, le serment suivant :
+
+Attestation en est délivrée par le tribunal et est déposée sur la carte de la commission d'emploi.
+
+Le serment n'est pas renouvelé tant qu'il n'y a pas interruption définitive de la fonction.
+
+Dans le cadre de l'exercice de leurs missions, les agents visés à l'article 25 ci-dessus, doivent décliner leur fonction et présenter leur commission d'emploi.
+
+**Art. 27.** — Les agents visés à l'article 25 ci-dessus, sont protégés contre toute forme de pression ou de menace de nature à entraver l'accomplissement de leurs missions conformément aux dispositions législatives en vigueur.
+
+**Art. 28.** — Les agents de contrôle visés à l'article 25 de la présente loi peuvent, en cas de besoin, solliciter le concours des agents de la force publique qui sont tenus, à la première sollicitation, de leur prêter main forte dans le cadre de l'exercice de leurs fonctions.
+
+En cas de nécessité, ils peuvent faire appel à l'autorité judiciaire territorialement compétente, conformément aux procédures en vigueur.
+
+### Chapitre II — Des procédures de contrôle
+
+**Art. 29.** — Les agents visés à l'article 25 de la présente loi, procèdent, par tout moyen, à tout moment et à tous les stades du processus de mise à la consommation, aux contrôles de la conformité des produits par rapport aux exigences spécifiées les concernant.
+
+**Art. 30.** — Les contrôles prévus par la présente loi sont effectués par des vérifications de documents et/ou d'auditions des intervenants concernés, par des constatations directes au moyen d'examens visuels ou d'appareils de mesure, et complétées le cas échéant, par des prélèvements d'échantillons aux fins d'analyses, de tests ou d'essais.
+
+Le contrôle aux frontières de la conformité des produits importés, est effectué avant dédouanement.
+
+Les conditions et les modalités de contrôle sont fixées par voie réglementaire.
+
+**Art. 31.** — Dans le cadre de leurs missions de contrôle et conformément aux dispositions de la présente loi, les agents visés à l'article 25 ci-dessus, dressent des procès-verbaux dans lesquels ils énoncent les dates et lieux des contrôles effectués, relèvent les faits constatés, les infractions et les sanctions y afférentes.
+
+En outre, les procès-verbaux comportent l'identité et la qualité des agents ayant effectué le contrôle ainsi que l'identité, la filiation, l'activité et l'adresse de l'intervenant concerné par le contrôle.
+
+Les agents, visés à l'article 25 ci-dessus, peuvent joindre aux procès-verbaux tout document ou toute pièce à conviction.
+
+Les procès-verbaux prévus aux alinéas précédents, font foi jusqu'à preuve du contraire.
+
+**Art. 32.** — Les procès-verbaux sont dressés et signés par les agents ayant constaté l'infraction.
+
+Lorsque le procès-verbal est rédigé en sa présence, l'intervenant signe le procès-verbal.
+
+Lorsque le procès-verbal est rédigé en l'absence de l'intervenant ou en cas de refus, mention y est portée.
+
+Les procès-verbaux dressés par les agents visés à l'article 25 ci-dessus, sont inscrits sur un registre tenu à cet effet, coté et paraphé par le président du tribunal territorialement compétent.
+
+La forme et le contenu des procès-verbaux sont fixés par voie réglementaire.
+
+**Art. 33.** — Dans le cadre de leurs missions, les agents visés à l'article 25 de la présente loi, peuvent sans se voir opposer le secret professionnel, consulter tout document technique, administratif, commercial, financier ou comptable ainsi que tout support magnétique ou informatique.
+
+Ils peuvent exiger la communication de ces documents, en quelque main où ils se trouvent et procéder à leur saisie.
+
+**Art. 34.** — Les agents visés à l'article 25 ci-dessus, ont libre accès de jour comme de nuit, y compris les jours fériés, dans les locaux commerciaux, bureaux, annexes, locaux d'expédition ou de stockage et, d'une manière générale, en quelque lieu que ce soit, à l'exception des locaux à usage d'habitation dont l'accès doit se faire conformément aux dispositions du code de procédure pénale.
+
+Leur action s'exerce également durant le transport des produits.
+
+### Chapitre III — Des laboratoires de la répression des fraudes
+
+**Art. 35.** — Dans le cadre de l'application des dispositions de la présente loi, les laboratoires relevant du ministère chargé de la protection du consommateur et de la répression des fraudes, sont habilités à effectuer les analyses, tests et essais au titre de la protection du consommateur et de la répression des fraudes.
+
+**Art. 36.** — Outre les laboratoires visés à l'article 35 ci-dessus, des laboratoires peuvent être agréés conformément à la législation et à la réglementation en vigueur, pour effectuer les analyses, tests et essais prévus à l'article 35 ci-dessus.
+
+Les conditions et les modalités d'agrément des laboratoires sont fixées par voie réglementaire.
+
+Ne sont pas soumis aux dispositions de l'alinéa ci-dessus, les laboratoires qui interviennent dans le cadre de leurs textes de création ou dans des domaines régis par une réglementation spécifique.
+
+**Art. 37.** — Les laboratoires visés aux articles 35 et 36 ci-dessus, sont tenus d'utiliser, dans le cadre de leurs missions, les méthodes fixées par voie réglementaire ou, à défaut, les méthodes issues des normes reconnues au plan international.
+
+**Art. 38.** — Les laboratoires visés aux articles 35 et 36 ci-dessus, établissent des bulletins ou rapports des résultats des analyses, tests ou essais effectués par leurs soins et mentionnent les références des méthodes utilisées.
+
+### Chapitre IV — Des prélèvements d'échantillons
+
+**Art. 39.** — Les prélèvements d'échantillons aux fins d'analyses, tests ou essais prévus à l'article 35 ci-dessus, sont effectués conformément aux dispositions de la présente loi.
+
+Chaque prélèvement donne lieu, séance tenante, à l'établissement d'un procès-verbal de prélèvement d'échantillons par les agents visés à l'article 25 ci-dessus.
+
+Les conditions et les modalités de prélèvement des échantillons, sont fixées par voie réglementaire.
+
+**Art. 40.** — Pour les besoins d'analyses, tests ou essais, trois (3) échantillons homogènes et représentatifs du lot contrôlé, sont prélevés et mis sous scellés.
+
+Le premier échantillon est transmis au laboratoire habilité par la présente loi aux fins d'analyses, tests ou essais. Le deuxième et le troisième échantillons constituent des échantillons témoins, l'un est conservé par les services de contrôle ayant effectué le prélèvement et l'autre est laissé sous la garde de l'intervenant concerné.
+
+L'échantillon détenu par l'intervenant et celui gardé par les agents ayant effectué le prélèvement, sont utilisés en cas d'expertise.
+
+Les échantillons témoins sont maintenus dans les conditions de conservation requises.
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 41.** — Lorsque le produit est rapidement altérable ou lorsqu'en raison de sa nature, de son poids, de sa quantité, de ses dimensions ou de sa valeur, il n'est prélevé qu'un seul échantillon qui est mis sous scellés et transmis immédiatement, aux fins d'analyses, tests ou essais, au laboratoire habilité par la présente loi.
+
+Les modalités d'application des dispositions du présent article, sont fixées par voie réglementaire.
+
+**Art. 42.** — Dans le cadre des études réalisées par les services chargés de la protection du consommateur et de la répression des fraudes, les agents visés à l'article 25 ci-dessus, peuvent procéder au prélèvement d'un seul échantillon.
+
+### Chapitre V — De l'expertise
+
+**Art. 43.** — L'expertise effectuée dans le cadre de la présente loi est contradictoire. Elle est ordonnée et exécutée selon les prescriptions et dans les formes prévues aux articles 143 à 156 du code de procédure pénale, sous réserve des dispositions ci-après.
+
+**Art. 44.** — Le procureur de la République saisit le juge compétent, s'il estime, soit à la suite des rapports ou des procès-verbaux dressés par les agents visés à l'article 25 ci-dessus, soit à la suite des bulletins ou des rapports des laboratoires habilités et, au besoin, après enquête préalable, qu'une poursuite doit être engagée ou une information ouverte.
+
+**Art. 45.** — Dans le cas où la présomption de fraude ou de falsification résulte des analyses, tests ou essais des laboratoires habilités, l'auteur présumé de l'infraction est avisé par le juge compétent qu'il peut prendre communication du bulletin ou du rapport du laboratoire et qu'un délai de huit (8) jours ouvrables lui est imparti pour présenter ses observations et réclamer éventuellement l'expertise. Passé ce délai, l'auteur présumé de l'infraction ne peut plus réclamer l'expertise.
+
+**Art. 46.** — Lorsque l'expertise a été réclamée par l'auteur présumé de l'infraction ou lorsqu'elle a été décidée par la juridiction compétente, deux (2) experts sont choisis ; l'un par la juridiction compétente et l'autre par l'auteur présumé de l'infraction.
+
+Les deux experts (2) sont nommés par la juridiction compétente, conformément aux dispositions prévues par le code de procédure pénale.
+
+A titre exceptionnel et sous réserve de l'accord de la juridiction compétente, l'auteur présumé de l'infraction peut choisir un expert ne figurant pas sur les listes dressées conformément aux dispositions de l'article 144 du code de procédure pénale.
+
+Les deux (2) experts nommés ont les mêmes obligations, les mêmes droits et la même responsabilité et perçoivent la même rémunération dans les conditions prévues par la législation et la réglementation en vigueur.
+
+Le responsable du laboratoire ayant effectué la première analyse, test ou essai peut être nommé en qualité d'expert, dans les conditions fixées par la présente loi.
+
+**Art. 47.** — Pour le choix de l'expert, un délai est imparti par la juridiction compétente à l'auteur présumé de l'infraction, qui a toutefois le droit de renoncer explicitement à ce choix et de s'en rapporter aux conclusions de l'expert nommé par la juridiction.
+
+Si l'intéressé, sans avoir renoncé à ce droit, n'a pas choisi un expert dans le délai imparti, un expert est nommé d'office par la juridiction compétente.
+
+**Art. 48.** — La juridiction compétente remet aux experts les deuxième et troisième échantillons prélevés conformément aux dispositions de l'article 40 de la présente loi.
+
+L'auteur présumé de l'infraction est préalablement mis en demeure par la juridiction compétente, de remettre, sous huitaine, le troisième échantillon laissé à sa garde tel que prévu à l'article 40 de la présente loi.
+
+Si l'auteur présumé de l'infraction ne présente pas le troisième échantillon intact dans ledit délai, il ne doit plus en être fait état à aucun moment et les experts concluent sur la base de l'examen du deuxième échantillon.
+
+**Art. 49.** — Dans le cas où il a été prélevé un seul échantillon conformément aux dispositions de l'article 41 de la présente loi, la juridiction compétente commet immédiatement les experts nommés, pour procéder à un nouveau prélèvement dans les formes prévues à l'article 39 de la présente loi.
+
+**Art. 50.** — En matière de contrôle bactériologique ou de pureté biologique, la juridiction compétente commet les experts nommés pour l'examen en commun du nouvel échantillon prévu à l'article 49 ci-dessus.
+
+Les experts sont choisis, l'un par le juge compétent parmi les responsables des laboratoires habilités conformément aux dispositions prévues par la présente loi et l'autre par l'auteur présumé de l'infraction dans la discipline concernée. Les deux experts sont nommés conformément aux dispositions prévues à l'article 46 de la présente loi.
+
+**Art. 51.** — La juridiction compétente prend toutes mesures pour que le prélèvement et l'expertise qui y fait suite immédiatement, soient effectués par les experts à la date fixée par elle.
+
+Le défaut de l'un des experts n'empêche pas l'accomplissement de l'examen avec les effets qui s'attachent à la procédure contradictoire.
+
+Les deux experts procèdent en commun, à l'examen de cet échantillon.
+
+**Art. 52.** — Les analyses, tests ou essais effectués dans le cadre de la procédure contradictoire, sont réalisés dans les laboratoires habilités conformément aux dispositions prévues par la présente loi.
+
+Les experts doivent employer la ou les méthodes d'analyses utilisées par les laboratoires habilités et procéder aux mêmes analyses, tests ou essais. Ils peuvent toutefois employer d'autres méthodes en complément.
+
+---
+
+## TITRE IV — DE LA RÉPRESSION DES FRAUDES
+
+### Chapitre I — Des mesures conservatoires et du principe de précaution
+
+**Art. 53.** — Les agents visés à l'article 25 de la présente loi, prennent toute mesure conservatoire visant la protection de la santé, de la sécurité et des intérêts du consommateur.
+
+A ce titre, ils peuvent procéder aux refus temporaires ou définitifs d'admission aux frontières des produits importés, à des consignations, à des saisies, à des retraits temporaires ou définitifs et à la destruction des produits ainsi qu'à la suspension temporaire d'activités, conformément aux dispositions prévues par la présente loi.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 :** Alinéa 2 complété — ajout de la fermeture administrative des locaux commerciaux :
+> « A ce titre, les agents peuvent procéder, à l'admission conditionnelle ou à un refus d'admission aux frontières des produits importés, à des consignations, à des saisies, à des retraits temporaires ou définitifs et à la destruction des produits ainsi qu'à la suspension temporaire d'activités ou à la fermeture administrative des locaux commerciaux, conformément aux dispositions prévues par la présente loi. »
+
+Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+
+**Art. 54.** — Le refus temporaire d'admission aux frontières d'un produit importé, est prononcé en cas de suspicion de non-conformité du produit concerné, en vue de vérifications approfondies ou pour mise en conformité.
+
+Le refus définitif d'admission aux frontières d'un produit importé est prononcé en cas de confirmation soit par constat direct, soit après vérifications approfondies, de non conformité du produit.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 :** Alinéas ajoutés :
+> « L'admission conditionnelle aux frontières au sens de la présente loi d'un produit importé est prononcée [...]
+> L'admission conditionnelle pour une mise en conformité du produit importé est autorisée au niveau des zones sous douane, des établissements spécialisés ou dans les locaux de l'intervenant à condition qu'il ne s'agisse pas de la sécurité et de la sûreté des produits.
+> L'admission conditionnelle pour une mise en conformité au niveau des établissements spécialisés ou dans les locaux de l'intervenant permet le dédouanement du produit objet de mise en conformité.
+> La mise à la consommation des produits soumis à l'admission conditionnelle est interdite jusqu'à sa mise en conformité.
+> Le refus d'admission aux frontières..... (le reste sans changement). »
+
+**Art. 55.** — La consignation consiste à suspendre, par décision de l'administration chargée de la protection du consommateur et de la répression des fraudes, la mise à la consommation d'un produit reconnu non conforme par constat direct.
+
+La consignation est décidée en vue de la mise en conformité du produit incriminé par l'intervenant concerné.
+
+La levée de la consignation est prononcée par l'administration chargée de la protection du consommateur et de la répression des fraudes, après constatation de la mise en conformité du produit.
+
+**Art. 56.** — En cas de non conformité du produit, le contrevenant concerné est mis en demeure de prendre les mesures appropriées pour faire cesser la cause de non conformité ou d'inobservation des règles et des usages communément admis dans le processus de mise à la consommation.
+
+**Art. 57.** — Lorsque la mise en conformité du produit n'est pas envisageable ou lorsque l'intervenant concerné refuse d'effectuer la mise en conformité du produit incriminé, il est procédé à sa saisie pour le changement de sa destination, de sa réorientation ou de sa destruction, sans préjudice des poursuites pénales prévues par les dispositions de la présente loi.
+
+**Art. 58.** — Si un produit propre à la consommation est reconnu non conforme, l'intervenant concerné soit modifie sa destination en l'envoyant vers un organisme d'intérêt général pour son utilisation directe et licite ; soit il l'oriente et l'envoie vers un organisme pour son utilisation licite, après sa transformation.
+
+**Art. 59.** — Le retrait temporaire consiste en l'interdiction de la mise à la consommation d'un produit, en tous lieux où il se trouve et dont la non conformité est suspectée et ce, en attendant les résultats des vérifications approfondies, dont notamment les résultats d'analyses, tests ou essais.
+
+Si ces vérifications ne sont pas effectuées dans un délai de sept (7) jours ouvrables ou si elles ne confirment pas la non conformité du produit, la mesure de retrait temporaire est immédiatement levée. Ce délai peut être prorogé lorsque les conditions techniques de contrôle et d'analyses, tests ou essais l'exigent.
+
+Si la non conformité du produit est établie, il est prononcé sa saisie et le procureur de la République en est immédiatement informé.
+
+**Art. 60.** *(Texte original)* — Lorsque la non conformité d'un produit a été établie, les frais générés par les opérations de contrôle, d'analyses, de tests ou d'essais sont remboursés par l'intervenant défaillant.
+
+Lorsque la non conformité n'a pas été confirmée par les analyses, tests ou essais, la valeur de l'échantillon est remboursée à l'intervenant concerné, sur la base de la valeur consignée sur le procès-verbal de prélèvement.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 10 :** L'article 60 est **abrogé**.
+
+**Art. 61.** — Les saisies ainsi que les retraits temporaires ou définitifs effectués par les agents visés à l'article 25 de la présente loi, donnent lieu à l'établissement de procès-verbaux et les produits incriminés sont mis sous scellés et placés sous la garde de l'intervenant concerné.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 3 — Art. 61 bis (nouveau) :**
+> « Art. 61 bis. — Les saisies ainsi que les retraits temporaires peuvent être opérés sur des produits suspectés de contrefaçon.
+> Les modalités d'application du présent article sont définies par voie réglementaire. »
+
+**Art. 62.** — Le retrait définitif est exécuté par les agents visés à l'article 25 ci-dessus, sans autorisation préalable de l'autorité judiciaire compétente, dans les cas :
+
+- de produits reconnus falsifiés, corrompus, toxiques ou périmés ;
+- de produits reconnus impropres à la consommation ;
+- de produits détenus sans motif légitime et susceptibles d'être utilisés à des fins de falsification ;
+- des produits de contrefaçon ;
+- des objets ou appareils propres à effectuer des falsifications.
+
+Le procureur de la République en est immédiatement informé.
+
+**Art. 63.** — Dans le cas des retraits définitifs prévus à l'article 62 ci-dessus, l'intervenant concerné doit procéder à ses frais et charges, au rappel du produit incriminé de tous lieux où il se trouve et orienté, selon le cas, vers un centre d'intérêt collectif à titre gracieux, lorsque ce produit est consommable ou pour destruction lorsqu'il est de contrefaçon ou impropre à la consommation.
+
+Le procureur de la République en est immédiatement informé.
+
+**Art. 64.** — Lorsque la destruction des produits est décidée par l'administration chargée de la protection du consommateur et de la répression des fraudes ou par la juridiction compétente, celle-ci est effectuée par l'intervenant en présence des agents visés à l'article 25 ci-dessus.
+
+La destruction peut consister également en la dénaturation du produit.
+
+Un procès-verbal de destruction est établi par les agents et signé conjointement par les agents et l'intervenant concerné.
+
+Les conditions et les modalités d'application des dispositions du présent article, sont fixées par voie réglementaire.
+
+**Art. 65.** — Les services chargés de la protection du consommateur et de la répression des fraudes peuvent procéder, conformément à la législation et à la réglementation en vigueur, à la suspension temporaire de l'activité des établissements dont la non conformité aux règles fixées par la présente loi a été établie, jusqu'à l'élimination totale des causes ayant motivé la mesure considérée, sans préjudice des sanctions pénales prévues par les dispositions de la présente loi.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 4 :** Article modifié, complété et rédigé comme suit :
+> « Art. 65. — Les services de la protection du consommateur et de la répression des fraudes peuvent procéder, conformément à la législation en vigueur, à la suspension temporaire de l'activité des établissements ou à des fermetures administratives des locaux commerciaux, dont la non-conformité aux règles fixées par la présente loi a été établie, pour une durée maximale de quinze (15) jours renouvelable, jusqu'à l'élimination totale des causes ayant motivé la mesure considérée, sans préjudice des sanctions pénales prévues par les dispositions de la présente loi.
+> Les modalités d'application du présent article sont définies, en tant que de besoin, par voie réglementaire. »
+
+**Art. 66.** — Les frais engendrés par l'application des dispositions relatives à la consignation, à la mise en conformité, au retrait temporaire, au changement de destination, à la réorientation, à la saisie et à la destruction, prévus ci-dessus, sont à la charge de l'intervenant défaillant.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 5 :** Article modifié et rédigé comme suit :
+> « Art. 66. — Les frais engendrés par l'application des dispositions relatives à la consignation, à l'analyse, aux tests ou essais, à la mise en conformité, au retrait temporaire, au changement de destination, à la réorientation, à la saisie et à la destruction, prévus ci-dessus, sont à la charge de l'intervenant. »
+
+**Art. 67.** — Les services chargés de la protection du consommateur et de la répression des fraudes informent par tous moyens, les consommateurs des dangers et des risques que présente tout produit retiré du processus de mise à la consommation.
+
+### Chapitre II — Des infractions et des sanctions
+
+**Art. 68.** — Est puni des peines prévues à l'article 429 du code pénal, quiconque trompe ou tente de tromper le consommateur, par quelque moyen ou procédé que ce soit sur :
+
+- la quantité des produits livrés ;
+- la livraison de produits autres que ceux déterminés préalablement ;
+- l'aptitude à l'emploi d'un produit ;
+- les dates ou les durées de validité du produit ;
+- les résultats escomptés d'un produit ;
+- les modes d'emploi ou les précautions à prendre pour l'utilisation d'un produit.
+
+**Art. 69.** — Les peines prévues à l'article 68 ci-dessus sont portées à cinq (5) ans d'emprisonnement et à une amende de cinq cent mille dinars (500.000 DA), si la tromperie ou la tentative de tromperie ont été commises, soit :
+
+- à l'aide de poids, mesures et autres instruments faux ou inexacts ;
+- à l'aide de procédés à même de fausser les opérations d'analyse, de dosage, de pesage, et de mesurage ou à modifier frauduleusement la composition, le poids ou le volume du produit ;
+- à l'aide d'indications ou d'allégations frauduleuses ;
+- à l'aide de brochures, circulaires, prospectus, affiches, annonces, étiquettes ou instructions quelconques.
+
+**Art. 70.** — Est puni des peines prévues par l'article 431 du code pénal, quiconque :
+
+- falsifie tout produit destiné à la consommation ou à l'utilisation humaine ou animale ;
+- expose, met en vente ou vend un produit qu'il sait falsifié, corrompu, toxique ou dangereux à l'utilisation humaine ou animale ;
+- expose, met en vente ou vend, connaissant leur destination, des substances, instruments, appareils ou tout objet propres à effectuer la falsification de tout produit destiné à l'utilisation humaine ou animale.
+
+**Art. 71.** — Est puni d'une amende de deux cent mille dinars (200.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation d'innocuité des denrées alimentaires prévue aux articles 4 et 5 de la présente loi.
+
+**Art. 72.** — Est puni d'une amende de cinquante mille dinars (50.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint l'obligation d'hygiène et de salubrité prévues aux articles 6 et 7 de la présente loi.
+
+**Art. 73.** — Est puni d'une amende de deux cent mille dinars (200.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation de sécurité du produit prévue à l'article 10 de la présente loi.
+
+**Art. 74.** — Est puni d'une amende de cinquante mille dinars (50.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation du contrôle préalable de conformité prévue à l'article 12 de la présente loi.
+
+**Art. 75.** — Est puni d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation de garantie ou d'exécution de la garantie du produit, prévues à l'article 13 de la présente loi.
+
+**Art. 76.** — Est puni d'une amende de cinquante mille dinars (50.000 DA) à cent mille dinars (100.000 DA), quiconque enfreint l'obligation d'essai du produit prévue à l'article 15 de la présente loi.
+
+**Art. 77.** — Est puni d'une amende de cinquante mille dinars (50.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint l'obligation d'exécution du service après-vente prévue à l'article 16 de la présente loi.
+
+**Art. 78.** — Est puni d'une amende de cent mille dinars (100.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint l'obligation d'étiquetage du produit prévue aux articles 17 et 18 de la présente loi.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 7 :** Article modifié et rédigé comme suit :
+> « Art. 78. — Est puni d'une amende de cent mille dinars (100.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint l'obligation d'information du consommateur prévue aux articles 17 et 18 de la présente loi. »
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 8 — Art. 78 bis (nouveau) :**
+> « Art. 78 bis. — Est puni d'une amende de cinquante mille dinars (50.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint les dispositions relatives au droit de rétractation prévues à l'article 19 de la présente loi. »
+
+**Art. 79.** — Sans préjudice des dispositions prévues à l'article 155 du code pénal, quiconque vend un produit mis sous scellés, consigné pour mise en conformité, retiré à titre temporaire du processus de mise à la consommation ou enfreint la mesure de suspension temporaire d'activité, est puni d'un emprisonnement de six mois à trois ans et d'une amende de cinq cent mille dinars (500.000 DA) à deux millions de dinars (2.000.000 DA) ou de l'une de ces peines.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 9 :** Article complété — ajout de la mesure de fermeture administrative des locaux commerciaux.
+
+**Art. 80.** — Outre les sanctions prévues à l'article 79 ci-dessus, le montant des produits mis sous scellés, consignés ou retirés temporairement du processus de mise à la consommation peut être prononcé par la juridiction compétente comme complément de peine.
+
+**Art. 81.** — Les personnes morales peuvent être déclarées pénalement responsables des infractions définies par la présente loi, dans les conditions prévues aux articles 51 bis et suivants du code pénal.
+
+**Art. 82.** — Les personnes physiques ou morales reconnues coupables des infractions prévues à la présente loi peuvent, en outre, être condamnées aux peines complémentaires suivantes :
+
+- la fermeture temporaire ou définitive de l'établissement ayant servi à commettre l'infraction ;
+- la confiscation des produits, objets, instruments et appareils ayant servi à commettre l'infraction ;
+- la publication du jugement par voie de presse ou par voie d'affichage.
+
+**Art. 83.** — Le tribunal peut ordonner la confiscation des produits au profit de l'État, leur remise à des organismes d'intérêt collectif ou leur destruction, aux frais du condamné.
+
+**Art. 84.** — Lorsqu'une condamnation pénale est prononcée pour les infractions prévues par la présente loi, la juridiction compétente peut ordonner la fermeture temporaire ou définitive de l'établissement du condamné.
+
+**Art. 85.** — Conformément aux dispositions législatives en vigueur, en cas de condamnation définitive, la juridiction compétente peut prononcer en sus des sanctions prévues par la présente loi, à titre de peine complémentaire, la radiation du registre de commerce de l'intervenant incriminé.
+
+> **Modification Loi n° 18-09 du 10 juin 2018 — Art. 9 :** Article complété — alinéa ajouté :
+> « Est considéré comme récidive, au sens de la présente loi, le fait pour tout intervenant de commettre une nouvelle infraction ayant une relation avec son activité, durant les cinq (5) ans qui suivent l'expiration de la précédente peine liée à la même activité. »
+
+---
+
+## TITRE V — DE L'AMENDE TRANSACTIONNELLE
+
+**Art. 86.** — Il peut être mis fin aux poursuites pénales engagées en vertu des dispositions de la présente loi, par le paiement d'une amende transactionnelle.
+
+**Art. 87.** — L'amende transactionnelle est proposée par les agents habilités à constater les infractions à la présente loi et est soumise à l'approbation du procureur de la République.
+
+**Art. 88.** — L'amende transactionnelle doit être versée au Trésor public dans les conditions et délais fixés par voie réglementaire.
+
+**Art. 89.** — Le paiement de l'amende transactionnelle éteint l'action publique.
+
+**Art. 90.** — La transaction ne peut être proposée lorsque les faits ont causé un préjudice corporel à des tiers ou lorsque la non-conformité du produit porte atteinte à la sécurité des personnes.
+
+**Art. 91.** — Les conditions et les modalités d'application des dispositions du présent titre sont fixées par voie réglementaire.
+
+---
+
+## TITRE VI — DISPOSITIONS DIVERSES ET FINALES
+
+**Art. 92.** — Les agents visés à l'article 25 ci-dessus sont tenus au secret professionnel pour les faits, actes et renseignements dont ils pourraient avoir connaissance dans le cadre de leurs fonctions.
+
+**Art. 93.** — Sont abrogées toutes les dispositions contraires à la présente loi, notamment la loi n° 89-02 du 7 février 1989 relative aux règles générales de protection du consommateur et toutes dispositions contraires.
+
+**Art. 94.** — Des lois et textes réglementaires particuliers pourront définir les mesures de protection spécifiques à certains secteurs ou à certains types de produits ou services.
+
+**Art. 95.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
+
+> Fait à Alger, le 29 Safar 1430 correspondant au 25 février 2009.
+> **Abdelaziz BOUTEFLIKA**
+
+---
+
+## RÉCAPITULATIF DES MODIFICATIONS — LOI N° 18-09 DU 10 JUIN 2018
+
+| Article de base | Nature de la modification (Loi 18-09) |
+|---|---|
+| Art. 11 | Alinéa 3 ajouté — spécifications techniques par voie réglementaire |
+| Art. 16 | Alinéa 2 ajouté — modalités SAV par voie réglementaire |
+| Art. 19 | Rédaction complète — extension aux produits + droit de rétractation |
+| Art. 53 | Alinéa 2 complété — admission conditionnelle + fermeture administrative |
+| Art. 54 | Alinéas ajoutés — admission conditionnelle aux frontières |
+| Art. 60 | **Abrogé** (Art. 10 Loi 18-09) |
+| Art. 61 bis | **Nouveau** — saisie produits suspectés de contrefaçon |
+| Art. 65 | Rédaction complète — fermeture administrative 15 jours renouvelables |
+| Art. 66 | Rédaction complète — ajout frais d'analyses |
+| Art. 73 bis | **Nouveau** — amende 500.000–1.000.000 DA pour infraction Art. 11 |
+| Art. 78 | Rédaction complète — obligation d'information consommateur |
+| Art. 78 bis | **Nouveau** — amende 50.000–500.000 DA pour infraction droit de rétractation Art. 19 |
+| Art. 79 | Complété — fermeture administrative ajoutée |
+| Art. 85 | Complété — définition de la récidive (5 ans) |
+
+---
+
+## Contrôle de séquence
+
+**Articles présents verbatim :** Art. 1–95 (intégral).
+
+**Gaps :** Aucun.
+
+**Note :** Art. 80–85 extraits du PDF `loi-09-03-2.pdf` (JO N° 15). La numérotation des sanctions dans le PDF de base diffère légèrement des résumés éditoriaux de la version précédente — la version présente est conforme au PDF source.
