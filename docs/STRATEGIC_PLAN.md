@@ -72,17 +72,18 @@
 | W31-2 | loi-09-03: tag Art.44–52 + Art.80–92 as [MANQUANT]; mark Art.4–67 as [RÉSUMÉ] | 2026-08-09 | Commit `bc1eb6d`. |
 | W31-3 | Decret-07-144: tag rubrique gap 1243–2922 as [MANQUANT] | 2026-08-09 | Commit `bc1eb6d`. |
 | W31-4 | Split bundled arrêté file into 3 separate files + update legal_refs/README.md | 2026-08-09 | Commit `bc1eb6d`. 3 files: 2025 + 2016 + 1999. |
-| W31-1 | audit.js regex: false-positive cross-ref numbers on article-declaration lines | 2026-08-09 | Commit `4c79ed3`. File IS in `legal_refs/` — intentional location, not stray. DO NOT DELETE OR MOVE. |
+| W31-1 | audit.js cross-ref false-positive fix | 2026-08-09 | Commit `4c79ed3`. File lives at `legal_refs/audit.js` — **DO NOT DELETE OR MOVE**. |
+| W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by Claude direct read: `decret-07-144-nomenclature-installations-classees.md` and `decret-17-140-hygiene-alimentaire.md` exist, old `Decret-07-144.md` / `Decret-17-140.md` gone. Links point to real files. No change needed. **W31 FULLY CLOSED.** |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W31** (W31-5 remaining) → **W16** → **W17** → **W11** → **W12** → **W15** → **W20** → **W13** → **W14** → **W10** (user sign-off required). W19 parallel.
+> Execution order: **W32** (loi-09-03 verbatim transcription — see note) → **W16** → **W17** → **W11** → **W12** → **W15** → **W20** → **W13** → **W14** → **W10** (user sign-off required). W19 parallel.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W31** | 🟠 P1 | legal_refs cleanup: 1 sub-item remaining | See sub-items below | W31-1/2/3/4 CLOSED. W31-5 still open. |
+| **W32** | 🟡 P2 | loi-09-03: verbatim transcription Art.4–67 + source Art.44–52/80–92 from JO n°15/2009 | `legal_refs/loi-09-03-protection-consommateur.md` | File is honest ([RÉSUMÉ]/[MANQUANT] tagged) but not verbatim. Needs JORADP JO n°15/2009. Not deceptive — low urgency. |
 | **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off |
 | **W11** | 🟠 P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required |
 | **W12** | 🟠 P1 | L-09: Fix semiPharma citations — Décret 17-140 → Loi 18-11 | `semiPharmaCriteria.ts` | ⚠️ Loi 18-11 article number required |
@@ -93,16 +94,6 @@
 | **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification required |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
 | **W20** | 🟡 P2 | Close 3 open legal unverifieds + delete `allCriteria` dead-code export | `src/criteria/index.ts` | Depends on W19. |
-
-### W31 Remaining Sub-items
-
-| Sub | Status | Description | Blocker |
-|---|---|---|---|
-| W31-1 | ✅ CLOSED 2026-08-09 | audit.js cross-ref false-positive fix. File lives at `legal_refs/audit.js` — **DO NOT DELETE OR MOVE** | Commit `4c79ed3` |
-| W31-2 | ✅ CLOSED 2026-08-09 | loi-09-03 placeholders tagged [MANQUANT] | Commit `bc1eb6d` |
-| W31-3 | ✅ CLOSED 2026-08-09 | Decret-07-144 rubrique gap tagged [MANQUANT] | Commit `bc1eb6d` |
-| W31-4 | ✅ CLOSED 2026-08-09 | arrêté bundling split into 3 files | Commit `bc1eb6d` |
-| W31-5 | ⏳ PENDING | README broken links / false rename claim | Claude must confirm exact file + line |
 
 ---
 
@@ -116,9 +107,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18–W19-CODE, W21–W30, W31-1, W31-2, W31-3, W31-4.
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18–W19-CODE, W21–W31 (all sub-items).
 - Z9 deferred.
-- **Open: W10–W17, W19 (parallel), W20, W31 (W31-5 only). Next new phase identifier: W32.**
+- **Open: W10–W17, W19 (parallel), W20, W32. Next new phase identifier: W33.**
 - Never reuse a closed phase letter.
 
 ---
@@ -145,7 +136,7 @@
 | Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
 | Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
 | Microbiological criteria | Arrêté interminist. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
-| Consumer protection — Art.1–43 + 53–79 + 93–95 | Loi 09-03 | Partiel | ⚠️ Art.44–52 + 80–92 MANQUANTS — JO n° 15/2009 requis |
+| Consumer protection — Art.1–43 + 53–79 + 93–95 | Loi 09-03 | Partiel | ⚠️ Art.4–67 [RÉSUMÉ]; Art.44–52 + 80–92 [MANQUANT] — W32 OPEN |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
