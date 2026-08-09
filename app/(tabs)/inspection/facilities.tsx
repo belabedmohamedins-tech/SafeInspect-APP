@@ -1,5 +1,8 @@
 // app/(tabs)/inspection/facilities.tsx
 // Phase-5: opening-meeting gate added before navigating to checklist.
+// W38 (2026-08-09): pass rubrique from Facility to checklist route so
+//     getCriteriaByRubriqueCategory fallback is reachable for all real
+//     facilities created via add.tsx/edit.tsx (Z11 persists rubrique on save).
 
 import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
@@ -46,6 +49,9 @@ export default function FacilitiesByCategoryScreen() {
         facilityName:       pendingFacility.projectName,
         facilityAddress:    pendingFacility.address,
         activity:           pendingFacility.activity,
+        // W38: rubrique enables getCriteriaByRubriqueCategory fallback in
+        //      useChecklistData when activity string has no exact key.
+        rubrique:           pendingFacility.rubrique,
         // Phase-5: gate already passed here
         openingMeetingDone: 'true',
       },
