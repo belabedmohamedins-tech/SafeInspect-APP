@@ -22,6 +22,11 @@
 //     share the same `collapsed` object snapshot in every render cycle,
 //     eliminating the stale-closure mismatch that caused the one-extra-tap
 //     symptom to persist after W4.
+// W38 (2026-08-09): thread `rubrique` route param into useChecklistData so the
+//     rubrique-based checklist fallback (getCriteriaByRubriqueCategory) is
+//     reachable for real facilities created via add.tsx/edit.tsx.
+//     Also adds an orange warning banner when checklistResolution === 'fallback'
+//     so the inspector is never silently misled by a generic checklist.
 
 import { FontAwesome } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -98,6 +103,8 @@ export default function ChecklistScreen() {
     facilityName: params.facilityName as string,
     facilityAddress: params.facilityAddress as string,
     activity: params.activity as string | undefined,
+    // W38: pass rubrique so getCriteriaByRubriqueCategory fallback is reachable.
+    rubrique: params.rubrique as string | undefined,
     agendaId: params.agendaId as string | undefined,
     cause: (params.cause as string) ?? '',
     reference: (params.reference as string) ?? '',
@@ -125,6 +132,8 @@ export default function ChecklistScreen() {
     handleNumericChange,
     handleFinish: _handleFinish,
     saveDraft,
+    // W38: resolution tells us how the checklist was selected.
+    checklistResolution,
   } = useChecklistData(checklistParams, signature);
 
   // W4-refix: destructure `collapsed` record directly so both renderItem and
@@ -315,6 +324,18 @@ export default function ChecklistScreen() {
         </View>
       )}
 
+      {/* W38: warn inspector when checklist fell back to the generic baseline.
+           This should never appear for real facilities (rubrique path handles them)
+           but acts as a last-resort visibility guard. */}
+      {checklistResolution === 'fallback' && (
+        <View style={styles.fallbackBanner}>
+          <FontAwesome name="exclamation-triangle" size={13} color="#7d4800" />
+          <Text style={styles.fallbackBannerText}>
+            تحذير: لم يُعرف نوع هذه المنشأة — تم تحميل القائمة العامة الأساسية فقط. تأكد من صحة نوع النشاط قبل الإنهاء.
+          </Text>
+        </View>
+      )}
+
       <ChecklistProgressBar
         evaluated={evaluatedItems}
         total={totalItems}
@@ -429,6 +450,26 @@ const styles = StyleSheet.create({
     borderBottomColor: '#a9dfbf',
   },
   meetingDoneText: { fontSize: 12, color: '#27ae60', fontWeight: '600' },
+  // W38: fallback banner — shown when checklist resolution could not match
+  // the facility to any known activity or rubrique category.
+  fallbackBanner: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 8,
+    backgroundColor: '#fff3cd',
+    paddingHorizontal: Spacing.base,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ffc107',
+  },
+  fallbackBannerText: {
+    flex: 1,
+    fontSize: 12,
+    color: '#7d4800',
+    fontWeight: '500',
+    lineHeight: 18,
+    textAlign: 'right',
+  },
   sectionHeader: {
     flexDirection: 'row',
     alignItems: 'center',
