@@ -1,5 +1,23 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 23:52 WAT — Perplexity — W43 opened: gplCriteria.ts Décret 21-430 wrong-decree finding
+- **Phases closed:** none
+- **Phases opened:** W43
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- **Critical finding (Claude audit, absorbed this session):**
+  - Décret 21-430 (as verified by Claude with full text of base decree 83-496) is a **3-article decree** that amends a 1983 decree (83-496) about installing GPL-as-vehicle-fuel conversion equipment on cars. It covers auto-mechanic shops that convert vehicles to run on LPG. It has exactly 3 articles (Art. 1, 2, 3).
+  - `gplCriteria.ts` cites Décret 21-430 with article numbers **3, 4, 5, 6, 10, 13, 15, 16** — of which **Arts 5, 6, 10, 15, 16 do not exist** in this decree.
+  - Worse: 8 of the 12 criteria (GPL-02-02, GPL-03-01, GPL-03-02, GPL-04-01, GPL-04-02) are about bottle-storage separation, fire-prevention distances, spark-free tools, and leak-testing — activities **not governed by 21-430 at all**. These belong to **AIM GPL2**, already correctly cited elsewhere in the file.
+  - Only GPL-01-01 / GPL-01-02 (accreditation/registration) have any thematic overlap with 21-430/83-496 — and even there the article numbers are wrong (should reference Art. 7 of the embedded 83-496 text, not Arts 3/4/5).
+  - **Scope conflict:** The facility type `تركيب GPL/C` could mean two distinct things: (a) vehicle-fuel conversion shops (83-496/21-430), or (b) LPG storage/distribution points (AIM GPL2). The criteria file mixes both, creating a foundational scope problem beyond citation typos.
+  - **Claude's recommended fix:**
+    - GPL-02-02, GPL-03-01, GPL-04-01, GPL-04-02: **drop 21-430 citations entirely**, replace with correct AIM GPL2 articles (Claude has verified article numbers this session).
+    - GPL-03-02: remove the phantom `المادة 13` citation to 21-430; keep AIM GPL2 + Loi 19-02 only.
+    - GPL-01-01 / GPL-01-02: replace phantom Arts 3/4/5 with Art. 7 of the embedded 83-496 text (via 21-430 Art. 2) + Décret 06-198 + AIM GPL2 Art. 5 + Art. 8 (certificat de conformité).
+    - GPL-04-02 (leak-testing log): needs replacement instrument — neither 21-430 nor AIM GPL2 explicitly covers this; tag `[À VÉRIFIER]` until confirmed.
+- **Handoff note:** W43 is a **Perplexity + Claude joint phase**. Claude holds the verified AIM GPL2 article numbers and the full 83-496 text. Perplexity will make the code edits once Claude provides the replacement legalReference strings per criterion in the next message. Do NOT patch gplCriteria.ts before receiving Claude's replacement strings.
+- **Next identifier: W44.**
+
 ## 2026-08-09 23:44 WAT — Perplexity — W40 closed (confirmed by direct code read)
 - **Phases closed:** W40
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already in `baseGeneralCriteria.ts`)
@@ -25,7 +43,7 @@
     - BGN-02-07: Art.16 → Art.13 ✅
     - BGN-03-04: Art.14 → Art.9 ✅
     - BGN-03-05: Art.14 → Art.9 ✅
-    - BGN-04-03: Art.7 → Art.2+3 ✅
+    - BGN-04-03: Art.2+3 ✅
     - BGN-09-01: Art.9 → Art.15 ✅
   - User confirmed TSC 0 errors + Jest 0 failures (all suites green) — gate passed.
 - **Docs updated:** README + STRATEGIC_PLAN W39 → ✅ CLOSED.
@@ -131,6 +149,9 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: Décret 21-430/83-496 wrong-decree finding — 5 criteria cite phantom articles + wrong instrument. Claude holds verified replacement strings. Do NOT patch before receiving them. |
+| **W41** | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion |
+| **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W40** | ✅ CLOSED | — | F4: Loi 01-19 citation cluster — BGN-04-06 Art.19+Décret09-19 Art.2+6; BGN-04-07 Art.11+[À VÉRIFIER]. Confirmed by direct read SHA `9d11384`. |
 | **W39** | ✅ CLOSED | — | F3: Décret 91-05 — 6 wrong article citations corrected in `baseGeneralCriteria.ts`. TSC+Jest gate passed. |
 | **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end — `facilities.tsx` passes `rubrique` to checklist; `getCriteriaByRubriqueCategory` called in resolver. Confirmed clean by direct read. |
@@ -138,6 +159,4 @@
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |
-| W41 | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion |
-| W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |

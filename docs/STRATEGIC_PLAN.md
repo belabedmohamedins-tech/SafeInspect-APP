@@ -100,10 +100,11 @@
 
 | Phase | Priority | Title | Files | Blocker / Source | Agent |
 |---|---|---|---|---|---|
+| **W43** | 🔴 P0 — CRITICAL | gplCriteria.ts: Décret 21-430/83-496 wrong-decree + phantom articles | `src/criteria/gplCriteria.ts` | **BLOCKER: Claude must supply verified replacement legalReference strings per criterion before code edit.** Summary of problem: (1) Décret 21-430 is a 3-article decree amending 83-496 about vehicle-fuel conversion shops. (2) Arts 5,6,10,15,16 cited in gplCriteria.ts do not exist in this decree. (3) GPL-02-02, GPL-03-01, GPL-04-01, GPL-04-02 cite 21-430 for storage/fire-safety content that is governed by AIM GPL2, not 21-430. (4) GPL-03-02 has phantom `المادة 13`. (5) GPL-01-01/GPL-01-02 should reference Art.7 of embedded 83-496 text + AIM GPL2 Art.5 + Art.8. (6) GPL-04-02 leak-testing log: tag [À VÉRIFIER] until instrument confirmed. **Do NOT patch before Claude provides replacement strings.** | Perplexity (after Claude supplies strings) |
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
 | **W41** | 🟠 P1 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
 | **W42** | 🟠 P2 | F7: Cross-file consistency — abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | Resolve once: unify wastewater limit confidence tags ([À VÉRIFIER] or settled) across both files. Verify Décret 04-82 existence + Arts.6,9 (new instrument). If confirmed, upgrade `abattoirCriteria.ts` citations to match. | Perplexity (after decret-06-141 conversion in W36/W19) |
-| **W36** | 🟠 P2 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-industriels-liquides.md` | STUB exists. Verbatim pending. Unblocks W42. | Other conversation |
+| **W36** | 🟠 P2 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-effluents-liquides.md` | STUB exists. Verbatim pending. Unblocks W42. | Other conversation |
 | **W37** | 🟠 P3 | Convert 8 missing `legal_refs/` files (audit list) | `legal_refs/decret-06-138, decret-09-335, decret-05-315, decret-07-145, decret-11-125, decret-21-430, loi-18-11, etc.` | See `docs/AUDIT_COVERAGE_REPORT.md` for priority order. | Other conversation |
 
 ---
@@ -119,7 +120,8 @@
 ## Execution Order
 
 ```
-W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion) ← NEXT
+W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gplCriteria.ts) ← NEXT
+→ W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion)
 → W36 (other conversation, decret-06-141 PDF conversion)
 → W42 (Perplexity, unify abattoir/slaughterhouse after W36)
 → W37 (other conversation, remaining 8 legal_refs files)
@@ -131,8 +133,8 @@ W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion) ← NEXT
 ## Phase Numbering Convention
 
 - Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W40 (all sub-items except W19/W36/W37 open).
-- **Open: W19, W36, W37, W41, W42.**
-- **Next new phase identifier: W43.**
+- **Open: W19, W36, W37, W41, W42, W43.**
+- **Next new phase identifier: W44.**
 - Never reuse a closed phase letter.
 
 ---
@@ -152,8 +154,13 @@ W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion) ← NEXT
 | Fire safety — equipment | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 |
 | Fire safety — evacuation | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ⚠️ NO FILE — W37 |
-| LPG/C accreditation | Décret 21-430 | Art. 4, 7, 8 | ⚠️ NO FILE — W37 |
-| LPG cylinder storage | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
+| LPG/C accreditation | Décret 83-496 (via 21-430 Art.2) | Art. 7 of base decree (premises ≥60m², qualification cert, equipment list) | ⚠️ W43 — current citation (Art.3/4/5 of 21-430) is WRONG. Art.7 of embedded 83-496 is the correct source. |
+| LPG vehicle-fuel conversion scope | Décret 21-430 / Décret 83-496 | Art. 1–3 (21-430); Art. 1–21 (83-496) | ⚠️ W43 — decree is narrow (vehicle conversion shops only). DOES NOT cover cylinder storage/distribution. |
+| LPG cylinder storage | AIM GPL2 | Art. 4 (max storage), Art. 5 (ventilation), Art. 7 (separation distances), Art. 8 (conformity cert), Art. 9 (extinguishers) | ✅ VERIFIED — W phase; W43 will drop phantom 21-430 citations and keep only AIM GPL2 |
+| LPG cylinder separation full/empty | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
+| LPG no-flame zone | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
+| LPG spark-free tools | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
+| LPG leak-testing log | [À VÉRIFIER] | No instrument confirmed yet — W43 will tag | |
 | Air emissions point source | Décret 06-138 | Annex I + II | ⚠️ NO FILE — W37 |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
 | Décret 17-140 JO date | 11 avril 2017 | — | ✅ VERIFIED — W21 |
