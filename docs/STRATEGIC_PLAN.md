@@ -83,11 +83,11 @@
 | W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read. Décret 24-196 cited exclusively as amending decree to 06-198 — never standalone. No change needed. |
 | W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change this session. |
 | W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read. `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` already present. No change needed. |
-| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines (Art.4–95 + all amendments). Reverted via `cbe46ba8`. File restored to `ca6fc9ec` baseline — complete Art.1–95, status NON VÉRIFIÉ. Art.80–85 NOT PDF-corrected. Superseded by W34-FIX.** |
-| W33 | Prevention protocol analysis + improved space instructions for legal-refs agent | 2026-08-09 | Analysis delivered in chat. User added SIZE GUARD + CITE-BEFORE-COMMIT + COORDINATION rules to other conversation's instructions. No code change. |
-| W34 | ⚠️ FAILED — loi-09-03 Art.80–95 verbatim patch — create_or_update_file truncated at Art.47 (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Caught immediately by diff gate. Superseded by W34-FIX. |
-| W34-FIX | loi-09-03 Art.1–95 fully restored + Art.80–95 verbatim from JO N°15/2009 PDF + amendment table | 2026-08-09 | Commit `566a5e28`. Size: 34,321 bytes. Diff: +169/-76 ✅. Used push_files per new SIZE GUARD rule. |
-| W35-DOCS | STRATEGIC_PLAN sync — close W33/W34/W34-FIX, correct next identifier to W36 | 2026-08-09 | This commit. |
+| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines. Reverted via `cbe46ba8`. Superseded by W34-FIX.** |
+| W33 | Prevention protocol analysis + improved space instructions | 2026-08-09 | Analysis delivered in chat. No code change. |
+| W34 | ⚠️ FAILED — loi-09-03 Art.80–95 verbatim patch truncated (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Caught by diff gate. Superseded by W34-FIX. |
+| W34-FIX | loi-09-03 Art.1–95 fully restored + Art.80–95 verbatim | 2026-08-09 | Commit `566a5e28`. Size 34,321 bytes. Diff +169/-76 ✅. |
+| W35-DOCS | STRATEGIC_PLAN sync — close W33/W34/W34-FIX | 2026-08-09 | Commit `980f8f4b`. |
 
 ---
 
@@ -96,13 +96,15 @@
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
+| **W36** | 🟠 P1 | Convert `decret-06-141` verbatim from JORADP JO n°26/2006 | `legal_refs/decret-06-141-rejets-industriels-liquides.md` | STUB exists. Other conversation converts PDF. Most-cited missing instrument. |
+| **W37** | 🟠 P2 | Convert 8 missing `legal_refs/` files (see AUDIT_COVERAGE_REPORT.md P1+P2 list) | `legal_refs/decret-06-138, decret-09-335, decret-05-315, decret-07-145, decret-11-125, decret-21-430, loi-18-11, decret-07-205` | Other conversation converts PDFs in priority order from AUDIT_COVERAGE_REPORT.md. |
 
 ---
 
 ### 🔵 DEFERRED Phases
 
 | ID | Title | Blocker |
-|---|---|---|
+|---|---|
 | Z9 | Server E2E integration test — `/sync` path against live instance | Needs a running server. |
 
 ---
@@ -111,7 +113,7 @@
 
 - Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W35-DOCS (all sub-items).
 - Z9 deferred.
-- **Open: W19 (parallel). Next new phase identifier: W36.**
+- **Open: W19 (parallel), W36, W37. Next new phase identifier: W38.**
 - Never reuse a closed phase letter.
 
 ---
@@ -122,34 +124,38 @@
 |---|---|---|---|
 | Classified establishments | Décret 06-198 | Art. 2–5 | ✅ Verified |
 | Rubrique nomenclature (1000–1242 only) | Décret 07-144 | Partial annex | ⚠️ PARTIEL — W31-3 tagged, JO n° 31/2007 needed |
-| Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
-| Abattoir wastewater annex | Décret 06-141 Annex II — g/t units | Annex II | ⚠️ [À VÉRIFIER] — W10 CLOSED Option C. Switch to g/tonne after JORADP JO verified. |
+| Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ⚠️ STUB — W36 OPEN. File created, verbatim pending. |
+| Abattoir wastewater annex | Décret 06-141 Annex II | Annex II | ⚠️ [À VÉRIFIER] — W10 CLOSED Option C. Switch to g/tonne after JORADP JO verified. |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
-| Healthcare waste | Décret 03-478 | Art. 3 | ✅ Verified |
+| Healthcare waste | Décret 03-478 | Art. 3 | ⚠️ NO FILE — W37. |
 | Fire safety — ERP scope | Loi 19-02 | Art. 1, 3, 14–19, 44–46 | ✅ VERIFIED |
 | Fire safety — equipment requirements | Loi 19-02 | Art. 5 | ✅ VERIFIED — W18 |
 | Fire safety — evacuation routes | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 |
-| Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
-| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
+| Internal intervention plan | Décret 09-335 | Art. 4–6 | ⚠️ NO FILE — W37. Quick-Ref previously claimed ✅ in error. |
+| LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ⚠️ NO FILE — W37. Quick-Ref previously claimed ✅ in error. |
 | LPG cylinder storage | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
-| Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED |
+| Air emissions point source | Décret 06-138 | Annex I + II | ⚠️ NO FILE — W37. Phase T verified content but file was never created. |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
-| Décret 17-140 actual JO date | 11 avril 2017 (14 Rajab 1438H) | — | ✅ VERIFIED — W21 |
+| Décret 17-140 actual JO date | 11 avril 2017 | — | ✅ VERIFIED — W21 |
 | Cold-chain temps (restaurants) | Arrêté interminst. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
-| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table (réf.) | ⚠️ Stub — texte verbatim non extrait. Other conversation converting. |
-| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait. Other conversation converting. |
-| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ✅ W34-FIX — Art.1–95 verbatim complete, 34,321 bytes, commit `566a5e28`. NON VÉRIFIÉ against JO PDF (human review pending). |
+| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table | ⚠️ STUB — W19. |
+| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ STUB — W19. |
+| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 | ✅ W34-FIX — 34,321 bytes, commit `566a5e28`. NON VÉRIFIÉ against JO PDF (human review pending). |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
-| Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
+| Occupational health general | Loi 88-07 | Art. 12–14 | ⚠️ NO FILE — W37 (P3). |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
+| BGN-02-06 ventilation | Décret 91-05 Art.11 CORRECT | Art.11 | ✅ VERIFIED — W11 |
+| BFD-08-01 traceability citation | Loi 09-03 Art.12+6 CORRECT | Art.12+6 | ✅ VERIFIED — W16 |
+| BFD-02-02 storage clearances | 15cm/5cm — [حكم مهني] tagged | — | ✅ VERIFIED — W17 |
+| semiPharmaCriteria Loi 18-11 | Arts.104/105/107 correct — NO FILE yet | — | ⚠️ NO FILE — W37. |
 | Approved inspection immutability | INSPECTION_LOCKED guard | — | ✅ VERIFIED — W22 |
 | Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel | — | ✅ VERIFIED — W24 |
-| BGN-02-06 ventilation | Décret 91-05 Art.11 CORRECT; Décret 93-120 removed | Art.11 | ✅ VERIFIED — W11 |
-| BFD-08-01 traceability citation | Loi 09-03 Art.12+6 CORRECT; Art.19 removed | Art.12+6 | ✅ VERIFIED — W16 |
-| BFD-02-02 storage clearances | 15cm/5cm — [حكم مهني] tagged | — | ✅ VERIFIED — W17 |
-| semiPharmaCriteria Loi 18-11 | Arts.104/105/107 correct; Décret 17-140 in-scope uses valid | — | ✅ VERIFIED — W12 |
-| Décret 06-198 Art.20 warning tier | allCriteria dead-code removed; 0 [À VÉRIFIER] | — | ✅ CLOSED — W20 |
-| Décret 24-196 citation scope | Always cited as amending decree to 06-198 — never standalone | Various | ✅ VERIFIED — W14 |
-| UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 chain. warningMin:700 in place. | UPD-AX2-01 | ✅ VERIFIED — W13 |
-| criteriaByActivity rubrique fallback | `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` | `src/criteriaData.ts` | ✅ VERIFIED — W15 |
+| Décret 24-196 citation scope | Always cited as amending decree to 06-198 | Various | ✅ VERIFIED — W14 |
+| UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 chain | UPD-AX2-01 | ✅ VERIFIED — W13 |
+| criteriaByActivity rubrique fallback | `criteriaByRubriqueCategory` 31-key map | `src/criteriaData.ts` | ✅ VERIFIED — W15 |
+| Drinking water standards | Décret 11-125 | Standards table | ⚠️ NO FILE — W37. Criteria citation correct (W8), file missing. |
+| Hazardous waste bordereau | Décret 05-315 | Art. bordereau | ⚠️ NO FILE — W37. |
+| EIA procedures | Décret 07-145 | Art. EIA | ⚠️ NO FILE — W37. |
+| Worker OHS training | Décret 02-427 | Art. training | ⚠️ NO FILE — W37 (P3). |
+| Electrical safety | Décret 76-35 | Art. electrical | ⚠️ NO FILE — W37 (P3). Very old decree — verify not superseded. |
