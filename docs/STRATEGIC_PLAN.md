@@ -78,21 +78,21 @@
 | W12 | semiPharmaCriteria: Décret 17-140 scope correct; Loi 18-11 Arts.104/105/107 confirmed | 2026-08-09 | Confirmed clean by direct read of `semiPharmaCriteria.ts`. No wrong Décret 17-140 citations found. No change needed. |
 | W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct; Art.19 already removed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W16: Art.19 WRONG` present. No change needed. |
 | W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean by direct read of `baseFoodCriteria.ts`. Comment `// W17` present. No change needed. |
-| W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed (comment present). Search of entire repo: 0 [À VÉRIFIER] tags found. No code change needed. |
+| W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | Direct read of `src/criteria/index.ts`: `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
+| W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain — no specific distance decree exists). `warningMin: 700` graduated alert in place. No change needed. |
+| W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 (“كما عُدِّل بالمرسومَيْن 22-167 و 24-196”) — never cited as a standalone authority. Citation chain is correct. No change needed. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W32** (low urgency — loi-09-03 verbatim) → **W15** (enhancement) → **W13** → **W14** → **W10** (user sign-off required).
+> ⚠️ Only W10 remains actionable. All other open phases are either user-blocked or parallel.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
+| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on Annex II g/t discharge limits |
+| **W15** | 🟡 P2 | criteriaByActivity rubrique-based fallback lookup | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | Enhancement only — not a bug. All 26 activity strings already mapped. |
 | **W32** | 🟡 P2 | loi-09-03: verbatim transcription Art.4–67 + source Art.44–52/80–92 from JO n°15/2009 | `legal_refs/loi-09-03-protection-consommateur.md` | File honest ([RÉSUMÉ]/[MANQUANT] tagged). Needs JORADP JO n°15/2009. Not deceptive — low urgency. |
-| **W15** | 🟡 P2 | criteriaByActivity rubrique-based fallback lookup | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | Enhancement only — not a bug. Current map covers all 26 activity strings with zero silent fallbacks. |
-| **W13** | 🟡 P2 | L-06: Clarify UPD-AX2-01 "500m buffer" | `updCriteria.ts` | ⚠️ Product decision from user |
-| **W14** | 🟡 P2 | L-08: Verify Décret 24-196 citation | Various | ⚠️ No source document supplied |
-| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
 
 ---
@@ -107,9 +107,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W11–W12, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items).
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W11–W14, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items).
 - Z9 deferred.
-- **Open: W10, W13–W15, W19 (parallel), W32. Next new phase identifier: W33.**
+- **Open: W10, W15, W19 (parallel), W32. Next new phase identifier: W33.**
 - Never reuse a closed phase letter.
 
 ---
@@ -147,6 +147,6 @@
 | BFD-08-01 traceability citation | Loi 09-03 Art.12+6 CORRECT; Art.19 removed | Art.12+6 | ✅ VERIFIED — W16 |
 | BFD-02-02 storage clearances | 15cm/5cm — [حكم مهني] tagged | — | ✅ VERIFIED — W17 |
 | semiPharmaCriteria Loi 18-11 | Arts.104/105/107 correct; Décret 17-140 in-scope uses valid | — | ✅ VERIFIED — W12 |
-| Décret 06-198 Art.20 | 'warning' sanction tier | Art.20 | ✅ CLOSED — W20 (0 [À VÉRIFIER] in codebase) |
-| Décret 24-196 grace period | 3-year clock start unconfirmed | — | ⚠️ W14 OPEN |
-| `allCriteria` export | Dead-code removed | `src/criteria/index.ts` | ✅ CLOSED — W20 |
+| Décret 06-198 Art.20 warning tier | allCriteria dead-code removed; 0 [À VÉRIFIER] | — | ✅ CLOSED — W20 |
+| Décret 24-196 citation scope | Always cited as amending decree to 06-198 — never standalone | Various | ✅ VERIFIED — W14 |
+| UPD-AX2-01 500m buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 chain. warningMin:700 in place. | UPD-AX2-01 | ✅ VERIFIED — W13 |
