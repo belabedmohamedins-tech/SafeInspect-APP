@@ -32,6 +32,17 @@
 //   BGN-03-05: Art.14 → Art.9 (siphon/water-seal requirement)
 //   BGN-04-03: Art.7 → Art.2+3 (cleaning program and hygiene obligations)
 //   BGN-09-01: secondary Décret 91-05 Art.9 → Art.15 (workplace noise limit)
+// W40 (2026-08-09): 2 wrong article citations corrected.
+//   BGN-04-06: Loi 01-19 Art.32 (hazardous waste collection register) → Art.19
+//              (declaration obligation for hazardous waste producers — correct subject).
+//              Décret 09-19 Arts.4-8 (too broad) → Art.2 (approval scope/definition)
+//              + Art.6 (conditions for granting approval to collector/transporter).
+//   BGN-04-07: Loi 01-19 Art.30 (import/export of hazardous waste — wrong domain)
+//              → [À VÉRIFIER — open]: Art.30 covers transboundary movement, not
+//              unlicensed incineration. Best available basis: Loi 01-19 Art.11
+//              (disposal conditions: no emission, no danger to health/environment)
+//              + Décret 07-205 (approved incinerator requirements). Open a LEGAL-VERIFY
+//              phase to locate the explicit prohibition article.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -295,7 +306,14 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
     criteria: 'وجود بورديرو (وثيقة نقل النفايات الخاصة الخطرة) عند كل عملية تسليم لنفايات خاصة خطرة لمتعامل معتمد، مع الاحتفاظ بنسخة منها لمدة لا تقل عن خمس سنوات. يتحقق المفتش إضافةً من أن المتعامل الجامع والناقل يحمل وثيقة اعتماد سارية المفعول صادرة عن السلطة المختصة وتُغطي نوع النفايات المنقولة فعلياً، وأن اسمه مطابق لما ورد في البورديرو.',
-    legalReference: 'القانون 01-19 المادة 32 + المرسوم التنفيذي 05-315 (بورديرو نقل النفايات الخاصة الخطرة — إلزامي لكل شحنة) + المرسوم التنفيذي 09-19 المواد 4–8 (اشتراط حصول المتعامل الجامع والناقل للنفايات الخاصة الخطرة على اعتماد من السلطة المختصة، وإلزامية التحقق من صحة هذا الاعتماد عند كل تعاقد).',
+    // W40 (2026-08-09): CORRECTED.
+    //   Loi 01-19 Art.32 (register of hazardous waste collectors — different subject) → Art.19
+    //   (declaration obligation for hazardous waste producers: quantity, nature, characteristics,
+    //   treatment methods — the article that makes bordereaux and producer tracking mandatory).
+    //   Décret 09-19 Arts.4-8 (overly broad range) → Art.2 (definition of approval scope and
+    //   categories of collectors/transporters covered) + Art.6 (conditions for granting approval:
+    //   technical capacity, equipment, personnel — what the inspector verifies on the accreditation).
+    legalReference: 'القانون 01-19 المادة 19 (إلزامية تصريح مُنشئي النفايات الخاصة الخطرة بطبيعتها وكمياتها وخصائصها وطرق معالجتها للسلطة المختصة، وحفظ الوثائق الثبوتية — الأساس القانوني لإلزامية البورديرو وتتبع الشحنات) + المرسوم التنفيذي 05-315 (نموذج بورديرو نقل النفايات الخاصة الخطرة — إلزامي لكل شحنة) + المرسوم التنفيذي 09-19 المادة 2 (نطاق الاعتماد: فئات المتعاملين الجامعين والناقلين الخاضعين لنظام الترخيص) + المادة 6 (شروط منح الاعتماد: الكفاءة التقنية، التجهيزات، التأهيل البشري — ما يتحقق منه المفتش في وثيقة الاعتماد).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -305,7 +323,16 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
     criteria: 'حظر الحرق الذاتي للنفايات الخطرة أو الطبية داخل المنشأة (محارق غير مرخصة)؛ وتُحوَّل هذه النفايات حصراً إلى مرافق الإحراق المعتمدة.',
-    legalReference: 'القانون 01-19 المادة 30 (حظر الحرق غير المرخص للنفايات الخطرة) + المرسوم التنفيذي 07-205 (اشتراطات محارق النفايات الخطرة المعتمدة).',
+    // W40 (2026-08-09): CORRECTED.
+    //   Loi 01-19 Art.30 covers transboundary movement of hazardous waste (import/export) —
+    //   completely wrong domain for unlicensed on-site incineration.
+    //   Best currently available basis: Art.11 (disposal conditions: must not cause
+    //   emissions, danger to health, environment, or amenity — applies to burning).
+    //   Décret 07-205 (approved incinerator technical requirements) unchanged and correct.
+    //   [À VÉRIFIER — open W40]: locate the explicit prohibition article in Loi 01-19 or
+    //   a specific arrêté for unlicensed incineration of hazardous/medical waste on-site.
+    //   Open a LEGAL-VERIFY phase before next session closes.
+    legalReference: 'القانون 01-19 المادة 11 (شروط التخلص من النفايات: دون إحداث انبعاثات أو تعريض الصحة والبيئة والجوار للخطر — يُشكِّل الأساس القانوني المتاح لحظر الحرق غير المرخص) + المرسوم التنفيذي 07-205 (الاشتراطات التقنية لمحارق النفايات الخطرة المعتمدة). [À VÉRIFIER — W40 مفتوح]: لم يُعثر حتى الآن على مادة صريحة تحظر الحرق الذاتي للنفايات الخطرة داخل المنشأة في القانون 01-19 (المادة 30 تتعلق بالحركة العابرة للحدود — موضوع مختلف). يُفتح فصل LEGAL-VERIFY لتحديد المرجع الصريح قبل إغلاق W40.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
