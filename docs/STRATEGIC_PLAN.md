@@ -59,46 +59,49 @@
 | W9 | L-05: Abattoir chlorine Décret 11-125 confirmed clean | 2026-08-08 | Direct code read — no change needed. |
 | W18 | BGN-08-01 + BGN-08-02: add Art.5 + Art.13 to Loi 19-02 citation | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
 | W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
-| W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — files do not exist in repo. Doc artefact. No action taken. |
-| W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — file does not exist. Doc artefact. No action taken. |
-| W27 | F-14: statusUtils.ts — observation-only + unable-to-verify explicit labels+colors | 2026-08-08 | `src/utils/statusUtils.ts`. Commit `e2791f7`. |
-| W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | `src/hooks/useChecklistData.ts`. Commit `e2791f7`. |
-| W19-CODE | baseGeneralCriteria article-citation corrections (8 wrong refs + 2 À VÉRIFIER resolved) | 2026-08-08 | Commits `10b51b0`, `d8cc8b5`. legalReference strings only — no logic change. |
+| W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — file does not exist in repo. Doc artefact. |
+| W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — file does not exist. Doc artefact. |
+| W27 | F-14: statusUtils.ts — observation-only + unable-to-verify labels+colors | 2026-08-08 | Commit `e2791f7`. |
+| W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | Commit `e2791f7`. |
+| W19-CODE | baseGeneralCriteria article-citation corrections (8 wrong refs + 2 À VÉRIFIER resolved) | 2026-08-08 | Commits `10b51b0`, `d8cc8b5`. |
 | W29-GATE | Jest gate fixes: Colors keys, Arabic vowel, BGN article refs, AppState mock | 2026-08-09 | Commit `efe4127`. User-confirmed all green. |
-| W22 | F-11: Approved inspection immutability guard | 2026-08-09 | **Confirmed clean by direct read** — `INSPECTION_LOCKED` guard already in `InspectionRepository.save()`. |
-| W23 | F-18: Local approval workflow | 2026-08-09 | **Confirmed clean by direct read** — `ApprovalRepository` fully local. No dead server endpoints. |
-| W24 | F-19: Audit log self-tamper protection | 2026-08-09 | **Confirmed clean by direct read** — `AUDIT_LOG_CLEARED` sentinel inserted before DELETE. |
-| W30 | F-20: decisionSupport.ts test coverage | 2026-08-09 | **Confirmed clean by direct read** — 20 tests covering full decision tree. |
+| W22 | F-11: Approved inspection immutability guard | 2026-08-09 | Confirmed clean by direct read. |
+| W23 | F-18: Local approval workflow | 2026-08-09 | Confirmed clean by direct read. |
+| W24 | F-19: Audit log self-tamper protection | 2026-08-09 | Confirmed clean by direct read. |
+| W30 | F-20: decisionSupport.ts test coverage | 2026-08-09 | Confirmed clean by direct read. |
+| W31-2 | loi-09-03: tag Art.44–52 + Art.80–92 as [MANQUANT]; mark Art.4–67 as [RÉSUMÉ] | 2026-08-09 | Commit `bc1eb6d`. |
+| W31-3 | Decret-07-144: tag rubrique gap 1243–2922 as [MANQUANT] | 2026-08-09 | Commit `bc1eb6d`. |
+| W31-4 | Split bundled arrêté file into 3 separate files + update legal_refs/README.md | 2026-08-09 | Commit `bc1eb6d`. 3 files: 2025 + 2016 + 1999. |
 
 ---
 
 ### 🟡 OPEN Phases
 
-> Execution order: **W31** (legal_refs cleanup) → **W16** → **W17** → **W11** → **W12** → **W15** → **W20** → **W13** → **W14** → **W10** (user sign-off required). W19 parallel.
+> Execution order: **W31** (remaining) → **W16** → **W17** → **W11** → **W12** → **W15** → **W20** → **W13** → **W14** → **W10** (user sign-off required). W19 parallel.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W31** | 🟠 P1 | legal_refs cleanup: 5 Claude-flagged items | See sub-items below | Item 1 blocked on Claude (audit.js not in repo). Items 2–5 actionable. |
-| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off on correct Annex II values before editing |
-| **W11** | 🟠 P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct Algerian ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required |
-| **W12** | 🟠 P1 | L-09: Fix semiPharma citations — Décret 17-140 (food-only scope) → Loi 18-11 | `semiPharmaCriteria.ts` (SPH-02-01, 02-02, 05-01) | ⚠️ Need Loi 18-11 article number confirmed |
-| **W13** | 🟡 P2 | L-06: Clarify UPD-AX2-01 "500m buffer" — rayon d'affichage vs. setback | `updCriteria.ts` (UPD-AX2-01) | ⚠️ Needs product decision from user |
-| **W14** | 🟡 P2 | L-08: Verify Décret 24-196 citation across all criteria files | Various | ⚠️ No source document supplied yet |
-| **W15** | 🟠 P1 (enhancement) | criteriaByActivity — add rubrique-based fallback lookup as secondary key | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | NOT a present bug — activity-string keying works. Enhancement only. |
+| **W31** | 🟠 P1 | legal_refs cleanup: 2 sub-items remaining | See sub-items below | W31-2/3/4 CLOSED. W31-1 + W31-5 still open. |
+| **W10** | 🔴 P0 | L-01: Fix wastewater annex — Annex I general → Annex II abattoir-specific (g/t units) | `abattoirCriteria.ts`, `slaughterhouseSmallCriteria.ts` | ⚠️ Needs user expert sign-off |
+| **W11** | 🟠 P1 | L-04: Fix ventilation citation — Décret 93-120 (medical exams) → correct ventilation decree | `baseGeneralCriteria.ts` (BGN-02-06) | ⚠️ JORADP research required |
+| **W12** | 🟠 P1 | L-09: Fix semiPharma citations — Décret 17-140 → Loi 18-11 | `semiPharmaCriteria.ts` | ⚠️ Loi 18-11 article number required |
+| **W13** | 🟡 P2 | L-06: Clarify UPD-AX2-01 "500m buffer" | `updCriteria.ts` | ⚠️ Product decision from user |
+| **W14** | 🟡 P2 | L-08: Verify Décret 24-196 citation | Various | ⚠️ No source document supplied |
+| **W15** | 🟠 P1 | criteriaByActivity rubrique-based fallback lookup | `src/criteriaData.ts`, `src/hooks/useChecklistData.ts` | Enhancement only — not a bug |
 | **W16** | 🟠 P1 | BFD-08-01: replace wrong Loi 09-03 Art.19 citation | `src/criteria/baseFoodCriteria.ts` | ⚠️ JORADP research required |
 | **W17** | 🟠 P1 | BFD-02-02: source or tag 15cm/5cm storage clearances | `src/criteria/baseFoodCriteria.ts` | ⚠️ Source verification required |
-| **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs, consolidate duplicates, spot-check ≥3 files | `legal_refs/` (24 files) | ⚠️ Do NOT touch — user is working on this in another conversation. |
-| **W20** | 🟡 P2 | Close 3 open legal unverifieds + delete `allCriteria` dead-code export | `src/criteria/index.ts`, `docs/audit/AUDIT_STATE.md` | Depends on W19. |
+| **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
+| **W20** | 🟡 P2 | Close 3 open legal unverifieds + delete `allCriteria` dead-code export | `src/criteria/index.ts` | Depends on W19. |
 
-### W31 Sub-items
+### W31 Remaining Sub-items
 
-| Sub | Status | Description | File | Blocker |
-|---|---|---|---|---|
-| W31-1 | ❌ BLOCKED | `audit.js` regex bug | unknown path — file not found in repo | Claude must push file or confirm path |
-| W31-2 | ⏳ PENDING | `loi-09-03` Art.44–52 + Art.80–92 placeholders; Art.4–67 paraphrase | `legal_refs/loi-09-03-protection-consommateur.md` | Need verbatim JO text OR tag gaps `[MANQUANT]` |
-| W31-3 | ⏳ PENDING | `Decret-07-144.md` missing rubriques 1243–2922 | `legal_refs/Decret-07-144.md` | Need JO n° 31/2007 source OR tag gap `[MANQUANT]` |
-| W31-4 | ⏳ PENDING | `arrete-interministeriel-2025` bundles 3 instruments | `legal_refs/arrete-interministeriel-2025-liaison-froide.md` | Split into 3 files + update index. No source needed. |
-| W31-5 | ⏳ PENDING | README broken links / false rename claim | `legal_refs/README.md` (or other path — confirm with Claude) | Confirm exact file + line |
+| Sub | Status | Description | Blocker |
+|---|---|---|---|
+| W31-1 | ❌ BLOCKED | `audit.js` regex bug | File not found in repo — Claude must push it or confirm path |
+| W31-2 | ✅ CLOSED 2026-08-09 | loi-09-03 placeholders tagged [MANQUANT] | Commit `bc1eb6d` |
+| W31-3 | ✅ CLOSED 2026-08-09 | Decret-07-144 rubrique gap tagged [MANQUANT] | Commit `bc1eb6d` |
+| W31-4 | ✅ CLOSED 2026-08-09 | arrêté bundling split into 3 files | Commit `bc1eb6d` |
+| W31-5 | ⏳ PENDING | README broken links / false rename claim | Claude must confirm exact file + line |
 
 ---
 
@@ -112,9 +115,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18–W19-CODE, W21–W30.
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W9, W18–W19-CODE, W21–W30, W31-2, W31-3, W31-4.
 - Z9 deferred.
-- **Open: W10–W17, W19 (parallel), W20, W31. Next new phase identifier: W32.**
+- **Open: W10–W17, W19 (parallel), W20, W31 (partial). Next new phase identifier: W32.**
 - Never reuse a closed phase letter.
 
 ---
@@ -124,7 +127,7 @@
 | Topic | Instrument | Article/Annex | Status |
 |---|---|---|---|
 | Classified establishments | Décret 06-198 | Art. 2–5 | ✅ Verified |
-| Rubrique nomenclature (622 entries) | Décret 07-144 | Full annex | ✅ VERIFIED |
+| Rubrique nomenclature (1000–1242 only) | Décret 07-144 | Partial annex | ⚠️ PARTIEL — W31-3 tagged, JO n° 31/2007 needed |
 | Wastewater discharge | Décret 06-141 | Art. 3–7 + Annex I | ✅ Verified |
 | Solid waste classification | Décret 06-104 | Annexes | ✅ Verified |
 | Waste collector accreditation | Décret 09-19 | Art. 4–8 | ✅ Verified |
@@ -134,24 +137,22 @@
 | Fire safety — evacuation routes | Loi 19-02 | Art. 13 | ✅ VERIFIED — W18 |
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ✅ Verified |
 | LPG/C installation accreditation | Décret 21-430 | Art. 4, 7, 8 | ✅ Verified |
-| LPG cylinder storage (point de vente) | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
+| LPG cylinder storage | AIM GPL2 | Annexes 1+2 | ✅ VERIFIED |
 | Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
 | Décret 17-140 actual JO date | 11 avril 2017 (14 Rajab 1438H) | — | ✅ VERIFIED — W21 |
 | Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
-| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temperature table | ✅ VERIFIED |
-| Occupational health — medical exam | Décret 93-120 du 15/05/1993 | Art. périodicité | ✅ VERIFIED |
+| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
+| Microbiological criteria | Arrêté interminist. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
+| Consumer protection — Art.1–43 + 53–79 + 93–95 | Loi 09-03 | Partiel | ⚠️ Art.44–52 + 80–92 MANQUANTS — JO n° 15/2009 requis |
+| Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
-| Approved inspection immutability | INSPECTION_LOCKED guard in InspectionRepository.save() | — | ✅ VERIFIED — W22 |
-| Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel before DELETE | — | ✅ VERIFIED — W24 |
+| Approved inspection immutability | INSPECTION_LOCKED guard | — | ✅ VERIFIED — W22 |
+| Audit log self-tamper protection | AUDIT_LOG_CLEARED sentinel | — | ✅ VERIFIED — W24 |
 | BGN-02-06 ventilation citation | Décret 93-120 is medical exams — WRONG | ? | ⚠️ W11 OPEN |
 | Abattoir wastewater annex | Décret 06-141 Annex II — g/t units | Annex II | ⚠️ W10 OPEN — needs user sign-off |
 | BFD-08-01 traceability citation | Loi 09-03 Art.19 WRONG | ? | ⚠️ W16 OPEN |
-| BFD-02-02 storage clearances | 15cm/5cm — not in Décret 17-140 Art.12–24 | ? | ⚠️ W17 OPEN |
-| Décret 06-198 Art.20 | Cited for 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN |
-| Décret 24-196 grace period | 3-year clock start date unconfirmed | Art. relevant | ⚠️ W20 OPEN |
-| loi-09-03 Art.44–52 + Art.80–92 | Placeholder stubs not verbatim | — | ⚠️ W31-2 OPEN |
-| Decret-07-144 rubriques 1243–2922 | Missing from file | — | ⚠️ W31-3 OPEN |
-| arrete-interministeriel-2025 | 3 instruments bundled in one file | — | ⚠️ W31-4 OPEN |
-| legal_refs/ stub files | Fabricated stubs not yet replaced | — | ⚠️ W19 IN PROGRESS (parallel) |
+| BFD-02-02 storage clearances | 15cm/5cm — unverified | ? | ⚠️ W17 OPEN |
+| Décret 06-198 Art.20 | 'warning' sanction tier | Art.20 | ⚠️ W20 OPEN |
+| Décret 24-196 grace period | 3-year clock start unconfirmed | — | ⚠️ W20 OPEN |
