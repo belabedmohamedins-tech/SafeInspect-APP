@@ -91,6 +91,7 @@
 | W36 | `decret-06-141` stub created in legal_refs/ | 2026-08-09 | Commit `d901937d`. Verbatim conversion pending (other conversation). |
 | W37 | Full instrument cross-reference audit report | 2026-08-09 | `docs/AUDIT_COVERAGE_REPORT.md` pushed. 13 missing instruments catalogued. Commit `d0da8c0e`. |
 | **W38** | **F1: Wire rubrique fallback into inspection flow** | **2026-08-09** | **Confirmed clean by direct read. `facilities.tsx` passes `rubrique` (comment `// W38`). `getCriteriaByRubriqueCategory()` exists in `criteriaData.ts`. Param chain: start → categories → facilities → checklist confirmed. No code change needed.** |
+| **W39** | **F3: Décret 91-05 citation cluster — 6 articles corrected** | **2026-08-09** | **Code already in `baseGeneralCriteria.ts` with W39 comments. TSC 0 + Jest 0 failures — user-confirmed gate passed 23:11 WAT.** |
 
 ---
 
@@ -99,7 +100,6 @@
 | Phase | Priority | Title | Files | Blocker / Source | Agent |
 |---|---|---|---|---|---|
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
-| **W39** | 🟠 P1 | F3: Décret 91-05 citation cluster — 6 confirmed wrong articles in `baseGeneralCriteria.ts` | `src/criteria/baseGeneralCriteria.ts` | Source: AUDIT_STATE.md F3 (Session 9). Fix list: BGN-02-05 Art.14→Art.3–4; BGN-02-07 Art.16→Art.13; BGN-03-04 Art.14→Art.9; BGN-03-05 Art.14→Art.9; BGN-04-03 Art.7→Art.2–3; BGN-09-01 Art.9→Art.15. BGN-07-04 needs different source or `[حكم مهني]`. | Perplexity (legalRef string changes, no logic change) |
 | **W40** | 🟠 P1 | F4 + Legacy-F3: Loi 01-19 citation-offset cluster + BGN-04-06 Décret 09-19 article fix | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F4: BGN-04-06 Art.32→Art.19 or 21; BGN-04-07 Art.30→Art.15; SLH-05-04 Art.34→Loi 03-10 Art.30 (already there); SLH-05-05 Art.17→Art.15 or 16. Legacy-F3: BGN-04-06 Décret 09-19 Art.4–8→Art.2+6 (full citation rewrite needed — two independent errors in same criterion). | Perplexity (legalRef string changes) |
 | **W41** | 🟠 P2 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
 | **W42** | 🟠 P2 | F7: Cross-file consistency — abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | Resolve once: unify wastewater limit confidence tags ([À VÉRIFIER] or settled) across both files. Verify Décret 04-82 existence + Arts.6,9 (new instrument). If confirmed, upgrade `abattoirCriteria.ts` citations to match. | Perplexity (after decret-06-141 conversion in W36/W19) |
@@ -119,8 +119,7 @@
 ## Execution Order
 
 ```
-W39 (Perplexity, baseGeneralCriteria Décret 91-05 6-fix cluster) ← NEXT
-→ W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster)
+W40 (Perplexity, Loi 01-19 + Décret 09-19 cluster) ← NEXT
 → W41 (Perplexity, Loi 03-10 range + SLH-08-01 deletion)
 → W36 (other conversation, decret-06-141 PDF conversion)
 → W42 (Perplexity, unify abattoir/slaughterhouse after W36)
@@ -132,8 +131,8 @@ W39 (Perplexity, baseGeneralCriteria Décret 91-05 6-fix cluster) ← NEXT
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W38 (all sub-items except W19/W36/W37 open).
-- **Open: W19, W36, W37, W39, W40, W41, W42.**
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W39 (all sub-items except W19/W36/W37 open).
+- **Open: W19, W36, W37, W40, W41, W42.**
 - **Next new phase identifier: W43.**
 - Never reuse a closed phase letter.
 
@@ -167,11 +166,11 @@ W39 (Perplexity, baseGeneralCriteria Décret 91-05 6-fix cluster) ← NEXT
 | Occupational health general | Loi 88-07 | Art. 12–14 | ⚠️ NO FILE — W37 (P3) |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
 | Décret 91-05 ventilation | Art. 6 (general) + Art. 11 (high-risk cabins) | BGN-02-06 | ✅ VERIFIED — W11; Art. 11 slightly narrow, Art. 6 is general |
-| Décret 91-05 floors/walls (BGN-02-05) | Art. 14 WRONG | Should be Art. 3–4 | ⚠️ W39 — fix pending |
-| Décret 91-05 lighting (BGN-02-07) | Art. 16 WRONG | Should be Art. 13 (lux table) | ⚠️ W39 — fix pending |
-| Décret 91-05 drainage design (BGN-03-04/05) | Art. 14 WRONG | Should be Art. 9 | ⚠️ W39 — fix pending |
-| Décret 91-05 cleaning program (BGN-04-03) | Art. 7 WRONG | Should be Art. 2–3 | ⚠️ W39 — fix pending |
-| Décret 91-05 noise limit (BGN-09-01) | Art. 9 WRONG | Should be Art. 15 | ⚠️ W39 — fix pending |
+| Décret 91-05 floors/walls (BGN-02-05) | Art. 3+4 | ✅ CLOSED — W39 | |
+| Décret 91-05 lighting (BGN-02-07) | Art. 13 (lux table) | ✅ CLOSED — W39 | |
+| Décret 91-05 drainage design (BGN-03-04/05) | Art. 9 | ✅ CLOSED — W39 | |
+| Décret 91-05 cleaning program (BGN-04-03) | Art. 2+3 | ✅ CLOSED — W39 | |
+| Décret 91-05 noise limit (BGN-09-01) | Art. 15 | ✅ CLOSED — W39 | |
 | Loi 03-10 EIE range (BGN-10-01) | Art. 15–22 WRONG | Should be Art. 14–21 | ⚠️ W41 — fix pending |
 | Loi 03-10 Class-1 auth (BGN-08-06) | Art. 18 WRONG | Should be Art. 63 + Art. 77 | ⚠️ W41 — fix pending |
 | Loi 01-19 hazardous waste (BGN-04-06) | Art. 32 WRONG | Should be Art. 19 or 21 | ⚠️ W40 — fix pending |

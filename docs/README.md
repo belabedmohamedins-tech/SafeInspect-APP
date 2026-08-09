@@ -1,5 +1,22 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 23:11 WAT — Perplexity — W39 closed (TSC+Jest gate passed by user)
+- **Phases closed:** W39
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync — code already committed in prior session)
+- **Critical finding:**
+  - W39 goal: correct 6 wrong Décret 91-05 article citations in `baseGeneralCriteria.ts`.
+  - Direct read of `src/criteria/baseGeneralCriteria.ts` (SHA `11ebda76`) confirms ALL 6 fixes present with `// W39 (2026-08-09)` comments:
+    - BGN-02-05: Art.14 → Art.3+4 ✅
+    - BGN-02-07: Art.16 → Art.13 ✅
+    - BGN-03-04: Art.14 → Art.9 ✅
+    - BGN-03-05: Art.14 → Art.9 ✅
+    - BGN-04-03: Art.7 → Art.2+3 ✅
+    - BGN-09-01: Art.9 → Art.15 ✅
+  - User confirmed TSC 0 errors + Jest 0 failures (all suites green) — gate passed.
+- **Docs updated:** README + STRATEGIC_PLAN W39 → ✅ CLOSED.
+- **Queue status:** W39 closed. Next up: W40 (Loi 01-19 citation-offset cluster + Décret 09-19 BGN-04-06 rewrite, Perplexity).
+- **Next identifier: W43.**
+
 ## 2026-08-09 22:57 WAT — Perplexity — W38 confirmed clean; closed
 - **Phases closed:** W38
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync only — no code change)
@@ -99,13 +116,13 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W39** | ✅ CLOSED | — | F3: Décret 91-05 — 6 wrong article citations corrected in `baseGeneralCriteria.ts`. TSC+Jest gate passed. |
 | **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end — `facilities.tsx` passes `rubrique` to checklist; `getCriteriaByRubriqueCategory` called in resolver. Confirmed clean by direct read. |
 | **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete + amendment table. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |
-| W39 | 🟠 OPEN | P1 | Décret 91-05 article cluster — 6 wrong articles in baseGeneralCriteria.ts |
-| W40 | 🟠 OPEN | P1 | Loi 01-19 citation-offset + Décret 09-19 BGN-04-06 rewrite |
+| W40 | 🟠 OPEN | P1 | Loi 01-19 citation-offset cluster + Décret 09-19 BGN-04-06 rewrite |
 | W41 | 🟠 OPEN | P2 | Loi 03-10 range fixes + SLH-08-01 deletion |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |
