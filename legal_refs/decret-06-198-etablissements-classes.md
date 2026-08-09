@@ -9,6 +9,7 @@
 **Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)  
 **Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14  
 **Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
+**Modifié par :** Décret exécutif n° 24-196 du 5 Dhou El Hidja 1445 correspondant au 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés  
 **Date de cette conversion :** 2026-08-09  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ
 
@@ -174,6 +175,8 @@ Les études de danger sont réalisées, à la charge du promoteur, par des burea
 
 ### Article 14
 
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Les points 1 à 7 restent sans changement ; les points 8, 9 et 10 sont renumérotés et reformulés (ajout du mot « lisible » sur les cartes et plans).
+
 L'étude de danger doit comporter les éléments suivants :
 
 1) une présentation générale du projet ;
@@ -192,7 +195,15 @@ b) les données socio-économiques et culturelles : population, habitat, points 
 
 6) l'analyse des impacts potentiels en cas d'accidents sur les populations (y compris les travailleurs au sein de l'établissement), l'environnement ainsi que les impacts économiques et financiers prévisibles ;
 
-7) Les modalités d'organisation de la sécurité du site, les modalités de prévention des accidents majeurs et du système de gestion de la sécurité et des moyens de secours.
+7) Les modalités d'organisation de la sécurité du site, les modalités de prévention des accidents majeurs et du système de gestion de la sécurité et des moyens de secours ;
+
+8) l'emplacement de l'établissement classé projeté est indiqué sur une carte à l'échelle comprise entre 1/25.000ème et 1/50.000ème lisible ;
+
+9) un plan de situation à l'échelle de 1/2.500ème, au minimum, du voisinage de l'établissement, lisible, jusqu'à une distance qui est, au moins, égale au dixième du rayon d'affichage fixé dans la nomenclature des installations classées sans pouvoir être inférieure à cent (100) mètres.
+
+Sur ce plan, sont indiqués tous les bâtiments avec leur affectation, les voies de chemin de fer, les voies publiques, les points d'eau, canaux et cours d'eau ;
+
+10) un plan d'ensemble, à l'échelle de 1/200ème, au minimum, lisible, indiquant les dispositions projetées de l'établissement classé jusqu'à trente-cinq (35) mètres, au moins, de celui-ci, l'affectation des constructions et terrains avoisinants ainsi que le tracé des voiries et réseaux divers (VRD) existants.
 
 ### Article 15
 
@@ -258,19 +269,23 @@ En cas de retrait de l'autorisation d'exploitation de l'établissement classé, 
 
 ### Article 24
 
-La déclaration d'exploitation d'un établissement classé de quatrième catégorie est adressée au président de l'assemblée populaire communale territorialement compétent, soixante (60) jours au moins avant sa mise en exploitation.
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Suppression du délai de 60 jours avant mise en exploitation ; simplification des mentions obligatoires (suppression du volume d'activités et du numéro de rubrique dans la déclaration elle-même) ; ajout de la nature de la déclaration (établissement projeté, existant ou modifié).
+
+La déclaration d'exploitation d'un établissement classé de quatrième catégorie, est adressée au président de l'assemblée populaire communale territorialement compétent.
 
 Cette déclaration doit mentionner expressément :
 
-— les nom, prénom et adresse de l'exploitant, s'il s'agit d'une personne physique ;
+— le nom et le prénom du déclarant, s'il s'agit d'une personne physique ;
 
-— la dénomination ou la raison sociale, la forme juridique, l'adresse de son siège social ainsi que la qualité du signataire de la déclaration s'il s'agit d'une personne morale ;
+— la dénomination ou la raison sociale, la forme juridique, l'adresse de son siège ainsi que la qualité du signataire de la déclaration, s'il s'agit d'une personne morale ;
 
-— la nature et le volume des activités que le déclarant se propose d'exercer ;
+— la désignation de l'activité ;
 
-— la ou les rubriques de la nomenclature des installations classées dans lesquelles l'établissement doit être classé.
+— la nature de la déclaration, s'il s'agit d'un établissement classé de quatrième catégorie projeté ou existant ou ayant fait l'objet de modification dans les éléments déclarés.
 
 ### Article 25
+
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Les deux premiers documents (plan de situation et plan de masse) restent sans changement. Le rapport unique est restructuré en trois sous-points distincts : rubrique de nomenclature, procédés/produits dangereux, mode de traitement des rejets et déchets.
 
 La déclaration d'exploitation d'un établissement classé de quatrième catégorie doit être accompagnée des documents suivants :
 
@@ -278,13 +293,25 @@ La déclaration d'exploitation d'un établissement classé de quatrième catégo
 
 — un plan de masse faisant ressortir les aires de production et de stockage des produits ;
 
-— un rapport sur les procédés de fabrication que le promoteur mettra en œuvre, les matières qu'il utilisera et notamment les produits dangereux qu'il est susceptible de détenir ainsi que les produits qu'il fabriquera de manière à apprécier les inconvénients de l'établissement classé.
+— un rapport comportant :
 
-— un rapport sur le mode et les conditions de réutilisation, d'épuration et d'évacuation des eaux résiduaires et des émanations de toute nature ainsi que l'élimination des déchets et résidus de l'exploitation.
+  - la nature et le volume des activités ainsi que la ou les rubrique(s) de la nomenclature des installations classées dans lesquelles l'établissement doit être classé ;
+
+  - les procédés de fabrication que le déclarant met en œuvre, les matières qu'il utilise et notamment les produits dangereux qu'il est susceptible de détenir ainsi que les produits qu'il fabrique de manière à apprécier les inconvénients de l'établissement classé et les mesures pour y remédier ;
+
+  - le mode et les conditions de traitement des rejets liquides et atmosphériques de toute nature ainsi que le traitement des déchets et résidus de l'exploitation.
 
 ### Article 26
 
-La déclaration d'exploitation d'un établissement classé de quatrième catégorie peut être refusée. Le refus de la déclaration doit être motivé, validé par la commission et notifié au déclarant.
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Remplacement du régime de refus motivé par un régime d'acceptation par décision du président de l'APC après avis des services de l'environnement et du secteur concerné ; introduction d'un délai de réponse de 60 jours ; introduction d'un recours au wali dans un délai de 10 jours après notification du refus.
+
+La déclaration d'exploitation de l'établissement classé de quatrième catégorie est acceptée par décision du président de l'assemblée populaire communale territorialement compétent, après avis des services de l'environnement et du secteur concerné par l'activité.
+
+Le président de l'assemblée populaire communale est tenu de répondre au déclarant dans un délai n'excédant pas soixante (60) jours, à compter de la date de la déclaration.
+
+Le refus de la déclaration d'exploitation d'un établissement classé de quatrième catégorie, doit être motivé et notifié au déclarant.
+
+Le déclarant peut introduire un recours dans un délai de 10 jours, à compter de la date de notification du refus au déclarant, auprès du wali territorialement compétent, conformément à la réglementation en vigueur.
 
 ### Article 27
 
@@ -302,7 +329,9 @@ Il est institué, au niveau de chaque wilaya, une commission de contrôle des é
 
 ### Article 29
 
-La commission, présidée par le wali territorialement compétent ou son représentant, est composée :
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Deux membres modifiés : « directeur de la santé et de la population de wilaya » remplacé par « directeur de la santé de wilaya » ; « représentant de l'agence nationale de développement de l'investissement » remplacé par « représentant de l'agence algérienne de la promotion de l'investissement ». Les autres membres restent sans changement.
+
+La commission, présidée par le wali territorialement compétent ou par son représentant, est composée :
 
 — du directeur de l'environnement de wilaya ou son représentant ;
 
@@ -324,19 +353,15 @@ La commission, présidée par le wali territorialement compétent ou son représ
 
 — du directeur des services agricoles de wilaya ou de son représentant ;
 
-— du directeur de la santé et de la population de wilaya ou de son représentant ;
+— du directeur de la santé de wilaya ou de son représentant ;
 
-— du directeur de la petite et moyenne entreprise et de l'artisanat de wilaya ou de son représentant ;
-
-— du directeur du travail de wilaya ou de son représentant ;
-
-— du directeur de la pêche de wilaya ou de son représentant ;
+— du directeur de la réglementation et des affaires générales ou de son représentant ;
 
 — des directeurs de la culture et du tourisme de la wilaya ou de leurs représentants lorsque les dossiers examinés par la commission concernent l'une et/ou l'autre de ces directions ;
 
 — du conservateur des forêts ou de son représentant ;
 
-— du représentant de l'agence nationale de développement de l'investissement ;
+— un représentant de l'agence algérienne de la promotion de l'investissement ;
 
 — de trois (3) experts dans le domaine concerné par les travaux de la commission ;
 
@@ -444,7 +469,9 @@ La commission saisie du plan de dépollution en contrôle l'exécution et s'assu
 
 ### Article 44
 
-Les établissements classés existants n'ayant pas fait l'objet d'autorisation d'exploitation ou dont l'autorisation d'exploitation ne correspond pas aux catégories fixées par l'article 3 ci-dessus, ainsi qu'aux rubriques de la nomenclature des installations classées fixée par la réglementation en vigueur, sont tenus, dans un délai n'excédant pas deux (2) ans à partir de la date de promulgation du présent décret, de réaliser un audit environnemental.
+> **Modification — Décret n° 24-196 du 11 juin 2024 (JORADP n° 42/2024) :** Nouvelle rédaction complète. Suppression de l'obligation d'audit environnemental ; remplacement par une obligation de régularisation (autorisation ou déclaration) dans un délai de 3 ans à compter de la promulgation du décret 24-196 (soit jusqu'au 11 juin 2027 environ).
+
+Tout exploitant d'un établissement classé existant n'ayant pas fait l'objet d'autorisation ou de déclaration d'exploitation, doit procéder à la régularisation de sa situation, dans un délai n'excédant pas trois (3) ans, à compter de la date de promulgation du présent décret.
 
 ### Article 45
 
@@ -484,13 +511,13 @@ Fait à Alger, le 4 Joumada El Oula 1427 correspondant au 31 mai 2006.
 
 ## Contrôle de séquence
 
-Articles présents dans le PDF source (JORADP JO n° 37, pages 8–14) :
+Articles présents dans le PDF source (JORADP JO n° 37, pages 8–14) et modifications intégrées (Décret 24-196, JORADP n° 42/2024) :
 
 **Art. 1 à 50 — tous présents et transcrits dans l'ordre.**
 
-Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — Art. 14 — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — Art. 24 — Art. 25 — Art. 26 — Art. 27 — Art. 28 — Art. 29 — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — Art. 44 — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50
+Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — **Art. 14 ✏️** — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — **Art. 24 ✏️** — **Art. 25 ✏️** — **Art. 26 ✏️** — Art. 27 — Art. 28 — **Art. 29 ✏️** — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — **Art. 44 ✏️** — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50
 
-Aucun article absent. Aucun gap dans la numérotation.
+✏️ = article modifié par le Décret n° 24-196 du 11 juin 2024. Aucun article absent. Aucun gap dans la numérotation.
 
 **Structure du décret :**
 - Chapitre I (Dispositions préliminaires) : Art. 2–3
@@ -508,3 +535,16 @@ Aucun article absent. Aucun gap dans la numérotation.
   - Section 3 (Arrêt d'exploitation) : Art. 41–43
 - Chapitre V (Dispositions transitoires) : Art. 44–48
 - Chapitre VI (Dispositions finales) : Art. 49–50
+
+---
+
+## Tableau des modifications
+
+| Article | Instrument modificatif | Date JO | Nature de la modification |
+|---|---|---|---|
+| Art. 14 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Ajout points 8, 9 et 10 (plans lisibles) ; points 1–7 inchangés |
+| Art. 24 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : suppression délai 60j avant exploitation ; simplification des mentions ; ajout nature de la déclaration |
+| Art. 25 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Restructuration du rapport en 3 sous-points distincts |
+| Art. 26 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : régime d'acceptation par décision APC ; délai de réponse 60j ; recours au wali sous 10j |
+| Art. 29 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Remplacement « santé et de la population » → « santé » ; ANDI → AAPI |
+| Art. 44 | Décret n° 24-196 | JORADP n° 42 — 19 juin 2024 | Nouvelle rédaction : obligation de régularisation en 3 ans (vs. audit environnemental en 2 ans) |
