@@ -5,20 +5,17 @@
  *
  * Usage:  node legal_refs/audit.js
  *
- * What it reports per file:
- *   - Total article numbers detected
- *   - Highest article number found
- *   - Any sequence gaps (e.g. Art.5 found but Art.4 missing)
- *   - Lines tagged [MANQUANT] or [À VÉRIFIER]
+ * Regex:
+ *   /\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/gim
+ *   Tolerates: **Art. N.**, *Article N :*, plain Article 12, Art.5
  *
- * Regex design (W31-1 fix):
- *   Tolerates bold markdown (**Art. N.**), *Article N :*, plain Article 12.
- *   Excludes cross-references to OTHER laws inside body text, e.g.:
- *     "article 429 du code pénal" — matched by checking the line does NOT
- *     contain 'code pénal', 'code de procédure', 'code civil', etc.
+ * Cross-ref filter logic:
+ *   A line like: "**Art. 5.** — Renvoi vers Décret exécutif n° 14-366..."
+ *   contains BOTH an article declaration AND a cross-reference.
+ *   Previous version dropped the entire line, losing the article number.
  *
- *   Per-line approach: split content by line, skip lines that are
- *   cross-references to external codes before applying the regex.
+ *   Fix: only skip a line if it does NOT start with an article declaration.
+ *   i.e. cross-ref filter applies only to body-text lines, not article headers.
  */
 
 const fs   = require('fs');
@@ -26,21 +23,28 @@ const path = require('path');
 
 const DIR = path.resolve(__dirname);
 
-// Matches: **Art. 12**, *Article 3 :*, Art.5, Article 12, Articles 3 à 7, etc.
+// Matches article declarations at or near the start of a line.
+const ARTICLE_START_RE = /^[\s#*>]*\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/im;
+
+// Full-line article scanner (used after cross-ref check).
 const ARTICLE_RE = /\*{0,2}art(?:icle)?s?[.:]?\s*(\d+)/gim;
 
-// Lines containing these strings are cross-references to OTHER codes/laws— skip them.
+// Cross-reference patterns — only applied to lines that are NOT article declarations.
 const CROSS_REF_PATTERNS = [
+  /(?:^|\s)articles?\s+\d+\s+(?:bis|ter|quater|\u00e0|et|ou)\s+\d+\s+(?:du\s+)?(?:code|loi|décret)/i,
+  /\(article\s+\d+\s+du\s+code/i,
+  /article\s+\d+\s+(?:et\s+suivants\s+)?du\s+code/i,
   /code\s+pénal/i,
   /code\s+de\s+procédure/i,
   /code\s+civil/i,
   /code\s+du\s+travail/i,
   /code\s+de\s+commerce/i,
-  /loi\s+n[\u00b0°]?\s*\d{2}-\d{2}/i,   // references to other laws: "loi n° 18-09"
-  /décret\s+ex[eé]cutif\s+n[\u00b0°]?\s*\d{2}-\d{3}/i, // cross-dec refs in body
 ];
 
-function isCrossRef(line) {
+function isCrossRefOnly(line) {
+  // If this line starts with an article declaration, never skip it.
+  if (ARTICLE_START_RE.test(line)) return false;
+  // Otherwise skip if it contains a cross-reference pattern.
   return CROSS_REF_PATTERNS.some(p => p.test(line));
 }
 
@@ -54,7 +58,7 @@ function auditFile(filePath) {
 
   const numbers = new Set();
   for (const line of lines) {
-    if (isCrossRef(line)) continue;   // skip cross-references to other codes
+    if (isCrossRefOnly(line)) continue;
     let match;
     ARTICLE_RE.lastIndex = 0;
     while ((match = ARTICLE_RE.exec(line)) !== null) {
@@ -65,7 +69,6 @@ function auditFile(filePath) {
   const sorted = Array.from(numbers).sort((a, b) => a - b);
   const max    = sorted.length ? sorted[sorted.length - 1] : 0;
 
-  // Detect gaps (only meaningful if at least 3 articles found)
   const gaps = [];
   if (sorted.length >= 3) {
     for (let i = sorted[0]; i <= max; i++) {
@@ -80,7 +83,6 @@ function auditFile(filePath) {
 }
 
 function gapNote(filename, gaps) {
-  // Known benign gap patterns — add notes so the reader doesn’t panic.
   if (filename.includes('decret-06-198') && gaps.some(g => g >= 51))
     return ' (gaps likely = Annexes, not numbered articles)';
   if (filename.includes('decret-09-19') && gaps.some(g => g >= 18))
@@ -97,9 +99,9 @@ function main() {
     .filter(f => f.endsWith('.md') && f !== 'README.md')
     .sort();
 
-  let totalManquant  = 0;
-  let totalAverifie  = 0;
-  let filesWithGaps  = 0;
+  let totalManquant = 0;
+  let totalAverifie = 0;
+  let filesWithGaps = 0;
 
   console.log('='.repeat(72));
   console.log('SafeInspect legal_refs — Article Coverage Audit');
@@ -108,8 +110,8 @@ function main() {
 
   for (const file of files) {
     const r = auditFile(path.join(DIR, file));
-    totalManquant  += r.manquantCount;
-    totalAverifie  += r.averifierCount;
+    totalManquant += r.manquantCount;
+    totalAverifie += r.averifierCount;
     if (r.gaps.length) filesWithGaps++;
 
     const status = r.manquantCount > 0  ? '⚠️  PARTIEL'
