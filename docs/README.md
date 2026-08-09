@@ -1,5 +1,16 @@
 # SafeInspect — Live Observations Log
 
+## 2026-08-09 15:31 WAT — Perplexity — W32 confirmed complete; closed
+- **Phases closed:** W32
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync only — no code change)
+- **Critical finding:**
+  - PDF `loi-09-03_compressed.pdf` (JO N° 15/2009) read directly — all 95 articles extracted verbatim.
+  - `legal_refs/loi-09-03-protection-consommateur.md` header already reads `✅ VÉRIFIÉ — Texte des Art. 1–95 contrôlé ligne à ligne contre le PDF JO N° 15 original. Art. 80–85 corrigés (base PDF) lors de la phase W32.`
+  - SHA: `e1c901e1b59ca46317444bfe1f933c9ec764abf2` — file is fully complete. No [RÉSUMÉ] or [MANQUANT] tags remain.
+  - W32 was implemented in a prior operation but never marked closed in docs. Closing now.
+- **Queue status:** ✅ NO open phases remain (W19 parallel — user working). Next identifier: **W33.**
+- **Handoff to Claude:** W32 closed. All autonomous work exhausted. Only W19 (parallel user session on legal_refs/) remains — do not touch. Await next user instruction.
+
 ## 2026-08-09 14:46 WAT — Perplexity — W15 confirmed clean; closed
 - **Phases closed:** W15
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (doc sync only — no code change)
@@ -61,6 +72,6 @@
 |---|---|---|---|
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
+| **W32** | ✅ CLOSED | — | loi-09-03 verbatim (Art.1–95) — verified against JO N°15/2009 PDF |
 | W19 | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
-| W32 | 🟡 OPEN | P2 | loi-09-03 verbatim transcription (JORADP source needed) |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |

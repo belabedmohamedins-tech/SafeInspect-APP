@@ -82,17 +82,17 @@
 | W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts`. 500m min cited against Loi 90-29 + Loi 03-10 + Décret 06-198 (correct legal chain — no specific distance decree exists). `warningMin: 700` graduated alert in place. No change needed. |
 | W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read of `updCriteria.ts` + directory listing. Décret 24-196 is cited exclusively as the amending decree to 06-198 («كما عُدِّل بالمرسومَيْن 22-167 و 24-196») — never cited as a standalone authority. Citation chain is correct. No change needed. |
 | W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER] in `abattoirCriteria.ts` (tag already applied in prior session). Switch to Annex II g/tonne units only after JORADP JO verbatim verified. No code change this session. |
-| **W15** | **criteriaByActivity rubrique-based fallback lookup** | **2026-08-09** | **Confirmed clean by direct read of `src/criteriaData.ts` + `src/hooks/useChecklistData.ts`. `criteriaByRubriqueCategory` map (31 keys, bilingual FR/AR) + `getCriteriaByRubriqueCategory()` function already present. Header comment `// W15 (2026-08-09)` present. All 26 activity strings have exact keys — fallback purely defensive. No code change needed.** |
+| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read of `src/criteriaData.ts` + `src/hooks/useChecklistData.ts`. `criteriaByRubriqueCategory` map (31 keys, bilingual FR/AR) + `getCriteriaByRubriqueCategory()` function already present. All 26 activity strings have exact keys — fallback purely defensive. No code change needed. |
+| **W32** | **loi-09-03 verbatim transcription Art.1–95 + source Art.44–52/80–92 from JO N°15/2009** | **2026-08-09** | **PDF `loi-09-03_compressed.pdf` read directly. All 95 articles extracted and verified against JO N°15 original. `legal_refs/loi-09-03-protection-consommateur.md` already marked ✅ VÉRIFIÉ (Art.80–85 corrected from PDF during W32). [RÉSUMÉ] and [MANQUANT] tags cleared. No further action needed.** |
 
 ---
 
-### 🟡 OPEN Phases
+### 🟠 OPEN Phases
 
-> ✅ No P0 or P1 items remain autonomously actionable. Only W19 (parallel) and W32 (source-blocked) remain.
+> ✅ No P0, P1, or P2 items remain autonomously actionable. Only W19 (parallel user session) remains.
 
 | Phase | Priority | Title | Files | Blocker / Source |
 |---|---|---|---|---|
-| **W32** | 🟡 P2 | loi-09-03: verbatim transcription Art.4–67 + source Art.44–52/80–92 from JO n°15/2009 | `legal_refs/loi-09-03-protection-consommateur.md` | File honest ([RÉSUMÉ]/[MANQUANT] tagged). Needs JORADP JO n°15/2009. Not deceptive — low urgency. |
 | **W19** | 🟠 P1 — **IN PROGRESS (parallel session)** | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working on this separately |
 
 ---
@@ -107,9 +107,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W15, W16–W18, W19-CODE, W20–W24, W27–W31 (all sub-items).
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W32 (all sub-items).
 - Z9 deferred.
-- **Open: W19 (parallel), W32. Next new phase identifier: W33.**
+- **Open: W19 (parallel). Next new phase identifier: W33.**
 - Never reuse a closed phase letter.
 
 ---
@@ -134,10 +134,10 @@
 | Air emissions point source | Décret 06-138 | Annex I + II | ✅ VERIFIED |
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
 | Décret 17-140 actual JO date | 11 avril 2017 (14 Rajab 1438H) | — | ✅ VERIFIED — W21 |
-| Cold-chain temps (restaurants) | Arrêté interminist. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
-| Cold storage temps by product type | Arrêté interminist. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
-| Microbiological criteria | Arrêté interminist. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
-| Consumer protection — Art.1–43 + 53–79 + 93–95 | Loi 09-03 | Partiel | ⚠️ Art.4–67 [RÉSUMÉ]; Art.44–52 + 80–92 [MANQUANT] — W32 OPEN |
+| Cold-chain temps (restaurants) | Arrêté interminst. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
+| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
+| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
+| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ✅ VERIFIED — W32. PDF JO N°15/2009 lu directement. |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
