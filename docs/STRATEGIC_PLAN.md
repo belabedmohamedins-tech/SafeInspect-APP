@@ -83,7 +83,11 @@
 | W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean by direct read. Décret 24-196 cited exclusively as amending decree to 06-198 — never standalone. No change needed. |
 | W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change this session. |
 | W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | Confirmed clean by direct read. `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` already present. No change needed. |
-| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines (Art.4–95 + all amendments). Reverted via `cbe46ba8`. File restored to `ca6fc9ec` baseline — complete Art.1–95, status NON VÉRIFIÉ. Art.80–85 NOT PDF-corrected. Future PDF correction = new phase W33+ as targeted patch only.** |
+| **W32** | **⚠️ RETRACTED — loi-09-03 W32 commit DESTRUCTIVE** | **2026-08-09** | **Commit `1c49fb43` deleted 492 lines (Art.4–95 + all amendments). Reverted via `cbe46ba8`. File restored to `ca6fc9ec` baseline — complete Art.1–95, status NON VÉRIFIÉ. Art.80–85 NOT PDF-corrected. Superseded by W34-FIX.** |
+| W33 | Prevention protocol analysis + improved space instructions for legal-refs agent | 2026-08-09 | Analysis delivered in chat. User added SIZE GUARD + CITE-BEFORE-COMMIT + COORDINATION rules to other conversation's instructions. No code change. |
+| W34 | ⚠️ FAILED — loi-09-03 Art.80–95 verbatim patch — create_or_update_file truncated at Art.47 (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Caught immediately by diff gate. Superseded by W34-FIX. |
+| W34-FIX | loi-09-03 Art.1–95 fully restored + Art.80–95 verbatim from JO N°15/2009 PDF + amendment table | 2026-08-09 | Commit `566a5e28`. Size: 34,321 bytes. Diff: +169/-76 ✅. Used push_files per new SIZE GUARD rule. |
+| W35-DOCS | STRATEGIC_PLAN sync — close W33/W34/W34-FIX, correct next identifier to W36 | 2026-08-09 | This commit. |
 
 ---
 
@@ -105,9 +109,9 @@
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W32 (all sub-items).
+- Closed: A–Z, Z2–Z5, Z7, Z10, Z10-FIX, Z11, Z12, Z6, Z8, W1, W2, G18, W4–W35-DOCS (all sub-items).
 - Z9 deferred.
-- **Open: W19 (parallel). Next new phase identifier: W33.**
+- **Open: W19 (parallel). Next new phase identifier: W36.**
 - Never reuse a closed phase letter.
 
 ---
@@ -133,9 +137,9 @@
 | Food safety / HACCP | Décret 17-140 | Art. 5 | ✅ Verified |
 | Décret 17-140 actual JO date | 11 avril 2017 (14 Rajab 1438H) | — | ✅ VERIFIED — W21 |
 | Cold-chain temps (restaurants) | Arrêté interminst. 07/05/2025 | Full text | ✅ VERIFIED — W7 |
-| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table (réf.) | ⚠️ Valeurs de référence — texte verbatim non extrait |
-| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait |
-| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ⚠️ RESTORED to ca6fc9ec — complete but NON VÉRIFIÉ against JO PDF. W32 RETRACTED. PDF correction pending W33+. |
+| Cold storage temps by product type | Arrêté interminst. 21/11/1999 | Temp. table (réf.) | ⚠️ Stub — texte verbatim non extrait. Other conversation converting. |
+| Microbiological criteria | Arrêté interminst. 04/10/2016 | — | ⚠️ Stub — texte verbatim non extrait. Other conversation converting. |
+| Consumer protection Art.1–95 | Loi 09-03 | Art. 1–95 complets | ✅ W34-FIX — Art.1–95 verbatim complete, 34,321 bytes, commit `566a5e28`. NON VÉRIFIÉ against JO PDF (human review pending). |
 | Occupational health — medical exam | Décret 93-120 | Art. périodicité | ✅ VERIFIED |
 | Occupational health general | Loi 88-07 | Art. 12–14 | ✅ Verified |
 | Pest control operators | Arrêté 1995 | Art. 3 | ✅ Verified |
