@@ -20,6 +20,7 @@
      README mis à jour le 2026-08-10 (19) — 6 corrections statut : loi-03-10 audité, D06-138 annexes corrompues, D25-63 et D21-319 stubs retirés, loi-18-11 450 art., D21-319 JO N° 64
      README mis à jour le 2026-08-10 (20) — 4 fichiers marqués CONVERTIS : decret-91-05, decret-93-120, loi-90-11, loi-19-02
      README mis à jour le 2026-08-10 (21) — decret-24-197 supprimé (hors scope SafeInspect) : row index + tableau de bord + note
+     README mis à jour le 2026-08-10 (22) — loi-90-29 et loi-04-20 marqués CONVERTIS par utilisateur depuis PDF officiel
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -37,13 +38,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 21)
+## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 22)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
 | ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 32 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 34 | voir index ci-dessous |
 | ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 1 | `decret-06-138` |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
@@ -55,7 +56,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 ## Index des fichiers
 
 | Fichier | Instrument | Objet | Statut réel |
-|---|---|---|
+|---|---|---|---|
 | `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 4/1988) — Art. 37, 38, 39 modifiés intégrés — [CONVERTI par utilisateur depuis PDF] |
 | `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO 12 mars 1976) — [CONVERTI par utilisateur depuis PDF] |
 | `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 42/1983) — Art. 4, 7, 8 modifiés par D21-430 — [CONVERTI par utilisateur depuis PDF, texte arabe + traduction française] |
@@ -63,13 +64,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
-| `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–81, JO 52/1990) |
+| `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme — Art. 1–81 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/1990) — Contrôle de séquence présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 77/2001) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) — [CONVERTI par utilisateur depuis PDF] |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable — Art. 1–89 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 43/2003) — séquence Art. 1–89 auditée 2026-08-10, aucun gap |
 | `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 + 3 annexes | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) — [CONVERTI par utilisateur depuis PDF] |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/2004) — [CONVERTI par utilisateur depuis PDF] |
-| `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 | ⚠️ NON VÉRIFIÉ — texte intégral présent |
+| `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 60/2005) — [CONVERTI 2026-08-10] |
 | `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 | ⚠️ NON VÉRIFIÉ — **PARTIEL — Annexes I–II corrompues par OCR** (JO N° 24/2006) — [CONVERTI par utilisateur, annexes à retravailler depuis PDF de meilleure qualité] |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 26/2006) |
@@ -129,3 +130,5 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 (patch 19) :** `loi-18-11-sante.md` — 450 articles complets, Art. 12–16 intégrés.
 - **2026-08-10 (patch 20) :** `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` — convertis verbatim par l'utilisateur depuis PDF (2026-08-10).
 - **2026-08-10 (patch 21) :** `decret-24-197-entrepreneuriat.md` — supprimé de l'index (hors scope SafeInspect, confirmé par l'utilisateur). Fichier non présent dans le repo.
+- **2026-08-10 (patch 22) :** `loi-90-29-urbanisme.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–81 complets, JO N° 52/1990. Contrôle de séquence présent.
+- **2026-08-10 (patch 22) :** `loi-04-20-risques-majeurs.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–75 complets.
