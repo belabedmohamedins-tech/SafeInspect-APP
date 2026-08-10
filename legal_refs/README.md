@@ -15,6 +15,7 @@
      README mis à jour le 2026-08-10 (14) — D90-245 JO N° 36 confirmé par utilisateur depuis PDF officiel
      README mis à jour le 2026-08-10 (15) — D04-83 hors scope SafeInspect — mention supprimée
      README mis à jour le 2026-08-10 (16) — decret-09-19 objet corrigé (collecte déchets spéciaux, JO N°6/2009) + loi-01-19 et decret-09-19 Contrôle de séquence + JO header patché
+     README mis à jour le 2026-08-10 (17) — D09-335 marqué ABROGÉ par D25-63 ; +3 rows : D21-319, D21-261, A2011-02-06-permis-construire-energie
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -37,7 +38,8 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
-| ⚠️ NON VÉRIFIÉ | 27 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ | 30 | voir index ci-dessous |
+| ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
@@ -68,15 +70,19 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
-| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 68, 25 octobre 2009) — [CONVERTI 2026-08-10] |
+| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025) — conservé pour référence historique — voir `decret-25-63-plans-intervention-catastrophes.md` |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) |
+| `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 6 février 2011 (3 Rabie El Aouel 1432) | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière | ⚠️ NON VÉRIFIÉ — à convertir depuis PDF (cntpp.dz) — [IDENTIFIÉ 2026-08-10, NON ENCORE CONVERTI] |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
 | `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé | ⚠️ NON VÉRIFIÉ — Texte intégral + Contrôle de séquence complet [CONVERTI 2026-08-09] |
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
+| `decret-21-261-esp-equipements-hydrocarbures.md` | Décret exécutif n° 21-261 du 13 juin 2021 (2 Dhou El Kaâda 1442) | Réglementation des équipements sous pression (ESP) et équipements électriques destinés aux installations du secteur des hydrocarbures | ⚠️ NON VÉRIFIÉ — à convertir depuis PDF (arh.gov.dz) — [IDENTIFIÉ 2026-08-10, NON ENCORE CONVERTI] |
+| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 14 août 2021 (5 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 | ⚠️ NON VÉRIFIÉ — créé par l'utilisateur 2026-08-10 — Abroge D08-312 et D15-09 |
 | `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) |
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
+| `decret-25-63-plans-intervention-catastrophes.md` | Décret exécutif n° 25-63 du 28 janvier 2025 | Plans d'intervention en matière de risques de catastrophes (PPI + PII) — Abroge D09-335 | ⚠️ NON VÉRIFIÉ — créé par l'utilisateur 2026-08-10 (JO N° 07/2025) |
 | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
 | `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
 | `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | Arrêté intermin. du 7 mai 2025 | Conditions particulières d'hygiène et de salubrité dans les établissements de restauration — Art. 1–48, 14 sections | ⚠️ NON VÉRIFIÉ — texte intégral présent (signé par 6 ministres) — [CONVERTI 2026-08-09] — W20 CLOSED |
@@ -106,3 +112,8 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `decret-90-245-appareils-pression-gaz.md` ajouté — Art. 1–24 complets, signé Mouloud HAMROUCHE. JO N° 36, 22 août 1990 — confirmé par l'utilisateur depuis PDF officiel. [CONVERTI 2026-08-10]
 - **2026-08-10 :** `decret-09-19.md` — objet corrigé dans README (était "système de management environnemental", est "collecte des déchets spéciaux"). JO N° 6/2009 ajouté. Contrôle de séquence + header JO patchés dans le fichier.
 - **2026-08-10 :** `loi-01-19-gestion-dechets.md` — JO N° 77/2001 + date de conversion ajoutés au header. Contrôle de séquence (Art. 1–72, aucun gap) ajouté en fin de fichier.
+- **2026-08-10 :** `decret-09-335-plans-internes-intervention.md` — note d'abrogation ajoutée dans le header : ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025). Fichier conservé pour référence historique.
+- **2026-08-10 :** `decret-25-63-plans-intervention-catastrophes.md` — créé par l'utilisateur. Abroge D09-335. Plans d'intervention PPI + PII, JO N° 07/2025. [NON ENCORE CONVERTI VERBATIM — à vérifier]
+- **2026-08-10 :** `decret-21-319-autorisation-exploitation-hydrocarbures.md` — créé par l'utilisateur. Régime autorisation exploitation hydrocarbures, Art. 1er–98. Abroge D08-312 et D15-09. Source : cei-halfaoui.com (PDF publié au JO N° 64/2021). [NON ENCORE VÉRIFIÉ VERBATIM]
+- **2026-08-10 :** `decret-21-261-esp-equipements-hydrocarbures.md` — identifié (lien 2 arh.gov.dz) : ESP et équipements électriques pour installations hydrocarbures, 13 juin 2021. Fichier à créer depuis PDF ARH. [NON ENCORE CONVERTI]
+- **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — identifié (lien 7 cntpp.dz) : permis de construire ouvrages énergie électrique et gazière, 6 février 2011. Fichier à créer depuis PDF. [NON ENCORE CONVERTI]
