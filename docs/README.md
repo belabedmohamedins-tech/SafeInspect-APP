@@ -1,5 +1,18 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 23:10 WAT — Perplexity — W52 CLOSED: INSPECTION_LOCKED guard on delete/deleteMany/clear
+- **Phases closed:** W52
+- **Phases opened:** none
+- **Files changed:** `src/repositories/InspectionRepository.ts` (commit `94e3f7c2`), `__tests__/repositories/InspectionRepository.test.ts` (commit `f439cc8c`)
+- **What was done:**
+  - `delete(id)` — pre-flight SELECT; throws `INSPECTION_LOCKED` + logs `INSPECTION_DELETE_BLOCKED` audit entry if `approval_status = 'approved'`.
+  - `deleteMany(ids)` — checks every id before transaction; atomically aborts all if any one is approved.
+  - `clear()` — checks `SELECT id FROM inspections WHERE approval_status = 'approved' LIMIT 1` before wipe.
+  - 6 new Jest tests: reject + success path for each of the three methods.
+- **TSC/Jest gate:** Hand off to Claude — run `npx jest __tests__/repositories/InspectionRepository.test.ts` then `npx tsc --noEmit`.
+- **Open phases: W19, W49, W51, W53, W54, W55, W56, W57, W58**
+- **Next identifier: W59**
+
 ### 2026-08-10 22:00 WAT — Perplexity — W52–W58 opened from 2026-08-10 audit sync
 - **Phases closed:** none
 - **Phases opened:** W52, W53, W54, W55, W56, W57, W58
@@ -123,7 +136,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W52** | 🟠 OPEN | P1/CRITICAL | F-11 remaining: add INSPECTION_LOCKED guard to `delete()/deleteMany()/clear()` in InspectionRepository |
+| **W52** | ✅ CLOSED | P1/CRITICAL | F-11 remaining: INSPECTION_LOCKED guard on `delete()/deleteMany()/clear()` — Commits `94e3f7c2` + `f439cc8c`. 2026-08-10. |
 | **W53** | 🟠 OPEN | P1/HIGH | F-18 remaining: wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` |
 | **W54** | 🟠 OPEN | P2 | F-14 loose end: confirm `scoringUtils.ts` completion-rate reconciled with progress bar + finish-gate |
 | **W55** | 🟠 OPEN | P2 | F-17 loose end: confirm `SavedInspection.violations` shape in `types.ts` matches `sync.ts` expectations |

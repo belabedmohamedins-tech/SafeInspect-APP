@@ -96,6 +96,7 @@
 | W47 | BGN-07-04 confirmed resolved by W46 | 2026-08-10 | Direct read confirmed. |
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
+| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` (impl) + `f439cc8c` (6 tests). TSC+Jest gate → Claude. |
 
 ---
 
@@ -103,7 +104,6 @@
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | P1/CRITICAL | `InspectionRepository.save()` is protected; the three delete methods are not. Pattern to copy is already in `save()`. Needs product decision on supervisor override/reopen before implementing. |
 | **W53** | F-18 remaining: ApprovalRepository → serverAuth wiring | P1/HIGH | `server/src/routes/sync.ts` creates PENDING record and sends push notification correctly. `ApprovalRepository.approve()/reject()/escalate()` never call `serverAuth.ts`'s `approveInspection()/rejectInspection()`. Fix: call after successful local action with offline-queue/retry. |
 | **W54** | F-14 loose end: scoringUtils.ts completion-rate reconciliation | P2 | Three formulas for "evaluated": live progress bar, finish-gate, `scoringUtils.ts` completion-rate. Not confirmed reconciled. Quick read of scoringUtils.ts needed. |
 | **W55** | F-17 loose end: SavedInspection.violations shape check | P2 | `src/types.ts` `SavedInspection.violations` shape vs. what `sync.ts` expects — not confirmed matching. Quick read of types.ts + sync.ts. |
@@ -172,13 +172,12 @@
 
 ## Execution Order (Current Session)
 
-1. **W52** (P1/CRITICAL) — Add INSPECTION_LOCKED guard to `delete()/deleteMany()/clear()` in `InspectionRepository.ts`. Get product sign-off on supervisor reopen workflow first.
-2. **W53** (P1/HIGH) — Wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` with offline queue.
-3. **W57** (P1) — Fix `semiPharmaCriteria.ts` SPH-02-01/02/05-01: replace Décret 17-140 (food-only) → Loi 18-11.
-4. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
-5. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
-6. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
-7. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
-8. **W58** (P3) — Confirm Décret 76-04 superseded by Loi 19-02; update BAK-10-12.
-9. **W19** (P0) — User fills 3 arrêté stubs in parallel.
-10. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.
+1. **W53** (P1/HIGH) — Wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` with offline queue.
+2. **W57** (P1) — Fix `semiPharmaCriteria.ts` SPH-02-01/02/05-01: replace Décret 17-140 (food-only) → Loi 18-11.
+3. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
+4. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
+5. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
+6. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
+7. **W58** (P3) — Confirm Décret 76-04 superseded by Loi 19-02; update BAK-10-12.
+8. **W19** (P0) — User fills 3 arrêté stubs in parallel.
+9. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.
