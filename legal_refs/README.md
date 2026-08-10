@@ -13,6 +13,7 @@
      README mis à jour le 2026-08-10 (12) — aim-gpl2 supprimé, projet-arrete-gpl indexé — statut PROJET NON PUBLIÉ JORADP
      README mis à jour le 2026-08-10 (13) — decret-90-245-appareils-pression-gaz ajouté — [CONVERTI 2026-08-10]
      README mis à jour le 2026-08-10 (14) — D90-245 JO N° 36 confirmé par utilisateur depuis PDF officiel
+     README mis à jour le 2026-08-10 (15) — D04-83 hors scope SafeInspect — mention supprimée
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -57,7 +58,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
-| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) — Annexes I–III retirées : elles appartiennent au D04-83 (tarifs phytosanitaires) — fichier D04-83 à créer |
+| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/2004) |
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–75) |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 60/2005) — [CONVERTI 2026-08-10] |
@@ -95,7 +96,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-09 :** `decret-83-496-gpl-carburant.md` — ajouté manuellement, instrument original modifié par D21-430 (Art. 4, 7, 8).
 - **2026-08-10 :** 6 nouveaux fichiers ajoutés manuellement et indexés : `decret-04-82`, `decret-06-138`, `decret-09-335`, `decret-11-125`, `loi-04-08`, `loi-88-07`.
 - **2026-08-10 :** `loi-05-12` complétée — 183 articles intégraux présents.
-- **2026-08-10 :** `decret-04-82` — Annexes I–III (tarifs phytosanitaires D04-83) retirées. Fichier `decret-04-83` à créer.
+- **2026-08-10 :** `decret-04-82` — PDF source contenait également D04-83 (tarifs phytosanitaires). D04-83 est hors scope SafeInspect — non pertinent pour l'inspection HSE/industrielle. Aucun fichier D04-83 à créer.
 - **2026-08-10 :** `decret-09-335` — JO N° 68, 25 octobre 2009 inscrit dans le header.
 - **2026-08-10 :** `arrete-interministeriel-1999-temperatures-conservation.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-1999-11-21-conservation-aliments.md` (texte intégral verbatim, Art. 1–10, JO N° 87/1999).
 - **2026-08-10 :** `arrete-interministeriel-2016-criteres-microbiologiques.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` (texte intégral verbatim, Art. 1–14 + Annexes I–II, JO N° 39/2017). **W19 CLOSED.**
