@@ -1,13 +1,13 @@
 # Loi n° 18-11 du 18 Chaoual 1439 correspondant au 2 juillet 2018 relative à la santé
 
 **Date de signature :** 2 juillet 2018 (18 Chaoual 1439)  
-**Journal Officiel :** N° 46, 16 Dhou El Kaâda 1439 (29 juillet 2018) — pages 2 à 38  
-**Source PDF :** Fourni par l'utilisateur (`loi 18-11.pdf`)  
+**Journal Officiel :** N° 46, 16 Dhou El Kaâda 1439 (29 juillet 2018) — pages 3 à 38  
+**Source PDF :** Fourni par l'utilisateur (`loi 18-11.pdf`) — version complète avec tous les articles  
 **Date de conversion :** 2026-08-09  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur l'extraction :** Les articles 12 à 16 ont été ajoutés à partir du texte fourni par l'utilisateur (Page 5 du PDF). L'ordre numérique séquentiel légal est désormais complet pour le Titre I, Chapitre 1er.
+**Note sur la source :** Cette version du PDF contient l'intégralité des articles 1er à 450, dans l'ordre séquentiel légal. Les articles 12 à 16, précédemment manquants dans la première extraction, sont désormais présents.
 
 ---
 
@@ -83,9 +83,9 @@ Vu la loi n° 04-18 du 13 Dhou El Kaâda 1425 correspondant au 25 décembre 2004
 
 Vu la loi n° 04-20 du 13 Dhou El Kaâda 1425 correspondant au 25 décembre 2004 relative à la prévention des risques majeurs et à la gestion des catastrophes dans le cadre du développement durable :
 
-Vu la loi n° 05-04 du 27 Dhou El Hidja 1425 correspondant au 6 février 2005, complétée, portant code de l’organisation pénitentiaire et de la réinsertion sociale des détenus ; 
+Vu la loi n° 05-04 du 27 Dhou El Hidja 1425 correspondant au 6 février 2005, complétée, portant code de l’organisation pénitentiaire et de la réinsertion sociale des détenus ;
 
-Vu la loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005, modifiée et complétée, relative à l’eau ; 
+Vu la loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005, modifiée et complétée, relative à l’eau ;
 
 Vu l’ordonnance n° 06-03 du 19 Joumada Ethania 1427 correspondant au 15 juillet 2006 portant statut général de la fonction publique ;
 
@@ -93,19 +93,19 @@ Vu l’ordonnance n° 07-01 du 11 Safar 1428 correspondant au 1er mars 2007 rela
 
 Vu la loi n° 07-11 du 15 Dhou El Kaâda 1428 correspondant au 25 novembre 2007, modifiée, portant système comptable financier ;
 
-Vu la loi n° 08 -04 du 15 Moharram 1429 correspondant au 23 janvier 2008 portant loi d’orientation sur l’éducation nationale ; 
+Vu la loi n° 08 -04 du 15 Moharram 1429 correspondant au 23 janvier 2008 portant loi d’orientation sur l’éducation nationale ;
 
 Vu la loi n° 08-09 du 18 Safar 1429 correspondant au 25 février 2008 portant code de procédure civile et administrative ;
 
-Vu la loi n° 08-11 du 21 Joumada Ethania 1429 corresponadant au 25 juin 2008 relative aux conditions d’entrée, de séjour et de circulation des étrangers en Algérie ;
+Vu la loi n° 08-11 du 21 Joumada Ethania 1429 correspondant au 25 juin 2008 relative aux conditions d’entrée, de séjour et de circulation des étrangers en Algérie ;
 
 Vu la loi n° 09-03 du 29 Safar 1430 correspondant au 25 février 2009, modifiée et complétée, relative à la protection du consommateur et à la répression des fraudes ;
 
 Vu la loi n° 10-02 du 16 Rajab 1431 correspondant au 29 juin 2010 portant approbation du Schéma National d’Aménagement du Territoire ;
 
-Vu la loi n° 10-12 du 23 Moharram 1432 correspondant au 29 décembre 2010 relative à la protection des personnes âgées ; 
+Vu la loi n° 10-12 du 23 Moharram 1432 correspondant au 29 décembre 2010 relative à la protection des personnes âgées ;
 
-Vu la loi n° 11-10 du 20 Rajab 1432 correspondant au 22 juin 2011 relative à la commune ; 
+Vu la loi n° 11-10 du 20 Rajab 1432 correspondant au 22 juin 2011 relative à la commune ;
 
 Vu la loi n° 12-06 du 18 Safar 1433 correspondant au 12 janvier 2012 relative aux associations ;
 
@@ -131,23 +131,23 @@ Promulgue la loi dont la teneur suit :
 
 ### Chapitre 1er — Dispositions générales
 
-**Article 1er.** — La présente loi fixe les dispositions et principes fondamentaux et vise à concrétiser les droits et devoirs de la population en matière de santé. 
+**Article 1er.** — La présente loi fixe les dispositions et principes fondamentaux et vise à concrétiser les droits et devoirs de la population en matière de santé.
 
-Elle a pour objet d’assurer la prévention, la protection, le maintien, le rétablissement et la promotion de la santé des personnes dans le respect de la dignité, de la liberté, de l’intégrité et de la vie privée. 
+Elle a pour objet d’assurer la prévention, la protection, le maintien, le rétablissement et la promotion de la santé des personnes dans le respect de la dignité, de la liberté, de l’intégrité et de la vie privée.
 
 **Art. 2.** — La protection et la promotion de la santé concourent au bien-être physique, mental et social de la personne, à son épanouissement au sein de la société et constituent un facteur essentiel du développement économique et social.
 
 **Art. 3.** — Les objectifs en matière de santé consistent à assurer la protection de la santé des citoyens à travers l'égal accès aux soins, la garantie de la continuité du service public de santé et la sécurité sanitaire.
 
-Les activités de santé s’appuient sur les principes de hiérarchisation et de complémentarité des activités de prévention, de soins et de réadaptation des différentes structures et les établissements de santé. 
+Les activités de santé s’appuient sur les principes de hiérarchisation et de complémentarité des activités de prévention, de soins et de réadaptation des différentes structures et les établissements de santé.
 
 **Art. 4.** — La politique nationale de santé s’appuie, notamment dans sa mise en œuvre, sur l’intersectorialité, à travers la contribution, l’organisation et l’orientation des différents acteurs intervenant dans le domaine de la santé.
 
-**Art. 5.** — Le système national de santé s’appuie sur un secteur public fort. 
+**Art. 5.** — Le système national de santé s’appuie sur un secteur public fort.
 
 **Art. 6.** — Le système national de santé vise la prise en charge des besoins de la population en matière de santé de manière globale, cohérente et continue.
 
-Son organisation et son fonctionnement sont basés sur les principes d’universalité, d’égalité d’accès aux soins, de solidarité, d’équité et de continuité du service public et des prestations de santé. 
+Son organisation et son fonctionnement sont basés sur les principes d’universalité, d’égalité d’accès aux soins, de solidarité, d’équité et de continuité du service public et des prestations de santé.
 
 **Art. 7.** — La planification sanitaire assure, dans le cadre du développement économique et social et du Schéma National d’Aménagement du Territoire, la répartition harmonieuse, équitable et rationnelle des ressources humaines et matérielles sur la base des besoins en santé compte tenu de l’évolution démographique et du profil épidémiologique.
 
@@ -165,9 +165,14 @@ L’observatoire élabore un rapport annuel sur l’état de santé de la popula
 
 La composition, l’organisation et le fonctionnement de l’observatoire, sont fixés par voie réglementaire.
 
+---
+
+### Chapitre 2 — Obligations de l’Etat en matière de santé
+
 **Art. 12.** — L’Etat œuvre, à tous les niveaux, à la concrétisation du droit à la santé comme droit fondamental de l’être humain à travers l’extension du secteur public pour une couverture sur l’ensemble du territoire national.
 
 **Art. 13.** — L’Etat assure la gratuité des soins et en garantit l’accès à tous les citoyens sur l’ensemble du territoire national.
+
 Il met en œuvre tous les moyens de diagnostic, de traitement et d’hospitalisation des malades dans l’ensemble des structures publiques de santé ainsi que toute action destinée à protéger et à promouvoir leur santé.
 
 **Art. 14.** — L’Etat assure et organise la prévention, la protection et la promotion en matière de santé.
@@ -175,6 +180,7 @@ Il met en œuvre tous les moyens de diagnostic, de traitement et d’hospitalisa
 **Art. 15.** — L’Etat met en œuvre les dispositifs en vue de prévenir et de lutter contre les maladies transmissibles et non transmissibles dans le but d’améliorer l’état de santé de la population et la qualité de vie des personnes.
 
 **Art. 16.** — L’Etat œuvre à l’élimination des inégalités en matière d’accès aux services de santé, et organise la complémentarité entre les secteurs public et privé de santé.
+
 L’Etat accorde une attention particulière au secteur public de santé.
 
 **Art. 17.** — L’Etat promeut la communication, l’information et la sensibilisation en matière de santé.
@@ -284,6 +290,10 @@ La liste des maladies transmissibles soumises à déclaration obligatoire, est f
 Les modalités d’application du présent article, notamment le calendrier des vaccinations obligatoires, sont fixées par voie réglementaire.
 
 **Art. 41.** — En cas de risque de situation épidémique et/ou de protection de personnes à risque, les autorités sanitaires organisent des campagnes de vaccination et prennent toute mesure appropriée en faveur des populations ou des personnes concernées.
+
+---
+
+#### Section 2 — Prévention et lutte contre les maladies à propagation internationale
 
 **Art. 42.** — La prévention et la lutte contre les maladies à propagation internationale sont soumises aux dispositions du règlement sanitaire international de l’organisation mondiale de la santé.
 
@@ -490,8 +500,6 @@ Les enfants cités à l’alinéa ci-dessus, doivent bénéficier de toutes les 
 **Art. 94.** — L’Etat assure la protection et la promotion de la santé en milieu éducatif, universitaire et de formation professionnelle, à travers des actions et programmes de santé appropriés.
 
 **Art. 95.** — La protection et la promotion de la santé citées à l’article 94 ci-dessus, visent la préservation de la santé des élèves, des étudiants et des stagiaires par :
-
-— le placement et le maintien des travailleurs dans un poste de travail adapté à leurs aptitudes physiologiques et psychologiques.
 
 — la surveillance de leur état de santé et le suivi de la prise en charge des affections dépistées ;
 
@@ -871,9 +879,9 @@ Les dispositions de l’alinéa ci-dessus, sont applicables aux patients atteint
 
 ---
 
-## TITRE IV — PROFESSIONS DE SANTE
+## TITRE IV — PROFESSIONNELS DE SANTE
 
-### Chapitre 1er — Dispositions générales
+### Chapitre 1er — Définitions
 
 **Art. 165.** — On entend par professionnel de santé, au sens de la présente loi, toute personne exerçant et relevant d’une structure ou d’un établissement de santé qui, dans son activité professionnelle, fournit ou concourt à la prestation de santé ou contribue à sa réalisation.
 
@@ -885,7 +893,7 @@ La nomenclature des professions de santé est fixée par voie réglementaire.
 
 ### Chapitre 2 — Conditions d’exercice des professions de santé
 
-#### Règles communes d’exercice des professions de santé
+#### Section 1 — Règles communes d’exercice des professions de santé
 
 **Art. 166.** — L’exercice des professions de santé est subordonné aux conditions suivantes :
 
@@ -1023,7 +1031,7 @@ Les modalités d’application du présent article sont fixées par voie réglem
 
 **Art. 190.** — Les praticiens inspecteurs prêtent, avant leur entrée en fonction, le serment suivant devant la juridiction compétente :
 
-"أقسم بالله العليم أن أؤدي عملي بكل أمانة وإخالص وأن أراعي في كل األحوال الواجبات التي يفرضها علي القانون وأحافظ على أسرار مهنتي."
+"أقسم بالله العلي العظيم أن أؤدي عملي بكل أمانة وإخالص وأن أراعي في كل األحوال الواجبات التي يفرضها علي القانون وأحافظ على أسرار مهنتي."
 
 **Art. 191.** — Les praticiens inspecteurs sont chargés, notamment :
 
@@ -1427,7 +1435,7 @@ Les structures, citées à l’alinéa 1er ci-dessus, sont chargées de la colle
 
 **Art. 262.** — L’Etat promeut et soutient la production des hémodérivés.
 
-Les modalités d’application du présent article sont précisées par voie réglementaire. 
+Les modalités d’application du présent article sont précisées par voie réglementaire.
 
 **Art. 263.** — Toute activité dans un but lucratif du sang humain, du plasma et de leurs dérivés est interdite.
 
@@ -1457,7 +1465,7 @@ Les missions, l’organisation et le fonctionnement de cette agence sont fixés 
 
 — la complémentarité des activités de prévention, de soins et de réadaptation, dans son aspect médical et social ;
 
-— les démarches diagnostiques et thérapeutiques basées sur des consensus factuels, régulièrement évalués et mis à jour ; 
+— les démarches diagnostiques et thérapeutiques basées sur des consensus factuels, régulièrement évalués et mis à jour ;
 
 — l’organisation et la promotion de la formation et de la recherche en sciences de la santé ;
 
@@ -1495,11 +1503,11 @@ Les modalités d’application du présent article sont fixées par voie réglem
 
 — d’assurer l’accès et l’amélioration des soins à travers tout le territoire national.
 
-**Art. 270.** — La carte sanitaire fixe les normes de couverture sanitaire et détermine les moyens à mobiliser au niveau national et régional en tenant compte, notamment du bassin de population, des caractéristiques épidémiologiques, sanitaires, géographiques, démographiques et socio-économiques, afin d’assurer une répartition équitable des soins de santé. 
+**Art. 270.** — La carte sanitaire fixe les normes de couverture sanitaire et détermine les moyens à mobiliser au niveau national et régional en tenant compte, notamment du bassin de population, des caractéristiques épidémiologiques, sanitaires, géographiques, démographiques et socio-économiques, afin d’assurer une répartition équitable des soins de santé.
 
-La carte sanitaire est élaborée, évaluée et mise à jour périodiquement selon des modalités fixées par voie réglementaire. 
+La carte sanitaire est élaborée, évaluée et mise à jour périodiquement selon des modalités fixées par voie réglementaire.
 
-**Art. 271.** — Le schéma d’organisation sanitaire vise à susciter les adaptations et les complémentarités de l’offre de soins, ainsi que les coopérations, notamment entre les établissements et structures de santé. 
+**Art. 271.** — Le schéma d’organisation sanitaire vise à susciter les adaptations et les complémentarités de l’offre de soins, ainsi que les coopérations, notamment entre les établissements et structures de santé.
 
 Les modalités d’application du présent article sont fixées par voie réglementaire.
 
@@ -1507,7 +1515,7 @@ Les modalités d’application du présent article sont fixées par voie réglem
 
 ### Chapitre 3 — Structures et établissements de santé
 
-#### Missions des structures et des établissements de santé
+#### Section 1 — Missions des structures et des établissements de santé
 
 **Art. 272.** — La création des différents structures et établissements de santé ainsi que les établissements et institutions concourant à la santé et les organismes de soutien, se fait selon les besoins de santé de la population, les nécessités de développement, les caractères socio- économiques des différentes régions du territoire national, les normes définies dans le cadre de la carte sanitaire et le schéma d’organisation sanitaire.
 
@@ -2101,11 +2109,11 @@ Il est tenu de notifier immédiatement tout effet indésirable grave ou inattend
 
 En cas de récidive, l’amende est portée au double.
 
-**Art. 403.** — Quiconque contrevient aux dispositions législatives et réglementaires en vigueur relatives aux essences pouvant servir à la fabrication de boissons alcoolisées, est puni conformément aux dispositions des articles 429 et 430 du code pénal. 
+**Art. 403.** — Quiconque contrevient aux dispositions législatives et réglementaires en vigueur relatives aux essences pouvant servir à la fabrication de boissons alcoolisées, est puni conformément aux dispositions des articles 429 et 430 du code pénal.
 
 **Art. 404.** — Quiconque contrevient aux dispositions de l’article 56 de la présente loi, relatives à l’interdiction de fumer dans des lieux affectés à un usage collectif ou accueillant du public, est passible d’une amende de 2.000 DA à 5.000 DA.
 
-L’amende de composition s’applique à l’infraction prévue à l’alinéa ci-dessus, conformément aux dispositions des articles 381 et 393 du code de procédure pénale. 
+L’amende de composition s’applique à l’infraction prévue à l’alinéa ci-dessus, conformément aux dispositions des articles 381 et 393 du code de procédure pénale.
 
 En cas de récidive, l’amende est portée au double.
 
@@ -2121,11 +2129,11 @@ En cas de récidive, la peine est portée au double.
 
 **Art. 408.** — Toute personne ayant produit ou commercialisé des produits alimentaires impropres à la consommation ayant causé une intoxication alimentaire ou le décès d’une ou de plusieurs personnes, est punie conformément aux dispositions des articles 431 et 432 du code pénal et aux articles 71,72 et 73 de la loi n° 09-03 du 25 février 2009 relative à la protection du consommateur et à la répression des fraudes.
 
-**Art. 409.** — Quiconque contrevient aux dispositions relatives à l’interruption thérapeutique de grossesse, est puni conformément aux dispositions de l’article 304 du code pénal. 
+**Art. 409.** — Quiconque contrevient aux dispositions relatives à l’interruption thérapeutique de grossesse, est puni conformément aux dispositions de l’article 304 du code pénal.
 
 **Art. 410.** — Quiconque contrevient aux dispositions de l’article 78 de la présente loi, relatives à l’obligation d’effectuer l’interruption thérapeutique de grossesse dans l’établissement public hospitalier, est puni d’un emprisonnement de six (6) mois à un (1) an et d’une amende de 200.000 DA à 400.000 DA.
 
-**Art. 411.** — Quiconque contrevient aux dispositions de l’article 143 de la présente loi, relatives à l’engagement de la prise en charge du malade atteint de troubles mentaux, est puni conformément aux dispositions des articles 314 et 316 du code pénal. 
+**Art. 411.** — Quiconque contrevient aux dispositions de l’article 143 de la présente loi, relatives à l’engagement de la prise en charge du malade atteint de troubles mentaux, est puni conformément aux dispositions des articles 314 et 316 du code pénal.
 
 **Art. 412.** — Quiconque contrevient aux dispositions de l’article 161 de la présente loi relatives à l’interdiction de soumettre les patients hospitalisés à des tâches non prescrites dans le cadre de leurs soins est puni d’un emprisonnement de deux (2) mois à six (6) mois et d’une amende de 10.000 DA à 50.000 DA.
 
@@ -2173,7 +2181,7 @@ En cas de récidive, l’amende est portée au double.
 
 **Art. 433.** — Quiconque procède à un prélèvement ou à une transplantation d’organes, de tissus ou de cellules humains ou exerce des activités d’assistance médicale à la procréation dans un établissement non autorisé, est puni d’un emprisonnement de deux (2) ans à cinq (5) ans et d’une amende de 500.000 DA à 1.000.000 DA.
 
-**Art. 434.** — Quiconque contrevient aux dispositions de l’article 371 de la présente loi, relatives à l’assistance médicale à la procréation, est puni d’un emprisonnement de cinq (5) ans à dix (10) ans et d’une amende de 500.000 DA.
+**Art. 434.** — Quiconque contrevient aux dispositions de l’article 371 de la présente loi, relatives à l’assistance médicale à la procréation, est puni d’un emprisonnement de cinq (5) ans à dix (10) ans et d’une amende de 500.000 DA à 1.000.000 DA.
 
 **Art. 435.** — Quiconque contrevient à l’interdiction prévue aux dispositions de l’article 374 de la présente loi, relatives au don, à la vente et à toute autre forme de transaction sur des produits du corps humain, est puni d’un emprisonnement de dix (10) ans à vingt (20) ans et d’une amende de 1.000.000 DA à 2.000.000 DA.
 
@@ -2233,6 +2241,8 @@ Abdelaziz BOUTEFLIKA.
 
 ## Contrôle de séquence
 
-Liste des articles de la Loi n° 18-11 dans l'ordre numérique. **Tous les articles sont désormais présents.**
+Liste des articles de la Loi n° 18-11 dans l'ordre numérique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 196, 197, 198, 199, 200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250, 251, 252, 253, 254, 255, 256, 257, 258, 259, 260, 261, 262, 263, 264, 265, 266, 267, 268, 269, 270, 271, 272, 273, 274, 275, 276, 277, 278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306, 307, 308, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 319, 320, 321, 322, 323, 324, 325, 326, 327, 328, 329, 330, 331, 332, 333, 334, 335, 336, 337, 338, 339, 340, 341, 342, 343, 344, 345, 346, 347, 348, 349, 350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450.
+
+**Intégrité du texte :** La loi est complète. Tous les articles sont présents dans l'ordre séquentiel légal.
