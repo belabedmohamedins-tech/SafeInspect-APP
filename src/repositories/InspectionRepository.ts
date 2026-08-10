@@ -12,6 +12,14 @@
 // W22: save() throws 'INSPECTION_LOCKED' if the existing row already has
 //      approval_status = 'approved'. Callers must not silently overwrite
 //      approved records; a dedicated reopen flow is required.
+// W52: delete(), deleteMany(), and clear() now throw 'INSPECTION_LOCKED'
+//      when any targeted inspection has approval_status = 'approved'.
+//      delete()     — checks single row before DELETE.
+//      deleteMany() — checks every id before the transaction; aborts all
+//                     if any one is approved (atomic: nothing is deleted).
+//      clear()      — checks whether ANY approved row exists before wiping.
+//      All three log an INSPECTION_DELETE_BLOCKED audit entry on rejection
+//      so the attempt is traceable.
 
 import { getDb } from '../db/schema';
 import { SavedInspection, InspectionItem, InspectionType } from '../types';
@@ -320,19 +328,59 @@ export const InspectionRepository = {
 
   async delete(id: string): Promise<void> {
     const db = await getDb();
-    const target = await InspectionRepository.getById(id);
+
+    // W52: block deletion of approved inspections.
+    const existingRow = await db.getFirstAsync<{
+      approval_status: string | null;
+      inspector_name: string;
+      facility_name: string;
+    }>(
+      'SELECT approval_status, inspector_name, facility_name FROM inspections WHERE id = ?',
+      [id],
+    );
+    if (existingRow?.approval_status === 'approved') {
+      await AuditLogRepository.append(
+        'INSPECTION_DELETE_BLOCKED',
+        existingRow.inspector_name,
+        { inspectionId: id, facilityName: existingRow.facility_name, reason: 'INSPECTION_LOCKED' },
+      );
+      throw new Error('INSPECTION_LOCKED');
+    }
+
     await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
-    if (target) {
+    if (existingRow) {
       await AuditLogRepository.append(
         'INSPECTION_DELETED',
-        target.inspectorName,
-        { inspectionId: id, facilityName: target.facilityName },
+        existingRow.inspector_name,
+        { inspectionId: id, facilityName: existingRow.facility_name },
       );
     }
   },
 
   async deleteMany(ids: string[]): Promise<void> {
     const db = await getDb();
+
+    // W52: check every id before entering the transaction — fail atomically
+    // if any targeted inspection is approved (nothing gets deleted).
+    for (const id of ids) {
+      const row = await db.getFirstAsync<{
+        approval_status: string | null;
+        inspector_name: string;
+        facility_name: string;
+      }>(
+        'SELECT approval_status, inspector_name, facility_name FROM inspections WHERE id = ?',
+        [id],
+      );
+      if (row?.approval_status === 'approved') {
+        await AuditLogRepository.append(
+          'INSPECTION_DELETE_BLOCKED',
+          row.inspector_name,
+          { inspectionId: id, facilityName: row.facility_name, reason: 'INSPECTION_LOCKED' },
+        );
+        throw new Error('INSPECTION_LOCKED');
+      }
+    }
+
     await db.withTransactionAsync(async () => {
       for (const id of ids) {
         await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
@@ -346,6 +394,21 @@ export const InspectionRepository = {
   },
 
   async clear(): Promise<void> {
-    await (await getDb()).runAsync('DELETE FROM inspections');
+    const db = await getDb();
+
+    // W52: refuse to wipe the table if any approved inspection exists.
+    const approvedRow = await db.getFirstAsync<{ id: string }>(
+      `SELECT id FROM inspections WHERE approval_status = 'approved' LIMIT 1`,
+    );
+    if (approvedRow) {
+      await AuditLogRepository.append(
+        'INSPECTION_DELETE_BLOCKED',
+        'system',
+        { inspectionId: approvedRow.id, reason: 'INSPECTION_LOCKED — clear() blocked: approved record exists' },
+      );
+      throw new Error('INSPECTION_LOCKED');
+    }
+
+    await db.runAsync('DELETE FROM inspections');
   },
 };
