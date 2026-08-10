@@ -57,43 +57,43 @@
 | W7 | L-02b: Cold-chain Arrêté 07/05/2025 confirmed clean | 2026-08-08 | Direct code read — no change needed. |
 | W8 | L-03: BGN-03-01 Décret 11-125 confirmed clean | 2026-08-08 | Direct code read — no change needed. |
 | W9 | L-05: Abattoir chlorine Décret 11-125 confirmed clean | 2026-08-08 | Direct code read — no change needed. |
-| W18 | BGN-08-01 + BGN-08-02: add Art.5 + Art.13 to Loi 19-02 citation | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
-| W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green — user-confirmed 16:23 WAT. |
+| W18 | BGN-08-01 + BGN-08-02: add Art.5 + Art.13 to Loi 19-02 citation | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green. |
+| W21 | BAK-10-10: bakery decree date corrected 27 mars → 11 avril 2017 | 2026-08-08 | Commit `f7c84a7`. TSC + Jest all green. |
 | W25 | F-13: differentialView.ts facility-match guard | 2026-08-08 | **PHANTOM** — file does not exist in repo. Doc artefact. |
 | W26 | F-10: categories.tsx data source swap | 2026-08-08 | **PHANTOM** — file does not exist. Doc artefact. |
 | W27 | F-14: statusUtils.ts — observation-only + unable-to-verify labels+colors | 2026-08-08 | Commit `e2791f7`. |
 | W28 | F-09: AppState autosave in useChecklistData.ts | 2026-08-08 | Commit `e2791f7`. |
 | W19-CODE | baseGeneralCriteria article-citation corrections (8 wrong refs + 2 À VÉRIFIER resolved) | 2026-08-08 | Commits `10b51b0`, `d8cc8b5`. |
 | W29-GATE | Jest gate fixes: Colors keys, Arabic vowel, BGN article refs, AppState mock | 2026-08-09 | Commit `efe4127`. User-confirmed all green. |
-| W22 | F-11: Approved inspection immutability guard | 2026-08-09 | Confirmed clean by direct read. |
-| W23 | F-18: Local approval workflow | 2026-08-09 | Confirmed clean by direct read. |
+| W22 | F-11: Approved inspection immutability guard | 2026-08-09 | Confirmed PARTIALLY clean — save() protected. delete/deleteMany/clear NOT protected → W52. |
+| W23 | F-18: Local approval workflow | 2026-08-09 | Confirmed PARTIALLY clean — server side ready; ApprovalRepository → serverAuth not wired → W53. |
 | W24 | F-19: Audit log self-tamper protection | 2026-08-09 | Confirmed clean by direct read. |
-| W30 | F-20: decisionSupport.ts test coverage | 2026-08-09 | Confirmed clean by direct read. |
-| W31-2 | loi-09-03: tag Art.44–52 + Art.80–92 as [MANQUANT]; mark Art.4–67 as [RÉSUMÉ] | 2026-08-09 | Commit `bc1eb6d`. |
+| W30 | F-20: decisionSupport.ts test coverage | 2026-08-09 | Confirmed: only typeof check present. Real coverage → W56. |
+| W31-2 | loi-09-03: tag Art.44–52 + Art.80–92 as [MANQUANT] | 2026-08-09 | Commit `bc1eb6d`. |
 | W31-3 | Decret-07-144: tag rubrique gap 1243–2922 as [MANQUANT] | 2026-08-09 | Commit `bc1eb6d`. |
-| W31-4 | Split bundled arrêté file into 3 separate files + update legal_refs/README.md | 2026-08-09 | Commit `bc1eb6d`. 3 files: 2025 + 2016 + 1999. |
-| W31-1 | audit.js cross-ref false-positive fix | 2026-08-09 | Commit `4c79ed3`. File lives at `legal_refs/audit.js` — **DO NOT DELETE OR MOVE**. |
-| W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by Claude direct read. Both renamed files exist. No change needed. **W31 FULLY CLOSED.** |
-| W11 | BGN-02-06 ventilation: Décret 93-120 removed, Décret 91-05 Art.11 confirmed correct | 2026-08-09 | Confirmed clean by direct read. Comment `// W11/L-04 fix` present. No change needed. |
-| W12 | semiPharmaCriteria: Décret 17-140 scope correct; Loi 18-11 Arts.104/105/107 confirmed | 2026-08-09 | Confirmed clean. No wrong Décret 17-140 citations found. No change needed. |
-| W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct; Art.19 already removed | 2026-08-09 | Confirmed clean. Comment `// W16: Art.19 WRONG` present. No change needed. |
-| W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean. Comment `// W17` present. No change needed. |
-| W20 | Close 3 open legal unverifieds + delete `allCriteria` dead-code | 2026-08-09 | `allCriteria` already removed. 0 [À VÉRIFIER] in codebase. |
-| W13 | L-06: UPD-AX2-01 "500m buffer" clarified | 2026-08-09 | Confirmed clean. |
+| W31-4 | Split bundled arrêté file into 3 separate files | 2026-08-09 | Commit `bc1eb6d`. |
+| W31-1 | audit.js cross-ref false-positive fix | 2026-08-09 | Commit `4c79ed3`. |
+| W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by Claude direct read. W31 FULLY CLOSED. |
+| W11 | BGN-02-06 ventilation: Décret 93-120 removed, Décret 91-05 Art.11 confirmed | 2026-08-09 | Confirmed clean. |
+| W12 | semiPharmaCriteria: Décret 17-140 scope correct for food; Loi 18-11 confirmed | 2026-08-09 | Confirmed food-scope issue exists → W57. |
+| W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct | 2026-08-09 | Confirmed clean. |
+| W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean. |
+| W20 | Close 3 open legal unverifieds + delete allCriteria dead-code | 2026-08-09 | 0 [À VÉRIFIER] in codebase. |
+| W13 | L-06: UPD-AX2-01 "500m buffer" clarified | 2026-08-09 | Confirmed: product/domain decision needed (notice-radius vs. siting-distance). No code change until decided. |
 | W14 | L-07: GAZ station vapor-recovery tag | 2026-08-09 | Confirmed clean. |
 | W15 | criteriaByActivity rubrique fallback confirmed clean | 2026-08-09 | No code change needed. |
 | W10 | Abattoir wastewater [À VÉRIFIER] — Option C tag applied | 2026-08-09 | Confirmed clean. |
-| W36 | decret-06-141: fully converted — Art.1–14 + Annexe I + II | 2026-08-10 | Direct read: 14.7 KB present. |
-| W38 | F1: rubrique wired end-to-end in facilities.tsx → criteriaData.ts | 2026-08-09 | Confirmed clean by direct read. |
-| W39 | F3: Décret 91-05 — 6 wrong citations corrected in baseGeneralCriteria.ts | 2026-08-09 | TSC 0 + Jest 0 failures. User-confirmed. |
-| W40 | F4: Loi 01-19 + Décret 09-19 citations corrected | 2026-08-09 | Confirmed by direct read SHA `9d11384`. |
+| W36 | decret-06-141: fully converted | 2026-08-10 | Direct read: 14.7 KB present. |
+| W38 | F1: rubrique wired end-to-end | 2026-08-09 | Confirmed clean. |
+| W39 | F3: Décret 91-05 — 6 citations corrected | 2026-08-09 | TSC 0 + Jest 0. |
+| W40 | F4: Loi 01-19 + Décret 09-19 citations corrected | 2026-08-09 | Direct read SHA `9d11384`. |
 | W41 | Loi 03-10 range fixes (BGN-10-01, BGN-08-06, GPL-05-01) + SLH-08-01 deleted + SLH-05-05 fixed | 2026-08-10 | Commit `287aaf3b`. |
-| W42 | SLH-08-01 Loi 03-10 Art.15–22 → Art.14–21 + Décret 04-82 Arts.6+9 confirmed | 2026-08-10 | Commit `60c58df6`. |
-| W43 | gplCriteria.ts phantom Décret 21-430 citations → Décret 83-496 + AIM GPL2 + Loi 19-02 | 2026-08-10 | Commit `287aaf3b`. Jest gate: Claude. |
+| W42 | SLH-08-01 Loi 03-10 range fix + Décret 04-82 Arts.6+9 confirmed | 2026-08-10 | Commit `60c58df6`. |
+| W43 | gplCriteria.ts phantom Décret 21-430 citations fixed | 2026-08-10 | Commit `287aaf3b`. |
 | W44 | audit.js gapNote stale exceptions removed | 2026-08-10 | Commit `a8ea0d2a`. |
 | W45 | BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني] | 2026-08-10 | Commit `287aaf3b`. |
 | W46 | BGN-07-04: Décret 91-05 Art.2+Art.3+[حكم مهني] (merged into W41) | 2026-08-10 | Commit `287aaf3b`. |
-| W47 | BGN-07-04 confirmed resolved by W46 — no code change | 2026-08-10 | Direct read confirmed. |
+| W47 | BGN-07-04 confirmed resolved by W46 | 2026-08-10 | Direct read confirmed. |
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
 
@@ -103,13 +103,36 @@
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. AIM GPL2 v14.03.2022 found only on Scribd — no JORADP trace. Décret 21-319 Art.92 delegates rule-making but arrêté not confirmed published. Technical values retained as [حكم مهني] pending confirmation. Resolution: monitor JORADP; if published under different ref, update legalReference strings + remove tags. |
-| **W49** | Audit 16 unaudited criteria files | P3 | Files not yet cross-checked against legal_refs/ content. Claude reads → Perplexity patches. |
+| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | P1/CRITICAL | `InspectionRepository.save()` is protected; the three delete methods are not. Pattern to copy is already in `save()`. Needs product decision on supervisor override/reopen before implementing. |
+| **W53** | F-18 remaining: ApprovalRepository → serverAuth wiring | P1/HIGH | `server/src/routes/sync.ts` creates PENDING record and sends push notification correctly. `ApprovalRepository.approve()/reject()/escalate()` never call `serverAuth.ts`'s `approveInspection()/rejectInspection()`. Fix: call after successful local action with offline-queue/retry. |
+| **W54** | F-14 loose end: scoringUtils.ts completion-rate reconciliation | P2 | Three formulas for "evaluated": live progress bar, finish-gate, `scoringUtils.ts` completion-rate. Not confirmed reconciled. Quick read of scoringUtils.ts needed. |
+| **W55** | F-17 loose end: SavedInspection.violations shape check | P2 | `src/types.ts` `SavedInspection.violations` shape vs. what `sync.ts` expects — not confirmed matching. Quick read of types.ts + sync.ts. |
+| **W56** | F-20: decisionSupport.ts real test coverage | P2 | Only `typeof suggestDecision` test exists. Need tests for grade A/B/C/D boundaries + escalation logic. |
+| **W57** | L-09: semiPharmaCriteria.ts food-decree misuse | P1 | `SPH-02-01`, `SPH-02-02`, `SPH-05-01` cite Décret 17-140 (food products only). File is non-food. Replacement: Loi 18-11 provisions (already correctly used in other SPH criteria in same file). |
+| **W58** | L-11: bakeryCriteria.ts Décret 76-04 vs Loi 19-02 | P3 | `BAK-10-12` cites Décret 76-04 + 2009 arrêté. `BGN-08-01/02` cites Loi 19-02 for the same fire-safety subject. Confirm 76-04 superseded; if yes, update BAK-10-12 to match. |
+| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication of arrêté under Décret 21-319 Art.92. |
+| **W49** | Audit 16 unaudited criteria files | P3 | Lower-stakes workshop/light-industrial files: `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. Claude reads → Perplexity patches any wrong citations. |
 | **W19** | legal_refs/ stubs (3 arrêtés) | P0 | User working in parallel. `arrete-interministeriel-1999`, `2016-criteres-microbiologiques`, `2025-liaison-froide` all have [MANQUANT] stubs. |
 
 ---
 
-## Next Phase Identifier: **W52**
+## Backlog (no phase opened — needs human decision first)
+
+| Item | What's needed |
+|---|---|
+| F-01: `.env` not gitignored | Confirm .env has no secrets committed, then add to .gitignore. Quick fix. |
+| F-05: prod API URL falls back to localhost | Confirm correct prod URL, then update fallback. |
+| F-02: stale Node/Expo version comment | Cosmetic. |
+| F-03: migration naming `001_` reused | Cosmetic. |
+| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision: is this criterion about siting distance or about Décret 07-144's rayon d'affichage? Answer changes the fix entirely. |
+| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation that Annexe II is operative standard for abattoirs (strongly indicated — g/t units vs. mg/L makes Annexe I structurally inapplicable). Then update ABT-AX4-01/04B + SLH-05-04 through 04D. |
+| legal_refs Issue #1: decret-83-496 Art.4/7/8 inline amendment notice | Add `> Modification Décret 21-430` inline at each amended article, not only in end-of-file note. |
+| legal_refs Issue #2: loi-09-03 ✅ VÉRIFIÉ status | Revert to ⚠️ NON VÉRIFIÉ — no named human reviewer. One-line fix. |
+| legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
+
+---
+
+## Next Phase Identifier: **W59**
 
 ---
 
@@ -149,6 +172,13 @@
 
 ## Execution Order (Current Session)
 
-1. **W51** (P1) — Monitor JORADP for AIM GPL2 publication. If not found, retain [حكم مهني] + [À VÉRIFIER] tags as-is. No code change until publication confirmed.
-2. **W19** (P0) — User fills 3 arrêté stubs in parallel.
-3. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches any wrong citations found.
+1. **W52** (P1/CRITICAL) — Add INSPECTION_LOCKED guard to `delete()/deleteMany()/clear()` in `InspectionRepository.ts`. Get product sign-off on supervisor reopen workflow first.
+2. **W53** (P1/HIGH) — Wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` with offline queue.
+3. **W57** (P1) — Fix `semiPharmaCriteria.ts` SPH-02-01/02/05-01: replace Décret 17-140 (food-only) → Loi 18-11.
+4. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
+5. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
+6. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
+7. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
+8. **W58** (P3) — Confirm Décret 76-04 superseded by Loi 19-02; update BAK-10-12.
+9. **W19** (P0) — User fills 3 arrêté stubs in parallel.
+10. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.
