@@ -36,12 +36,16 @@ export const gplCriteria: InspectionItem[] = [
     id: 'GPL-02-01',
     axis: 'تخزين قوارير الغاز',
     category: 'سلامة',
-    // Phase W — verified 2026-08-06 against AIM GPL2 (Arrêté interministériel, version 14/03/2022)
+    // W51 [À VÉRIFIER]: AIM GPL2 (v14.03.2022) has NO JORADP publication trace as of 2026-08-10.
+    // Décret 21-319 Art.92 delegates rule-making but the arrêté has not been published.
+    // Source is an unpublished draft circulating on Scribd — not binding law.
+    // Technical values retained as professional judgment pending publication.
+    // Phase W — cited from AIM GPL2 (Arrêté interministériel, version 14/03/2022)
     // Ventilation: 2 openings ≥ 1600 cm² each at floor and ceiling level, unobstructed.
     // Max propane bottle storage (outdoors): 1400 kg. Indoors: per building permit.
     // Separation distances: ≤525 kg → 3 m from openings/ignition sources; >525 kg → 5 m.
     criteria: 'تخزين قوارير الغاز البترولي المميع في وضع عمودي في مستودع أو قفص مهوّى طبيعياً بفتحتَي تهوية (واحدة عند الأرض وأخرى عند السقف) لا تقل مساحة كل منهما عن 1600 سم² وغير مسدودتين، مع تثبيت القوارير بحوامل أو سلاسل لمنع سقوطها، وعلى بُعد لا يقل عن 3 أمتار من أي مصدر اشتعال أو فتحات بناء (>525 كغ → 5 أمتار)، مع عدم تجاوز الحد الأقصى للتخزين خارج المبنى (1400 كغ من البروبان).',
-    legalReference: 'القرار الوزاري المشترك المتعلق بالقواعد التقنية وشروط السلامة المطبقة على نقاط توزيع وتخزين الغاز البترولي المميع (AIM GPL2، الإصدار 14/03/2022): المادة 5 (التهوية: فتحتان ≥1600 سم²) + المادة 7 (مسافات الفصل: 3م ≤525كغ، 5م >525كغ) + المادة 4 (الحد الأقصى للتخزين الخارجي: 1400 كغ).',
+    legalReference: '[À VÉRIFIER — W51] القرار الوزاري المشترك المتعلق بالقواعد التقنية وشروط السلامة المطبقة على نقاط توزيع وتخزين الغاز البترولي المميع (AIM GPL2، الإصدار 14/03/2022): المادة 5 (التهوية: فتحتان ≥1600 سم²) + المادة 7 (مسافات الفصل: 3م ≤525كغ، 5م >525كغ) + المادة 4 (الحد الأقصى للتخزين الخارجي: 1400 كغ). [تحذير: هذا القرار غير منشور في الجريدة الرسمية (JORADP) حتى تاريخ 2026-08-10 — المصدر مسودة متداولة، لا قيمة قانونية ملزمة. الأرقام التقنية محتفظ بها بصفة حكم مهني ريثما يُنشر القرار].',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -52,9 +56,10 @@ export const gplCriteria: InspectionItem[] = [
     category: 'سلامة',
     criteria: 'الفصل الواضح بين قوارير الغاز الممتلئة والقوارير الفارغة في مناطق تخزين محددة وموسومة.',
     // W43 FIX: 21-430 المادة 6 is phantom (21-430 has only 3 articles).
+    // W51 [À VÉRIFIER]: AIM GPL2 unpublished — see GPL-02-01 note.
     // Operative rule: 83-496 Art.16 (licence exploitation imposed by minister + conformity cert from civil protection)
     // + AIM GPL2 (arrêté conjoint issued per 83-496 Art.19) governs technical organisation of storage areas.
-    legalReference: 'المرسوم 83-496 المادة 16 (رخصة استغلال منشآت توزيع GPL/C تشترط المطابقة مع اشتراطات الحماية المدنية، بما فيها تنظيم مناطق التخزين) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (تنظيم مخزون قوارير GPL/C: الفصل بين الممتلئة والفارغة وتحديد مناطق التخزين لكل صنف).',
+    legalReference: 'المرسوم 83-496 المادة 16 (رخصة استغلال منشآت توزيع GPL/C تشترط المطابقة مع اشتراطات الحماية المدنية، بما فيها تنظيم مناطق التخزين) + [À VÉRIFIER — W51] القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (تنظيم مخزون قوارير GPL/C: الفصل بين الممتلئة والفارغة وتحديد مناطق التخزين لكل صنف). [تحذير: AIM GPL2 غير منشور في JORADP — مسودة غير ملزمة].',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -63,9 +68,10 @@ export const gplCriteria: InspectionItem[] = [
     id: 'GPL-02-03',
     axis: 'تخزين قوارير الغاز',
     category: 'سلامة',
+    // W51 [À VÉRIFIER]: AIM GPL2 unpublished — see GPL-02-01 note.
     // Phase W — AIM GPL2: max outdoor storage 1400 kg propane; licence dossier specifies activity-level limit.
     criteria: 'عدم تجاوز الحد الأقصى لكمية الغاز البترولي المميع المخزنة في العراء (1400 كغ من البروبان كحد أقصى مطلق للتخزين خارج المبنى)، وعدم تجاوز الكمية المحددة في رخصة الاستغلال أو دفتر الشروط للنشاط.',
-    legalReference: 'القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022) المادة 4 (الحد الأقصى للتخزين الخارجي 1400 كغ) + المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 المادة 14 (دفتر الشروط يحدد الكميات القصوى المرخصة للتخزين).',
+    legalReference: '[À VÉRIFIER — W51] القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022) المادة 4 (الحد الأقصى للتخزين الخارجي 1400 كغ) [تحذير: AIM GPL2 غير منشور في JORADP — مسودة غير ملزمة] + المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 المادة 14 (دفتر الشروط يحدد الكميات القصوى المرخصة للتخزين).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -79,7 +85,8 @@ export const gplCriteria: InspectionItem[] = [
     //   — 83-496 Art.20 (infractions constatées et réprimées per legislation in force)
     //   — loi 19-02 Art.6 (interdiction sources d'ignition in fire-risk zones)
     //   — AIM GPL2 (technical rules per 83-496 Art.19) specifies the ban on naked flames in storage zones.
-    legalReference: 'القانون 19-02 المادة 6 (حظر مصادر الاشتعال في مناطق تخزين المواد القابلة للاشتعال واشتراط لافتات التحذير) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الحظر الصريح لأي مصدر حرارة أو اشتعال في محيط تخزين وعمل GPL/C) + المرسوم 83-496 المادة 20 (المخالفات تُعاين وتُلاحق وتُعاقب طبقاً للأحكام التشريعية والتنظيمية النافذة).',
+    // W51 [À VÉRIFIER]: AIM GPL2 unpublished — see GPL-02-01 note.
+    legalReference: 'القانون 19-02 المادة 6 (حظر مصادر الاشتعال في مناطق تخزين المواد القابلة للاشتعال واشتراط لافتات التحذير) + [À VÉRIFIER — W51] القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الحظر الصريح لأي مصدر حرارة أو اشتعال في محيط تخزين وعمل GPL/C) [تحذير: AIM GPL2 غير منشور في JORADP — مسودة غير ملزمة] + المرسوم 83-496 المادة 20 (المخالفات تُعاين وتُلاحق وتُعاقب طبقاً للأحكام التشريعية والتنظيمية النافذة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -88,6 +95,7 @@ export const gplCriteria: InspectionItem[] = [
     id: 'GPL-03-02',
     axis: 'الوقاية من الحريق والانفجار',
     category: 'سلامة',
+    // W51 [À VÉRIFIER]: AIM GPL2 unpublished — see GPL-02-01 note.
     // Phase W — AIM GPL2: extinguishers per storage capacity:
     //   ≤ 3500 kg total → 1 × 9 kg dry powder extinguisher minimum
     //   > 3500 kg total → 2 × 9 kg dry powder extinguishers minimum
@@ -96,7 +104,7 @@ export const gplCriteria: InspectionItem[] = [
     // W43 FIX: 21-430 المادة 13 is phantom. Operative rules:
     //   — AIM GPL2 (per 83-496 Art.19) specifies extinguisher count per storage capacity
     //   — loi 19-02 Art.7 covers first-response fire equipment generally
-    legalReference: 'القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) المادة 9 (مواصفات وعدد طفايات الحريق حسب الكمية المخزنة: 1×9كغ ≤3500كغ، 2×9كغ >3500كغ) + القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية في المنشآت ذات الأخطار).',
+    legalReference: '[À VÉRIFIER — W51] القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) المادة 9 (مواصفات وعدد طفايات الحريق حسب الكمية المخزنة: 1×9كغ ≤3500كغ، 2×9كغ >3500كغ) [تحذير: AIM GPL2 غير منشور في JORADP — مسودة غير ملزمة] + القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية في المنشآت ذات الأخطار).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -120,7 +128,8 @@ export const gplCriteria: InspectionItem[] = [
     //   — 88-07 Art.10 (general workplace safety tool requirement)
     //   — 83-496 Art.8 as amended by 21-430 Art.2 (approbation des équipements before use — implies conformity of tools)
     //   — AIM GPL2 (technical rules per 83-496 Art.19) specifies non-spark tool requirement in GPL environments
-    legalReference: 'القانون 88-07 المادة 10 (استعمال أدوات العمل المناسبة للبيئة الخطرة) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الاشتراطات التقنية لأدوات العمل في محيط الغاز البترولي المميع: حظر الأدوات المولدة للشرر) + المرسوم 83-496 المادة 8 (معدَّلة: اشتراط مطابقة التجهيزات المستخدمة في نشاط GPL/C للمتطلبات التقنية النافذة).',
+    // W51 [À VÉRIFIER]: AIM GPL2 unpublished — see GPL-02-01 note.
+    legalReference: 'القانون 88-07 المادة 10 (استعمال أدوات العمل المناسبة للبيئة الخطرة) + [À VÉRIFIER — W51] القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الاشتراطات التقنية لأدوات العمل في محيط الغاز البترولي المميع: حظر الأدوات المولدة للشرر) [تحذير: AIM GPL2 غير منشور في JORADP — مسودة غير ملزمة] + المرسوم 83-496 المادة 8 (معدَّلة: اشتراط مطابقة التجهيزات المستخدمة في نشاط GPL/C للمتطلبات التقنية النافذة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
