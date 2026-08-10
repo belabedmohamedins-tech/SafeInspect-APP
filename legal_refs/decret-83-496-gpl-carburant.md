@@ -43,17 +43,30 @@ Vu l'arrêté du 7 mars 1977 portant classification des industries et dépôts d
 
 **Art. 4.** — L'utilisation du pétrole comme carburant n'exclut pas l'utilisation du GPL-carburant sur les véhicules automobiles.
 
+> **⚠️ ARTICLE MODIFIÉ — Décret exécutif n° 21-430 du 4 novembre 2021 :**  
+> L'article 4 ci-dessus reproduit le texte original de 1983. Il a été **remplacé** par le texte suivant :  
+> « Le GPL-carburant peut être utilisé sur les véhicules automobiles, séparément ou mélangé avec un ou plusieurs carburants, y compris ceux à motorisation hybride. »  
+> Voir le texte de remplacement complet dans `decret-21-430-gpl-carburant.md`.
+
 **Art. 5.** — Les prix du GPL-carburant sont fixés par décret pris sur rapport conjoint du ministre chargé des hydrocarbures et du ministre chargé des finances.
 
 **Art. 6.** — Les modalités de calcul, de révision et de modification des prix d'installation des équipements, ainsi que les modalités de paiement des installateurs, sont fixées par arrêté conjoint des ministres chargés des finances et des hydrocarbures.
 
 **Art. 7.** — L'installation d'équipement permettant l'utilisation du GPL-carburant sur les véhicules automobiles ne peut être réalisée que par des installateurs agréés par le ministre chargé des hydrocarbures. Les modalités d'agrément sont fixées par arrêté conjoint des ministres chargés des hydrocarbures et des transports.
 
+> **⚠️ ARTICLE MODIFIÉ — Décret exécutif n° 21-430 du 4 novembre 2021 :**  
+> L'article 7 ci-dessus reproduit le texte original de 1983. Il a été **remplacé** par un nouveau texte définissant les conditions d'agrément des installateurs de GPL-carburant.  
+> Voir le texte de remplacement complet dans `decret-21-430-gpl-carburant.md`.
+
 **Art. 8.** — Tout équipement permettant l'utilisation du GPL-carburant sur les véhicules automobiles doit, avant sa mise en service, être approuvé par le ministre chargé des hydrocarbures.
 
 Les modalités d'approbation sont fixées par arrêté conjoint des ministres chargés des hydrocarbures et des transports.
 
 Le ministre chargé des hydrocarbures délivre, après vérification de la conformité de l'équipement à la réglementation, une autorisation d'utilisation du GPL-carburant. Le modèle du certificat d'installation et de l'autorisation d'utilisation du GPL-carburant est fixé par arrêté conjoint des ministres chargés des hydrocarbures et des transports.
+
+> **⚠️ ARTICLE MODIFIÉ — Décret exécutif n° 21-430 du 4 novembre 2021 :**  
+> L'article 8 ci-dessus reproduit le texte original de 1983. Il a été **remplacé** par un nouveau texte définissant les conditions d'approbation des équipements GPL et d'autorisation d'utilisation.  
+> Voir le texte de remplacement complet dans `decret-21-430-gpl-carburant.md`.
 
 **Art. 9.** —  
 **Texte original (arabe) :** لا يمكن للمركب المعتمد أن يسلم سيارة مجهزة بغاز البترول المبيع كوقود إلا إذا كان في وسعه التقديم لصاحب السيارة (الترخيص باستعمال غاز الوقود المبيع كوقود) مثلما حدد ذلك في المادة ٨ وتحدد كيفيات تسليم هذا الترخيص في النص التنظيمي المنصوص عليه في المادة ٧ من هذا المرسوم.
@@ -139,6 +152,6 @@ Liste des articles du Décret n° 83-496 dans l'ordre numérique :
 **Note sur la modification :** Ce décret a été modifié par le **Décret exécutif n° 21-430 du 4 novembre 2021** qui a révisé les articles 4, 7 et 8 (déjà converti dans `decret-21-430-gpl-carburant.md`).
 
 **Modifications apportées par le décret 21-430 :**
-- **Art. 4** : remplacé par "Le GPL-carburant peut être utilisé sur les véhicules automobiles, séparément ou mélangé avec un ou plusieurs carburants, y compris ceux à motorisation hybride."
+- **Art. 4** : remplacé par « Le GPL-carburant peut être utilisé sur les véhicules automobiles, séparément ou mélangé avec un ou plusieurs carburants, y compris ceux à motorisation hybride. »
 - **Art. 7** : remplacé par un nouveau texte définissant l'agrément des installateurs.
 - **Art. 8** : remplacé par un nouveau texte définissant l'approbation et l'autorisation d'utilisation.
