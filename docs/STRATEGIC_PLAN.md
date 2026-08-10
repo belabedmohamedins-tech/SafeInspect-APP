@@ -97,6 +97,8 @@
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
 | **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` (impl) + `f439cc8c` (6 tests). TSC+Jest gate → Claude. |
+| **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. TSC+Jest gate → Claude. |
+| **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | Code fix → Claude (commit + TSC+Jest gate). |
 
 ---
 
@@ -108,8 +110,6 @@
 | **W54** | F-14 loose end: scoringUtils.ts completion-rate reconciliation | P2 | Three formulas for "evaluated": live progress bar, finish-gate, `scoringUtils.ts` completion-rate. Not confirmed reconciled. Quick read of scoringUtils.ts needed. |
 | **W55** | F-17 loose end: SavedInspection.violations shape check | P2 | `src/types.ts` `SavedInspection.violations` shape vs. what `sync.ts` expects — not confirmed matching. Quick read of types.ts + sync.ts. |
 | **W56** | F-20: decisionSupport.ts real test coverage | P2 | Only `typeof suggestDecision` test exists. Need tests for grade A/B/C/D boundaries + escalation logic. |
-| **W57** | L-09: semiPharmaCriteria.ts food-decree misuse | P1 | `SPH-02-01`, `SPH-02-02`, `SPH-05-01` cite Décret 17-140 (food products only). File is non-food. Replacement: Loi 18-11 provisions (already correctly used in other SPH criteria in same file). |
-| **W58** | L-11: bakeryCriteria.ts Décret 76-04 vs Loi 19-02 | P3 | `BAK-10-12` cites Décret 76-04 + 2009 arrêté. `BGN-08-01/02` cites Loi 19-02 for the same fire-safety subject. Confirm 76-04 superseded; if yes, update BAK-10-12 to match. |
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication of arrêté under Décret 21-319 Art.92. |
 | **W49** | Audit 16 unaudited criteria files | P3 | Lower-stakes workshop/light-industrial files: `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. Claude reads → Perplexity patches any wrong citations. |
 | **W19** | legal_refs/ stubs (3 arrêtés) | P0 | User working in parallel. `arrete-interministeriel-1999`, `2016-criteres-microbiologiques`, `2025-liaison-froide` all have [MANQUANT] stubs. |
@@ -162,7 +162,7 @@
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | Hygiène alimentaire | ✅ Present |
+| Décret 76-35 | IGH incendie | ✅ Present |
 | AIM GPL2 v14.03.2022 | GPL station technique rules | ⚠️ Present but UNPUBLISHED — no JORADP trace. W51 OPEN. |
 | Arrêté 2025 liaison froide | Conservation températures | ⚠️ STUB — W19 OPEN |
 | Arrêté 2016 critères microbiologiques | Microbiologie alimentaire | ⚠️ STUB — W19 OPEN |
@@ -173,11 +173,9 @@
 ## Execution Order (Current Session)
 
 1. **W53** (P1/HIGH) — Wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` with offline queue.
-2. **W57** (P1) — Fix `semiPharmaCriteria.ts` SPH-02-01/02/05-01: replace Décret 17-140 (food-only) → Loi 18-11.
-3. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
-4. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
-5. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
-6. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
-7. **W58** (P3) — Confirm Décret 76-04 superseded by Loi 19-02; update BAK-10-12.
-8. **W19** (P0) — User fills 3 arrêté stubs in parallel.
-9. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.
+2. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
+3. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
+4. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
+5. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
+6. **W19** (P0) — User fills 3 arrêté stubs in parallel.
+7. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.

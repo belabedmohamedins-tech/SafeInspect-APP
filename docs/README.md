@@ -1,5 +1,21 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-11 00:34 WAT — Perplexity — W57+W58 CLOSED: semiPharma + bakery fire-safety citations fixed
+- **Phases closed:** W57, W58
+- **Phases opened:** none
+- **Files changed:** `src/criteria/semiPharmaCriteria.ts` (commit `f31faa33`), `src/criteria/bakeryCriteria.ts` (W58 — pending commit by Claude)
+- **W57 — semiPharmaCriteria.ts:**
+  - SPH-02-01: `Décret 17-140 Art.15+16` → `Loi 18-11 Art.104` (facility hygiene for non-food health products)
+  - SPH-02-02: `Décret 17-140 Art.13` → `Loi 18-11 Art.104` (separation of production lines)
+  - SPH-05-01: `Décret 17-140 Art.21` → `Loi 18-11 Art.218` (PPE + hygiene in health-type facilities)
+  - Root cause: Décret 17-140 has explicit food-products scope; semi-pharma packaging is non-food → Loi 18-11 is correct.
+- **W58 — bakeryCriteria.ts:**
+  - BAK-10-12: `Décret 76-04 + arrêté 4 mai 2009` → `Loi 19-02 Art.5 + Art.13` (consistent with BGN-08-01/02)
+  - Root cause: Décret 76-04 (1976) superseded by Loi 19-02 (2019) for fire-safety framework. 2009 arrêté has no confirmed JORADP trace.
+- **TSC/Jest gate:** Hand off to Claude — run `npx jest src/__tests__/semiPharmaCriteria.test.ts src/__tests__/bakeryCriteria.test.ts` then `npx tsc --noEmit`.
+- **Open phases: W19, W49, W51, W53, W54, W55, W56**
+- **Next identifier: W59**
+
 ### 2026-08-10 23:10 WAT — Perplexity — W52 CLOSED: INSPECTION_LOCKED guard on delete/deleteMany/clear
 - **Phases closed:** W52
 - **Phases opened:** none
@@ -136,13 +152,13 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W57** | ✅ CLOSED | P1 | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 — Décret 17-140 (food-only) → Loi 18-11 Art.104/218. Commit `f31faa33`. 2026-08-11. |
+| **W58** | ✅ CLOSED | P3 | L-11: bakeryCriteria.ts BAK-10-12 — Décret 76-04 + unconfirmed 2009 arrêté → Loi 19-02 Art.5+Art.13. TSC+Jest gate → Claude. 2026-08-11. |
 | **W52** | ✅ CLOSED | P1/CRITICAL | F-11 remaining: INSPECTION_LOCKED guard on `delete()/deleteMany()/clear()` — Commits `94e3f7c2` + `f439cc8c`. 2026-08-10. |
 | **W53** | 🟠 OPEN | P1/HIGH | F-18 remaining: wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` |
 | **W54** | 🟠 OPEN | P2 | F-14 loose end: confirm `scoringUtils.ts` completion-rate reconciled with progress bar + finish-gate |
 | **W55** | 🟠 OPEN | P2 | F-17 loose end: confirm `SavedInspection.violations` shape in `types.ts` matches `sync.ts` expectations |
 | **W56** | 🟠 OPEN | P2 | F-20: add real test coverage for `decisionSupport.ts` (grade boundaries + escalation logic) |
-| **W57** | 🟠 OPEN | P1 | L-09: `semiPharmaCriteria.ts` SPH-02-01/02/05-01 cite Décret 17-140 (food-only) — replace with Loi 18-11 |
-| **W58** | 🟠 OPEN | P3 | L-11: `bakeryCriteria.ts` BAK-10-12 cites Décret 76-04 — confirm superseded by Loi 19-02; standardize |
 | **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: AIM GPL2 publication status — 6 GPL criteria tagged [À VÉRIFIER] |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
 | **W19** | 🟠 OPEN | P0 | legal_refs/ stubs (3 arrêtés — user working in parallel) |
