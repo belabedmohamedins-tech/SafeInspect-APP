@@ -1,23 +1,17 @@
-<!-- ============================================================
-     FICHE D'IDENTIFICATION
-     Titre         : Loi n° 90-29 du 1er décembre 1990 relative à
-                     l'aménagement et l'urbanisme
-     Signataire    : Chadli BENDJEDID, Président de la République
-     Date signature: 1er décembre 1990
-     JO n°         : 52 — 2 décembre 1990, p. 1408–1415
-     Source PDF    : loi-90-29.pdf (JORADP JO 52/1990)
-     Date conversion: 2026-08-09
-     Statut        : ⚠️ NON VÉRIFIÉ
-     ⚠️  Vérifier contre le texte original JORADP avant toute
-         décision légale ou d'application.
-============================================================ -->
-
 # Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme
 
-> **Source :** Journal Officiel de la République Algérienne n° 52 du 2 décembre 1990, p. 1408–1415.  
-> **Statut :** ⚠️ NON VÉRIFIÉ — Vérifier contre le texte original JORADP avant toute décision légale ou d'application.
+**Date de signature :** 1er décembre 1990  
+**Journal Officiel :** N° 52, 2 décembre 1990 — pages 1408 à 1415  
+**Source PDF :** Fourni par l'utilisateur (`loi 90-29.pdf`)  
+**Date de conversion :** 2026-08-10  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+
+**Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.
 
 ---
+
+## PRÉAMBULE
 
 Le Président de la République,
 
@@ -33,7 +27,7 @@ Vu l'ordonnance n° 66-155 du 8 juin 1966 portant code de procédure pénale, mo
 
 Vu l'ordonnance n° 67-281 du 20 décembre 1967 relative aux fouilles et à la protection des sites et monuments historiques et naturels ;
 
-Vu l'ordonnance n° 75-43 du 17 juin 1975 portant code pastoral ;
+Vu l'ordonnance n° 75-43 du 17 juin 1975 portant code pastoral,
 
 Vu l'ordonnance n° 75-58 du 26 septembre 1975 portant code civil, modifiée et complétée ;
 
@@ -67,7 +61,7 @@ Vu la loi n° 88-02 du 12 janvier 1988 relative à la planification, modifiée e
 
 Vu la loi n° 90-08 du 7 avril 1990 relative à la commune ;
 
-Vu la loi n° 90-09 du 7 avril 1990 relative à la wilaya ;
+Vu la loi n° 90-09 du 7 avril 1990 relative à la wilaya.
 
 Vu la loi n° 90-25 du 18 novembre 1990 relative à l'orientation foncière ;
 
@@ -93,10 +87,13 @@ Promulgue la loi dont la teneur suit :
 
 **Art. 4.** — Seules sont constructibles, les parcelles :
 
-- qui respectent l'économie urbaine, lorsqu'elles sont situées à l'intérieur des parties urbanisées de la commune,
-- dans les limites compatibles avec la viabilité des exploitations agricoles lorsqu'elles sont situées sur des terres agricoles,
-- dans les limites compatibles avec les objectifs de sauvegarde des équilibres écologiques lorsqu'elles sont situées sur des sites naturels,
-- dans les limites compatibles avec la nécessité de sauvegarde des sites archéologiques et culturels.
+— qui respectent l'économie urbaine, lorsqu'elles sont situées à l'intérieur des parties urbanisées de la commune,
+
+— dans les limites compatibles avec la viabilité des exploitations agricoles lorsqu'elles sont situées sur des terres agricoles,
+
+— dans les limites compatibles avec les objectifs de sauvegarde des équilibres écologiques lorsqu'elles sont situées sur des sites naturels,
+
+— dans les limites compatibles avec la nécessité de sauvegarde des sites archéologiques et culturels.
 
 Les modalités d'application du présent article seront précisées par voie réglementaire.
 
@@ -148,16 +145,21 @@ Dans le cas d'une association de communes, les périmètres d'intervention du pl
 
 **Art. 18.** — Le plan directeur d'aménagement et d'urbanisme :
 
-- détermine la destination générale des sols sur l'ensemble du territoire d'une ou d'un ensemble de communes par secteur,
-- définit l'extension des établissements humains, la localisation des services et des activités, la nature et l'implantation des grands équipements et infrastructures,
-- détermine les zones d'intervention sur les tissus urbains et les zones à protéger.
+— détermine la destination générale des sols sur l'ensemble du territoire d'une ou d'un ensemble de communes par secteur,
+
+— définit l'extension des établissements humains, la localisation des services et des activités, la nature et l'implantation des grands équipements et infrastructures,
+
+— détermine les zones d'intervention sur les tissus urbains et les zones à protéger.
 
 **Art. 19.** — Le plan directeur d'aménagement et d'urbanisme divise le territoire auquel il se rapporte en secteurs. Lesdits secteurs sont déterminés comme suit :
 
-- les secteurs urbanisés,
-- les secteurs à urbaniser,
-- les secteurs d'urbanisation future,
-- les secteurs non urbanisables.
+— les secteurs urbanisés,
+
+— les secteurs à urbaniser,
+
+— les secteurs d'urbanisation future,
+
+— les secteurs non urbanisables.
 
 Le secteur est une fraction continue du territoire communal pour laquelle sont prévus des usages généraux du sol et des échéances d'urbanisation fixées dans le cas des trois premières catégories de secteurs définies ci-dessus, dits d'urbanisation.
 
@@ -175,9 +177,11 @@ Tous les investissements dont la durée d'amortissement dépasse les délais pr�
 
 Toutefois, sont autorisés dans ces secteurs :
 
-- la rénovation, le remplacement ou l'extension des habitations liées à la viabilité de l'exploitation agricole,
-- les constructions et installations nécessaires à des équipements collectifs et à la réalisation d'opérations d'intérêt national,
-- les constructions justifiées par l'intérêt de la commune et dûment autorisées par le wali sur demande motivée du président de l'assemblée populaire communale après avis de l'assemblée populaire communale.
+— la rénovation, le remplacement ou l'extension des habitations liées à la viabilité de l'exploitation agricole,
+
+— les constructions et installations nécessaires à des équipements collectifs et à la réalisation d'opérations d'intérêt national,
+
+— les constructions justifiées par l'intérêt de la commune et dûment autorisées par le wali sur demande motivée du président de l'assemblée populaire communale après avis de l'assemblée populaire communale.
 
 **Art. 23.** — Les secteurs non urbanisables sont ceux dans lesquels des droits à construire peuvent être édictés mais réglementés dans des proportions limitées, compatibles avec l'économie générale des territoires de ces secteurs.
 
@@ -193,9 +197,11 @@ Après son adoption par l'assemblée populaire communale, il est transmis à l'a
 
 **Art. 27.** — Le plan directeur d'aménagement et d'urbanisme est approuvé :
 
-- par arrêté du wali pour les communes ou associations de communes de moins de deux cent mille habitants ;
-- par arrêté du ministre, chargé de l'urbanisme conjointement, le cas échéant, avec le ou les ministres concernés, pour les communes ou associations de communes de plus de deux cent mille habitants et de moins de cinq cent mille habitants,
-- par décret exécutif pris sur rapport du ministre chargé de l'urbanisme pour les communes ou associations de communes de plus de cinq cent mille habitants.
+— par arrêté du wali pour les communes ou associations de communes de moins de deux cent mille habitants ;
+
+— par arrêté du ministre chargé de l'urbanisme conjointement, le cas échéant, avec le ou les ministres concernés, pour les communes ou associations de communes de plus de deux cent mille habitants et de moins de cinq cent mille habitants,
+
+— par décret exécutif pris sur rapport du ministre chargé de l'urbanisme pour les communes ou associations de communes de plus de cinq cent mille habitants.
 
 Les modalités d'application du présent article seront précisées, par voie réglementaire.
 
@@ -205,7 +211,7 @@ Les révisions et les modifications du plan en vigueur sont approuvées dans les
 
 **Art. 29.** — Les procédures d'élaboration du plan directeur d'aménagement et d'urbanisme et le contenu des documents qui s'y rapportent, seront précisés par voie réglementaire.
 
-**Art. 30.** — Durant l'élaboration du plan directeur d'aménagement et d'urbanisme, le ou les président(s) des assemblées(s) populaire(s) communale(s) concernés arrêtent toute mesure nécessaire à la bonne exécution ultérieure dudit plan.
+**Art. 30.** — Durant l'élaboration du plan directeur d'aménagement et d'urbanisme, le ou les présidents(s) des assemblées(s) populaire(s) communale(s) concernés arrêtent toute mesure nécessaire à la bonne exécution ultérieure dudit plan.
 
 ### Section 3 — Le plan d'occupation des sols
 
@@ -213,13 +219,19 @@ Les révisions et les modifications du plan en vigueur sont approuvées dans les
 
 A cet effet, le plan d'occupation des sols :
 
-- fixe de façon détaillée pour le ou les secteurs concernés, la forme urbaine, l'organisation, les droits de construction et d'utilisation des sols,
-- définit la quantité minimale et maximale de construction autorisée exprimée en mètre carré de plancher hors œuvre ou en mètre cube de volume bâti, les types de constructions autorisés et leurs usages,
-- détermine les règles concernant l'aspect extérieur des constructions,
-- délimite l'espace public, les espaces verts, les emplacements réservés aux ouvrages publics et installations d'intérêt général ainsi que les tracés et les caractéristiques des voies de circulation,
-- définit les servitudes,
-- précise les quartiers, rues, monuments et sites à protéger, à rénover et à restaurer,
-- localise les terrains agricoles à préserver et à protéger.
+— fixe de façon détaillée pour le ou les secteurs concernés, la forme urbaine, l'organisation, les droits de construction et d'utilisation des sols,
+
+— définit la quantité minimale et maximale de construction autorisée exprimée en mètre carré de plancher hors œuvre ou en mètre cube de volume bâti, les types de constructions autorisés et leurs usages,
+
+— détermine les règles concernant l'aspect extérieur des constructions,
+
+— délimite l'espace public, les espaces verts, les emplacements réservés aux ouvrages publics et installations d'intérêt général ainsi que les tracés et les caractéristiques des voies de circulation,
+
+— définit les servitudes,
+
+— précise les quartiers, rues, monuments et sites à protéger, à rénover et à restaurer,
+
+— localise les terrains agricoles à préserver et à protéger.
 
 **Art. 32.** — Le plan d'occupation des sols se traduit par un règlement accompagné de documents graphiques de référence.
 
@@ -237,15 +249,19 @@ Le plan d'occupation des sols approuvé est mis à la disposition du public. Il 
 
 **Art. 37.** — Le plan d'occupation des sols ne peut être révisé que dans les conditions suivantes :
 
-- si le projet urbain ou les constructions initialement prévus n'ont été réalisés qu'au tiers seulement du volume de construction autorisée à l'échéance projetée pour son achèvement,
-- si le cadre bâti existant est en ruine ou dans un état de vétusté nécessitant son renouvellement,
-- si le cadre bâti a subi des détériorations causées par des phénomènes naturels,
-- si, passé un délai de cinq (5) ans après son approbation, la majorité des propriétaires des constructions totalisant au moins la moitié des droits à construire définis par le plan d'occupation des sols en cours de validité, le demande ;
-- si la nécessité de créer un projet d'intérêt national le requiert.
+— si le projet urbain ou les constructions initialement prévus n'ont été réalisés qu'au tiers seulement du volume de construction autorisée à l'échéance projetée pour son achèvement,
+
+— si le cadre bâti existant est en ruine ou dans un état de vétusté nécessitant son renouvellement,
+
+— si le cadre bâti a subi des détériorations causées par des phénomènes naturels,
+
+— si, passé un délai de cinq (5) ans après son approbation, la majorité des propriétaires des constructions totalisant au moins la moitié des droits à construire définis par le plan d'occupation des sols en cours de validité, le demande ;
+
+— si la nécessité de créer un projet d'intérêt national le requiert.
 
 Les révisions de plan en vigueur sont approuvées dans les mêmes conditions et formes que celles prévues pour l'élaboration du plan d'occupation des sols.
 
-**Art. 38.** — Les procédures d'élaboration et d'approbation des plans d'occupation des sols ainsi que le contenu des documents qui s'y rapportent, seront précisés, par voie réglementaire.
+**Art. 38.** — Les procédures d'élaboration et d'approbation des plans d'occupation des sols ainsi que le contenu des documents qui s'y rapportent, seront précisées, par voie réglementaire.
 
 ### Section 4 — Consistance des terres urbanisées et urbanisables
 
@@ -257,11 +273,13 @@ La gestion de ce portefeuille foncier est soumise aux dispositions législatives
 
 **Art. 41.** — Le portefeuille foncier de la commune est constitué des :
 
-- terres, propriété de la commune,
-- terres, acquises au marché foncier,
-- terres acquises par l'exercice du droit de préemption, conformément à la législation en vigueur.
+— terres, propriété de la commune,
 
-**Art. 42.** — Pour la réalisation de ses programmes d'investissement, prévus par le plan directeur de l'aménagement et de l'urbanisme et le plan d'occupation des sols, la commune établit son plan d'acquisition de terres, en conformité avec les plans de développement communal, de wilaya et national.
+— terres, acquises au marché foncier,
+
+— terres acquises par l'exercice du droit de préemption, conformément à la législation en vigueur.
+
+**Art. 42.** — Pour la réalisation de ses programmes d'investissement, prévus pour le plan directeur de l'aménagement et de l'urbanisme et le plan d'occupation des sols, la commune établit son plan d'acquisition de terres, en conformité avec les plans de développement communal, de wilaya et national.
 
 ---
 
@@ -271,16 +289,19 @@ La gestion de ce portefeuille foncier est soumise aux dispositions législatives
 
 ### Section 1 — Le littoral
 
-**Art. 44.** — Le littoral, au regard de la présente loi, englobe toutes les iles et ilôts ainsi qu'une bande de terre d'une largeur minimale de huit cents mètres (800 m) longeant la mer et incluant :
+**Art. 44.** — Le littoral, au regard de la présente loi, englobe toutes les îles et îlots ainsi qu'une bande de terre d'une largeur minimale de huit cents mètres (800 m) longeant la mer et incluant :
 
-- toutes les terres, versants de collines et montagnes, visibles de la mer tout en n'étant pas séparés du rivage par une plaine littorale,
-- les plaines littorales de moins de trois kilomètres (3 km) de largeur,
-- l'intégralité des massifs forestiers dont une partie est en littoral tel que définie ci-dessus,
-- l'intégralité des zones humides et leurs rivages sur trois cents mètres (300 m) de largeur dès qu'une partie de ces zones est en littoral tel que définie ci-dessus.
+— toutes les terres, versants de collines et montagnes, visibles de la mer tout en n'étant pas séparés du rivage par une plaine littorale,
+
+— les plaines littorales de moins de trois kilomètres (3 km) de largeur,
+
+— l'intégralité des massifs forestiers dont une partie est en littoral tel que définie ci-dessus,
+
+— l'intégralité des « zones humides » et leurs rivages sur trois cents mètres (300 m) de largeur dès qu'une partie de ces zones est en littoral tel que définie ci-dessus.
 
 **Art. 45.** — Dans le littoral, l'extension de l'urbanisation doit préserver les espaces et mettre en valeur les sites et paysages caractéristiques du patrimoine national, naturel, culturel et historique du littoral et les milieux nécessaires aux équilibres biologiques et doit s'opérer en conformité avec les dispositions du plan d'occupation des sols.
 
-Toute construction sur une bande de territoire de cent mètres de large à partir du rivage est frappée de servitude de non aedificandi. Cette distance est calculée horizontalement à partir du point des plus hautes eaux.
+Toute construction sur une bande de territoire de cent mètres de large à partir du rivage est frappée de servitude de non edificandi. Cette distance est calculée horizontalement à partir du point des plus hautes eaux.
 
 Peuvent être toutefois autorisées, les constructions ou activités exigeant la proximité immédiate de l'eau.
 
@@ -300,9 +321,11 @@ Dans tous les cas, elles doivent figurer dans le plan d'occupation des sols.
 
 **Art. 49.** — En l'absence de plan d'occupation des sols approuvé et après consultation du ministère chargé de l'agriculture peuvent être autorisées :
 
-- les constructions et installations nécessaires à l'hydraulique et à l'exploitation agricole,
-- les constructions et installations d'intérêt national ou nécessaires aux équipements collectifs,
-- les modifications de constructions existantes.
+— les constructions et installations nécessaires à l'hydraulique et à l'exploitation agricole,
+
+— les constructions et installations d'intérêt national ou nécessaires aux équipements collectifs,
+
+— les modifications de constructions existantes.
 
 Les conditions et modalités d'application des dispositions du présent article seront définies par voie réglementaire.
 
@@ -374,14 +397,17 @@ En cas de refus ou de réserve, la décision dûment motivée de l'autorité com
 
 **Art. 65.** — Sous réserve des dispositions prévues aux articles 66 et 67 ci-après, le permis de lotir ou le permis de construire est délivré par le président de l'assemblée populaire communale :
 
-- en tant que représentant de la commune, pour tous les lotissements ou constructions dans un secteur couvert par un plan d'occupation des sols, le président de l'assemblée populaire communale transmet, dans ce cas, au wali un exemplaire de la demande de permis considérée,
-- en tant que représentant de l'Etat en l'absence d'un plan d'occupation des sols, et après avis conforme du wali.
+— en tant que représentant de la commune, pour tous les lotissements ou constructions dans un secteur couvert par un plan d'occupation des sols, le président de l'assemblée populaire communale transmet, dans ce cas, au wali un exemplaire de la demande de permis considérée,
+
+— en tant que représentant de l'Etat en l'absence d'un plan d'occupation des sols, et après avis conforme du wali.
 
 **Art. 66.** — Le permis de lotir ou le permis de construire est délivré par le wali pour :
 
-- les constructions et installations réalisées pour le compte de l'Etat, de la wilaya et de leurs établissements publics,
-- les ouvrages de productions, de transport, de distribution et de stockage d'énergie ainsi que de matières stratégiques,
-- les lotissements ou constructions localisés dans les territoires visés aux articles 44, 45, 46, 48 et 49 ci-dessus, non régis par un plan d'occupation des sols approuvé.
+— les constructions et installations réalisées pour le compte de l'Etat, de la wilaya et de leurs établissements publics,
+
+— les ouvrages de productions, de transport, de distribution et de stockage d'énergie ainsi que de matières stratégiques,
+
+— les lotissements ou constructions localisés dans les territoires visés aux articles 44, 45, 46, 48 et 49 ci-dessus, non régis par un plan d'occupation des sols approuvé.
 
 **Art. 67.** — Le permis de lotir ou de construire est délivré par le ministre chargé de l'urbanisme, après avis du ou des walis concernés, pour les projets structurants d'intérêt national ou régional.
 
@@ -417,8 +443,6 @@ Toutefois, ne sont pas soumises à cette obligation, les clôtures forestières 
 
 Il est délivré, selon le cas, par le président de l'assemblée populaire communale ou par le wali.
 
-Les conditions et modalités d'application du présent article seront précisées par décret.
-
 ### Section 2 — Infraction
 
 **Art. 76.** — En cas de travaux de construction entrepris en violation grave des dispositions légales et réglementaires en vigueur en la matière, l'autorité administrative peut saisir le juge compétent à l'effet de prononcer selon les voies d'urgence prévues par l'ordonnance n° 66-154 du 8 juin 1966 susvisée, l'interruption des travaux.
@@ -439,101 +463,24 @@ Les peines prévues aux alinéas précédents peuvent être prononcées contre l
 
 **Art. 80.** — Toutes les dispositions contraires à la présente loi sont abrogées et notamment :
 
-- la loi n° 82-02 du 6 février 1982 relative au permis de construire et de lotir,
-- l'ordonnance n° 85-01 du 13 août 1985 fixant à titre transitoire les règles d'occupation des sols en vue de leur préservation et de leur protection, approuvée par la loi n° 85-08 du 12 novembre 1985 sous réserve des dispositions de l'article 79 ci-dessus.
+— la loi n° 82-02 du 6 février 1982 relative au permis de construire et de lotir,
+
+— l'ordonnance n° 85-01 du 13 août 1985 fixant à titre transitoire les règles d'occupation des sols en vue de leur préservation et de leur protection, approuvée par la loi n° 85-08 du 12 novembre 1985 sous réserve des dispositions de l'article 79 ci-dessus.
 
 **Art. 81.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
 
+Les conditions et modalités d'application du présent article seront précisées par décret.
+
 Fait à Alger, le 1er décembre 1990.
 
-**Chadli BENDJEDID**
+Chadli BENDJEDID.
 
 ---
 
 ## Contrôle de séquence
 
-| N° article | Présent | Note |
-|---|---|---|
-| Art. 1er | ✅ | |
-| Art. 2 | ✅ | |
-| Art. 3 | ✅ | |
-| Art. 4 | ✅ | |
-| Art. 5 | ✅ | |
-| Art. 6 | ✅ | |
-| Art. 7 | ✅ | |
-| Art. 8 | ✅ | |
-| Art. 9 | ✅ | |
-| Art. 10 | ✅ | |
-| Art. 11 | ✅ | |
-| Art. 12 | ✅ | |
-| Art. 13 | ✅ | |
-| Art. 14 | ✅ | |
-| Art. 15 | ✅ | |
-| Art. 16 | ✅ | |
-| Art. 17 | ✅ | |
-| Art. 18 | ✅ | |
-| Art. 19 | ✅ | |
-| Art. 20 | ✅ | |
-| Art. 21 | ✅ | |
-| Art. 22 | ✅ | |
-| Art. 23 | ✅ | |
-| Art. 24 | ✅ | |
-| Art. 25 | ✅ | |
-| Art. 26 | ✅ | |
-| Art. 27 | ✅ | |
-| Art. 28 | ✅ | |
-| Art. 29 | ✅ | |
-| Art. 30 | ✅ | |
-| Art. 31 | ✅ | |
-| Art. 32 | ✅ | |
-| Art. 33 | ✅ | |
-| Art. 34 | ✅ | |
-| Art. 35 | ✅ | |
-| Art. 36 | ✅ | |
-| Art. 37 | ✅ | |
-| Art. 38 | ✅ | |
-| Art. 39 | ✅ | |
-| Art. 40 | ✅ | |
-| Art. 41 | ✅ | |
-| Art. 42 | ✅ | |
-| Art. 43 | ✅ | |
-| Art. 44 | ✅ | |
-| Art. 45 | ✅ | |
-| Art. 46 | ✅ | |
-| Art. 47 | ✅ | |
-| Art. 48 | ✅ | |
-| Art. 49 | ✅ | |
-| Art. 50 | ✅ | |
-| Art. 51 | ✅ | |
-| Art. 52 | ✅ | |
-| Art. 53 | ✅ | |
-| Art. 54 | ✅ | |
-| Art. 55 | ✅ | |
-| Art. 56 | ✅ | |
-| Art. 57 | ✅ | |
-| Art. 58 | ✅ | |
-| Art. 59 | ✅ | |
-| Art. 60 | ✅ | |
-| Art. 61 | ✅ | |
-| Art. 62 | ✅ | |
-| Art. 63 | ✅ | |
-| Art. 64 | ✅ | |
-| Art. 65 | ✅ | |
-| Art. 66 | ✅ | |
-| Art. 67 | ✅ | |
-| Art. 68 | ✅ | |
-| Art. 69 | ✅ | |
-| Art. 70 | ✅ | |
-| Art. 71 | ✅ | |
-| Art. 72 | ✅ | |
-| Art. 73 | ✅ | |
-| Art. 74 | ✅ | |
-| Art. 75 | ✅ | |
-| Art. 76 | ✅ | |
-| Art. 77 | ✅ | |
-| Art. 78 | ✅ | |
-| Art. 79 | ✅ | |
-| Art. 80 | ✅ | |
-| Art. 81 | ✅ | |
+Liste des articles de la Loi n° 90-29 dans l'ordre numérique :
 
-**Total : 81 articles — aucun saut détecté. Séquence Art. 1–81 complète.**
+1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81.
+
+**Intégrité du texte :** La loi est complète. Tous les articles sont présents.
