@@ -3,8 +3,7 @@
 **Date de signature :** 11 juin 2024 (5 Dhou El Hidja 1445)  
 **Journal Officiel :** Publié le 19 juin 2024 (13 Dhou El Hidja 1445) — Source PDF fournie par l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
-> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
 
 **Note sur l'extraction :** L'intégralité du texte de ce décret est présente dans l'extraction fournie.
 
@@ -62,15 +61,15 @@ Cette déclaration doit mentionner expressément :
 
 « **Art. 25.** — La déclaration d'exploitation d'un établissement classé de quatrième catégorie doit être accompagnée des documents suivants :
 
-— ................ (sans changement jusqu’à) stockage des produits ;
+— ................ (sans changement jusqu'à) stockage des produits ;
 
 — un rapport comportant :
 
- la nature et le volume des activités ainsi que la ou les rubrique(s) de la nomenclature des installations classées dans lesquelles l'établissement doit être classé ;
+ la nature et le volume des activités ainsi que la ou les rubrique(s) de la nomenclature des installations classées dans lesquelles l'établissement doit être classé ;
 
- les procédés de fabrication que le déclarant met en œuvre, les matières qu'il utilise et notamment les produits dangereux qu'il est susceptible de détenir ainsi que les produits qu'il fabrique de manière à apprécier les inconvénients de l'établissement classé et les mesures pour y remédier ;
+ les procédés de fabrication que le déclarant met en œuvre, les matières qu'il utilise et notamment les produits dangereux qu'il est susceptible de détenir ainsi que les produits qu'il fabrique de manière à apprécier les inconvénients de l'établissement classé et les mesures pour y remédier ;
 
- le mode et les conditions de traitement des rejets liquides et atmosphériques de toute nature ainsi que le traitement des déchets et résidus de l'exploitation. ».
+ le mode et les conditions de traitement des rejets liquides et atmosphériques de toute nature ainsi que le traitement des déchets et résidus de l'exploitation. ».
 
 « **Art. 26.** — La déclaration d'exploitation de l'établissement classé de quatrième catégorie est acceptée par décision du président de l'assemblée populaire communale territorialement compétent, après avis des services de l'environnement et du secteur concerné par l'activité.
 
