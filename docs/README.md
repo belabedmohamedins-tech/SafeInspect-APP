@@ -1,5 +1,13 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 19:58 WAT — Perplexity — W47 CLOSED: BGN-07-04 confirmed resolved by W46
+- **Phases closed:** W47
+- **Phases opened:** none
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md` (docs only — no code change)
+- **What was done:** Direct read of `src/criteria/baseGeneralCriteria.ts` confirmed BGN-07-04 already has the W46 fix: `Décret 91-05 Art.2 + Art.3 + [حكم مهني — W46]`. W47 was opened for source research, but W46 already resolved it via the [حكم مهني] protocol — no dedicated Algerian article mandating crack-sealing for pest ingress exists in D91-05 or any known decree. Code is correct and legally defensible. W47 = confirmed closed by direct read.
+- **Open phases: W19, W48, W49**
+- **Next identifier: W51**
+
 ### 2026-08-10 15:01 WAT — Perplexity — W43 CLOSED: gplCriteria.ts phantom Décret 21-430 citations replaced
 - **Phases closed:** W43
 - **Phases opened:** none
@@ -158,7 +166,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W47** | 🟠 OPEN | P2 | BGN-07-04 pest sealing — no Décret 91-05 match. Source research needed. |
+| **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved by W46 — Art.2+Art.3+[حكم مهني]. No code change. Direct read 2026-08-10. |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
