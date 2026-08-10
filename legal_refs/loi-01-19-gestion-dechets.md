@@ -2,7 +2,10 @@
 
 **Date de signature :** 12 décembre 2001 (27 Ramadhan 1422)  
 **Signataire :** Abdelaziz BOUTEFLIKA, Président de la République  
+**Journal Officiel :** N° 77 — 15 décembre 2001  
 **Source PDF convertie :** `Loi 01-19.pdf` (Space files SafeInspect)  
+**Date de conversion :** 2026-08-10  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 
 > ⚠️ **AVERTISSEMENT** : Vérifier contre le texte original du JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou d'application.
 
@@ -580,3 +583,22 @@ La présente loi sera publiée au Journal officiel de la République algérienne
 Fait à Alger, le 27 Ramadhan 1422 correspondant au 12 décembre 2001.
 
 **Abdelaziz BOUTEFLIKA**
+
+---
+
+## Contrôle de séquence
+
+| Titre | Chapitre(s) | Articles |
+|---|---|---|
+| I — Dispositions générales | Chap. 1 (Art. 1–5), Chap. 2 (Art. 6–11) | 1–11 |
+| II — Déchets spéciaux | Chap. 1 (Art. 12–23), Chap. 2 (Art. 24–28) | 12–28 |
+| III — Déchets ménagers et assimilés | Chap. 1 (Art. 29–33), Chap. 2 (Art. 34–36) | 29–36 |
+| IV — Déchets inertes | — | 37–40 |
+| V — Installations de traitement | Chap. 1 (Art. 41–45), Chap. 2 (Art. 46–49) | 41–49 |
+| VI — Dispositions financières | — | 50–52 |
+| VII — Dispositions pénales | — | 53–66 |
+| VIII — Disposition particulière | — | 67 |
+| IX — Dispositions transitoires | — | 68–72 |
+
+**Articles présents :** Art. 1 à 72 — séquence complète et continue.  
+**Gaps :** Aucun.

@@ -1,8 +1,11 @@
 # Décret exécutif n° 2009-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
 
 **Date de signature :** 20 janvier 2009 (23 Moharram 1430)  
-**Source PDF convertie :** `decret 09-19.pdf` (Space files SafeInspect)  
 **Signataire :** Ahmed OUYAHIA, Premier ministre  
+**Journal Officiel :** N° 6 — 25 janvier 2009  
+**Source PDF convertie :** `decret 09-19.pdf` (Space files SafeInspect)  
+**Date de conversion :** 2026-08-10  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 
 > ⚠️ **AVERTISSEMENT** : Vérifier contre le texte original du JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou d'application.
 
@@ -156,3 +159,18 @@ Le présent décret sera publié au Journal officiel de la République algérien
 Fait à Alger, le 23 Moharram 1430 correspondant au 20 janvier 2009.
 
 **Ahmed OUYAHIA**
+
+---
+
+## Contrôle de séquence
+
+| Chapitre | Articles |
+|---|---|
+| I — Dispositions générales | Art. 1er |
+| II — Dispositions relatives à l'agrément | Art. 2–6 |
+| III — Droits et obligations du collecteur | Art. 7–10 |
+| IV — Dispositions relatives au contrôle | Art. 11–13 |
+| V — Dispositions finales | Art. 14–17 |
+
+**Articles présents :** Art. 1er à 17 — séquence complète et continue.  
+**Gaps :** Aucun.
