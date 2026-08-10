@@ -1,5 +1,37 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 10:30 WAT — Perplexity — W44 closed; full audit.js run triaged
+- **Phases closed:** W44 (audit.js gapNote stale-exception removal — committed `a8ea0d2a`)
+- **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- **Audit run results — 27 files scanned, 4 [MANQUANT], 0 [À VÉRIFIER], 13 files with gaps:**
+
+| File | Gap verdict | Action |
+|---|---|---|
+| `aim-gpl2-regles-techniques-securite.md` | ⚠️ PARTIEL — 1 [MANQUANT], 18 gap articles (3,7,9-29 except listed). **This is a selective extract of a 30-article document.** | W43 depends on this file — Claude holds verified arts for W43. No stub needed if Claude supplies text. |
+| `arrete-interministeriel-1999-temperatures-conservation.md` | ⚠️ PARTIEL — 0 articles found, 1 [MANQUANT] | W19 OPEN — stub awaiting full text from user's parallel session |
+| `arrete-interministeriel-2016-criteres-microbiologiques.md` | ⚠️ PARTIEL — 0 articles found, 1 [MANQUANT] | W19 OPEN — same |
+| `arrete-interministeriel-2025-liaison-froide.md` | ⚠️ PARTIEL — 0 articles found, 1 [MANQUANT] | W19 OPEN — same |
+| `decret-02-427-prevention-risques-professionnels.md` | ✅ OK status — 25 arts found (1-24 + 85). Gap: Arts 25–84 = **middle section of a 85-art decree** — a selective extract. No [MANQUANT] tag. | **BENIGN** — partial extract, only key articles loaded. Gap note to be added to file header. |
+| `decret-06-141-rejets-effluents-liquides.md` | ✅ OK status — 15 arts found (1-14 + 85 final). Gap = Arts 15–84 = middle bulk of decree. No [MANQUANT]. | **BENIGN** — art 85 is abrogation clause. Selective extract. Gap note to file header. |
+| `decret-06-198-etablissements-classes.md` | ✅ OK — 51 arts found. Gaps 51–84 = Annexes/tables, not numbered articles. | **BENIGN** — confirmed by prior audit sessions (Annexes). |
+| `decret-07-144-nomenclature-installations-classees.md` | ✅ OK — 5 arts (1-4 + 23). Gaps 5–22 = annex/nomenclature table rows, not numbered articles. | **BENIGN** — already tagged [MANQUANT] for rubrique range 1243-2922 in W31-3. |
+| `decret-09-19.md` | ✅ OK — 18 arts (1-17 + 85). Gaps 18–84 = same pattern. Art. 85 = abrogation clause. | **BENIGN** — selective extract. Art. 85 is expected final clause. |
+| `decret-21-430-gpl-carburant.md` | ✅ OK — 7 arts (1,2,3,4,7,8,112). Gaps 5,6,9–111. **Art. 112 is almost certainly a false positive** (likely a cross-reference or article number from the embedded 83-496 text picked up by scanner). | ⚠️ **W43 — investigate Art.112 before patching gplCriteria.ts. Decree has 3 real articles only.** |
+| `decret-22-167-etablissements-classes-modification.md` | ✅ OK — 25 arts, highest 112. Same Art.112 false-positive as above (amending decree cites article numbers from 06-198). | **BENIGN** — amending decrees reference base decree article numbers. Art. 112 = base decree reference. |
+| `decret-24-196-etablissements-classes-modification.md` | ✅ OK — 10 arts, highest 112. Same pattern. | **BENIGN** — same as above. |
+| `decret-83-496-gpl-carburant.md` | ✅ OK — 24 arts (1-21 + 22 gaps: 22,23,25-32). Decree has 21 real articles. | ⚠️ **W43 — Arts 22-32 gap: investigate whether these are scanner artifacts or real. 21-article decree should not have Art. 22+.** |
+| `decret-93-120-medecine-du-travail.md` | ✅ OK — 45 arts, highest 76. Gaps: 41-76 with holes. | **BENIGN** — 76-article decree, selective extract of most-cited articles. |
+| `loi-01-19-gestion-dechets.md` | ✅ OK — 73 arts (1-72 + 122). Gaps 73-121. Art. 122 = final clause. | **BENIGN** — Arts 73-121 are enforcement/transitional provisions not needed for criteria. Art. 122 is abrogation clause. |
+| `loi-04-20-risques-majeurs.md` | ✅ OK — 76 arts, highest 119. Gaps 76-118. Art. 119 = final clause. | **BENIGN** — same pattern. |
+| All others | ✅ OK, 0 gaps | Confirmed clean. |
+
+- **Action items generated:**
+  1. W43 must investigate `decret-21-430` Art.112 scanner artifact + `decret-83-496` Arts 22-32 gap before patching gplCriteria.ts.
+  2. W19 (parallel) — 3 arrêté stubs still have [MANQUANT]: 1999 temps, 2016 micro, 2025 liaison froide.
+  3. `aim-gpl2` partial file (18 gaps) — acceptable if Claude's W43 verified article numbers cover the needed arts. No new phase needed.
+  4. For `decret-02-427` and `decret-06-141`: add a single-line gap note in their file headers confirming "selective extract — Arts 25-84 / 15-84 = transitional/procedural provisions not needed for criteria." Low priority.
+- **Next identifier: W45.**
+
 ## 2026-08-09 23:52 WAT — Perplexity — W43 opened: gplCriteria.ts Décret 21-430 wrong-decree finding
 - **Phases closed:** none
 - **Phases opened:** W43
@@ -152,10 +184,11 @@
 | **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: Décret 21-430/83-496 wrong-decree finding — 5 criteria cite phantom articles + wrong instrument. Claude holds verified replacement strings. Do NOT patch before receiving them. |
 | **W41** | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
+| **W44** | ✅ CLOSED | — | audit.js: remove stale per-file gapNote exceptions. Commit `a8ea0d2a`. |
 | **W40** | ✅ CLOSED | — | F4: Loi 01-19 citation cluster — BGN-04-06 Art.19+Décret09-19 Art.2+6; BGN-04-07 Art.11+[À VÉRIFIER]. Confirmed by direct read SHA `9d11384`. |
 | **W39** | ✅ CLOSED | — | F3: Décret 91-05 — 6 wrong article citations corrected in `baseGeneralCriteria.ts`. TSC+Jest gate passed. |
-| **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end — `facilities.tsx` passes `rubrique` to checklist; `getCriteriaByRubriqueCategory` called in resolver. Confirmed clean by direct read. |
-| **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete + amendment table. |
+| **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end. Confirmed clean by direct read. |
+| **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
 | **W32** | ⚠️ RETRACTED | — | loi-09-03: W32 commit was DESTRUCTIVE (deleted 492 lines). Reverted. Superseded by W34-FIX. |

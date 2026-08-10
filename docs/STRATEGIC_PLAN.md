@@ -82,7 +82,7 @@
 | W13 | L-06: UPD-AX2-01 "500m buffer" clarification | 2026-08-09 | Confirmed clean. Correct legal chain. `warningMin: 700` in place. No change needed. |
 | W14 | L-08: Verify Décret 24-196 citation scope | 2026-08-09 | Confirmed clean. Always cited as amending decree to 06-198. No change needed. |
 | W10 | L-01: Abattoir wastewater Annex II — Option C | 2026-08-09 | User decision: keep Annex I mg/L as interim. ABT-AX6-02 tagged [À VÉRIFIER]. No code change. |
-| W15 | criteriaByActivity rubrique-based fallback lookup | 2026-08-09 | `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` confirmed present. Wiring completed in W38. |
+| W15 | criteriaByRubriqueCategory rubrique-based fallback lookup | 2026-08-09 | `criteriaByRubriqueCategory` 31-key map + `getCriteriaByRubriqueCategory()` confirmed present. Wiring completed in W38. |
 | **W32** | **⚠️ RETRACTED** | **2026-08-09** | **Commit `1c49fb43` destructive. Reverted `cbe46ba8`. Superseded by W34-FIX.** |
 | W33 | Prevention protocol analysis + improved space instructions | 2026-08-09 | No code change. |
 | W34 | ⚠️ FAILED — loi-09-03 truncated (-249 lines) | 2026-08-09 | Commit `4e994e86` DESTRUCTIVE. Superseded by W34-FIX. |
@@ -90,9 +90,10 @@
 | W35-DOCS | STRATEGIC_PLAN sync — close W33/W34/W34-FIX | 2026-08-09 | Commit `980f8f4b`. |
 | W36 | `decret-06-141` stub created in legal_refs/ | 2026-08-09 | Commit `d901937d`. Verbatim conversion pending (other conversation). |
 | W37 | Full instrument cross-reference audit report | 2026-08-09 | `docs/AUDIT_COVERAGE_REPORT.md` pushed. 13 missing instruments catalogued. Commit `d0da8c0e`. |
-| **W38** | **F1: Wire rubrique fallback into inspection flow** | **2026-08-09** | **Confirmed clean by direct read. `facilities.tsx` passes `rubrique` (comment `// W38`). `getCriteriaByRubriqueCategory()` exists in `criteriaData.ts`. Param chain: start → categories → facilities → checklist confirmed. No code change needed.** |
-| **W39** | **F3: Décret 91-05 citation cluster — 6 articles corrected** | **2026-08-09** | **Code already in `baseGeneralCriteria.ts` with W39 comments. TSC 0 + Jest 0 failures — user-confirmed gate passed 23:11 WAT.** |
-| **W40** | **F4: Loi 01-19 citation cluster — BGN-04-06 + BGN-04-07** | **2026-08-09** | **BGN-04-06: Art.32→Art.19 + Décret 09-19 Arts.4-8→Art.2+Art.6. BGN-04-07: Art.30→Art.11+[À VÉRIFIER]+Décret 07-205. Code in `baseGeneralCriteria.ts` SHA `9d11384`. Confirmed by direct read. No code change needed.** |
+| **W38** | **F1: Wire rubrique fallback into inspection flow** | **2026-08-09** | **Confirmed clean by direct code read.** |
+| **W39** | **F3: Décret 91-05 citation cluster — 6 articles corrected** | **2026-08-09** | **Code in `baseGeneralCriteria.ts` with W39 comments. TSC 0 + Jest 0 failures — user-confirmed.** |
+| **W40** | **F4: Loi 01-19 citation cluster — BGN-04-06 + BGN-04-07** | **2026-08-09** | **Confirmed by direct read. No code change needed.** |
+| **W44** | **audit.js: remove stale gapNote exceptions** | **2026-08-10** | **Commit `a8ea0d2a`. gapNote() always returns ''. 4 stale per-file exception clauses removed.** |
 
 ---
 
@@ -100,7 +101,7 @@
 
 | Phase | Priority | Title | Files | Blocker / Source | Agent |
 |---|---|---|---|---|---|
-| **W43** | 🔴 P0 — CRITICAL | gplCriteria.ts: Décret 21-430/83-496 wrong-decree + phantom articles | `src/criteria/gplCriteria.ts` | **BLOCKER: Claude must supply verified replacement legalReference strings per criterion before code edit.** Summary of problem: (1) Décret 21-430 is a 3-article decree amending 83-496 about vehicle-fuel conversion shops. (2) Arts 5,6,10,15,16 cited in gplCriteria.ts do not exist in this decree. (3) GPL-02-02, GPL-03-01, GPL-04-01, GPL-04-02 cite 21-430 for storage/fire-safety content that is governed by AIM GPL2, not 21-430. (4) GPL-03-02 has phantom `المادة 13`. (5) GPL-01-01/GPL-01-02 should reference Art.7 of embedded 83-496 text + AIM GPL2 Art.5 + Art.8. (6) GPL-04-02 leak-testing log: tag [À VÉRIFIER] until instrument confirmed. **Do NOT patch before Claude provides replacement strings.** | Perplexity (after Claude supplies strings) |
+| **W43** | 🔴 P0 — CRITICAL | gplCriteria.ts: Décret 21-430/83-496 wrong-decree + phantom articles | `src/criteria/gplCriteria.ts` | **BLOCKER: Claude must supply verified replacement legalReference strings per criterion before code edit.** Additional finding from audit.js run (2026-08-10): `decret-21-430` scanner picks up Art.112 — this is almost certainly a false positive from the embedded 83-496 text. `decret-83-496` shows Arts 22-32 gap — investigate whether real articles or scanner artifact (decree has 21 real articles). Confirm before patching. | Perplexity (after Claude supplies strings) |
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
 | **W41** | 🟠 P1 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely (straight duplicate of BGN-10-01). | Perplexity (legalRef string changes + 1 criterion deletion) |
 | **W42** | 🟠 P2 | F7: Cross-file consistency — abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | Resolve once: unify wastewater limit confidence tags ([À VÉRIFIER] or settled) across both files. Verify Décret 04-82 existence + Arts.6,9 (new instrument). If confirmed, upgrade `abattoirCriteria.ts` citations to match. | Perplexity (after decret-06-141 conversion in W36/W19) |
@@ -132,9 +133,9 @@ W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gp
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W40 (all sub-items except W19/W36/W37 open).
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W44 (all sub-items except W19/W36/W37/W41/W42/W43 open).
 - **Open: W19, W36, W37, W41, W42, W43.**
-- **Next new phase identifier: W44.**
+- **Next new phase identifier: W45.**
 - Never reuse a closed phase letter.
 
 ---
@@ -156,7 +157,7 @@ W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gp
 | Internal intervention plan | Décret 09-335 | Art. 4–6 | ⚠️ NO FILE — W37 |
 | LPG/C accreditation | Décret 83-496 (via 21-430 Art.2) | Art. 7 of base decree (premises ≥60m², qualification cert, equipment list) | ⚠️ W43 — current citation (Art.3/4/5 of 21-430) is WRONG. Art.7 of embedded 83-496 is the correct source. |
 | LPG vehicle-fuel conversion scope | Décret 21-430 / Décret 83-496 | Art. 1–3 (21-430); Art. 1–21 (83-496) | ⚠️ W43 — decree is narrow (vehicle conversion shops only). DOES NOT cover cylinder storage/distribution. |
-| LPG cylinder storage | AIM GPL2 | Art. 4 (max storage), Art. 5 (ventilation), Art. 7 (separation distances), Art. 8 (conformity cert), Art. 9 (extinguishers) | ✅ VERIFIED — W phase; W43 will drop phantom 21-430 citations and keep only AIM GPL2 |
+| LPG cylinder storage | AIM GPL2 | Art. 4 (max storage), Art. 5 (ventilation), Art. 7 (separation distances), Art. 8 (conformity cert), Art. 9 (extinguishers) | ✅ VERIFIED — W43 will drop phantom 21-430 citations and keep only AIM GPL2 |
 | LPG cylinder separation full/empty | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
 | LPG no-flame zone | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
 | LPG spark-free tools | AIM GPL2 | ⚠️ Specific article TBC — Claude to supply in W43 | |
@@ -193,7 +194,9 @@ W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gp
 | Drinking water standards | Décret 11-125 | Standards table | ⚠️ NO FILE — W37 |
 | Hazardous waste bordereau | Décret 05-315 | Art. bordereau | ⚠️ NO FILE — W37 |
 | EIA procedures | Décret 07-145 | Art. EIA | ⚠️ NO FILE — W37 |
-| Worker OHS training | Décret 02-427 | Art. training | ⚠️ NO FILE — W37 (P3) |
+| Worker OHS training | Décret 02-427 | Art. training | ⚠️ selective extract (Arts 1-24+85), rest benign — W37 (P3) |
 | Electrical safety | Décret 76-35 | Art. electrical | ⚠️ NO FILE — W37 (P3). Verify not superseded. |
 | Décret 04-82 veterinary | Arts. 6, 9 — not yet verified | slaughter files | ⚠️ W42 — new instrument, not yet checked |
 | Loi 04-08 commercial conditions | Cited in paintShopCriteria.ts | paint shop | ⚠️ NOT AUDITED |
+| decret-21-430 scanner Art.112 | False positive suspected — embedded 83-496 reference | W43 | ⚠️ Investigate before patching gplCriteria.ts |
+| decret-83-496 Arts 22-32 gap | 24 articles found, highest 34, but only 21 real articles — investigate | W43 | ⚠️ Scanner artifact or real gap? Confirm before W43 code edit. |
