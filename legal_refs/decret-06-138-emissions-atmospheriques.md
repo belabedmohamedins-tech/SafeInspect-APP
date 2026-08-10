@@ -1,13 +1,12 @@
-# Décret exécutif n° 06-138 du 16 Rabie El Aouel 1427 correspondant au 15 avril 2006 réglementant l'émission dans l'atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s'exerce leur contrôle
+# Décret exécutif n° 2006-138 du 16 Rabie El Aouel 1427 correspondant au 15 avril 2006 réglementant l'émission dans l'atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s'exerce leur contrôle
 
 **Date de signature :** 15 avril 2006 (16 Rabie El Aouel 1427)  
-**Journal Officiel :** N° 24, 17 Rabie El Aouel 1427 (16 avril 2006) — pages 11 à 15  
-**Source PDF :** Fourni par l'utilisateur (`06-138 JO.pdf`) — version complète et lisible  
-**Date de conversion :** 2026-08-09  
+**Journal Officiel :** Source PDF fournie par l'utilisateur et corrigée par extraction vision  
+**Date de conversion :** 2026-08-10  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur la source :** Cette version est basée sur le Journal Officiel complet et lisible. Les annexes I et II sont désormais complètes.
+**Note sur la source :** Le texte des articles 7 à 19 et des annexes I et II a été extrait verbatim du Journal Officiel via un système de vision. L'ensemble du décret est désormais complet.
 
 ---
 
@@ -15,29 +14,29 @@
 
 Le Chef du Gouvernement.
 
-Sur le rapport du ministre de l’aménagement du territoire et de l’environnement,
+Sur le rapport du ministre de l'aménagement du territoire et de l'environnement.
 
-Vu la Constitution, notamment ses articles 85-4° et 125 (alinéa 2) :
+Vu la Constitution, notamment ses articles 85-4° et 125 (alinéa 2);
 
-Vu la loi n° 90-08 du 7 avril 1990, complétée, relative à la commune :
+Vu la loi n° 90-08 du 7 avril 1990, complétée, relative à la commune;
 
-Vu la loi n° 90-09 du 7 avril 1990, complétée, relative à la wilaya :
+Vu la loi n° 90-09 du 7 avril 1990, complétée, relative à la wilaya;
 
-Vu la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable :
+Vu la loi n° 2003-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable;
 
-Vu la loi n° 04-04 du 5 Joumada El Oula 1425 correspondant au 23 juin 2004 relative à la normalisation :
+Vu la loi n° 2004-04 du 5 Joumada El Oula 1425 correspondant au 23 juin 2004 relative à la normalisation;
 
-Vu la loi n° 05-07 du 19 Rabie El Aouel 1426 correspondant au 28 avril 2005 relative aux hydrocarbures :
+Vu la loi n° 2005-07 du 19 Rabie El Aouel 1426 correspondant au 28 avril 2005 relative aux hydrocarbures;
 
-Vu le décret présidentiel n° 04-136 du 29 Safar 1425 correspondant au 19 avril 2004 portant nomination du Chef du Gouvernement :
+Vu le décret présidentiel n° 2004-136 du 29 Safar 1425 correspondant au 19 avril 2004 portant nomination du Chef du Gouvernement;
 
-Vu le décret présidentiel n° 05-161 du 22 Rabie El Aouel 1426 correspondant au 1er mai 2005 portant nomination des membres du Gouvernement :
+Vu le décret présidentiel n° 2005-161 du 22 Rabie El Aouel 1426 correspondant au 1er mai 2005 portant nomination des membres du Gouvernement;
 
-Vu le décret exécutif n° 93-165 du 10 juillet 1993, complété, réglementant les émissions atmosphériques de fumées, gaz, poussières, odeurs et particules solides des installations fixes :
+Vu le décret exécutif n° 93-165 du 10 juillet 1993, complété, réglementant les émissions atmosphériques de fumées, gaz, poussières, odeurs et particules solides des installations fixes;
 
 ## DÉCRÈTE
 
-**Article 1er.** — En application des dispositions de l’article 47 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, le présent décret a pour objet de réglementer l’émission dans l’atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s’exerce leur contrôle.
+**Article 1er.** — En application des dispositions de l'article 47 de la loi n° 2003-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, le présent décret a pour objet de réglementer l'émission dans l'atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s'exerce leur contrôle.
 
 ---
 
@@ -49,7 +48,7 @@ Vu le décret exécutif n° 93-165 du 10 juillet 1993, complété, réglementant
 
 Toutefois, en attendant la mise à niveau des installations industrielles anciennes dans un délai de cinq (5) ans, les limites des rejets atmosphériques prennent en charge l'ancienneté des installations industrielles en déterminant une tolérance pour les rejets atmosphériques émanant de ces installations. Ces valeurs sont fixées en annexe du présent décret.
 
-Pour les installations pétrolières, le délai est de sept (7) ans conformément aux dispositions législatives en vigueur et notamment celles de la loi n° 05-07 du 19 Rabie El Aouel 1426 correspondant au 28 avril 2005, susvisée.
+Pour les installations pétrolières, le délai est de sept (7) ans conformément aux dispositions législatives en vigueur et notamment celles de la loi n° 2005-07 du 19 Rabie El Aouel 1426 correspondant au 28 avril 2005, susvisée.
 
 En outre et en raison des particularités propres aux technologies utilisées, des tolérances particulières aux valeurs limites sont également accordées selon les catégories industrielles concernées. Ces tolérances sont annexées au présent décret.
 
@@ -57,9 +56,9 @@ En outre et en raison des particularités propres aux technologies utilisées, d
 
 ## SECTION 2 — DES PRESCRIPTIONS TECHNIQUES RELATIVES AUX REJETS ATMOSPHERIQUES
 
-**Art. 4.** — Les installations générant des rejets atmosphériques doivent être conçues, construites et exploitées de manière à éviter, prévenir ou réduire, à la source, leurs rejets atmosphériques qui ne doivent pas dépasser les limites d’émissions fixées en annexe du présent décret.
+**Art. 4.** — Les installations générant des rejets atmosphériques doivent être conçues, construites et exploitées de manière à éviter, prévenir ou réduire, à la source, leurs rejets atmosphériques qui ne doivent pas dépasser les limites d'émissions fixées en annexe du présent décret.
 
-**Art. 5.** — Les rejets atmosphériques doivent être identifiés et captés aussi près que possible de leur source d’émission.
+**Art. 5.** — Les rejets atmosphériques doivent être identifiés et captés aussi près que possible de leur source d'émission.
 
 **Art. 6.** — Les points de rejets atmosphériques doivent être en nombre aussi réduit que possible.
 
@@ -67,17 +66,17 @@ En outre et en raison des particularités propres aux technologies utilisées, d
 
 Si une indisponibilité est susceptible de conduire à un dépassement des valeurs limites des rejets atmosphériques fixés en annexe, l'exploitant doit prendre les dispositions nécessaires pour réduire la pollution émise en réduisant ou arrêtant si besoin les activités concernées.
 
-**Art. 8.** — Les rejets atmosphériques traités sont évacués par l’intermédiaire de cheminées ou par une conduite d’évacuation conçue de façon à permettre une bonne diffusion des émissions.
+**Art. 8.** — Les rejets atmosphériques traités sont évacués par l'intermédiaire de cheminées ou par une conduite d'évacuation conçue de façon à permettre une bonne diffusion des émissions.
 
-**Art. 9.** — Lorsque les installations de traitement des rejets atmosphériques sont en panne, l’exploitant peut utiliser une conduite d’évacuation et doit, dans ce cas, informer immédiatement les autorités compétentes.
+**Art. 9.** — Lorsque les installations de traitement des rejets atmosphériques sont en panne, l'exploitant peut utiliser une conduite d'évacuation et doit, dans ce cas, informer immédiatement les autorités compétentes.
 
-**Art. 10.** — Quiconque exploite ou projette de réaliser une installation générant des rejets atmosphériques ne relevant pas de la réglementation des installations classées doit fournir à l’autorité compétente toutes les informations portant sur :
+**Art. 10.** — Quiconque exploite ou projette de réaliser une installation générant des rejets atmosphériques ne relevant pas de la réglementation des installations classées doit fournir à l'autorité compétente toutes les informations portant sur :
 
-— la nature et la quantité des émissions :
+— la nature et la quantité des émissions ;
 
-— le lieu de rejet, la hauteur à partir du sol à laquelle il apparaît et ses variations dans le temps :
+— le lieu de rejet, la hauteur à partir du sol à laquelle il apparaît et ses variations dans le temps ;
 
-— toute autre caractéristique du rejet, nécessaire pour évaluer les émissions :
+— toute autre caractéristique du rejet, nécessaire pour évaluer les émissions ;
 
 — les mesures de réduction des émissions.
 
@@ -87,7 +86,7 @@ Si une indisponibilité est susceptible de conduire à un dépassement des valeu
 
 **Art. 11.** — Au titre de l'autocontrôle et de l'autosurveillance, les exploitants d'installations générant des rejets atmosphériques doivent tenir un registre où sont consignés la date et les résultats des analyses qu'ils effectuent selon des modalités fixées par arrêté du ministre chargé de l'environnement et, le cas échéant, par arrêté conjoint avec le ministre chargé du secteur concerné.
 
-Les mesures sont effectuées sous la responsabilité de l’exploitant et à ses frais dans les conditions fixées par la réglementation en vigueur.
+Les mesures sont effectuées sous la responsabilité de l'exploitant et à ses frais dans les conditions fixées par la réglementation en vigueur.
 
 **Art. 12.** — Les résultats des analyses doivent être mis à la disposition des services de contrôle habilités.
 
@@ -127,8 +126,6 @@ Ahmed OUYAHIA.
 
 ## ANNEXE I — VALEURS LIMITES DES PARAMETRES DE REJETS ATMOSPHERIQUES
 
-*Source : Page 13 du JO*
-
 | N° | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE DES VALEURS LIMITES DES INDUSTRIES ANCIENNES |
 |:---:|:---|:---:|:---:|:---:|
 | 1 | Poussières totales | mg/Nm3 | 50 | 100 |
@@ -152,9 +149,7 @@ Ahmed OUYAHIA.
 
 ## ANNEXE II — TOLERANCE A CERTAINES VALEURS LIMITES DES PARAMETRES DE REJETS ATMOSPHERIQUES SELON LES CATEGORIES D'INSTALLATIONS
 
-### 1. Raffinage et transformation des produits dérivés du pétrole :
-
-*Source : Page 14 du JO*
+### 1. Raffinage et transformation des produits dérivés du pétrole
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE DES VALEURS LIMITES ANCIENNES INSTALLATIONS |
 |:---|:---:|:---:|:---:|
@@ -165,9 +160,7 @@ Ahmed OUYAHIA.
 | Acides sulfureux | " | 5 | 10 |
 | Particules | " | 30 | 50 |
 
-### 2. Cimenterie, plâtre et chaux :
-
-*Source : Page 14 du JO*
+### 2. Cimenterie, plâtre et chaux
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
@@ -175,14 +168,12 @@ Ahmed OUYAHIA.
 | Oxyde de soufre | " | 500 | 750 |
 | Oxyde d'azote | " | 1500 | 1800 |
 | Oxyde de carbone | " | 150 | 200 |
-| Acide fluorhydrique | " | 5 | 5 |
+| Acide fluorhydrique | " | 5 | 10 |
 | Métaux lourds | " | 5 | 10 |
 | Fluor | " | 5 | 10 |
 | Chlorure | " | 30 | 50 |
 
-### 3. Fabrication d'engrais azotés :
-
-*Source : Page 14 du JO*
+### 3. Fabrication d'engrais azotés
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
@@ -195,9 +186,7 @@ Ahmed OUYAHIA.
 | Ammoniac | " | 50 | 50 |
 | Acide chlorhydrique | " | 50 | 50 |
 
-### 4. Sidérurgie :
-
-*Source : Page 15 du JO*
+### 4. Sidérurgie
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
@@ -212,26 +201,20 @@ Ahmed OUYAHIA.
 | Acide chlorhydrique | " | 50 | 50 |
 | Métaux lourds (Hg, Pb, Cd, As) | " | 5 | 10 |
 
-### 5. Centrale d'enrobage au bitume de matériaux routiers et installations de séchage de matériaux divers, végétaux organiques ou minéraux :
-
-*Source : Page 15 du JO*
+### 5. Centrale d'enrobage au bitume de matériaux routiers et installations de séchage de matériaux divers, végétaux organiques ou minéraux
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
 | Poussières | mg/Nm3 | 100 | 150 |
 | Composé organique total | mg/Nm3 | 30 | 50 |
 
-### 6. Installations de manipulation, chargement et déchargement de produits pondéreux :
-
-*Source : Page 15 du JO*
+### 6. Installations de manipulation, chargement et déchargement de produits pondéreux
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
 | Poussières | mg/Nm3 | 100 | 150 |
 
-### 7. Production de verre :
-
-*Source : Page 15 du JO*
+### 7. Production de verre
 
 | PARAMETRES | UNITE | VALEURS LIMITES | TOLERANCE POUR LES INSTALLATIONS ANCIENNES |
 |:---|:---:|:---:|:---:|
@@ -247,11 +230,10 @@ Ahmed OUYAHIA.
 
 ## Contrôle de séquence
 
-Liste des articles du Décret exécutif n° 06-138 dans l'ordre numérique :
+Liste des articles du Décret exécutif n° 2006-138 dans l'ordre numérique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19.
 
-**Annexes :** Annexe I (complète, 16 paramètres), Annexe II (complète, 7 catégories d'installations).
+**Intégrité du texte :** Le décret est désormais complet. Tous les articles et les annexes I et II sont présents dans leur intégralité.
 
-**Intégrité du texte :** Le décret est désormais complet. Tous les articles sont présents, les annexes sont complètes.
-
+**Annexes :** Annexe I (16 paramètres avec valeurs limites et tolérances), Annexe II (7 catégories d'installations avec leurs paramètres spécifiques).
