@@ -1,5 +1,13 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 20:35 WAT — Perplexity — W48 CLOSED: BGN-02-02 test added + 20/20 green
+- **Phases closed:** W48
+- **Phases opened:** none
+- **Files changed:** `src/__tests__/baseGeneralCriteria.test.ts` (commit `0eb33bf`)
+- **What was done:** Added BGN-02-02 test asserting `90-29` + `'8'` (Art.8 nuisance prevention) + `'03-10'` + `'6'`. Source `baseGeneralCriteria.ts` already had the correct citation from W48 code work. Test file was the only gap. User confirmed: `npx jest src/__tests__/baseGeneralCriteria.test.ts` → **20 passed / 0 failed**.
+- **Open phases: W19, W49**
+- **Next identifier: W51**
+
 ### 2026-08-10 19:58 WAT — Perplexity — W47 CLOSED: BGN-07-04 confirmed resolved by W46
 - **Phases closed:** W47
 - **Phases opened:** none
@@ -166,9 +174,9 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W48** | ✅ CLOSED | — | BGN-02-02 test 20/20 green. Commit `0eb33bf`. 2026-08-10. |
 | **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved by W46 — Art.2+Art.3+[حكم مهني]. No code change. Direct read 2026-08-10. |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
-| **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
 | **W43** | ✅ CLOSED | — | gplCriteria.ts phantom 21-430 citations → 83-496 (amended) + AIM GPL2 + Loi 19-02. Jest gate: Claude. |
 | **W42** | ✅ CLOSED | — | SLH-08-01 Loi 03-10 Art.15–22 → Art.14–21 + Décret 04-82 Arts.6+9 confirmed clean. Commit `60c58df6`. |

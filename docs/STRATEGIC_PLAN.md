@@ -98,7 +98,8 @@
 | **W45** | **BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني]** | **2026-08-10** | **Commit `287aaf3b`. Art.37 confirmed unrelated to siting (atmospheric emissions). Replaced Art.4 (constructibility/ecological balance) + [حكم مهني]. TSC+Jest gate pending — hand off to Claude.** |
 | **W50** | **CLEANUP_LOG.md: add 12 missing files, remove stale À-créer section, add Issue #1-4 history** | **2026-08-10** | **Commit `f8ed975`. 27-row state table now complete. HANDOFF.md deleted. Next identifier: W51.** |
 | **W42** | **F7: SLH-08-01 Loi 03-10 EIE range + Décret 04-82 Arts.6+9 confirmed** | **2026-08-10** | **Commit `60c58df6`. SLH-08-01 المواد 15–22 → المواد 14–21 ✅. SLH-05-02 (Art.6) + SLH-05-03 (Art.9) confirmed clean by direct read ✅.** |
-| **W47** | **BGN-07-04 pest sealing — confirmed resolved by W46** | **2026-08-10** | **No code change needed. Direct read confirmed: Décret 91-05 Art.2+Art.3+[حكم مهني] already applied in W46. No dedicated Algerian article mandates crack-sealing for pest ingress. [حكم مهني] protocol correct and complete.** |
+| **W47** | **BGN-07-04 pest sealing — confirmed resolved by W46** | **2026-08-10** | **No code change needed. Direct read confirmed: Décret 91-05 Art.2+Art.3+[حكم مهني] already applied in W46. No dedicated Algerian article mandates crack-sealing for pest ingress. [حكم مهني] protocol applied.** |
+| **W48** | **BGN-02-02: add Loi 90-29 Art.8 test assertion** | **2026-08-10** | **Commit `0eb33bf`. Test 20/20 green — user-confirmed. Source already had correct Art.8 citation. Test was the only gap.** |
 
 ---
 
@@ -107,7 +108,6 @@
 | Phase | Priority | Title | Files | Blocker / Source | Agent |
 |---|---|---|---|---|---|
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
-| **W48** | 🟠 P3 | BGN-02-02 enhancement: add Loi 90-29 Art.8 specific citation | `src/criteria/baseGeneralCriteria.ts` | Not wrong, just imprecise. Low priority. | Perplexity |
 | **W49** | 🟠 P3 | Audit 16 unaudited criteria files | `src/criteria/bakeryCriteria.ts`, `blacksmithCriteria.ts`, `carWashCriteria.ts`, `carpenteryCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`, `semiPharmaCriteria.ts`, `uabCriteria.ts`, `updCriteria.ts`, `baseCompressedGasCriteria.ts` | 16 files with zero direct audit attention. | Claude (reads) + Perplexity (fixes) |
 
 ---
@@ -123,8 +123,7 @@
 ## Execution Order
 
 ```
-W48 (Perplexity: BGN-02-02 Art.8 precision enhancement) ← NEXT
-→ W49 (Claude + Perplexity: audit 16 unaudited criteria files)
+W49 (Claude + Perplexity: audit 16 unaudited criteria files) ← NEXT
 → W19 (ongoing parallel)
 ```
 
@@ -132,8 +131,8 @@ W48 (Perplexity: BGN-02-02 Art.8 precision enhancement) ← NEXT
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W50 (all sub-items), W42, W47.
-- **Open: W19, W48, W49.**
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W50 (all sub-items), W42, W47, W48.
+- **Open: W19, W49.**
 - **Next new phase identifier: W51.**
 - Never reuse a closed phase letter.
 
@@ -184,7 +183,7 @@ W48 (Perplexity: BGN-02-02 Art.8 precision enhancement) ← NEXT
 | Loi 01-19 SLH-05-05 container (slaughter) | Art. 15/16 | ✅ CLOSED — W41. Commit `287aaf3b`. |
 | SLH-08-01 duplicate EIE criterion | DELETED | ✅ CLOSED — W41 (F6). Commit `287aaf3b`. |
 | Loi 90-29 siting (BGN-02-01) | Art. 4 + [حكم مهني] | ✅ CLOSED — W45. Commit `287aaf3b`. |
-| Loi 90-29 nuisance prevention (BGN-02-02) | Generic → Art. 8 near-exact match | ⚠️ W48 — enhancement, low priority |
+| Loi 90-29 nuisance prevention (BGN-02-02) | Art. 8 explicit citation | ✅ CLOSED — W48. Commit `0eb33bf`. Test 20/20. |
 | Décret 04-82 ante mortem (SLH-05-02) | Art. 6 | ✅ CONFIRMED CLEAN — W42 direct read |
 | Décret 04-82 post mortem (SLH-05-03) | Art. 9 | ✅ CONFIRMED CLEAN — W42 direct read |
 | BGN-02-06 ventilation | Décret 91-05 Art.11 correct (narrow) | ✅ VERIFIED — W11 |
