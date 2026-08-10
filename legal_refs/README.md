@@ -18,6 +18,7 @@
      README mis à jour le 2026-08-10 (17) — D09-335 marqué ABROGÉ par D25-63 ; +3 rows : D21-319, D21-261, A2011-02-06-permis-construire-energie
      README mis à jour le 2026-08-10 (18) — D21-261 et A2011-02-06 marqués CONVERTIS ; A2011 date 1431→1432 corrigée après vérification JORADP par l'utilisateur
      README mis à jour le 2026-08-10 (19) — 6 corrections statut : loi-03-10 audité, D06-138 annexes corrompues, D25-63 et D21-319 stubs retirés, loi-18-11 450 art., D21-319 JO N° 64 ; decret-24-197 ajouté (partiel) ; tableau de bord mis à jour
+     README mis à jour le 2026-08-10 (20) — 4 fichiers marqués CONVERTIS par utilisateur depuis PDF : decret-91-05, decret-93-120, loi-90-11, loi-19-02 ; tableau de bord mis à jour
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -35,15 +36,14 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 19)
+## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 20)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
 | ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti | 28 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 32 | voir index ci-dessous |
 | ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 2 | `decret-06-138`, `decret-24-197` |
-| ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO | 4 | `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
@@ -59,9 +59,9 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO 12 mars 1976) — [CONVERTI par utilisateur depuis PDF] |
 | `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 42/1983) — Art. 4, 7, 8 modifiés par D21-430 — [CONVERTI par utilisateur depuis PDF, texte arabe + traduction française] |
 | `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 36/1990) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
-| `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
-| `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
-| `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–130) présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
+| `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
+| `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
+| `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
 | `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–81, JO 52/1990) |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 77/2001) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) — [CONVERTI par utilisateur depuis PDF] |
@@ -81,7 +81,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 23, 17 avril 2011) — [CONVERTI 2026-08-10 par utilisateur] — date 1431→1432 corrigée après vérification JORADP par l'utilisateur (2026-08-10) |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
 | `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé — Art. 1–450 complets (Art. 12–16 intégrés) | ⚠️ NON VÉRIFIÉ — texte intégral + Contrôle de séquence complet — [CONVERTI 2026-08-09 par utilisateur depuis PDF] |
-| `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
+| `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte intégral présent — [CONVERTI 2026-08-10 par utilisateur depuis PDF] |
 | `decret-21-261-esp-equipements-hydrocarbures.md` | Décret exécutif n° 21-261 du 13 juin 2021 (2 Dhou El Kaâda 1442) | Réglementation des équipements sous pression (ESP) et équipements électriques destinés aux installations du secteur des hydrocarbures — Art. 1–104 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO source PDF ARH) — [CONVERTI 2026-08-10 par utilisateur] |
 | `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 14 août 2021 (5 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 + 4 annexes | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 64/2021) — [CONVERTI 2026-08-10 par utilisateur] — Abroge D08-312 et D15-09 — ⚠️ header JO à confirmer : indiquer numéro JO exact si disponible |
 | `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) — [CONVERTI par utilisateur depuis PDF] |
@@ -128,4 +128,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 (patch 19) :** `decret-06-138-emissions-atmospheriques.md` — statut corrigé : PARTIEL — Annexes I–II corrompues par OCR. PDF de meilleure qualité requis.
 - **2026-08-10 (patch 19) :** `loi-18-11-sante.md` — précision ajoutée : 450 articles complets, Art. 12–16 intégrés.
 - **2026-08-10 (patch 19) :** `decret-24-197-entrepreneuriat.md` — ajouté à l'index. PARTIEL : Art. 10, 21 bis, 22 bis manquants dans le PDF source. PDF de meilleure qualité requis.
-- **2026-08-10 (patch 19) :** `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` — statuts clarifiés : non convertis verbatim par l'utilisateur, PDFs disponibles dans le projet.
+- **2026-08-10 (patch 20) :** `decret-91-05-hygiene-securite-milieu-travail.md` — converti verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
+- **2026-08-10 (patch 20) :** `decret-93-120-medecine-du-travail.md` — converti verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
+- **2026-08-10 (patch 20) :** `loi-90-11-relations-travail.md` — convertie verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
+- **2026-08-10 (patch 20) :** `loi-19-02-incendie-panique.md` — convertie verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
