@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 85, 2 Rabie Ethani 1443 (7 novembre 2021) — pages 11  
 **Source PDF :** Fourni par l'utilisateur (`21-430.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
