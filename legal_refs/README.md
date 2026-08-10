@@ -17,6 +17,7 @@
      README mis à jour le 2026-08-10 (16) — decret-09-19 objet corrigé (collecte déchets spéciaux, JO N°6/2009) + loi-01-19 et decret-09-19 Contrôle de séquence + JO header patché
      README mis à jour le 2026-08-10 (17) — D09-335 marqué ABROGÉ par D25-63 ; +3 rows : D21-319, D21-261, A2011-02-06-permis-construire-energie
      README mis à jour le 2026-08-10 (18) — D21-261 et A2011-02-06 marqués CONVERTIS ; A2011 date 1431→1432 corrigée après vérification JORADP par l'utilisateur
+     README mis à jour le 2026-08-10 (19) — 6 corrections statut : loi-03-10 audité, D06-138 annexes corrompues, D25-63 et D21-319 stubs retirés, loi-18-11 450 art., D21-319 JO N° 64 ; decret-24-197 ajouté (partiel) ; tableau de bord mis à jour
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -34,12 +35,15 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-10
+## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 19)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
-| ⚠️ NON VÉRIFIÉ | 30 | voir index ci-dessous |
+| ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti | 28 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 2 | `decret-06-138`, `decret-24-197` |
+| ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO | 4 | `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
@@ -50,40 +54,41 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 ## Index des fichiers
 
 | Fichier | Instrument | Objet | Statut réel |
-|---|---|---|---|
-| `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 4/1988) — Art. 37, 38, 39 modifiés intégrés |
-| `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO 12 mars 1976) |
-| `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 42/1983) — Art. 4, 7, 8 modifiés par D21-430 |
+|---|---|---|
+| `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 4/1988) — Art. 37, 38, 39 modifiés intégrés — [CONVERTI par utilisateur depuis PDF] |
+| `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO 12 mars 1976) — [CONVERTI par utilisateur depuis PDF] |
+| `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 42/1983) — Art. 4, 7, 8 modifiés par D21-430 — [CONVERTI par utilisateur depuis PDF, texte arabe + traduction française] |
 | `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 36/1990) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
-| `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
-| `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
-| `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–130) présent, non relu contre JO |
+| `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
+| `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
+| `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–130) présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
 | `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–81, JO 52/1990) |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 77/2001) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
-| `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) |
-| `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
-| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) |
-| `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/2004) |
-| `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–75) |
+| `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) — [CONVERTI par utilisateur depuis PDF] |
+| `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable — Art. 1–89 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 43/2003) — séquence Art. 1–89 auditée 2026-08-10, aucun gap |
+| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 + 3 annexes | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) — [CONVERTI par utilisateur depuis PDF] |
+| `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/2004) — [CONVERTI par utilisateur depuis PDF] |
+| `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 | ⚠️ NON VÉRIFIÉ — texte intégral présent |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 60/2005) — [CONVERTI 2026-08-10] |
-| `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 + Annexes I–II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 24/2006) |
+| `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 | ⚠️ NON VÉRIFIÉ — **PARTIEL — Annexes I–II corrompues par OCR** (JO N° 24/2006) — [CONVERTI par utilisateur, annexes à retravailler depuis PDF de meilleure qualité] |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 26/2006) |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025) — conservé pour référence historique — voir `decret-25-63-plans-intervention-catastrophes.md` |
-| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
+| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 23, 17 avril 2011) — [CONVERTI 2026-08-10 par utilisateur] — date 1431→1432 corrigée après vérification JORADP par l'utilisateur (2026-08-10) |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
-| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé | ⚠️ NON VÉRIFIÉ — Texte intégral + Contrôle de séquence complet [CONVERTI 2026-08-09] |
-| `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
+| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé — Art. 1–450 complets (Art. 12–16 intégrés) | ⚠️ NON VÉRIFIÉ — texte intégral + Contrôle de séquence complet — [CONVERTI 2026-08-09 par utilisateur depuis PDF] |
+| `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ⚠️ NON VÉRIFIÉ — texte présent, **non relu contre JO — non converti verbatim par utilisateur** — PDF disponible |
 | `decret-21-261-esp-equipements-hydrocarbures.md` | Décret exécutif n° 21-261 du 13 juin 2021 (2 Dhou El Kaâda 1442) | Réglementation des équipements sous pression (ESP) et équipements électriques destinés aux installations du secteur des hydrocarbures — Art. 1–104 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO source PDF ARH) — [CONVERTI 2026-08-10 par utilisateur] |
-| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 14 août 2021 (5 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 | ⚠️ NON VÉRIFIÉ — créé par l'utilisateur 2026-08-10 — Abroge D08-312 et D15-09 |
-| `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) |
-| `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
-| `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
-| `decret-25-63-plans-intervention-catastrophes.md` | Décret exécutif n° 25-63 du 28 janvier 2025 | Plans d'intervention en matière de risques de catastrophes (PPI + PII) — Abroge D09-335 | ⚠️ NON VÉRIFIÉ — créé par l'utilisateur 2026-08-10 (JO N° 07/2025) |
+| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 14 août 2021 (5 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 + 4 annexes | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 64/2021) — [CONVERTI 2026-08-10 par utilisateur] — Abroge D08-312 et D15-09 — ⚠️ header JO à confirmer : indiquer numéro JO exact si disponible |
+| `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) — [CONVERTI par utilisateur depuis PDF] |
+| `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME — [CONVERTI par utilisateur] |
+| `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME — [CONVERTI par utilisateur] |
+| `decret-24-197-entrepreneuriat.md` | Décret exécutif n° 24-197 du 11 juin 2024 | Entrepreneuriat — modalités d'exercice | ⚠️ NON VÉRIFIÉ — **PARTIEL** — Art. 10, 21 bis, 22 bis non fournis dans le PDF source — [CONVERTI par utilisateur, lacunes documentées] — PDF de meilleure qualité requis pour compléter |
+| `decret-25-63-plans-intervention-catastrophes.md` | Décret exécutif n° 25-63 du 28 janvier 2025 | Plans d'intervention en matière de risques de catastrophes (PPI + PII) — Art. 1–30, 4 chapitres — Abroge D09-335 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 07/2025) — [CONVERTI 2026-08-10 par utilisateur] |
 | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
 | `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
 | `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | Arrêté intermin. du 7 mai 2025 | Conditions particulières d'hygiène et de salubrité dans les établissements de restauration — Art. 1–48, 14 sections | ⚠️ NON VÉRIFIÉ — texte intégral présent (signé par 6 ministres) — [CONVERTI 2026-08-09] — W20 CLOSED |
@@ -114,8 +119,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `decret-09-19.md` — objet corrigé dans README (était "système de management environnemental", est "collecte des déchets spéciaux"). JO N° 6/2009 ajouté. Contrôle de séquence + header JO patchés dans le fichier.
 - **2026-08-10 :** `loi-01-19-gestion-dechets.md` — JO N° 77/2001 + date de conversion ajoutés au header. Contrôle de séquence (Art. 1–72, aucun gap) ajouté en fin de fichier.
 - **2026-08-10 :** `decret-09-335-plans-internes-intervention.md` — note d'abrogation ajoutée dans le header : ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025). Fichier conservé pour référence historique.
-- **2026-08-10 :** `decret-25-63-plans-intervention-catastrophes.md` — créé par l'utilisateur. Abroge D09-335. Plans d'intervention PPI + PII, JO N° 07/2025. [NON ENCORE CONVERTI VERBATIM — à vérifier]
-- **2026-08-10 :** `decret-21-319-autorisation-exploitation-hydrocarbures.md` — créé par l'utilisateur. Régime autorisation exploitation hydrocarbures, Art. 1er–98. Abroge D08-312 et D15-09. Source : cei-halfaoui.com (PDF publié au JO N° 64/2021). [NON ENCORE VÉRIFIÉ VERBATIM]
+- **2026-08-10 :** `decret-25-63-plans-intervention-catastrophes.md` — créé par l'utilisateur. Art. 1–30 complets, 4 chapitres, JO N° 07/2025. Abroge D09-335. [CONVERTI 2026-08-10 — mention stub obsolète retirée]
+- **2026-08-10 :** `decret-21-319-autorisation-exploitation-hydrocarbures.md` — créé par l'utilisateur. Art. 1er–98 + 4 annexes complets. JO N° 64/2021. Abroge D08-312 et D15-09. [CONVERTI 2026-08-10 — mention stub et source cei-halfaoui obsolètes retirées]
 - **2026-08-10 :** `decret-21-261-esp-equipements-hydrocarbures.md` — converti par l'utilisateur depuis PDF (arh.gov.dz). Art. 1–104 complets (ESP + équipements électriques + protection cathodique + dispositions transitoires et finales). [CONVERTI 2026-08-10]
 - **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — converti par l'utilisateur depuis PDF (cntpp.dz). Art. 1–22 complets (4 chapitres : objet, procédure ordinaire, procédure spéciale État, droits communs). JO N° 23, 17 avril 2011. [CONVERTI 2026-08-10]
 - **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — erreur de frappe corrigée dans la formule de signature : date hégirienne **1431 → 1432**, après vérification par l'utilisateur sur JO N° 23/2011. Le texte est désormais conforme à la version officielle publiée.
+- **2026-08-10 (patch 19) :** `loi-03-10-protection-environnement.md` — séquence Art. 1–89 auditée le 2026-08-10, aucun gap. Statut mis à jour : texte intégral confirmé, JO N° 43/2003.
+- **2026-08-10 (patch 19) :** `decret-06-138-emissions-atmospheriques.md` — statut corrigé : PARTIEL — Annexes I–II corrompues par OCR. PDF de meilleure qualité requis.
+- **2026-08-10 (patch 19) :** `loi-18-11-sante.md` — précision ajoutée : 450 articles complets, Art. 12–16 intégrés.
+- **2026-08-10 (patch 19) :** `decret-24-197-entrepreneuriat.md` — ajouté à l'index. PARTIEL : Art. 10, 21 bis, 22 bis manquants dans le PDF source. PDF de meilleure qualité requis.
+- **2026-08-10 (patch 19) :** `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` — statuts clarifiés : non convertis verbatim par l'utilisateur, PDFs disponibles dans le projet.
