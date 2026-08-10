@@ -14,6 +14,7 @@
      README mis à jour le 2026-08-10 (13) — decret-90-245-appareils-pression-gaz ajouté — [CONVERTI 2026-08-10]
      README mis à jour le 2026-08-10 (14) — D90-245 JO N° 36 confirmé par utilisateur depuis PDF officiel
      README mis à jour le 2026-08-10 (15) — D04-83 hors scope SafeInspect — mention supprimée
+     README mis à jour le 2026-08-10 (16) — decret-09-19 objet corrigé (collecte déchets spéciaux, JO N°6/2009) + loi-01-19 et decret-09-19 Contrôle de séquence + JO header patché
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -55,7 +56,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–130) présent, non relu contre JO |
 | `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–81, JO 52/1990) |
-| `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
+| `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 77/2001) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
 | `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) |
@@ -66,7 +67,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 26/2006) |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
-| `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Modalités de fonctionnement du système de management environnemental | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
+| `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 68, 25 octobre 2009) — [CONVERTI 2026-08-10] |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) |
@@ -103,3 +104,5 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `arrete-interministeriel-2025-liaison-froide.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2025-05-07-hygiene-restauration.md` (texte intégral verbatim, Art. 1–48, 14 sections, signé par 6 ministres). **W20 CLOSED.**
 - **2026-08-10 :** `aim-gpl2-regles-techniques-securite.md` (source non-JORADP, Scribd) supprimé par l'utilisateur — remplacé par `projet-arrete-gpl-installations-securite.md`. Statut : 🔴 PROJET NON PUBLIÉ AU JORADP — Art. 13 incomplet, Art. 14 manquant, Annexes 3–5 non fournies.
 - **2026-08-10 :** `decret-90-245-appareils-pression-gaz.md` ajouté — Art. 1–24 complets, signé Mouloud HAMROUCHE. JO N° 36, 22 août 1990 — confirmé par l'utilisateur depuis PDF officiel. [CONVERTI 2026-08-10]
+- **2026-08-10 :** `decret-09-19.md` — objet corrigé dans README (était "système de management environnemental", est "collecte des déchets spéciaux"). JO N° 6/2009 ajouté. Contrôle de séquence + header JO patchés dans le fichier.
+- **2026-08-10 :** `loi-01-19-gestion-dechets.md` — JO N° 77/2001 + date de conversion ajoutés au header. Contrôle de séquence (Art. 1–72, aucun gap) ajouté en fin de fichier.
