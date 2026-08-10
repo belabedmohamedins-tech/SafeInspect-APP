@@ -12,6 +12,9 @@
 //   governs separation distances; W45 replaced Art.37 with:
 //   القانون 90-29 المادة 4 (buildability conditions) + القانون 03-10 المادة 6
 //   (prevention principle). Test updated accordingly.
+// W48 (2026-08-10): BGN-02-02 test added — Loi 90-29 Art.8 is now primary citation
+//   (explicit obligation to avoid nuisance impacts on neighbouring properties).
+//   Art.4 retained as secondary; Art.6 of Loi 03-10 also asserted.
 import { baseGeneralCriteria } from '../criteria/baseGeneralCriteria';
 import { InspectionItem } from '../types';
 
@@ -95,6 +98,20 @@ describe('baseGeneralCriteria', () => {
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('90-29');
     expect(item!.legalReference).toContain('4');
+    expect(item!.legalReference).toContain('03-10');
+    expect(item!.legalReference).toContain('6');
+  });
+
+  // W48 (2026-08-10): BGN-02-02 — Loi 90-29 Art.8 is the primary citation for the nuisance
+  //   prevention obligation (noise/odours/emissions/vibrations affecting neighbours).
+  //   Art.4 (site compatibility) and Loi 03-10 Art.6 (prevention principle) are secondary.
+  it('BGN-02-02 legalReference cites 90-29 art.8 as primary nuisance prevention basis', () => {
+    const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-02-02');
+    expect(item).toBeDefined();
+    expect(item!.severity).toBe('high');
+    expect(item!.controlType).toBe('visual');
+    expect(item!.legalReference).toContain('90-29');
+    expect(item!.legalReference).toContain('8');
     expect(item!.legalReference).toContain('03-10');
     expect(item!.legalReference).toContain('6');
   });
