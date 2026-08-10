@@ -8,6 +8,7 @@
      README mis à jour le 2026-08-10 (7) — audit.js documenté comme outil natif du dossier
      README mis à jour le 2026-08-10 (8) — sync 3 rows : loi-05-12 complète, D04-82 annexes retirées, D09-335 JO N° 68
      README mis à jour le 2026-08-10 (9) — arrete-1999 stub supprimé, nouveau fichier verbatim indexé
+     README mis à jour le 2026-08-10 (10) — arrete-2016 stub supprimé, nouveau fichier verbatim indexé — W19 CLOSED
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -70,7 +71,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
 | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
-| `arrete-interministeriel-2016-criteres-microbiologiques.md` | Arrêté intermin. 2016 | Critères microbiologiques | ⚠️ NON VÉRIFIÉ — STUB, texte verbatim non extrait |
+| `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
 | `arrete-interministeriel-2025-liaison-froide.md` | Arrêté intermin. du 7 mai 2025 | Conditions d'hygiène restauration — chaîne du froid / liaison chaude-froide | 🔴 VALEURS DE RÉFÉRENCE SEULEMENT — texte intégral JO 43/2025 non extrait |
 | `aim-gpl2-regles-techniques-securite.md` | AIM GPL2 | Règles techniques de sécurité | 🔴 SOURCE NON-JORADP (Scribd) — ne pas utiliser pour vérification légale |
 
@@ -92,3 +93,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `decret-04-82` — Annexes I–III (tarifs phytosanitaires D04-83) retirées. Fichier `decret-04-83` à créer.
 - **2026-08-10 :** `decret-09-335` — JO N° 68, 25 octobre 2009 inscrit dans le header.
 - **2026-08-10 :** `arrete-interministeriel-1999-temperatures-conservation.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-1999-11-21-conservation-aliments.md` (texte intégral verbatim, Art. 1–10, JO N° 87/1999).
+- **2026-08-10 :** `arrete-interministeriel-2016-criteres-microbiologiques.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` (texte intégral verbatim, Art. 1–14 + Annexes I–II, JO N° 39/2017). **W19 CLOSED.**
