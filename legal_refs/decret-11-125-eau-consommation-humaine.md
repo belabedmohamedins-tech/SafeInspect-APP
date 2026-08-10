@@ -2,12 +2,10 @@
 
 **Date de signature :** 22 mars 2011 (17 Rabie Ethani 1432)  
 **Journal Officiel :** N° 18, 18 Rabie Ethani 1432 (23 mars 2011) — pages 6 à 9  
-**Source PDF :** Fourni par l'utilisateur (`ndecret 11-125.pdf`)  
-**Date de conversion :** 2026-08-09  
+**Source PDF :** Fourni par l'utilisateur (`decret 11-125.pdf`)  
+**Date de conversion :** 2026-08-10  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
-
-**Note sur la source :** Le fichier PDF contenait également un décret budgétaire (décret 11-124). Seul le décret 11-125 est converti dans ce fichier.
 
 ---
 
@@ -41,9 +39,9 @@ Après approbation du Président de la République ;
 
 **Art. 3.** — Au sens du présent décret, il est entendu par :
 
-— valeurs limites : valeurs maximales fixées pour certains paramètres chimiques, radionucléides et microbiologiques et dont le dépassement constitue un danger potentiel pour la santé des personnes ;
+— **valeurs limites** : valeurs maximales fixées pour certains paramètres chimiques, radionucléides et microbiologiques et dont le dépassement constitue un danger potentiel pour la santé des personnes ;
 
-— valeurs indicatives : valeurs de référence fixées pour certains paramètres organoleptiques et physico-chimiques à des fins de contrôle du fonctionnement des installations de production, de traitement et de distribution d'eau et d'évaluation des risques pour la santé des personnes.
+— **valeurs indicatives** : valeurs de référence fixées pour certains paramètres organoleptiques et physico-chimiques à des fins de contrôle du fonctionnement des installations de production, de traitement et de distribution d'eau et d'évaluation des risques pour la santé des personnes.
 
 **Art. 4.** — Les valeurs limites et les valeurs indicatives des paramètres de qualité de l'eau de consommation humaine sont annexées au présent décret.
 
@@ -85,8 +83,7 @@ Ahmed OUYAHIA.
 
 | GROUPE DE PARAMETRES | PARAMETRES | UNITES | VALEURS LIMITES |
 |:---|:---|:---:|:---:|
-| **Paramètres chimiques** | | | |
-| | Aluminium | mg/l | 0,2 |
+| **Paramètres chimiques** | Aluminium | mg/l | 0,2 |
 | | Ammonium | mg/l | 0,5 |
 | | Baryum | mg/l | 0,7 |
 | | Bore | mg/l | 1 |
@@ -123,29 +120,25 @@ Ahmed OUYAHIA.
 | | Agents de surface réagissant au bleu de méthylène | mg/l | 0,4 |
 | | Epychloroérydrine | μg/l | 0,1 |
 | | Microcystine LR | μg/l | 0,03 |
-| | Pesticides par substance individualisée | μg/l | 0,1 |
-| | *à l'exception de aldrine et dieldrine* | | |
-| | *- Insecticides organochlorés persistants, organophosphorés et carbamates, les herbicides, les fongicides, les P.C.B. et PC.T* | | |
+| | Pesticides par substance individualisée<br/>- Insecticides organochlorés persistants, organophosphorés et carbamates, les herbicides, les fongicides, les P.C.B. et P.C.T<br/>à l'exception de aldrine et dieldrine | μg/l | 0,1 |
 | | Pesticides (Totaux) | μg/l | 0,5 |
 | | Bromates | μg/l | 10 |
 | | Chlore | mg/l | 5 |
 | | Chlorite | mg/l | 0,07 |
 | | Trihalométhanes (THM) (Total) | μg/l | 100 |
-| | *Chloroforme, Bromoforme, Dibromochlorométhane, Bromodichlorométhane* | | |
+| | Chloroforme, Bromoforme, Dibromochlorométhane, Bromodichlorométhane | μg/l | 100 |
 | | Chlorure de vinyle | μg/l | 0,3 |
 | | 1,2 - Dichloroéthane | μg/l | 30 |
 | | 1,2 - Dichlorobenzène | μg/l | 1000 |
 | | 1,4 - Dichlorobenzène | μg/l | 300 |
 | | Trichloroéthylène | μg/l | 20 |
 | | Tetrachloroéthylène | μg/l | 40 |
-| **Radionucléides** | | | |
-| | Particules alpha | Picocurie/l | 15 |
+| **Radionucléides** | Particules alpha | Picocurie/l | 15 |
 | | Particules bêta | Millirems/an | 4 |
 | | Tritium | Bequerel/l | 100 |
 | | Uranium | μg/l | 15 |
 | | Dose totale indicative (DTI) | (mSv/an) | 0,1 |
-| **Paramètres microbiologiques** | | | |
-| | Escherichia Coli | n/100ml | 0 |
+| **Paramètres microbiologiques** | Escherichia Coli | n/100ml | 0 |
 | | Entérocoques | n/100ml | 0 |
 | | Bactéries sulfitoréductices y compris les spores | n/20ml | 0 |
 
@@ -155,18 +148,16 @@ Ahmed OUYAHIA.
 
 | GROUPE DE PARAMETRES | PARAMETRES | UNITES | VALEURS INDICATIVES |
 |:---|:---|:---:|:---:|
-| **Paramètres organoleptiques** | | | |
-| | Couleur | mg/l Platine | 15 |
+| **Paramètres organoleptiques** | Couleur | mg/l Platine | 15 |
 | | Turbidité | NTU | 5 |
 | | Odeur à 12°C | Taux dilution | 4 |
 | | Saveur à 25°C | Taux dilution | 4 |
-| **Paramètres physico-chimiques en relation avec la structure naturelle des eaux** | | | |
-| | Alcalinité | mg/l en CaCO3 | 500 |
-| | Calcium | mg/l en CaCO3 | 200 |
+| **Paramètres physico-chimiques en relation avec la structure naturelle des eaux** | Alcalinité | mg/l en CaCO₃ | 500 |
+| | Calcium | mg/l en CaCO₃ | 200 |
 | | Chlorures | mg/l | 500 |
 | | Concentration en ions hydrogène | Unité pH | ≥ 6,5 et ≤ 9 |
 | | Conductivité à 20°C | µS/cm | 2800 |
-| | Dureté | mg/l en CaCO3 | 200 |
+| | Dureté | mg/l en CaCO₃ | 200 |
 | | Potassium | mg/l | 12 |
 | | Résidu sec | mg/l | 1500 |
 | | Sodium | mg/l | 200 |
@@ -181,8 +172,6 @@ Liste des articles du Décret exécutif n° 11-125 dans l'ordre numérique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9.
 
-**Annexes :** Annexe complète avec Tableau 1 (valeurs limites) et Tableau 2 (valeurs indicatives).
+**Annexes :** Tableau 1 (Paramètres avec valeurs limites), Tableau 2 (Paramètres avec valeurs indicatives).
 
-**Intégrité du texte :** Le décret est complet. Tous les articles et les tableaux annexes sont présents.
-
-**Note sur les unités :** Les unités "µg/l" (microgrammes par litre) et "mg/l" (milligrammes par litre) ont été conservées conformément au texte original.
+**Intégrité du texte :** Le décret est complet. Tous les articles et les annexes sont présents.
