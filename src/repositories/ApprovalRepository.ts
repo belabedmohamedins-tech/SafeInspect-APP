@@ -6,10 +6,16 @@
 //   InspectionRepository → ApprovalRepository → InspectionRepository
 // Using a top-level import would cause one module to see an uninitialised
 // value during startup.
+//
+// W53: After every successful local write, the corresponding serverAuth call is
+// fired in a non-blocking, non-throwing wrapper (syncToServer). If the server
+// is unreachable the local action is already committed; an audit entry with
+// action 'SERVER_SYNC_PENDING' is appended so the sync engine can retry later.
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from './keys';
 import { ApprovalStatus, SavedInspection } from '../types';
 import { AuditLogRepository } from './AuditLogRepository';
+import * as serverAuth from '../services/serverAuth';
 
 export interface ApprovalRecord {
   inspectionId: string;
@@ -41,6 +47,35 @@ async function saveQueue(queue: ApprovalRecord[]): Promise<void> {
 function getInspectionRepository() {
   // eslint-disable-next-line @typescript-eslint/no-var-requires
   return require('./InspectionRepository').InspectionRepository as typeof import('./InspectionRepository').InspectionRepository;
+}
+
+/**
+ * Fire-and-forget server sync wrapper (W53).
+ * Calls `fn` and, if it fails or returns ok:false, appends a
+ * SERVER_SYNC_PENDING audit entry for later retry by the sync engine.
+ * Never throws — local state is already committed before this is called.
+ */
+async function syncToServer(
+  inspectionId: string,
+  actor: string,
+  fn: () => Promise<serverAuth.ApprovalResult>,
+): Promise<void> {
+  try {
+    const result = await fn();
+    if (!result.ok) {
+      await AuditLogRepository.append(
+        'SERVER_SYNC_PENDING' as any,
+        actor,
+        { inspectionId, detail: `server sync failed: ${result.error ?? 'unknown'}` },
+      );
+    }
+  } catch {
+    await AuditLogRepository.append(
+      'SERVER_SYNC_PENDING' as any,
+      actor,
+      { inspectionId, detail: 'server sync threw — will retry' },
+    ).catch(() => undefined);
+  }
 }
 
 export const ApprovalRepository = {
@@ -103,6 +138,10 @@ export const ApprovalRepository = {
       supervisorName,
       { inspectionId, facilityName: q[idx].facilityName, detail: `اعتمد المشرف ${supervisorName}` },
     );
+    // W53: non-blocking server sync
+    void syncToServer(inspectionId, supervisorName, () =>
+      serverAuth.approveInspection(inspectionId, note)
+    );
   },
 
   /** Supervisor returns inspection for revision. */
@@ -134,6 +173,10 @@ export const ApprovalRepository = {
       'INSPECTION_SAVED',
       supervisorName,
       { inspectionId, facilityName: q[idx].facilityName, detail: `أعيد المشرف: ${reason}` },
+    );
+    // W53: non-blocking server sync
+    void syncToServer(inspectionId, supervisorName, () =>
+      serverAuth.rejectInspection(inspectionId, reason)
     );
   },
 
@@ -167,5 +210,8 @@ export const ApprovalRepository = {
       supervisorName,
       { inspectionId, facilityName: q[idx].facilityName, detail: `رفع المشرف للجهة الأعلى` },
     );
+    // W53: escalation is a local routing decision — no dedicated server endpoint.
+    // Server is notified via the existing sync engine when the inspection record
+    // is next synced with approvalStatus: 'escalated'.
   },
 };
