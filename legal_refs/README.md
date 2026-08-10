@@ -5,6 +5,7 @@
      README mis à jour le 2026-08-09 (4) — decret-76-35, decret-02-427, decret-21-430 indexés
      README mis à jour le 2026-08-09 (5) — decret-83-496-gpl-carburant indexé
      README mis à jour le 2026-08-10 (6) — D04-82, D06-138, D09-335, D11-125, L04-08, L88-07 indexés
+     README mis à jour le 2026-08-10 (7) — audit.js documenté comme outil natif du dossier
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -12,8 +13,13 @@
 > **Dossier canonique unique.** Tous les textes légaux de référence pour SafeInspect se trouvent ici et uniquement ici.  
 > `docs/legal_sources/` **a été supprimé définitivement** (confirmé le 2026-08-09 — voir `CLEANUP_LOG.md`). Ce dossier n'existe plus et ne doit pas être recréé.
 
-Chaque fichier est une transcription verbatim du texte officiel publié au Journal Officiel de la République Algérienne (JORADP).  
+Chaque fichier `.md` est une transcription verbatim du texte officiel publié au Journal Officiel de la République Algérienne (JORADP).  
 Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP original avant tout usage légal.
+
+## Fichiers non-MD dans ce dossier
+
+> ℹ️ **`audit.js` appartient à ce dossier.** C'est le script d'audit natif qui analyse le contenu de `/legal_refs/` (vérification des headers, séquences d'articles, cohérence README). Il est intentionnellement colocalisé avec les fichiers qu'il audite. **Ne pas le déplacer, ne pas le signaler comme anomalie.**  
+> De même, `CLEANUP_LOG.md` est un journal d'opérations internes, pas un texte légal.
 
 ---
 
@@ -70,6 +76,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ## Notes
 
+- **`audit.js`** — Script d'audit natif de ce dossier. Il analyse les fichiers `.md` de `/legal_refs/` (vérification des headers, séquences d'articles, cohérence du README). **Intentionnellement colocalisé ici. Ne pas déplacer, ne pas signaler comme anomalie.**
 - Aucun fichier PDF ne doit être stocké dans ce dossier — les PDFs ne sont pas lisibles par les outils IA sur GitHub.
 - Pour ajouter un nouveau texte : transcrire verbatim depuis le PDF source, respecter la convention de nommage `{type}-{numéro}-{sujet-court}.md`, mettre à jour cet index.
 - Un instrument = un fichier. Ne jamais regrouper plusieurs arrêtés ou décrets dans un seul fichier.
