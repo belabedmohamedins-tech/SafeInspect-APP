@@ -21,6 +21,7 @@
      README mis à jour le 2026-08-10 (20) — 4 fichiers marqués CONVERTIS : decret-91-05, decret-93-120, loi-90-11, loi-19-02
      README mis à jour le 2026-08-10 (21) — decret-24-197 supprimé (hors scope SafeInspect) : row index + tableau de bord + note
      README mis à jour le 2026-08-10 (22) — loi-90-29 et loi-04-20 marqués CONVERTIS par utilisateur depuis PDF officiel
+     README mis à jour le 2026-08-10 (23) — decret-11-125 et loi-09-03 marqués CONVERTIS par utilisateur depuis PDF officiel
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -38,13 +39,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 22)
+## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 23)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
 | ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 34 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 36 | voir index ci-dessous |
 | ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 1 | `decret-06-138` |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
@@ -78,8 +79,8 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025) — conservé pour référence historique — voir `decret-25-63-plans-intervention-catastrophes.md` |
-| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
-| `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) |
+| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ⚠️ NON VÉRIFIÉ — texte intégral présent (Art. 1–95) — amdt Loi 18-09 intégré — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
+| `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 23, 17 avril 2011) — [CONVERTI 2026-08-10 par utilisateur] — date 1431→1432 corrigée après vérification JORADP par l'utilisateur (2026-08-10) |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
 | `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé — Art. 1–450 complets (Art. 12–16 intégrés) | ⚠️ NON VÉRIFIÉ — texte intégral + Contrôle de séquence complet — [CONVERTI 2026-08-09 par utilisateur depuis PDF] |
@@ -132,3 +133,5 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 (patch 21) :** `decret-24-197-entrepreneuriat.md` — supprimé de l'index (hors scope SafeInspect, confirmé par l'utilisateur). Fichier non présent dans le repo.
 - **2026-08-10 (patch 22) :** `loi-90-29-urbanisme.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–81 complets, JO N° 52/1990. Contrôle de séquence présent.
 - **2026-08-10 (patch 22) :** `loi-04-20-risques-majeurs.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–75 complets.
+- **2026-08-10 (patch 23) :** `loi-09-03-protection-consommateur.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–95 complets, amendement Loi 18-09 intégré.
+- **2026-08-10 (patch 23) :** `decret-11-125-eau-consommation-humaine.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–9 + Annexe (valeurs limites et indicatives), JO N° 18/2011.
