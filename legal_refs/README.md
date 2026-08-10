@@ -9,6 +9,7 @@
      README mis à jour le 2026-08-10 (8) — sync 3 rows : loi-05-12 complète, D04-82 annexes retirées, D09-335 JO N° 68
      README mis à jour le 2026-08-10 (9) — arrete-1999 stub supprimé, nouveau fichier verbatim indexé
      README mis à jour le 2026-08-10 (10) — arrete-2016 stub supprimé, nouveau fichier verbatim indexé — W19 CLOSED
+     README mis à jour le 2026-08-10 (11) — arrete-2025 stub supprimé, nouveau fichier verbatim indexé — W20 CLOSED
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -31,7 +32,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
-| ⚠️ NON VÉRIFIÉ | 25 | voir index ci-dessous |
+| ⚠️ NON VÉRIFIÉ | 26 | voir index ci-dessous |
 | 🔴 SOURCE NON-JORADP / STUB | 1 | `aim-gpl2` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
@@ -72,7 +73,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
 | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
 | `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
-| `arrete-interministeriel-2025-liaison-froide.md` | Arrêté intermin. du 7 mai 2025 | Conditions d'hygiène restauration — chaîne du froid / liaison chaude-froide | 🔴 VALEURS DE RÉFÉRENCE SEULEMENT — texte intégral JO 43/2025 non extrait |
+| `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | Arrêté intermin. du 7 mai 2025 | Conditions particulières d'hygiène et de salubrité dans les établissements de restauration — Art. 1–48, 14 sections | ⚠️ NON VÉRIFIÉ — texte intégral présent (signé par 6 ministres) — [CONVERTI 2026-08-09] — W20 CLOSED |
 | `aim-gpl2-regles-techniques-securite.md` | AIM GPL2 | Règles techniques de sécurité | 🔴 SOURCE NON-JORADP (Scribd) — ne pas utiliser pour vérification légale |
 
 ---
@@ -94,3 +95,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `decret-09-335` — JO N° 68, 25 octobre 2009 inscrit dans le header.
 - **2026-08-10 :** `arrete-interministeriel-1999-temperatures-conservation.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-1999-11-21-conservation-aliments.md` (texte intégral verbatim, Art. 1–10, JO N° 87/1999).
 - **2026-08-10 :** `arrete-interministeriel-2016-criteres-microbiologiques.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` (texte intégral verbatim, Art. 1–14 + Annexes I–II, JO N° 39/2017). **W19 CLOSED.**
+- **2026-08-10 :** `arrete-interministeriel-2025-liaison-froide.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2025-05-07-hygiene-restauration.md` (texte intégral verbatim, Art. 1–48, 14 sections, signé par 6 ministres). **W20 CLOSED.**
