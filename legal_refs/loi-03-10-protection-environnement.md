@@ -1,8 +1,12 @@
 # Loi n° 03-10 du 19 juillet 2003
 ## Relative à la protection de l'environnement dans le cadre du développement durable
 
-> **Source officielle :** Journal Officiel de la République Algérienne (JORADP) N° 43 — 20 juillet 2003  
-> **Texte intégral en français**
+**Date de signature :** 19 juillet 2003 (19 Joumada El Oula 1424)  
+**Journal Officiel :** N° 43 — 20 juillet 2003  
+**Source PDF :** Texte intégral en français (JORADP N° 43 — 2003)  
+**Date de conversion :** 2026-08-10  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
 
@@ -59,7 +63,7 @@
 1. **Le principe de précaution :** l'absence de certitudes, compte tenu des connaissances scientifiques et techniques du moment, ne doit pas retarder l'adoption de mesures effectives et proportionnées visant à prévenir un risque de dommages graves et irréversibles à l'environnement, à un coût économiquement acceptable ;
 2. **Le principe de prévention :** des actions de prévention des atteintes à l'environnement doivent être définies, planifiées et mises en œuvre, en s'appuyant sur les meilleures techniques disponibles à un coût économiquement acceptable ;
 3. **Le principe pollueur-payeur :** le pollueur doit supporter le coût des mesures de réduction des pollutions et nuisances dont il est l'auteur, à hauteur du dommage qu'il cause à l'environnement ;
-4. **Le principe de réhabilitation :** en cas d'atteintes à l'environnement, le responsable est tenu à la remise en état du site endommagé ;
+4. **Le principe de réhabilitation :** en cas d'atteintes à l'environnement, le responsable est tenu à la remise en état du site endommageable ;
 5. **Le principe d'intégration :** la protection de l'environnement est partie intégrante des politiques et actions sectorielles ;
 6. **Le principe de participation :** chaque citoyen participe à la protection de l'environnement. L'État garantit à chacun le droit à l'information en matière d'environnement ainsi que la participation aux procédures d'élaboration des décisions qui ont un effet sur celui-ci.
 
@@ -115,7 +119,7 @@
 
 **Art. 17.** — Sont soumis à une notice d'impact sur l'environnement les projets qui, en raison de leur faible importance, ne nécessitent pas une étude d'impact. Les modalités de cette notice sont fixées par voie réglementaire.
 
-**Art. 18.** — L'étude d'impact sur l'environnement est élaborée par des organismes agrées à cet effet. Les conditions d'agrément sont fixées par voie réglementaire.
+**Art. 18.** — L'étude d'impact sur l'environnement est élaborée par des organismes agréés à cet effet. Les conditions d'agrément sont fixées par voie réglementaire.
 
 **Art. 19.** — Les résultats de l'étude d'impact sont soumis à une enquête publique réalisée dans les conditions fixées par voie réglementaire.
 
@@ -336,3 +340,25 @@
 
 > Fait à Alger, le 19 Joumada El Oula 1424 correspondant au 19 juillet 2003.  
 > **Abdelaziz BOUTEFLIKA**
+
+---
+
+## Contrôle de séquence
+
+**Articles présents :** Art. 1er à 89 intégral (Disposition préliminaire + Titres I–VIII).
+
+| Titre | Chapitre(s) | Articles |
+|---|---|---|
+| Disposition préliminaire | — | 1–3 |
+| I — Dispositions générales | I-II | 4–10 |
+| II — Instruments de gestion | I-V | 11–29 |
+| III — Prescriptions de protection | I-VI | 30–52 |
+| IV — Protection contre nuisances | I-III | 53–61 |
+| V — Dispositions particulières | I-IV | 62–72 |
+| VI — Dispositions pénales | — | 73–80 |
+| VII — Recherche et constatation | — | 81–85 |
+| VIII — Dispositions finales | — | 86–89 |
+
+**Gaps :** Aucun. Séquence 1–er → 89 complète et continue.
+
+**Note :** Ce fichier prédate les règles de conversion actuelles. En-tête obligatoire et Contrôle de séquence ajoutés le 2026-08-10 (Phase W50 — Claude audit Issues #3).
