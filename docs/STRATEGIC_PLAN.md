@@ -94,6 +94,8 @@
 | **W39** | **F3: Décret 91-05 citation cluster — 6 articles corrected** | **2026-08-09** | **Code in `baseGeneralCriteria.ts` with W39 comments. TSC 0 + Jest 0 failures — user-confirmed.** |
 | **W40** | **F4: Loi 01-19 citation cluster — BGN-04-06 + BGN-04-07** | **2026-08-09** | **Confirmed by direct read. No code change needed.** |
 | **W44** | **audit.js: remove stale gapNote exceptions** | **2026-08-10** | **Commit `a8ea0d2a`. gapNote() always returns ''. 4 stale per-file exception clauses removed.** |
+| **W41** | **F5+F6: Loi 03-10 range fixes + SLH-08-01 deletion + SLH-05-05 + GPL-05-01** | **2026-08-10** | **Commit `287aaf3b`. BGN-10-01 Art.14–21 ✅; BGN-08-06 Art.63+77 ✅; SLH-08-01 deleted ✅; SLH-05-05 Art.15/16 ✅; GPL-05-01 Art.14–21 ✅. TSC+Jest gate pending — hand off to Claude.** |
+| **W45** | **BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني]** | **2026-08-10** | **Commit `287aaf3b`. Art.37 confirmed unrelated to siting (atmospheric emissions). Replaced Art.4 (constructibility/ecological balance) + [حكم مهني]. TSC+Jest gate pending — hand off to Claude.** |
 | **W50** | **CLEANUP_LOG.md: add 12 missing files, remove stale À-créer section, add Issue #1-4 history** | **2026-08-10** | **Commit `f8ed975`. 27-row state table now complete. HANDOFF.md deleted. Next identifier: W51.** |
 
 ---
@@ -104,14 +106,12 @@
 |---|---|---|---|---|---|
 | **W43** | 🔴 P0 — CRITICAL | gplCriteria.ts: Décret 21-430/83-496 wrong-decree + phantom articles | `src/criteria/gplCriteria.ts` | **BLOCKER: Claude must supply verified replacement legalReference strings per criterion before code edit.** audit.js: `decret-21-430` Art.112 = false positive from embedded 83-496 text. `decret-83-496` Arts 22-32 gap — 21-art decree should not have Art.22+; investigate before patching. | Perplexity (after Claude supplies strings) |
 | **W19** | 🟠 P0 — IN PROGRESS (parallel) | `legal_refs/` maintenance: replace fabricated stubs | `legal_refs/` | ⚠️ Do NOT touch — user working separately | Other conversation |
-| **W41** | 🟠 P1 | F5 + F6: Loi 03-10 article range fixes + remove SLH-08-01 duplicate EIE criterion | `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | F5: BGN-10-01 Art.15–22→Art.14–21; BGN-08-06 Loi 03-10 Art.18→Art.63+77. F6: delete SLH-08-01 entirely. Also fix SLH-05-05 Loi 01-19 Art.17→Art.15 or 16. Also fix GPL-05-01 Loi 03-10 Art.15–22→Art.14–21 (W46 merged). | Perplexity |
-| **W45** | 🟠 P1 | BGN-02-01 wrong citation: Loi 90-29 Art.37 → Art.4 or [حكم مهني] | `src/criteria/baseGeneralCriteria.ts` | AUDIT_STATE Session 10: Art.37 confirmed unrelated to siting. Read loi-90-29 Art.4 from legal_refs before patching. | Perplexity |
-| **W47** | 🟠 P2 | BGN-07-04 pest sealing — no correct Décret 91-05 source found | `src/criteria/baseGeneralCriteria.ts` | No clean match in Décret 91-05. Either find correct instrument or tag [حكم مهني]. Requires source research. | Perplexity (after source research) |
 | **W42** | 🟠 P2 | F7: abattoir vs slaughterhouse wastewater confidence + Décret 04-82 verification | `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts` | W36 CLOSED — blocker lifted. Unify [À VÉRIFIER] tags. Verify Décret 04-82 Arts.6,9. | Perplexity |
+| **W47** | 🟠 P2 | BGN-07-04 pest sealing — no correct Décret 91-05 source found | `src/criteria/baseGeneralCriteria.ts` | No clean match in Décret 91-05. Either find correct instrument or tag [حكم مهني]. Requires source research. | Perplexity (after source research) |
 | **W48** | 🟠 P3 | BGN-02-02 enhancement: add Loi 90-29 Art.8 specific citation | `src/criteria/baseGeneralCriteria.ts` | Not wrong, just imprecise. Low priority. | Perplexity |
 | **W49** | 🟠 P3 | Audit 16 unaudited criteria files | `src/criteria/bakeryCriteria.ts`, `blacksmithCriteria.ts`, `carWashCriteria.ts`, `carpenteryCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`, `semiPharmaCriteria.ts`, `uabCriteria.ts`, `updCriteria.ts`, `baseCompressedGasCriteria.ts` | 16 files with zero direct audit attention. | Claude (reads) + Perplexity (fixes) |
 
-> **Note on W41 + W46 merge:** W46 (GPL-05-01 range fix) tracked as a note inside W41. Execute with W41 unless W43 runs first — in that case fold into W43 code edit.
+> **Note on W41 + W46 merge:** W46 was merged into W41 and is now CLOSED with it.
 
 ---
 
@@ -127,8 +127,6 @@
 
 ```
 W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gplCriteria.ts) ← NEXT
-→ W41 (Perplexity: Loi 03-10 range fixes + SLH-08-01 deletion + SLH-05-05 fix + GPL-05-01 range fix)
-→ W45 (Perplexity: BGN-02-01 Art.37 → Art.4 or [حكم مهني])
 → W42 (Perplexity: unify abattoir/slaughterhouse wastewater + Décret 04-82)
 → W47 (Perplexity: BGN-07-04 source research + fix)
 → W48 (Perplexity: BGN-02-02 Art.8 precision enhancement)
@@ -140,8 +138,8 @@ W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gp
 
 ## Phase Numbering Convention
 
-- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W44, W50 (all sub-items).
-- **Open: W19, W41, W42, W43, W45, W47, W48, W49.**
+- Closed: A–Z, Z2–Z5, Z7, Z10–Z11–Z12, Z6, Z8, W1–W45, W47–W50 (all sub-items); W41, W44, W45, W50 closed 2026-08-10.
+- **Open: W19, W42, W43, W47, W48, W49.**
 - **Next new phase identifier: W51.**
 - Never reuse a closed phase letter.
 
@@ -186,14 +184,15 @@ W43 (BLOCKER: wait for Claude replacement strings → then Perplexity patches gp
 | Décret 91-05 cleaning program (BGN-04-03) | Art. 2+3 | ✅ CLOSED — W39 | |
 | Décret 91-05 noise limit (BGN-09-01) | Art. 15 | ✅ CLOSED — W39 | |
 | Décret 91-05 pest sealing (BGN-07-04) | Art. 14 WRONG — no clean match | ⚠️ W47 — source research or [حكم مهني] |
-| Loi 03-10 EIE range (BGN-10-01) | Art. 15–22 WRONG → Art. 14–21 | ⚠️ W41 — fix pending |
-| Loi 03-10 EIE range (GPL-05-01) | Art. 15–22 WRONG → Art. 14–21 | ⚠️ W41 — fix pending (merged) |
-| Loi 03-10 Class-1 auth (BGN-08-06) | Art. 18 WRONG → Art. 63 + Art. 77 | ⚠️ W41 — fix pending |
+| Loi 03-10 EIE range (BGN-10-01) | Art. 14–21 | ✅ CLOSED — W41. Commit `287aaf3b`. |
+| Loi 03-10 EIE range (GPL-05-01) | Art. 14–21 | ✅ CLOSED — W41 (W46 merged). Commit `287aaf3b`. |
+| Loi 03-10 Class-1 auth (BGN-08-06) | Art. 63 + Art. 77 | ✅ CLOSED — W41. Commit `287aaf3b`. |
 | Loi 01-19 hazardous waste producer (BGN-04-06) | Art. 19 | ✅ CLOSED — W40 |
 | Loi 01-19 self-incineration ban (BGN-04-07) | Art. 11 + [À VÉRIFIER] | ✅ CLOSED — W40 |
 | Décret 09-19 accreditation (BGN-04-06) | Art. 2 + Art. 6 | ✅ CLOSED — W40 |
-| Loi 01-19 SLH-05-05 container (slaughter) | Art. 17 WRONG → Art. 15 or 16 | ⚠️ W41 — fix pending |
-| Loi 90-29 siting (BGN-02-01) | Art. 37 WRONG → Art. 4 or [حكم مهني] | ⚠️ W45 — fix pending |
+| Loi 01-19 SLH-05-05 container (slaughter) | Art. 15/16 | ✅ CLOSED — W41. Commit `287aaf3b`. |
+| SLH-08-01 duplicate EIE criterion | DELETED | ✅ CLOSED — W41 (F6). Commit `287aaf3b`. |
+| Loi 90-29 siting (BGN-02-01) | Art. 4 + [حكم مهني] | ✅ CLOSED — W45. Commit `287aaf3b`. |
 | Loi 90-29 nuisance prevention (BGN-02-02) | Generic → Art. 8 near-exact match | ⚠️ W48 — enhancement, low priority |
 | BGN-02-06 ventilation | Décret 91-05 Art.11 correct (narrow) | ✅ VERIFIED — W11 |
 | BFD-08-01 traceability | Loi 09-03 Art.12+6 correct | ✅ VERIFIED — W16 |

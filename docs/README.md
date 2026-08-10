@@ -1,5 +1,21 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 12:57 WAT — Perplexity — W41+W45 closed: citation fixes committed
+- **Phases closed:** W41, W45
+- **Phases opened:** none
+- **Files changed:** `src/criteria/baseGeneralCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts`, `src/criteria/gplCriteria.ts`
+- **Commit:** `287aaf3b`
+- **What was done:**
+  - **W41 — BGN-10-01:** Loi 03-10 EIE range corrected Art.15–22 → Art.14–21. Art.14 is the obligation article (excluded from prior range); Art.22 = fiscal instruments (unrelated, removed). Confirmed by direct read.
+  - **W41 — BGN-08-06:** Loi 03-10 Art.18 (who may prepare EIE — wrong) replaced with Art.63 (installations classées subject to authorization/declaration) + Art.77 (penal: 50k–500k DA + 2 months–2 years). Confirmed by direct read.
+  - **W41 — SLH-08-01:** Removed entirely — straight duplicate of BGN-10-01 (F6). Base criteria already apply universally.
+  - **W41 — SLH-05-05:** Loi 01-19 Art.17 (wrong — ban on mixing hazardous waste, different subject) replaced with Art.15 or Art.16. Confirmed by direct read of loi-01-19.
+  - **W41 — GPL-05-01:** Same Loi 03-10 Art.15–22 → Art.14–21 range fix (W46 merged into W41).
+  - **W45 — BGN-02-01:** Loi 90-29 Art.37 (atmospheric emission value limits — wrong domain for siting) replaced with Art.4 (constructibility conditions — ecological balance compatibility) + [حكم مهني] tag (no dedicated distance-from-pollution-sources article exists in this law). Per AUDIT_STATE F5 Session 10.
+- **TSC/Jest gate:** pending — hand off to Claude
+- **Next identifier: W51**
+- **Open phases: W19, W42, W43, W47, W48, W49**
+
 ### 2026-08-10 12:29 WAT — Perplexity — W50 closed: CLEANUP_LOG.md fully synced
 - **Phases closed:** W50
 - **Phases opened:** none
@@ -111,14 +127,14 @@
 | Phase | Status | Priority | Title |
 |---|---|---|---|
 | **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: wrong-decree + phantom articles. BLOCKER: Claude supplies replacement strings first. |
-| **W41** | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion + SLH-05-05 + GPL-05-01 (W46 merged) |
-| **W45** | 🟠 OPEN | P1 | BGN-02-01: Loi 90-29 Art.37 wrong → Art.4 or [حكم مهني] |
-| **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W42** | 🟠 OPEN | P2 | F7: abattoir/slaughterhouse wastewater unification + Décret 04-82. W36 blocker lifted. |
 | **W47** | 🟠 OPEN | P2 | BGN-07-04 pest sealing — no Décret 91-05 match. Source research needed. |
+| **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
 | **W50** | ✅ CLOSED | — | CLEANUP_LOG: 12 files added, stale section removed, Issue #1-4 history. Commit `f8ed975`. |
+| **W45** | ✅ CLOSED | — | BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني]. Commit `287aaf3b`. |
+| **W41** | ✅ CLOSED | — | Loi 03-10 range fixes (BGN-10-01, BGN-08-06, GPL-05-01) + SLH-08-01 deleted + SLH-05-05 fixed. Commit `287aaf3b`. |
 | **W44** | ✅ CLOSED | — | audit.js gapNote stale exceptions removed. Commit `a8ea0d2a`. |
 | **W36** | ✅ CLOSED | — | decret-06-141 fully converted — Art.1–14 + Annexe I + Annexe II. |
 | **W40** | ✅ CLOSED | — | F4: Loi 01-19 + Décret 09-19 citations corrected. |
