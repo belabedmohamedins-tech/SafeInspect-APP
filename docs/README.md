@@ -1,5 +1,18 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 21:35 WAT — Perplexity — W51 OPENED: AIM GPL2 unpublished draft — 6 GPL criteria tagged [À VÉRIFIER]
+- **Phases closed:** none
+- **Phases opened:** W51 (LEGAL-VERIFY — AIM GPL2 publication status)
+- **Files changed:** `src/criteria/gplCriteria.ts` (already patched in prior session — confirmed by direct read SHA `d0d6787b`)
+- **Critical finding:** AIM GPL2 (v14.03.2022, cited in GPL-02-01/02/03, GPL-03-01/02, GPL-04-01) has **no JORADP publication trace** as of 2026-08-10. Décret 21-319 Art.92 delegates rule-making but the arrêté has not been published. Source circulates on Scribd as an unpublished working draft — no binding legal force.
+- **Web search result:** `joradp.dz` state-of-texts index for 2022 + Ministry of Commerce regulatory recueil — no matching arrêté interministériel found. Scribd document (AIM GPL2 v14.03.2022) bears no JO publication reference.
+- **What is already in code:** All 6 criteria have `[À VÉRIFIER — W51]` tag + Arabic warning: "هذا القرار غير منشور في الجريدة الرسمية (JORADP) حتى تاريخ 2026-08-10 — المصدر مسودة متداولة، لا قيمة قانونية ملزمة. الأرقام التقنية محتفظ بها بصفة حكم مهني ريثما يُنشر القرار". Code comments explain unpublished status.
+- **Technical values retained** as professional judgment ([حكم مهني]) pending official publication — do NOT remove numeric values (ventilation ≥1600cm², distances 3m/5m, 1400kg max, extinguisher counts) until a valid substitute is found.
+- **Resolution path for W51:** (1) Monitor JORADP for publication of the delegated arrêté under Décret 21-319 Art.92; (2) If published under a different name/date, update legalReference strings and remove [À VÉRIFIER] tags; (3) If still unpublished at next legal audit cycle, retain [حكم مهني] + warning tags.
+- **TSC/Jest gate:** No test references AIM GPL2 legalReference content. No gate action needed.
+- **Open phases: W19, W49, W51**
+- **Next identifier: W52**
+
 ### 2026-08-10 20:35 WAT — Perplexity — W48 CLOSED: BGN-02-02 test added + 20/20 green
 - **Phases closed:** W48
 - **Phases opened:** none
@@ -174,10 +187,11 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: AIM GPL2 publication status — 6 GPL criteria tagged [À VÉRIFIER] |
+| **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
+| **W19** | 🟠 OPEN | P0 | legal_refs/ stubs (parallel — user working) |
 | **W48** | ✅ CLOSED | — | BGN-02-02 test 20/20 green. Commit `0eb33bf`. 2026-08-10. |
 | **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved by W46 — Art.2+Art.3+[حكم مهني]. No code change. Direct read 2026-08-10. |
-| **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
-| **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
 | **W43** | ✅ CLOSED | — | gplCriteria.ts phantom 21-430 citations → 83-496 (amended) + AIM GPL2 + Loi 19-02. Jest gate: Claude. |
 | **W42** | ✅ CLOSED | — | SLH-08-01 Loi 03-10 Art.15–22 → Art.14–21 + Décret 04-82 Arts.6+9 confirmed clean. Commit `60c58df6`. |
 | **W50** | ✅ CLOSED | — | CLEANUP_LOG: 12 files added, stale section removed, Issue #1-4 history. Commit `f8ed975`. |
