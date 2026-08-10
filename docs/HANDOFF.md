@@ -5,6 +5,7 @@
 > STRATEGIC_PLAN.md. Read all three before acting.
 >
 > **Generated:** 2026-08-10 10:42 WAT by Perplexity (conversation-end handoff)
+> **Corrected:** 2026-08-10 10:56 WAT — Section 5 rewritten from direct file reads (Claude + Perplexity)
 > **Repo:** belabedmohamedins-tech/SafeInspect-APP · branch: main
 
 ---
@@ -40,11 +41,12 @@ Never invent articles, penalties, or numeric limits. Tag uncertain criteria `[À
 | **W43** | 🔴 P0 CRITICAL | Perplexity (after Claude supplies strings) | gplCriteria.ts: phantom article citations + wrong decree | Claude must supply verified replacement legalReference strings. DO NOT patch before receiving them. |
 | **W41** | 🟠 P1 | Perplexity | Loi 03-10 range fixes + SLH-08-01 deletion | None — ready to execute |
 | **W19** | 🟠 P0 IN PROGRESS | Other conversation | legal_refs/ stubs (3 arrêtés) | ⚠️ DO NOT TOUCH — user working in parallel |
-| **W42** | 🟠 P2 | Perplexity | Abattoir vs slaughter wastewater unification | Blocked by W36 |
-| **W36** | 🟠 P2 | Other conversation | decret-06-141 verbatim conversion | Needs JORADP PDF |
+| **W42** | 🟠 P2 | Perplexity | Abattoir vs slaughter wastewater unification | Blocked by W36 (now CLOSED — see Section 5) |
 | **W37** | 🟠 P3 | Other conversation | Convert 8 remaining legal_refs stubs | Needs JORADP PDFs |
 
 **Next new phase identifier: W45** (W44 was last used).
+
+> **W36 CLOSED:** decret-06-141 was already fully converted before this session. W42 blocker is lifted.
 
 ---
 
@@ -110,7 +112,16 @@ Never invent articles, penalties, or numeric limits. Tag uncertain criteria `[À
 
 ## 5 — legal_refs/ Status
 
-Run `node legal_refs/audit.js` at any time to see coverage. Current state (2026-08-10 run):
+> ⚠️ **CRITICAL WARNING — READ BEFORE USING THIS TABLE:**
+> The previous version of this section was generated from `audit.js` scanner output WITHOUT
+> reading the actual files. Several entries contained fabricated article numbers (e.g. Art.73/122,
+> Art.76/119, Art.18/85, Art.25/85) that do not exist in the files. This section has been
+> corrected by Claude + Perplexity via direct file reads on 2026-08-10.
+>
+> **Rule:** Never trust audit.js article counts without reading the actual file to confirm.
+> audit.js picks up stray digits from footnotes, cross-references, and page numbers.
+
+Run `node legal_refs/audit.js` at any time to see coverage. Verified state after direct reads:
 
 | File | Status | Notes |
 |---|---|---|
@@ -120,27 +131,27 @@ Run `node legal_refs/audit.js` at any time to see coverage. Current state (2026-
 | `loi-90-11-relations-travail.md` | ✅ 130 arts | Complete |
 | `loi-90-29-urbanisme.md` | ✅ 81 arts | Complete |
 | `loi-05-12-ressources-en-eau.md` | ✅ 126 arts | Complete |
-| `loi-04-20-risques-majeurs.md` | ✅ 76 arts (+ Art.119 final clause) | Arts 76–118 = transitional provisions, not needed. BENIGN. |
-| `loi-01-19-gestion-dechets.md` | ✅ 73 arts (+ Art.122 final clause) | Arts 73–121 = enforcement, not needed. BENIGN. |
+| `loi-04-20-risques-majeurs.md` | ✅ **75 arts** | **Verified by Claude direct read:** file's own sequence-audit table states "Total: 75 articles — aucun saut détecté. Séquence Art.1–75 complète." Ends at Art.75 + signature block. Prior entry (76 arts + Art.119) was an audit.js false positive. |
+| `loi-01-19-gestion-dechets.md` | ✅ **72 arts** | **Verified by Claude direct read:** file ends cleanly at Art.72 with signature block. No Art.73–122 in file. Prior entry (73 arts + Art.122) was an audit.js false positive. |
 | `loi-19-02-incendie-panique.md` | ✅ 42 arts | Complete |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | ✅ 68 arts | Complete |
 | `decret-17-140-hygiene-alimentaire.md` | ✅ 64 arts | Complete |
-| `decret-93-120-medecine-du-travail.md` | ✅ 45 arts | Gaps 41–76 = selective extract. BENIGN. |
-| `decret-02-427-prevention-risques-professionnels.md` | ✅ 25 arts | Selective extract Arts 1–24+85. Gap Arts 25–84 = transitional. BENIGN. |
+| `decret-93-120-medecine-du-travail.md` | ✅ 45 arts | Selective extract. BENIGN (transitional provisions not inspected). |
+| `decret-02-427-prevention-risques-professionnels.md` | ✅ **24 arts** | **Verified by Claude direct read:** ends cleanly at Art.24 + signature block. No Art.85 in file. Prior entry (25 arts + Art.85) was an audit.js false positive. |
 | `decret-06-198-etablissements-classes.md` | ✅ 51 arts | Gap 51–84 = Annexes/tables. BENIGN. |
 | `decret-22-167-etablissements-classes-modification.md` | ✅ 25 arts | Amending decree. Art.112 = cross-ref to base decree 06-198. BENIGN. |
 | `decret-24-196-etablissements-classes-modification.md` | ✅ 10 arts | Same. BENIGN. |
 | `decret-76-35-igh-incendie.md` | ✅ 26 arts | Complete |
-| `decret-09-19.md` | ✅ 18 arts | Selective + Art.85 = abrogation clause. BENIGN. |
-| `decret-07-144-nomenclature-installations-classees.md` | ✅ 5 arts | Rubriques 1000–1242 only. Gap = annex table rows. W31-3 tagged. BENIGN. |
-| `decret-06-141-rejets-effluents-liquides.md` | ✅ 15 arts | STUB — verbatim pending W36. Gap Arts 15–84 = BENIGN (transitional). Art.85 = abrogation. |
+| `decret-09-19.md` | ✅ **17 arts** | **Verified by Claude direct read:** ends cleanly at Art.17 + signature block. No Art.85 anywhere in file. Prior entry (18 arts + Art.85) was an audit.js false positive. |
+| `decret-07-144-nomenclature-installations-classees.md` | ✅ 5 arts | Rubriques 1000–1242 only. **⚠️ Gap = REAL MISSING CONTENT** — rubriques 1243–2922 absent. Requires actual JORADP PDF. This is NOT benign — it is the known disclosed gap from W31-3. Do not deprioritize. |
+| `decret-06-141-rejets-effluents-liquides.md` | ✅ **14 arts + Annexe I + Annexe II** | **FULLY CONVERTED — verified by Perplexity direct read 2026-08-10.** Art.1–14 verbatim + both annexes with parameter tables. W36 is CLOSED. Prior entry ("STUB — verbatim pending W36") was **WRONG** — file was already complete. |
 | `decret-83-496-gpl-carburant.md` | ✅ 24 arts | ⚠️ W43 — Arts 22–32 gap: 21-art decree should not have Art.22+. Investigate. |
 | `decret-21-430-gpl-carburant.md` | ✅ 7 arts | ⚠️ W43 — Art.112 is a scanner false positive from embedded 83-496 text. Investigate. |
 | `aim-gpl2-regles-techniques-securite.md` | ⚠️ PARTIEL | 12 arts / 30 total. 1 [MANQUANT]. W43 depends on Claude's verified art numbers. |
 | `arrete-interministeriel-1999-temperatures-conservation.md` | ⚠️ STUB | 0 arts, 1 [MANQUANT]. W19 OPEN. |
 | `arrete-interministeriel-2016-criteres-microbiologiques.md` | ⚠️ STUB | 0 arts, 1 [MANQUANT]. W19 OPEN. |
 | `arrete-interministeriel-2025-liaison-froide.md` | ⚠️ STUB | 0 arts, 1 [MANQUANT]. W19 OPEN. |
-| `decret-06-198` via `decret-07-144` | ⚠️ NO FILE | decret-06-138 (air emissions), decret-09-335 (internal plan), decret-05-315 (waste bordereau), decret-07-145 (EIA), decret-11-125 (drinking water), loi-88-07 (OHS training), decret-04-82 (veterinary) — W37 |
+| Missing files | ⚠️ NO FILE | decret-06-138 (air emissions), decret-09-335 (internal plan), decret-05-315 (waste bordereau), decret-07-145 (EIA), decret-11-125 (drinking water), loi-88-07 (OHS training), decret-04-82 (veterinary) — W37 |
 
 ---
 
@@ -229,7 +240,7 @@ All 4 test assertions then pass on this local aggregate.
 | Drinking water | Décret 11-125 | ⚠️ NO FILE — W37 |
 | Consumer protection traceability | Loi 09-03 **Art.12+6** | ✅ W16 |
 | Urbanisme buffer | Loi 90-29 + Loi 03-10 + Décret 06-198 | ✅ W13 |
-| Abattoir wastewater Annex | Décret 06-141 Annex II | ⚠️ [À VÉRIFIER] W10 Option C |
+| Abattoir wastewater Annex | Décret 06-141 Annexe II | ✅ **W36 CLOSED** — file fully converted, Annexe II present |
 
 ---
 
@@ -250,6 +261,10 @@ All 4 test assertions then pass on this local aggregate.
    this session's tool output in the chat. If not visible → write `[MANQUANT]` and stop.
 6. **BROKEN-FILE ESCALATION:** If a file cannot be fixed via targeted patches, post
    `⚠️ NEEDS FULL REWRITE — see [reason]` to the README row and stop until user authorizes.
+7. **audit.js IS NOT GROUND TRUTH:** Scanner output contains false positives from stray digits
+   in footnotes, cross-references, and page numbers. Always read the actual file before reporting
+   any article count or gap as real. The W32 incident and the Section 5 corruption of 2026-08-10
+   both originated from trusting scanner output over direct reads.
 
 ---
 
@@ -261,6 +276,7 @@ All 4 test assertions then pass on this local aggregate.
 | 2026-08-09 | W34: Same file, same tool, same truncation at ~25 KB limit. | Files >20K chars must use `push_files`. |
 | 2026-08-09 | W32 session hallucinated a successful PDF-match report. | CANNOT-SEE = CANNOT-CONFIRM. Never report from prior-session memory. |
 | 2026-08-09 | Two sessions reported phantom phases as "confirmed clean" from doc claims, not code reads. | Always read source file before closing a phase. |
+| 2026-08-10 | HANDOFF.md Section 5 written from audit.js output without reading actual files. 6 entries had fabricated article numbers (Art.73/122, Art.76/119, Art.18/85, Art.25/85 ×2). decret-06-141 falsely marked STUB when fully converted. decret-07-144 real gap labeled BENIGN. | Never write doc status entries from scanner output alone. Read the file. |
 
 ---
 
@@ -276,7 +292,8 @@ Before doing ANY work in a new conversation:
 - [ ] Check current open phases in STRATEGIC_PLAN — next identifier is **W45**
 - [ ] Do NOT touch W19 files — user's parallel conversation owns them
 - [ ] Do NOT patch `gplCriteria.ts` (W43) until Claude supplies verified replacement strings
+- [ ] W36 is CLOSED — do NOT attempt to convert decret-06-141, it is already done
 
 ---
 
-*End of handoff document — 2026-08-10 10:42 WAT*
+*End of handoff document — corrected 2026-08-10 10:56 WAT*
