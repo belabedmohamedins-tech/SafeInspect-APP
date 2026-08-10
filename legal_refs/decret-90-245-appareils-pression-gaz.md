@@ -1,7 +1,7 @@
 # Décret exécutif n° 90-245 du 18 août 1990 portant réglementation des appareils à pression de gaz
 
 **Date de signature :** 18 août 1990  
-**Journal Officiel :** N° 38, 22 août 1990 — pages 998 à 1003 *(⚠️ numéro JO à confirmer : source ILO NATLEX indique N° 36 — vérifier contre le JORADP original)*  
+**Journal Officiel :** N° 36, 22 août 1990 — pages 998 à 1003  
 **Source PDF :** Fourni par l'utilisateur (`Décret 90-245 du 18 août 1990 (appareils à pression de gaz).pdf`) — converti sous responsabilité de l'utilisateur  
 **Date de conversion :** 2026-08-09  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
