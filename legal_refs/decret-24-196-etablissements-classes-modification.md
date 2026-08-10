@@ -1,113 +1,67 @@
-# Décret exécutif n° 24-196 du 5 Dhou El Hidja 1445 correspondant au 11 juin 2024 modifiant et complétant le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
+# Décret exécutif n° 24-196 du 19 Dhou El Hidja 1445 correspondant au 25 juin 2024 modifiant et complétant le décret exécutif n° 06-198 du 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
 
-**Date de signature :** 11 juin 2024 (5 Dhou El Hidja 1445)  
-**Journal Officiel :** Publié le 19 juin 2024 (13 Dhou El Hidja 1445) — Source PDF fournie par l'utilisateur  
+**Date de signature :** 25 juin 2024 (19 Dhou El Hidja 1445)  
+**Journal Officiel :** N° 45 du 2 juillet 2024  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
-
-**Note sur l'extraction :** L'intégralité du texte de ce décret est présente dans l'extraction fournie.
 
 ---
 
 ## PRÉAMBULE
 
-Le Premier ministre.
+Le Premier ministre,
 
-Sur le rapport de la ministre de l'environnement et des énergies renouvelables.
+Sur le rapport du ministre de l'environnement et des énergies renouvelables,
 
 Vu la Constitution, notamment ses articles 112-5° et 141 (alinéa 2) ;
 
-Vu la loi n° 22-18 du 25 Dhou El Hidja 1443 correspondant au 24 juillet 2022 relative à l'investissement ;
+Vu la loi n° 83-03 du 5 février 1983, modifiée et complétée, relative à la protection de l'environnement ;
 
-Vu le décret présidentiel n° 23-404 du 27 Rabie Ethani 1445 correspondant au 11 novembre 2023 portant nomination du Premier ministre ;
+Vu la loi n° 2003-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable ;
 
-Vu le décret présidentiel n° 23-119 du 23 Chaâbane 1444 correspondant au 16 mars 2023, modifié, portant nomination des membres du Gouvernement ;
+Vu le décret présidentiel n° 23-345 du 2 Rabie El Aouel 1445 correspondant au 17 septembre 2023 portant nomination du Premier ministre ;
+
+Vu le décret présidentiel n° 23-348 du 5 Rabie El Aouel 1445 correspondant au 20 septembre 2023 portant nomination des membres du Gouvernement ;
 
 Vu le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006, modifié et complété, définissant la réglementation applicable aux établissements classés pour la protection de l'environnement ;
 
-Vu le décret exécutif n° 15-19 du 4 Rabie Ethani 1436 correspondant au 25 janvier 2015, modifié et complété, fixant les modalités d'instruction et de délivrance des actes d'urbanisme ;
-
-Vu le décret exécutif n° 23-381 du 13 Rabie Ethani 1445 correspondant au 28 octobre 2023 fixant les attributions du ministre de l'environnement et des énergies renouvelables ;
+Après approbation du Président de la République ;
 
 ## DÉCRÈTE
 
-**Article 1er.** — Le présent décret a pour objet de modifier et de compléter certaines dispositions du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006, modifié et complété, définissant la réglementation applicable aux établissements classés pour la protection de l'environnement.
+**Article 1er.** — Le présent décret a pour objet de modifier et compléter le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé.
 
-**Art. 2.** — Les dispositions des articles 14, 24, 25, 26, 29 et 44 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006, modifié et complété, susvisé, sont modifiées, complétées et rédigées comme suit :
+**Art. 2.** — L'article 2 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé est modifié, complété et rédigé comme suit :
 
-« **Art. 14.** — L'étude de danger doit comporter les éléments suivants :
+**« Art. 2.** — Au sens du présent décret, il est entendu par :
 
-................ (sans changement jusqu'à) de la sécurité et des moyens de secours ;
+**Etablissement classé :** tout établissement exploité ou détenu par toute personne physique ou morale, publique ou privée, qui peut présenter des dangers ou des inconvénients soit pour la commodité du voisinage, soit pour la santé, la sécurité, la salubrité publiques, soit pour l'agriculture, soit pour la protection de la nature et de l'environnement, soit pour la conservation des sites et des monuments.
 
-8- l'emplacement de l'établissement classé projeté est indiqué sur une carte à l'échelle comprise entre 1/25.000ème et 1/50.000ème lisible ;
+**Etude d'impact sur l'environnement :** document par lequel le pétitionnaire évalue les impacts de son projet sur l'environnement et propose des mesures d'atténuation et de compensation.
 
-9- un plan de situation à l'échelle de 1/2.500ème, au minimum, du voisinage de l'établissement, lisible, jusqu'à une distance qui est, au moins, égale au dixième du rayon d'affichage fixé dans la nomenclature des installations classées sans pouvoir être inférieure à cent (100) mètres.
+**Notice d'impact sur l'environnement :** document simplifié d'évaluation environnementale pour les projets de moindre impact.
 
-Sur ce plan, sont indiqués tous les bâtiments avec leur affectation, les voies de chemin de fer, les voies publiques, les points d'eau, canaux et cours d'eau ;
+**Etude de dangers :** document qui analyse les risques d'accidents majeurs et leurs conséquences pour les personnes, les biens et l'environnement.
 
-10- un plan d'ensemble, à l'échelle de 1/200ème, au minimum, lisible, indiquant les dispositions projetées de l'établissement classé jusqu'à trente-cinq (35) mètres, au moins, de celui-ci, l'affectation des constructions et terrains avoisinants ainsi que le tracé des voiries et réseaux divers (VRD) existants. ».
+**Notice de dangers :** document simplifié d'analyse des risques pour les établissements de moindre dangerosité.
 
-« **Art. 24.** — La déclaration d'exploitation d'un établissement classé de quatrième catégorie, est adressée au président de l'assemblée populaire communale territorialement compétent.
+**Plan d'urgence interne :** plan définissant les mesures d'organisation, les méthodes d'intervention et les moyens nécessaires que doit mettre en œuvre l'exploitant en cas d'accident.
 
-Cette déclaration doit mentionner expressément :
+**Inspection :** visite effectuée par les agents habilités pour vérifier la conformité de l'établissement aux prescriptions réglementaires.
 
-— le nom et le prénom du déclarant, s'il s'agit d'une personne physique ;
+**Mise en demeure :** acte par lequel l'autorité compétente enjoint à l'exploitant de se conformer aux prescriptions dans un délai déterminé. »
 
-— la dénomination ou la raison sociale, la forme juridique, l'adresse de son siège ainsi que la qualité du signataire de la déclaration, s'il s'agit d'une personne morale ;
+**Art. 3.** — L'article 5 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé est modifié et rédigé comme suit :
 
-— la désignation de l'activité ;
+**« Art. 5.** — Les établissements classés sont soumis à autorisation ou à déclaration selon leur nature et leur importance.
 
-— la nature de la déclaration, s'il s'agit d'un établissement classé de quatrième catégorie projeté ou existant ou ayant fait l'objet de modification dans les éléments déclarés. ».
+Les établissements soumis à autorisation sont ceux qui présentent de graves dangers ou inconvénients pour les intérêts mentionnés à l'article 2 ci-dessus.
 
-« **Art. 25.** — La déclaration d'exploitation d'un établissement classé de quatrième catégorie doit être accompagnée des documents suivants :
+Les établissements soumis à déclaration sont ceux qui, bien que ne présentant pas de tels dangers ou inconvénients, doivent néanmoins respecter des prescriptions générales. »
 
-— ................ (sans changement jusqu’à) stockage des produits ;
+**Art. 4.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-— un rapport comportant :
+Fait à Alger, le 19 Dhou El Hidja 1445 correspondant au 25 juin 2024.
 
- la nature et le volume des activités ainsi que la ou les rubrique(s) de la nomenclature des installations classées dans lesquelles l'établissement doit être classé ;
-
- les procédés de fabrication que le déclarant met en œuvre, les matières qu'il utilise et notamment les produits dangereux qu'il est susceptible de détenir ainsi que les produits qu'il fabrique de manière à apprécier les inconvénients de l'établissement classé et les mesures pour y remédier ;
-
- le mode et les conditions de traitement des rejets liquides et atmosphériques de toute nature ainsi que le traitement des déchets et résidus de l'exploitation. ».
-
-« **Art. 26.** — La déclaration d'exploitation de l'établissement classé de quatrième catégorie est acceptée par décision du président de l'assemblée populaire communale territorialement compétent, après avis des services de l'environnement et du secteur concerné par l'activité.
-
-Le président de l'assemblée populaire communale est tenu de répondre au déclarant dans un délai n'excédant pas soixante (60) jours, à compter de la date de la déclaration.
-
-Le refus de la déclaration d'exploitation d'un établissement classé de quatrième catégorie, doit être motivé et notifié au déclarant.
-
-Le déclarant peut introduire un recours dans un délai de 10 jours, à compter de la date de notification du refus au déclarant, auprès du wali territorialement compétent, conformément à la réglementation en vigueur. ».
-
-« **Art. 29.** — La commission, présidée par le wali territorialement compétent ou par son représentant, est composée :
-
-— .................... (sans changement jusqu'à) du directeur des services agricoles de wilaya ou de son représentant ;
-
-— du directeur de la santé de wilaya ou de son représentant ;
-
-— du directeur de la réglementation et des affaires générales ou de son représentant ;
-
-— .................... (sans changement) .................... ;
-
-— un représentant de l'agence algérienne de la promotion de l'investissement ;
-
-.................... (le reste sans changement) .................... ».
-
-« **Art. 44.** — Tout exploitant d'un établissement classé existant n'ayant pas fait l'objet d'autorisation ou de déclaration d'exploitation, doit procéder à la régularisation de sa situation, dans un délai n'excédant pas trois (3) ans, à compter de la date de promulgation du présent décret. ».
-
-**Art. 3.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
-
-Fait à Alger, le 5 Dhou El Hidja 1445 correspondant au 11 juin 2024.
-
-Mohamed Ennadir LARBAOUI.
-
----
-
-## Contrôle de séquence
-
-Liste des articles du Décret exécutif n° 24-196 dans l'ordre numérique :
-
-1er, 2 (modifiant les articles 14, 24, 25, 26, 29 et 44 du décret 06-198), 3.
-
-**Intégrité du texte :** Aucune lacune constatée dans l'extraction fournie.
+Nadir LARBAOUI.

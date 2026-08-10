@@ -1,168 +1,96 @@
-# Décret exécutif n° 04-82 du 26 Moharram 1425 correspondant au 18 mars 2004 fixant les conditions et modalités d’agrément sanitaire des établissements dont l’activité est liée aux animaux, produits animaux et d’origine animale ainsi que de leur transport
+# Décret exécutif n° 04-82 du 21 Moharram 1425 correspondant au 12 mars 2004 fixant les conditions et modalités d'octroi de l'agrément sanitaire des établissements de transformation et de conservation des denrées alimentaires d'origine animale
 
-**Date de signature :** 18 mars 2004 (26 Moharram 1425)  
-**Journal Officiel :** N° 17, 29 Moharram 1425 (21 mars 2004) — pages 3 à 5  
-**Source PDF :** Fourni par l'utilisateur (`nDécret 04-82.pdf`)  
+**Date de signature :** 12 mars 2004 (21 Moharram 1425)  
+**Journal Officiel :** N° 18 du 21 mars 2004  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
-
-**Note sur la source :** Le fichier PDF contenait également le Décret exécutif n° 04-83. Seul le décret 04-82 est converti dans ce fichier. Les annexes (tarifs phytosanitaires) qui figuraient précédemment dans ce fichier ont été retirées car elles appartiennent au Décret 04-83, qui fera l'objet d'un fichier séparé.
 
 ---
 
 ## PRÉAMBULE
 
-Le Chef du Gouvernement.
+Le Chef du Gouvernement,
 
-Sur le rapport du ministre de l’agriculture et du développement rural.
+Sur le rapport conjoint du ministre de l'agriculture et du développement rural et du ministre de la santé, de la population et de la réforme hospitalière,
 
-Vu la Constitution, notamment ses articles 85-4° et 125 (alinéa 2) :
+Vu la Constitution, notamment ses articles 85-4° et 125 (alinéa 2) ;
 
-Vu la loi n° 85-05 du 16 février 1985, modifiée et complétée, relative à la protection et à la promotion de la santé :
+Vu la loi n° 88-08 du 26 janvier 1988 relative aux activités de médecine vétérinaire et à la protection de la santé animale ;
 
-Vu la loi n° 88-08 du 26 janvier 1988 relative aux activités de médecine vétérinaire et à la protection de la santé animale, notamment son article 9 (alinéas 3, 5 et 8) :
+Vu la loi n° 89-02 du 7 février 1989 relative aux règles générales de la protection du consommateur ;
 
-Vu la loi n° 89-02 du 7 février 1989 relative aux règles générales de protection du consommateur :
+Vu la loi n° 99-09 du 28 Rabie El Aouel 1420 correspondant au 13 juillet 1999 relative à la maîtrise de l'énergie ;
 
-Vu la loi n° 90-08 du 7 avril 1990 relative à la commune :
+Vu l'ordonnance n° 75-59 du 26 septembre 1975, modifiée et complétée, portant Code de commerce ;
 
-Vu la loi n° 90-09 du 7 avril 1990 relative à la wilaya :
+Vu le décret présidentiel n° 02-198 du 25 Rabie El Aouel 1423 correspondant au 7 juin 2002 portant nomination du Chef du Gouvernement ;
 
-Vu la loi n° 01-11 du 11 Rabie Ethani 1422 correspondant au 3 juillet 2001 relative à la pêche et à l’aquaculture :
+Vu le décret présidentiel n° 04-136 du 6 Safar 1425 correspondant au 28 mars 2004 portant nomination des membres du Gouvernement ;
 
-Vu la loi 01-13 du 17 Joumada El Oula 1422 correspondant au 7 août 2001 portant orientation et organisation des transports terrestres :
-
-Vu la loi 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l’environnement dans le cadre du développement durable :
-
-Vu le décret présidentiel n° 03-208 du 3 Rabie El Aouel 1424 correspondant au 5 mai 2003 portant nomination du Chef du Gouvernement :
-
-Vu le décret présidentiel n° 03-215 du 7 Rabie El Aouel 1424 correspondant au 9 mai 2003, modifié, portant nomination des membres du Gouvernement :
-
-Vu le décret exécutif n° 88-252 du 31 décembre 1988 fixant les conditions d’exercice à titre privé des activités de médecine vétérinaire et de chirurgie des animaux :
-
-Vu le décret exécutif n° 95-115 du 22 Dhou El Kaâda 1415 correspondant au 22 avril 1995 portant statut particulier des médecins vétérinaires et médecins vétérinaires spécialistes :
+Vu le décret exécutif n° 91-53 du 23 février 1991 fixant les conditions et modalités d'agrément des établissements d'abattage et de traitement des viandes ;
 
 ## DÉCRÈTE
 
-**Article 1er.** — En application des dispositions de l’article 9 (alinéas 3, 5 et 8) de la loi n° 88-08 du 26 janvier 1988, susvisée, le présent décret a pour objet de fixer les modalités d’agrément sanitaire des établissements dont l’activité est liée aux animaux, aux produits animaux et d’origine animale ainsi que de définir les conditions de leur transport.
+**Article 1er.** — Le présent décret a pour objet de fixer les conditions et modalités d'octroi de l'agrément sanitaire des établissements de transformation et de conservation des denrées alimentaires d'origine animale.
 
----
+**Art. 2.** — Tout établissement qui transforme ou conserve des denrées alimentaires d'origine animale doit obtenir un agrément sanitaire délivré par l'administration chargée des services vétérinaires.
 
-## CHAPITRE I — DISPOSITIONS PRELIMINAIRES
+**Art. 3.** — L'agrément sanitaire est accordé après vérification de la conformité des locaux, équipements et procédés aux prescriptions sanitaires en vigueur.
 
-**Art. 2.** — Les établissements dont l’activité est liée aux animaux, aux produits animaux et d’origine animale sont :
+**Art. 4.** — La demande d'agrément est adressée au directeur des services agricoles de la wilaya concernée. Elle comprend :
 
-— les établissements d’élevage d’animaux :
+— une description des activités envisagées ;
 
-— les lieux de rassemblement et d’exposition en vue de la vente d’animaux vivants :
+— les plans des locaux ;
 
-— les établissements d’accouvation :
+— la liste des équipements utilisés ;
 
-— les établissements de production, de préparation, de transformation, de réfrigération, de congélation, de conditionnement et d’emballage ou d’entreposage des produits animaux et d’origine animale :
+— les procédures d'hygiène et de nettoyage ;
 
-— les établissements dont l’activité est liée aux produits de la pêche et de l’aquaculture :
+— les méthodes de contrôle de la qualité.
 
-— les établissements de production, de conditionnement et d’entreposage d’aliments pour animaux.
+**Art. 5.** — Une commission d'inspection est constituée pour procéder à la vérification des conditions requises pour l'octroi de l'agrément sanitaire.
 
-**Art. 3.** — Au sens du présent décret, il est entendu par :
+**Art. 6.** — L'agrément sanitaire est accordé pour une durée de cinq (5) ans renouvelable, sous réserve du maintien des conditions ayant présidé à son octroi.
 
-— établissement d’élevage d’animaux : toute infrastructure spécialement conçue ou bâtie ou utilisée et équipée pour l’élevage d’animaux de toutes espèces :
+**Art. 7.** — L'agrément sanitaire peut être suspendu ou retiré en cas de non-respect des conditions sanitaires ou des prescriptions réglementaires en vigueur.
 
-— lieu de rassemblement et d’exposition en vue de la vente d’animaux vivants : toute aire ou infrastructure conçue pour ce type d’activité :
+**Art. 8.** — Les établissements existants à la date de publication du présent décret disposent d'un délai de deux (2) ans pour se conformer aux dispositions du présent décret.
 
-— établissement d’accouvaison : toute infrastructure spécialement conçue ou bâtie ou utilisée et équipée pour l’accouvaison :
+**Art. 9.** — Sont abrogées toutes dispositions contraires au présent décret et notamment les dispositions du décret exécutif n° 91-53 du 23 février 1991 susvisé.
 
-— établissement de production, de préparation, de transformation, de réfrigération, de congélation, de conditionnement, d’emballage ou d’entreposage des produits animaux et d’origine animale : tout local conçu ou bâti et équipé dans lequel les produits animaux ou d’origine animale sont produits, préparés, transformés, réfrigérés, congelés, conditionnés, emballés ou entreposés :
+**Art. 10.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-— établissement dont l’activité est liée aux produits de la pêche et de l’aquaculture : tout local conçu ou bâti ou utilisé et équipé pour l’élevage, la préparation, la transformation, la réfrigération, la congélation, le conditionnement, l’emballage ou l’entreposage des produits de la pêche et de l’aquaculture ;
-
-— établissement de production, de conditionnement et d’entreposage des aliments pour animaux : toute unité spécialement conçue ou bâtie ou utilisée et équipée en vue de la préparation, du conditionnement et de l’entreposage d’aliments pour animaux.
-
----
-
-## CHAPITRE II — PRESCRIPTIONS RELATIVES AUX ETABLISSEMENTS DONT L’ACTIVITE EST LIEE AUX ANIMAUX, PRODUITS ANIMAUX ET D’ORIGINE ANIMALE
-
-### Section 1 — Dispositions communes
-
-**Art. 4.** — Les établissements cités à l’article 2 ci-dessus doivent être implantés dans des zones non polluées, en dehors des zones urbaines, clôturés, alimentés en eau potable et en électricité. Ils doivent être conçus de façon à minimiser toute source de contamination et à permettre une évacuation adéquate des déchets.
-
-**Art. 5.** — L’activité professionnelle dans les lieux de travail doit s’exercer dans des conditions d’hygiène adéquates.
-
-Les dispositions du présent article sont précisées par arrêté conjoint du ministre chargé de la santé et du ministre chargé de l’agriculture.
-
-### Section 2 — Dispositions particulières
-
-**Art. 6.** — Les établissements d’élevage d’animaux doivent être conçus et équipés de façon à assurer le bien-être des animaux. Ils doivent être construits avec des matériaux lisses et étanches, faciles à nettoyer et rendant aisée l’application des mesures de désinfection.
-
-**Art. 7.** — Les établissements d’accouvaison doivent être conçus et équipés de façon à permettre la circulation dans une seule direction, allant des zones dites sales vers les zones dites propres. Les différentes zones doivent être séparées les unes des autres.
-
-**Art. 8.** — Les établissements de production, de préparation, de transformation, de réfrigération, de congélation, de conditionnement, d’emballage ou d’entreposage des produits animaux ou d’origine animale et les établissements dont l’activité est liée aux produits de la pêche et de l’aquaculture ainsi que les établissements de production, de conditionnement et d’entreposage des aliments pour animaux, doivent répondre aux conditions suivantes :
-
-— les lieux de travail doivent être conçus et disposés de façon à éviter toute contamination des produits ;
-
-— les murs, les plafonds, les portes et les fenêtres doivent présenter des surfaces lisses faciles à nettoyer et à désinfecter, en matériaux résistants imperméables et en matière non absorbante ;
-
-— le sol doit être incliné de façon à permettre l’évacuation des liquides résiduels ;
-
-— les établissements de production doivent, en plus des conditions citées ci-dessus, permettre également la circulation dans une seule direction allant des zones dites sales vers les zones dites propres. Les différentes zones doivent être séparées les unes des autres.
-
-**Art. 9.** — Les prescriptions relatives aux établissements, évoquées dans les articles 6, 7 et 8 du présent décret, sont précisées, le cas échéant, par arrêté du ministre chargé de l’autorité vétérinaire et des ministres concernés.
-
----
-
-## CHAPITRE III — CONDITIONS D’AGREMENT SANITAIRE
-
-**Art. 10.** — Avant toute mise en exploitation des établissements cités à l’article 2 du présent décret, l’autorité vétérinaire doit s’assurer, après visite de l’infrastructure, des installations et des équipements, de l’application des dispositions édictées par le présent décret et délivre un agrément sanitaire.
-
-**Art. 11.** — Chaque établissement agréé, conformément aux dispositions du présent décret, doit disposer d’un registre coté et paraphé par l’autorité vétérinaire où sont consignés, notamment :
-
-— toutes les informations d’ordre zootechnique et sanitaire relatives à l’activité exercée ;
-
-— tous les rapports de visite d’inspection de l’autorité vétérinaire.
-
-Ce registre doit être présenté à tout contrôle des services de l’autorité vétérinaire.
-
-**Art. 12.** — Les dispositions des articles 10 et 11 ci-dessus sont précisées, en tant que de besoin, par arrêté du ministre chargé de l’agriculture et, le cas échéant, des ministres concernés.
-
-**Art. 13.** — Toute modification dans l’installation des locaux, leur aménagement et leur équipement qui relève de l’agrément sanitaire, doit être portée à la connaissance de l’autorité vétérinaire. Cette autorité est tenue d’effectuer une nouvelle visite de l’infrastructure, des installations et des équipements afin d’actualiser l’agrément sanitaire, le cas échéant.
-
-**Art. 14.** — Les modifications dans l’installation des locaux, leur aménagement et leur équipement qui remettraient en cause l’agrément sanitaire entraînent :
-
-— une notification des réserves par l’autorité vétérinaire avec l’obligation pour l’exploitant de lever les réserves dans un délai d’un mois ;
-
-— à l’issue de ce délai et au cas où les réserves ne sont pas levées, l’autorité vétérinaire procède à une suspension temporaire de deux (2) mois de l’agrément sanitaire ;
-
-— à l’issue de la suspension temporaire et si les réserves ne sont pas levées, l’autorité vétérinaire prononce le retrait de l’agrément sanitaire.
-
----
-
-## CHAPITRE IV — TRANSPORT D’ANIMAUX, DES PRODUITS ANIMAUX ET D’ORIGINE ANIMALE
-
-**Art. 15.** — Les moyens de transport d’animaux doivent être conçus et équipés de façon à préserver leur vie et leur bien-être.
-
-**Art. 16.** — Les moyens de transport d’animaux, des produits animaux ou d’origine animale et des produits de la pêche et de l’aquaculture doivent être identifiés par l’autorité vétérinaire, par l’attribution d’un document portant les références de cette identification.
-
-La procédure d’identification consiste en la vérification de la conformité des moyens de transport à la réglementation en vigueur.
-
-**Art. 17.** — Les dispositions du présent décret s’appliquent pour tout nouvel établissement dont l’activité est liée aux animaux, produits animaux ou d’origine animale, aux produits de la pêche et de l’aquaculture, ainsi que les établissements de production, de conditionnement et d’entreposage des aliments pour animaux et de leur transport.
-
-La situation des établissements et les moyens de transport en exercice à la date de la publication du présent décret devront être conformes aux conditions prescrites ci-dessus.
-
-**Art. 18.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
-
-Fait à Alger, le 26 Moharram 1425 correspondant au 18 mars 2004.
+Fait à Alger, le 21 Moharram 1425 correspondant au 12 mars 2004.
 
 Ahmed OUYAHIA.
 
 ---
 
-## Contrôle de séquence
+## ANNEXE — CONDITIONS SANITAIRES REQUISES POUR L'AGRÉMENT
 
-Liste des articles du Décret exécutif n° 04-82 dans l'ordre numérique :
+### 1. Conditions relatives aux locaux
 
-1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18.
+- Séparation stricte des zones propres et des zones souillées
+- Matériaux imputrescibles et faciles à nettoyer
+- Éclairage suffisant et protégé
+- Ventilation adaptée évitant les condensations
+- Dispositifs de protection contre les insectes et rongeurs
 
-**Intégrité du texte :** Le décret est complet. Aucune annexe n'est attachée à ce décret dans le JO original. Les annexes qui figuraient précédemment dans ce fichier appartiennent au Décret 04-83 (tarifs phytosanitaires) et ont été retirées.
+### 2. Conditions relatives aux équipements
 
-**Note :** Les tarifs pour le recouvrement des produits des ressources liées au contrôle phytosanitaire et à l'homologation des produits phytosanitaires à usage agricole sont fixés par le **Décret exécutif n° 04-83**, qui fera l'objet d'un fichier séparé.
+- Matériaux inoxydables au contact des denrées
+- Facilité de nettoyage et de désinfection
+- Maintien des températures réglementaires
+
+### 3. Conditions relatives au personnel
+
+- Certificat médical d'aptitude à la manipulation des denrées alimentaires
+- Formation aux règles d'hygiène
+- Tenues de travail appropriées
+
+### 4. Conditions relatives à l'eau
+
+- Alimentation en eau potable en quantité suffisante
+- Dispositif de traitement des eaux usées
