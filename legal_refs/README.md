@@ -7,6 +7,7 @@
      README mis à jour le 2026-08-10 (6) — D04-82, D06-138, D09-335, D11-125, L04-08, L88-07 indexés
      README mis à jour le 2026-08-10 (7) — audit.js documenté comme outil natif du dossier
      README mis à jour le 2026-08-10 (8) — sync 3 rows : loi-05-12 complète, D04-82 annexes retirées, D09-335 JO N° 68
+     README mis à jour le 2026-08-10 (9) — arrete-1999 stub supprimé, nouveau fichier verbatim indexé
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -30,7 +31,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
 | ⚠️ NON VÉRIFIÉ | 25 | voir index ci-dessous |
-| 🔴 SOURCE NON-JORADP / STUB | 2 | `aim-gpl2`, `arrete-2025-liaison-froide` |
+| 🔴 SOURCE NON-JORADP / STUB | 1 | `aim-gpl2` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
 
@@ -68,7 +69,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) |
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME |
-| `arrete-interministeriel-1999-temperatures-conservation.md` | Arrêté intermin. 1999 | Températures de conservation des denrées alimentaires | ⚠️ NON VÉRIFIÉ — valeurs de référence uniquement, texte verbatim non extrait |
+| `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
 | `arrete-interministeriel-2016-criteres-microbiologiques.md` | Arrêté intermin. 2016 | Critères microbiologiques | ⚠️ NON VÉRIFIÉ — STUB, texte verbatim non extrait |
 | `arrete-interministeriel-2025-liaison-froide.md` | Arrêté intermin. du 7 mai 2025 | Conditions d'hygiène restauration — chaîne du froid / liaison chaude-froide | 🔴 VALEURS DE RÉFÉRENCE SEULEMENT — texte intégral JO 43/2025 non extrait |
 | `aim-gpl2-regles-techniques-securite.md` | AIM GPL2 | Règles techniques de sécurité | 🔴 SOURCE NON-JORADP (Scribd) — ne pas utiliser pour vérification légale |
@@ -90,3 +91,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `loi-05-12` complétée — 183 articles intégraux présents.
 - **2026-08-10 :** `decret-04-82` — Annexes I–III (tarifs phytosanitaires D04-83) retirées. Fichier `decret-04-83` à créer.
 - **2026-08-10 :** `decret-09-335` — JO N° 68, 25 octobre 2009 inscrit dans le header.
+- **2026-08-10 :** `arrete-interministeriel-1999-temperatures-conservation.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-1999-11-21-conservation-aliments.md` (texte intégral verbatim, Art. 1–10, JO N° 87/1999).
