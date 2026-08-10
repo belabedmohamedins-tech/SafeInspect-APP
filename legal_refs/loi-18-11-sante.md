@@ -1,1 +1,1 @@
-__PLACEHOLDER_loi-18-11-sante.md__
+REPLACE_loi-18-11-sante
