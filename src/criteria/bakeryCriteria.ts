@@ -9,6 +9,9 @@
 //   Previous: "المؤرخ في 27 مارس 2017" — INCORRECT.
 //   Correct: "المؤرخ في 11 أبريل 2017" (14 Rajab 1438) — confirmed from primary document
 //   (Décret exécutif 17-140, actual JO date). Article number (Art. 5) was already correct.
+// W58 fix 2026-08-11: BAK-10-12 — Décret 76-04 + 2009 ministerial order (no JORADP trace)
+//   replaced with Loi 19-02 Art.5 + Art.13. Consistent with BGN-08-01/02 (W18, 2026-08-08).
+//   Loi 19-02 is the current framework law for fire/panic prevention, superseding 76-04.
 
 import { InspectionItem } from '../types';
 
@@ -111,7 +114,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     id: 'BAK-10-11',
     axis: 'HACCP وإدارة الجودة',
     category: 'تنظيمية',
-    criteria: 'المنتجات المعبأة تحمل بطاقات إعلامية مطابقة للمواصفات (المكونات، تاريخ الإنتاج والصلاحية، شروط الحفظ).',
+    criteria: 'المنتجات المعبّأة تحمل بطاقات إعلامية مطابقة للمواصفات (المكونات، تاريخ الإنتاج والصلاحية، شروط الحفظ).',
     legalReference: 'المرسوم التنفيذي 17-140 + القانون 09-03 (المادة 18: إعلام المستهلك).',
     severity: 'medium',
     controlType: 'doc',
@@ -121,8 +124,11 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     id: 'BAK-10-12',
     axis: 'السلامة من الحريق',
     category: 'هيكلية',
-    criteria: 'توفر وسائل الإطفاء المناسبة (طفايات حريق صالحة ومعلَّمة، مخارج طوارئ واضحة) في جميع مناطق الإنتاج والتخزين.',
-    legalReference: 'المرسوم التنفيذي 76-04 المتعلق بالوقاية من أخطار الحريق والذعر في المؤسسات والمنشآت المفتوحة للجمهور. القرار الوزاري المشترك المؤرخ في 4 مايو 2009 المتعلق بالحماية من الحريق.',
+    criteria: 'توفر وسائل الإطفاء المناسبة (طفايات حريق صالحة ومعلّمة، مخارج طوارئ واضحة) في جميع مناطق الإنتاج والتخزين.',
+    // W58 (2026-08-11): Décret 76-04 (1976) + 2009 ministerial order (no JORADP trace) replaced
+    // with Loi 19-02 Art.5 + Art.13 — current fire/panic prevention framework law.
+    // Consistent with BGN-08-01/02 citations (W18, 2026-08-08).
+    legalReference: 'القانون 19-02 المادة 5 (إلزام المستغلين باتخاذ تدابير الوقاية من الحريق والذعر) + المادة 13 (وسائل الإطفاء ومخارج الطوارئ الإلزامية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
