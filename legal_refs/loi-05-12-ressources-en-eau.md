@@ -1,28 +1,87 @@
-# Loi n° 05-12 du 28 Joumada El Oula 1426 correspondant au 4 août 2005 relative à l'eau
+# Loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005 relative à l'eau
 
----
-
-**Titre officiel :** Loi n° 05-12 du 28 Joumada El Oula 1426 correspondant au 4 août 2005 relative à l'eau  
-**Date de signature :** 4 août 2005  
-**Journal Officiel :** N° 60 du 4 septembre 2005 (30 Rajab 1426)  
-**Source PDF :** `loi-05-12.pdf` (fichier espace SafeInspect)  
+**Date de signature :** 4 août 2005 (28 Joumada Ethania 1426)  
+**Journal Officiel :** N° 60, 30 Rajab 1426 (4 septembre 2005) — pages 1 à 18  
+**Source PDF :** Fourni par l'utilisateur (`loi 05-12.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ — à vérifier contre le texte original JORADP avant tout usage légal ou décisionnel.  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-> ⚠️ **Avertissement :** Vérifier contre le texte original JORADP avant de se fonder sur ce fichier pour toute décision légale ou d'inspection.
-
-> **Note OCR — Art. 1 à 3 :** La page 1 du PDF source n'a pas été retournée par l'outil de lecture. Les Art. 1, 2 et 3 (dispositions générales, objet, principes directeurs partiels) sont partiellement absents ou fragmentés ci-dessous.  
-> [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, page 1 — Art. 1 à 3 incomplets]
+**Note sur la source :** La loi est complète, avec ses 183 articles. Aucune annexe n'est attachée à ce texte.
 
 ---
 
-## TITRE PREMIER — DISPOSITIONS GÉNÉRALES
+## PRÉAMBULE
 
-**Art. 1.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, page 1]
+Le Président de la République,
 
-**Art. 2.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, page 1]
+Vu la Constitution, notamment ses articles 12, 17, 18, 98, 119, 120, 122, 126 et 127 ;
 
-**Art. 3.** — La gestion durable des ressources en eau est fondée sur les principes suivants *(suite — début de l'article non capturé, page 1)* :
+Vu l'ordonnance n° 66-154 du 8 juin 1966, modifiée et complétée, portant code de procédure civile ;
+
+Vu l'ordonnance n° 66-155 du 8 juin 1966, modifiée et complétée, portant code de procédure pénale ;
+
+Vu l'ordonnance n° 66-156 du 8 juin 1966, modifiée et complétée, portant code pénal ;
+
+Vu l'ordonnance n° 75-58 du 26 septembre 1975, modifiée et complétée, portant code civil ;
+
+Vu l'ordonnance n° 75-59 du 26 septembre 1975, modifiée et complétée, portant code de commerce ;
+
+Vu l'ordonnance n° 76-80 du 23 octobre 1976, modifiée et complétée, portant code maritime ;
+
+Vu la loi n° 83-17 du 16 juillet 1983, modifiée et complétée, portant code des eaux ;
+
+Vu la loi n° 85-05 du 16 février 1985, modifiée et complétée, relative à la protection et à la promotion de la santé ;
+
+Vu la loi n° 90-08 du 7 avril 1990, complétée, relative à la commune ;
+
+Vu la loi n° 90-09 du 7 avril 1990, complétée, relative à la wilaya ;
+
+Vu la loi n° 90-30 du 1er décembre 1990 portant loi domaniale ;
+
+Vu la loi n° 91-11 du 27 avril 1991, complétée, fixant les règles relatives à l'expropriation pour cause d'utilité publique ;
+
+Vu l'ordonnance n° 01-03 du Aouel Joumada Ethania 1422 correspondant au 20 août 2001 relative au développement de l'investissement ;
+
+Vu la loi n° 01-10 du 11 Rabie Ethani 1422 correspondant au 3 juillet 2001 portant loi minière ;
+
+Vu la loi n° 01-11 du 11 Rabie Ethani 1422 correspondant au 3 juillet 2001 relative à la pêche et à l'aquaculture ;
+
+Vu la loi n° 01-20 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à l'aménagement et au développement durable du territoire ;
+
+Vu la loi n° 03-01 du 16 Dhou El Hidja 1423 correspondant au 17 février 2003 relative au développement durable du tourisme ;
+
+Vu la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable ;
+
+Vu la loi n° 04-20 du 13 Dhou El Kaâda 1425 correspondant au 25 décembre 2004 relative à la prévention des risques majeurs et à la gestion des catastrophes dans le cadre du développement durable ;
+
+Après avis du Conseil d'Etat :
+
+Après adoption par le Parlement.
+
+Promulque la loi dont la teneur suit :
+
+**Article 1er.** — La présente loi a pour objet de fixer les principes et les règles applicables pour l'utilisation, la gestion et le développement durable des ressources en eau en tant que bien de la collectivité nationale.
+
+---
+
+## TITRE I — DES DISPOSITIONS PRELIMINAIRES
+
+**Art. 2.** — Les objectifs assignés à l'utilisation, à la gestion et au développement durable des ressources en eau visent à assurer :
+
+— l'approvisionnement en eau à travers la mobilisation et la distribution d'eau en quantité suffisante et en qualité requise, pour satisfaire en priorité les besoins de la population et de l'abreuvement du cheptel et pour couvrir la demande de l'agriculture, de l'industrie et des autres activités économiques et sociales utilisatrices d'eau ;
+
+— la préservation de la salubrité publique et la protection des ressources en eau et des milieux aquatiques contre les risques de pollution à travers la collecte et l'épuration des eaux usées domestiques et industrielles ainsi que des eaux pluviales et de ruissellement dans les zones urbaines ;
+
+— la recherche et l'évaluation des ressources en eau superficielles et souterraines ainsi que la surveillance de leur état quantitatif et qualitatif ;
+
+— la valorisation des eaux non conventionnelles de toutes natures pour accroître les potentialités hydriques ;
+
+— la maîtrise des crues par des actions de régulation des écoulements d'eaux superficielles pour atténuer les effets nuisibles des inondations et protéger les personnes et les biens dans les zones urbaines et autres zones inondables.
+
+**Art. 3.** — Les principes sur lesquels se fondent l'utilisation, la gestion et le développement durable des ressources en eau sont :
+
+— le droit d'accès à l'eau et à l'assainissement pour satisfaire les besoins fondamentaux de la population dans le respect de l'équité et des règles fixées par la présente loi, en matière de services publics de l'eau et de l'assainissement ;
 
 — le droit d'utilisation des ressources en eau, dévolu à toute personne physique ou morale de droit public ou privé, dans les limites de l'intérêt général et dans le respect des obligations fixées par la présente loi et les textes réglementaires pris pour son application ;
 
@@ -38,11 +97,9 @@
 
 ---
 
-## TITRE II — DU RÉGIME JURIDIQUE DES RESSOURCES EN EAU ET DES INFRASTRUCTURES HYDRAULIQUES
+## TITRE II — DU REGIME JURIDIQUE DES RESSOURCES EN EAU ET DES INFRASTRUCTURES HYDRAULIQUES
 
 ### Chapitre 1 — Du domaine public hydraulique naturel
-
-#### Section 1 — De la consistance du domaine public hydraulique naturel
 
 **Art. 4.** — En vertu de la présente loi, font partie du domaine public hydraulique naturel :
 
@@ -53,17 +110,22 @@
 — les alluvions et atterrissements qui se forment naturellement dans les lits des oueds ;
 
 — les ressources en eau non conventionnelles constituées par :
+
 * les eaux de mer dessalées et les eaux saumâtres déminéralisées dans un but d'utilité publique ;
+
 * les eaux usées épurées et utilisées dans un but d'utilité publique ;
+
 * les eaux de toute origine injectées dans les systèmes aquifères par la technique de recharge artificielle.
 
 **Art. 5.** — Toute personne physique ou morale ayant découvert, intentionnellement ou fortuitement, des eaux souterraines, ou ayant été présente lors de pareilles découvertes, est tenue d'en faire déclaration à l'administration des ressources en eau territorialement compétente.
 
 **Art. 6.** — La mobilisation, la production et l'utilisation de toutes les ressources en eau, y compris les eaux non conventionnelles sont soumises aux conditions particulières fixées par la présente loi, les textes réglementaires pris pour son application et les cahiers des charges y afférents.
 
-#### Section 2 — De la délimitation du domaine public hydraulique naturel
+### Section 2 — De la délimitation du domaine public hydraulique naturel
 
-**Art. 7.** — La délimitation des oueds, lacs, étangs, sebkhas et chotts est déterminée par le plus haut niveau atteint par les eaux et notamment, pour les oueds, par celui des crues coulant à plein bord avant de déborder. Les modalités de délimitation du domaine public hydraulique naturel sont fixées par voie réglementaire.
+**Art. 7.** — La délimitation des oueds, lacs, étangs, sebkhas et chotts est déterminée par le plus haut niveau atteint par les eaux et notamment, pour les oueds, par celui des crues coulant à plein bord avant de déborder.
+
+Les modalités de délimitation du domaine public hydraulique naturel sont fixées par voie réglementaire.
 
 **Art. 8.** — Si, pour des causes naturelles, un oued abandonne son lit et s'ouvre un nouveau lit, celui-ci, délimité tel que prévu par les dispositions de l'article 7 ci-dessus, est incorporé au domaine public hydraulique naturel.
 
@@ -73,15 +135,17 @@ Si l'ancien lit n'est pas entièrement abandonné par les eaux ou si les disposi
 
 **Art. 9.** — Tout acte d'administration du domaine public hydraulique naturel donne lieu, lorsqu'il lèse les tiers, à une indemnisation déterminée comme en matière d'expropriation pour cause d'utilité publique.
 
-#### Section 3 — Des servitudes relatives au domaine public hydraulique naturel
+### Section 3 — Des servitudes relatives au domaine public hydraulique naturel
 
 **Art. 10.** — Il est institué, le long des rives des oueds, des lacs, des étangs, des sebkhas et des chotts, une zone dite zone de franc-bord, sur une largeur de trois (3) mètres à cinq (5) mètres selon le cas, à l'intérieur du domaine public hydraulique naturel, destinée à permettre le libre passage du personnel et du matériel de l'administration chargée des ressources en eau ou des entrepreneurs chargés des travaux d'entretien, de curage et de protection des berges.
+
+Les plantations de cultures annuelles sont autorisées sur le domaine public hydraulique naturel selon des modalités fixées par voie réglementaire.
 
 **Art. 11.** — Le long des rives des oueds, des lacs, des étangs, des sebkhas et des chotts pour lesquelles la zone de franc-bord ne peut pas être définie et utilisée pour des raisons de topographie et/ou d'écoulement des eaux, il est institué une servitude de franc-bord, sur une largeur de trois (3) à cinq (5) mètres selon le cas, à l'intérieur des propriétés riveraines, et calculée à partir de leurs limites.
 
 **Art. 12.** — A l'intérieur des zones de franc-bord ou des zones soumises à une servitude de franc-bord :
 
-— sont interdits toute nouvelle construction, toute plantation, toute élévation de clôture fixe et tout acte de nature à nuire à l'entretien des oueds, lacs, étangs, sebkhas et chotts ;
+— sont interdits toute nouvelle construction, toute plantation, toute élévation de clôture fixe et tout acte de nature à nuire à l'entretien des oueds, lacs, étangs, sebkhas et chotts :
 
 — l'administration chargée des ressources en eau peut requérir l'abattage des arbres ainsi que la démolition de toute construction existante, sous réserve de réparation des dommages causés.
 
@@ -89,17 +153,17 @@ Si l'ancien lit n'est pas entièrement abandonné par les eaux ou si les disposi
 
 **Art. 14.** — L'extraction de matériaux alluvionnaires par tous moyens, et en particulier par l'installation de sablières dans les lits des oueds, est interdite.
 
-A titre transitoire, et pour une durée n'excèdant pas deux (2) années à compter de la publication de la présente loi au Journal officiel de la République algérienne démocratique et populaire, l'extraction peut être autorisée dans le cadre du régime de la concession assortie d'un cahier des charges et sous réserve d'une étude d'impact établie conformément à la législation et à la réglementation en vigueur.
+A titre transitoire, et pour une durée n'excédant pas deux (2) années à compter de la publication de la présente loi au Journal officiel de la République algérienne démocratique et populaire, l'extraction peut être autorisée dans le cadre du régime de la concession assortie d'un cahier des charges et sous réserve d'une étude d'impact établie conformément à la législation et à la réglementation en vigueur.
 
 Les modalités d'application des dispositions du présent article sont précisées, le cas échéant, par voie réglementaire.
 
 **Art. 15.** — Il est interdit d'entreprendre, dans le lit des oueds, tout acte de nature à entraver le libre écoulement des eaux superficielles, à porter préjudice à la stabilité des berges et des ouvrages publics et à nuire à la conservation des nappes alluviales.
 
-Les plantations de cultures annuelles sont autorisées sur le domaine public hydraulique naturel selon des modalités fixées par voie réglementaire.
+---
 
 ### Chapitre II — Du domaine public hydraulique artificiel
 
-#### Section I — De la consistance du domaine public hydraulique artificiel
+#### Section 1 — De la consistance du domaine public hydraulique artificiel
 
 **Art. 16.** — Relèvent du domaine public hydraulique artificiel, les ouvrages et installations réalisés par l'Etat et les collectivités territoriales ou pour leur compte, et notamment :
 
@@ -117,7 +181,9 @@ Les plantations de cultures annuelles sont autorisées sur le domaine public hyd
 
 #### Section 2 — De l'inventaire du domaine public hydraulique artificiel
 
-**Art. 19.** — Les ouvrages et installations relevant du domaine public hydraulique artificiel font l'objet d'un inventaire établi par l'administration chargée des ressources en eau. Les modalités d'élaboration de l'inventaire des infrastructures hydrauliques sont fixées par voie réglementaire.
+**Art. 19.** — Les ouvrages et installations relevant du domaine public hydraulique artificiel font l'objet d'un inventaire établi par l'administration chargée des ressources en eau.
+
+Les modalités d'élaboration de l'inventaire des infrastructures hydrauliques sont fixées par voie réglementaire.
 
 **Art. 20.** — Conformément aux dispositions de la loi n° 90-30 du 14 Joumada El Oula 1411 correspondant au 1er décembre 1990 portant loi domaniale, les ouvrages et les installations hydrauliques, tels que définis à l'article 16 ci-dessus, font l'objet d'une procédure de classement leur conférant le caractère de domanialité publique.
 
@@ -125,7 +191,11 @@ Les plantations de cultures annuelles sont autorisées sur le domaine public hyd
 
 **Art. 21.** — En vertu de la présente loi, l'Etat, les collectivités territoriales, les établissements publics ainsi que les concessionnaires et les délégataires de services publics qui réalisent des ouvrages et installations relevant du domaine public hydraulique artificiel bénéficient de servitudes d'emprise, d'occupation temporaire ou d'implantation sur les propriétés riveraines.
 
-**Art. 22.** — Les zones d'emprise nécessaires à l'installation des ouvrages et installations d'utilité publique peuvent faire l'objet, selon le cas, soit d'une occupation temporaire soit d'une expropriation pour cause d'utilité publique. Dans le cas de l'occupation temporaire, les propriétaires concernés ont droit à réparation intégrale du dommage causé.
+**Art. 22.** — Les zones d'emprise nécessaires à l'installation des ouvrages et installations d'utilité publique peuvent faire l'objet, selon le cas, soit d'une occupation temporaire soit d'une expropriation pour cause d'utilité publique.
+
+Dans le cas de l'occupation temporaire, les propriétaires concernés ont droit à réparation intégrale du dommage causé.
+
+Lorsque l'établissement de ces servitudes cause des préjudices aux propriétaires concernés, ces derniers peuvent ouvrir droit à une indemnité déterminée sur la base des préjudices identifiés.
 
 **Art. 23.** — Les riverains des conduites et canaux de transfert et d'adduction d'eau ainsi que les riverains des collecteurs d'assainissement agricole sont tenus de permettre le libre passage sur leurs propriétés du personnel et du matériel de l'administration ou des entrepreneurs chargés de leur entretien ainsi que le dépôt des produits de curage sur une largeur de cinq (5) mètres de part et d'autre du domaine public hydraulique artificiel.
 
@@ -135,13 +205,13 @@ Tout propriétaire d'un fonds grevé d'une servitude de dépôt peut, à toute �
 
 **Art. 24.** — Le propriétaire ou l'exploitant d'un fonds est soumis aux servitudes concernant l'installation par l'administration de moyens de signalisation, de mesure et de relevé des eaux.
 
-**Art. 25.** — Le chargé des travaux notifie par écrit l'exécution des travaux sur les terrains grevés de servitudes aux personnes exploitant lesdits terrains, à charge pour elles de prévenir les propriétaires. Un état des lieux est dressé pour évaluer les dommages pouvant résulter de l'exécution des travaux.
+**Art. 25.** — Le chargé des travaux notifie par écrit l'exécution des travaux sur les terrains grevés de servitudes aux personnes exploitant lesdits terrains, à charge pour elles de prévenir les propriétaires.
+
+Un état des lieux est dressé pour évaluer les dommages pouvant résulter de l'exécution des travaux.
 
 **Art. 26.** — Tout propriétaire ou usager d'un fonds frappé des servitudes, objet de la présente section, est tenu de s'abstenir de tout acte de nature à nuire à l'objet pour lequel la servitude a été établie.
 
 **Art. 27.** — L'Etat, les collectivités territoriales, les établissements publics, les concessionnaires et les délégataires de services publics qui réalisent des aménagements d'utilité publique peuvent bénéficier de servitudes d'implantation de conduites enterrées ou à ciel ouvert, dans les terrains privés non bâtis.
-
-Lorsque l'établissement de ces servitudes cause des préjudices aux propriétaires concernés, ces derniers peuvent ouvrir droit à une indemnité déterminée sur la base des préjudices identifiés.
 
 **Art. 28.** — Les servitudes sont établies et délimitées dans les conditions les plus rationnelles et les moins dommageables pour l'exploitation des fonds traversés.
 
@@ -149,14 +219,18 @@ Lorsque l'établissement de ces servitudes cause des préjudices aux propriétai
 
 ---
 
-## TITRE III — DE LA PROTECTION ET DE LA PRÉSERVATION DES RESSOURCES EN EAU
+## TITRE III — DE LA PROTECTION ET DE LA PRESERVATION DES RESSOURCES EN EAU
 
 **Art. 30.** — La protection et la préservation des ressources en eau sont assurées par :
 
-— des périmètres de protection quantitative ;
-— des plans de lutte contre l'érosion hydrique ;
-— des périmètres de protection qualitative ;
-— des mesures de prévention et de protection contre les pollutions ;
+— des périmètres de protection quantitative :
+
+— des plans de lutte contre l'érosion hydrique :
+
+— des périmètres de protection qualitative :
+
+— des mesures de prévention et de protection contre les pollutions :
+
 — des mesures de prévention des risques d'inondations.
 
 ### Chapitre 1 — Des périmètres de protection quantitative
@@ -165,7 +239,7 @@ Lorsque l'établissement de ces servitudes cause des préjudices aux propriétai
 
 **Art. 32.** — A l'intérieur des périmètres de protection quantitative :
 
-— sont interdites toutes réalisations de nouveaux puits ou forages ou toutes modifications des installations existantes, visant à augmenter les débits prélevés ;
+— sont interdites toutes réalisations de nouveaux puits ou forages ou toutes modifications des installations existantes, visant à augmenter les débits prélevés :
 
 — sont soumis à autorisation de l'administration chargée des ressources en eau tous travaux de remplacement ou de réaménagement des installations hydrauliques existantes.
 
@@ -184,7 +258,9 @@ Les conditions et les modalités de délimitation des périmètres de lutte cont
 **Art. 35.** — Dans les zones caractérisées par une forte érosion hydrique provoquant un envasement accéléré des retenues d'eau superficielle, les plans d'aménagements anti-érosifs peuvent instaurer toutes mesures visant à :
 
 — promouvoir l'utilisation de techniques culturales ou d'élevage permettant une meilleure protection des sols ;
+
 — l'interdiction de toute intervention susceptible d'endommager les ouvrages de conservation des eaux et des sols ;
+
 — la suppression de tous obstacles naturels ou artificiels établis dans les exploitations agricoles ou forestières et susceptibles de gêner la réalisation des travaux d'aménagement tels que le reboisement, le développement du couvert végétal, la protection des berges d'oueds, les opérations de correction torrentielle et toutes autres actions anti-érosives.
 
 **Art. 36.** — Les interventions et travaux effectués dans le cadre des plans d'aménagements anti-érosifs, élaborés et adoptés conformément à la législation et à la réglementation en vigueur, ainsi que les mesures temporaires ou définitives y afférentes peuvent ouvrir droit à une indemnité au profit des propriétaires concernés en fonction des préjudices causés.
@@ -204,11 +280,17 @@ Les conditions et les modalités de délimitation des périmètres de lutte cont
 **Art. 39.** — A l'intérieur des périmètres de protection qualitative, l'ensemble des activités, y compris les activités agricoles ou industrielles, peuvent être réglementées ou interdites. Peuvent faire l'objet de mesures particulières de contrôle, de restriction ou d'interdiction, les activités concernant notamment :
 
 — l'installation de canalisations d'eaux usées ;
+
 — l'installation de canalisations, réservoirs et dépôts d'hydrocarbures, de stations-service de distribution de carburant ;
+
 — l'installation de centrales d'asphalte ;
+
 — l'établissement de toutes constructions à usage industriel ;
+
 — le dépôt de déchets de toutes natures ;
+
 — l'épandage d'effluents et, d'une manière générale, tous produits et matières susceptibles d'altérer la qualité de l'eau, y compris, le cas échéant, les produits destinés à l'agriculture ;
+
 — l'installation et l'exploitation de carrières.
 
 **Art. 40.** — Les conditions et les modalités de création et de délimitation des périmètres de protection qualitative, la nomenclature des périmètres de protection requis pour chaque type d'ouvrage ou d'installation de mobilisation, de traitement et de stockage d'eau, ainsi que les mesures de réglementation ou d'interdiction d'activités dans chaque périmètre de protection qualitative sont fixées par voie réglementaire.
@@ -226,22 +308,31 @@ Les conditions et les modalités de délimitation des périmètres de lutte cont
 **Art. 45.** — L'autorisation prévue à l'article 44 ci-dessus est refusée notamment lorsque les effluents ou matières sont de nature à nuire :
 
 — à la capacité de régénération naturelle des eaux ;
+
 — aux exigences de l'utilisation des eaux ;
+
 — à la santé et la salubrité publiques ;
+
 — à la protection des écosystèmes aquatiques ;
+
 — à l'écoulement normal des eaux ;
+
 — aux activités de loisirs nautiques.
 
 **Art. 46.** — Sont interdits :
 
 — tout déversement ou rejet d'eaux usées de toute nature dans les puits, forages, galeries de captage, fontaines et abreuvoirs publics, oueds à sec et canaux ;
+
 — tout dépôt ou enfouissement de matières insalubres susceptibles de polluer les eaux souterraines par infiltration naturelle ou par recharge artificielle ;
+
 — l'introduction de toutes matières insalubres dans les ouvrages et installations hydrauliques destinés à l'alimentation en eau ;
+
 — le dépôt et/ou l'enfouissement de cadavres d'animaux dans les oueds, lacs, étangs et à proximité des puits, forages, galeries de captage, fontaines et abreuvoirs publics.
 
 **Art. 47.** — Tout établissement classé, au sens des dispositions de l'article 18 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable, et notamment toute unité industrielle dont les rejets sont reconnus polluants doit impérativement :
 
 — prévoir des installations d'épuration appropriées ;
+
 — mettre en conformité leurs installations ou les procédés de traitement de leurs eaux résiduaires par rapport aux normes de rejet telles que fixées par voie réglementaire.
 
 **Art. 48.** — Lorsque la pollution des eaux met en péril la salubrité publique, l'administration chargée des ressources en eau doit prendre toutes mesures exécutoires en vue de faire cesser les déversements d'effluents ou les dépôts de matières nuisibles. Elle doit également décider de l'arrêt du fonctionnement de l'établissement qui en est responsable, jusqu'à la disparition de la pollution.
@@ -251,13 +342,16 @@ Les conditions et les modalités de délimitation des périmètres de lutte cont
 Ce plan comporte des mesures et des actions ayant pour objectif :
 
 — la suppression des sources de pollution chronique, notamment à travers la réalisation de systèmes d'épuration des eaux usées urbaines et industrielles ;
+
 — la prévention des risques de pollution accidentelle et la mise en place de dispositifs de lutte appropriés ;
+
 — la mise en œuvre de toutes opérations techniques permettant de restaurer la qualité des eaux ;
+
 — l'installation de dispositifs d'observation et de suivi des paramètres significatifs de la qualité des eaux et d'un système d'alerte anti-pollution.
 
 Les conditions et modalités d'élaboration, d'approbation et de mise en œuvre des plans de restauration et de protection de la qualité des eaux sont fixées par voie réglementaire.
 
-**Art. 50.** — Les objectifs de qualité auxquels doivent répondre les eaux souterraines ainsi que les écoulements et les retenues d'eaux superficielles destinées à l'alimentation en eau des populations sont fixés par voie réglementaire.
+**Art. 50.** — Les objectifs de qualité auxquels doivent répondre les eau souterraine ainsi que les écoulements et les retenues d'eaux superficielles destinées à l'alimentation en eau des populations sont fixés par voie réglementaire.
 
 **Art. 51.** — L'inventaire périodique du degré de pollution des eaux souterraines et superficielles ainsi que les contrôles des caractéristiques des eaux de déversement ou de rejet sont effectués conformément aux dispositions des articles 49 et 50 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable, et aux textes réglementaires subséquents.
 
@@ -273,14 +367,16 @@ Les conditions et modalités d'élaboration, d'approbation et de mise en œuvre 
 
 ---
 
-## TITRE IV — DES INSTRUMENTS INSTITUTIONNELS DE LA GESTION INTÉGRÉE DES RESSOURCES EN EAU
+## TITRE IV — DES INSTRUMENTS INSTITUTIONNELS DE LA GESTION INTEGREE DES RESSOURCES EN EAU
 
 ### Chapitre 1 — Des plans directeurs d'aménagement des ressources en eau
 
 **Art. 56.** — Pour chaque unité hydrographique naturelle, il est institué un plan directeur d'aménagement des ressources en eau qui définit les choix stratégiques de mobilisation, d'affectation et d'utilisation des ressources en eau, y compris les eaux non conventionnelles, en vue d'assurer :
 
 — la satisfaction des besoins en eau correspondant aux usages domestique, industriel et agricole et autres usages économiques et sociaux ;
+
 — la protection quantitative et qualitative des eaux souterraines et superficielles ;
+
 — la prévention et la gestion des risques liés aux phénomènes naturels exceptionnels, tels que la sécheresse et les inondations.
 
 **Art. 57.** — Le plan directeur d'aménagement des ressources en eau détermine, sur la base de l'offre et de la demande en eau, en quantité et en qualité, les objectifs de développement des aménagements de mobilisation et de transfert d'eaux entre unités hydrographiques naturelles, en tenant compte des paramètres économiques.
@@ -303,7 +399,9 @@ Il définit également les mesures d'accompagnement d'ordre économique, financi
 
 **Art. 62.** — Il est créé un organe national consultatif dénommé "Conseil national consultatif des ressources en eau" chargé d'examiner les options stratégiques et les instruments de mise en œuvre du plan national de l'eau ainsi que sur toutes questions relatives à l'eau pour lesquelles son avis est demandé.
 
-**Art. 63.** — Le Conseil national consultatif des ressources en eau est composé de représentants des administrations, des assemblées locales, des établissements publics concernés, et d'associations professionnelles et/ou d'usagers. Les missions, la composition et les règles de fonctionnement du Conseil national consultatif des ressources en eau sont fixées par voie réglementaire.
+**Art. 63.** — Le Conseil national consultatif des ressources en eau est composé de représentants des administrations, des assemblées locales, des établissements publics concernés, et d'associations professionnelles et/ou d'usagers.
+
+Les missions, la composition et les règles de fonctionnement du Conseil national consultatif des ressources en eau sont fixées par voie réglementaire.
 
 **Art. 64.** — Au niveau de chaque unité hydrographique naturelle, la gestion intégrée des ressources en eau est exercée par une agence de bassin hydrographique, dont les missions, les règles d'organisation et de fonctionnement et le cadre de concertation sont fixés par voie réglementaire.
 
@@ -314,26 +412,32 @@ L'autorité de régulation est chargée, dans le cadre de la législation en vig
 Dans le cadre de sa mission, l'autorité de régulation :
 
 — contribue à la mise en œuvre du dispositif de gestion des services publics de l'eau et à l'établissement des normes et règlements y afférents ;
+
 — veille au respect des principes régissant les systèmes tarifaires et contrôle les coûts et les tarifs des services publics de l'eau ;
+
 — effectue toutes enquêtes, expertises, études et publications portant sur l'évaluation de la qualité du service aux usagers.
 
 Les attributions ainsi que les règles d'organisation et de fonctionnement de l'autorité de régulation sont fixées par voie réglementaire.
 
 ### Chapitre 4 — De l'information sur l'eau
 
-**Art. 66.** — Il est établi par l'administration chargée des ressources en eau un système de gestion intégrée de l'information sur l'eau, harmonisé avec les systèmes d'information et les bases de données constituées notamment au niveau des organismes publics compétents. Les modalités d'organisation et de fonctionnement du système de gestion intégrée de l'information sur l'eau sont fixées par voie réglementaire.
+**Art. 66.** — Il est établi par l'administration chargée des ressources en eau un système de gestion intégrée de l'information sur l'eau, harmonisé avec les systèmes d'information et les bases de données constituées notamment au niveau des organismes publics compétents.
+
+Les modalités d'organisation et de fonctionnement du système de gestion intégrée de l'information sur l'eau sont fixées par voie réglementaire.
 
 **Art. 67.** — Les personnes physiques ou morales, de droit public ou privé, titulaires d'une autorisation ou d'une concession d'utilisation du domaine public hydraulique naturel, les concessionnaires ou délégataires de services publics de l'eau et de l'assainissement et les concessionnaires d'exploitation des périmètres irrigués sont tenus de fournir périodiquement, à l'autorité chargée du système de gestion intégrée d'information, tous renseignements et données dont ils disposent.
 
 **Art. 68.** — L'administration chargée des ressources en eau fournit, à la demande de quiconque veut entreprendre la réalisation dûment autorisée d'un ouvrage de prélèvement d'eau dans le domaine public hydraulique naturel pour un usage public ou privatif, tous renseignements d'ordre hydrologique et hydrogéologique disponibles, ainsi que toutes informations portant sur les prescriptions de protection qualitative et/ou quantitative.
 
-**Art. 69.** — Les ressources en eau souterraine et superficielle sont soumises à des contrôles de leurs caractéristiques physiques, chimiques, biologiques et bactériologiques. Les conditions dans lesquelles sont effectués les prélèvements et les analyses d'échantillons sont fixées par voie réglementaire.
+**Art. 69.** — Les ressources en eau souterraine et superficielle sont soumises à des contrôles de leurs caractéristiques physiques, chimiques, biologiques et bactériologiques.
+
+Les conditions dans lesquelles sont effectués les prélèvements et les analyses d'échantillons sont fixées par voie réglementaire.
 
 **Art. 70.** — Les inventaires et les bases de données relatifs aux ressources en eau et aux ouvrages et installations hydrauliques de toute nature, sont établis et tenus à jour par l'administration chargée des ressources en eau.
 
 ---
 
-## TITRE V — DU RÉGIME JURIDIQUE DE L'UTILISATION DES RESSOURCES EN EAU
+## TITRE V — DU REGIME JURIDIQUE DE L'UTILISATION DES RESSOURCES EN EAU
 
 ### Chapitre 1 — De l'utilisation des ressources en eau
 
@@ -341,7 +445,9 @@ Les attributions ainsi que les règles d'organisation et de fonctionnement de l'
 
 **Art. 72.** — L'autorisation ou la concession d'utilisation des ressources en eau confère à son titulaire la disposition, pour une durée déterminée, d'un débit ou d'un volume d'eau déterminé sur la base des ressources globales disponibles en année moyenne et des besoins correspondant à l'usage considéré.
 
-**Art. 73.** — L'autorisation ou la concession d'utilisation des ressources en eau donne lieu au paiement de redevances fixées par la loi de finances. Les modalités de recouvrement de ces redevances sont fixées par voie réglementaire et sont précisées dans les actes d'autorisation ou de concession.
+**Art. 73.** — L'autorisation ou la concession d'utilisation des ressources en eau donne lieu au paiement de redevances fixées par la loi de finances.
+
+Les modalités de recouvrement de ces redevances sont fixées par voie réglementaire et sont précisées dans les actes d'autorisation ou de concession.
 
 #### Section 1 — Du régime juridique de l'autorisation d'utilisation des ressources en eau
 
@@ -350,8 +456,11 @@ Les attributions ainsi que les règles d'organisation et de fonctionnement de l'
 **Art. 75.** — Sont soumises au régime de l'autorisation d'utilisation des ressources en eau, les opérations portant sur :
 
 — la réalisation de puits ou de forages, en vue d'un prélèvement d'eau souterraine ;
+
 — la réalisation d'ouvrages de captage de source non destinés à une exploitation commerciale ;
+
 — la construction d'ouvrages et installations de dérivation, de pompage ou de retenue, à l'exception des barrages, en vue d'un prélèvement d'eau superficielle ;
+
 — l'établissement de tous autres ouvrages ou installations de prélèvement d'eau souterraine ou superficielle.
 
 #### Section 2 — Du régime juridique de la concession d'utilisation des ressources en eau
@@ -361,15 +470,24 @@ Les attributions ainsi que les règles d'organisation et de fonctionnement de l'
 **Art. 77.** — Sont soumises au régime de la concession d'utilisation des ressources en eau, les opérations portant notamment sur :
 
 — la réalisation de forages en vue d'un prélèvement d'eau dans les systèmes aquifères fossiles ou faiblement renouvelables, pour des usages agricoles ou industriels, notamment dans les zones sahariennes ;
+
 — l'établissement d'installations de prélèvement d'eau souterraine ou superficielle, y compris par raccordement sur des systèmes d'adduction d'eau, en vue d'assurer un approvisionnement autonome de zones ou unités industrielles ;
+
 — l'établissement d'installations de dessalement d'eau de mer ou de déminéralisation d'eaux saumâtres pour cause d'utilité publique ou pour la satisfaction de besoins propres ;
+
 — la réalisation d'infrastructures destinées à l'utilisation d'eaux usées épurées pour des usages agricoles individuels ou collectifs ou pour des usages industriels ;
+
 — l'aménagement de captages d'eaux minérales naturelles, d'eaux de source ou d'eaux dites "eaux de table" d'origine souterraine, ayant fait l'objet d'une procédure de reconnaissance de qualité en vue d'une exploitation commerciale à des fins de consommation ;
+
 — l'aménagement de captages ou de forages d'eaux thermales ayant fait l'objet d'une procédure de reconnaissance de leurs propriétés thérapeutiques en vue d'une exploitation à des fins de soins curatifs ;
+
 — l'établissement d'installations et la mise en œuvre d'opérations particulières au niveau des retenues d'eau superficielle et des lacs, en vue d'y développer l'aquaculture et la pêche continentale ou des activités de sports et loisirs nautiques ;
+
 — l'établissement d'installations au pied des barrages, plans d'eau et ouvrages de dérivation en vue d'alimenter des usines hydroélectriques.
 
-**Art. 78.** — L'octroi d'une concession d'utilisation des ressources en eau est subordonné à la signature par l'autorité concédante et le concessionnaire d'un cahier des charges particulier. Des cahiers des charges-types sont fixés par voie réglementaire pour chacune des catégories d'utilisation prévues par les dispositions de l'article 77 ci-dessus.
+**Art. 78.** — L'octroi d'une concession d'utilisation des ressources en eau est subordonné à la signature par l'autorité concédante et le concessionnaire d'un cahier des charges particulier.
+
+Des cahiers des charges-types sont fixés par voie réglementaire pour chacune des catégories d'utilisation prévues par les dispositions de l'article 77 ci-dessus.
 
 **Art. 79.** — Les cahiers des charges portant sur la concession d'utilisation des ressources en eau fossiles doivent tenir compte des exigences de conservation des nappes aquifères, de sauvegarde des ouvrages de captage traditionnels ainsi que de protection des écosystèmes locaux.
 
@@ -387,64 +505,146 @@ Dans tous les cas, les cahiers des charges relatifs à cette catégorie de conce
 
 #### Section 3 — Des prescriptions communes aux régimes de l'autorisation et de la concession d'utilisation des ressources en eau
 
-**Art. 85.** — Le refus d'autorisation ou de concession d'utilisation des ressources en eau doit être motivé. Les demandes sont refusées si les besoins à satisfaire ne sont pas justifiés, si leur satisfaction porte préjudice à la protection quantitative et qualitative des ressources en eau, s'ils lèsent l'intérêt général ou s'ils sont contraires aux droits des tiers dûment établis.
+**Art. 85.** — Le refus d'autorisation ou de concession d'utilisation des ressources en eau doit être motivé.
 
-**Art. 86.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10 — texte tronqué dans le fichier source]
+Les demandes sont refusées si les besoins à satisfaire ne sont pas justifiés, si leur satisfaction porte préjudice à la protection quantitative et qualitative des ressources en eau, s'ils lèsent l'intérêt général ou s'ils sont contraires aux droits des tiers dûment établis.
 
-**Art. 87.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 86.** — L'autorisation ou la concession d'utilisation des ressources en eau peut, à tout moment, être modifiée, réduite ou révoquée pour cause d'intérêt général, avec indemnisation si le titulaire de l'autorisation ou de la concession subit un préjudice direct, selon des modalités fixées par l'autorisation ou le cahier des charges.
 
-**Art. 88.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 87.** — L'autorisation ou la concession d'utilisation des ressources en eau est révoquée sans indemnité, et après mise en demeure adressée au titulaire, dans le cas de non-respect des conditions et obligations qui résultent des dispositions de la présente loi, des textes réglementaires pris pour son application ainsi que de l'autorisation ou du cahier des charges.
 
-**Art. 89.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 88.** — L'administration chargée des ressources en eau peut ordonner :
 
-**Art. 90.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— la modification de travaux d'équipement non conformes aux conditions de l'autorisation ou de la concession ;
 
-**Art. 91.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— la démolition des ouvrages effectués sans autorisation ou concession ou, en cas de déchéance du droit à l'autorisation ou à la concession, la remise en l'état des lieux.
 
-**Art. 92.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 89.** — Les titulaires d'une autorisation ou d'une concession d'utilisation des ressources en eau sont tenus :
 
-**Art. 93.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— d'utiliser l'eau de façon rationnelle et économique,
 
-**Art. 94.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— d'observer les dispositions relatives aux conditions de mise en service et d'exploitation des ouvrages hydrauliques,
 
-**Art. 95.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— de respecter les droits des autres utilisateurs de l'eau,
 
-**Art. 96.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— d'installer des dispositifs de mesure ou de comptage des consommations d'eau,
 
-**Art. 97.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+— de se soumettre aux interventions de contrôle effectuées par les agents habilités.
 
-**Art. 98.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 90.** — Sans préjudice des sanctions pénales prévues par les dispositions de la présente loi, l'administration chargée des ressources en eau peut procéder à la suspension provisoire de l'autorisation ou de la concession d'utilisation des ressources en eau en cas de gaspillage de l'eau dûment constaté et quelle qu'en soit la cause.
 
-**Art. 99.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+Le rétablissement de l'autorisation ou de la concession est subordonné à la constatation par l'administration chargée des ressources en eau des dispositions prises par les utilisateurs concernés pour remédier au gaspillage constaté.
 
-**Art. 100.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-10]
+**Art. 91.** — En cas de calamités naturelles et notamment en situation de sécheresse, l'administration chargée des ressources en eau peut prendre des mesures de limitation ou de suspension provisoire des utilisations d'eau ou procéder à des réquisitions en vue de mobiliser les eaux nécessaires pour lutter contre les sinistres et pour assurer, en priorité, l'alimentation en eau des populations et l'abreuvement du cheptel.
 
-**Art. 101.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+**Art. 92.** — Les ouvrages et installations hydrauliques réalisés par les personnes de droit privé doivent répondre aux normes et règles prescrites à l'article 18 de la présente loi.
 
-**Art. 102.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+**Art. 93.** — Des aides et soutiens de toute nature peuvent êtres accordés aux personnes physiques ou morales, de droit public ou privé, qui initient et mettent en œuvre des opérations portant notamment sur :
 
-**Art. 103.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+— le développement, l'implantation ou la modification de technologies, de procédés, d'installations ou d'équipements qui permettent d'économiser, de recycler et de valoriser l'eau :
 
-**Art. 104.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+— l'utilisation d'eaux usées épurées en vue de valoriser les eaux traitées.
 
-**Art. 105.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+---
 
-**Art. 106.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 9-11]
+### Chapitre 2 — Des servitudes liées aux régimes de l'autorisation et de la concession d'utilisation des ressources en eau
 
-**Art. 107.** — La convention de délégation de service public est approuvée selon les modalités fixées par voie réglementaire. La modification, la prolongation ou l'annulation de la convention sont effectuées dans les mêmes formes.
+**Art. 94.** — Toute personne physique ou morale, de droit public ou privé, titulaire d'une autorisation ou d'une concession d'utilisation des ressources en eau, bénéficie d'un droit de passage des eaux, y compris les eaux de drainage des terres, par conduite souterraine dans les fonds intermédiaires, à l'exclusion des cours, jardins et enclos attenant aux habitations. Ce passage doit s'effectuer dans les conditions les plus rationnelles et les moins dommageables à l'exploitation des fonds traversés, à charge d'une juste et préalable indemnité.
+
+Les contestations résultant de l'établissement de la servitude et de l'indemnisation relèvent des tribunaux.
+
+**Art. 95.** — Les propriétaires ou exploitants des fonds intermédiaires affectés par la servitude établie à l'article 94 ci-dessus, ont la faculté de bénéficier des travaux réalisés au titre de ladite servitude pour l'écoulement des eaux entrant ou sortant de leurs fonds. Ils supportent, dans ce cas :
+
+— une part proportionnelle de la valeur des travaux dont ils profitent :
+
+— les dépenses résultant des modifications que l'exercice de cette faculté peut rendre nécessaire :
+
+— une part contributive pour l'entretien des ouvrages devenus communs.
+
+**Art. 96.** — Toute personne physique ou morale, de droit public ou privé, titulaire d'une autorisation ou d'une concession d'utilisation des ressources en eau a la faculté d'appuyer, sur la propriété du riverain opposé, les ouvrages nécessaires à sa prise d'eau à charge d'une juste et préalable indemnité.
+
+Sont exemptés de cette servitude, les bâtiments, cours et enclos attenant aux habitations.
+
+**Art. 97.** — Le riverain sur le fonds duquel l'appui est réclamé peut demander l'usage commun de l'ouvrage, en contribuant, pour moitié, aux frais d'établissement et d'entretien. Dans ce cas, aucune indemnité n'est respectivement due.
+
+Lorsque l'usage commun de cet ouvrage n'est demandé qu'après le commencement ou l'achèvement des travaux, celui qui le demande doit supporter, seul, l'excédent de dépenses auquel donnent lieu les changements devant intervenir quant à l'ouvrage.
+
+**Art. 98.** — Tout propriétaire a le droit d'user et de disposer des eaux pluviales qui tombent sur ses fonds.
+
+Le propriétaire d'un fonds inférieur est tenu de recevoir sur son fonds les eaux qui s'écoulent naturellement du fonds supérieur, notamment les eaux de pluie, de neige ou de sources non captées.
+
+**Art. 99.** — Tout propriétaire qui, lors de travaux souterrains ou de sondage, fait surgir des eaux dans son fonds, a le droit de passage sur les propriétés des fonds inférieurs, suivant le tracé le plus rationnel et le moins dommageable.
+
+Les propriétaires des fonds inférieurs ont droit à une indemnité en cas de dommage résultant de l'écoulement de ces eaux.
+
+---
+
+## TITRE VI — DES SERVICES PUBLICS DE L'EAU ET DE L'ASSAINISSEMENT
+
+### Chapitre 1 — Des dispositions relatives aux modes de gestion des services publics de l'eau et de l'assainissement
+
+**Art. 100.** — L'alimentation en eau potable et industrielle et l'assainissement constituent des services publics.
+
+**Art. 101.** — Les services publics de l'eau relèvent de la compétence de l'Etat et des communes.
+
+L'Etat peut concéder la gestion des services publics de l'eau à des personnes morales de droit public, sur la base d'un cahier des charges et d'un règlement de service approuvés par voie réglementaire. Il peut également déléguer tout ou partie de leur gestion à des personnes morales de droit public ou privé sur la base d'une convention.
+
+La commune peut, selon des modalités fixées par voie réglementaire, exploiter les services publics de l'eau en régie dotée de l'autonomie financière ou concéder leur gestion à des personnes morales de droit public.
+
+#### Section 1 — De la concession de service public
+
+**Art. 102.** — Le concessionnaire d'un service public de l'eau ou de l'assainissement est chargé, dans les limites territoriales de la concession, de l'exploitation, de la maintenance, du renouvellement, de la réhabilitation et du développement des ouvrages et installations relevant du domaine public hydraulique artificiel et permettant d'assurer selon le cas :
+
+— la production d'eau à partir des ouvrages de mobilisation et de transfert, le traitement, l'adduction, le stockage et la distribution d'eau à usage domestique et industriel ;
+
+— la collecte, l'évacuation et l'épuration des eaux usées ainsi que le traitement des boues résultant de l'épuration en vue de leur élimination finale.
+
+Le concessionnaire est également chargé de l'exploitation commerciale de la concession, incluant l'ensemble des opérations de facturation et de recouvrement des montants dus par les usagers du service public de l'eau ou de l'assainissement conformément au système de tarification.
+
+**Art. 103.** — Dans le cadre de la concession d'un service public de l'eau ou de l'assainissement, le concessionnaire est tenu, selon le cas, de :
+
+— s'assurer de la compatibilité des projets de développement des infrastructures hydrauliques avec les prescriptions des plans directeurs d'aménagement des ressources en eau ;
+
+— gérer rationnellement les ressources en eau superficielle et souterraine et les ressources en eau non conventionnelles qui sont mises à sa disposition ;
+
+— promouvoir des procédés technologiques et des actions d'information et de sensibilisation visant l'économie d'eau par les usagers du service public ;
+
+— veiller à la protection des milieux récepteurs contre les risques de pollution de toute nature ;
+
+— respecter les normes et règles relatives à la sécurité des installations.
+
+#### Section 2 — De la délégation de service public
+
+**Art. 104.** — L'administration chargée des ressources en eau, agissant au nom de l'Etat, ou le concessionnaire, peuvent déléguer tout ou partie de la gestion des activités des services publics de l'eau ou de l'assainissement à des opérateurs publics ou privés présentant des qualifications professionnelles et des garanties financières suffisantes.
+
+Le concessionnaire peut également déléguer tout ou partie de ces activités à une (ou des) filiale (s) d'exploitation créée (s) à cet effet.
+
+**Art. 105.** — La délégation de service public s'effectue par voie d'appel à la concurrence en précisant notamment la consistance et les conditions d'exécution des prestations mises à la charge du délégataire, les responsabilités engagées, la durée de la délégation, les modalités de rémunération du délégataire ou de tarification du service payé par les usagers et les paramètres d'évaluation de la qualité de service.
+
+**Art. 106.** — La délégation de service public peut consister en la construction d'infrastructures hydrauliques ou leur réhabilitation ainsi que leur exploitation dans le cadre d'opérations de partenariat incluant la conception des projets et le financement des investissements y afférents.
+
+**Art. 107.** — La convention de délégation de service public est approuvée selon les modalités fixées par voie réglementaire.
+
+La modification, la prolongation ou l'annulation de la convention sont effectuées dans les mêmes formes.
 
 **Art. 108.** — Lorsque la délégation de service public est initiée par le concessionnaire, agissant comme organisme délégant, celui-ci est tenu de solliciter, préalablement à sa mise en concurrence, l'accord préalable de l'administration chargée des ressources en eau.
 
-**Art. 109.** — Le concessionnaire doit soumettre à l'autorité concédante un rapport annuel permettant de contrôler et d'évaluer les conditions d'exécution de la délégation de service public. Ce rapport annuel et les appréciations qui découlent de son examen font l'objet d'une communication au Gouvernement.
+**Art. 109.** — Le concessionnaire doit soumettre à l'autorité concédante un rapport annuel permettant de contrôler et d'évaluer les conditions d'exécution de la délégation de service public.
+
+Ce rapport annuel et les appréciations qui découlent de son examen font l'objet d'une communication au Gouvernement.
 
 **Art. 110.** — Le délégataire est tenu de mettre à la disposition du concessionnaire tous documents techniques, financiers et comptables utiles à l'évaluation de la délégation de service public.
+
+---
 
 ### Chapitre 2 — Des dispositions spécifiques à l'alimentation en eau potable
 
 **Art. 111.** — Au sens de la présente loi, on entend par eau de consommation humaine toute eau destinée à :
 
 — la boisson et aux usages domestiques ;
+
 — la fabrication des boissons gazeuses et de la glace ;
+
 — la préparation au conditionnement et à la conservation de toutes denrées alimentaires.
 
 **Art. 112.** — Toute personne physique ou morale, de droit public ou privé, fournissant de l'eau de consommation humaine, est tenue de s'assurer que cette eau répond aux normes de potabilité et/ou de qualité fixées par voie réglementaire.
@@ -453,17 +653,23 @@ Dans tous les cas, les cahiers des charges relatifs à cette catégorie de conce
 
 **Art. 114.** — La nature, la périodicité et les méthodes d'analyse de l'eau pratiquées au niveau des ouvrages et installations de production, de traitement, d'adduction, de stockage et de distribution de l'eau de consommation humaine, ainsi que les conditions d'agrément des laboratoires devant effectuer ces analyses, sont fixées par voie réglementaire.
 
-**Art. 115.** — Dans le cadre du contrôle sanitaire prévu par les lois et règlements en vigueur, il est procédé régulièrement aux analyses de contrôle de qualité de l'eau de consommation humaine. Les résultats de ces analyses doivent être rendus publics.
+**Art. 115.** — Dans le cadre du contrôle sanitaire prévu par les lois et règlements en vigueur, il est procédé régulièrement aux analyses de contrôle de qualité de l'eau de consommation humaine.
+
+Les résultats de ces analyses doivent être rendus publics.
 
 **Art. 116.** — Les méthodes et les produits chimiques utilisés pour le traitement et la correction des eaux de consommation humaine sont définis par voie réglementaire.
 
 **Art. 117.** — Toute personne exerçant au niveau des ouvrages et installations d'exploitation d'un service public de l'eau doit faire l'objet d'un suivi médical selon des modalités fixées par voie réglementaire ; ne peuvent y exercer les personnes atteintes de maladie pouvant être transmise par voie hydrique.
 
+---
+
 ### Chapitre 3 — Des dispositions spécifiques à l'assainissement
 
 **Art. 118.** — En zone agglomérée est obligatoire le branchement au réseau public d'assainissement de toute habitation ou établissement.
 
-**Art. 119.** — Tout déversement dans un réseau public d'assainissement ou dans une station d'épuration d'eaux usées autres que domestiques est soumis à l'autorisation préalable de l'administration chargée des ressources en eau. Ce déversement peut être subordonné à une obligation de pré-traitement dans le cas où, à l'état brut, ces eaux usées peuvent affecter le bon fonctionnement du réseau public d'assainissement ou de la station d'épuration.
+**Art. 119.** — Tout déversement dans un réseau public d'assainissement ou dans une station d'épuration d'eaux usées autres que domestiques est soumis à l'autorisation préalable de l'administration chargée des ressources en eau.
+
+Ce déversement peut être subordonné à une obligation de pré-traitement dans le cas où, à l'état brut, ces eaux usées peuvent affecter le bon fonctionnement du réseau public d'assainissement ou de la station d'épuration.
 
 **Art. 120.** — Il est interdit d'introduire dans les ouvrages et installations d'assainissement toute matière solide, liquide ou gazeuse susceptible d'affecter la santé du personnel d'exploitation ou d'entraîner une dégradation ou une gêne de fonctionnement des ouvrages de collecte, d'évacuation et d'épuration des eaux usées.
 
@@ -483,25 +689,248 @@ Dans tous les cas, les cahiers des charges relatifs à cette catégorie de conce
 
 **Art. 125.** — En vertu de la présente loi, est qualifiée d'eau agricole toute eau destinée à un usage exclusivement agricole et, accessoirement, aux autres besoins liés aux activités agricoles.
 
-**Art. 126 à 183.** — [UNREADABLE — VERIFY AGAINST ORIGINAL PDF, pages 13–20 — texte non restitué par l'outil de lecture ; comprend les Titres VII à X (eau agricole, dispositions financières, dispositions pénales, dispositions finales et abrogatoires)]
+**Art. 126.** — Tout prélèvement d'eau agricole ne peut être opéré que selon les modalités fixées par les articles 71 à 93 de la présente loi.
+
+**Art. 127.** — Les ouvrages et installations relevant du domaine public hydraulique artificiel et destinés à l'usage agricole sont classés en infrastructures de grande, moyenne et petite hydraulique agricole et font l'objet de concession selon des conditions et des modalités fixées par voie réglementaire.
+
+**Art. 128.** — L'autorisation ou la concession d'utilisation des ressources en eau à des fins d'irrigation est accordée au profit d'un fonds déterminé. En cas de cession du fonds considéré, le droit d'utilisation est transféré de plein droit au nouveau propriétaire ; celui-ci doit déclarer à l'administration chargée des ressources en eau cette cession, dans un délai de trois mois à dater de la mutation de la propriété.
+
+En cas de morcellement du fonds, la répartition des eaux entre les parcelles en découlant doit faire l'objet d'autorisations ou de concessions nouvelles qui se substitueront au droit d'utilisation originaire.
+
+**Art. 129.** — Les propriétaires et exploitants des terres agricoles sont tenus de procéder à une utilisation rationnelle de l'eau agricole, notamment à travers l'utilisation de techniques permettant d'économiser l'eau.
+
+**Art. 130.** — L'utilisation des eaux usées brutes pour l'irrigation est interdite.
+
+---
+
+### Chapitre 2 — Des périmètres d'irrigation
+
+**Art. 131.** — Au sens de la présente loi, on entend par périmètre d'irrigation tout ensemble de parcelles de terres agricoles disposant d'infrastructures d'irrigation et d'assainissement, ainsi que de la disponibilité d'une ressource en eau pérenne.
+
+**Art. 132.** — La typologie des périmètres d'irrigation ainsi que les règles, mesures et obligations permettant d'assurer la valorisation de l'eau et la conservation des terres agricoles qui les composent sont fixées par voie réglementaire.
+
+**Art. 133.** — La gestion des périmètres d'irrigation équipés par l'Etat ou pour son compte est concédée à des personnes morales de droit public ou privé sur la base d'un cahier des charges fixant, notamment, les règles relatives à l'exploitation, à l'entretien et au renouvellement des ouvrages et installations d'irrigation, de drainage et d'assainissement des terres, et aux modalités de couverture des charges de gestion.
+
+Le cahier des charges précise également les éléments relatifs au règlement de distribution et d'usage de l'eau à l'intérieur du périmètre d'irrigation.
+
+Le cahier des charges-type de gestion des périmètres d'irrigation par concession est fixé par voie réglementaire.
+
+**Art. 134.** — Les actes de concession des ouvrages et installations de mobilisation d'eau fixent les règles d'organisation de la distribution d'eau et de sa valorisation ainsi que les modalités de couverture des charges d'entretien et d'exploitation des infrastructures d'irrigation et d'assainissement des terres agricoles.
+
+**Art. 135.** — Tout concessionnaire de la gestion d'un périmètre d'irrigation est tenu de :
+
+— contrôler le niveau de la nappe phréatique et de s'assurer de sa compatibilité avec une exploitation rationnelle des sols ;
+
+— suivre l'évolution des sols et la qualité des eaux d'irrigation au moyen d'analyses périodiques ;
+
+— veiller à ce que les eaux utilisées ne constituent pas, par leur stagnation, une source de détérioration des sols cultivables ou de propagation de maladies, notamment en mettant en œuvre des systèmes de drainage et d'assainissement agricole.
+
+---
+
+### Chapitre 3 — Des dispositions particulières à l'eau agricole
+
+**Art. 136.** — Des mesures et des prescriptions particulières peuvent être précisées par voie réglementaire pour assurer le développement de :
+
+— l'hydraulique pastorale et l'abreuvement du cheptel ;
+
+— l'épandage d'eaux de crues.
+
+---
+
+## TITRE VIII — DE LA TARIFICATION DES SERVICES DE L'EAU
+
+### Chapitre 1 — Des dispositions communes relatives à la tarification des services de l'eau
+
+**Art. 137.** — Les systèmes de tarification des services de l'eau sont établis par zone tarifaire selon des conditions et modalités fixées par décret.
+
+**Art. 138.** — Les systèmes de tarification des services de l'eau sont basés sur les principes d'équilibre financier, de solidarité sociale, d'incitation à l'économie d'eau et de protection de la qualité des ressources en eau.
+
+**Art. 139.** — Les tarifs des services publics de l'eau sont fixés et facturés par l'organisme exploitant. Ils comprennent tout ou partie des charges financières d'investissement, d'exploitation, de maintenance et de renouvellement des infrastructures liées à la gestion du service public.
+
+Les tarifs de l'eau doivent tenir compte des exigences d'optimisation des coûts, de progrès de la productivité et d'amélioration des indicateurs de performances et de la qualité de service.
+
+**Art. 140.** — Dans le cas où l'application d'obligations incidentes conduit à des tarifs ne correspondant pas au coût réel justifié par le concessionnaire ou le délégataire, il pourra lui être attribué une dotation financière compensatoire équivalente aux charges additionnelles subies à ce titre.
+
+**Art. 141.** — Les concessionnaires ou les délégataires des services de l'eau sont tenus de présenter à l'autorité concédante, pour chaque exercice comptable, les éléments de comptabilité analytique permettant d'analyser les charges, les produits et les coûts de revient et d'assurer la transparence des tarifs.
+
+**Art. 142.** — Les tarifs des services de l'eau peuvent faire l'objet de révision si l'évolution des conditions économiques générales l'exige.
+
+---
+
+### Chapitre 2 — Du système de tarification de l'eau à usage domestique et industriel
+
+**Art. 143.** — La tarification du service public d'alimentation en eau potable est fondée sur le principe de progressivité des tarifs selon les catégories d'usagers et les tranches de consommation d'eau afin, d'une part, d'assurer aux usagers domestiques la fourniture, à un tarif social, d'un volume d'eau suffisant pour la satisfaction des besoins vitaux et, d'autre part, de réguler la demande correspondant aux consommations élevées des différentes catégories d'usagers.
+
+L'application de ce principe se traduit par l'établissement, pour chaque zone tarifaire, d'un barème de tarifs progressifs déterminés par application de coefficients au tarif de base calculé en fonction des paramètres de charges définis à l'article 139 de la présente loi.
+
+**Art. 144.** — La fourniture en gros d'eau brute ou d'eau traitée par le concessionnaire ou le délégataire de service public à des communes ou à des zones d'activités qui assurent, sous leur responsabilité, la gestion de leur système de distribution, fait l'objet de tarifs spéciaux.
+
+Les volumes d'eau fournis sont mesurés par un dispositif de comptage installé au point de livraison.
+
+**Art. 145.** — La facturation aux usagers de la fourniture du service public d'alimentation en eau potable est établie sur la base du barème de tarifs par zone tarifaire territoriale ; elle comprend deux termes :
+
+— une partie variable, d'un montant proportionnel au volume consommé pendant un temps donné et mesuré au compteur particulier ou, exceptionnellement, déterminé forfaitairement :
+
+— une partie fixe dite redevance fixe d'abonnement, d'un montant couvrant tout ou partie des frais d'entretien du branchement particulier, de location et d'entretien du compteur d'eau et de gestion commerciale des usagers.
+
+**Art. 146.** — Pour les immeubles collectifs d'habitation, la facturation est établie individuellement au nom de chaque occupant, copropriétaire ou locataire, sur la base du volume réellement consommé et mesuré par un compteur particulier en tenant compte de la consommation d'eau relative aux parties communes, déterminée en fonction des indications du compteur général et des compteurs particuliers.
+
+**Art. 147.** — Le concessionnaire, le délégataire et la régie communale sont tenus d'installer des compteurs particuliers à la demande du propriétaire de l'immeuble ou de l'administrateur de copropriété, formulée selon les conditions réglementaires et/ou particulières régissant la copropriété.
+
+**Art. 148.** — A titre transitoire, pour les immeubles collectifs d'habitation non dotés de compteurs particuliers, la facturation est établie sur la base d'un barème adapté ou de tarifs spéciaux tenant compte du nombre de logements et de locaux à usage professionnel desservis à partir du compteur général ainsi que des conditions d'alimentation en eau et des caractéristiques du réseau de distribution à l'aval du compteur général.
+
+---
+
+### Chapitre 3 — Du système de tarification de l'assainissement
+
+**Art. 149.** — La tarification du service public d'assainissement est fondée sur le principe de progressivité des tarifs selon les catégories d'usagers et les tranches de consommation d'eau correspondant au service public d'alimentation en eau potable et ce pour prendre en compte l'importance, la nature et la charge polluante des effluents déversés dans le réseau de collecte des eaux usées.
+
+**Art. 150.** — Pour chaque zone tarifaire, le barème des tarifs progressifs est déterminé par l'application de coefficients au tarif de base calculé en fonction des paramètres des charges définis à l'article 139 de la présente loi.
+
+**Art. 151.** — La facturation aux usagers de la fourniture du service public d'assainissement est établie sur la base d'un barème des tarifs par zone tarifaire territoriale ; elle comprend deux termes :
+
+— une partie variable, d'un montant proportionnel au volume d'eau facturé au titre du service public d'alimentation en eau potable :
+
+— une partie fixe dite redevance fixe d'abonnement, d'un montant couvrant tout ou partie des frais d'entretien du branchement particulier et de gestion commerciale des usagers.
+
+**Art. 152.** — Pour les immeubles collectifs d'habitation, la facturation est établie selon les modalités définies dans l'article 146 de la présente loi.
+
+**Art. 153.** — Pour les usagers du service public d'assainissement qui disposent d'une alimentation en eau autonome par rapport au service public d'alimentation en eau potable, la facturation de la partie variable est assise sur le volume d'eau utilisé et mesuré par un dispositif de comptage, à la charge des usagers, ou estimé par le concessionnaire, le délégataire ou la régie communale.
+
+**Art. 154.** — La facturation et le recouvrement de la fourniture du service public d'assainissement peuvent être assurés par le concessionnaire ou le délégataire du service public d'alimentation en eau potable selon des modalités fixées par voie conventionnelle.
+
+---
+
+### Chapitre 4 — Du système de tarification de l'eau d'irrigation
+
+**Art. 155.** — La tarification de l'eau d'irrigation dans les périmètres équipés par l'Etat ou pour son compte et gérés par voie de concession est fondée sur les principes de valorisation optimale de l'eau et de régulation de la demande en fonction des systèmes de cultures et des modes d'irrigation.
+
+**Art. 156.** — Les systèmes tarifaires de l'eau d'irrigation prennent notamment en compte les types de cultures ou d'assolement.
+
+**Art. 157.** — Pour chaque périmètre d'irrigation, le barème des tarifs est déterminé en fonction des paramètres de charges définis à l'article 139 de la présente loi.
+
+**Art. 158.** — La facturation aux usagers de la fourniture de l'eau d'irrigation dans les périmètres d'irrigation comprend deux termes :
+
+— une partie variable, d'un montant proportionnel au volume d'eau consommé pendant une durée donnée et mesuré directement par un dispositif de comptage ou estimé indirectement sur la base du débit ou du module d'arrosage utilisé ;
+
+— une partie fixe dite redevance fixe, dont le montant est déterminé en fonction de la superficie irrigable et du débit maximal souscrit par l'usager au titre de la campagne d'irrigation.
+
+---
+
+## TITRE IX — DE LA POLICE DES EAUX
+
+### Chapitre 1 — Des prérogatives de la police des eaux
+
+**Art. 159.** — Il est institué une police des eaux constituée par des agents relevant de l'administration chargée des ressources en eau.
+
+Pour exercer leurs fonctions, les agents de la police des eaux prêtent, devant le tribunal de leur résidence administrative, le serment suivant :
+
+"أقسم بالله العليّ العظيم أن أؤدي وظيفتي بامانة وإخالص وأن أحافظ على سرّ الهمنة وأسهر على تطبيق قوانين الدولة ."
+
+Le statut spécifique de la police des eaux, le niveau de formation de ses agents, les indemnités auxquelles ces derniers ouvrent droit ainsi que l'obligation de port d'insignes distinctifs sont fixés par voie réglementaire.
+
+**Art. 160.** — Les agents de la police des eaux exercent leurs prérogatives conformément à leur statut, aux dispositions de l'ordonnance n° 66-155 du 8 juin 1966 portant code de procédure pénale, modifiée et complétée, notamment ses articles 14 (alinéa 3), et 27 et aux dispositions ci-après.
+
+**Art. 161.** — Les infractions à la présente loi font l'objet de recherche, de constatation et d'enquête par les officiers et agents de police judiciaire ainsi que par les agents de la police des eaux instituée par l'article 159 ci-dessus.
+
+**Art. 162.** — Les infractions sont constatées par procès-verbal relatant les faits et les déclarations de leur(s) auteur (s).
+
+**Art. 163.** — En vue de rechercher et de constater les infractions, les agents de la police des eaux ont accès aux ouvrages et installations exploités au titre des utilisations du domaine public hydraulique. Ils peuvent réquérir du propriétaire ou de l'exploitant de ces ouvrages et installations leur mise en fonctionnement afin de procéder aux vérifications utiles et peuvent exiger la communication de tous documents nécessaires à l'accomplissement de leur mission.
+
+**Art. 164.** — Les agents de la police des eaux sont habilités à conduire, devant le procureur de la République ou l'officier de police judiciaire compétent, tout individu surpris en flagrant délit d'atteinte au domaine public hydraulique, sauf si la résistance du contrevenant constitue pour eux une menace grave. Dans ce cas, il est fait mention de l'acte de rébellion du contrevenant dans le procès-verbal de constation de l'infraction.
+
+**Art. 165.** — Dans l'exercice de leurs fonctions, les agents de la police des eaux peuvent requérir la force publique pour leur prêter assistance.
+
+---
+
+### Chapitre 2 — Des infractions et des sanctions
+
+**Art. 166.** — Quiconque commet une infraction aux dispositions de l'article 5 de la présente loi est puni d'une amende de cinq mille dinars (5.000 DA) à dix mille dinars (10.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 167.** — Quiconque commet une infraction aux dispositions de l'article 12 de la présente loi est puni d'une amende de cinquante mille dinars (50.000 DA) à cent mille dinars (100.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 168.** — Quiconque commet une infraction aux dispositions de l'article 14 de la présente loi est puni d'un emprisonnement d'un (1) an à cinq (5) ans et d'une amende de deux cent mille dinars (200.000 DA) à deux millions de dinars (2.000.000 DA).
+
+Les équipements, matériels et véhicules ayant servi à commettre l'infraction peuvent être confisqués.
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 169.** — Quiconque commet une infraction aux dispositions de l'article 15 de la présente loi est puni d'un emprisonnement de deux (2) mois à six (6) mois et d'une amende de cinquante mille dinars (50.000 DA) à cent mille dinars (100.000 DA) ou de l'une de ces deux peines seulement.
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 170.** — Quiconque commet une infraction aux dispositions de l'article 32 de la présente loi est puni d'un emprisonnement de six (6) mois à trois (3) ans et d'une amende de cinquante mille dinars (50.000 DA) à un million de dinars (1.000.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 171.** — Quiconque commet une infraction aux dispositions de l'article 44 de la présente loi est puni d'une amende de dix mille dinars (10.000 DA) à cent mille dinars (100.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 172.** — Quiconque commet une infraction aux dispositions de l'article 46 de la présente loi est puni d'un emprisonnement d'un (1) an à cinq (5) ans et d'une amende de cinquante mille dinars (50.000 DA) à un million de dinars (1.000.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 173.** — Quiconque commet une infraction aux dispositions de l'article 47 de la présente loi est puni d'une amende de cent mille dinars (100.000 DA) à un million de dinars (1.000.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 174.** — Quiconque commet une infraction aux dispositions de l'article 75 de la présente loi est puni d'un emprisonnement de six (6) mois à deux (2) ans et d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA).
+
+Les équipements et matériels ayant servi à commettre l'infraction peuvent être confisqués.
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 175.** — Quiconque commet une infraction aux dispositions de l'article 77 de la présente loi est puni d'un emprisonnement d'un (1) an à cinq (5) ans et d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA).
+
+Les équipements et matériels ayant servi à commettre l'infraction peuvent être confisqués.
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 176.** — Quiconque commet une infraction aux dispositions de l'article 112 de la présente loi est puni d'un emprisonnement d'un (1) an à deux (2) ans et d'une amende de deux cent mille dinars (200.000 DA) à un million de dinars (1.000.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 177.** — Quiconque commet une infraction aux dispositions de l'article 119 de la présente loi est puni d'un emprisonnement de deux (2) mois à six (6) mois et d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA) ou de l'une de ces deux peines seulement.
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 178.** — Quiconque commet une infraction aux dispositions de l'article 120 de la présente loi est puni d'un emprisonnement de (6) mois à un (1) an et d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+**Art. 179.** — Quiconque commet une infraction aux dispositions de l'article 130 de la présente loi est puni d'un emprisonnement d'un (1) an à cinq (5) ans et d'une amende de cinq cent mille dinars (500.000 DA) à un million de dinars (1.000.000 DA).
+
+En cas de récidive, la peine est portée au double.
+
+---
+
+## TITRE X — DISPOSITIONS TRANSITOIRES ET FINALES
+
+**Art. 180.** — Sont abrogées toutes dispositions contraires à la présente loi, notamment la loi n° 83-17 du 16 juillet 1983, modifiée et complétée, portant code des eaux.
+
+**Art. 181.** — Les textes pris en application de la loi n° 83-17 du 16 juillet 1983, modifiée et complétée, portant code des eaux demeurent en vigueur jusqu'à la promulgation des textes réglementaires prévus par la présente loi.
+
+**Art. 182.** — Les autorisations, concessions et tous autres documents délivrés en vertu de la loi n° 83-17 du 16 juillet 1983, modifiée et complétée, portant code des eaux sont actualisés conformément aux dispositions de la présente loi dans un délai n'excédant pas vingt quatre (24) mois.
+
+Les ouvrages et installations d'utilisation des ressources en eau réalisés et exploités sans acte administratif à la date de publication de la présente loi au Journal officiel de la République algérienne démocratique et populaire doivent faire l'objet, dans un délai d'un an, et sous peine de la mise en œuvre des dispositions des articles 174 et 175 ci-dessus et de la suppression de l'accès à la ressource hydrique, d'une déclaration en vue de leur régularisation dans les conditions fixées par la présente loi.
+
+**Art. 183.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
+
+Fait à Alger, le 28 Joumada Ethania 1426 correspondant au 4 août 2005.
+
+Abdelaziz BOUTEFLIKA.
 
 ---
 
 ## Contrôle de séquence
 
-Articles présents (texte intégral ou partiel extrait du PDF) :
-- **Art. 1–2** : absents du PDF restitué (page 1 non capturée) — ⚠️ [UNREADABLE]
-- **Art. 3** : partiel (début non capturé)
-- **Art. 4–55** : présents, texte intégral
-- **Art. 56–85** : présents, texte intégral
-- **Art. 86–106** : absents du PDF restitué (pages 9–11 tronquées) — ⚠️ [UNREADABLE]
-- **Art. 107–125** : présents, texte intégral
-- **Art. 126–183** : absents du PDF restitué (pages 13–20) — ⚠️ [UNREADABLE]
+Liste des articles de la Loi n° 05-12 dans l'ordre numérique :
 
-**Lacunes à vérifier contre le PDF original :** Art. 1–2, Art. 3 (début), Art. 86–106, Art. 126–183.
+1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183.
 
----
-
-## Tableau des modifications
-
-*Aucune modification législative intégrée à ce stade — à compléter lors de la vérification JORADP.*
+**Intégrité du texte :** La loi est complète. Tous les articles sont présents.
