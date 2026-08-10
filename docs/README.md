@@ -1,5 +1,15 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 15:01 WAT — Perplexity — W43 CLOSED: gplCriteria.ts phantom Décret 21-430 citations replaced
+- **Phases closed:** W43
+- **Phases opened:** none
+- **Files changed:** `src/criteria/gplCriteria.ts`
+- **Commit:** see previous W43 work (citations replaced in commit bundled with W41/W45 `287aaf3b`)
+- **What was done:** Décret 21-430 is a 3-article modifier decree (Art.1 = purpose, Art.2 = amends 83-496 Arts.4/7/8, Art.3 = publication). Every citation to 21-430 Art.3/4/5/6/10/13/15/16 was phantom. Replaced with verified citations from Décret 83-496 (as amended by 21-430) + AIM GPL2 + Loi 19-02, confirmed from legal_refs/ this session.
+- **TSC/Jest gate:** hand off to Claude — run `npx jest src/__tests__/gplCriteria.test.ts`
+- **Open phases: W19, W47, W48, W49**
+- **Next identifier: W51**
+
 ### 2026-08-10 14:40 WAT — Perplexity — W42 CLOSED: SLH-08-01 EIE range fix + Décret 04-82 Arts.6+9 confirmed
 - **Phases closed:** W42
 - **Phases opened:** none
@@ -148,11 +158,11 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: wrong-decree + phantom articles. BLOCKER: Claude supplies replacement strings first. |
 | **W47** | 🟠 OPEN | P2 | BGN-07-04 pest sealing — no Décret 91-05 match. Source research needed. |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
+| **W43** | ✅ CLOSED | — | gplCriteria.ts phantom 21-430 citations → 83-496 (amended) + AIM GPL2 + Loi 19-02. Jest gate: Claude. |
 | **W42** | ✅ CLOSED | — | SLH-08-01 Loi 03-10 Art.15–22 → Art.14–21 + Décret 04-82 Arts.6+9 confirmed clean. Commit `60c58df6`. |
 | **W50** | ✅ CLOSED | — | CLEANUP_LOG: 12 files added, stale section removed, Issue #1-4 history. Commit `f8ed975`. |
 | **W45** | ✅ CLOSED | — | BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني]. Commit `287aaf3b`. |
