@@ -8,6 +8,10 @@
 //   Décret 91-05 Art.9 governs drainage channel design and P-trap requirements.
 //   Art.14 was the wrong article (covers a different topic). Code corrected in W39;
 //   these test assertions now match the correct legal source.
+// W45 (2026-08-10): BGN-02-01 legalReference updated — no explicit article in 90-29
+//   governs separation distances; W45 replaced Art.37 with:
+//   القانون 90-29 المادة 4 (buildability conditions) + القانون 03-10 المادة 6
+//   (prevention principle). Test updated accordingly.
 import { baseGeneralCriteria } from '../criteria/baseGeneralCriteria';
 import { InspectionItem } from '../types';
 
@@ -83,11 +87,16 @@ describe('baseGeneralCriteria', () => {
     expect(item!.legalReference).toContain('84');
   });
 
-  it('BGN-02-01 legalReference contains art.37 of 90-29', () => {
+  // W45 (2026-08-10): CORRECTED — no explicit article in 90-29 governs separation distances.
+  //   W45 replaced Art.37 with Art.4 (buildability/environmental balance) of 90-29
+  //   + Art.6 (prevention principle) of 03-10 + professional judgment note.
+  it('BGN-02-01 legalReference references 90-29 art.4 and 03-10 art.6', () => {
     const item = baseGeneralCriteria.find((c: InspectionItem) => c.id === 'BGN-02-01');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('90-29');
-    expect(item!.legalReference).toContain('37');
+    expect(item!.legalReference).toContain('4');
+    expect(item!.legalReference).toContain('03-10');
+    expect(item!.legalReference).toContain('6');
   });
 
   // W8 (2026-08-08): BGN-03-01 legalReference updated from Décret 88-164 (superseded/unfindable
