@@ -12,6 +12,7 @@
      README mis à jour le 2026-08-10 (11) — arrete-2025 stub supprimé, nouveau fichier verbatim indexé — W20 CLOSED
      README mis à jour le 2026-08-10 (12) — aim-gpl2 supprimé, projet-arrete-gpl indexé — statut PROJET NON PUBLIÉ JORADP
      README mis à jour le 2026-08-10 (13) — decret-90-245-appareils-pression-gaz ajouté — [CONVERTI 2026-08-10]
+     README mis à jour le 2026-08-10 (14) — D90-245 JO N° 36 confirmé par utilisateur depuis PDF officiel
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -48,7 +49,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 4/1988) — Art. 37, 38, 39 modifiés intégrés |
 | `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO 12 mars 1976) |
 | `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 42/1983) — Art. 4, 7, 8 modifiés par D21-430 |
-| `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 38 ou 36/1990 — à confirmer) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
+| `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 36/1990) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ⚠️ NON VÉRIFIÉ — texte présent, non relu contre JO |
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–130) présent, non relu contre JO |
@@ -100,4 +101,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `arrete-interministeriel-2016-criteres-microbiologiques.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` (texte intégral verbatim, Art. 1–14 + Annexes I–II, JO N° 39/2017). **W19 CLOSED.**
 - **2026-08-10 :** `arrete-interministeriel-2025-liaison-froide.md` (STUB) supprimé par l'utilisateur — remplacé par `arrete-interministeriel-2025-05-07-hygiene-restauration.md` (texte intégral verbatim, Art. 1–48, 14 sections, signé par 6 ministres). **W20 CLOSED.**
 - **2026-08-10 :** `aim-gpl2-regles-techniques-securite.md` (source non-JORADP, Scribd) supprimé par l'utilisateur — remplacé par `projet-arrete-gpl-installations-securite.md`. Statut : 🔴 PROJET NON PUBLIÉ AU JORADP — Art. 13 incomplet, Art. 14 manquant, Annexes 3–5 non fournies.
-- **2026-08-10 :** `decret-90-245-appareils-pression-gaz.md` ajouté — Art. 1–24 complets, signé Mouloud HAMROUCHE. Numéro JO à confirmer (N° 38 selon header, N° 36 selon ILO NATLEX). Converti par l'utilisateur depuis PDF officiel. [CONVERTI 2026-08-10]
+- **2026-08-10 :** `decret-90-245-appareils-pression-gaz.md` ajouté — Art. 1–24 complets, signé Mouloud HAMROUCHE. JO N° 36, 22 août 1990 — confirmé par l'utilisateur depuis PDF officiel. [CONVERTI 2026-08-10]
