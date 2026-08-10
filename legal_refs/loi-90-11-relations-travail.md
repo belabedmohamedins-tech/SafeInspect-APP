@@ -1,12 +1,13 @@
 # Loi n° 90-11 du 21 avril 1990 relative aux relations de travail
 
 **Date de signature :** 21 avril 1990  
-**Journal Officiel :** Source PDF fournie par l'utilisateur (`LOI 90-11.pdf`)  
+**Journal Officiel :** N° 25, 6 mai 1990 — pages 1 à 29 (extrait)  
+**Source PDF :** Fourni par l'utilisateur (`LOI 90-11.pdf`)  
 **Date de conversion :** 2026-08-10  
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur la source :** L'extraction du PDF est complète. Les articles 22 à 26 et 72 sont marqués comme abrogés, conformément au texte source. Les articles 56 bis à 56 bis 6 (créés en 2022) sont inclus.
+**Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents. La loi a été modifiée par plusieurs textes ultérieurs (notamment en 1991, 1994, 1996, 1997, 2015, 2017, 2022). Les modifications sont indiquées en note dans le corps du texte.
 
 ---
 
@@ -36,7 +37,7 @@ Vu la loi n° 88-02 du 12 janvier 1988 relative à la planification,
 
 Vu la loi n° 88-04 du 12 janvier 1988 modifiant et complétant l'ordonnance n° 75-59 du 26 septembre 1975 portant code de commerce et fixant les règles particulières applicables aux entreprises publiques économiques,
 
-Vu la loi n° 88-06 du 12 janvier 1988 modifiant et complétant la loi n° 86-12 du 19 août 1986 relative au régime des banque et du crédit,
+Vu la loi n° 88-06 du 12 janvier 1988 modifiant et complétant la loi n° 86-12 du 19 août 1986 relative au régime des banques et du crédit,
 
 Vu la loi n° 90-02 du 6 février 1990 relative à la prévention et au règlement des conflits collectifs de travail et à l'exercice du droit de grève,
 
@@ -142,7 +143,7 @@ Elle crée pour les intéressés des droits et des obligations tels que définis
 
 Lorsqu'il n'existe pas un contrat de travail écrit, la relation de travail est présumée établie pour une durée indéterminée.
 
-**Art. 12.** (modifié le 10/07/1996) — Le contrat de travail peut être conclu pour une durée déterminée, à temps plein ou partiel, dans les cas expressément prévus ci-après :
+**Art. 12.** — (modifié le 10/07/1996) — Le contrat de travail peut être conclu pour une durée déterminée, à temps plein ou partiel, dans les cas expressément prévus ci-après :
 
 — lorsque le travailleur est recruté pour l'exécution d'un travail lié à des contrats de travaux ou de prestations non renouvelables,
 
@@ -150,15 +151,15 @@ Lorsqu'il n'existe pas un contrat de travail écrit, la relation de travail est 
 
 — lorsqu'il s'agit pour l'organisme employeur d'effectuer des travaux périodiques à caractère discontinu,
 
-— lorsqu'un surcroît de travail, ou lorsque des motifs saisonniers le justifient.
+— lorsqu'un surcroît de travail, ou lorsque des motifs saisonniers le justifient,
 
 — lorsqu'il s'agit d'activités ou d'emplois à durée limitée ou qui sont par nature temporaires.
 
 Dans l'ensemble de ces cas, le contrat de travail précisera la durée de la relation de travail ainsi que les motifs de la durée arrêtée.
 
-**Art. 12 bis.** (créé le 10/07/1996) — En vertu des attributions qui lui sont dévolues par la législation et la réglementation en vigueur, l'inspecteur du travail territorialement compétent s'assure que le contrat de travail à durée déterminée est conclu pour l'un des cas expressément cités par l'article 12 de la présente loi, et que la durée prévue au contrat correspond à l'activité pour laquelle le travailleur a été recruté.
+**Art. 12 bis.** — (créé le 10/07/1996) — En vertu des attributions qui lui sont dévolues par la législation et la réglementation en vigueur, l'inspecteur du travail territorialement compétent s'assure que le contrat de travail à durée déterminée est conclu pour l'un des cas expressément cités par l'article 12 de la présente loi, et que la durée prévue au contrat correspond à l'activité pour laquelle le travailleur a été recruté.
 
-**Art. 13.** (modifié le 10/07/1996) — Le contrat de travail peut être conclu également pour une durée indéterminée mais pour un temps partiel, c'est-à-dire pour un volume horaire moyen inférieur à la durée légale de travail et ce lorsque :
+**Art. 13.** — (modifié le 10/07/1996) — Le contrat de travail peut être conclu également pour une durée indéterminée mais pour un temps partiel, c'est-à-dire pour un volume horaire moyen inférieur à la durée légale de travail et ce lorsque :
 
 — le volume de travail disponible ne permet pas de recourir aux services à plein temps d'un travailleur,
 
@@ -182,7 +183,7 @@ Le travailleur mineur ne peut être employé à des travaux dangereux, insalubre
 
 **Art. 17.** — Toute disposition prévue au titre d'une convention ou d'un accord collectif, ou d'un contrat de travail de nature à asseoir une discrimination quelconque entre travailleurs en matière d'emploi, de rémunération ou de conditions de travail, fondée sur l'âge, le sexe, la situation sociale ou matrimoniale, les liens familiaux, les convictions politiques, l'affiliation ou non à un syndicat, est nulle et de nul effet.
 
-**Art. 18.** (modifié le 14/08/1991) — Le travailleur nouvellement recruté peut être soumis à une période d'essai dont la durée ne peut excéder six (06) mois. Cette période peut être portée à douze (12) mois pour les postes de travail de haute qualification. La période d'essai est déterminée par voie de négociation collective pour chacune des catégories de travailleurs ou pour l'ensemble des travailleurs.
+**Art. 18.** — (modifié le 14/08/1991) — Le travailleur nouvellement recruté peut être soumis à une période d'essai dont la durée ne peut excéder six (06) mois. Cette période peut être portée à douze (12) mois pour les postes de travail de haute qualification. La période d'essai est déterminée par voie de négociation collective pour chacune des catégories de travailleurs ou pour l'ensemble des travailleurs.
 
 **Art. 19.** — Durant la période d'essai, le travailleur a les mêmes droits et obligations que ceux occupant des postes de travail similaires et cette période est prise en compte dans le décompte de son ancienneté au sein de l'organisme employeur lorsqu'il est confirmé à l'issue de la période d'essai.
 
@@ -194,15 +195,15 @@ Le travailleur mineur ne peut être employé à des travaux dangereux, insalubre
 
 #### Section 1 — Durée légale de travail
 
-**Art. 22.** (modifié le 12/01/1997) — Abrogé.
+**Art. 22.** — (modifié le 12/01/1997) — Abrogé.
 
-**Art. 23.** (modifié le 12/01/1997) — Abrogé.
+**Art. 23.** — (modifié le 12/01/1997) — Abrogé.
 
-**Art. 24.** (modifié le 12/01/1997) — Abrogé.
+**Art. 24.** — (modifié le 12/01/1997) — Abrogé.
 
-**Art. 25.** (modifié le 12/01/1997) — Abrogé.
+**Art. 25.** — (modifié le 12/01/1997) — Abrogé.
 
-**Art. 26.** (modifié le 12/01/1997) — Abrogé.
+**Art. 26.** — (modifié le 12/01/1997) — Abrogé.
 
 #### Section 2 — Travail de nuit
 
@@ -224,7 +225,7 @@ Le travail posté donne droit à une indemnité.
 
 #### Section 4 — Heures supplémentaires
 
-**Art. 31.** (modifié le 10/07/1996) — Le recours aux heures supplémentaires doit répondre à une nécessité absolue de service et revêtir un caractère exceptionnel.
+**Art. 31.** — (modifié le 10/07/1996) — Le recours aux heures supplémentaires doit répondre à une nécessité absolue de service et revêtir un caractère exceptionnel.
 
 Dans ce cas, l'employeur peut requérir tout travailleur pour effectuer des heures supplémentaires au-delà de la durée légale de travail sans que ces heures n'excèdent 20 % de ladite durée légale, sous réserve des dispositions de l'article 26 ci-dessus.
 
@@ -238,7 +239,7 @@ Dans ces cas, les représentants des travailleurs sont obligatoirement consulté
 
 **Art. 32.** — Les heures supplémentaires effectuées donnent lieu au paiement d'une majoration qui ne peut en aucun cas être inférieure à 50 % du salaire horaire normal.
 
-### Chapitre IV — Repos légaux - Congés - Absences
+### Chapitre IV — Repos légaux — Congés — Absences
 
 #### Section 1 — Congés et repos légaux
 
@@ -264,7 +265,7 @@ Pour les travailleurs nouvellement recrutés, le point de départ de la période
 
 **Art. 41.** — Le congé rémunéré est calculé à raison de deux jours et demi par mois de travail sans que la durée globale ne puisse excéder trente jours calendaires par année de travail.
 
-**Art. 42.** (modifié le 10/07/1996) — Un congé supplémentaire ne pouvant être inférieur à dix (10) jours par année de travail est accordé au travailleur exerçant dans les wilayas du Sud.
+**Art. 42.** — (modifié le 10/07/1996) — Un congé supplémentaire ne pouvant être inférieur à dix (10) jours par année de travail est accordé au travailleur exerçant dans les wilayas du Sud.
 
 Les conventions ou accords collectifs fixent les modalités d'octroi de ce congé.
 
@@ -272,7 +273,7 @@ Les conventions ou accords collectifs fixent les modalités d'octroi de ce cong�
 
 Cette période est égale à cent quatre-vingt heures ouvrables pour les travailleurs saisonniers ou à temps partiel.
 
-**Art. 44.** (modifié le 10/07/1996) — La période supérieure à quinze (15) jours ouvrables du premier mois de recrutement du travailleur équivaut à un (1) mois de travail pour le calcul du congé annuel rémunéré.
+**Art. 44.** — (modifié le 10/07/1996) — La période supérieure à quinze (15) jours ouvrables du premier mois de recrutement du travailleur équivaut à un (1) mois de travail pour le calcul du congé annuel rémunéré.
 
 **Art. 45.** — La durée du congé principal peut être augmentée pour les travailleurs occupés à des travaux particulièrement pénibles ou dangereux impliquant des contraintes particulières sur les plans physique ou nerveux.
 
@@ -304,23 +305,23 @@ Les conventions ou accords collectifs fixent les modalités d'application du pr�
 
 **Art. 52.** — L'indemnité afférente au congé annuel est égale au douzième de la rémunération totale perçue par le travailleur au cours de l'année de référence du congé ou au titre de l'année précédant le congé.
 
-**Art. 52 bis.** (créé le 12/01/1997) — L'indemnité de congé annuel due aux travailleurs des professions, branches et secteurs d'activité qui ne sont pas habituellement occupés d'une façon continue par un même organisme employeur au cours de la période retenue pour l'appréciation du droit au congé, est payée par une caisse spécifique.
+**Art. 52 bis.** — (créé le 12/01/1997) — L'indemnité de congé annuel due aux travailleurs des professions, branches et secteurs d'activité qui ne sont pas habituellement occupés d'une façon continue par un même organisme employeur au cours de la période retenue pour l'appréciation du droit au congé, est payée par une caisse spécifique.
 
 Les organismes employeurs cités ci-dessus doivent obligatoirement s'affilier à cette caisse.
 
 Les professions, branches et secteurs d'activité prévus ci-dessus sont fixés par voie réglementaire.
 
-**Art. 52 ter.** (créé le 12/01/1997) — Les dépenses afférentes au paiement de l'indemnité de congé prévue à l'article 52 bis ci-dessus, ainsi que les frais de gestion sont couverts par une cotisation à la charge exclusive des organismes employeurs.
+**Art. 52 ter.** — (créé le 12/01/1997) — Les dépenses afférentes au paiement de l'indemnité de congé prévue à l'article 52 bis ci-dessus, ainsi que les frais de gestion sont couverts par une cotisation à la charge exclusive des organismes employeurs.
 
 Le taux et les modalités de recouvrement de cette cotisation sont fixés par voie réglementaire.
 
-**Art. 52 quater.** (créé le 12/01/1997) — La création de la caisse spécifique prévue à la présente ordonnance ainsi que les conditions et modalités de son fonctionnement sont fixées par voie réglementaire.
+**Art. 52 quater.** — (créé le 12/01/1997) — La création de la caisse spécifique prévue à la présente ordonnance ainsi que les conditions et modalités de son fonctionnement sont fixées par voie réglementaire.
 
 #### Section 2 — Absences
 
 **Art. 53.** — Sauf les cas expressément prévus par la loi ou par la réglementation, le travailleur, quelle que soit sa position dans la hiérarchie, ne peut être rémunéré pour une période non travaillée sans préjudice des mesures disciplinaires prévues au règlement intérieur.
 
-**Art. 54.** (modifié le 10/07/1996) — Outre les cas d'absences pour des causes prévues par la législation relative à la sécurité sociale, le travailleur peut bénéficier, sous réserve de notification et de justification préalable à l'employeur, d'absences sans perte de rémunération pour les motifs suivants :
+**Art. 54.** — (modifié le 10/07/1996) — Outre les cas d'absences pour des causes prévues par la législation relative à la sécurité sociale, le travailleur peut bénéficier, sous réserve de notification et de justification préalable à l'employeur, d'absences sans perte de rémunération pour les motifs suivants :
 
 — pour s'acquitter des tâches liées à une représentation syndicale ou une représentation du personnel, selon les durées fixées par les dispositions légales ou conventionnelles,
 
@@ -338,19 +339,19 @@ Ils peuvent bénéficier, également de facilités dans les conditions fixées p
 
 **Art. 56.** — Des autorisations d'absences spéciales non rémunérées peuvent être accordées par l'employeur aux travailleurs qui ont un besoin impérieux de s'absenter dans les conditions fixées par le règlement intérieur.
 
-**Art. 56 bis.** (créé le 20/07/2022) — Le travailleur a droit à un congé non rémunéré, pour création d'entreprise, une (1) fois durant sa carrière professionnelle. Il a droit également au recours au travail à temps partiel pour création d'entreprise, conformément aux dispositions de la législation et de la réglementation en vigueur.
+**Art. 56 bis.** — (créé le 20/07/2022) — Le travailleur a droit à un congé non rémunéré, pour création d'entreprise, une (1) fois durant sa carrière professionnelle. Il a droit également au recours au travail à temps partiel pour création d'entreprise, conformément aux dispositions de la législation et de la réglementation en vigueur.
 
-**Art. 56 bis 1.** (créé le 20/07/2022) — La durée du congé ou du travail à temps partiel pour création d'entreprise est fixée à une (1) année, au maximum. La durée du congé ou du travail à temps partiel pour la création d'entreprise peut être prorogée, exceptionnellement, pour une durée n'excédant pas six (6) mois, sur justification fournie par le travailleur concerné.
+**Art. 56 bis 1.** — (créé le 20/07/2022) — La durée du congé ou du travail à temps partiel pour création d'entreprise est fixée à une (1) année, au maximum. La durée du congé ou du travail à temps partiel pour la création d'entreprise peut être prorogée, exceptionnellement, pour une durée n'excédant pas six (6) mois, sur justification fournie par le travailleur concerné.
 
-**Art. 56 bis 2.** (créé le 20/07/2022) — L'employeur peut, pour nécessité de service, décider, après avis du comité de participation, de reporter la date du départ du travailleur en congé ou le recours au travail à temps partiel, pour création d'entreprise pour une période de six (6) mois, au maximum, si l'absence du travailleur concerné risque d'avoir des effets majeurs préjudiciables à l'entreprise.
+**Art. 56 bis 2.** — (créé le 20/07/2022) — L'employeur peut, pour nécessité de service, décider, après avis du comité de participation, de reporter la date du départ du travailleur en congé ou le recours au travail à temps partiel, pour création d'entreprise pour une période de six (6) mois, au maximum, si l'absence du travailleur concerné risque d'avoir des effets majeurs préjudiciables à l'entreprise.
 
-**Art. 56 bis 3.** (créé le 20/07/2022) — La mise en congé du travailleur pour la création d'entreprise entraîne la suspension de sa rémunération et la cessation du bénéfice de ses droits relatifs à l'ancienneté et à l'avancement. Toutefois, le travailleur concerné préserve ses droits acquis liés à son poste de travail, à la date de sa mise en congé pour la création d'entreprise. Durant le congé pour création d'entreprise, le travailleur continue de bénéficier de la couverture en matière de sécurité sociale, selon des modalités fixées par voie réglementaire.
+**Art. 56 bis 3.** — (créé le 20/07/2022) — La mise en congé du travailleur pour la création d'entreprise entraîne la suspension de sa rémunération et la cessation du bénéfice de ses droits relatifs à l'ancienneté et à l'avancement. Toutefois, le travailleur concerné préserve ses droits acquis liés à son poste de travail, à la date de sa mise en congé pour la création d'entreprise. Durant le congé pour création d'entreprise, le travailleur continue de bénéficier de la couverture en matière de sécurité sociale, selon des modalités fixées par voie réglementaire.
 
-**Art. 56 bis 4.** (créé le 20/07/2022) — En cas de non réalisation de son projet, dans les délais fixés, le travailleur peut demander sa réintégration dans son poste de travail, ou réemployé à temps plein, dans un délai d'un (1) mois, au moins, avant l'expiration du congé ou de la période du travail à temps partiel pour création d'entreprise.
+**Art. 56 bis 4.** — (créé le 20/07/2022) — En cas de non réalisation de son projet, dans les délais fixés, le travailleur peut demander sa réintégration dans son poste de travail, ou réemployé à temps plein, dans un délai d'un (1) mois, au moins, avant l'expiration du congé ou de la période du travail à temps partiel pour création d'entreprise.
 
-**Art. 56 bis 5.** (créé le 20/07/2022) — La relation du travail prend fin, sans préjudice de la législation et de la réglementation en vigueur lorsque le travailleur crée son entreprise et, le cas échéant, n'a pas introduit sa demande de réintégration dans les délais fixés par les dispositions de l'article 56 bis 4 ci-dessus.
+**Art. 56 bis 5.** — (créé le 20/07/2022) — La relation du travail prend fin, sans préjudice de la législation et de la réglementation en vigueur lorsque le travailleur crée son entreprise et, le cas échéant, n'a pas introduit sa demande de réintégration dans les délais fixés par les dispositions de l'article 56 bis 4 ci-dessus.
 
-**Art. 56 bis 6.** (créé le 20/07/2022) — Le travailleur désirant créer une entreprise peut bénéficier des avantages et aides octroyés dans le cadre des dispositifs publics de création et d'extension d'activités, conformément à la législation et à la réglementation en vigueur.
+**Art. 56 bis 6.** — (créé le 20/07/2022) — Le travailleur désirant créer une entreprise peut bénéficier des avantages et aides octroyés dans le cadre des dispositifs publics de création et d'extension d'activités, conformément à la législation et à la réglementation en vigueur.
 
 ### Chapitre V — Formation et promotion en cours d'emploi
 
@@ -450,9 +451,9 @@ La compression d'effectifs, qui consiste en une mesure de licenciement collectif
 
 Les conventions et les accords collectifs précisent l'ensemble des modalités fixées.
 
-**Art. 72.** (modifié le 01/06/1994) — Abrogé.
+**Art. 72.** — (modifié le 01/06/1994) — Abrogé.
 
-**Art. 73.** (modifié le 25/12/1991) — Le licenciement à caractère disciplinaire intervient dans les cas de fautes graves commises par le travailleur.
+**Art. 73.** — (modifié le 25/12/1991) — Le licenciement à caractère disciplinaire intervient dans les cas de fautes graves commises par le travailleur.
 
 Outre les fautes graves sanctionnées par la législation pénale, commises à l'occasion du travail, sont notamment considérées comme fautes graves et susceptibles d'entraîner le licenciement sans délai-congé ni indemnités, les actes par lesquels le travailleur :
 
@@ -470,23 +471,23 @@ Outre les fautes graves sanctionnées par la législation pénale, commises à l
 
 — consomme de l'alcool ou de la drogue à l'intérieur des lieux de travail.
 
-**Art. 73 1.** (créé le 25/12/1991) — Dans la détermination et la qualification de la faute grave commise par le travailleur, l'employeur devra tenir compte, notamment des circonstances dans lesquelles la faute s'est produite, de son étendue et de son degré de gravité, du préjudice causé, ainsi que de la conduite que le travailleur adoptait, jusqu'à la date de sa faute envers le patrimoine de son organisme employeur.
+**Art. 73 1.** — (créé le 25/12/1991) — Dans la détermination et la qualification de la faute grave commise par le travailleur, l'employeur devra tenir compte, notamment des circonstances dans lesquelles la faute s'est produite, de son étendue et de son degré de gravité, du préjudice causé, ainsi que de la conduite que le travailleur adoptait, jusqu'à la date de sa faute envers le patrimoine de son organisme employeur.
 
-**Art. 73 2.** (créé le 25/12/1991) — Le licenciement prévu à l'article 73 ci-dessus est prononcé dans le respect des procédures fixées par le règlement intérieur.
+**Art. 73 2.** — (créé le 25/12/1991) — Le licenciement prévu à l'article 73 ci-dessus est prononcé dans le respect des procédures fixées par le règlement intérieur.
 
 Celles-ci prévoient obligatoirement la notification écrite de la décision de licenciement, l'audition par l'employeur du travailleur concerné qui peut à cette occasion se faire assister d'un travailleur de son choix, appartenant à l'organisme employeur.
 
-**Art. 73 3.** (créé le 25/12/1991) — Tout licenciement individuel intervenu en violation des dispositions de la présente loi est présumé abusif, à charge pour l'employeur d'apporter la preuve du contraire.
+**Art. 73 3.** — (créé le 25/12/1991) — Tout licenciement individuel intervenu en violation des dispositions de la présente loi est présumé abusif, à charge pour l'employeur d'apporter la preuve du contraire.
 
-**Art. 73 4.** (créé le 25/12/1991, modifié le 10/07/1996) — Si le licenciement d'un travailleur survient en violation des procédures légales et/ou conventionnelles obligatoires, le tribunal saisi, qui statue en premier et dernier ressort, annule la décision de licenciement pour non respect des procédures, et impose à l'employeur d'accomplir la procédure prévue, et accorde au travailleur, à la charge de l'employeur, une compensation pécuniaire qui ne saurait être inférieure au salaire perçu par le travailleur comme s'il avait continué à travailler.
+**Art. 73 4.** — (créé le 25/12/1991, modifié le 10/07/1996) — Si le licenciement d'un travailleur survient en violation des procédures légales et/ou conventionnelles obligatoires, le tribunal saisi, qui statue en premier et dernier ressort, annule la décision de licenciement pour non respect des procédures, et impose à l'employeur d'accomplir la procédure prévue, et accorde au travailleur, à la charge de l'employeur, une compensation pécuniaire qui ne saurait être inférieure au salaire perçu par le travailleur comme s'il avait continué à travailler.
 
 Si le licenciement d'un travailleur survient en violation des dispositions de l'article 73 ci-dessus, il est présumé abusif. Le tribunal saisi, statue en premier et en dernier ressort, et se prononce soit, sur la réintégration du travailleur dans l'entreprise avec maintien de ses avantages acquis soit, en cas de refus par l'une ou l'autre des parties, sur l'octroi au travailleur d'une compensation pécuniaire qui ne peut être inférieure à six (6) mois de salaire, sans préjudice des dommages et intérêts éventuels.
 
 Le jugement rendu en la matière est susceptible de pourvoi en cassation.
 
-**Art. 73 5.** (créé le 25/12/1991) — Le licenciement ouvre droit, pour le travailleur qui n'a pas commis de faute grave, à un délai-congé dont la durée minimale est fixée dans les accords ou conventions collectifs.
+**Art. 73 5.** — (créé le 25/12/1991) — Le licenciement ouvre droit, pour le travailleur qui n'a pas commis de faute grave, à un délai-congé dont la durée minimale est fixée dans les accords ou conventions collectifs.
 
-**Art. 73 6.** (créé le 25/12/1991) — Le travailleur licencié a droit pendant la durée de son délai-congé, à deux heures par jour, cumulables et rémunérées pour lui permettre de rechercher un autre emploi.
+**Art. 73 6.** — (créé le 25/12/1991) — Le travailleur licencié a droit pendant la durée de son délai-congé, à deux heures par jour, cumulables et rémunérées pour lui permettre de rechercher un autre emploi.
 
 L'organisme employeur peut s'acquitter de l'obligation de donner le délai-congé en versant au travailleur licencié une somme égale à la rémunération totale qu'il aurait perçue pendant le même temps.
 
@@ -504,7 +505,7 @@ Toute modification éventuelle dans les relations de travail ne peut intervenir 
 
 La nature de ces activités est fixée par voie réglementaire.
 
-**Art. 77.** — Le règlement intérieur est un document par lequel l'employeur fixe obligatoirement les règles relatives à l'organisation technique du travail, à l'hygiène, à la sécurité et à la discipline.
+**Art. 77.** — Le règlement intérieur est un document par lequel l'employeur fixe obligatoirement les règles relatives à l'organisation technique du travail, à l'hygiène, à la sécurité et à la discipline,
 
 Dans le domaine disciplinaire, le règlement intérieur fixe la qualification des fautes professionnelles, les degrés des sanctions correspondantes et les procédures de mise en œuvre.
 
@@ -546,7 +547,7 @@ Cette disposition ne s'applique pas aux remboursements de frais.
 
 ### Chapitre II — Salaire national minimum garanti
 
-**Art. 87.** (modifié le 31/12/2014) — Le salaire national minimum garanti (SNMG) applicable dans les secteurs d'activité est fixé après consultation des associations syndicales de travailleurs et d'employeurs les plus représentatives.
+**Art. 87.** — (modifié le 31/12/2014) — Le salaire national minimum garanti (SNMG) applicable dans les secteurs d'activité est fixé après consultation des associations syndicales de travailleurs et d'employeurs les plus représentatives.
 
 Pour la détermination du SNMG, il est tenu compte de l'évolution :
 
@@ -554,11 +555,11 @@ Pour la détermination du SNMG, il est tenu compte de l'évolution :
 
 — de l'indice des prix à la consommation ;
 
-— de la conjoncture économique générale.
+— de la conjonction économique générale.
 
 Les éléments constitutifs du SNMG et son montant sont fixés par décret.
 
-**Art. 87 bis.** (créé le 13/04/1994, modifié le 31/12/2014) — Abrogé.
+**Art. 87 bis.** — (créé le 13/04/1994, modifié le 31/12/2014) — Abrogé.
 
 ### Chapitre III — Privilèges et garanties
 
@@ -574,7 +575,7 @@ Les éléments constitutifs du SNMG et son montant sont fixés par décret.
 
 ### Chapitre I — Organes de participation
 
-**Art. 91.** (modifié le 10/07/1996) — Au sein de l'organisme employeur, la participation des travailleurs est assurée :
+**Art. 91.** — (modifié le 10/07/1996) — Au sein de l'organisme employeur, la participation des travailleurs est assurée :
 
 — au niveau de tout lieu de travail distinct comprenant au moins vingt (20) travailleurs par des délégués du personnel ;
 
@@ -582,9 +583,9 @@ Les éléments constitutifs du SNMG et son montant sont fixés par décret.
 
 **Art. 92.** — Lorsqu'il existe, au sein d'un même organisme employeur plusieurs lieux de travail distincts, comprenant chacun moins de vingt (20) travailleurs mais dont le nombre total est égal ou supérieur à vingt (20), les travailleurs peuvent être affiliés au lieu de travail le plus proche ou regroupés pour élire leurs délégués du personnel.
 
-**Art. 93.** (modifié le 10/07/1996) — Au sein d'un même organisme employeur, les délégués du personnel élus conformément aux articles 91 et 92 de la présente loi, élisent en leur sein un comité de participation dont le nombre de délégués est déterminé dans les conditions fixées à l'article 99 ci-dessous.
+**Art. 93.** — (modifié le 10/07/1996) — Au sein d'un même organisme employeur, les délégués du personnel élus conformément aux articles 91 et 92 de la présente loi, élisent en leur sein un comité de participation dont le nombre de délégués est déterminé dans les conditions fixées à l'article 99 ci-dessous.
 
-**Art. 93 bis.** (créé le 10/07/1996) — Dans les cas où l'organisme employeur n'est constitué que d'un lieu de travail distinct unique, le délégué du personnel élu conformément aux articles 91 et 99 de la présente loi, exerce les prérogatives du comité de participation prévues à l'article 94 ci-dessous.
+**Art. 93 bis.** — (créé le 10/07/1996) — Dans les cas où l'organisme employeur n'est constitué que d'un lieu de travail distinct unique, le délégué du personnel élu conformément aux articles 91 et 99 de la présente loi, exerce les prérogatives du comité de participation prévues à l'article 94 ci-dessous.
 
 ### Chapitre II — Attributions des organes de participation
 
@@ -618,11 +619,11 @@ Les éléments constitutifs du SNMG et son montant sont fixés par décret.
 
 Les avis doivent être émis dans un délai maximum de quinze (15) jours après exposé des motifs formulés par l'employeur. En cas de désaccord sur le règlement intérieur, l'inspecteur du travail est obligatoirement saisi.
 
-5 - gérer les œuvres sociales de l'organisme employeur. Lorsque la gestion des œuvres sociales est confiée à l'employeur, après accord de celui-ci, une convention entre le comité de participation et l'employeur en précisera les conditions, modalités d'exercice et de contrôle.
+5 — gérer les œuvres sociales de l'organisme employeur. Lorsque la gestion des oeuvres sociales est confiée à l'employeur, après accord de celui-ci, une convention entre le comité de participation et l'employeur en précisera les conditions, modalités d'exercice et de contrôle.
 
-6 - consulter les états financiers de l'organisme employeur : bilans, comptes d'exploitation, comptes profits et pertes,
+6 — consulter les états financiers de l'organisme employeur : bilans, comptes d'exploitation, comptes profits et pertes,
 
-7 - informer régulièrement les travailleurs des questions traitées sauf celles ayant trait aux processus de fabrication, aux relations avec les tiers ou celles revêtues d'un cachet confidentiel ou secret.
+7 — informer régulièrement les travailleurs des questions traitées sauf celles ayant trait aux processus de fabrication, aux relations avec les tiers ou celles revêtues d'un cachet confidentiel ou secret.
 
 **Art. 95.** — Lorsque l'organisme employeur regroupe plus de cent cinquante (150) travailleurs et lorsqu'il existe en son sein un conseil d'administration ou de surveillance, le comité de participation désigne parmi ses membres ou en dehors d'eux des administrateurs chargés de représenter les travailleurs au sein dudit conseil conformément à la législation en vigueur.
 
@@ -630,7 +631,7 @@ Les avis doivent être émis dans un délai maximum de quinze (15) jours après 
 
 ### Chapitre III — Mode d'élection et composition des organes de participation
 
-**Art. 97.** (modifié le 10/07/1996) — Les délégués du personnel sont élus en conformité avec les articles 91 et 92 précédents, par les travailleurs concernés au suffrage personnel libre, secret et direct.
+**Art. 97.** — (modifié le 10/07/1996) — Les délégués du personnel sont élus en conformité avec les articles 91 et 92 précédents, par les travailleurs concernés au suffrage personnel libre, secret et direct.
 
 Ne sont pas éligibles, les cadres dirigeants de l'organisme employeur, les ascendants, descendants, collatéraux ou parents par alliance au premier degré de l'employeur et des cadres dirigeants, les travailleurs occupant des postes de responsabilité avec pouvoir disciplinaire et les travailleurs ne jouissant pas de leurs droits civils et civiques.
 
@@ -638,7 +639,7 @@ Les délégués du personnel sont élus parmi les travailleurs confirmés réuni
 
 La condition d'ancienneté prévue à l'alinéa 3 ci-dessus n'est pas requise pour l'organisme employeur créé depuis moins d'une année.
 
-**Art. 98.** (modifié le 10/07/1996) — Le scrutin est à deux (2) tours. Au premier tour de scrutin, les candidats à l'élection des délégués du personnel sont présentés par les organisations syndicales représentatives au sein de l'organisme employeur, parmi les travailleurs remplissant les critères d'éligibilité fixés à l'article 97 ci-dessus.
+**Art. 98.** — (modifié le 10/07/1996) — Le scrutin est à deux (2) tours. Au premier tour de scrutin, les candidats à l'élection des délégués du personnel sont présentés par les organisations syndicales représentatives au sein de l'organisme employeur, parmi les travailleurs remplissant les critères d'éligibilité fixés à l'article 97 ci-dessus.
 
 Si le nombre de votants est inférieur à la moitié des électeurs, il est procédé dans un délai n'excédant pas trente (30) jours à un second tour de scrutin.
 
@@ -664,7 +665,7 @@ Les modalités d'application du présent article notamment celles relatives à l
 
 Au-delà de 1.000 travailleurs il sera décompté un (01) délégué supplémentaire par tranche de 500 travailleurs.
 
-**Art. 100.** (modifié le 10/07/1996) — Toute contestation portant sur les élections des délégués du personnel est portée dans les trente (30) jours suivant les élections devant le tribunal territorialement compétent qui se prononce dans un délai de trente (30) jours de sa saisine par un jugement rendu en premier et dernier ressort.
+**Art. 100.** — (modifié le 10/07/1996) — Toute contestation portant sur les élections des délégués du personnel est portée dans les trente (30) jours suivant les élections devant le tribunal territorialement compétent qui se prononce dans un délai de trente (30) jours de sa saisine par un jugement rendu en premier et dernier ressort.
 
 **Art. 101.** — La durée du mandat des délégués du personnel est de trois (3) ans, le mandat des délégués du personnel peut leur être retiré par décision de la majorité des travailleurs qui les ont élus lors d'une assemblée générale convoquée par le président du bureau du comité de participation visé à l'article 102 ou organisée à la demande du tiers au moins des travailleurs concernés.
 
@@ -672,7 +673,7 @@ En cas de vacance pour un motif quelconque, le délégué du personnel est rempl
 
 ### Chapitre IV — Fonctionnement et facilités
 
-**Art. 102.** (modifié le 10/07/1996) — Lorsque le comité de participation est composé d'au moins deux délégués du personnel, il établit son règlement intérieur et procède à l'élection en son sein d'un bureau composé d'un président et d'un vice-président.
+**Art. 102.** — (modifié le 10/07/1996) — Lorsque le comité de participation est composé d'au moins deux délégués du personnel, il établit son règlement intérieur et procède à l'élection en son sein d'un bureau composé d'un président et d'un vice-président.
 
 **Art. 103.** — Le comité de participation se réunit au moins une fois tous les trois mois. Il se réunit obligatoirement à la demande de son président ou de la majorité de ses membres.
 
@@ -708,11 +709,11 @@ Les modalités d'utilisation du crédit horaire ainsi alloué fait l'objet d'un 
 
 ---
 
-## TITRE VI — CONVENTIONS ET ACCORDS COLLECTIFS
+## TITRE VI — CONVENTIONS ET ACCORDS COLLECTIFS DE TRAVAIL
 
 ### Chapitre I — Dispositions générales
 
-**Art. 114.** (modifié le 10/07/1996) — La convention collective est un accord écrit sur l'ensemble des conditions d'emploi et de travail pour une ou plusieurs catégories professionnelles.
+**Art. 114.** — (modifié le 10/07/1996) — La convention collective est un accord écrit sur l'ensemble des conditions d'emploi et de travail pour une ou plusieurs catégories professionnelles.
 
 L'accord collectif est un accord écrit dont l'objet traite d'un ou des aspects déterminés des conditions d'emploi et de travail pour une ou plusieurs catégories socioprofessionnelles de cet ensemble. Il peut constituer un avenant à la convention collective.
 
@@ -722,19 +723,19 @@ Ils sont également conclus entre un groupe d'employeurs ou une ou plusieurs org
 
 La représentativité des parties à la négociation est déterminée dans les conditions fixées par la loi.
 
-**Art. 115.** (modifié le 10/07/1996) — La convention et l'accord collectifs déterminent leur champ d'application professionnel et territorial.
+**Art. 115.** — (modifié le 10/07/1996) — La convention et l'accord collectifs déterminent leur champ d'application professionnel et territorial.
 
 Ils peuvent concerner une ou plusieurs catégories socioprofessionnelles, un ou plusieurs organismes employeurs et revêtir un caractère local, régional ou national.
 
-**Art. 116.** (modifié le 10/07/1996) — Lorsque les conventions et les accords collectifs concernent plusieurs organismes employeurs, ils n'engagent ces derniers qu'à la condition que les représentants des travailleurs et des employeurs desdits organismes en soient ensemble parties prenantes ou qu'ils y adhèrent d'un commun accord.
+**Art. 116.** — (modifié le 10/07/1996) — Lorsque les conventions et les accords collectifs concernent plusieurs organismes employeurs, ils n'engagent ces derniers qu'à la condition que les représentants des travailleurs et des employeurs desdits organismes en soient ensemble parties prenantes ou qu'ils y adhèrent d'un commun accord.
 
-**Art. 117.** (modifié le 10/07/1996) — La convention et l'accord collectifs sont conclus pour une durée déterminée ou pour une durée indéterminée.
+**Art. 117.** — (modifié le 10/07/1996) — La convention et l'accord collectifs sont conclus pour une durée déterminée ou pour une durée indéterminée.
 
 A défaut de stipulations contraires, la convention et l'accord collectifs à durée déterminée qui arrivent à expiration continuent à produire leurs effets comme une convention ou accord à durée indéterminée, jusqu'à adoption d'une nouvelle convention ou accord par les parties concernées.
 
-**Art. 118.** (modifié le 10/07/1996) — Les dispositions les plus favorables contenues dans les différentes conventions et accords collectifs auxquels l'organisme employeur a souscrit ou adhéré s'imposent à lui et s'appliquent aux travailleurs de l'organisme concerné sauf dispositions favorables contenues dans les contrats de travail avec l'entreprise.
+**Art. 118.** — (modifié le 10/07/1996) — Les dispositions les plus favorables contenues dans les différentes conventions et accords collectifs auxquels l'organisme employeur a souscrit ou adhéré s'imposent à lui et s'appliquent aux travailleurs de l'organisme concerné sauf dispositions favorables contenues dans les contrats de travail avec l'entreprise.
 
-**Art. 119.** (modifié le 10/07/1996) — Les organismes employeurs doivent assurer une publicité suffisante aux conventions et accords collectifs auxquels ils sont parties prenantes en direction des collectifs des travailleurs concernés.
+**Art. 119.** — (modifié le 10/07/1996) — Les organismes employeurs doivent assurer une publicité suffisante aux conventions et accords collectifs auxquels ils sont parties prenantes en direction des collectifs des travailleurs concernés.
 
 Un exemplaire de ces conventions et accords collectifs est tenu en permanence à la disposition des travailleurs, en tout lieu de travail distinct.
 
@@ -772,17 +773,17 @@ Un exemplaire de ces conventions et accords collectifs est tenu en permanence à
 
 ### Chapitre III — Convention collective d'entreprise et convention de rang supérieur
 
-**Art. 121.** (modifié le 10/07/1996) — Chaque organisme employeur peut disposer d'une convention et d'accords collectifs d'entreprise ou être partie prenante d'une convention ou accord(s) collectifs d'un rang supérieur.
+**Art. 121.** — (modifié le 10/07/1996) — Chaque organisme employeur peut disposer d'une convention et d'accords collectifs d'entreprise ou être partie prenante d'une convention ou accord(s) collectifs d'un rang supérieur.
 
-**Art. 122.** (modifié le 10/07/1996) — Les conventions et accords collectifs qui dépassent le cadre de l'organisme employeur sont réputés de rang supérieur dès lors qu'ils sont négociés et conclus par des organisations syndicales de travailleurs et d'employeurs reconnues représentatives dans le champ d'application sectoriel, professionnel ou territorial desdits conventions et accords collectifs.
+**Art. 122.** — (modifié le 10/07/1996) — Les conventions et accords collectifs qui dépassent le cadre de l'organisme employeur sont réputés de rang supérieur dès lors qu'ils sont négociés et conclus par des organisations syndicales de travailleurs et d'employeurs reconnues représentatives dans le champ d'application sectoriel, professionnel ou territorial desdits conventions et accords collectifs.
 
 ### Chapitre IV — Négociation des conventions collectives
 
-**Art. 123.** (modifié le 10/07/1996) — A la demande d'une des parties visées à l'article 114 ci-dessus, la négociation des conventions et accords collectifs est menée par des commissions paritaires de négociation composées d'un nombre égal de représentants syndicaux de travailleurs et d'employeurs dûment mandatés par ceux qu'ils représentent.
+**Art. 123.** — (modifié le 10/07/1996) — A la demande d'une des parties visées à l'article 114 ci-dessus, la négociation des conventions et accords collectifs est menée par des commissions paritaires de négociation composées d'un nombre égal de représentants syndicaux de travailleurs et d'employeurs dûment mandatés par ceux qu'ils représentent.
 
 Leur désignation est du ressort de chacune des parties à la négociation.
 
-**Art. 124.** (modifié le 10/07/1996) — Pour les conventions et accords collectifs d'entreprises, chacune des parties peut être représentée par trois (3) à sept (7) membres.
+**Art. 124.** — (modifié le 10/07/1996) — Pour les conventions et accords collectifs d'entreprises, chacune des parties peut être représentée par trois (3) à sept (7) membres.
 
 Pour les conventions et accords collectifs de rang supérieur, les représentants de chacune des parties ne peuvent excéder onze (11) membres.
 
@@ -790,7 +791,7 @@ Pour les conventions et accords collectifs de rang supérieur, les représentant
 
 ### Chapitre V — Exécution des conventions collectives
 
-**Art. 126.** (modifié le 10/07/1996) — La convention et l'accord collectifs sont présentés dès leur conclusion aux seules fins d'enregistrement par les parties à la négociation collective ou par la plus diligente d'entre elles auprès de l'inspection du travail et du greffe du tribunal :
+**Art. 126.** — (modifié le 10/07/1996) — La convention et l'accord collectifs sont présentés dès leur conclusion aux seules fins d'enregistrement par les parties à la négociation collective ou par la plus diligente d'entre elles auprès de l'inspection du travail et du greffe du tribunal :
 
 — du lieu du siège de l'organisme employeur lorsqu'il s'agit d'une convention ou accord collectifs d'entreprise,
 
@@ -800,25 +801,25 @@ Pour les conventions et accords collectifs de rang supérieur, les représentant
 
 — d'Alger pour les conventions collectives interwilayas, de branches ou nationales.
 
-**Art. 127.** (modifié le 10/07/1996) — Les conventions et accords collectifs obligent tous ceux qui les ont signés ou qui y ont adhéré dès accomplissement des formalités prévues à l'article précédent.
+**Art. 127.** — (modifié le 10/07/1996) — Les conventions et accords collectifs obligent tous ceux qui les ont signés ou qui y ont adhéré dès accomplissement des formalités prévues à l'article précédent.
 
-**Art. 128.** (modifié le 10/07/1996) — Les personnes liées par une convention collective ou un accord collectif peuvent intenter toute action visant à obtenir l'exécution des engagements contractés sans préjudice des réparations qu'elles pourraient demander pour violation de ladite convention ou dudit accord.
+**Art. 128.** — (modifié le 10/07/1996) — Les personnes liées par une convention collective ou un accord collectif peuvent intenter toute action visant à obtenir l'exécution des engagements contractés sans préjudice des réparations qu'elles pourraient demander pour violation de ladite convention ou dudit accord.
 
-**Art. 129.** (modifié le 10/07/1996) — Les organisations syndicales de travailleurs et d'employeurs qui sont liées par une convention ou un accord collectifs peuvent exercer toutes les actions en justice qui naissent de ce chef, en faveur de leurs membres et peuvent également intenter en leur nom propre, toute action visant à obtenir l'exécution des engagements contractés.
+**Art. 129.** — (modifié le 10/07/1996) — Les organisations syndicales de travailleurs et d'employeurs qui sont liées par une convention ou un accord collectifs peuvent exercer toutes les actions en justice qui naissent de ce chef, en faveur de leurs membres et peuvent également intenter en leur nom propre, toute action visant à obtenir l'exécution des engagements contractés.
 
-**Art. 130.** (modifié le 10/07/1996) — Les inspecteurs du travail veillent à l'exécution des conventions et accords collectifs et sont saisis de tout différend concernant leur application.
+**Art. 130.** — (modifié le 10/07/1996) — Les inspecteurs du travail veillent à l'exécution des conventions et accords collectifs et sont saisis de tout différend concernant leur application.
 
-**Art. 131.** (modifié le 10/07/1996) — La convention ou l'accord collectifs peuvent être dénoncés en partie ou en totalité par les parties signataires.
+**Art. 131.** — (modifié le 10/07/1996) — La convention ou l'accord collectifs peuvent être dénoncés en partie ou en totalité par les parties signataires.
 
 La dénonciation ne peut toutefois intervenir dans les douze (12) mois qui suivent leur enregistrement.
 
-**Art. 132.** (modifié le 10/07/1996) — La dénonciation est signifiée par lettre recommandée à l'autre partie signataire, avec copie à l'inspection du travail qui enregistre ladite convention ou ledit accord et la (ou le) dépose auprès du greffe du tribunal consignataire.
+**Art. 132.** — (modifié le 10/07/1996) — La dénonciation est signifiée par lettre recommandée à l'autre partie signataire, avec copie à l'inspection du travail qui enregistre ladite convention ou ledit accord et la (ou le) dépose auprès du greffe du tribunal consignataire.
 
-**Art. 133.** (modifié le 10/07/1996) — La signification et la dénonciation emporte obligation pour les parties d'avoir à engager des négociations dans les trente (30) jours pour la conclusion d'une nouvelle convention collective ou d'un nouvel accord collectif.
+**Art. 133.** — (modifié le 10/07/1996) — La signification et la dénonciation emporte obligation pour les parties d'avoir à engager des négociations dans les trente (30) jours pour la conclusion d'une nouvelle convention collective ou d'un nouvel accord collectif.
 
 Dans tous les cas, la dénonciation de la convention ou de l'accord collectifs ne peut avoir d'effets sur les contrats de travail antérieurement conclus, qui demeurent régis par les dispositions en vigueur jusqu'à la conclusion d'une nouvelle convention ou nouvel accord collectifs.
 
-**Art. 134.** (modifié le 10/07/1996) — Lorsque l'inspecteur du travail constate qu'une convention collective ou un accord collectif est contraire à la législation et à la réglementation en vigueur, il la (le) soumet d'office à la juridiction compétente.
+**Art. 134.** — (modifié le 10/07/1996) — Lorsque l'inspecteur du travail constate qu'une convention collective ou un accord collectif est contraire à la législation et à la réglementation en vigueur, il la (le) soumet d'office à la juridiction compétente.
 
 ---
 
@@ -842,63 +843,63 @@ L'annulation de la relation de travail ne peut, cependant, avoir pour effet la p
 
 Il y a récidive lorsque, dans les douze (12) mois antérieurs au fait poursuivi, le contrevenant a été condamné pour une infraction identique.
 
-**Art. 140.** (modifié le 23/07/2015) — Hormis les cas d'un contrat d'apprentissage établi conformément à la législation en vigueur, tout recrutement d'un jeune travailleur n'ayant pas atteint l'âge prévu par la loi, est puni d'une amende de 10.000 DA à 20.000 DA.
+**Art. 140.** — (modifié le 23/07/2015) — Hormis les cas d'un contrat d'apprentissage établi conformément à la législation en vigueur, tout recrutement d'un jeune travailleur n'ayant pas atteint l'âge prévu par la loi, est puni d'une amende de 10.000 DA à 20.000 DA.
 
-**Art. 141.** (modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi relative aux conditions d'emploi des jeunes travailleurs et des femmes, est puni d'une amende de 10.000 à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
+**Art. 141.** — (modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi relative aux conditions d'emploi des jeunes travailleurs et des femmes, est puni d'une amende de 10.000 à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 142.** (modifié le 28/12/2017) — Le signataire d'une convention collective ou d'un accord collectif de travail dont les dispositions sont de nature à asseoir une discrimination entre les travailleurs en matière d'emploi, de rémunération ou de conditions de travail, ainsi que prévu à l'article 17 de la présente loi, est puni d'une amende de 100.000 à 200.000 DA.
+**Art. 142.** — (modifié le 28/12/2017) — Le signataire d'une convention collective ou d'un accord collectif de travail dont les dispositions sont de nature à asseoir une discrimination entre les travailleurs en matière d'emploi, de rémunération ou de conditions de travail, ainsi que prévu à l'article 17 de la présente loi, est puni d'une amende de 100.000 à 200.000 DA.
 
 En cas de récidive, la peine est de 200.000 DA à 500.000 DA et d'un emprisonnement d'un (1) mois à trois (3) mois, ou de l'une de ces deux peines seulement.
 
-**Art. 143.** (modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi, relative à la durée légale hebdomadaire de travail, à l'amplitude journalière de travail et aux limitations en matière de recours aux heures supplémentaires et au travail de nuit pour les jeunes et les femmes est puni d'une amende de 10.000 DA à 20.000 DA appliquée pour chacune des infractions constatées et autant de fois qu'il y a de travailleurs concernés.
+**Art. 143.** — (modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi, relative à la durée légale hebdomadaire de travail, à l'amplitude journalière de travail et aux limitations en matière de recours aux heures supplémentaires et au travail de nuit pour les jeunes et les femmes est puni d'une amende de 10.000 DA à 20.000 DA appliquée pour chacune des infractions constatées et autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 143 bis.** (créé le 10/07/1996, modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi relative au dépassement dérogatoire en matière d'heures supplémentaires tel que précisé par l'article 31 ci-dessus, est puni d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
+**Art. 143 bis.** — (créé le 10/07/1996, modifié le 28/12/2017) — Tout contrevenant aux dispositions de la présente loi relative au dépassement dérogatoire en matière d'heures supplémentaires tel que précisé par l'article 31 ci-dessus, est puni d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 144.** (modifié le 28/12/2017) — Tout employeur qui contrevient aux dispositions de la présente loi relative aux repos légaux, est puni d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
+**Art. 144.** — (modifié le 28/12/2017) — Tout employeur qui contrevient aux dispositions de la présente loi relative aux repos légaux, est puni d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 145.** (modifié le 28/12/2017) — Tout contrevenant aux dispositions des articles 38 à 52 ci-dessus, est puni d'une amende de 10.000 DA à 20.000 DA pour chaque infraction constatée autant de fois qu'il y a de travailleurs concernés.
+**Art. 145.** — (modifié le 28/12/2017) — Tout contrevenant aux dispositions des articles 38 à 52 ci-dessus, est puni d'une amende de 10.000 DA à 20.000 DA pour chaque infraction constatée autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 146.** (modifié le 28/12/2017) — Quiconque procède à une compression d'effectifs en violation des dispositions de la présente loi est, sans préjudice des droits des travailleurs pour leur réintégration, est puni d'une amende de 100.000 DA à 200.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
+**Art. 146.** — (modifié le 28/12/2017) — Quiconque procède à une compression d'effectifs en violation des dispositions de la présente loi est, sans préjudice des droits des travailleurs pour leur réintégration, est puni d'une amende de 100.000 DA à 200.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 146 bis.** (créé le 10/07/1996, modifié le 28/12/2017) — Toute infraction aux dispositions de la présente loi relative au recours au contrat à durée déterminée en dehors des cas et des conditions expressément prévus à l'article 12 et 12 bis de la présente loi, est punie d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
-
-En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
-
-**Art. 147.** (modifié le 28/12/2017) — Toute infraction aux dispositions de la loi relative à l'obligation de dépôt du règlement intérieur auprès de l'inspection du travail et du greffe du tribunal compétent, est puni d'une amende de 10.000 DA à 20.000 DA.
-
-**Art. 148.** (modifié le 28/12/2017) — Quiconque rémunère un travailleur sans lui remettre une fiche de paie correspondant à la rémunération perçue ou omet d'y faire figurer un ou plusieurs des éléments composant le salaire perçu, est puni amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
+**Art. 146 bis.** — (créé le 10/07/1996, modifié le 28/12/2017) — Toute infraction aux dispositions de la présente loi relative au recours au contrat à durée déterminée en dehors des cas et des conditions expressément prévus à l'article 12 et 12 bis de la présente loi, est punie d'une amende de 10.000 DA à 20.000 DA appliquée autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 149.** (modifié le 23/07/2015) — Sans préjudice des autres dispositions de la législation en vigueur, tout employeur qui rémunère un travailleur à un salaire inférieur au salaire national minimum garanti ou au salaire fixé par la convention ou l'accord collectif de travail, est puni d'une amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a d'infractions.
+**Art. 147.** — (modifié le 28/12/2017) — Toute infraction aux dispositions de la loi relative à l'obligation de dépôt du règlement intérieur auprès de l'inspection du travail et du greffe du tribunal compétent, est puni d'une amende de 10.000 DA à 20.000 DA.
+
+**Art. 148.** — (modifié le 28/12/2017) — Quiconque rémunère un travailleur sans lui remettre une fiche de paie correspondant à la rémunération perçue ou omet d'y faire figurer un ou plusieurs des éléments composant le salaire perçu, est puni amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
+
+En cas de récidive, la peine est de 40.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
+
+**Art. 149.** — (modifié le 23/07/2015) — Sans préjudice des autres dispositions de la législation en vigueur, tout employeur qui rémunère un travailleur à un salaire inférieur au salaire national minimum garanti ou au salaire fixé par la convention ou l'accord collectif de travail, est puni d'une amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a d'infractions.
 
 En cas de récidive, la peine est de 20.000 DA à 50.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
-**Art. 150.** (modifié le 28/12/2017) — Toute infraction à l'obligation de versement à terme échu de la rémunération due est punie d'une amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
+**Art. 150.** — (modifié le 28/12/2017) — Toute infraction à l'obligation de versement à terme échu de la rémunération due est punie d'une amende de 10.000 DA à 20.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA applicable autant de fois qu'il y a de travailleurs concernés et d'un emprisonnement de trois (3) mois à six (6) mois, ou de l'une de ces deux peines seulement.
 
-**Art. 151.** (modifié le 28/12/2017) — Toute entrave à la constitution et au fonctionnement du comité de participation ou à l'exercice de ses attributions ou de ceux des délégués du personnel ainsi que tout refus d'accorder les facilités et moyens reconnus par la présente loi aux organes de participation est punie d'une amende de 100.000 DA à 200.000 DA et d'un emprisonnement d'un (1) mois à trois (3) mois ou de l'une de ces deux peines seulement.
+**Art. 151.** — (modifié le 28/12/2017) — Toute entrave à la constitution et au fonctionnement du comité de participation ou à l'exercice de ses attributions ou de ceux des délégués du personnel ainsi que tout refus d'accorder les facilités et moyens reconnus par la présente loi aux organes de participation est punie d'une amende de 100.000 DA à 200.000 DA et d'un emprisonnement d'un (1) mois à trois (3) mois ou de l'une de ces deux peines seulement.
 
 En cas de récidive, la peine est de 200.000 DA à 500.000 DA multipliée par autant de fois qu'il y a de travailleurs concernés et d'un emprisonnement de trois (3) mois à six (6) mois, ou de l'une de ces deux peines seulement.
 
-**Art. 152.** (modifié le 28/12/2017) — Toute infraction aux dispositions de la présente loi en matière de dépôt et d'enregistrement des conventions et accords collectif, de leurs publicité auprès des travailleurs concernés ainsi que tous refus de négociation dans les délais légaux est punie d'une amende de 10.000 DA à 20.000 DA.
+**Art. 152.** — (modifié le 28/12/2017) — Toute infraction aux dispositions de la présente loi en matière de dépôt et d'enregistrement des conventions et accords collectif, de leurs publicité auprès des travailleurs concernés ainsi que tous refus de négociation dans les délais légaux est punie d'une amende de 10.000 DA à 20.000 DA.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA.
 
 **Art. 153.** — Toute infraction aux stipulations des conventions ou accords collectifs est assimilée à des infractions à la législation du travail et réprimée conformément aux dispositions de la présente loi.
 
-**Art. 154.** (modifié le 28/12/2017) — Toute infraction à la tenue des livres et registres spéciaux visés à l'article 156 de la présente loi ainsi que le défaut de leur présentation au contrôle de l'inspecteur du travail, sont punis d'une amende de 10.000 DA à 20.000 DA.
+**Art. 154.** — (modifié le 28/12/2017) — Toute infraction à la tenue des livres et registres spéciaux visés à l'article 156 de la présente loi ainsi que le défaut de leur présentation au contrôle de l'inspecteur du travail, sont punis d'une amende de 10.000 DA à 20.000 DA.
 
 En cas de récidive, la peine est de 40.000 DA à 50.000 DA.
 
@@ -934,6 +935,6 @@ Chadli BENDJEDID.
 
 Liste des articles de la Loi n° 90-11 dans l'ordre numérique :
 
-1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12 bis, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22 (abrogé), 23 (abrogé), 24 (abrogé), 25 (abrogé), 26 (abrogé), 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 52 bis, 52 ter, 52 quater, 53, 54, 55, 56, 56 bis, 56 bis 1, 56 bis 2, 56 bis 3, 56 bis 4, 56 bis 5, 56 bis 6, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72 (abrogé), 73, 73 1, 73 2, 73 3, 73 4, 73 5, 73 6, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 87 bis (abrogé), 88, 89, 90, 91, 92, 93, 93 bis, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 143 bis, 144, 145, 146, 146 bis, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158.
+1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12 bis, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 52 bis, 52 ter, 52 quater, 53, 54, 55, 56, 56 bis, 56 bis 1, 56 bis 2, 56 bis 3, 56 bis 4, 56 bis 5, 56 bis 6, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 73 1, 73 2, 73 3, 73 4, 73 5, 73 6, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 87 bis, 88, 89, 90, 91, 92, 93, 93 bis, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 143 bis, 144, 145, 146, 146 bis, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158.
 
-**Intégrité du texte :** La loi est complète. Tous les articles sont présents dans l'extraction fournie. Les articles abrogés sont marqués comme tels.
+**Intégrité du texte :** La loi est complète. Tous les articles sont présents.
