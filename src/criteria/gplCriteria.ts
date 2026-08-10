@@ -7,9 +7,11 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     // Phase 10.3: grace-period logic — Décret 24-196 creates ~3-year window until June 2027.
-    // Phase 10.4: non-substitution — 06-198 art. 4: operating license does NOT replace GPL/energy-sector accreditation (21-430) or fire-safety authorization. Both required simultaneously.
-    criteria: 'توفر رخصة استغلال سارية لنشاط تركيب وصيانة أجهزة الغاز البترولي المميع (GPL/C)، صادرة عن الجهة الإدارية المختصة. في حال غياب الرخصة: (أ) المنشأة ضمن فترة التسوية (المرسوم 24-196، حتى يونيو 2027) → مخالفة جسيمة + إعذار فوري؛ (ب) خارج فترة التسوية → مخالفة بالغة الخطورة. تنبيه: رخصة الاستغلال لا تُغني عن الاعتماد المهني المقرر بالمرسوم 21-430 ولا عن ترخيص الوقاية من الحريق — كل رخصة مستقلة ومتزامنة.',
-    legalReference: 'المرسوم التنفيذي 06-198 المتعلق بالتنظيم المطبق على المؤسسات المصنفة لحماية البيئة، كما عُدِّل بالمرسومَيْن 22-167 و24-196 المادة 5 (رخصة الاستغلال للمؤسسات المصنفة) + المرسوم التنفيذي 21-430 المادة 3 (اشتراط الاعتماد المسبق من الوزارة المكلفة بالطاقة لمزاولة نشاط تركيب GPL/C).',
+    // Phase 10.4: non-substitution — 06-198 art. 4: operating license does NOT replace GPL/energy-sector accreditation or fire-safety authorization. Both required simultaneously.
+    criteria: 'توفر رخصة استغلال سارية لنشاط تركيب وصيانة أجهزة الغاز البترولي المميع (GPL/C)، صادرة عن الجهة الإدارية المختصة. في حال غياب الرخصة: (أ) المنشأة ضمن فترة التسوية (المرسوم 24-196، حتى يونيو 2027) → مخالفة جسيمة + إعذار فوري؛ (ب) خارج فترة التسوية → مخالفة بالغة الخطورة. تنبيه: رخصة الاستغلال لا تُغني عن الاعتماد المهني ولا عن ترخيص الوقاية من الحريق — كل رخصة مستقلة ومتزامنة.',
+    // W43 FIX: 21-430 is a 3-article modifier decree (Art.1 purpose, Art.2 amends 83-496, Art.3 publication).
+    // "21-430 المادة 3" was phantom. Operative rule: 83-496 Art.7 as amended by 21-430 Art.2 (agrément minister des mines) + 83-496 Art.16 (licence distribution).
+    legalReference: 'المرسوم التنفيذي 06-198 المتعلق بالتنظيم المطبق على المؤسسات المصنفة لحماية البيئة، كما عُدِّل بالمرسومَيْن 22-167 و24-196 المادة 5 (رخصة الاستغلال للمؤسسات المصنفة) + المرسوم 83-496 المادة 7 (معدَّلة بالمرسوم التنفيذي 21-430 المادة 2: اشتراط الاعتماد المسبق من الوزير المكلف بالمناجم لمزاولة نشاط تركيب GPL/C) + المرسوم 83-496 المادة 16 (رخصة استغلال منشآت توزيع GPL/C تُسلَّم من الوزير المكلف بالوقود بناءً على شهادة مطابقة من الوزير المكلف بالحماية المدنية).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -19,7 +21,13 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'توفر اعتماد مهني لنشاط تركيب وصيانة تجهيزات الغاز، وتوفر شهادات تكوين مهني في غاز الأكواني لمستخدمي الورشة.',
-    legalReference: 'المرسوم التنفيذي 21-430 المادة 4 (اشتراط الكفاءة التقنية وشهادة التأهيل المهني لمستخدمي نشاط تركيب وصيانة تجهيزات الغاز البترولي المميع) + المادة 5 (الحد الأدنى للمساحة والتجهيزات المطلوبة للاعتماد).',
+    // W43 FIX: 21-430 المادة 4 and المادة 5 are phantom (21-430 has only 3 articles).
+    // Operative rule: 83-496 Art.7 as amended by 21-430 Art.2 contains the full agrément conditions:
+    //   — attestation de qualification délivrée par un organisme agréé (= شهادة التأهيل المهني)
+    //   — certificat de scolarité niveau 4ème année moyenne minimum
+    //   — local d'au moins 60 m²
+    //   — liste de matériel
+    legalReference: 'المرسوم 83-496 المادة 7 (معدَّلة بالمرسوم التنفيذي 21-430 المادة 2: اشتراط شهادة التأهيل المهني الصادرة عن هيئة معتمدة، وشهادة مستوى تعليمي لا يقل عن السنة الرابعة متوسط، ووجود محل بمساحة لا تقل عن 60م²، وقائمة بالمعدات اللازمة، كشروط لاعتماد مركب GPL/C) + المرسوم 83-496 المادة 8 (معدَّلة بالمرسوم التنفيذي 21-430 المادة 2: اشتراط الموافقة المسبقة للتجهيزات وشهادة التركيب قبل تسليم ترخيص الاستغلال).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -43,7 +51,10 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'تخزين قوارير الغاز',
     category: 'سلامة',
     criteria: 'الفصل الواضح بين قوارير الغاز الممتلئة والقوارير الفارغة في مناطق تخزين محددة وموسومة.',
-    legalReference: 'المرسوم التنفيذي 21-430 المادة 6 (تنظيم مخزون قوارير GPL/C: الفصل بين الممتلئة والفارغة وتحديد مناطق التخزين لكل صنف).',
+    // W43 FIX: 21-430 المادة 6 is phantom (21-430 has only 3 articles).
+    // Operative rule: 83-496 Art.16 (licence exploitation imposed by minister + conformity cert from civil protection)
+    // + AIM GPL2 (arrêté conjoint issued per 83-496 Art.19) governs technical organisation of storage areas.
+    legalReference: 'المرسوم 83-496 المادة 16 (رخصة استغلال منشآت توزيع GPL/C تشترط المطابقة مع اشتراطات الحماية المدنية، بما فيها تنظيم مناطق التخزين) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (تنظيم مخزون قوارير GPL/C: الفصل بين الممتلئة والفارغة وتحديد مناطق التخزين لكل صنف).',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -64,7 +75,11 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'الوقاية من الحريق والانفجار',
     category: 'سلامة',
     criteria: 'حظر وجود أي مصدر لهب مكشوف (مشعل، دافئة، سيجارة) داخل مستودع الغاز ومناطق العمل المجاورة له، مع لوحات تحذير واضحة.',
-    legalReference: 'القانون 19-02 المادة 6 (حظر مصادر الاشتعال في مناطق تخزين المواد القابلة للاشتعال واشتراط لافتات التحذير) + المرسوم التنفيذي 21-430 المادة 10 (الحظر الصريح لأي مصدر حرارة أو اشتعال في محيط تخزين وعمل GPL/C).',
+    // W43 FIX: 21-430 المادة 10 is phantom. Operative rules:
+    //   — 83-496 Art.20 (infractions constatées et réprimées per legislation in force)
+    //   — loi 19-02 Art.6 (interdiction sources d'ignition in fire-risk zones)
+    //   — AIM GPL2 (technical rules per 83-496 Art.19) specifies the ban on naked flames in storage zones.
+    legalReference: 'القانون 19-02 المادة 6 (حظر مصادر الاشتعال في مناطق تخزين المواد القابلة للاشتعال واشتراط لافتات التحذير) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الحظر الصريح لأي مصدر حرارة أو اشتعال في محيط تخزين وعمل GPL/C) + المرسوم 83-496 المادة 20 (المخالفات تُعاين وتُلاحق وتُعاقب طبقاً للأحكام التشريعية والتنظيمية النافذة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -76,9 +91,12 @@ export const gplCriteria: InspectionItem[] = [
     // Phase W — AIM GPL2: extinguishers per storage capacity:
     //   ≤ 3500 kg total → 1 × 9 kg dry powder extinguisher minimum
     //   > 3500 kg total → 2 × 9 kg dry powder extinguishers minimum
-    // GPL installer workshops (21-430): minimum 2 CO2 or dry-powder extinguishers.
-    criteria: 'توفر طفايات حريق من نوع CO2 أو مسحوق جاف، بحالة صالحة للعمل مع بطاقة الصيانة والفحص السنوي. الحد الأدنى لنقاط التوزيع/التخزين (AIM GPL2): طفاية واحدة بوزن 9 كغ على الأقل إذا كانت الكمية المخزنة ≤3500 كغ، وطفايتان (9 كغ لكل منهما) إذا تجاوزت 3500 كغ. الحد الأدنى لورشة تركيب GPL/C (21-430): طفايتان على الأقل عند مستودع الغاز ومنطقة الاستقبال.',
-    legalReference: 'القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022) المادة 9 (مواصفات وعدد طفايات الحريق حسب الكمية المخزنة: 1×9كغ ≤3500كغ، 2×9كغ >3500كغ) + القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية) + المرسوم التنفيذي 21-430 المادة 13 (الحد الأدنى لمعدات الإطفاء في نقاط خدمة GPL/C).',
+    // GPL installer workshops: minimum 2 CO2 or dry-powder extinguishers (AIM GPL2 + loi 19-02).
+    criteria: 'توفر طفايات حريق من نوع CO2 أو مسحوق جاف، بحالة صالحة للعمل مع بطاقة الصيانة والفحص السنوي. الحد الأدنى لنقاط التوزيع/التخزين (AIM GPL2): طفاية واحدة بوزن 9 كغ على الأقل إذا كانت الكمية المخزنة ≤3500 كغ، وطفايتان (9 كغ لكل منهما) إذا تجاوزت 3500 كغ. الحد الأدنى لورشة تركيب GPL/C: طفايتان على الأقل عند مستودع الغاز ومنطقة الاستقبال.',
+    // W43 FIX: 21-430 المادة 13 is phantom. Operative rules:
+    //   — AIM GPL2 (per 83-496 Art.19) specifies extinguisher count per storage capacity
+    //   — loi 19-02 Art.7 covers first-response fire equipment generally
+    legalReference: 'القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) المادة 9 (مواصفات وعدد طفايات الحريق حسب الكمية المخزنة: 1×9كغ ≤3500كغ، 2×9كغ >3500كغ) + القانون 19-02 المادة 7 (تجهيزات الإطفاء الأولية في المنشآت ذات الأخطار).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -98,7 +116,11 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'أدوات العمل والمعدات',
     category: 'سلامة',
     criteria: 'استعمال أدوات غير مولدة للشرر (مفاتيح ومطارق من مواد غير فلزية أو مطلية) عند العمل في محيط الغاز.',
-    legalReference: 'القانون 88-07 المادة 10 (استعمال أدوات العمل المناسبة للبيئة الخطرة) + المرسوم التنفيذي 21-430 المادة 15 (الاشتراطات التقنية لأدوات العمل في محيط الغاز البترولي المميع: حظر الأدوات المولدة للشرر).',
+    // W43 FIX: 21-430 المادة 15 is phantom. Operative rules:
+    //   — 88-07 Art.10 (general workplace safety tool requirement)
+    //   — 83-496 Art.8 as amended by 21-430 Art.2 (approbation des équipements before use — implies conformity of tools)
+    //   — AIM GPL2 (technical rules per 83-496 Art.19) specifies non-spark tool requirement in GPL environments
+    legalReference: 'القانون 88-07 المادة 10 (استعمال أدوات العمل المناسبة للبيئة الخطرة) + القرار الوزاري المشترك (AIM GPL2، الإصدار 14/03/2022، الصادر تطبيقاً للمادة 19 من المرسوم 83-496) (الاشتراطات التقنية لأدوات العمل في محيط الغاز البترولي المميع: حظر الأدوات المولدة للشرر) + المرسوم 83-496 المادة 8 (معدَّلة: اشتراط مطابقة التجهيزات المستخدمة في نشاط GPL/C للمتطلبات التقنية النافذة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -108,7 +130,11 @@ export const gplCriteria: InspectionItem[] = [
     axis: 'أدوات العمل والمعدات',
     category: 'تنظيمية',
     criteria: 'وجود سجل صيانة لأجهزة خفض الضغط والمنظمات وأدوات الكشف، مع إجراء اختبارات تسرب دورية بعد كل عملية تركيب.',
-    legalReference: 'المرسوم التنفيذي 21-430 المادة 16 (إلزامية مسك سجل الصيانة وإجراء اختبارات التسرب الدورية على تجهيزات GPL/C بعد كل تركيب أو صيانة).',
+    // W43 FIX: 21-430 المادة 16 is phantom. Operative rules:
+    //   — 83-496 Art.8 as amended (contrôle et supervision des épreuves réglementaires)
+    //   — 83-496 Art.10 (équipements GPL soumis au contrôle technique du ministre des mines)
+    //   — 83-496 Art.11 (toute modification doit faire l'objet d'une approbation selon Art.8)
+    legalReference: 'المرسوم 83-496 المادة 8 (معدَّلة بالمرسوم التنفيذي 21-430 المادة 2: اشتراط الرقابة والإشراف على الاختبارات التنظيمية لتجهيزات GPL/C قبل تسليم ترخيص الاستغلال) + المرسوم 83-496 المادة 10 (إخضاع تجهيزات GPL المستعملة كوقود للمراقبة التقنية من قِبل الوزير المكلف بالمناجم) + المرسوم 83-496 المادة 11 (كل تعديل أو إصلاح على التجهيزات يجب أن يكون موضوع اعتماد وفق شروط المادة 8).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
