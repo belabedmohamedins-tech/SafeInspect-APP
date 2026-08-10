@@ -5,9 +5,7 @@
 **Journal Officiel :** N° 6 — 25 janvier 2009  
 **Source PDF convertie :** `decret 09-19.pdf` (Space files SafeInspect)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
-
-> ⚠️ **AVERTISSEMENT** : Vérifier contre le texte original du JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou d'application.
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
 
 ---
 
