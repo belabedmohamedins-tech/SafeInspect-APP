@@ -17,8 +17,9 @@
      README mis à jour le 2026-08-10 (16) — decret-09-19 objet corrigé (collecte déchets spéciaux, JO N°6/2009) + loi-01-19 et decret-09-19 Contrôle de séquence + JO header patché
      README mis à jour le 2026-08-10 (17) — D09-335 marqué ABROGÉ par D25-63 ; +3 rows : D21-319, D21-261, A2011-02-06-permis-construire-energie
      README mis à jour le 2026-08-10 (18) — D21-261 et A2011-02-06 marqués CONVERTIS ; A2011 date 1431→1432 corrigée après vérification JORADP par l'utilisateur
-     README mis à jour le 2026-08-10 (19) — 6 corrections statut : loi-03-10 audité, D06-138 annexes corrompues, D25-63 et D21-319 stubs retirés, loi-18-11 450 art., D21-319 JO N° 64 ; decret-24-197 ajouté (partiel) ; tableau de bord mis à jour
-     README mis à jour le 2026-08-10 (20) — 4 fichiers marqués CONVERTIS par utilisateur depuis PDF : decret-91-05, decret-93-120, loi-90-11, loi-19-02 ; tableau de bord mis à jour
+     README mis à jour le 2026-08-10 (19) — 6 corrections statut : loi-03-10 audité, D06-138 annexes corrompues, D25-63 et D21-319 stubs retirés, loi-18-11 450 art., D21-319 JO N° 64
+     README mis à jour le 2026-08-10 (20) — 4 fichiers marqués CONVERTIS : decret-91-05, decret-93-120, loi-90-11, loi-19-02
+     README mis à jour le 2026-08-10 (21) — decret-24-197 supprimé (hors scope SafeInspect) : row index + tableau de bord + note
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -36,14 +37,14 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 20)
+## Tableau de bord — Audit baseline 2026-08-10 (mis à jour patch 21)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
 | ✅ VÉRIFIÉ | 2 | `decret-07-144`, `decret-17-140` |
 | ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
 | ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 32 | voir index ci-dessous |
-| ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 2 | `decret-06-138`, `decret-24-197` |
+| ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 1 | `decret-06-138` |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
@@ -87,7 +88,6 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 85/2021) — [CONVERTI par utilisateur depuis PDF] |
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ CONFORME — [CONVERTI par utilisateur] |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ CONFORME — [CONVERTI par utilisateur] |
-| `decret-24-197-entrepreneuriat.md` | Décret exécutif n° 24-197 du 11 juin 2024 | Entrepreneuriat — modalités d'exercice | ⚠️ NON VÉRIFIÉ — **PARTIEL** — Art. 10, 21 bis, 22 bis non fournis dans le PDF source — [CONVERTI par utilisateur, lacunes documentées] — PDF de meilleure qualité requis pour compléter |
 | `decret-25-63-plans-intervention-catastrophes.md` | Décret exécutif n° 25-63 du 28 janvier 2025 | Plans d'intervention en matière de risques de catastrophes (PPI + PII) — Art. 1–30, 4 chapitres — Abroge D09-335 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 07/2025) — [CONVERTI 2026-08-10 par utilisateur] |
 | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
 | `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
@@ -119,16 +119,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 :** `decret-09-19.md` — objet corrigé dans README (était "système de management environnemental", est "collecte des déchets spéciaux"). JO N° 6/2009 ajouté. Contrôle de séquence + header JO patchés dans le fichier.
 - **2026-08-10 :** `loi-01-19-gestion-dechets.md` — JO N° 77/2001 + date de conversion ajoutés au header. Contrôle de séquence (Art. 1–72, aucun gap) ajouté en fin de fichier.
 - **2026-08-10 :** `decret-09-335-plans-internes-intervention.md` — note d'abrogation ajoutée dans le header : ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025). Fichier conservé pour référence historique.
-- **2026-08-10 :** `decret-25-63-plans-intervention-catastrophes.md` — créé par l'utilisateur. Art. 1–30 complets, 4 chapitres, JO N° 07/2025. Abroge D09-335. [CONVERTI 2026-08-10 — mention stub obsolète retirée]
-- **2026-08-10 :** `decret-21-319-autorisation-exploitation-hydrocarbures.md` — créé par l'utilisateur. Art. 1er–98 + 4 annexes complets. JO N° 64/2021. Abroge D08-312 et D15-09. [CONVERTI 2026-08-10 — mention stub et source cei-halfaoui obsolètes retirées]
-- **2026-08-10 :** `decret-21-261-esp-equipements-hydrocarbures.md` — converti par l'utilisateur depuis PDF (arh.gov.dz). Art. 1–104 complets (ESP + équipements électriques + protection cathodique + dispositions transitoires et finales). [CONVERTI 2026-08-10]
-- **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — converti par l'utilisateur depuis PDF (cntpp.dz). Art. 1–22 complets (4 chapitres : objet, procédure ordinaire, procédure spéciale État, droits communs). JO N° 23, 17 avril 2011. [CONVERTI 2026-08-10]
-- **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — erreur de frappe corrigée dans la formule de signature : date hégirienne **1431 → 1432**, après vérification par l'utilisateur sur JO N° 23/2011. Le texte est désormais conforme à la version officielle publiée.
-- **2026-08-10 (patch 19) :** `loi-03-10-protection-environnement.md` — séquence Art. 1–89 auditée le 2026-08-10, aucun gap. Statut mis à jour : texte intégral confirmé, JO N° 43/2003.
-- **2026-08-10 (patch 19) :** `decret-06-138-emissions-atmospheriques.md` — statut corrigé : PARTIEL — Annexes I–II corrompues par OCR. PDF de meilleure qualité requis.
-- **2026-08-10 (patch 19) :** `loi-18-11-sante.md` — précision ajoutée : 450 articles complets, Art. 12–16 intégrés.
-- **2026-08-10 (patch 19) :** `decret-24-197-entrepreneuriat.md` — ajouté à l'index. PARTIEL : Art. 10, 21 bis, 22 bis manquants dans le PDF source. PDF de meilleure qualité requis.
-- **2026-08-10 (patch 20) :** `decret-91-05-hygiene-securite-milieu-travail.md` — converti verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
-- **2026-08-10 (patch 20) :** `decret-93-120-medecine-du-travail.md` — converti verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
-- **2026-08-10 (patch 20) :** `loi-90-11-relations-travail.md` — convertie verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
-- **2026-08-10 (patch 20) :** `loi-19-02-incendie-panique.md` — convertie verbatim par l'utilisateur depuis PDF (2026-08-10). Statut mis à jour : texte intégral présent.
+- **2026-08-10 :** `decret-25-63-plans-intervention-catastrophes.md` — créé par l'utilisateur. Art. 1–30 complets, 4 chapitres, JO N° 07/2025. Abroge D09-335.
+- **2026-08-10 :** `decret-21-319-autorisation-exploitation-hydrocarbures.md` — créé par l'utilisateur. Art. 1er–98 + 4 annexes complets. JO N° 64/2021. Abroge D08-312 et D15-09.
+- **2026-08-10 :** `decret-21-261-esp-equipements-hydrocarbures.md` — converti par l'utilisateur depuis PDF (arh.gov.dz). Art. 1–104 complets. [CONVERTI 2026-08-10]
+- **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — converti par l'utilisateur depuis PDF (cntpp.dz). Art. 1–22 complets. JO N° 23, 17 avril 2011. [CONVERTI 2026-08-10]
+- **2026-08-10 :** `arrete-interministeriel-2011-02-06-permis-construire-energie.md` — date hégirienne corrigée : **1431 → 1432**, après vérification par l'utilisateur sur JO N° 23/2011.
+- **2026-08-10 (patch 19) :** `loi-03-10-protection-environnement.md` — séquence Art. 1–89 auditée, aucun gap. JO N° 43/2003 confirmé.
+- **2026-08-10 (patch 19) :** `decret-06-138-emissions-atmospheriques.md` — statut corrigé : PARTIEL — Annexes I–II corrompues par OCR.
+- **2026-08-10 (patch 19) :** `loi-18-11-sante.md` — 450 articles complets, Art. 12–16 intégrés.
+- **2026-08-10 (patch 20) :** `decret-91-05`, `decret-93-120`, `loi-90-11`, `loi-19-02` — convertis verbatim par l'utilisateur depuis PDF (2026-08-10).
+- **2026-08-10 (patch 21) :** `decret-24-197-entrepreneuriat.md` — supprimé de l'index (hors scope SafeInspect, confirmé par l'utilisateur). Fichier non présent dans le repo.
