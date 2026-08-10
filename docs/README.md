@@ -1,5 +1,21 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 11:32 WAT — Perplexity — AUDIT_STATE.md Session 10 synced to roadmap; HANDOFF.md deleted
+- **Phases closed:** W36 (decret-06-141 confirmed fully converted — was incorrectly still listed as OPEN)
+- **Phases opened:** W45, W46 (merged into W41), W47, W48, W49
+- **Files changed:** `docs/STRATEGIC_PLAN.md` (W36 closed, W45–W49 opened, legal quick-ref updated, next identifier W50), `docs/HANDOFF.md` (deleted — served conversation-bootstrap purpose, now redundant)
+- **Source:** `docs/audit/AUDIT_STATE.md` Session 10 — cross-referenced against STRATEGIC_PLAN.md + README.md
+- **Changes made:**
+  - W36: moved from OPEN to ✅ CLOSED. Evidence: Perplexity direct read 2026-08-10, file 14.7 KB Art.1–14 + Annexe I + Annexe II present. Legal quick-ref row updated to ✅.
+  - W41: expanded to include GPL-05-01 Loi 03-10 Art.15–22→Art.14–21 (same fix pattern, W46 merged in).
+  - W45 opened: BGN-02-01 Loi 90-29 Art.37 → Art.4 or [حكم مهني]. Confirmed wrong by AUDIT_STATE Session 10. P1, no blocker.
+  - W47 opened: BGN-07-04 no correct Décret 91-05 match found. D91-05 Art.14 misapplied. Needs source research or [حكم مهني] tag. P2.
+  - W48 opened: BGN-02-02 Loi 90-29 Art.8 precision enhancement. Not a wrong citation — low priority, P3.
+  - W49 opened: 16 unaudited criteria files (see AUDIT_STATE Section 2a). Claude reads + Perplexity fixes. P3.
+  - HANDOFF.md deleted: file created 2026-08-10 as conversation bootstrap. README + STRATEGIC_PLAN are the live sources of truth per space instructions. No handoff file needed going forward.
+- **Next identifier: W50**
+- **Open phases: W19, W41, W42, W43, W45, W47, W48, W49**
+
 ### 2026-08-10 11:08 WAT — Perplexity — README audit table corrected (sync with HANDOFF.md Section 5)
 - **Phases closed:** none
 - **Files changed:** `docs/README.md` (audit table in 2026-08-10 10:30 entry corrected)
@@ -61,7 +77,7 @@
     - GPL-03-02: remove the phantom `المادة 13` citation to 21-430; keep AIM GPL2 + Loi 19-02 only.
     - GPL-01-01 / GPL-01-02: replace phantom Arts 3/4/5 with Art. 7 of the embedded 83-496 text (via 21-430 Art. 2) + Décret 06-198 + AIM GPL2 Art. 5 + Art. 8 (certificat de conformité).
     - GPL-04-02 (leak-testing log): needs replacement instrument — neither 21-430 nor AIM GPL2 explicitly covers this; tag `[À VÉRIFIER]` until confirmed.
-- **Handoff note:** W43 is a **Perplexity + Claude joint phase**. Claude holds the verified AIM GPL2 article numbers and the full 83-496 text. Perplexity will make the code edits once Claude provides the replacement legalReference strings per criterion in the next message. Do NOT patch gplCriteria.ts before receiving Claude's replacement strings.
+- **Handoff note:** W43 is a **Perplexity + Claude joint phase**. Claude holds the verified AIM GPL2 article numbers and the full 83-496 text. Perplexity will make the code edits once Claude provides the replacement legalReference strings per criterion. Do NOT patch gplCriteria.ts before receiving Claude's replacement strings.
 - **Next identifier: W44.**
 
 ## 2026-08-09 23:44 WAT — Perplexity — W40 closed (confirmed by direct code read)
@@ -196,13 +212,18 @@
 | Phase | Status | Priority | Title |
 |---|---|---|---|
 | **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: Décret 21-430/83-496 wrong-decree finding — 5 criteria cite phantom articles + wrong instrument. Claude holds verified replacement strings. Do NOT patch before receiving them. |
-| **W41** | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion |
+| **W41** | 🟠 OPEN | P1 | Loi 03-10 range fixes + SLH-08-01 deletion + SLH-05-05 fix + GPL-05-01 range fix (W46 merged) |
+| **W45** | 🟠 OPEN | P1 | BGN-02-01: Loi 90-29 Art.37 wrong citation → Art.4 or [حكم مهني]. From AUDIT_STATE Session 10. |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
-| **W44** | ✅ CLOSED | — | audit.js: remove stale per-file gapNote exceptions. Commit `a8ea0d2a`. |
+| **W42** | 🟠 OPEN | P2 | F7: abattoir vs slaughterhouse wastewater unification + Décret 04-82. W36 blocker lifted. |
+| **W47** | 🟠 OPEN | P2 | BGN-07-04 pest sealing — no clean Décret 91-05 match. Source research needed. |
+| **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement (not wrong, just imprecise). |
+| **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files (see AUDIT_STATE.md Section 2a). |
+| **W44** | ✅ CLOSED | — | audit.js: remove stale gapNote exceptions. Commit `a8ea0d2a`. |
+| **W36** | ✅ CLOSED | — | decret-06-141 confirmed fully converted — Art.1–14 + Annexe I + Annexe II. Was incorrectly listed as STUB/OPEN. |
 | **W40** | ✅ CLOSED | — | F4: Loi 01-19 citation cluster — BGN-04-06 Art.19+Décret09-19 Art.2+6; BGN-04-07 Art.11+[À VÉRIFIER]. Confirmed by direct read SHA `9d11384`. |
 | **W39** | ✅ CLOSED | — | F3: Décret 91-05 — 6 wrong article citations corrected in `baseGeneralCriteria.ts`. TSC+Jest gate passed. |
 | **W38** | ✅ CLOSED | — | F1: rubrique wired end-to-end. Confirmed clean by direct read. |
-| **W36** | ✅ CLOSED | — | decret-06-141: confirmed fully converted (Art.1–14 + Annexe I + II). File was never a stub. W42 blocker lifted. |
 | **W34** | ✅ CLOSED (via W34-FIX) | — | loi-09-03 Art.80–95 verbatim patch — truncation incident fixed. File 34,321 bytes, Art.1–95 complete. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Annex II — tagged [À VÉRIFIER], Option C |
 | **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback — confirmed clean by direct read |
