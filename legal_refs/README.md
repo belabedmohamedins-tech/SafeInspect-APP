@@ -6,6 +6,7 @@
      README mis à jour le 2026-08-09 (5) — decret-83-496-gpl-carburant indexé
      README mis à jour le 2026-08-10 (6) — D04-82, D06-138, D09-335, D11-125, L04-08, L88-07 indexés
      README mis à jour le 2026-08-10 (7) — audit.js documenté comme outil natif du dossier
+     README mis à jour le 2026-08-10 (8) — sync 3 rows : loi-05-12 complète, D04-82 annexes retirées, D09-335 JO N° 68
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -49,16 +50,16 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
-| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 + Annexes I–III | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) — Note : les Annexes I–III semblent appartenir au D04-83 (tarifs phytosanitaires) inclus dans le même JO |
+| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 17/2004) — Annexes I–III retirées : elles appartiennent au D04-83 (tarifs phytosanitaires) — fichier D04-83 à créer |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 52/2004) |
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–75) |
-| `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau | ⚠️ NON VÉRIFIÉ — partiel (Art. 1–2, 86–106, 126–183 absents) |
+| `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 60/2005) — [CONVERTI 2026-08-10] |
 | `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 + Annexes I–II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 24/2006) |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 26/2006) |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Modalités de fonctionnement du système de management environnemental | ⚠️ NON VÉRIFIÉ — texte présent, statut non audité par grep |
-| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO non précisé dans le header) |
+| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 68, 25 octobre 2009) — [CONVERTI 2026-08-10] |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes | ⚠️ NON VÉRIFIÉ — texte intégral (Art. 1–95, amdt Loi 18-09 intégré) |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 18/2011) |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
@@ -86,4 +87,6 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-09 :** `decret-76-35`, `decret-02-427`, `decret-21-430` — ajoutés manuellement par l'utilisateur, indexés.
 - **2026-08-09 :** `decret-83-496-gpl-carburant.md` — ajouté manuellement, instrument original modifié par D21-430 (Art. 4, 7, 8).
 - **2026-08-10 :** 6 nouveaux fichiers ajoutés manuellement et indexés : `decret-04-82`, `decret-06-138`, `decret-09-335`, `decret-11-125`, `loi-04-08`, `loi-88-07`.
-- **Note `decret-04-82` :** Les Annexes I–III présentes dans le fichier (tarifs phytosanitaires, nomenclature douanière) semblent appartenir au D04-83 inclus dans le même JO — à vérifier contre le PDF original.
+- **2026-08-10 :** `loi-05-12` complétée — 183 articles intégraux présents.
+- **2026-08-10 :** `decret-04-82` — Annexes I–III (tarifs phytosanitaires D04-83) retirées. Fichier `decret-04-83` à créer.
+- **2026-08-10 :** `decret-09-335` — JO N° 68, 25 octobre 2009 inscrit dans le header.
