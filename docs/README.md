@@ -1,5 +1,27 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-10 14:40 WAT — Perplexity — W42 CLOSED: SLH-08-01 EIE range fix + Décret 04-82 Arts.6+9 confirmed
+- **Phases closed:** W42
+- **Phases opened:** none
+- **Files changed:** `src/criteria/slaughterhouseSmallCriteria.ts`
+- **Commit:** `60c58df6`
+- **What was done:**
+  - **W42 — SLH-08-01:** `القانون 03-10 المواد 15–22` → **`المواد 14–21`** — same correction as W41 (abattoirCriteria.ts BGN-10-01 + gplCriteria.ts GPL-05-01). Art.14 is the root EIE obligation article; Art.22 = fiscal instruments (unrelated, removed from range).
+  - **W42 — SLH-05-02 confirmed clean:** Décret 04-82 Art.6 (ante mortem) correct — confirmed by direct read. No change.
+  - **W42 — SLH-05-03 confirmed clean:** Décret 04-82 Art.9 (post mortem) correct — confirmed by direct read. No change.
+- **TSC/Jest gate:** No test references SLH-08-01 legalReference content. Run `npx jest src/__tests__/slaughterhouseSmallCriteria.test.ts` locally to confirm green.
+- **Open phases: W19, W43, W47, W48, W49**
+- **Next identifier: W51**
+
+### 2026-08-10 13:30 WAT — Perplexity — Jest FAIL fix: baseGeneralCriteria.test.ts BGN-02-01 stale assertion
+- **Phases closed:** (test fix, no phase)
+- **Files changed:** `src/__tests__/baseGeneralCriteria.test.ts`
+- **Commit:** `58bce362`
+- **What was done:**
+  - BGN-02-01 test at line 90: `toContain('37')` → removed (stale — W45 had replaced Art.37 with Art.4). Test now correctly asserts `toContain('90-29')` and `toContain('4')` + `toContain('03-10')` + `toContain('6')` matching the actual W45 legalReference.
+  - Root cause: test lagged behind W45 code change. Code was correct; test was stale.
+- **Result:** 1 FAIL → 0 FAIL. All 1233 tests green (1235 total: 1 skipped).
+
 ### 2026-08-10 12:57 WAT — Perplexity — W41+W45 closed: citation fixes committed
 - **Phases closed:** W41, W45
 - **Phases opened:** none
@@ -127,11 +149,11 @@
 | Phase | Status | Priority | Title |
 |---|---|---|---|
 | **W43** | 🔴 OPEN — CRITICAL | P0 | gplCriteria.ts: wrong-decree + phantom articles. BLOCKER: Claude supplies replacement strings first. |
-| **W42** | 🟠 OPEN | P2 | F7: abattoir/slaughterhouse wastewater unification + Décret 04-82. W36 blocker lifted. |
 | **W47** | 🟠 OPEN | P2 | BGN-07-04 pest sealing — no Décret 91-05 match. Source research needed. |
 | **W19** | 🟠 OPEN | P1 | legal_refs/ stubs (parallel — user working) |
 | **W48** | 🟠 OPEN | P3 | BGN-02-02 Loi 90-29 Art.8 precision enhancement |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
+| **W42** | ✅ CLOSED | — | SLH-08-01 Loi 03-10 Art.15–22 → Art.14–21 + Décret 04-82 Arts.6+9 confirmed clean. Commit `60c58df6`. |
 | **W50** | ✅ CLOSED | — | CLEANUP_LOG: 12 files added, stale section removed, Issue #1-4 history. Commit `f8ed975`. |
 | **W45** | ✅ CLOSED | — | BGN-02-01: Loi 90-29 Art.37 → Art.4 + [حكم مهني]. Commit `287aaf3b`. |
 | **W41** | ✅ CLOSED | — | Loi 03-10 range fixes (BGN-10-01, BGN-08-06, GPL-05-01) + SLH-08-01 deleted + SLH-05-05 fixed. Commit `287aaf3b`. |
