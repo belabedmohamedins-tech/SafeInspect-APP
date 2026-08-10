@@ -43,6 +43,26 @@
 //              (disposal conditions: no emission, no danger to health/environment)
 //              + Décret 07-205 (approved incinerator requirements). Open a LEGAL-VERIFY
 //              phase to locate the explicit prohibition article.
+// W41 (2026-08-10): 2 wrong article citations corrected after direct read of
+//   legal_refs/loi-03-10-protection-environnement.md (all 89 articles confirmed).
+//   BGN-10-01: Loi 03-10 "Art.15–22" → "Art.14–21".
+//     Art.14 is the primary EIE obligation article (projects susceptible to harm
+//     the environment are subject to a prior EIE). It was excluded from the old
+//     range, making the citation miss the root obligation entirely.
+//     Art.22 = fiscal/economic instruments (completely unrelated to EIE).
+//     Confirmed: Arts.14–21 form the complete EIE chapter (Chapitre II, Titre II).
+//   BGN-08-06: Loi 03-10 Art.18 (who may prepare EIE — accredited orgs) → Art.63
+//     (installations classées subject to prior authorization OR declaration) +
+//     Art.77 (penal article: 50,000–500,000 DA fine + 2 months–2 years prison
+//     for operating an installation classée without required authorization).
+//     Art.18 confirmed to address EIE preparer accreditation — wrong domain.
+// W45 (2026-08-10): BGN-02-01 wrong article corrected after direct read of
+//   legal_refs/loi-90-29-urbanisme.md (AUDIT_STATE Session 10 / Finding F5).
+//   Loi 90-29 Art.37 confirmed = setting atmospheric emission value limits —
+//   completely unrelated to facility siting away from pollution sources.
+//   Replaced with Art.4 (constructibility conditions including ecological-balance
+//   compatibility — closest available match in this law) + [حكم مهني] tag
+//   (no dedicated "distance from pollution sources" article exists in Loi 90-29).
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -94,7 +114,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'موقع المنشأة بعيد عن مصادر التلوث الظاهر (مفرغة، مياه راكدة، دخان صناعي).',
-    legalReference: 'القانون 90-29 المادة 37 (احترام قواعد التهيئة وعدم إقامة منشآت مضرة بمحيطها العمراني) + القانون 03-10 المادة 6 (مبدأ الوقاية ومنع الإضرار بالبيئة والجوار).',
+    // W45 (2026-08-10): CORRECTED — Loi 90-29 Art.37 confirmed = atmospheric emission
+    // VALUE LIMITS (wrong domain). Art.4 is the constructibility/ecological-balance
+    // compatibility article — closest match in this law for siting obligations.
+    // [حكم مهني]: no dedicated "distance from pollution sources" article exists
+    // in Loi 90-29 (all 81 articles read — AUDIT_STATE Session 10 / Finding F5).
+    legalReference: 'القانون 90-29 المادة 4 (شروط قابلية البناء — ضرورة تحقيق التوافق مع متطلبات التوازن البيئي والإيكولوجي للموقع) + القانون 03-10 المادة 6 (مبدأ الوقاية ومنع الإضرار بالبيئة والجوار). [حكم مهني — W45]: لا توجد مادة صريحة في القانون 90-29 تُحدد مسافات فصل بين المنشآت ومصادر التلوث — يعتمد المفتش حكمه المهني وإرشادات التخطيط العمراني المحلية.',
     severity: 'medium',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -444,7 +469,16 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'تنظيمية',
     criteria: 'بالنسبة للمنشآت المصنفة من الدرجة الأولى (التي تستلزم قرار الوالي): التحقق من وجود قرار الاستغلال الصادر عن الوالي (رخصة استغلال المؤسسات المصنفة D1) ساري المفعول، وأن النشاط المُمارَس فعلياً مطابق للنشاط المُرخَّص به، وأن التعديلات الجوهرية أُخضِعت لإجراءات الترخيص المسبق. تنبيه: هذا القرار لا يُغني عن الحصول المستقل على رخصة الوقاية من الحريق ورخصة التفريغ وسائر التراخيص القطاعية الأخرى — كل ترخيص يُفحص على حدة.',
-    legalReference: 'المرسوم التنفيذي 06-198 المادة 7 المعدَّل بالمرسومين 22-167 و24-196 (قرار الوالي لمنشآت الدرجة الأولى) + القانون 03-10 المادة 18 (إلزامية الترخيص المسبق للمنشآت المصنفة D1 وتجريم مخالفته).',
+    // W41 (2026-08-10): CORRECTED — Loi 03-10 Art.18 confirmed WRONG.
+    //   Art.18 = who may prepare an EIE study (accredited organisms) — EIE domain, not
+    //   installations classées authorization.
+    //   Replaced with:
+    //   Art.63: installations classées subject to prior authorization (ministre) OR
+    //           declaration — the article that establishes the authorization regime.
+    //   Art.77: penal article — 50,000–500,000 DA fine + 2 months–2 years imprisonment
+    //           for operating an installation classée without required authorization.
+    //   Both confirmed by direct read of legal_refs/loi-03-10 (all 89 articles, 2026-08-10).
+    legalReference: 'المرسوم التنفيذي 06-198 المادة 7 المعدَّل بالمرسومين 22-167 و24-196 (قرار الوالي لمنشآت الدرجة الأولى) + القانون 03-10 المادة 63 (إلزامية الترخيص المسبق أو التصريح للمنشآت المصنفة — يُرسي نظام الترخيص) + المادة 77 (العقوبة الجزائية: غرامة من 50.000 إلى 500.000 دج وحبس من شهرين إلى سنتين لكل من يستغل منشأة مصنفة دون الترخيص المطلوب).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -489,7 +523,18 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من السلطة المختصة، وذلك للمنشآت المصنفة من الفئة الأولى والثانية وفق قائمة التصنيف المحددة بالمرسوم 07-144. تشمل المراجعة: (أ) وجود وثيقة الدراسة المعتمدة في الملف؛ (ب) عدم تجاوز الحدود البيئية المحددة فيها (ضجيج، روائح، غازات، مياه)؛ (ج) إعادة إجراء الدراسة عند إجراء توسعات أو تغييرات جوهرية في طبيعة النشاط أو طاقته.',
-    legalReference: 'القانون 03-10 المواد 15–22 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة وفئاتها). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة وإجراءاتها). المرسوم التنفيذي 07-144 (قائمة المنشآت المصنفة وتصنيفها إلى فئات). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ربط رخصة الاستغلال بنتائج دراسة التأثير أو الموجز البيئي).',
+    // W41 (2026-08-10): CORRECTED — range "Art.15–22" → "Art.14–21".
+    //   Art.14 is the primary EIE obligation article: projects/installations susceptible
+    //   to harm the environment are subject to a prior EIE — this was excluded from the
+    //   old range, making the citation miss the root obligation entirely.
+    //   Art.22 = fiscal/economic instruments (État may use economic/fiscal instruments
+    //   to orient activities toward environmental protection) — completely unrelated to
+    //   EIE requirements; removed from range.
+    //   Correct range: Arts.14–21 = Chapitre II (Études d'impact), Titre II, Loi 03-10.
+    //   Confirmed by direct read of legal_refs/loi-03-10 (all 89 articles, 2026-08-10).
+    //   Note: same range error also existed on GPL-05-01 — flagged in AUDIT_STATE F8,
+    //   to be fixed in the W43 phase (gplCriteria.ts).
+    legalReference: 'القانون 03-10 المواد 14–21 (الفصل الثاني — دراسات التأثير على البيئة: المادة 14 تُرسي الالتزام الأساسي بإجراء دراسة تأثير مسبقة للمشاريع والمنشآت المرشحة للإضرار بالبيئة؛ المواد 15–21 تُحدد محتوى الدراسة والمشاريع الخاضعة لها وإجراءات التحقيق العمومي والتنظيم). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة وإجراءاتها). المرسوم التنفيذي 07-144 (قائمة المنشآت المصنفة وتصنيفها إلى فئات). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ربط رخصة الاستغلال بنتائج دراسة التأثير أو الموجز البيئي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
