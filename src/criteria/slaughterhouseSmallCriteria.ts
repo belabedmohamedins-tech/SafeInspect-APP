@@ -1,3 +1,10 @@
+// src/criteria/slaughterhouseSmallCriteria.ts
+// W42 (2026-08-10): SLH-08-01 legalReference corrected — Loi 03-10 "المواد 15–22" → "المواد 14–21".
+//   Same W41 fix applied to abattoirCriteria.ts now applied here.
+//   Art.14 is the root EIE obligation article (missed by the old range).
+//   Art.22 = fiscal instruments — completely unrelated to EIE. Confirmed by direct read.
+//   Décret 04-82 Arts.6 (SLH-05-02) + Arts.9 (SLH-05-03) confirmed correct by direct read.
+//   ABT-AX6-02 [À VÉRIFIER] on Annex II g/tonne — intentional per W10 decision. No change.
 import { InspectionItem } from '../types';
 
 export const slaughterhouseSmallCriteria: InspectionItem[] = [
@@ -16,6 +23,8 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'الذبح والفحص الصحي',
     category: 'صحية',
     criteria: 'تنظيم فحص صحي قبل الذبح للدواجن (ante mortem) للتأكد من خلوّها من الأمراض الظاهرة واستبعاد الحالات المشتبه فيها قبل الدخول إلى غرفة الذبح.',
+    // W42 (2026-08-10): CONFIRMED CLEAN — Art.6 of Décret 04-82 is the correct article
+    // (ante mortem health inspection requirement). No change needed.
     legalReference: 'المادة 6 من المرسوم التنفيذي 04-82 المؤرخ في 24 مارس 2004 المتعلق بالاعتماد الصحي للمنشآت المرتبطة بالحيوانات والمنتوجات الحيوانية، التي تشترط إجراء المراقبة الصحية قبل ذبح الدواجن.',
     severity: 'high',
     controlType: 'visual',
@@ -26,6 +35,8 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'الذبح والفحص الصحي',
     category: 'صحية',
     criteria: 'إجراء فحص بعدي للذبائح (post mortem) للتأكد من سلامة الذبائح واستبعاد الأجزاء أو الذبائح غير الصالحة للاستهلاك وتوجيهها لمسار نفايات خاص.',
+    // W42 (2026-08-10): CONFIRMED CLEAN — Art.9 of Décret 04-82 is the correct article
+    // (post mortem inspection requirement). No change needed.
     legalReference: 'المادة 9 من المرسوم 04-82 بخصوص الاعتماد الصحي للمنشآت الحيوانية، والمادة 3 من المرسوم 17-140 المؤرخ في 27 مارس 2017 حول سلامة المنتجات الغذائية ذات الأصل الحيواني.',
     severity: 'high',
     controlType: 'visual',
@@ -181,7 +192,11 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (DBO5، روائح، ضجيج، مخلفات ذبح)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في الطاقة التذبيحية.',
-    legalReference: 'القانون 03-10 المواد 15–22 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
+    // W42 (2026-08-10): CORRECTED — "المواد 15–22" → "المواد 14–21".
+    // Same correction as W41 on abattoirCriteria.ts (BGN-10-01 + GPL-05-01).
+    // Art.14 = root EIE obligation (missed by old range). Art.22 = fiscal instruments (unrelated).
+    // Confirmed by direct read: Arts.14–21 form the complete EIE chapter (Chapitre II, Titre II).
+    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
