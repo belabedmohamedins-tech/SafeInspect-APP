@@ -7,6 +7,8 @@
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
+> **Note de correction (2026-08-10) :** Le texte source comportait une erreur de frappe dans la formule de signature finale : la date hégirienne y était écrite « 3 Rabie El Aouel **1431** » au lieu de « 3 Rabie El Aouel **1432** ». La version officielle publiée au Journal Officiel n° 23 du 17 avril 2011 porte bien **1432**, correspondant au 6 février 2011. La correction a été apportée après vérification par l'utilisateur sur le JORADP. Le texte ci-dessous reflète la version officielle.
+
 ---
 
 ## PRÉAMBULE
@@ -319,7 +321,7 @@ Au-delà de cette période de cinq (5) ans une demande de prolongation ou de ren
 
 **Art. 22.** — Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-Fait à Alger, le 3 Rabie El Aouel 1431 correspondant au 6 février 2010.
+Fait à Alger, le 3 Rabie El Aouel 1432 correspondant au 6 février 2011.
 
 Le ministre de l'énergie Le ministre de l'habitat et des mines et de l'urbanisme
 
@@ -339,6 +341,6 @@ Liste des articles de l'Arrêté interministériel dans l'ordre numérique :
 
 **Intégrité du texte :** L'arrêté est complet. Tous les articles sont présents dans l'extraction fournie.
 
-**Note sur la signature :** La date figurant dans la signature est "3 Rabie El Aouel 1431" (6 février 2010), mais le Journal Officiel indique 1432 (2011). Il s'agit probablement d'une erreur de frappe dans le document source. Le texte a été conservé tel quel.
+**Note sur la correction de date :** La date hégirienne dans la formule de signature était erronément « 3 Rabie El Aouel 1431 » dans le texte source original. Après vérification par l'utilisateur sur le Journal Officiel n° 23 du 17 avril 2011, la date correcte est **3 Rabie El Aouel 1432** correspondant au 6 février 2011. Correction appliquée le 2026-08-10.
 
 ---
