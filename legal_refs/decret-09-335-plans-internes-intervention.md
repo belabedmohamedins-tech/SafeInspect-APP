@@ -7,6 +7,8 @@
 **Statut de vérification :** ⚠️ NON VÉRIFIÉ  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
+> ⚠️ **ABROGÉ par le décret exécutif n° 25-63 du 28 janvier 2025 (JO N° 07/2025)** — voir `decret-25-63-plans-intervention-catastrophes.md`
+
 ---
 
 ## PRÉAMBULE
