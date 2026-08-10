@@ -38,7 +38,7 @@
 //              Décret 09-19 Arts.4-8 (too broad) → Art.2 (approval scope/definition)
 //              + Art.6 (conditions for granting approval to collector/transporter).
 //   BGN-04-07: Loi 01-19 Art.30 (import/export of hazardous waste — wrong domain)
-//              → [À VÉRIFIER — open]: Art.30 covers transboundary movement, not
+//              → [À VÉRIFIER — open W40]: Art.30 covers transboundary movement, not
 //              unlicensed incineration. Best available basis: Loi 01-19 Art.11
 //              (disposal conditions: no emission, no danger to health/environment)
 //              + Décret 07-205 (approved incinerator requirements). Open a LEGAL-VERIFY
@@ -70,6 +70,12 @@
 //   Replaced with Art.2 (employer obligation to maintain premises clean/intact) +
 //   Art.3 (surface material requirements: impermeability, no cracks) — closest
 //   available legal foundation. [حكم مهني] tag added per protocol.
+// W48 (2026-08-10): BGN-02-02 legalReference precision enhancement.
+//   Previous ref: Loi 90-29 Art.4 (generic constructibility/ecological balance).
+//   W48 adds Art.8 which explicitly addresses the obligation to prevent nuisance
+//   impacts on neighbouring properties — a near-exact match for this criterion
+//   (noise, odours, emissions, vibrations affecting residents/neighbours).
+//   Art.4 retained as secondary supporting basis; Art.8 promoted to primary.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -136,7 +142,11 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'الموقع والتهيئة العامة',
     category: 'بيئية',
     criteria: 'نشاط المنشأة لا يسبب ضرراً للساكنة المجاورة (ضجيج، روائح، انبعاثات، اهتزازات).',
-    legalReference: 'القانون 03-10 (حماية البيئة) المادة 6 (مبدأ الحيطة ومنع الضرر على الجوار) + القانون 90-29 المادة 4 (التهيئة والتعمير — شروط قابلية البناء وتوافق النشاط مع المحيط والجوار).',
+    // W48 (2026-08-10): ENHANCED — Loi 90-29 Art.4 (generic constructibility) replaced
+    // as primary by Art.8 (explicit obligation to avoid nuisance impacts on neighbouring
+    // properties — direct match for noise/odours/emissions/vibrations criterion).
+    // Art.4 retained as secondary supporting basis for site-compatibility framing.
+    legalReference: 'القانون 90-29 المادة 8 (إلزامية مراعاة حقوق الجوار وعدم التسبب في إزعاج أو أضرار للساكنة المجاورة — الأساس المباشر لحظر الضجيج والروائح والانبعاثات والاهتزازات الضارة بالجوار) + المادة 4 (شروط قابلية البناء وتوافق النشاط مع المحيط البيئي والإيكولوجي للموقع) + القانون 03-10 المادة 6 (مبدأ الحيطة ومنع الضرر على الجوار).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
