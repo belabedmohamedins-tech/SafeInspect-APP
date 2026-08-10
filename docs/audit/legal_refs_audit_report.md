@@ -70,9 +70,9 @@ exactly as the instructions require:
 
 ---
 
-## 4. Issues found this session
+## 4. Issues found
 
-### Issue #1 — `decret-83-496`: superseded text shown without inline modification notice
+### Issue #1 — ⚠️ OPEN — `decret-83-496`: superseded text shown without inline modification notice
 Art. 4, 7, and 8 display their **original 1983 wording**. These three articles
 were replaced by `decret-21-430` (2021), and the file *does* explain this — but
 only in an end-of-file note, not inline at each amended article as the
@@ -82,7 +82,7 @@ Art. 4 would see outdated law with no indication, right at the point of reading.
 **Fix:** add the inline modification note at Art. 4, 7, and 8 themselves, not
 just in the closing summary.
 
-### Issue #2 — `loi-09-03`: self-declared `✅ VÉRIFIÉ` with no named human reviewer
+### Issue #2 — ⚠️ OPEN — `loi-09-03`: self-declared `✅ VÉRIFIÉ` with no named human reviewer
 Per the instructions (Rule 6), only a human reviewer may set this status. The
 file's header currently shows `✅ VÉRIFIÉ` with no name attached — a
 carry-over from the earlier "Phase W32" incident. The content itself is now
@@ -90,7 +90,7 @@ genuinely complete and correct, but the status field is not compliant.
 **Fix:** revert to `⚠️ NON VÉRIFIÉ` until an actual human sign-off happens, or
 add the reviewer's name/date if one occurred.
 
-### Issue #3 — `loi-03-10`: missing mandatory header entirely, no sequence audit
+### Issue #3 — ⚠️ OPEN — `loi-03-10`: missing mandatory header entirely, no sequence audit
 No verification status, no conversion date, no PDF source citation, no JORADP
 warning, and **no `## Contrôle de séquence` section at all**. Content itself
 reads as structurally complete (Art. 1–89 across 8 titres, including penal
@@ -98,7 +98,7 @@ provisions) but this predates the current rules and was never retrofitted.
 **Fix:** add the mandatory header block and a sequence-audit section like every
 other file in the corpus has.
 
-### Issue #4 — `CLEANUP_LOG.md` is stale
+### Issue #4 — ⚠️ OPEN — `CLEANUP_LOG.md` is stale
 Still lists `loi-90-11`, `loi-90-29`, `loi-04-20`, `loi-05-12`, `loi-18-11-sante`
 as "❌ À créer" even though all five are in the repo and verified complete. It
 also has no entries at all for the 7 newest decrees (`decret-02-427`,
@@ -110,7 +110,7 @@ folder contents.
 listing before the next session starts, per the file's own stated purpose
 ("LIRE EN PREMIER... évite de repousser des fichiers déjà présents").
 
-### Issue #5 — `audit.js`: two bugs found and fixed during this session
+### Issue #5 — ✅ FIXED — `audit.js`: two bugs found and fixed during this session
 1. Original regex didn't match bold (`**Art. N.**`) or colon-terminated
    (`**Article N :**`) headers — fixed.
 2. The fix for #1 initially caused a new bug: cross-references appearing on
@@ -140,10 +140,15 @@ before considering the corpus closed.
 
 ## 6. Recommended next actions, in order
 
-1. Fix Issue #1 (decret-83-496 inline modification notice) — factual accuracy risk.
-2. Fix Issue #2 (loi-09-03 verification status) — one-line correction.
-3. Fix Issue #3 (loi-03-10 missing header/audit section) — compliance gap.
-4. Regenerate `CLEANUP_LOG.md` and reconcile `README.md` against the real
-   current file listing (Issue #4).
+1. **Issue #1** — Fix `decret-83-496` inline modification notice at Art. 4, 7, 8 — factual accuracy risk.
+2. **Issue #2** — Fix `loi-09-03` verification status header — one-line correction.
+3. **Issue #3** — Add mandatory header + sequence-audit section to `loi-03-10`.
+4. **Issue #4** — Regenerate `CLEANUP_LOG.md` and reconcile `README.md` against the real
+   current file listing.
 5. Source the missing JORADP pages for `loi-05-12` (Art. 1–2, 86–106, 126–183)
    and `decret-07-144` (rubriques 1243–2922) when available.
+
+---
+
+## DOCUMENT HISTORY
+- **2026-08-10:** Initial version — full corpus audit (25 files + audit.js + README + CLEANUP_LOG).
