@@ -1,615 +1,486 @@
-<!-- ============================================================
-     FICHE D'IDENTIFICATION
-     Titre         : Loi n° 04-20 du 13 Dhou El Kaada 1425
-                     correspondant au 25 décembre 2004 relative à
-                     la prévention des risques majeurs et à la
-                     gestion des catastrophes dans le cadre du
-                     développement durable
-     Signataire    : Abdelaziz BOUTEFLIKA, Président de la République
-     Date signature: 25 décembre 2004 (13 Dhou El Kaada 1425)
-     JO n°         : Non indiqué dans le PDF — vérifier JORADP
-     Source PDF    : Loi-04-20.pdf
-     Date conversion: 2026-08-09
-     Statut        : ⚠️ NON VÉRIFIÉ
-     ⚠️  Vérifier contre le texte original JORADP avant toute
-         décision légale ou d'application.
-============================================================ -->
+# Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme
 
-# Loi n° 04-20 du 13 Dhou El Kaada 1425 correspondant au 25 décembre 2004 relative à la prévention des risques majeurs et à la gestion des catastrophes dans le cadre du développement durable
+**Date de signature :** 1er décembre 1990  
+**Journal Officiel :** N° 52, 2 décembre 1990 — pages 1408 à 1415  
+**Source PDF :** Fourni par l'utilisateur (`loi 90-29.pdf`)  
+**Date de conversion :** 2026-08-10  
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-> **Source :** Loi-04-20.pdf — JO n° non indiqué dans le PDF source ; vérifier au JORADP.  
-> **Statut :** ⚠️ NON VÉRIFIÉ — Vérifier contre le texte original JORADP avant toute décision légale ou d'application.
+**Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.
 
 ---
 
+## PRÉAMBULE
+
 Le Président de la République,
 
-Vu la Constitution, notamment ses articles 119, 120, 122 et 126 ;
+Vu la Constitution ;
 
-Vu l'ordonnance n° 66-155 du 8 juin 1966, modifiée et complétée, portant code de procédure pénale ;
+Vu l'ordonnance n° 64-244 du 22 août 1964 relative aux aérodromes et aux servitudes dans l'intérêt de la sécurité ;
 
-Vu l'ordonnance n° 66-156 du 8 juin 1966, modifiée et complétée, portant code pénal ;
+Vu l'ordonnance n° 66-62 du 26 mars 1966 relative aux zones et sites touristiques et les textes subséquents ;
 
-Vu l'ordonnance n° 74-55 du 13 mai 1974 portant ratification de la convention internationale relative à la création d'un fonds international d'indemnisation pour les dommages dûs à la pollution par les hydrocarbures, faite à Bruxelles le 18 décembre 1971 ;
+Vu l'ordonnance n° 66-154 du 8 juin 1966 portant code de procédure civile, modifiée et complétée ;
 
-Vu l'ordonnance n° 75-58 du 26 septembre 1975, modifiée et complétée, portant code civil ;
+Vu l'ordonnance n° 66-155 du 8 juin 1966 portant code de procédure pénale, modifiée et complétée ;
 
-Vu l'ordonnance n° 76-04 du 20 février 1976 relative aux règles applicables en matière de sécurité contre les risques de l'incendie et de panique et à la création de commissions de prévention et de protection civile ;
+Vu l'ordonnance n° 67-281 du 20 décembre 1967 relative aux fouilles et à la protection des sites et monuments historiques et naturels ;
 
-Vu l'ordonnance n° 76-80 du 23 octobre 1976, modifiée et complétée, portant code maritime ;
+Vu l'ordonnance n° 75-43 du 17 juin 1975 portant code pastoral,
 
-Vu la loi n° 83-17 du 16 juillet 1983, modifiée et complétée, portant code des eaux ;
+Vu l'ordonnance n° 75-58 du 26 septembre 1975 portant code civil, modifiée et complétée ;
 
-Vu la loi n° 84-12 du 23 juin 1984, modifiée et complétée, portant régime général des forêts ;
+Vu l'ordonnance n° 75-74 du 12 novembre 1975 portant établissement du cadastre général et institution du livre foncier ;
 
-Vu la loi n° 84-17 du 7 juillet 1984, modifiée et complétée, relative aux lois de finances ;
+Vu l'ordonnance n° 75-79 du 15 décembre 1975 relative aux sépultures ;
 
-Vu la loi n° 85-05 du 16 février 1985, modifiée complétée, relative à la protection et à la promotion de la santé ;
+Vu l'ordonnance n° 76-29 du 26 mars 1976 relative à l'acquisition et à la gestion du domaine du chemin de fer ;
 
-Vu la loi n° 87-17 du 1er août 1987 relative à la protection phytosanitaire ;
+Vu l'ordonnance n° 76-48 du 25 mai 1976 fixant les règles de l'expropriation pour cause d'utilité publique ;
 
-Vu la loi n° 88-08 du 26 janvier 1988 relative aux activités de médecine vétérinaire et à la protection de la santé animale ;
+Vu la loi n° 82-02 du 6 février 1982 relative au permis de construire et au permis de lotir, modifiée et complétée ;
 
-Vu la loi n° 90-07 du 3 avril 1990, modifiée, relative à l'information ;
+Vu la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement ;
+
+Vu la loi n° 83-18 du 13 août 1983 relative à l'accession à la protection foncière agricole ;
+
+Vu la loi n° 84-12 du 23 juin 1984 portant régime général des forêts ;
+
+Vu l'ordonnance n° 84-02 du 8 septembre 1984 portant définition, composition et formation du domaine militaire, approuvée par la loi n° 84-19 du 6 novembre 1984 ;
+
+Vu l'ordonnance n° 85-01 du 13 août 1985 fixant, à titre transitoire, les règles d'occupation des sols en vue de leur préservation et de leur protection, approuvée par la loi n° 85-08 du 12 novembre 1985 ;
+
+Vu la loi n° 86-14 du 19 août 1986 relative aux activités de protection, de recherche, d'exploitation et de transport par canalisation des hydrocarbures ;
+
+Vu la loi n° 87-03 du 27 janvier 1987 relative à l'aménagement du territoire ;
+
+Vu la loi n° 88-01 du 12 janvier 1988 portant loi d'orientation sur les entreprises publiques économiques ;
+
+Vu la loi n° 88-02 du 12 janvier 1988 relative à la planification, modifiée et complétée ;
 
 Vu la loi n° 90-08 du 7 avril 1990 relative à la commune ;
 
-Vu la loi n° 90-09 du 7 avril 1990 relative à la wilaya ;
+Vu la loi n° 90-09 du 7 avril 1990 relative à la wilaya.
 
-Vu la loi n° 90-25 du 18 novembre 1990, modifiée et complétée, relative à l'orientation foncière ;
+Vu la loi n° 90-25 du 18 novembre 1990 relative à l'orientation foncière ;
 
-Vu la loi n° 90-29 du 1er décembre 1990, modifiée et complétée, relative à l'aménagement et l'urbanisme ;
+Vu la loi n° 90-30 du 1er décembre 1990 portant loi domaniale.
 
-Vu la loi n° 90-30 du 1er décembre 1990, modifiée et complétée, relative à la loi domaniale ;
-
-Vu la loi n° 91-11 du 27 avril 1991 fixant les règles relatives à l'expropriation pour cause d'utilité publique ;
-
-Vu la loi n° 91-23 du 6 décembre 1991 relative à la participation de l'armée nationale populaire à des missions de sauvegarde de l'ordre public hors les situations d'exception ;
-
-Vu l'ordonnance n° 95-07 du 23 Chaâbane 1415 correspondant au 25 janvier 1995 relative aux assurances ;
-
-Vu la loi n° 98-04 du 20 Safar 1419 correspondant au 15 juin 1998 relative à la protection du patrimoine culturel ;
-
-Vu la loi n° 99-09 du 15 Rabie Ethani 1420 correspondant au 28 juillet 1999 relative à la maîtrise de l'énergie ;
-
-Vu la loi n° 01-10 du 11 Rabie Ethani 1422 correspondant au 3 juillet 2001 portant loi minière ;
-
-Vu la loi n° 01-14 du 29 Joumada El Oula 1422 correspondant au 19 août 2001, modifiée et complétée, relative à l'organisation, la sécurité et la police de la circulation routière ;
-
-Vu la loi n° 01-20 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à l'aménagement et au développement durable du territoire ;
-
-Vu la loi n° 02-01 du 22 Dhou El Kaada 1422 correspondant au 5 février 2002 relative à l'électricité et à la distribution du gaz par canalisation ;
-
-Vu la loi n° 02-03 du 5 Joumada El Oula 1421 correspondant au 5 août 2002 fixant les règles générales relatives aux postes et télécommunications ;
-
-Vu la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003 relative à la protection de l'environnement dans le cadre du développement durable ;
-
-Vu l'ordonnance n° 03-12 du 27 Joumada Ethania 1424 correspondant au 26 août 2003 relative à l'obligation d'assurance des catastrophes naturelles et à l'indemnisation des victimes ;
-
-Vu la loi n° 04-04 du 5 Joumada El Oula 1425 correspondant au 23 juin 2004 relative à la normalisation ;
-
-Vu le décret n° 63-344 du 11 septembre 1963 portant adhésion de la République algérienne démocratique et populaire à la convention internationale pour la prévention de la pollution des eaux de la mer par les hydrocarbures ;
-
-Vu le décret n° 80-14 du 26 janvier 1980 portant adhésion de l'Algérie à la convention pour la protection de la mer Méditerranée contre la pollution, faite à Barcelone le 16 février 1976 ;
-
-Vu le décret n° 81-02 du 17 janvier 1981 portant ratification du protocole relatif à la prévention de la pollution de la mer Méditerranée par les opérations d'immersion effectuées par les navires et aéronefs, fait à Barcelone le 16 février 1976 ;
-
-Vu le décret n° 81-03 du 17 janvier 1981 portant ratification du protocole relatif à la coopération en matière de lutte contre la pollution de la mer Méditerranée par les hydrocarbures et autres substances nuisibles en cas de situation critique, fait à Barcelone le 16 février 1976 ;
-
-Vu le décret n° 82-441 du 11 décembre 1982 portant adhésion de la République algérienne démocratique et populaire au protocole relatif à la protection de la mer Méditerranée contre la pollution d'origine tellurique fait à Athènes le 17 mai 1980 ;
-
-Vu le décret présidentiel n° 98-123 du 21 Dhou El Hidja 1418 correspondant au 18 avril 1998 portant ratification du protocole de 1992, modifiant la convention internationale, de 1969 sur la responsabilité civile pour les dommages dus à la pollution par les hydrocarbures ;
-
-Après adoption par le Parlement ;
+Après adoption par l'Assemblée populaire nationale.
 
 Promulgue la loi dont la teneur suit :
 
 ---
 
-**Article 1er.** — La présente loi a pour objet d'édicter les règles de prévention des risques majeurs et de gestion des catastrophes dans le cadre du développement durable.
+## Chapitre I — Principes généraux
+
+**Article 1er.** — La présente loi a pour objet d'édicter les règles générales visant à organiser la production du sol urbanisable, la formation et la transformation du bâti dans le cadre d'une gestion économe des sols, de l'équilibre entre la fonction d'habitat, d'agriculture et d'industrie ainsi que de préservation de l'environnement, des milieux naturels, des paysages et du patrimoine culturel et historique sur la base du respect des principes et objectifs de la politique nationale d'aménagement du territoire.
+
+**Art. 2.** — L'utilisation et la gestion du sol urbanisable, la formation et la transformation du cadre bâti s'effectuent dans le cadre des règles générales d'aménagement et d'urbanisme, et des instruments d'aménagement et d'urbanisme définis par la présente loi.
 
 ---
 
-## TITRE I — DISPOSITIONS PRÉLIMINAIRES
+## Chapitre II — Les règles générales d'aménagement et d'urbanisme
 
-### Chapitre 1 — Des définitions et des qualifications
+**Art. 3.** — Sous réserve des dispositions législatives et réglementaires spécifiques en matière d'occupation des sols et en l'absence des instruments d'aménagement et d'urbanisme, les constructions sont régies par les règles générales d'aménagement et d'urbanisme fixées aux articles ci-après du présent chapitre.
 
-**Article 2.** — Est qualifié, au sens de la présente loi, de risque majeur toute menace probable pour l'Homme et son environnement pouvant survenir du fait d'aléas naturels exceptionnels et/ou du fait d'activités humaines.
+**Art. 4.** — Seules sont constructibles, les parcelles :
 
-**Article 3.** — Relèvent de la prévention des risques majeurs, la définition et la mise en oeuvre de procédures et de règles visant à limiter la vulnérabilité des hommes et des biens aux aléas naturels et technologiques.
+— qui respectent l'économie urbaine, lorsqu'elles sont situées à l'intérieur des parties urbanisées de la commune,
 
-**Article 4.** — Est qualifié de système de gestion des catastrophes, lors de la survenance d'un aléa naturel ou technologique entraînant des dommages au plan humain, social, économique et/ou environnemental, l'ensemble des dispositifs et mesures de droit mis en oeuvre pour assurer les meilleures conditions d'information, de secours, d'aide, de sécurité, d'assistance et d'intervention de moyens complémentaires et/ou spécialisés.
+— dans les limites compatibles avec la viabilité des exploitations agricoles lorsqu'elles sont situées sur des terres agricoles,
 
-**Article 5.** — L'ensemble des actes relevant de la prévention des risques majeurs et de la gestion des catastrophes sont des actes d'intérêt public, et qui, à ce titre, peuvent déroger à la législation en vigueur dans les limites fixées par la présente loi.
+— dans les limites compatibles avec les objectifs de sauvegarde des équilibres écologiques lorsqu'elles sont situées sur des sites naturels,
 
-### Chapitre 2 — Des objectifs et des fondements
+— dans les limites compatibles avec la nécessité de sauvegarde des sites archéologiques et culturels.
 
-**Article 6.** — Les règles de prévention des risques majeurs et de la gestion des catastrophes visent à prévenir et prendre en charge les effets des risques majeurs sur les établissements humains, leurs activités et leur environnement dans un objectif de préservation et de sécurisation du développement et du patrimoine des générations futures.
+Les modalités d'application du présent article seront précisées par voie réglementaire.
 
-**Article 7.** — Le système de prévention des risques majeurs et de gestion des catastrophes a pour objectifs :
+**Art. 5.** — Sauf prescriptions techniques contraires, à l'intérieur des parties urbanisées de la commune, aucune construction ou mur de clôture ne pourra être édifié à moins de quatre mètres de l'axe de la voie qui la dessert.
 
-- l'amélioration de la connaissance des risques, le renforcement de leur surveillance et de leur prévision ainsi que le développement de l'information préventive sur ces risques ;
-- la prise en compte des risques dans l'utilisation des sols et dans la construction ainsi que la réduction de la vulnérabilité des personnes et des biens aux aléas ;
-- la mise en place de dispositifs ayant pour objectif la prise en charge cohérente, intégrée et adaptée de toute catastrophe d'origine naturelle ou technologique.
+Au cas où des constructions ou clôtures en dur existent déjà sur un côté de la voie, l'axe de la voie est considéré comme étant à quatre (4) mètres de la limite des clôtures ou constructions existantes.
 
-**Article 8.** — Afin de permettre aux établissements humains, aux activités qu'ils abritent, et à leur environnement de façon générale, de s'inscrire dans l'objectif d'un développement durable, les règles de prévention des risques majeurs et de gestion des catastrophes ont pour fondement les principes suivants :
+**Art. 6.** — Dans les parties urbanisées de la commune, la hauteur des constructions ne doit pas être supérieure à la hauteur moyenne des constructions avoisinantes et ce, dans le respect des dispositions prévues par la législation en vigueur, notamment pour ce qui est de la protection des sites historiques.
 
-- le principe de précaution et de prudence : sur la base duquel l'absence de certitudes, compte tenu des connaissances scientifiques et techniques du moment, ne doit pas retarder l'adoption de mesures effectives et proportionnées visant à prévenir, à un coût économiquement acceptable, tout risque aux biens, aux personnes et à l'environnement d'une manière générale.
-- le principe de concomitance : qui, lors de l'identification et de l'évaluation des conséquences de chaque aléa ou de chaque vulnérabilité, prend en charge leurs interactions et l'aggravation des risques du fait de leur survenance de façon concomitante ;
-- le principe d'action préventive et de correction par priorité à la source : selon lequel les actes de prévention des risques majeurs doivent, autant que possible, en utilisant les meilleures techniques, et à un coût économiquement acceptable, veiller à prendre en charge d'abord les causes de la vulnérabilité, avant d'édicter les mesures permettant de maîtriser les effets de cette vulnérabilité ;
-- le principe de participation : en vertu duquel chaque citoyen doit avoir accès à la connaissance des aléas qu'il encourt, aux informations relatives aux facteurs de vulnérabilité s'y rapportant, ainsi qu'à l'ensemble du dispositif de prévention de ces risques majeurs et de gestion des catastrophes ;
-- le principe d'intégration des techniques nouvelles : en vertu duquel le système de prévention des risques majeurs doit veiller à suivre et, chaque fois que nécessaire, à intégrer les évolutions techniques en matière de prévention des risques majeurs.
+La hauteur des constructions à l'extérieur des parties urbanisées doit être en harmonie avec l'environnement.
 
-### Chapitre 3 — Du champ d'application
+Les modalités d'application du présent article ainsi que les termes d'occupation des sols et de la surface bâtie seront déterminées par voie réglementaire.
 
-**Article 9.** — La prévention des risques majeurs et la gestion des catastrophes dans le cadre du développement durable constitue un système global initié et conduit par l'Etat, mis en oeuvre par les institutions publiques et les collectivités territoriales dans le cadre de leurs compétences respectives, en concertation avec les opérateurs économiques, sociaux et scientifiques, et en associant les citoyens dans les conditions définies par la présente loi et ses textes d'application.
+**Art. 7.** — Toute construction à usage d'habitation doit justifier d'un point d'alimentation en eau potable.
 
-**Article 10.** — Constituent des risques majeurs pris en charge par des dispositifs de prévention de risques majeurs au sens des dispositions de l'article 5 ci-dessus, les risques suivants :
+Elle doit, en outre, être équipée d'un système d'assainissement évitant le rejet direct des effluents en surface.
 
-- les séismes et les risques géologiques,
-- les inondations,
-- les risques climatiques,
-- les feux de forêts,
-- les risques industriels et énergétiques,
-- les risques radiologiques et nucléaires,
-- les risques portant sur la santé humaine,
-- les risques portant sur la santé animale et végétale,
-- les pollutions atmosphériques, telluriques, marines ou hydriques,
-- les catastrophes dues à des regroupements humains importants.
+**Art. 8.** — Les installations en constructions à usage professionnel et industriel doivent être conçues de façon à éviter tout rejet d'effluents polluants et toute nuisance au delà des seuils réglementaires.
 
-### Chapitre 4 — De l'information et de la formation en matière de prévention des risques majeurs et de gestion des catastrophes
-
-#### Section 1 — De l'information
-
-**Article 11.** — L'Etat assure aux citoyens un accès égal et permanent à toute information relative aux risques majeurs.
-
-Ce droit d'accès à l'information couvre :
-
-- la connaissance des aléas et des vulnérabilités de son lieu de résidence et d'activité,
-- l'information sur les dispositifs de prévention des risques majeurs applicables à son lieu de résidence ou d'activité ;
-- l'information sur les dispositifs de prise en charge des catastrophes.
-
-Les modalités d'élaboration, de diffusion et d'accès à ces informations sont fixées par voie réglementaire.
-
-**Article 12.** — Les modalités d'organisation, de promotion et de soutien de toute campagne ou action d'information sur les risques majeurs, leur prévention, et la gestion des catastrophes qui peuvent en découler, tant pour améliorer l'information générale des citoyens, que pour permettre une information particulière dans des zones présentant des risques particuliers, ou dans les lieux de travail ou les lieux publics de façon générale, sont fixées par voie réglementaire.
-
-#### Section 2 — De la formation
-
-**Article 13.** — Il est institué en vertu de la présente loi un enseignement des risques majeurs dans tous les cycles d'enseignement.
-
-Les programmes d'enseignement des risques majeurs ont pour objectifs de :
-
-- fournir une information générale sur les risques majeurs ;
-- inculquer une formation sur la connaissance des aléas, des vulnérabilités, et des moyens de prévention modernes ;
-- informer et préparer l'ensemble des dispositifs devant être mis en oeuvre lors de la survenance de catastrophes.
-
-Les modalités d'application du présent article sont précisées par voie réglementaire.
-
-**Article 14.** — L'Etat veille à relever le niveau de qualification, de spécialisation et d'expertise des institutions et de l'ensemble des corps qui interviennent dans la prévention des risques majeurs et dans la gestion des catastrophes.
+**Art. 9.** — Les exploitations de carrières et les décharges doivent être organisées de façon à laisser en fin d'exploitation ou de période d'exploitation des terrains utilisables et à restituer, au site, un aspect net.
 
 ---
 
-## TITRE II — DE LA PRÉVENTION DES RISQUES MAJEURS
+## Chapitre III — Les instruments d'aménagement et d'urbanisme
 
-**Article 15.** — La prévention des risques majeurs est fondée sur :
+### Section 1 — Dispositions générales
 
-- des règles et des prescriptions générales applicables à tous les risques majeurs,
-- des prescriptions particulières à chaque risque majeur,
-- des dispositifs de sécurisation stratégique,
-- des dispositifs complémentaires de prévention.
+**Art. 10.** — Les instruments d'urbanisme sont constitués par les plans directeurs d'aménagement et d'urbanisme et par les plans d'occupation des sols. Les instruments d'aménagement et d'urbanisme ainsi que les règlements qui en font partie intégrante, sont opposables aux tiers.
 
-### Chapitre 1 — Des règles et des prescriptions générales applicables à tous les risques majeurs
+Aucun usage du sol ou construction ne peut se faire en contradiction avec les règlements d'urbanisme sous peine des sanctions prévues par la présente loi.
 
-**Article 16.** — Pour chaque risque majeur, au sens des dispositions de l'article 10 ci-dessus, il est institué un plan général de prévention de risque majeur adopté par décret.
+**Art. 11.** — Les instruments d'aménagement et d'urbanisme fixent les orientations fondamentales d'aménagement des territoires intéressés et déterminent les prévisions et les règles d'urbanisme. Ils définissent, plus particulièrement, les conditions permettant d'une part, de rationaliser l'utilisation de l'espace, de préserver les activités agricoles, de protéger les périmètres sensibles, les sites, les paysages ; d'autre part, de prévoir les terrains réservés aux activités économiques et d'intérêt général et aux constructions pour la satisfaction des besoins présents et futurs en matière d'équipements collectifs de services, d'activités et de logements. Ils définissent également les conditions d'aménagement et de construction en prévention des risques naturels.
 
-Ce plan fixe l'ensemble des règles et procédures visant à atténuer la vulnérabilité à l'aléa concerné et à prévenir les effets induits par la survenance de cet aléa.
+**Art. 12.** — Le plan directeur d'aménagement et d'urbanisme et le plan d'occupation des sols peuvent concerner une association de communes présentant une communauté d'intérêts économiques et sociaux, une commune, ou pour le plan d'occupation des sols une partie de commune.
 
-**Article 17.** — Chaque plan général de prévention de risque majeur doit déterminer :
+Dans le cas d'une association de communes, les périmètres d'intervention du plan directeur d'aménagement et d'urbanisme ou du plan d'occupation des sols sont arrêtés par le wali territorialement compétent sur proposition des présidents des assemblées populaires communales concernées, après délibération desdites assemblées populaires communales. Lorsque les territoires de communes relèvent de wilayas différentes, les périmètres d'intervention du plan directeur d'aménagement et d'urbanisme et du plan d'occupation des sols sont arrêtés conjointement par le ministre chargé de l'urbanisme et le ministre chargé des collectivités territoriales.
 
-- le système national de veille, par lequel est organisée, selon des paramètres pertinents et/ou significatifs, une observation permanente de l'évolution des aléas et/ou des risques concernés ainsi qu'une capitalisation, une analyse et une valorisation des informations enregistrées, et permettant :
-  * une meilleure connaissance de l'aléa ou du risque concerné,
-  * l'amélioration de la prévisibilité de sa survenance,
-  * le déclenchement des systèmes d'alerte.
+**Art. 13.** — Le plan directeur d'aménagement et d'urbanisme et le plan d'occupation des sols prennent en charge les programmes de l'Etat, des collectivités territoriales et ceux de leurs établissements et services publics. Les projets d'intérêt national s'imposent au plan directeur d'aménagement et d'urbanisme et au plan d'occupation des sols.
 
-Les institutions, les organismes et/ou les laboratoires de référence chargés de la veille pour un aléa ou un risque majeur ainsi que les modalités d'exercice de cette veille sont fixés par voie réglementaire.
+**Art. 14.** — Le plan directeur d'aménagement et d'urbanisme et le plan d'occupation des sols, approuvés, sont publiés en permanence aux lieux réservés habituellement aux publications destinées aux administrés. Ils tiennent par leur contenu, l'autorité qui les a établis à l'obligation de s'y conformer.
 
-- Le système national d'alerte permettant l'information des citoyens quant à la probabilité et/ou l'imminence de la survenance de l'aléa ou du risque majeur concerné. Ce système national d'alerte doit être structuré selon la nature de l'aléa et/ou du risque majeur concerné, en :
-  * système national,
-  * système local (par aire métropolitaine, ville, village),
-  * système par site.
+**Art. 15.** — Les associations locales d'usager, les chambres de commerce et d'agriculture et les organisations professionnelles doivent être consultées lors de l'élaboration du plan directeur d'aménagement et d'urbanisme et du plan d'occupation des sols.
 
-Les composants de chaque système d'alerte, les conditions et modalités de sa mise en place, de sa gestion ainsi que les modalités de son déclenchement sont précisés par voie réglementaire.
+### Section 2 — Le plan directeur d'aménagement et d'urbanisme
 
-- Les programmes de simulation nationaux, régionaux ou locaux permettant de :
-  * vérifier et améliorer les dispositifs de prévention du risque majeur concerné,
-  * s'assurer de la qualité, de la pertinence et de l'efficacité des mesures de prévention,
-  * informer et préparer les populations concernées.
+**Art. 16.** — Le plan directeur d'aménagement et d'urbanisme est un instrument de planification spatiale et de gestion urbaine. Il fixe les orientations fondamentales de l'aménagement du territoire, de la ou des communes concernées en tenant compte des schémas d'aménagement et plans de développement. Il définit les termes de référence du plan d'occupation des sols.
 
-**Article 18.** — Le plan général de prévention des risques majeurs doit également comporter :
+**Art. 17.** — Le plan directeur d'aménagement et d'urbanisme se traduit par un règlement accompagné de documents graphiques de référence et d'un rapport d'orientation.
 
-- le système retenu pour évaluer l'importance de l'aléa concerné, le cas échéant.
-- la détermination des régions, wilayas, communes et zones présentant des vulnérabilités particulières selon l'importance de l'aléa concerné, lors de sa survenance ;
-- les mesures de mise en oeuvre en matière de prévention et d'atténuation de la vulnérabilité vis-à-vis du risque majeur concerné, en précisant la gradation des mesures en matière d'établissements humains et d'occupation de l'espace, selon l'importance de l'aléa lors de sa survenance et de la vulnérabilité de la région, wilaya, commune ou zone concernée.
+**Art. 18.** — Le plan directeur d'aménagement et d'urbanisme :
 
-**Article 19.** — Sans préjudice des dispositions législatives en vigueur en matière de construction, d'aménagement et d'urbanisme, sont strictement interdites, pour risque majeur, les constructions, et notamment dans les zones à risques suivantes :
+— détermine la destination générale des sols sur l'ensemble du territoire d'une ou d'un ensemble de communes par secteur,
 
-- les zones de failles sismiques jugées actives,
-- les terrains à risque géologique,
-- les terrains inondables, les lits d'oueds et l'aval des barrages en dessous du seuil d'inondabilité fixé conformément aux dispositions de l'article 24 ci-dessous,
-- les périmètres de protection des zones industrielles, des unités industrielles à risque ou de tout ouvrage industriel ou énergétique présentant un risque important,
-- les terrains d'emprise des canalisations d'hydrocarbures, d'eau ou les amenées d'énergie dont l'altération ou la rupture peut entraîner un risque majeur.
+— définit l'extension des établissements humains, la localisation des services et des activités, la nature et l'implantation des grands équipements et infrastructures,
 
-**Article 20.** — Chaque plan général de prévention des risques majeurs prévus par les dispositions de l'article 16 ci-dessus, fixe les zones frappées de servitude de non-aedificandi pour risque majeur ainsi que les mesures applicables aux constructions existantes avant la promulgation de la présente loi.
+— détermine les zones d'intervention sur les tissus urbains et les zones à protéger.
 
-### Chapitre 2 — Des prescriptions particulières à chaque risque majeur
+**Art. 19.** — Le plan directeur d'aménagement et d'urbanisme divise le territoire auquel il se rapporte en secteurs. Lesdits secteurs sont déterminés comme suit :
 
-#### Section 1 — Des prescriptions particulières en matière de séismes et de risques géologiques
+— les secteurs urbanisés,
 
-**Article 21.** — Sans préjudice des dispositions législatives en matière de construction, d'aménagement et d'urbanisme, le plan général de prévention des séismes et des risques géologiques précise la classification de l'ensemble des zones exposées à ces risques, selon l'importance du risque, afin de permettre une information adéquate et d'organiser le rééquilibrage des implantations et le redéploiement de certains établissements humains.
+— les secteurs à urbaniser,
 
-**Article 22.** — Pour les zones exposées aux séismes et aux risques géologiques et selon l'importance du risque, le plan général de prévention des séismes et des risques géologiques peut prévoir des procédures complémentaires de contrôle ou d'expertise des bâtiments, installations et infrastructures réalisées avant l'introduction de règles parasismiques ou selon des règles parasismiques non actualisées.
+— les secteurs d'urbanisation future,
 
-**Article 23.** — Toute reconstruction d'ouvrage, d'infrastructure ou de bâtiment totalement ou partiellement détruits par une catastrophe due à la survenance d'un risque sismique et/ou géologique ne peut être effectuée qu'après une procédure particulière de contrôle visant à s'assurer que les causes de destruction totale ou partielle ont été prises en charge.
+— les secteurs non urbanisables.
 
-Les organes, les modalités et les procédures de ce contrôle sont fixés par voie réglementaire.
+Le secteur est une fraction continue du territoire communal pour laquelle sont prévus des usages généraux du sol et des échéances d'urbanisation fixées dans le cas des trois premières catégories de secteurs définies ci-dessus, dits d'urbanisation.
 
-#### Section 2 — Des prescriptions particulières en matière de prévention des inondations
+**Art. 20.** — Les secteurs urbanisés incluent tous les terrains, même non dotés de toutes les viabilités, occupés par les constructions agglomérées, par leurs espaces de prospect et par les emprises des équipements et activités même non construits, espaces verts, surfaces libres, parcs et forêts urbains, destinés à la desserte de ces constructions agglomérées.
 
-**Article 24.** — Le plan général de prévention des inondations prévu par les dispositions de l'article 16 ci-dessus doit comporter :
+Les secteurs urbanisés incluent également les parties de territoire urbanisées à rénover, à restaurer et à protéger.
 
-- une carte nationale d'inondabilité précisant l'ensemble des zones inondables, y compris les lits d'oueds et les périmètres situés à l'aval des barrages et exposés à ce titre en cas de rupture de barrage,
-- la hauteur de référence pour chaque zone déclarée inondable, au-dessous de laquelle les périmètres concernés sont grevés de la servitude de non-aedificandi instituée par les dispositions de l'article 20 ci-dessus,
-- les seuils, conditions, modalités et procédures de déclenchement des pré-alertes et des alertes pour chacun de ces aléas, ainsi que les procédures de suspension des alertes.
+**Art. 21.** — Les secteurs à urbaniser, incluent les terrains destinés à être urbanisés à court et moyen termes, à un horizon de dix (10) ans, dans l'ordre de priorité prévue par le plan directeur d'aménagement et d'urbanisme.
 
-**Article 25.** — Sans préjudice des dispositions législatives en vigueur, dans les zones déclarées inondables par le plan général de prévention des inondations et situées au dessus de la hauteur de référence, les autorisations d'occupation, de lotissement ou de construction doivent, sous peine de nullité, préciser l'ensemble des travaux, aménagements, canalisations ou ouvrages de correction destinés à réduire le risque des eaux pour la sécurité des personnes et des biens.
+**Art. 22.** — Les secteurs d'urbanisation future incluent les terrains destinés à être urbanisés à long terme, à un horizon de vingt (20) ans, aux échéances prévues par le plan directeur d'aménagement et d'urbanisme.
 
-Les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
+Tous les terrains situés dans les secteurs d'urbanisation future sont frappés d'une servitude temporaire de non aedificandi. Cette servitude n'est levée aux échéances prévues que pour les terrains entrant dans le champ d'application d'un plan d'occupation des sols, approuvé.
 
-#### Section 3 — Des prescriptions particulières en matière de prévention des aléas climatiques
+Tous les investissements dont la durée d'amortissement dépasse les délais prévus pour l'urbanisation ainsi que les modifications ou grosses réparations des constructions destinées à être détruites, sont interdits dans ces secteurs.
 
-**Article 26.** — Constituent des aléas climatiques pouvant engendrer un risque majeur au sens des dispositions de l'article 2 ci-dessus :
+Toutefois, sont autorisés dans ces secteurs :
 
-- les vents violents,
-- les chutes de pluies importantes,
-- la sécheresse,
-- la désertification,
-- les vents de sable,
-- les tempêtes de neige.
+— la rénovation, le remplacement ou l'extension des habitations liées à la viabilité de l'exploitation agricole,
 
-**Article 27.** — Le plan général de prévention des aléas climatiques détermine :
+— les constructions et installations nécessaires à des équipements collectifs et à la réalisation d'opérations d'intérêt national,
 
-- les zones exposées à chacun des aléas cités à l'article 26 ci-dessus ;
-- les modalités de veille pour l'observation de l'évolution de chacun de ces aléas,
-- les seuils, conditions, modalités, et procédures de déclenchement des pré-alertes et des alertes pour chacun de ces aléas, ainsi que les procédures de suspension des alertes,
-- les mesures de prévention applicables lors de l'annonce des avis de pré-alerte ou d'alerte.
+— les constructions justifiées par l'intérêt de la commune et dûment autorisées par le wali sur demande motivée du président de l'assemblée populaire communale après avis de l'assemblée populaire communale.
 
-**Article 28.** — Le plan général de prévention des aléas climatiques peut fixer toute règle de prévention ou de sécurité applicable aux zones exposées à ces aléas.
+**Art. 23.** — Les secteurs non urbanisables sont ceux dans lesquels des droits à construire peuvent être édictés mais réglementés dans des proportions limitées, compatibles avec l'économie générale des territoires de ces secteurs.
 
-#### Section 4 — Des prescriptions particulières en matière de prévention des feux de forêts
+**Art. 24.** — Chaque commune doit être couverte par un plan directeur d'aménagement et d'urbanisme dont le projet est établi à l'initiative et sous la responsabilité du président de l'assemblée populaire communale.
 
-**Article 29.** — Sans préjudice des dispositions de la loi n° 84-12 du 23 juin 1984, modifiée et complétée, susvisée, le plan général de prévention des feux de forêts doit :
+**Art. 25.** — Le projet de plan directeur d'aménagement et d'urbanisme est adopté par délibération de l'assemblée populaire communale ou par les assemblées populaires communales dans le cas où le plan directeur d'aménagement et d'urbanisme couvre deux ou plusieurs communes.
 
-- comporter une classification des zones forestières selon le risque encouru par les villes,
-- déterminer les agglomérations ou les établissements humains implantés dans des zones forestières ou à leur proximité et pour lesquels le déclenchement d'un feu de forêt peut constituer un risque majeur au sens des dispositions de l'article 2 ci-dessus.
+**Art. 26.** — Le projet de plan directeur d'aménagement et d'urbanisme adopté est soumis à enquête publique par le ou les président(s) d'assemblée(s) populaire(s) communale(s) pendant une durée de quarante cinq jours (45).
 
-**Article 30.** — Sur la base de la classification des zones forestières, le plan général de prévention des feux de forêts doit déterminer en outre :
+Après enquête publique, le plan directeur d'aménagement et d'urbanisme est éventuellement modifié pour tenir compte, s'il y a lieu, des conclusions de l'enquête publique.
 
-- les modalités de veille et d'évaluation des circonstances climatiques prévisibles ;
-- le système de pré-alerte ou d'alerte ;
-- les mesures de prévention applicables lors de l'annonce des avis de pré-alerte ou d'alerte.
+Après son adoption par l'assemblée populaire communale, il est transmis à l'autorité compétente pour approbation.
 
-**Article 31.** — Le plan général de prévention contre les feux de forêts peut également fixer toutes mesures de prévention ou prescriptions de sécurité applicables aux zones forestières.
+**Art. 27.** — Le plan directeur d'aménagement et d'urbanisme est approuvé :
 
-#### Section 5 — Des prescriptions particulières en matière de prévention des risques industriels et énergétiques
+— par arrêté du wali pour les communes ou associations de communes de moins de deux cent mille habitants ;
 
-**Article 32.** — Le plan général de prévention des risques industriels et énergétiques fixe l'ensemble des dispositifs, règles et/ou procédures de prévention et de limitation des risques d'explosion, d'émanation de gaz et d'incendie, ainsi que ceux liés à la manipulation de matières classées dangereuses.
+— par arrêté du ministre chargé de l'urbanisme conjointement, le cas échéant, avec le ou les ministres concernés, pour les communes ou associations de communes de plus de deux cent mille habitants et de moins de cinq cent mille habitants,
 
-**Article 33.** — Le plan général de prévention des risques industriels et énergétiques détermine :
+— par décret exécutif pris sur rapport du ministre chargé de l'urbanisme pour les communes ou associations de communes de plus de cinq cent mille habitants.
 
-- les établissements et installations industriels concernés ;
-- les procédures applicables aux établissements et aux installations industriels selon leur implantation en zone industrielle, hors zone industrielle, ou dans les zones urbaines ;
-- les dispositifs de contrôle et de mise en oeuvre des prescriptions du plan général de prévention des risques industriels et énergétiques.
+Les modalités d'application du présent article seront précisées, par voie réglementaire.
 
-**Article 34.** — Sans préjudice des dispositions législatives en vigueur, le plan général de prévention des risques industriels et énergétiques comporte l'ensemble des règles et procédures applicables à des installations ou ensembles d'installations particulières et notamment les mines, les carrières, les ouvrages ou installations de traitement et de transport de l'énergie et notamment des hydrocarbures.
+**Art. 28.** — Le plan directeur d'aménagement et d'urbanisme ne peut être révisé que si les secteurs d'urbanisation visés à l'article 19 ci-dessus sont en voie d'être saturés ou si l'évolution de la situation ou du contexte est telle que les projets d'aménagement de la commune ou de structuration urbaine ne répondent plus fondamentalement aux objectifs qui leurs sont assignés.
 
-#### Section 6 — Des prescriptions particulières en matière de prévention des risques radiologiques et nucléaires
+Les révisions et les modifications du plan en vigueur sont approuvées dans les mêmes conditions et formes que celles prévues pour l'élaboration du plan directeur d'aménagement et d'urbanisme.
 
-**Article 35.** — Sans préjudice des dispositions législatives en vigueur et sur la base des risques prévisibles, un décret précise le dispositif de prévention des risques radiologiques et nucléaires, ainsi que les moyens et les modalités de lutte contre ces sinistres lors de leur survenance.
+**Art. 29.** — Les procédures d'élaboration du plan directeur d'aménagement et d'urbanisme et le contenu des documents qui s'y rapportent, seront précisés par voie réglementaire.
 
-#### Section 7 — Des prescriptions particulières en matière de prévention des risques portant sur la santé humaine
+**Art. 30.** — Durant l'élaboration du plan directeur d'aménagement et d'urbanisme, le ou les présidents(s) des assemblées(s) populaire(s) communale(s) concernés arrêtent toute mesure nécessaire à la bonne exécution ultérieure dudit plan.
 
-**Article 36.** — Le plan général de prévention des risques pour la santé humaine définit, pour les affections présentant un risque de contagion ou d'épidémies :
+### Section 3 — Le plan d'occupation des sols
 
-- le système de veille et le mode de détermination des laboratoires de référence chargés d'exercer cette veille ;
-- les systèmes de pré-alerte ou d'alerte en la matière.
+**Art. 31.** — Dans le respect des dispositions du plan directeur d'aménagement et d'urbanisme, le plan d'occupation des sols fixe de façon détaillée les droits d'usage des sols et de construction.
 
-**Article 37.** — Le plan général de prévention des risques pour la santé humaine détermine également les mesures de prévention pouvant être mises en oeuvre en cas de survenance de ces risques.
+A cet effet, le plan d'occupation des sols :
 
-#### Section 8 — Des prescriptions particulières en matière de prévention des risques portant sur la santé animale et végétale
+— fixe de façon détaillée pour le ou les secteurs concernés, la forme urbaine, l'organisation, les droits de construction et d'utilisation des sols,
 
-**Article 38.** — Sans préjudice des dispositions législatives en vigueur, le plan général de prévention des risques pour la santé animale et végétale doit définir :
+— définit la quantité minimale et maximale de construction autorisée exprimée en mètre carré de plancher hors œuvre ou en mètre cube de volume bâti, les types de constructions autorisés et leurs usages,
 
-- les modalités de veille en matière zoo sanitaire et de protection des végétaux ;
-- les modalités de détermination des laboratoires et/ou des institutions de référence chargés d'exercer cette veille ;
-- les systèmes de pré-alerte et d'alerte lors de la survenance d'une épizootie ou d'une atteinte au patrimoine végétal.
+— détermine les règles concernant l'aspect extérieur des constructions,
 
-**Article 39.** — Le plan général de prévention des risques pour la santé animale et végétale doit, en outre, prévoir l'ensemble des procédures et mécanismes concernant la veille, la prévention, la pré-alerte, l'alerte ainsi que la mobilisation des moyens adaptés en matière de risques d'épizootie, de zoonoses majeures ou d'atteinte au patrimoine végétal.
+— délimite l'espace public, les espaces verts, les emplacements réservés aux ouvrages publics et installations d'intérêt général ainsi que les tracés et les caractéristiques des voies de circulation,
 
-#### Section 9 — Des prescriptions particulières en matière de prévention des risques dus à des regroupements humains importants
+— définit les servitudes,
 
-**Article 40.** — Le plan général de prévention des risques dus à des regroupements humains importants doit déterminer les mesures de prévention applicables aux établissements recevant un nombre élevé de visiteurs, tels que les stades, les gares routières, portuaires ou aéroportuaires importantes, les plages ou tous autres lieux publics et nécessitant de ce fait des mesures de prévention particulières.
+— précise les quartiers, rues, monuments et sites à protéger, à rénover et à restaurer,
 
-**Article 41.** — Le plan général de prévention des risques dus à des regroupements humains importants définira en outre, selon le type d'infrastructure ou de lieu et selon la nature du regroupement, l'ensemble des moyens et/ou des personnes devant être mobilisés pour garantir la sécurité de ces regroupements humains importants.
+— localise les terrains agricoles à préserver et à protéger.
 
-### Chapitre 3 — Des dispositifs de sécurisation stratégiques
+**Art. 32.** — Le plan d'occupation des sols se traduit par un règlement accompagné de documents graphiques de référence.
 
-#### Section 1 — Des infrastructures routières et autoroutières
+**Art. 33.** — Les règles et les servitudes définies par le plan d'occupation des sols ne peuvent faire l'objet d'aucune autorisation de modification à l'exception toutefois des simples adaptations imposées par la nature du sol, la forme du terrain ou le contexte des constructions limitrophes.
 
-**Article 42.** — Sans préjudice des dispositions de la loi n° 01-14 du 29 Joumada El Oula 1422 correspondant au 19 août 2001 susvisée, l'Etat peut prescrire toute mesure ou ensemble de mesures destinées à assurer la sécurité du réseau routier et autoroutier lors de la survenance des risques majeurs.
+**Art. 34.** — Chaque commune doit être couverte par un plan d'occupation des sols dont le projet est établi à l'initiative et sous la responsabilité du président de l'assemblée populaire communale.
 
-**Article 43.** — Les mesures prévues à l'article 42 ci-dessus doivent notamment concerner :
+**Art. 35.** — Le projet de plan d'occupation des sols est adopté par délibération de l'assemblée populaire communale ou par les assemblées populaires communales dans le cas où le plan d'occupation des sols couvre deux ou plusieurs communes.
 
-- la sécurisation préventive du réseau routier et autoroutier, y compris les ouvrages d'art (viaducs, ponts et tunnels) contre leur vulnérabilité aux aléas des risques majeurs identifiés par la présente loi et notamment les séismes et les risques géologiques,
-- l'expertise des ouvrages d'art n'ayant pas fait l'objet, au moment de leur réalisation, de mesures techniques de prévention des risques majeurs.
+**Art. 36.** — Le projet de plan d'occupation des sols adopté est soumis à enquête publique par le ou les président(s) d'assemblée(s) populaire(s) communale(s) pendant une durée de soixante (60) jours.
 
-#### Section 2 — Des liaisons stratégiques et des télécommunications
+Après enquête publique, le plan d'occupation des sols, éventuellement modifié pour tenir compte, s'il y a lieu, des conclusions de l'enquête publique, est approuvé par délibération de ou des assemblée(s) populaire(s) communale(s).
 
-**Article 44.** — L'Etat peut prescrire toute mesure ou ensemble de mesures destinées à développer un réseau national de télécommunications fiable, sécurisé et conçu pour pouvoir pallier tout dysfonctionnement ou rupture du fait de la survenance d'un risque majeur.
+Le plan d'occupation des sols approuvé est mis à la disposition du public. Il devient exécutoire soixante (60) jours après qu'il a été mis à la disposition du public.
 
-**Article 45.** — Les mesures prévues par les dispositions de l'article 44 ci-dessus doivent notamment viser à :
+**Art. 37.** — Le plan d'occupation des sols ne peut être révisé que dans les conditions suivantes :
 
-- la diversification des points d'interconnexion avec les réseaux internationaux,
-- la sécurisation des centres stratégiques nodaux de commutation et de transmission,
-- la disponibilité en moyens de communication fiables et adéquats lors de la prévention de risques majeurs et de la gestion des catastrophes.
+— si le projet urbain ou les constructions initialement prévus n'ont été réalisés qu'au tiers seulement du volume de construction autorisée à l'échéance projetée pour son achèvement,
 
-#### Section 3 — Des infrastructures et bâtiments à valeur stratégique
+— si le cadre bâti existant est en ruine ou dans un état de vétusté nécessitant son renouvellement,
 
-**Article 46.** — Les bâtiments à valeur stratégique ou patrimoniale des villes font l'objet de plans d'étude de vulnérabilité destinés à les préserver contre les effets des risques majeurs du fait de leur emplacement, de leur mode de réalisation ou de l'ancienneté de leur édification.
+— si le cadre bâti a subi des détériorations causées par des phénomènes naturels,
 
-Les modalités d'élaboration de ces plans, notamment les bâtiments concernés sont fixées par voie réglementaire.
+— si, passé un délai de cinq (5) ans après son approbation, la majorité des propriétaires des constructions totalisant au moins la moitié des droits à construire définis par le plan d'occupation des sols en cours de validité, le demande ;
 
-**Article 47.** — Sur la base des plans d'étude de vulnérabilité prévus dans les dispositions de l'article 46 ci-dessus, il est institué des plans de confortement priorisés visant à préserver les bâtiments à valeur stratégique ou patrimoniale.
+— si la nécessité de créer un projet d'intérêt national le requiert.
 
-Les modalités d'élaboration et d'exécution des plans de confortement priorisés sont fixées par voie réglementaire.
+Les révisions de plan en vigueur sont approuvées dans les mêmes conditions et formes que celles prévues pour l'élaboration du plan d'occupation des sols.
 
-### Chapitre 4 — Des dispositifs complémentaires de prévention
+**Art. 38.** — Les procédures d'élaboration et d'approbation des plans d'occupation des sols ainsi que le contenu des documents qui s'y rapportent, seront précisées, par voie réglementaire.
 
-**Article 48.** — Afin de garantir la protection la plus étendue des personnes et des biens face aux risques majeurs et le caractère durable des activités humaines, les plans de prévention des risques majeurs institués par les dispositions de l'article 16 ci-dessus, doivent comporter des dispositifs visant un recours systématique au système national d'assurance pour les risques assurables.
+### Section 4 — Consistance des terres urbanisées et urbanisables
 
-**Article 49.** — Sans préjudice des dispositions de la loi n° 91-11 du 27 avril 1991 fixant les règles d'expropriation pour cause d'utilité publique, la procédure d'expropriation pour cause d'utilité publique peut être mise en oeuvre lorsqu'un danger grave et permanent constitue une menace pour les personnes et les biens situés dans une zone exposée à des risques majeurs.
+**Art. 39.** — Les terres urbanisées et urbanisables telles que définies par les instruments d'aménagement et d'urbanisme consistent en les terres classifiées par la législation selon leur nature juridique.
 
-Les modalités de l'expropriation pour risque majeur sont mises en œuvre conformément aux dispositions de la loi n° 91-11 du 27 avril 1991, susvisée.
+**Art. 40.** — Dans le cadre de la mise en œuvre des instruments d'aménagement et d'urbanisme, la commune peut constituer un portefeuille foncier aux fins de satisfaction de ses besoins en terres pour la construction.
+
+La gestion de ce portefeuille foncier est soumise aux dispositions législatives et réglementaires en vigueur.
+
+**Art. 41.** — Le portefeuille foncier de la commune est constitué des :
+
+— terres, propriété de la commune,
+
+— terres, acquises au marché foncier,
+
+— terres acquises par l'exercice du droit de préemption, conformément à la législation en vigueur.
+
+**Art. 42.** — Pour la réalisation de ses programmes d'investissement, prévus pour le plan directeur de l'aménagement et de l'urbanisme et le plan d'occupation des sols, la commune établit son plan d'acquisition de terres, en conformité avec les plans de développement communal, de wilaya et national.
 
 ---
 
-## TITRE III — DE LA GESTION DES CATASTROPHES
+## Chapitre IV — Dispositions particulières applicables à certaines parties du territoire
 
-**Article 50.** — Le système national de gestion des catastrophes est constitué par :
+**Art. 43.** — Le littoral, les territoires présentant un caractère naturel, culturel ou historique marqué ainsi que les terres agricoles à potentialités élevées ou bonnes sont soumis aux dispositions particulières ci-après.
 
-- une planification des secours et des interventions,
-- des mesures structurelles pour la prise en charge des catastrophes.
+### Section 1 — Le littoral
 
-### Chapitre 1 — De la planification des secours et des interventions
+**Art. 44.** — Le littoral, au regard de la présente loi, englobe toutes les îles et îlots ainsi qu'une bande de terre d'une largeur minimale de huit cents mètres (800 m) longeant la mer et incluant :
 
-**Article 51.** — Il est institué en vertu de la présente loi ce qui suit :
+— toutes les terres, versants de collines et montagnes, visibles de la mer tout en n'étant pas séparés du rivage par une plaine littorale,
 
-- une planification des secours pour la prise en charge des catastrophes, notamment celles résultant de la survenance de risques majeurs, dénommée « plans ORSEC »,
-- une planification des interventions particulières.
+— les plaines littorales de moins de trois kilomètres (3 km) de largeur,
 
-#### Section 1 — Des plans ORSEC
+— l'intégralité des massifs forestiers dont une partie est en littoral tel que définie ci-dessus,
 
-**Article 52.** — Selon l'importance de la catastrophe et/ou des moyens à mettre en oeuvre, les plans ORSEC se subdivisent en :
+— l'intégralité des « zones humides » et leurs rivages sur trois cents mètres (300 m) de largeur dès qu'une partie de ces zones est en littoral tel que définie ci-dessus.
 
-- plans ORSEC nationaux ;
-- plans ORSEC inter-wilaya ;
-- plans ORSEC de wilaya ;
-- plans ORSEC communaux ;
-- plans ORSEC des sites sensibles.
+**Art. 45.** — Dans le littoral, l'extension de l'urbanisation doit préserver les espaces et mettre en valeur les sites et paysages caractéristiques du patrimoine national, naturel, culturel et historique du littoral et les milieux nécessaires aux équilibres biologiques et doit s'opérer en conformité avec les dispositions du plan d'occupation des sols.
 
-Les plans d'organisation des secours peuvent se combiner, notamment lorsqu'il s'agit d'une catastrophe nationale.
+Toute construction sur une bande de territoire de cent mètres de large à partir du rivage est frappée de servitude de non edificandi. Cette distance est calculée horizontalement à partir du point des plus hautes eaux.
 
-Les modalités de mise en place, de gestion et de règles particulières de déclenchement des plans ORSEC sont fixées par voie réglementaire.
+Peuvent être toutefois autorisées, les constructions ou activités exigeant la proximité immédiate de l'eau.
 
-**Article 53.** — Chaque plan ORSEC est composé de plusieurs modules visant à prendre en charge et à gérer chaque aspect particulier d'une catastrophe.
+Les modalités d'application du présent article seront définies par voie réglementaire.
 
-Lors de la survenance d'une catastrophe, les modules requis sont activés selon la nature du sinistre.
+### Section 2 — Les territoires à caractère naturel et culturel marqué
 
-Pour chaque catégorie de plans ORSEC, les modules la composant et les moyens mobilisés au titre de ces modules sont fixés par voie réglementaire.
+**Art. 46.** — Les territoires qui recèlent soit un ensemble de curiosités naturelles, pittoresques, historiques, culturelles, soit des avantages résultant de leur situation géographique, climatique, géologique ou hydro-minéralogique, telles que les ressources thermales ou balnéaires, sont délimités et classés conformément aux dispositions législatives qui leur sont applicables.
 
-**Article 54.** — L'organisation et la planification des opérations de secours doivent être conçues de manière à prendre en charge par ordre de priorité les segments d'intervention suivants :
+**Art. 47.** — Des textes législatifs et réglementaires préciseront les obligations particulières applicables aux territoires visés à l'article ci-dessus, en matière d'utilisation et de gestion du sol, notamment en ce qui concerne la construction, la localisation, la desserte, l'implantation des constructions, l'architecture, le mode de clôture, l'aménagement, la sauvegarde et la mise en valeur de l'environnement du patrimoine naturel, culturel et historique.
 
-- le sauvetage et le secours des personnes,
-- la mise en place de sites d'hébergement provisoires sécurisés,
-- la gestion rationnelle des aides,
-- la sécurité et la santé des sinistrés et de leurs biens,
-- l'alimentation en eau potable,
-- la mise en place d'alimentation en énergie.
+### Section 3 — Les terres agricoles à potentialités élevées ou bonnes
 
-**Article 55.** — Les plans ORSEC sont organisés et planifiés selon les trois phases suivantes :
+**Art. 48.** — Dans les terres agricoles à potentialités élevées ou bonnes telles que définies par la législation en vigueur, les droits à construire sont limités aux constructions nécessaires à la viabilité des exploitations agricoles et aux constructions d'utilité publique.
 
-- la phase d'urgence ou phase « rouge »,
-- la phase d'évaluation et de contrôle,
-- la phase de réhabilitation et/ou de reconstruction.
+Dans tous les cas, elles doivent figurer dans le plan d'occupation des sols.
 
-**Article 56.** — Outre les moyens mobilisés par l'Etat au titre des plans ORSEC, lors de la survenance d'une catastrophe et en vertu du caractère d'utilité publique de la gestion des catastrophes institué par les dispositions de l'article 5 ci-dessus, l'Etat procède à la réquisition des personnes et des moyens nécessaires.
+**Art. 49.** — En l'absence de plan d'occupation des sols approuvé et après consultation du ministère chargé de l'agriculture peuvent être autorisées :
 
-Les modalités de mise en oeuvre des dispositions du présent article sont fixées par voie réglementaire.
+— les constructions et installations nécessaires à l'hydraulique et à l'exploitation agricole,
 
-**Article 57.** — L'intervention de l'Armée nationale populaire dans les opérations de secours dans le cas de catastrophes obéit aux règles fixées par la loi n° 91-23 du 6 décembre 1991, relative à la participation de l'Armée nationale populaire à des missions de sauvegarde de l'ordre public hors des situations d'exception.
+— les constructions et installations d'intérêt national ou nécessaires aux équipements collectifs,
 
-#### Section 2 — Des plans particuliers d'intervention
+— les modifications de constructions existantes.
 
-**Article 58.** — Il est institué des plans particuliers d'intervention fixant les mesures spécifiques d'intervention en cas de catastrophes.
-
-**Article 59.** — Les plans particuliers d'intervention ont pour objet, pour chaque aléa ou pour chaque risque majeur particulier identifié et notamment en matière de pollution atmosphérique, tellurique, marine ou hydrique :
-
-- d'analyser les risques ;
-- de prévoir, le cas échéant, les dispositifs d'alerte complémentaires ;
-- de mettre en oeuvre les mesures particulières requises pour maîtriser les accidents ;
-- d'informer les citoyens sur les mesures prises aux abords des installations concernées.
-
-**Article 60.** — Sans préjudice des dispositions de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, toute installation industrielle doit, avant sa mise en exploitation, être soumise à une étude de danger.
-
-**Article 61.** — Les plans particuliers d'intervention sont élaborés sur la base des informations fournies par les exploitants d'installations ou d'ouvrages comportant le risque concerné.
-
-Les conditions et modalités d'élaboration et d'adoption des plans particuliers d'intervention sont fixées par voie réglementaire.
-
-**Article 62.** — Outre les plans particuliers d'intervention, les exploitants d'installations industrielles doivent élaborer un plan interne d'intervention définissant, au titre de l'installation concernée, l'ensemble des mesures de prévention des risques, les moyens mobilisés à ce titre ainsi que les procédures à mettre en oeuvre lors du déclenchement d'un sinistre.
-
-Les modalités d'élaboration et de mise en oeuvre des plans internes d'intervention sont fixées par voie réglementaire.
-
-### Chapitre 2 — Des mesures structurelles pour la prise en charge des catastrophes
-
-**Article 63.** — Les mesures structurelles pour la prise en charge des catastrophes sont :
-
-- la constitution de réserves stratégiques,
-- la mise en place du système de prise en charge des dommages,
-- la mise en place d'institutions spécialisées.
-
-#### Section 1 — Des réserves stratégiques
-
-**Article 64.** — L'Etat constitue les réserves stratégiques destinées à assurer la gestion de la phase d'urgence consécutive à la catastrophe telle que définie dans les dispositions de l'article 55 ci-dessus.
-
-**Article 65.** — Les réserves stratégiques prévues dans les dispositions de l'article 63 ci-dessus sont constituées notamment par :
-
-- des tentes, des chalets, ou tout autre moyen destiné à loger provisoirement les sinistrés sans abri ;
-- des vivres ;
-- des médicaments de première urgence et des produits de désinfection et de lutte contre la propagation d'épidémies et de maladies ;
-- des citernes d'eau potable tractables ;
-- de l'eau potable conditionnée sous des formes diverses.
-
-**Article 66.** — Les réserves stratégiques sont constituées aux niveaux :
-
-- national,
-- inter-wilayas,
-- wilaya.
-
-La nomenclature et les modalités de mise en place, de gestion et d'utilisation de ces réserves stratégiques sont fixées par voie réglementaire.
-
-#### Section 2 — De la réparation des dommages
-
-**Article 67.** — Les conditions et les modalités d'octroi des aides financières aux victimes des catastrophes sont fixées conformément à la législation en vigueur.
-
-#### Section 3 — Des institutions spécialisées
-
-**Article 68.** — Outre les institutions intervenant dans la mise en oeuvre du système national de prévention des risques majeurs et de gestion des catastrophes et des attributions qui leur sont conférées, il est institué, sous l'autorité du Chef du Gouvernement, une délégation nationale aux risques majeurs chargée de l'évaluation et de la coordination des actions relevant du système national de prévention des risques majeurs et de gestion des catastrophes.
-
-Les missions et les modalités d'organisation et de fonctionnement de la délégation nationale aux risques majeurs sont fixées par voie réglementaire.
+Les conditions et modalités d'application des dispositions du présent article seront définies par voie réglementaire.
 
 ---
 
-## TITRE IV — DISPOSITIONS PÉNALES
+## Chapitre V — Permis de lotir — Permis de construire — Permis de démolir
 
-**Article 69.** — Outre les officiers et agents de police judiciaire sont habilités à rechercher et à constater les infractions aux dispositions de la présente loi et aux textes pris pour son application, les personnes et organes de contrôle habilités par la loi, dans les conditions, formes et procédures fixées par la législation applicable aux secteurs et activités concernés.
+### Section 1 — Dispositions générales
 
-**Article 70.** — Sans préjudice des dispositions de la loi n° 90-29 du 1er décembre 1990, modifiée et complétée, relative à l'aménagement et l'urbanisme, toute infraction aux dispositions de l'article 19 de la présente loi est punie d'un emprisonnement de un (1) an à trois (3) ans et d'une amende de trois cent mille dinars (300.000 DA) à six cent mille dinars (600.000 DA) ou de l'une de ces deux peines seulement.
+**Art. 50.** — Le droit de construire est attaché à la propriété du sol. Il s'exerce dans le strict respect des dispositions législatives et réglementaires relatives à l'utilisation du sol.
 
-En cas de récidive la peine est portée au double.
+Il est soumis au permis de construire, de lotir ou de démolir.
 
-**Article 71.** — Toute infraction aux dispositions de l'article 23 de la présente loi est punie conformément aux dispositions de la loi n° 90-29 du 1er décembre 1990, modifiée et compétée, relative à l'aménagement et à l'urbanisme.
+**Art. 51.** — Toute personne physique ou morale intéressée peut, avant d'engager les études, demander un certificat d'urbanisme qui indique les droits à construire et servitudes affectant le terrain concerné.
 
-**Article 72.** — Tout exploitant d'installation industrielle qui n'aura pas élaboré un plan interne d'intervention tel que prévu à l'article 62 ci-dessus est puni d'un emprisonnement de deux (2) mois à un (1) an et d'une amende de trois cent mille dinars (300.000 DA) à six cent mille dinars (600.000 DA) ou de l'une de ces deux peines seulement.
+Les conditions et modalités de délivrance du certificat d'urbanisme seront définies par voie réglementaire.
 
-En cas de récidive la peine est portée au double.
+### Section 2 — Permis de construire
+
+**Art. 52.** — Le permis de construire est exigé pour l'édification de nouvelles constructions quel qu'en soit l'usage, l'extension de constructions existantes, la modification de construction touchant aux gros œuvres ou aux façades donnant sur l'espace public, la réalisation de mur de soutènement et de clôture en dur.
+
+Le permis de construire est instruit et délivré dans des formes, conditions et délais déterminés par voie réglementaire.
+
+**Art. 53.** — Ne sont pas soumises à permis de construire, les constructions couvertes par le secret de défense nationale, pour lesquelles le maître d'ouvrage doit veiller à leur conformité avec les dispositions législatives et réglementaires en matière d'urbanisme et de construction.
+
+**Art. 54.** — Les règles générales de construction applicables aux bâtiments d'habitation, les mesures d'entretien destinées à assurer le respect des règles de sécurité ainsi que les modalités de justification de l'exécution de cette obligation d'entretien sont déterminées par voie réglementaire.
+
+Sont également fixées par voie réglementaire, les règles de construction et d'aménagement des locaux et les normes d'équipement, de fonctionnement et de contrôle des installations d'aération et de chauffage.
+
+**Art. 55.** — Les projets de construction soumis à permis de construire doivent être établis par un architecte agréé. Le projet architectural doit comprendre des plans et des documents écrits renseignant sur l'implantation des bâtiments, leur composition, leur organisation, leur volume, l'expression des façades ainsi que le choix des matériaux et des couleurs, tout en encourageant le type d'architecture qui tient compte des spécificités locales et civilisationnelles de la société.
+
+Toutefois, il n'est pas obligatoire de recourir à un architecte pour les projets de constructions de moindre importance dont la surface plancher, les destinations et le lieu d'implantation seront fixés par la réglementation, lorsqu'ils ne sont pas situés dans les territoires visés à l'article 46 ci-dessus.
+
+L'application des dispositions du présent article sera définie par voie réglementaire.
+
+**Art. 56.** — Le propriétaire ou le maître de l'ouvrage doit signaler à l'assemblée populaire communale, l'achèvement de la construction pour la délivrance d'un certificat de conformité.
+
+### Section 3 — Permis de lotir
+
+**Art. 57.** — Le permis de lotir est exigé pour toute opération de division en deux ou plusieurs lots d'une ou plusieurs propriétés foncières, quelle qu'en soit la localisation.
+
+Le permis de lotir est instruit et délivré dans des formes, conditions et délais déterminés par voie réglementaire.
+
+**Art. 58.** — Le lotisseur présente à l'appui de sa demande de permis de lotir, un dossier incluant un cahier des charges définissant les travaux éventuels d'équipement et de viabilisation que le ou les propriétaires s'engage à réaliser dans les délais impartis ainsi que les conditions de cession des lots et les prescriptions urbanistiques, architecturales et autres auxquelles devront satisfaire les constructions à édifier.
+
+**Art. 59.** — A la demande du propriétaire d'une propriété foncière bâtie, il est délivré un certificat de morcellement pour toute opération de division en deux ou plusieurs lots.
+
+Le certificat de morcellement ne vaut pas certificat d'urbanisme.
+
+Le certificat de morcellement est instruit et délivré dans des formes, conditions et délais déterminés par voie réglementaire.
+
+### Section 4 — Permis de démolir
+
+**Art. 60.** — Le permis de démolir est exigé pour toute démolition totale ou partielle d'une construction dans les territoires visés à l'article 46 ci-dessus, ou chaque fois que les conditions techniques et de sécurité le commandent.
+
+Le permis de démolir est instruit et délivré dans des formes, conditions et délais déterminés par voie réglementaire.
+
+### Section 5 — Dispositions diverses
+
+**Art. 61.** — La demande de permis de lotir, de construire ou de démolir est déposée au siège de l'assemblée populaire communale concernée.
+
+**Art. 62.** — Le permis de construire, de lotir ou de démolir ne peut être refusé que pour des motifs tirés des dispositions de la présente loi.
+
+En cas de refus ou de réserve, la décision dûment motivée de l'autorité compétente doit être notifiée à l'intéressé.
+
+**Art. 63.** — Le titulaire de la demande du permis de construire, de lotir ou de démolir non convaincu par le refus opposé à sa demande, peut introduire un recours hiérarchique ou introduire une action auprès de la juridiction compétente en cas de refus ou de silence de l'autorité compétente.
+
+**Art. 64.** — La demande de permis de lotir ou de construire peut faire l'objet d'un sursis à statuer d'une (1) année au maximum par l'autorité chargée de délivrer le permis de lotir ou le permis de construire lorsqu'un instrument d'aménagement et d'urbanisme est en cours d'élaboration.
+
+**Art. 65.** — Sous réserve des dispositions prévues aux articles 66 et 67 ci-après, le permis de lotir ou le permis de construire est délivré par le président de l'assemblée populaire communale :
+
+— en tant que représentant de la commune, pour tous les lotissements ou constructions dans un secteur couvert par un plan d'occupation des sols, le président de l'assemblée populaire communale transmet, dans ce cas, au wali un exemplaire de la demande de permis considérée,
+
+— en tant que représentant de l'Etat en l'absence d'un plan d'occupation des sols, et après avis conforme du wali.
+
+**Art. 66.** — Le permis de lotir ou le permis de construire est délivré par le wali pour :
+
+— les constructions et installations réalisées pour le compte de l'Etat, de la wilaya et de leurs établissements publics,
+
+— les ouvrages de productions, de transport, de distribution et de stockage d'énergie ainsi que de matières stratégiques,
+
+— les lotissements ou constructions localisés dans les territoires visés aux articles 44, 45, 46, 48 et 49 ci-dessus, non régis par un plan d'occupation des sols approuvé.
+
+**Art. 67.** — Le permis de lotir ou de construire est délivré par le ministre chargé de l'urbanisme, après avis du ou des walis concernés, pour les projets structurants d'intérêt national ou régional.
+
+**Art. 68.** — Le permis de démolir est délivré par le président de l'assemblée populaire communale.
+
+**Art. 69.** — Toute construction ou démolition pouvant porter atteinte à un patrimoine naturel ou historique ou culturel ou constituer un risque, n'est autorisée qu'après avis conforme des services compétents en la matière conformément aux lois et règlements en vigueur.
+
+Les modalités d'application du présent article seront précisées par voie réglementaire.
 
 ---
 
-## TITRE V — DISPOSITIONS PARTICULIÈRES
+## Chapitre VI — Clôture
 
-**Article 73.** — L'ensemble des plans généraux de prévention des risques majeurs, des plans ORSEC et des plans particuliers d'intervention doivent, tant pour les systèmes de veille, les systèmes d'alerte et/ou de pré-alerte que pour les mécanismes de prévention ou de gestion des catastrophes, préciser chaque intervenant, les missions et les responsabilités qui lui sont conférées.
+**Art. 70.** — L'édification de clôture dans les territoires visés aux articles 44, 46, 48 et 49 ci-dessus est subordonnée à une autorisation de travaux délivrée par le président de l'assemblée populaire communale.
+
+Toutefois, ne sont pas soumises à cette obligation, les clôtures forestières et agricoles.
+
+**Art. 71.** — L'édification de clôture peut faire l'objet de prescriptions spéciales concernant la nature, la hauteur et l'aspect extérieur de la part de l'autorité compétente conformément aux lois et règlements en vigueur.
+
+**Art. 72.** — Lorsque des travaux de construction ou de démolition sont entrepris en bordure de routes, passages piétons, trottoirs, espace de parking, aire de jeux, espace public aménagé ou non, la réalisation de clôture de séparation physique et visuelle de jour comme de nuit entre ces espaces et le lieu des travaux est obligatoire. Cette clôture doit être régulièrement entretenue.
 
 ---
 
-## TITRE VI — DISPOSITIONS FINALES
+## Chapitre VII — Sanctions
 
-**Article 74.** — Toutes dispositions contraires à celles de la présente loi sont abrogées. Toutefois, les dispositions régissant les aspects liés à la prévention des risques majeurs, demeurent en vigueur jusqu'à publication des textes d'application de la présente loi.
+### Section 1 — Du contrôle
 
-**Article 75.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
+**Art. 73.** — Le wali, le président de l'assemblée populaire communale ainsi que les agents assermentés ou commissionnés peuvent, à tout moment, visiter les constructions en cours, procéder aux vérifications qu'ils jugent utiles et se faire communiquer, à tout moment, les documents techniques se rapportant à la construction.
 
-Fait à Alger, le 13 Dhou El Kaada 1425 correspondant au 25 décembre 2004.
+**Art. 74.** — Toute association légalement constituée qui se propose, par ses statuts, d'agir pour l'aménagement du cadre de vie et pour la protection de l'environnement, peut se porter partie civile en ce qui concerne les infractions aux dispositions de la législation en vigueur en matière d'aménagement et d'urbanisme.
 
-**Abdelaziz BOUTEFLIKA**
+**Art. 75.** — A leur achèvement, la conformité des travaux avec le permis de construire est constatée par un certificat de conformité.
+
+Il est délivré, selon le cas, par le président de l'assemblée populaire communale ou par le wali.
+
+### Section 2 — Infraction
+
+**Art. 76.** — En cas de travaux de construction entrepris en violation grave des dispositions légales et réglementaires en vigueur en la matière, l'autorité administrative peut saisir le juge compétent à l'effet de prononcer selon les voies d'urgence prévues par l'ordonnance n° 66-154 du 8 juin 1966 susvisée, l'interruption des travaux.
+
+**Art. 77.** — L'exécution de travaux ou l'utilisation du sol en méconnaissance des obligations imposées par la présente loi, par les règlements pris pour son application ou par les autorisations délivrées en conformité avec leurs dispositions, est punie d'une amende de 3000 DA à 300.000 DA.
+
+En cas de récidive, un emprisonnement d'un (1) mois à six (6) mois peut être prononcé.
+
+Les peines prévues aux alinéas précédents peuvent être prononcées contre les utilisateurs du sol, les bénéficiaires des travaux, les architectes, les entrepreneurs, ou autres personnes responsables de l'exécution desdits travaux.
+
+**Art. 78.** — Le juge compétent, saisi dans le cadre des dispositions des articles 76 et 77 ci-dessus, se prononce soit sur la mise en conformité des lieux ou celle des ouvrages avec le permis de construire, soit sur la démolition des ouvrages ou la réaffectation des sols, en vue du rétablissement des lieux dans leur état antérieur.
+
+---
+
+## Chapitre VIII — Dispositions particulières et transitoires
+
+**Art. 79.** — Les instruments d'aménagement et d'urbanisme régulièrement approuvés dans le cadre des procédures antérieures à la date de promulgation de la présente loi, continuent à produire leurs effets lorsque leurs dispositions ne sont pas contraires aux dispositions de la présente loi et seront, dans tous les cas, mis en conformité progressivement.
+
+**Art. 80.** — Toutes les dispositions contraires à la présente loi sont abrogées et notamment :
+
+— la loi n° 82-02 du 6 février 1982 relative au permis de construire et de lotir,
+
+— l'ordonnance n° 85-01 du 13 août 1985 fixant à titre transitoire les règles d'occupation des sols en vue de leur préservation et de leur protection, approuvée par la loi n° 85-08 du 12 novembre 1985 sous réserve des dispositions de l'article 79 ci-dessus.
+
+**Art. 81.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
+
+Les conditions et modalités d'application du présent article seront précisées par décret.
+
+Fait à Alger, le 1er décembre 1990.
+
+Chadli BENDJEDID.
 
 ---
 
 ## Contrôle de séquence
 
-| N° article | Présent | Note |
-|---|---|---|
-| Art. 1er | ✅ | |
-| Art. 2 | ✅ | |
-| Art. 3 | ✅ | |
-| Art. 4 | ✅ | |
-| Art. 5 | ✅ | |
-| Art. 6 | ✅ | |
-| Art. 7 | ✅ | |
-| Art. 8 | ✅ | |
-| Art. 9 | ✅ | |
-| Art. 10 | ✅ | |
-| Art. 11 | ✅ | |
-| Art. 12 | ✅ | |
-| Art. 13 | ✅ | |
-| Art. 14 | ✅ | |
-| Art. 15 | ✅ | |
-| Art. 16 | ✅ | |
-| Art. 17 | ✅ | |
-| Art. 18 | ✅ | |
-| Art. 19 | ✅ | |
-| Art. 20 | ✅ | |
-| Art. 21 | ✅ | |
-| Art. 22 | ✅ | |
-| Art. 23 | ✅ | |
-| Art. 24 | ✅ | |
-| Art. 25 | ✅ | |
-| Art. 26 | ✅ | |
-| Art. 27 | ✅ | |
-| Art. 28 | ✅ | |
-| Art. 29 | ✅ | |
-| Art. 30 | ✅ | |
-| Art. 31 | ✅ | |
-| Art. 32 | ✅ | |
-| Art. 33 | ✅ | |
-| Art. 34 | ✅ | |
-| Art. 35 | ✅ | |
-| Art. 36 | ✅ | |
-| Art. 37 | ✅ | |
-| Art. 38 | ✅ | |
-| Art. 39 | ✅ | |
-| Art. 40 | ✅ | |
-| Art. 41 | ✅ | |
-| Art. 42 | ✅ | |
-| Art. 43 | ✅ | |
-| Art. 44 | ✅ | |
-| Art. 45 | ✅ | |
-| Art. 46 | ✅ | |
-| Art. 47 | ✅ | |
-| Art. 48 | ✅ | |
-| Art. 49 | ✅ | |
-| Art. 50 | ✅ | |
-| Art. 51 | ✅ | |
-| Art. 52 | ✅ | |
-| Art. 53 | ✅ | |
-| Art. 54 | ✅ | |
-| Art. 55 | ✅ | |
-| Art. 56 | ✅ | |
-| Art. 57 | ✅ | |
-| Art. 58 | ✅ | |
-| Art. 59 | ✅ | |
-| Art. 60 | ✅ | |
-| Art. 61 | ✅ | |
-| Art. 62 | ✅ | |
-| Art. 63 | ✅ | |
-| Art. 64 | ✅ | |
-| Art. 65 | ✅ | |
-| Art. 66 | ✅ | |
-| Art. 67 | ✅ | |
-| Art. 68 | ✅ | |
-| Art. 69 | ✅ | |
-| Art. 70 | ✅ | |
-| Art. 71 | ✅ | |
-| Art. 72 | ✅ | |
-| Art. 73 | ✅ | |
-| Art. 74 | ✅ | |
-| Art. 75 | ✅ | |
+Liste des articles de la Loi n° 90-29 dans l'ordre numérique :
 
-**Total : 75 articles — aucun saut détecté. Séquence Art. 1–75 complète.**
+1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81.
+
+**Intégrité du texte :** La loi est complète. Tous les articles sont présents.
