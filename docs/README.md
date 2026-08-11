@@ -1,5 +1,14 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-11 18:27 WAT — Perplexity — W49 CLOSED — 10 criteria files audited, all confirmed clean
+- **Phases closed:** W49
+- **Phases opened:** none
+- **Files changed:** none (all 10 files confirmed clean by direct source read)
+- **Files audited (10):** `blacksmithCriteria.ts`, `carWashCriteria.ts`, `carpenteryCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`
+- **Verdict:** 0 citation errors, 0 `[À VÉRIFIER]` open, 0 invented numeric values, all numericFields coherent with Décret 06-138 / 06-141 / 17-140 / Arrêté 07/05/2025 limits
+- **Open phases: W51**
+- **Next identifier: W59**
+
 ### 2026-08-11 18:21 WAT — Perplexity — W53 W54 W55 W56 CLOSED — confirmed clean by direct read
 - **Phases closed:** W53, W54, W55, W56
 - **Phases opened:** none
@@ -77,6 +86,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W49** | ✅ CLOSED | P3 | Audit 10 criteria files — all confirmed clean. 0 errors. 2026-08-11. |
 | **W56** | ✅ CLOSED | P2 | F-20: `decisionSupport.test.ts` — 18 tests, all 7 actions, grade boundaries, escalation, criticalOverride, incomplete. Confirmed by direct read 2026-08-11. |
 | **W55** | ✅ CLOSED | P2 | F-17: `SyncService.ts` sends full `SavedInspection` object — `.violations` field never accessed directly. No shape conflict. Confirmed 2026-08-11. |
 | **W54** | ✅ CLOSED | P2 | F-14: `completionRate` + `incomplete` correctly computed in `scoringUtils.ts`. No active inspection screen (progress bar = future feature, backlog). Confirmed 2026-08-11. |
@@ -87,7 +97,6 @@
 | **W57** | ✅ CLOSED | P1 | semiPharmaCriteria SPH citations fixed. Commit `f31faa33`. |
 | **W52** | ✅ CLOSED | P1 | INSPECTION_LOCKED on delete/deleteMany/clear. Gate: 26/26. |
 | **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: AIM GPL2 publication status — 6 critères GPL [À VÉRIFIER] |
-| **W49** | 🟠 OPEN | P3 | Audit 16 fichiers critères non audités |
 | **W48** | ✅ CLOSED | — | BGN-02-02 test. Commit `0eb33bf`. |
 | **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved. |
 | **W45** | ✅ CLOSED | — | BGN-02-01 Art.4 fix. |
