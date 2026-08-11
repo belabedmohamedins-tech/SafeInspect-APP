@@ -1,17 +1,17 @@
-ï»¿# DÃ©cret exÃ©cutif nÂ° 90-245 du 18 aoÃ»t 1990 portant rÃ©glementation des appareils Ã  pression de gaz
+# Décret exécutif n° 90-245 du 18 août 1990 portant réglementation des appareils à pression de gaz
 
-**Date de signature :** 18 aoÃ»t 1990  
-**Journal Officiel :** NÂ° 36, 22 aoÃ»t 1990 â€” pages 998 Ã  1003  
-**Source PDF :** Fourni par l'utilisateur (`DÃ©cret 90-245 du 18 aoÃ»t 1990 (appareils Ã  pression de gaz).pdf`) â€” converti sous responsabilitÃ© de l'utilisateur  
+**Date de signature :** 18 août 1990  
+**Journal Officiel :** N° 36, 22 août 1990 — pages 998 à 1003  
+**Source PDF :** Fourni par l'utilisateur (`Décret 90-245 du 18 août 1990 (appareils à pression de gaz).pdf`) — converti sous responsabilité de l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vÃ©rification :** âœ… VÃ‰RIFIÃ‰ 2026-08-11 par Belabed Mohamed â€” converti et relu contre PDF officiel  
-> **AVERTISSEMENT :** Veuillez vÃ©rifier ce texte par rapport au texte original du JORADP avant toute dÃ©cision lÃ©gale ou d'exÃ©cution.
+**Statut de vérification : ? VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur la source :** Le texte du dÃ©cret 90-245 est complet. Le PDF contenait Ã©galement le dÃ©cret 90-246 (appareils Ã  pression de vapeur) et d'autres textes. Seul le dÃ©cret 90-245 est converti dans ce fichier.
+**Note sur la source :** Le texte du décret 90-245 est complet. Le PDF contenait également le décret 90-246 (appareils à pression de vapeur) et d'autres textes. Seul le décret 90-245 est converti dans ce fichier.
 
 ---
 
-## PRÃ‰AMBULE
+## PRÉAMBULE
 
 Le Chef du Gouvernement
 
@@ -19,260 +19,260 @@ Sur le rapport du ministre des mines,
 
 Vu la Constitution, notamment ses articles 81 et 116 ;
 
-Vu l'ordonnance nÂ° 66-156 du 8 juin 1966, modifiÃ©e et complÃ©tÃ©e, portant code pÃ©nal ;
+Vu l'ordonnance n° 66-156 du 8 juin 1966, modifiée et complétée, portant code pénal ;
 
-Vu l'ordonnance nÂ° 76-04 du 20 fÃ©vrier 1976 relative aux rÃ¨gles applicables en matiÃ¨re de sÃ©curitÃ© contre les risques d'incendie et de panique et Ã  la crÃ©ation de commissions de prÃ©vention et de protection civile ;
+Vu l'ordonnance n° 76-04 du 20 février 1976 relative aux règles applicables en matière de sécurité contre les risques d'incendie et de panique et à la création de commissions de prévention et de protection civile ;
 
-Vu la loi nÂ° 83-03 du 5 fÃ©vrier 1983 portant protection de l'environnement ;
+Vu la loi n° 83-03 du 5 février 1983 portant protection de l'environnement ;
 
-Vu le dÃ©cret nÂ° 76-34 du 20 fÃ©vrier 1976 relatif aux Ã©tablissements dangereux, insalubres ou incommodes ;
+Vu le décret n° 76-34 du 20 février 1976 relatif aux établissements dangereux, insalubres ou incommodes ;
 
-Vu le dÃ©cret nÂ° 84-105 du 12 mai 1984 portant institution d'un pÃ©rimÃ¨tre de protection des installations et infrastructures ;
+Vu le décret n° 84-105 du 12 mai 1984 portant institution d'un périmètre de protection des installations et infrastructures ;
 
-Vu le dÃ©cret nÂ° 85-59 du 23 mars 1985 portant statut-type des travailleurs, des institutions et des administrations publiques ;
+Vu le décret n° 85-59 du 23 mars 1985 portant statut-type des travailleurs, des institutions et des administrations publiques ;
 
-Vu le dÃ©cret nÂ° 85-231 du 25 aoÃ»t 1985 fixant les conditions et modalitÃ©s d'organisation et de mise en Å“uvre des interventions et secours en cas de catastrophes ;
+Vu le décret n° 85-231 du 25 août 1985 fixant les conditions et modalités d'organisation et de mise en œuvre des interventions et secours en cas de catastrophes ;
 
-Vu le dÃ©cret nÂ° 85-232 du 25 aoÃ»t 1985 relatif Ã  la prÃ©vention des risques de catastrophes ;
+Vu le décret n° 85-232 du 25 août 1985 relatif à la prévention des risques de catastrophes ;
 
-Vu le dÃ©cret nÂ° 88-149 du 26 juillet 1988 dÃ©finissant la rÃ©glementation applicable aux installations classÃ©es et fixant leur nomenclature ;
+Vu le décret n° 88-149 du 26 juillet 1988 définissant la réglementation applicable aux installations classées et fixant leur nomenclature ;
 
-Vu le dÃ©cret prÃ©sidentiel nÂ° 89-171 du 9 septembre 1989 portant nomination du chef du Gouvernement ;
+Vu le décret présidentiel n° 89-171 du 9 septembre 1989 portant nomination du chef du Gouvernement ;
 
-Vu le dÃ©cret prÃ©sidentiel nÂ° 89-178 du 16 septembre 1989, modifiÃ©, portant nomination des membres du Gouvernement ;
+Vu le décret présidentiel n° 89-178 du 16 septembre 1989, modifié, portant nomination des membres du Gouvernement ;
 
-## DÃ‰CRÃˆTE
+## DÉCRÈTE
 
-**Article 1er.** â€” Le prÃ©sent rÃ¨glement fixe les exigences auxquelles doivent rÃ©pondre la construction, l'installation et l'exploitation des appareils Ã  pression de gaz.
+**Article 1er.** — Le présent règlement fixe les exigences auxquelles doivent répondre la construction, l'installation et l'exploitation des appareils à pression de gaz.
 
-**Art. 2.** â€” Sont soumis Ã  l'ensemble des dispositions du prÃ©sent rÃ¨glement les appareils, ci-aprÃ¨s dÃ©finis lorsqu'ils sont destinÃ©s Ã  Ãªtre utilisÃ©s Ã  terre :
+**Art. 2.** — Sont soumis à l'ensemble des dispositions du présent règlement les appareils, ci-après définis lorsqu'ils sont destinés à être utilisés à terre :
 
-1. Les appareils de production, d'emmagasinage ou de mise en Å“uvre de gaz comprimÃ©s, liquÃ©fiÃ©s ou dissous ou de vapeur, ou de liquides surchauffÃ©s sous pression, lorsque les deux conditions suivantes sont simultanÃ©ment remplies :
+1. Les appareils de production, d'emmagasinage ou de mise en œuvre de gaz comprimés, liquéfiés ou dissous ou de vapeur, ou de liquides surchauffés sous pression, lorsque les deux conditions suivantes sont simultanément remplies :
 
-â€” la pression effective de la phase gazeuse peut excÃ©der quatre (4) bars ;
+— la pression effective de la phase gazeuse peut excéder quatre (4) bars ;
 
-â€” le produit de la pression effective maximale exprimÃ©e en bars, par la contenance exprimÃ©e en litres, excÃ¨de le nombre quatre vingt (80).
+— le produit de la pression effective maximale exprimée en bars, par la contenance exprimée en litres, excède le nombre quatre vingt (80).
 
-Le prÃ©sent alinÃ©a ne vise pas les compresseurs et les canalisations, les extincteurs d'incendie, les gÃ©nÃ©rateurs, les rÃ©cipients d'acÃ©tylÃ¨ne.
+Le présent alinéa ne vise pas les compresseurs et les canalisations, les extincteurs d'incendie, les générateurs, les récipients d'acétylène.
 
-Le corps proprement dit des moteurs et des pompes ainsi que les enveloppes de chambres Ã  air dites pneumatiques ne sont pas soumis au prÃ©sent rÃ¨glement.
+Le corps proprement dit des moteurs et des pompes ainsi que les enveloppes de chambres à air dites pneumatiques ne sont pas soumis au présent règlement.
 
-2. Les appareils mobiles d'emmagasinage de gaz comprimÃ©s, liquÃ©fiÃ©s ou dissous, ou de vapeur sous pression, lorsque les deux (2) conditions suivantes sont simultanÃ©ment remplies :
+2. Les appareils mobiles d'emmagasinage de gaz comprimés, liquéfiés ou dissous, ou de vapeur sous pression, lorsque les deux (2) conditions suivantes sont simultanément remplies :
 
-â€” la pression effective de la phase gazeuse peut excÃ©der quatre (4) bars ;
+— la pression effective de la phase gazeuse peut excéder quatre (4) bars ;
 
-â€” le produit de la pression maximale exprimÃ©e en bars, par la contenance exprimÃ©e en litres, excÃ¨de le nombre de dix (10) sans excÃ©der le nombre quatre vingt (80).
+— le produit de la pression maximale exprimée en bars, par la contenance exprimée en litres, excède le nombre de dix (10) sans excéder le nombre quatre vingt (80).
 
-3. Les compresseurs de gaz ou de vapeurs autres que la vapeur d'eau lorsque les deux (2) conditions suivantes sont simultanÃ©ment remplies :
+3. Les compresseurs de gaz ou de vapeurs autres que la vapeur d'eau lorsque les deux (2) conditions suivantes sont simultanément remplies :
 
-â€” la pression effective de refoulement du dernier Ã©tage peut excÃ©der dix (10) bars ;
+— la pression effective de refoulement du dernier étage peut excéder dix (10) bars ;
 
-â€” le produit de la pression effective de refoulement exprimÃ©e en bars par le dÃ©bit du fluide mesurÃ© dans les conditions de refoulement et exprimÃ© en mÃ¨tres cubes par minute, peut excÃ©der le nombre cinquante (50).
+— le produit de la pression effective de refoulement exprimée en bars par le débit du fluide mesuré dans les conditions de refoulement et exprimé en mètres cubes par minute, peut excéder le nombre cinquante (50).
 
-Les limites ci-dessus sont ramenÃ©es respectivement Ã  quatre (4) bars et au nombre vingt (20) pour certaines catÃ©gories de fluides qui seront dÃ©signÃ©s par arrÃªtÃ© du ministre chargÃ© des mines.
+Les limites ci-dessus sont ramenées respectivement à quatre (4) bars et au nombre vingt (20) pour certaines catégories de fluides qui seront désignés par arrêté du ministre chargé des mines.
 
-4. Les canalisations de gaz ou de vapeurs autres que la vapeur d'eau et les canalisations de liquides autres que l'eau dont la pression de vapeur en services peut dÃ©passer un (1) bar, lorsque les trois (3) conditions suivantes sont simultanÃ©ment remplies :
+4. Les canalisations de gaz ou de vapeurs autres que la vapeur d'eau et les canalisations de liquides autres que l'eau dont la pression de vapeur en services peut dépasser un (1) bar, lorsque les trois (3) conditions suivantes sont simultanément remplies :
 
-â€” diamÃ¨tre intÃ©rieur supÃ©rieur Ã  quatre vingt (80) millimÃ¨tres ;
+— diamètre intérieur supérieur à quatre vingt (80) millimètres ;
 
-â€” pression effective maximale en service supÃ©rieure Ã  dix (10) bars ;
+— pression effective maximale en service supérieure à dix (10) bars ;
 
-â€” produit du diamÃ¨tre par la pression maximale, exprimÃ©e dans les unitÃ©s ci-dessus, supÃ©rieur au nombre mille cinq cent (1500).
+— produit du diamètre par la pression maximale, exprimée dans les unités ci-dessus, supérieur au nombre mille cinq cent (1500).
 
-Les limites ci-dessus sont ramenÃ©es respectivement Ã  quatre (4) bars, et au nombre mille (1000) pour certaines catÃ©gories de fluides qui seront dÃ©signÃ©s par arrÃªtÃ© du ministre chargÃ© des mines.
+Les limites ci-dessus sont ramenées respectivement à quatre (4) bars, et au nombre mille (1000) pour certaines catégories de fluides qui seront désignés par arrêté du ministre chargé des mines.
 
-Ne sont pas soumises aux dispositions du prÃ©sent rÃ¨glement, les canalisations de transport d'hydrocarbures liquides ou liquÃ©fiÃ©s sous pression ou gazeux.
+Ne sont pas soumises aux dispositions du présent règlement, les canalisations de transport d'hydrocarbures liquides ou liquéfiés sous pression ou gazeux.
 
-5. Les extincteurs d'incendie qui prÃ©sentent des parties d'une contenance supÃ©rieure Ã  cinq (5) litres, mises sous pression au moment du fonctionnement, ou des enceintes sous pression permanente lorsque les deux conditions suivantes sont simultanÃ©ment remplies :
+5. Les extincteurs d'incendie qui présentent des parties d'une contenance supérieure à cinq (5) litres, mises sous pression au moment du fonctionnement, ou des enceintes sous pression permanente lorsque les deux conditions suivantes sont simultanément remplies :
 
-â€” la pression effective peut excÃ©der quatre (4) bars ;
+— la pression effective peut excéder quatre (4) bars ;
 
-â€” le produit de la pression effective maximale exprimÃ©e en bars par la contenance exprimÃ©e en litres, excÃ¨de le nombre quatre vingt (80) ou, si la contenance est supÃ©rieure Ã  un (1) litre, le nombre dix (10).
+— le produit de la pression effective maximale exprimée en bars par la contenance exprimée en litres, excède le nombre quatre vingt (80) ou, si la contenance est supérieure à un (1) litre, le nombre dix (10).
 
-6. Les gÃ©nÃ©rateurs d'acÃ©tylÃ¨ne, Ã  l'exclusion des appareils Ã  fonctionnement discontinu dont la charge de carbure de calcium est au plus Ã©gale Ã  un (1) kilogramme.
+6. Les générateurs d'acétylène, à l'exclusion des appareils à fonctionnement discontinu dont la charge de carbure de calcium est au plus égale à un (1) kilogramme.
 
-7. Les rÃ©cipients d'acÃ©tylÃ¨ne et canalisations d'usine du mÃªme gaz, lorsque la pression effective peut excÃ©der un bar et demi (1,5) quelque soit le volume intÃ©rieur.
+7. Les récipients d'acétylène et canalisations d'usine du même gaz, lorsque la pression effective peut excéder un bar et demi (1,5) quelque soit le volume intérieur.
 
-**Art. 3.** â€” Les compresseurs d'air, non visÃ©s ci-dessus, alimentant directement ou indirectement des appareils respiratoires, ou alimentant des installations situÃ©es dans des atmosphÃ¨res confinÃ©es ou susceptibles de devenir explosives, sont soumis aux dispositions des articles 17, 22 et 23 ci-aprÃ¨s.
+**Art. 3.** — Les compresseurs d'air, non visés ci-dessus, alimentant directement ou indirectement des appareils respiratoires, ou alimentant des installations situées dans des atmosphères confinées ou susceptibles de devenir explosives, sont soumis aux dispositions des articles 17, 22 et 23 ci-après.
 
-Sont soumis aux seules dispositions des articles 4, 17 et 23, les appareils qui ne sont pas, en raison de leurs caractÃ©ristiques de contenance, de dimension ou de pression de service, soumis aux autres dispositions du prÃ©sent rÃ¨glement par application de l'article 2 ci-dessus.
+Sont soumis aux seules dispositions des articles 4, 17 et 23, les appareils qui ne sont pas, en raison de leurs caractéristiques de contenance, de dimension ou de pression de service, soumis aux autres dispositions du présent règlement par application de l'article 2 ci-dessus.
 
-**Art. 4.** â€” Les appareils Ã  pression de gaz doivent Ãªtre construits ou rÃ©parÃ©s de maniÃ¨re Ã  garantir sous tous les rapports, la sÃ©curitÃ© de l'exploitation et notamment :
+**Art. 4.** — Les appareils à pression de gaz doivent être construits ou réparés de manière à garantir sous tous les rapports, la sécurité de l'exploitation et notamment :
 
-â€” le choix des matÃ©riaux employÃ©s Ã  la construction ou Ã  la rÃ©paration des appareils, leur mise en Å“uvre, la construction des assemblages, la dÃ©termination des formes, dimension et Ã©paisseur sont laissÃ©es Ã  l'apprÃ©ciation du constructeur ou rÃ©parateur sous sa responsabilitÃ©, rÃ©serves faites des dispositions ci-aprÃ¨s et de celles qui pourront Ãªtre prescrites en application du prÃ©sent rÃ¨glement ;
+— le choix des matériaux employés à la construction ou à la réparation des appareils, leur mise en œuvre, la construction des assemblages, la détermination des formes, dimension et épaisseur sont laissées à l'appréciation du constructeur ou réparateur sous sa responsabilité, réserves faites des dispositions ci-après et de celles qui pourront être prescrites en application du présent règlement ;
 
-â€” Les matÃ©riaux employÃ©s Ã  la construction des appareils Ã  pression doivent, par leur nature, opposÃ©s dans les conditions d'utilisation prÃ©vues, une rÃ©sistance aux actions chimiques des corps qu'ils sont appelÃ©s Ã  contenir. Ils doivent Ãªtre exempts de fragilitÃ©, aux tempÃ©ratures et aux pressions de service et d'Ã©preuve ;
+— Les matériaux employés à la construction des appareils à pression doivent, par leur nature, opposés dans les conditions d'utilisation prévues, une résistance aux actions chimiques des corps qu'ils sont appelés à contenir. Ils doivent être exempts de fragilité, aux températures et aux pressions de service et d'épreuve ;
 
-â€” Pour les appareils dont les parois sont susceptibles d'Ãªtre amincies par corrosion ou Ã©rosion, le constructeur doit prÃ©voir une surÃ©paisseur ou tout autre moyen de protection des surfaces.
+— Pour les appareils dont les parois sont susceptibles d'être amincies par corrosion ou érosion, le constructeur doit prévoir une surépaisseur ou tout autre moyen de protection des surfaces.
 
-**Art. 5.** â€” Pour tout appareil neuf, le constructeur fixe, sous sa responsabilitÃ©, la pression de calcul.
+**Art. 5.** — Pour tout appareil neuf, le constructeur fixe, sous sa responsabilité, la pression de calcul.
 
-Sous une pression Ã©gale Ã  la pression de calcul, le taux de travail du mÃ©tal dans la paroi sous pression doit Ãªtre infÃ©rieur Ã  la plus faible des deux valeurs suivantes :
+Sous une pression égale à la pression de calcul, le taux de travail du métal dans la paroi sous pression doit être inférieur à la plus faible des deux valeurs suivantes :
 
-â€” un tiers (1/3) de la rÃ©sistance de rupture Ã  la traction du mÃ©tal Ã  la tempÃ©rature ordinaire ;
+— un tiers (1/3) de la résistance de rupture à la traction du métal à la température ordinaire ;
 
-â€” cinq huitiÃ¨mes (5/8) de la limite d'Ã©lasticitÃ© Ã  0,2 % du mÃ©tal Ã  la tempÃ©rature maximale en service.
+— cinq huitièmes (5/8) de la limite d'élasticité à 0,2 % du métal à la température maximale en service.
 
-Si les conditions de service peuvent provoquer un fluage du mÃ©tal, le taux de travail doit, en outre, Ãªtre limitÃ© sous la responsabilitÃ© du constructeur, en fonction de la tempÃ©rature et de la durÃ©e de service prÃ©vues.
+Si les conditions de service peuvent provoquer un fluage du métal, le taux de travail doit, en outre, être limité sous la responsabilité du constructeur, en fonction de la température et de la durée de service prévues.
 
-Le ministre chargÃ© des mines peut prescrire, pour certaines catÃ©gories d'appareils, un taux de travail diffÃ©rent sous conditions dÃ©finies par arrÃªtÃ©.
+Le ministre chargé des mines peut prescrire, pour certaines catégories d'appareils, un taux de travail différent sous conditions définies par arrêté.
 
-L'emploi de la soudure sur les appareils soumis aux dispositions du prÃ©sent rÃ¨glement fera l'objet de prescriptions particuliÃ¨res qui seront dÃ©finies par arrÃªtÃ© du ministre chargÃ© des mines.
+L'emploi de la soudure sur les appareils soumis aux dispositions du présent règlement fera l'objet de prescriptions particulières qui seront définies par arrêté du ministre chargé des mines.
 
-**Art. 6.** â€” Le ministre chargÃ© des mines pourra prescrire pour certaines catÃ©gories d'appareils, dans les conditions dÃ©finies par arrÃªtÃ©, l'obligation d'avoir les Ã©quipements suivants :
+**Art. 6.** — Le ministre chargé des mines pourra prescrire pour certaines catégories d'appareils, dans les conditions définies par arrêté, l'obligation d'avoir les équipements suivants :
 
-â€” soupape de sÃ»retÃ© ;
+— soupape de sûreté ;
 
-â€” indicateur de niveau du liquide ;
+— indicateur de niveau du liquide ;
 
-â€” manomÃ¨tre ;
+— manomètre ;
 
-â€” thermomÃ¨tre ;
+— thermomètre ;
 
-â€” ouverture pour la visite interne et le nettoyage ;
+— ouverture pour la visite interne et le nettoyage ;
 
-â€” dispositif de purge et de vidange.
+— dispositif de purge et de vidange.
 
-**Art. 7.** â€” Les diffÃ©rentes enceintes, autres que les tuyauteries, de tout appareil Ã  pression de gaz doivent porter, soit dans le mÃ©tal mÃªme, soit sur une plaque fixÃ©e au moyen de rivets pleins, les marques d'identitÃ© suivantes :
+**Art. 7.** — Les différentes enceintes, autres que les tuyauteries, de tout appareil à pression de gaz doivent porter, soit dans le métal même, soit sur une plaque fixée au moyen de rivets pleins, les marques d'identité suivantes :
 
-â€” nom du constructeur, lieu, annÃ©e et numÃ©ro d'ordre de fabrication, volume intÃ©rieur de l'appareil, pression maximale en service et pression d'Ã©preuve exprimÃ©es en bars ;
+— nom du constructeur, lieu, année et numéro d'ordre de fabrication, volume intérieur de l'appareil, pression maximale en service et pression d'épreuve exprimées en bars ;
 
-â€” les diffÃ©rentes marques de service indiquant les principales conditions Ã  observer dans l'usage de l'appareil seront Ã©galement reproduites.
+— les différentes marques de service indiquant les principales conditions à observer dans l'usage de l'appareil seront également reproduites.
 
-Les marques, prescrites ci-dessus, doivent Ãªtre placÃ©es de faÃ§on Ã  rester apparentes sur l'appareil en service ou, tout au moins, en cas d'impossibilitÃ© Ã  Ãªtre visible lors des Ã©preuves ou des vÃ©rifications et, pour les rÃ©cipients mobiles, en cours de transport.
+Les marques, prescrites ci-dessus, doivent être placées de façon à rester apparentes sur l'appareil en service ou, tout au moins, en cas d'impossibilité à être visible lors des épreuves ou des vérifications et, pour les récipients mobiles, en cours de transport.
 
-**Art. 8.** â€” La construction de tout appareil soumis aux dispositions du prÃ©sent rÃ¨glement, doit Ãªtre, au prÃ©alable, approuvÃ©e par le service chargÃ© des mines sur la base d'un dossier technique comprenant :
+**Art. 8.** — La construction de tout appareil soumis aux dispositions du présent règlement, doit être, au préalable, approuvée par le service chargé des mines sur la base d'un dossier technique comprenant :
 
-â€” un Ã©tat descriptif donnant avec rÃ©fÃ©rence Ã  un dessin cÃ´tÃ©, la spÃ©cification des matÃ©riaux, formes, dimensions, Ã©paisseurs ainsi que l'emplacement et le procÃ©dÃ© d'exÃ©cution des soudures et les dispositions de tous les autres assemblages ;
+— un état descriptif donnant avec référence à un dessin côté, la spécification des matériaux, formes, dimensions, épaisseurs ainsi que l'emplacement et le procédé d'exécution des soudures et les dispositions de tous les autres assemblages ;
 
-â€” une note de calcul justifiant les paramÃ¨tres de construction retenus.
+— une note de calcul justifiant les paramètres de construction retenus.
 
-**Art. 9.** â€” Toute personne qui prÃ©sente un appareil aux Ã©preuves prÃ©vues par les articles 11 et 13 du prÃ©sent dÃ©cret, est tenue de produire un certificat attestant que ledit appareil Ã  Ã©tÃ© vÃ©rifiÃ© en vue de l'Ã©preuve et dÃ©crivant les vÃ©rifications faites.
+**Art. 9.** — Toute personne qui présente un appareil aux épreuves prévues par les articles 11 et 13 du présent décret, est tenue de produire un certificat attestant que ledit appareil à été vérifié en vue de l'épreuve et décrivant les vérifications faites.
 
-Pour les appareils neufs, les vÃ©rifications portent sur toutes les parties de l'appareil, tant en cours de construction, pour celles qui seront insuffisamment visibles par la suite, qu'aprÃ¨s achÃ¨vement du travail.
+Pour les appareils neufs, les vérifications portent sur toutes les parties de l'appareil, tant en cours de construction, pour celles qui seront insuffisamment visibles par la suite, qu'après achèvement du travail.
 
-Pour les appareils qui subissent une nouvelle Ã©preuve Ã  la suite d'une rÃ©paration notable, elles portent sur toutes les parties visibles, aprÃ¨s exÃ©cution de toutes mises Ã  nu et dÃ©montage de tous Ã©lÃ©ments amovibles, et en outre, tant en cours de rÃ©paration qu'aprÃ¨s achÃ¨vement, sur toutes les parties intÃ©ressÃ©es par la rÃ©paration.
+Pour les appareils qui subissent une nouvelle épreuve à la suite d'une réparation notable, elles portent sur toutes les parties visibles, après exécution de toutes mises à nu et démontage de tous éléments amovibles, et en outre, tant en cours de réparation qu'après achèvement, sur toutes les parties intéressées par la réparation.
 
-Dans les autres cas, elles portent sur toutes les parties visibles aprÃ¨s exÃ©cution de toute mise Ã  nu et dÃ©montage de tous les Ã©lÃ©ments amovibles.
+Dans les autres cas, elles portent sur toutes les parties visibles après exécution de toute mise à nu et démontage de tous les éléments amovibles.
 
-**Art. 10.** â€” L'Ã©preuve d'un appareil neuf a lieu Ã  la diligence du constructeur sur prÃ©sentation du dossier technique et du certificat de vÃ©rification, prÃ©vus aux articles 8 et 9 ci-dessus, complÃ©tÃ© des certificats relatifs aux matÃ©riaux utilisÃ©s, aux contrÃ´les et traitements thermiques Ã©ventuellement pratiquÃ©s.
+**Art. 10.** — L'épreuve d'un appareil neuf a lieu à la diligence du constructeur sur présentation du dossier technique et du certificat de vérification, prévus aux articles 8 et 9 ci-dessus, complété des certificats relatifs aux matériaux utilisés, aux contrôles et traitements thermiques éventuellement pratiqués.
 
-L'Ã©preuve, aprÃ¨s rÃ©paration, a lieu Ã  la demande du rÃ©parateur sur prÃ©sentation du certificat visÃ© Ã  l'article 9 ci-dessus, accompagnÃ© du dossier technique de rÃ©paration comportant tous les Ã©lÃ©ments permettant d'en apprÃ©cier la conformitÃ©.
+L'épreuve, après réparation, a lieu à la demande du réparateur sur présentation du certificat visé à l'article 9 ci-dessus, accompagné du dossier technique de réparation comportant tous les éléments permettant d'en apprécier la conformité.
 
-L'Ã©preuve d'un appareil en service a lieu Ã  la demande de l'exploitant sur prÃ©sentation du certificat prÃ©vu Ã  l'article 9 ci-dessus.
+L'épreuve d'un appareil en service a lieu à la demande de l'exploitant sur présentation du certificat prévu à l'article 9 ci-dessus.
 
-**Art. 11.** â€” Aucun appareil ne doit Ãªtre livrÃ©, ni mis en service sans avoir subi une Ã©preuve Ã  la pression hydraulique.
+**Art. 11.** — Aucun appareil ne doit être livré, ni mis en service sans avoir subi une épreuve à la pression hydraulique.
 
-Cette opÃ©ration doit Ãªtre faite chez le constructeur. Toutefois, elle pourra Ãªtre faite sur le lieu de l'emploi, sur accord du service chargÃ© des mines lorsque, en raison des conditions de dimensions, l'assemblage des Ã©lÃ©ments constitutifs ne peut Ãªtre rÃ©alisÃ© chez le constructeur.
+Cette opération doit être faite chez le constructeur. Toutefois, elle pourra être faite sur le lieu de l'emploi, sur accord du service chargé des mines lorsque, en raison des conditions de dimensions, l'assemblage des éléments constitutifs ne peut être réalisé chez le constructeur.
 
-La pression d'Ã©preuve est fixÃ©e par le constructeur sous sa responsabilitÃ©. Elle ne peut Ãªtre infÃ©rieure aux trois demis (3/2) de la pression de calcul.
+La pression d'épreuve est fixée par le constructeur sous sa responsabilité. Elle ne peut être inférieure aux trois demis (3/2) de la pression de calcul.
 
-La pression d'Ã©preuve ne peut Ãªtre infÃ©rieure Ã  soixante bars (60) pour les rÃ©cipients d'acÃ©tylÃ¨ne dissous, Ã  deux cents (200) bars pour les rÃ©cipients mobiles ou mi-fixes contenant du fluor, Ã  vingt (20) bars, pour les rÃ©cipients mobiles ou mi-fixes contenant du phosgÃ¨ne.
+La pression d'épreuve ne peut être inférieure à soixante bars (60) pour les récipients d'acétylène dissous, à deux cents (200) bars pour les récipients mobiles ou mi-fixes contenant du fluor, à vingt (20) bars, pour les récipients mobiles ou mi-fixes contenant du phosgène.
 
-La pression d'Ã©preuve peut, pour certains gaz ou certaines catÃ©gories d'appareils, Ãªtre fixÃ©e Ã  des taux supÃ©rieurs au trois demis (3/2) de la pression de calcul par arrÃªtÃ© du ministre chargÃ© des mines.
+La pression d'épreuve peut, pour certains gaz ou certaines catégories d'appareils, être fixée à des taux supérieurs au trois demis (3/2) de la pression de calcul par arrêté du ministre chargé des mines.
 
-L'Ã©preuve est exÃ©cutÃ©e en prÃ©sence et sous le contrÃ´le des ingÃ©nieurs des services des mines. Toutefois, elle pourra Ãªtre exÃ©cutÃ©e sous le contrÃ´le d'autres organismes habilitÃ©s par le ministre chargÃ© des mines.
+L'épreuve est exécutée en présence et sous le contrôle des ingénieurs des services des mines. Toutefois, elle pourra être exécutée sous le contrôle d'autres organismes habilités par le ministre chargé des mines.
 
-Les diffÃ©rentes opÃ©rations nÃ©cessaires Ã  l'Ã©preuve sont effectuÃ©es Ã  la diligence de la personne qui a demandÃ© celles-ci.
+Les différentes opérations nécessaires à l'épreuve sont effectuées à la diligence de la personne qui a demandé celles-ci.
 
-Avant Ã©preuve, l'ingÃ©nieur des mines procÃ¨de Ã  un examen des diffÃ©rentes parties de l'appareil, en vue d'en vÃ©rifier la conformitÃ©, et aux diffÃ©rents essais destructifs et contrÃ´les prescrits compte-tenu des paramÃ¨tres de construction. Il pourra, lorsqu'il le juge nÃ©cessaire, procÃ©der Ã  des contrÃ´les et essais complÃ©mentaires.
+Avant épreuve, l'ingénieur des mines procède à un examen des différentes parties de l'appareil, en vue d'en vérifier la conformité, et aux différents essais destructifs et contrôles prescrits compte-tenu des paramètres de construction. Il pourra, lorsqu'il le juge nécessaire, procéder à des contrôles et essais complémentaires.
 
-La mise sous pression est effectuÃ©e en sa prÃ©sence et sous son contrÃ´le.
+La mise sous pression est effectuée en sa présence et sous son contrôle.
 
-Toute la paroi extÃ©rieure de l'appareil doit Ãªtre Ã  nu pendant l'Ã©preuve et la pression maintenue au moins pendant tout le temps nÃ©cessaire Ã  l'examen complet de cette paroi.
+Toute la paroi extérieure de l'appareil doit être à nu pendant l'épreuve et la pression maintenue au moins pendant tout le temps nécessaire à l'examen complet de cette paroi.
 
-L'appareil sera rÃ©putÃ© avoir subi l'Ã©preuve avec succÃ¨s s'il a supportÃ© la pression d'Ã©preuve sans fuite, ni dÃ©formation permanente.
+L'appareil sera réputé avoir subi l'épreuve avec succès s'il a supporté la pression d'épreuve sans fuite, ni déformation permanente.
 
-AprÃ¨s qu'un appareil ait Ã©tÃ© Ã©prouvÃ© avec succÃ¨s, l'ingÃ©nieur des mines appose, en regard de la marque portant la pression d'Ã©preuve, les chiffres indiquant la date d'Ã©preuve suivie du poinÃ§on des mines. Il poinÃ§onne Ã©galement soit les marques d'identitÃ©, soit les rivets de fixation de la plaque d'identitÃ©.
+Après qu'un appareil ait été éprouvé avec succès, l'ingénieur des mines appose, en regard de la marque portant la pression d'épreuve, les chiffres indiquant la date d'épreuve suivie du poinçon des mines. Il poinçonne également soit les marques d'identité, soit les rivets de fixation de la plaque d'identité.
 
-AprÃ¨s Ã©preuve, un procÃ¨s-verbal est Ã©tabli en deux (2) exemplaires dont l'un est remis Ã  la personne qui a demandÃ© l'Ã©preuve.
+Après épreuve, un procès-verbal est établi en deux (2) exemplaires dont l'un est remis à la personne qui a demandé l'épreuve.
 
-**Art. 12.** â€” Les appareils construits Ã  l'Ã©tranger sont soumis aux prescriptions du prÃ©sent rÃ¨glement, le constructeur doit, en outre, prÃ©senter au moment de l'Ã©preuve prÃ©vue Ã  l'article 11, un certificat de conformitÃ© attestant que l'appareil est de construction conforme pour une utilisation dans le pays d'origine.
+**Art. 12.** — Les appareils construits à l'étranger sont soumis aux prescriptions du présent règlement, le constructeur doit, en outre, présenter au moment de l'épreuve prévue à l'article 11, un certificat de conformité attestant que l'appareil est de construction conforme pour une utilisation dans le pays d'origine.
 
-**Art. 13.** â€” L'Ã©preuve doit Ãªtre renouvelÃ©e Ã  intervalles n'excÃ©dant pas :
+**Art. 13.** — L'épreuve doit être renouvelée à intervalles n'excédant pas :
 
-â€” dix (10) annÃ©es, pour les appareils fixes ;
+— dix (10) années, pour les appareils fixes ;
 
-â€” cinq (5) annÃ©es, pour les appareils mobiles.
+— cinq (5) années, pour les appareils mobiles.
 
-Elle doit Ãªtre Ã©galement renouvelÃ©e lorsque l'appareil a subi une rÃ©paration notable.
+Elle doit être également renouvelée lorsque l'appareil a subi une réparation notable.
 
-Le renouvellement de l'Ã©preuve peut Ãªtre exigÃ© par anticipation, par le service chargÃ© des mines, lorsque en raison des conditions dans lesquelles l'appareil fonctionne, sa soliditÃ© est suspectÃ©e.
+Le renouvellement de l'épreuve peut être exigé par anticipation, par le service chargé des mines, lorsque en raison des conditions dans lesquelles l'appareil fonctionne, sa solidité est suspectée.
 
-L'intervalle entre deux Ã©preuves consÃ©cutives peut Ãªtre modifiÃ© pour certaines catÃ©gories d'appareils ou, compte-tenu de certaines catÃ©gories de gaz, par arrÃªtÃ© du ministre chargÃ© des mines.
+L'intervalle entre deux épreuves consécutives peut être modifié pour certaines catégories d'appareils ou, compte-tenu de certaines catégories de gaz, par arrêté du ministre chargé des mines.
 
-**Art. 14.** â€” Le renouvellement de l'Ã©preuve d'un appareil doit Ãªtre prÃ©cÃ©dÃ© d'une vÃ©rification complÃ¨te, sanctionnÃ©e par l'Ã©tablissement d'un certificat.
+**Art. 14.** — Le renouvellement de l'épreuve d'un appareil doit être précédé d'une vérification complète, sanctionnée par l'établissement d'un certificat.
 
-Pour les appareils qui subissent une nouvelle Ã©preuve Ã  la suite d'une rÃ©paration notable, les vÃ©rifications portent sur toutes les parties visibles aprÃ¨s exÃ©cution de toute mise Ã  nu et dÃ©montage de tous Ã©lÃ©ments amovibles et, en outre, tant en cours de rÃ©paration qu'aprÃ¨s achÃ¨vement, sur toutes les parties intÃ©ressÃ©es par la rÃ©paration.
+Pour les appareils qui subissent une nouvelle épreuve à la suite d'une réparation notable, les vérifications portent sur toutes les parties visibles après exécution de toute mise à nu et démontage de tous éléments amovibles et, en outre, tant en cours de réparation qu'après achèvement, sur toutes les parties intéressées par la réparation.
 
-Dans les autres cas, les vÃ©rifications portent sur toutes les parties visibles aprÃ¨s exÃ©cution de toute mise Ã  nu et dÃ©montages de tous les Ã©lÃ©ments amovibles.
+Dans les autres cas, les vérifications portent sur toutes les parties visibles après exécution de toute mise à nu et démontages de tous les éléments amovibles.
 
-Les certificats de vÃ©rification sont Ã©tablis, datÃ©s et signÃ©s par la personne qui a procÃ©dÃ© aux dites vÃ©rifications ; ils sont, en outre, visÃ©s par le rÃ©parateur ou l'exploitant.
+Les certificats de vérification sont établis, datés et signés par la personne qui a procédé aux dites vérifications ; ils sont, en outre, visés par le réparateur ou l'exploitant.
 
-**Art. 15.** â€” La personne chargÃ©e de la visite d'un appareil, en exÃ©cution des articles 9, 14 et 19, doit Ãªtre apte Ã  reconnaÃ®tre des dÃ©fauts et en apprÃ©cier la gravitÃ©.
+**Art. 15.** — La personne chargée de la visite d'un appareil, en exécution des articles 9, 14 et 19, doit être apte à reconnaître des défauts et en apprécier la gravité.
 
-Cette personne peut Ãªtre choisie parmi le personnel du constructeur, rÃ©parateur ou exploitant qui dispose d'un service chargÃ© exclusivement du contrÃ´le. A dÃ©faut, la visite est confiÃ©e Ã  un organisme de contrÃ´le indÃ©pendant ayant la compÃ©tence et les moyens nÃ©cessaires Ã  la bonne exÃ©cution de cette mission.
+Cette personne peut être choisie parmi le personnel du constructeur, réparateur ou exploitant qui dispose d'un service chargé exclusivement du contrôle. A défaut, la visite est confiée à un organisme de contrôle indépendant ayant la compétence et les moyens nécessaires à la bonne exécution de cette mission.
 
-Le service de contrÃ´le du constructeur, rÃ©parateur ou de l'exploitant et l'organisation de contrÃ´le indÃ©pendant sont habilitÃ©s par le ministre chargÃ© des mines suivant des modalitÃ©s dÃ©finies par arrÃªtÃ©.
+Le service de contrôle du constructeur, réparateur ou de l'exploitant et l'organisation de contrôle indépendant sont habilités par le ministre chargé des mines suivant des modalités définies par arrêté.
 
-Le service chargÃ© des mines peut rÃ©cuser le visiteur s'il estime que celui-ci ne satisfait pas aux conditions posÃ©es aux alinÃ©as prÃ©cÃ©dents.
+Le service chargé des mines peut récuser le visiteur s'il estime que celui-ci ne satisfait pas aux conditions posées aux alinéas précédents.
 
-**Art. 16.** â€” Lorsqu'il rÃ©sulte des constatations faites par le service chargÃ© des mines, notamment Ã  la suite d'un accident, qu'un type d'appareil est, en raison de ses caractÃ©ristiques, manifestement dangereux, le ministre chargÃ© des mines peut interdire le maintien en service de tous les appareils prÃ©sentant les mÃªmes caractÃ©ristiques, mÃªme si ces appareils ne contreviennent pas aux rÃ¨glements en vigueur.
+**Art. 16.** — Lorsqu'il résulte des constatations faites par le service chargé des mines, notamment à la suite d'un accident, qu'un type d'appareil est, en raison de ses caractéristiques, manifestement dangereux, le ministre chargé des mines peut interdire le maintien en service de tous les appareils présentant les mêmes caractéristiques, même si ces appareils ne contreviennent pas aux règlements en vigueur.
 
-Le ministre peut Ã©galement prescrire toutes conditions de construction, de vÃ©rification, d'Ã©preuve, d'entretien et d'usage de ces appareils en vue de remÃ©dier au danger constatÃ©.
+Le ministre peut également prescrire toutes conditions de construction, de vérification, d'épreuve, d'entretien et d'usage de ces appareils en vue de remédier au danger constaté.
 
-Dans tous les cas, le constructeur ou l'importateur peuvent Ãªtre tenus de prendre toutes dispositions en leur pouvoir pour informer les utilisateurs des appareils, et notamment prendre en charge les actions de publicitÃ© qui pourraient Ãªtre prescrites.
+Dans tous les cas, le constructeur ou l'importateur peuvent être tenus de prendre toutes dispositions en leur pouvoir pour informer les utilisateurs des appareils, et notamment prendre en charge les actions de publicité qui pourraient être prescrites.
 
-**Art. 17.** â€” Toute personne qui met en exploitation un appareil Ã  pression de gaz fixe est tenue d'en faire dÃ©claration au service chargÃ© des mines territorialement compÃ©tent.
+**Art. 17.** — Toute personne qui met en exploitation un appareil à pression de gaz fixe est tenue d'en faire déclaration au service chargé des mines territorialement compétent.
 
-**Art. 18.** â€” L'exploitant doit tenir, pour chaque appareil fixe, un registre d'entretien oÃ¹ sont notÃ©s Ã  leur date, les Ã©preuves, les examens intÃ©rieurs et extÃ©rieurs, les nettoyages et les rÃ©parations.
+**Art. 18.** — L'exploitant doit tenir, pour chaque appareil fixe, un registre d'entretien où sont notés à leur date, les épreuves, les examens intérieurs et extérieurs, les nettoyages et les réparations.
 
-Les pages de ce registre, doivent Ãªtre numÃ©rotÃ©es de faÃ§on continue Ã  partir de 1. DÃ¨s l'ouverture du registre, le nombre de pages qu'il contient doit Ãªtre inscrit en tÃªte. Il est prÃ©sentÃ© Ã  toute rÃ©quisition du service chargÃ© des mines.
+Les pages de ce registre, doivent être numérotées de façon continue à partir de 1. Dès l'ouverture du registre, le nombre de pages qu'il contient doit être inscrit en tête. Il est présenté à toute réquisition du service chargé des mines.
 
-**Art. 19.** â€” A l'effet de reconnaÃ®tre l'Ã©tat de chaque appareil fixe et de ses accessoires, l'exploitant doit faire procÃ©der Ã  une visite complÃ¨te, tant Ã  l'intÃ©rieur qu'Ã  l'extÃ©rieur, aussi souvent qu'il est nÃ©cessaire, sans que l'intervalle entre deux visites complÃ¨tes successives, puisse Ãªtre supÃ©rieur Ã  3 ans, Ã  moins que l'appareil soit en chÃ´mage. Dans ce cas, l'appareil ne peut Ãªtre remis en service qu'aprÃ¨s avoir subi une nouvelle visite complÃ¨te, si la prÃ©cÃ©dente remonte Ã  plus de 3 ans.
+**Art. 19.** — A l'effet de reconnaître l'état de chaque appareil fixe et de ses accessoires, l'exploitant doit faire procéder à une visite complète, tant à l'intérieur qu'à l'extérieur, aussi souvent qu'il est nécessaire, sans que l'intervalle entre deux visites complètes successives, puisse être supérieur à 3 ans, à moins que l'appareil soit en chômage. Dans ce cas, l'appareil ne peut être remis en service qu'après avoir subi une nouvelle visite complète, si la précédente remonte à plus de 3 ans.
 
-Au cas oÃ¹ les vÃ©rifications stipulÃ©es par le constructeur sont d'un intervalle infÃ©rieur, ce dernier est prÃ©pondÃ©rant.
+Au cas où les vérifications stipulées par le constructeur sont d'un intervalle inférieur, ce dernier est prépondérant.
 
-Lorsque certaines parties sont inaccessibles Ã  la visite, le nÃ©cessaire doit Ãªtre fait pour la vÃ©rification de leur Ã©tat, par le dÃ©blocage de certaines parties ou par toutes autres mesures appropriÃ©es, aussi souvent qu'il en est besoin.
+Lorsque certaines parties sont inaccessibles à la visite, le nécessaire doit être fait pour la vérification de leur état, par le déblocage de certaines parties ou par toutes autres mesures appropriées, aussi souvent qu'il en est besoin.
 
-**Art. 20.** â€” Les appareils Ã  pression de gaz soumis aux dispositions du prÃ©sent rÃ¨glement sont placÃ©s sous la surveillance des services chargÃ©s des mines.
+**Art. 20.** — Les appareils à pression de gaz soumis aux dispositions du présent règlement sont placés sous la surveillance des services chargés des mines.
 
-Les ingÃ©nieurs des mines auront libre accÃ¨s dans toutes les parties oÃ¹ sont installÃ©s les appareils.
+Les ingénieurs des mines auront libre accès dans toutes les parties où sont installés les appareils.
 
-Les ingÃ©nieurs des mines et ceux des organismes dÃ©lÃ©guÃ©s sont tenus au secret professionnel, sauf Ã  l'Ã©gard des autoritÃ©s administratives et judiciaires, pour tous les faits ou renseignements dont ils ont eu connaissance dans l'exercice de leur fonction.
+Les ingénieurs des mines et ceux des organismes délégués sont tenus au secret professionnel, sauf à l'égard des autorités administratives et judiciaires, pour tous les faits ou renseignements dont ils ont eu connaissance dans l'exercice de leur fonction.
 
-La violation du secret professionnel est rÃ©primÃ©e dans les conditions prÃ©vues par l'article 302 de la loi nÂ° 66-156 du 8 juin 1966 susvisÃ©e.
+La violation du secret professionnel est réprimée dans les conditions prévues par l'article 302 de la loi n° 66-156 du 8 juin 1966 susvisée.
 
-**Art. 21.** â€” En cas de rupture accidentelle d'un appareil, l'exploitant est tenu, qu'il y ait des dÃ©gÃ¢ts corporels ou matÃ©riels ou non, d'avertir sans retard le service chargÃ© des mines afin qu'il puisse Ãªtre procÃ©dÃ© Ã  une enquÃªte immÃ©diate.
+**Art. 21.** — En cas de rupture accidentelle d'un appareil, l'exploitant est tenu, qu'il y ait des dégâts corporels ou matériels ou non, d'avertir sans retard le service chargé des mines afin qu'il puisse être procédé à une enquête immédiate.
 
-Les dispositions de l'alinÃ©a ci-dessus s'appliquent Ã©galement dans le cas d'un accident occasionnÃ© par un appareil Ã  pression et ayant entraÃ®nÃ© mort d'homme ou ayant causÃ© des blessures ou lÃ©sions graves.
+Les dispositions de l'alinéa ci-dessus s'appliquent également dans le cas d'un accident occasionné par un appareil à pression et ayant entraîné mort d'homme ou ayant causé des blessures ou lésions graves.
 
-Avant l'enquÃªte officielle, il ne devra Ãªtre opÃ©rÃ© aucun changement dans l'Ã©tat des choses crÃ©Ã© par l'accident, sauf pour empÃªcher de plus grands dÃ©gÃ¢ts et pour secourir des victimes.
+Avant l'enquête officielle, il ne devra être opéré aucun changement dans l'état des choses créé par l'accident, sauf pour empêcher de plus grands dégâts et pour secourir des victimes.
 
-Le rapport d'enquÃªte Ã©tabli par le service des mines est adressÃ© au wali et au ministre chargÃ© des mines. Outre le cas oÃ¹ une contravention est relevÃ©e, le service chargÃ© des mines adresse au parquet, s'il y a mort d'homme, blessures ou lÃ©sions graves un procÃ¨s-verbal des constatations faites ; il y joint son avis sur les responsabilitÃ©s engagÃ©es.
+Le rapport d'enquête établi par le service des mines est adressé au wali et au ministre chargé des mines. Outre le cas où une contravention est relevée, le service chargé des mines adresse au parquet, s'il y a mort d'homme, blessures ou lésions graves un procès-verbal des constatations faites ; il y joint son avis sur les responsabilités engagées.
 
-**Art. 22.** â€” Le ministre chargÃ© des mines peut accorder dispense de tout ou partie des prescriptions du prÃ©sent rÃ¨glement dans le cas oÃ¹ il serait reconnu que cette dispense ne peut avoir d'inconvÃ©nient.
+**Art. 22.** — Le ministre chargé des mines peut accorder dispense de tout ou partie des prescriptions du présent règlement dans le cas où il serait reconnu que cette dispense ne peut avoir d'inconvénient.
 
-Le ministre peut Ã©galement, prescrire, par arrÃªtÃ©, des mesures particuliÃ¨res Ã  certaines catÃ©gories d'appareils soumis soit Ã  l'ensemble des dispositions du prÃ©sent rÃ¨glement, soit seulement Ã  certaines de ces dispositions.
+Le ministre peut également, prescrire, par arrêté, des mesures particulières à certaines catégories d'appareils soumis soit à l'ensemble des dispositions du présent règlement, soit seulement à certaines de ces dispositions.
 
-**Art. 23.** â€” Lorsque la sÃ©curitÃ© de l'exploitation l'exige, les appareils Ã  pression de gaz, en service au moment de l'entrÃ©e en vigueur du prÃ©sent dÃ©cret, doivent Ãªtre modifiÃ©s de faÃ§on qu'ils rÃ©pondent aux prescriptions du prÃ©sent rÃ¨glement. Dans ce cas, des dÃ©lais peuvent Ãªtre accordÃ©s par le ministre chargÃ© des mines jusqu'Ã  concurrence de trois annÃ©es pour exÃ©cuter les modifications nÃ©cessaires.
+**Art. 23.** — Lorsque la sécurité de l'exploitation l'exige, les appareils à pression de gaz, en service au moment de l'entrée en vigueur du présent décret, doivent être modifiés de façon qu'ils répondent aux prescriptions du présent règlement. Dans ce cas, des délais peuvent être accordés par le ministre chargé des mines jusqu'à concurrence de trois années pour exécuter les modifications nécessaires.
 
-La dÃ©claration aux services chargÃ©s des mines des appareils fixes, en exploitation, avant l'entrÃ©e en vigueur du prÃ©sent rÃ¨glement, doit Ãªtre effectuÃ©e dans un dÃ©lai n'excÃ©dant pas une annÃ©e.
+La déclaration aux services chargés des mines des appareils fixes, en exploitation, avant l'entrée en vigueur du présent règlement, doit être effectuée dans un délai n'excédant pas une année.
 
-**Art. 24.** â€” Le prÃ©sent dÃ©cret sera publiÃ© au Journal officiel de la RÃ©publique algÃ©rienne dÃ©mocratique et populaire.
+**Art. 24.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-Fait Ã  Alger, le 18 aoÃ»t 1990.
+Fait à Alger, le 18 août 1990.
 
 Mouloud HAMROUCHE.
 
 ---
 
-## ContrÃ´le de sÃ©quence
+## Contrôle de séquence
 
-Liste des articles du DÃ©cret exÃ©cutif nÂ° 90-245 dans l'ordre numÃ©rique :
+Liste des articles du Décret exécutif n° 90-245 dans l'ordre numérique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24.
 
-**IntÃ©gritÃ© du texte :** Le dÃ©cret est complet. Tous les articles sont prÃ©sents. Aucun saut de numÃ©rotation.
+**Intégrité du texte :** Le décret est complet. Tous les articles sont présents. Aucun saut de numérotation.
 
-**Note :** Ce dÃ©cret est le texte de base pour la rÃ©glementation des appareils Ã  pression de gaz. Il est citÃ© dans le projet d'arrÃªtÃ© GPL de 2021 (converti dans ce dÃ©pÃ´t) comme texte de rÃ©fÃ©rence.
+**Note :** Ce décret est le texte de base pour la réglementation des appareils à pression de gaz. Il est cité dans le projet d'arrêté GPL de 2021 (converti dans ce dépôt) comme texte de référence.
