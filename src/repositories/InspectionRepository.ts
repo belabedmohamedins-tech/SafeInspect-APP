@@ -2,16 +2,14 @@
 //
 // SQLite-backed implementation.
 //
-// W5:  SHA-256 integrity hashing on save (IntegrityService).
+// W5:  SHA-256 integrity hashing on save (IntegrityService.hashAndStore).
 // W22: save() throws INSPECTION_LOCKED if the existing row has approval_status
 //      = 'approved'. Approved reports are legally immutable.
 // W52: INSPECTION_LOCKED guard — delete(), deleteMany(), clear() all throw
 //      'INSPECTION_LOCKED' and log INSPECTION_DELETE_BLOCKED before any
 //      mutation if an affected inspection has approvalStatus = 'approved'.
-//
-// NOTE: ApprovalRepository is required lazily (inside methods) to break the
-// circular dependency:
-//   InspectionRepository → ApprovalRepository → InspectionRepository
+// W57: added getCompleted(), getDrafts(), updateStatus() — used by screens
+//      and services (approval-detail, stats, map, briefService, loadHomeData).
 
 import { getDb } from '../db/schema';
 import { SavedInspection } from '../types';
@@ -22,7 +20,7 @@ import { createCapItemsFromInspection } from '../services/capFactory';
 // ── Row shape returned by SQLite ──────────────────────────────────────────────
 interface InspectionRow {
   id: string;
-  data: string;          // JSON blob of the full SavedInspection object
+  data: string;
   facility_id: string;
   status: string;
   approval_status: string | null;
@@ -35,14 +33,17 @@ function rowToInspection(row: InspectionRow): SavedInspection {
   return JSON.parse(row.data) as SavedInspection;
 }
 
-function inspectionToParams(insp: SavedInspection) {
+// Returns a plain mutable tuple — avoids TS2769 with runAsync overloads.
+function inspectionToParams(
+  insp: SavedInspection,
+): [string, string, string, string, string | null] {
   return [
     insp.id,
     JSON.stringify(insp),
     insp.facilityId,
     insp.status,
     insp.approvalStatus ?? null,
-  ] as const;
+  ];
 }
 
 // ── Repository ────────────────────────────────────────────────────────────────
@@ -53,6 +54,30 @@ export const InspectionRepository = {
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
       'SELECT * FROM inspections ORDER BY created_at DESC',
+    );
+    return rows.map(rowToInspection);
+  },
+
+  // ── getCompleted ──────────────────────────────────────────────────────────
+  // W57: returns all inspections with status = 'completed' | 'approved'.
+  async getCompleted(): Promise<SavedInspection[]> {
+    const db = await getDb();
+    const rows = await db.getAllAsync<InspectionRow>(
+      `SELECT * FROM inspections
+       WHERE status IN ('completed','submitted','approved','pending-review')
+       ORDER BY created_at DESC`,
+    );
+    return rows.map(rowToInspection);
+  },
+
+  // ── getDrafts ─────────────────────────────────────────────────────────────
+  // W57: returns all inspections with status = 'draft' | 'in-progress'.
+  async getDrafts(): Promise<SavedInspection[]> {
+    const db = await getDb();
+    const rows = await db.getAllAsync<InspectionRow>(
+      `SELECT * FROM inspections
+       WHERE status IN ('draft','in-progress')
+       ORDER BY created_at DESC`,
     );
     return rows.map(rowToInspection);
   },
@@ -92,8 +117,10 @@ export const InspectionRepository = {
       throw new Error('INSPECTION_LOCKED');
     }
 
-    // W5: compute integrity hash before persisting
-    const withHash = await IntegrityService.stamp(inspection);
+    // W5: compute + persist SHA-256 hash; embed in the inspection blob.
+    const hash = await IntegrityService.hashAndStore(inspection);
+    const withHash: SavedInspection = { ...inspection, integrityHash: hash };
+
     await db.runAsync(
       `INSERT INTO inspections (id, data, facility_id, status, approval_status)
        VALUES (?,?,?,?,?)
@@ -116,12 +143,38 @@ export const InspectionRepository = {
     }
   },
 
+  // ── updateStatus ──────────────────────────────────────────────────────────
+  // W57: supervisor workflow — approves or rejects an inspection by updating
+  //      both the approval_status column and the data JSON blob.
+  //      Does NOT throw INSPECTION_LOCKED — status transitions are always
+  //      allowed for supervisor actions (approval overwrites are intentional).
+  async updateStatus(
+    id: string,
+    status: SavedInspection['approvalStatus'],
+  ): Promise<void> {
+    const db = await getDb();
+    const row = await db.getFirstAsync<InspectionRow>(
+      'SELECT * FROM inspections WHERE id = ?',
+      [id],
+    );
+    if (!row) return;
+    const inspection = rowToInspection(row);
+    const updated: SavedInspection = { ...inspection, approvalStatus: status };
+    await db.runAsync(
+      `UPDATE inspections
+       SET data = ?, approval_status = ?, updated_at = CURRENT_TIMESTAMP
+       WHERE id = ?`,
+      [JSON.stringify(updated), status ?? null, id],
+    );
+  },
+
   // ── delete ────────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED if the inspection is approved.
   async delete(id: string): Promise<void> {
     const db = await getDb();
     const existingRow = await db.getFirstAsync<{ approval_status: string | null; facility_name: string | null }>(
-      'SELECT approval_status, json_extract(data, \'$.facilityName\') AS facility_name FROM inspections WHERE id = ?',
+      `SELECT approval_status, json_extract(data, '$.facilityName') AS facility_name
+       FROM inspections WHERE id = ?`,
       [id],
     );
     if (existingRow?.approval_status === 'approved') {
