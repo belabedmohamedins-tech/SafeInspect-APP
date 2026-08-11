@@ -24,6 +24,7 @@
      README mis à jour le 2026-08-10 (23) — decret-11-125 et loi-09-03 marqués CONVERTIS par utilisateur depuis PDF officiel
      README mis à jour le 2026-08-11 (24) — 21 fichiers promus ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed
      README mis à jour le 2026-08-11 (25) — patch-25 : decret-02-427 VÉRIFIÉ, decret-06-198 CONFORME→VÉRIFIÉ, decret-06-138 PARTIEL→VÉRIFIÉ, decret-21-319 date corrigée, tableau de bord nettoyé (25 VÉRIFIÉ)
+     README mis à jour le 2026-08-11 (26) — patch-26 : arrete-1999 + decret-09-335 promus VÉRIFIÉ via API ; decret-90-245 + arrete-2016 + arrete-2025 promus VÉRIFIÉ via PowerShell — dashboard 25→30 VÉRIFIÉ — 4 NON VÉRIFIÉ restants
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -41,13 +42,13 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-11 (mis à jour patch 25)
+## Tableau de bord — Audit baseline 2026-08-11 (mis à jour patch 26)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 25 | `decret-07-144`, `decret-17-140` + 23 fichiers vérifiés 2026-08-11 par Belabed Mohamed (voir index) |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti | 9 | `decret-90-245`, `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19`, `arrete-1999-conservation-aliments`, `arrete-2016-microbiologiques`, `arrete-2025-hygiene-restauration`, `decret-09-335` (ABROGÉ) |
-| ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
+| ✅ VÉRIFIÉ | 30 | 30 fichiers vérifiés par Belabed Mohamed (voir index) |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti | 4 | `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19` |
+| ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` (désormais ✅ VÉRIFIÉ) |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
@@ -61,7 +62,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 36/1990) — [CONVERTI 2026-08-10 par utilisateur depuis PDF officiel] |
+| `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 (JO N° 36/1990) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -78,7 +79,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
-| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025) — conservé pour référence historique — voir `decret-25-63-plans-intervention-catastrophes.md` |
+| `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel — ⚠️ ABROGÉ par D25-63 du 28/01/2025 — conservé pour référence historique |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -91,9 +92,9 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd |
 | `decret-25-63-plans-intervention-catastrophes.md` | Décret exécutif n° 25-63 du 28 janvier 2025 | Plans d'intervention en matière de risques de catastrophes (PPI + PII) — Art. 1–30, 4 chapitres — Abroge D09-335 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + 2 tableaux | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 87, 8 décembre 1999) — [CONVERTI 2026-08-09] |
-| `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 39, 2 juillet 2017) — [CONVERTI 2026-08-09] — W19 CLOSED |
-| `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | Arrêté intermin. du 7 mai 2025 | Conditions particulières d'hygiène et de salubrité dans les établissements de restauration — Art. 1–48, 14 sections | ⚠️ NON VÉRIFIÉ — texte intégral présent (signé par 6 ministres) — [CONVERTI 2026-08-09] — W20 CLOSED |
+| `arrete-interministeriel-1999-11-21-conservation-aliments.md` | Arrêté intermin. du 21 novembre 1999 | Températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires — Art. 1–10 + tableau | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | Arrêté intermin. du 4 octobre 2016 | Critères microbiologiques des denrées alimentaires — Art. 1–14 + Annexe I (15 catégories) + Annexe II (techniques d'interprétation) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | Arrêté intermin. du 7 mai 2025 | Conditions particulières d'hygiène et de salubrité dans les établissements de restauration — Art. 1–48, 14 sections | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `projet-arrete-gpl-installations-securite.md` | Projet d'arrêté intermin. (2021) — Ministre Energie & Mines + Ministre Intérieur | Règles techniques et de sécurité applicables aux installations et points de vente GPL ≤ 6 tonnes — Art. 1–24 + Annexes 1–2 (Annexes 3–5 : modèles non fournis) | 🔴 PROJET — NON PUBLIÉ AU JORADP — Art. 13 incomplet (valeur X non définie), Art. 14 manquant (numéro sauté) — ne pas utiliser pour vérification légale contraignante |
 
 ---
@@ -135,5 +136,6 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 (patch 22) :** `loi-04-20-risques-majeurs.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–75 complets.
 - **2026-08-10 (patch 23) :** `loi-09-03-protection-consommateur.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–95 complets, amendement Loi 18-09 intégré.
 - **2026-08-10 (patch 23) :** `decret-11-125-eau-consommation-humaine.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–9 + Annexe (valeurs limites et indicatives), JO N° 18/2011.
-- **2026-08-11 (patch 24) :** 21 fichiers promus ✅ VÉRIFIÉ — relecture complète contre PDF officiel par Belabed Mohamed (2026-08-11) : `decret-83-496`, `decret-22-167`, `decret-04-82`, `decret-06-138` (statut PARTIEL maintenu), `decret-76-35`, `loi-88-07`, `decret-25-63`, `decret-21-319`, `decret-21-261`, `arrete-2011-02-06`, `loi-04-08`, `decret-91-05`, `decret-93-120`, `loi-19-02`, `loi-90-29`, `loi-04-20`, `decret-11-125`, `loi-09-03`, `decret-06-141`, `loi-18-11`, `loi-90-11`.
-- **2026-08-11 (patch 25) :** README sync — `decret-02-427` row corrigée (✅ VÉRIFIÉ, en accord avec header fichier) ; `decret-06-198` CONFORME→VÉRIFIÉ 2026-08-11 ; `decret-06-138` PARTIEL retiré→VÉRIFIÉ (Art. 7–19 + Annexes I–II complétés par extraction vision depuis JO) ; `decret-21-319` date corrigée 5→13 Moharram / 14→22 août 2021 ; tableau de bord CONFORME supprimé, compteurs mis à jour (25 VÉRIFIÉ).
+- **2026-08-11 (patch 24) :** 21 fichiers promus ✅ VÉRIFIÉ — relecture complète contre PDF officiel par Belabed Mohamed (2026-08-11).
+- **2026-08-11 (patch 25) :** README sync — `decret-02-427` VÉRIFIÉ ; `decret-06-198` CONFORME→VÉRIFIÉ ; `decret-06-138` VÉRIFIÉ (Art. 7–19 + Annexes I–II complétés par extraction vision) ; `decret-21-319` date corrigée 13 Moharram/22 août ; dashboard 25 VÉRIFIÉ.
+- **2026-08-11 (patch 26) :** 5 fichiers promus ✅ VÉRIFIÉ par Belabed Mohamed — `arrete-1999-conservation-aliments`, `decret-09-335` (via API patch-26) ; `decret-90-245`, `arrete-2016-microbiologiques`, `arrete-2025-hygiene-restauration` (via PowerShell patch-26b + git push `96bba5c`). Dashboard : **30 ✅ VÉRIFIÉ** — Restants NON VÉRIFIÉ : `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19`.
