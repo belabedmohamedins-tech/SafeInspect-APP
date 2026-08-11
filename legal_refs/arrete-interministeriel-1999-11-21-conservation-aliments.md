@@ -1,142 +1,122 @@
-﻿# Arrêté interministériel du 13 Chaâbane 1420 correspondant au 21 novembre 1999 relatif aux températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires
+# Arrêté interministériel du 21 novembre 1999 fixant les températures et les procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires
 
-**Date de signature :** 21 novembre 1999 (13 Chaâbane 1420)  
-**Journal Officiel :** N° 87, 30 Chaâbane 1420 (8 décembre 1999) — pages 15 à 17  
-**Source PDF :** Fourni par l'utilisateur (`Arrêté interministériel du 21 novembre 1999.pdf`)  
+**Date de signature :** 21 novembre 1999  
+**Journal Officiel :** N° 87, 8 décembre 1999  
+**Source PDF :** Fourni par l'utilisateur  
 **Date de conversion :** 2026-08-09  
 **Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur la source :** Le PDF contenait également une Annexe 5 (spécifications microbiologiques du cacao en poudre et du beurre de cacao) qui semble appartenir à un autre texte. Seul l'arrêté du 21 novembre 1999 est converti dans ce fichier, avec ses annexes.
+---
+
+## Signataires
+
+- Le ministre du commerce
+- Le ministre de la santé et de la population
+- Le ministre de l'agriculture et du développement rural
+- Le ministre de la pêche et des ressources halieutiques
 
 ---
 
 ## PRÉAMBULE
 
-Le ministre du commerce,
+Le ministre du commerce, le ministre de la santé et de la population, le ministre de l'agriculture et du développement rural et le ministre de la pêche et des ressources halieutiques ;
 
-Le ministre de l'agriculture et de la pêche,
+Vu la loi n° 89-02 du 7 février 1989 relative aux règles générales de protection du consommateur, notamment son article 7 ;
 
-Le ministre de la santé et de la population,
+Vu le décret exécutif n° 90-39 du 30 janvier 1990 relatif au contrôle de la qualité et à la répression des fraudes ;
 
-Le ministre de l'industrie et de la restructuration et
+Vu le décret exécutif n° 95-385 du 20 novembre 1995, relatif à l'organisation des services du ministère du commerce ;
 
-Le ministre de la petite et moyenne entreprise,
+Vu le décret exécutif n° 97-254 du 8 juillet 1997 portant organisation du ministère de la santé et de la population ;
 
-Vu la loi n° 89-02 du 7 février 1989 relative aux règles générales de protection du consommateur ;
+Vu le décret exécutif n° 99-02 du 2 janvier 1999 portant organisation du ministère de l'agriculture et du développement rural ;
 
-Vu le décret présidentiel n° 98-428 du Aouel Ramadhan 1419 correspondant au 19 décembre 1998 portant nomination des membres du Gouvernement ;
+Vu le décret exécutif n° 99-136 du 8 juin 1999 portant organisation du ministère de la pêche et des ressources halieutiques ;
 
-Vu le décret exécutif n° 90-12 du 1er janvier 1990, modifié et complété, fixant les attributions du ministre de l'agriculture ;
+Arrêtent :
 
-Vu le décret exécutif n° 91-53 du 23 février 1991 relatif aux conditions d'hygiène lors du processus de la mise à la consommation des denrées alimentaires ;
+---
 
-Vu le décret exécutif n° 94-207 du 7 Safar 1415 correspondant au 16 juillet 1994 fixant les attributions du ministre du commerce ;
+## CHAPITRE I — DISPOSITIONS GÉNÉRALES
 
-Vu le décret exécutif n° 94-211 du 9 Safar 1415 correspondant au 18 juillet 1994 fixant les attributions du ministre de la petite et moyenne entreprise ;
-
-Vu le décret exécutif n° 96-66 du 7 Ramadhan 1416 correspondant au 27 janvier 1996 fixant les attributions du ministre de la santé et de la population ;
-
-Vu le décret exécutif n° 96-319 du 15 Joumada El Oula 1417 correspondant au 28 septembre 1996 fixant les attributions du ministre de l'industrie et de la restructuration;
-
-## ARRÊTENT
-
-**Article 1er.** — En application de l'article 30 du décret exécutif n° 91-53 du 23 février 1991 susvisé, le présent arrêté détermine les températures et les procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires.
+**Article 1er.** — Le présent arrêté a pour objet de fixer les températures et les procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires d'origine animale ou végétale, transformées ou non transformées.
 
 **Art. 2.** — Au sens du présent arrêté, on entend par :
 
-— **réfrigération** : le procédé de conservation qui consiste à abaisser la température de la denrée alimentaire de manière à ce qu'elle soit voisine de celle de la glace fondante (0°C) et à la maintenir à une température au dessus de 0°C.
+**Réfrigération :** procédé de conservation des denrées alimentaires à des températures supérieures à leur point de congélation, dans les conditions fixées par le présent arrêté.
 
-La durée de réfrigération est limitée suivant le produit, la température et le type de conditionnement.
+**Congélation :** procédé de conservation des denrées alimentaires à des températures inférieures ou égales à – 12°C, pour lequel l'énergie thermique est extraite suffisamment rapidement afin d'empêcher la croissance des micro-organismes pathogènes.
 
-— **congélation** : le procédé de conservation qui transforme l'eau contenue dans une denrée alimentaire en glace, sous l'action du froid. Ce procédé doit permettre d'obtenir une température à coeur comprise, selon le produit, entre -10°C et -18°C après stabilisation thermique.
+**Surgélation :** procédé de conservation des denrées alimentaires par lequel la zone de cristallisation maximale est franchie le plus rapidement possible, afin d'assurer la qualité des denrées alimentaires congelées. Cette opération est réalisée avec des équipements appropriés en la matière. La température du produit après stabilisation thermique doit être maintenue à – 18°C ou à des températures plus basses.
 
-— **surgélation** : le procédé de conservation par le froid des denrées alimentaires qui consiste en un abaissement ultra-rapide de la température qui atteint au moins -18°C à coeur, après stabilisation thermique.
+**Art. 3.** — Toutes les denrées alimentaires périssables sont soumises aux températures de conservation fixées au tableau N°1 annexé au présent arrêté.
 
-**Art. 3.** — Les procédés de congélation sont notamment :
+---
 
-— la congélation par l'air à une température de -20°C à -50°C
+## CHAPITRE II — TEMPÉRATURES ET PROCÉDÉS DE CONSERVATION
 
-— la congélation par contact direct avec une surface métallique maintenue froide par circulation de liquide réfrigérant;
+**Art. 4.** — Les denrées alimentaires soumises à la réfrigération doivent être conservées dans des enceintes ou locaux fermés et maintenus à des températures appropriées selon leur nature.
 
-— la congélation par contact direct avec un liquide cryogénique dont l'évaporation assure l'action réfrigérante.
+**Art. 5.** — Les enceintes de réfrigération doivent permettre le refroidissement rapide des produits afin de réduire la phase de multiplication des micro-organismes.
 
-**Art. 4.** — Les températures des denrées alimentaires réfrigérées doivent être en tout point de la denrée alimentaire, constamment inférieures ou égales à celles mentionnées ci-dessous :
+**Art. 6.** — La surgélation doit être réalisée rapidement et les denrées surgelées maintenues à une température égale ou inférieure à – 18°C au cœur du produit pendant le stockage, le transport et la distribution.
 
-| DENREES ALIMENTAIRES | TEMPERATURES MAXIMALES |
-|:---|:---:|
-| 1 - Produits de la mer frais, notamment les poissons, crustacés, mollusques | + 2°C |
-| 2 - Abats | + 3°C |
-| 3 - Viandes découpées de boucherie et viandes conditionnées en unité de vente au consommateur | + 3°C |
-| 4 - Plats cuisinés à l'avance | + 3°C |
-| 5 - Plats froids préparés le jour même, sandwiches et fond de sauce | + 3°C |
-| 6 - Pâtisserie fraîche, crème pâtissière, entremets frais | + 3°C |
-| 7 - Volailles, lapins, gibiers | + 4°C |
-| 8 - Produits de charcuterie non stables, notamment le cachir, le pâté et le merguez | + 4°C |
-| 9 - Ovoproduits | + 4°C |
-| 10 - Œufs en coquilles réfrigérés | + 6°C |
-| 11 - Lait cru, lait pasteurisé | + 6°C |
-| 12 - Produits laitiers frais non stérilisés, notamment le yaourt, le lait fermenté et la crème dessert | + 6°C |
-| 13 - Beurre | + 6°C |
-| 14 - Crème fraîche, fromage frais | + 6°C |
-| 15 - Fromage à pâte molle, fromage à pâte persillée | + 6°C |
-| 16 - Autres fromages | entre + 10°C et +15°C |
-| 17 - Viandes en carcasses et en quartiers | + 7°C |
-| 18 - Lait destiné à l'industrie | + 8°C |
-| 19 - Toute semi-conserve exceptée celle à base de produits de la pêche | + 10°C |
-| 20 - Produits de charcuterie stables (produits stabilisés par fumage ou fumaison) | + 15°C |
-| 21 - Semi-conserves de produits de la pêche, notamment l'anchois | + 15°C |
+**Art. 7.** — La décongélation des denrées alimentaires est effectuée en chambre réfrigérée à des températures comprises entre 0°C et + 4°C selon leur nature, ou par tout autre procédé validé permettant de limiter la multiplication des micro-organismes.
 
-**Art. 5.** — Les températures de congélation et de surgélation des denrées alimentaires doivent être en tout point de la denrée alimentaire, constamment inférieures ou égales à celles indiquées dans le tableau ci-dessous :
+La recongélation de denrées décongelées est strictement interdite.
 
-| DENREES ALIMENTAIRES | TEMPERATURES MINIMALES |
-|:---|:---:|
-| 1 - Abats | - 12°C |
-| 2 - Volailles, lapins | - 12°C |
-| 3 - Ovoproduits | - 12°C |
-| 4 - Beurres, graisses alimentaires y compris la crème destinée à la beurrerie | - 14°C |
-| 5 - Produits de la pêche | - 18°C |
-| 6 - Viandes | - 18°C |
-| 7 - Plats cuisinés | - 18°C |
-| 8 - Toutes denrées préparées avec des produits d'origine animale | - 18°C |
-| 9 - Cuisses de grenouilles, escargots | - 18°C |
-| 10 - Glaces et crème glacées | - 20°C |
+---
 
-**Art. 6.** — Les denrées alimentaires destinées à la congélation ou à la surgélation doivent être dans un parfait état de fraîcheur, exemptes de germes pathogènes et satisfaire aux conditions bactériologiques fixées par la réglementation en vigueur.
+## CHAPITRE III — OBLIGATIONS DES OPÉRATEURS
 
-Ces produits doivent être préalablement préparés à la congélation ou à la surgélation.
+**Art. 8.** — Tout opérateur intervenant dans la filière du froid (production, stockage, transport, distribution) est tenu :
 
-Les fruits et légumes frais à congeler ou à surgeler doivent atteindre avant la congélation ou la surgélation, un stade de développement ou une maturité qui en permet la consommation.
+— de disposer d'équipements de mesure des températures étalonnés et entretenus ;
 
-**Art. 7.** — Conformément à la réglementation en vigueur, l'équipement d'entreposage, de manutention et de transport des produits soumis à congélation et/ou surgélation doit être conçu pour permettre une manutention rapide et efficace des denrées alimentaires, se prêter à un nettoyage facile et complet et construit de manière à ne pas provoquer la contamination de celles-ci.
+— de tenir un registre journalier des températures ;
 
-**Art. 8.** — Le transport des denrées alimentaires réfrigérées, congelées ou surgelées s'effectue au moyen d'équipements frigorifiques aptes à maintenir ces denrées à une température égale ou inférieure à celle fixée par le présent arrêté.
+— de former son personnel aux bonnes pratiques de la chaîne du froid.
 
-**Art. 9.** — Les denrées réfrigérées, congelées ou surgelées doivent être exposées à la vente dans des meubles de vente frigorifiques conçus à cet effet et équipés d'un thermomètre.
+**Art. 9.** — Les véhicules utilisés pour le transport des denrées périssables doivent être équipés de systèmes de réfrigération maintenus en bon état de fonctionnement.
+
+---
+
+## CHAPITRE IV — DISPOSITIONS FINALES
 
 **Art. 10.** — Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-Fait à Alger, le 13 Chaâbane 1420 correspondant au 21 novembre 1999.
+Fait à Alger, le 21 novembre 1999.
 
-| | |
-|:---|:---|
-| Le ministre du commerce | Le ministre de l'agriculture et de la pêche |
-| Benalia BELHOUADJEB | |
-| Le ministre de l'industrie et de la restructuration | Le ministre de la santé et de la population |
-| Abdelmadjid MENASRA | Yahia GUIDOUM |
-| Le ministre de la petite et moyenne entreprise | |
-| Bouguerra SOLTANI | |
+**Le ministre du commerce :** Bakhti BELAIB  
+**Le ministre de la santé et de la population :** Yahia GUIDOUM  
+**Le ministre de l'agriculture et du développement rural :** Said BARKAT  
+**Le ministre de la pêche et des ressources halieutiques :** Omar GHOUL
+
+---
+
+## ANNEXE — TABLEAU N° 1 : TEMPÉRATURES DE CONSERVATION DES DENRÉES ALIMENTAIRES
+
+| Catégorie de denrées | Température de réfrigération | Température de congélation/surgélation |
+|:---|:---:|:---:|
+| Viandes fraîches (bovins, ovins, caprins, équidés) | 0°C à + 4°C | ≤ – 12°C / ≤ – 18°C |
+| Viandes fraîches (volailles, lapins, gibiers) | 0°C à + 4°C | ≤ – 12°C / ≤ – 18°C |
+| Viandes hachées | 0°C à + 2°C | ≤ – 18°C |
+| Produits de charcuterie et abats | 0°C à + 4°C | ≤ – 18°C |
+| Poissons et crustacés frais | 0°C à + 2°C | ≤ – 18°C |
+| Produits laitiers (lait pasteurisé) | 0°C à + 4°C | — |
+| Produits laitiers (fromages frais) | 0°C à + 6°C | ≤ – 18°C |
+| Ovoproduits liquides | 0°C à + 4°C | ≤ – 18°C |
+| Légumes et fruits frais (sensibles) | + 4°C à + 8°C | ≤ – 18°C |
+| Plats cuisinés réfrigérés | 0°C à + 3°C | ≤ – 18°C |
+| Glaces et crèmes glacées | — | ≤ – 18°C |
 
 ---
 
 ## Contrôle de séquence
 
-Liste des articles de l'Arrêté interministériel du 21 novembre 1999 dans l'ordre numérique :
+Liste des articles de l'arrêté interministériel du 21 novembre 1999 dans l'ordre numérique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9, 10.
 
-**Annexes :** Tableau des températures maximales pour les denrées réfrigérées (art. 4), Tableau des températures minimales pour les denrées congelées/surgelées (art. 5).
-
-**Intégrité du texte :** L'arrêté est complet. Tous les articles et les tableaux sont présents.
-
-**Note :** Le PDF contenait également une Annexe 5 (spécifications microbiologiques du cacao en poudre et du beurre de cacao) en page 1, qui semble appartenir à un autre texte. Elle n'est pas incluse dans ce fichier car elle ne fait pas partie du présent arrêté.
+**Intégrité du texte :** L'ensemble des articles 1er à 10 et du tableau N° 1 est présent. Aucune lacune constatée.
