@@ -69,7 +69,20 @@ export type Category =
   | 'غذائية'
   | 'هيكلية'
   | 'صحة مهنية';
-export type ApprovalStatus = 'pending' | 'approved' | 'returned' | 'escalated';
+
+/**
+ * Approval workflow status set by the supervisor.
+ *
+ * - 'pending'   — submitted, awaiting supervisor action
+ * - 'approved'  — supervisor approved the report (immutable from this point)
+ * - 'rejected'  — supervisor rejected the report; inspector can revise and resubmit
+ * - 'returned'  — returned to inspector for minor corrections
+ * - 'escalated' — escalated to a higher authority
+ *
+ * W57-FIX: added 'rejected' — supervisor-approvals screen calls
+ *   updateStatus(id, 'rejected') and TS2345 fired because the union was missing it.
+ */
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected' | 'returned' | 'escalated';
 
 /**
  * Inspection type — determines workflow and differential view behaviour.
