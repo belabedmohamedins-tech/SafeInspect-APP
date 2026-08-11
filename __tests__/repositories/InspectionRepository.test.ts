@@ -5,9 +5,18 @@
  * W52-FIX: replaced await import() in cleanup blocks with require() — Jest
  *   runs under CJS transform and rejects dynamic ESM imports without
  *   --experimental-vm-modules. require() is equivalent here.
+ * W57-FIX: added IntegrityService.stamp mock — W5 renamed hashAndStore → stamp;
+ *   without the mock every save() call crashes in the Node/Jest environment.
+ *   stamp returns the inspection unchanged (identity mock) so data is preserved.
  */
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import type { SavedInspection } from '../../src/types';
+
+jest.mock('../../src/services/IntegrityService', () => ({
+  IntegrityService: {
+    stamp: jest.fn().mockImplementation((insp: unknown) => Promise.resolve(insp)),
+  },
+}));
 
 function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
   return {
@@ -64,7 +73,7 @@ describe('InspectionRepository', () => {
     expect(await InspectionRepository.getAll()).toHaveLength(0);
   });
 
-  // ── W52: INSPECTION_LOCKED guard ────────────────────────────────────────────
+  // ── W52: INSPECTION_LOCKED guard ──────────────────────────────────────────────────
 
   it('W52: delete() throws INSPECTION_LOCKED for approved inspection', async () => {
     const id = 'w52-del-approved';

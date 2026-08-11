@@ -1,5 +1,6 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 // W22: verify save() throws INSPECTION_LOCKED for approved inspections.
+// W52-fix: mock IntegrityService.stamp (rename from hashAndStore — W5 renamed the method).
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { SavedInspection } from '../../types';
@@ -20,7 +21,10 @@ jest.mock('../../repositories/AuditLogRepository', () => ({
   AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
 }));
 jest.mock('../../services/IntegrityService', () => ({
-  IntegrityService: { hashAndStore: jest.fn().mockResolvedValue('hash_mock') },
+  IntegrityService: {
+    // W5 renamed hashAndStore → stamp; mock must match the call site.
+    stamp: jest.fn().mockImplementation((insp: unknown) => Promise.resolve(insp)),
+  },
 }));
 jest.mock('../../services/capFactory', () => ({
   createCapItemsFromInspection: jest.fn().mockResolvedValue(undefined),
