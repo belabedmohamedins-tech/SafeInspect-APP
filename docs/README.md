@@ -1,5 +1,23 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-11 14:27 WAT — Perplexity — W57-TSC CLOSED — 31/31 Jest green, TSC 0 errors
+- **Phases closed:** W57-TSC (IntegrityService.stamp → hashAndStore; missing repo methods; ApprovalStatus union)
+- **Phases opened:** none
+- **Files changed:**
+  - `src/repositories/InspectionRepository.ts` (commits `59d70426`, `0555f5fd`) — restored W22 INSPECTION_LOCKED guard in save(); added getCompleted()/getDrafts()/updateStatus(); fixed IntegrityService.stamp→hashAndStore; fixed readonly tuple TS2769
+  - `src/types.ts` (commit `09c317aa`) — added 'rejected' to ApprovalStatus union
+  - `src/__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`) — mock stamp→hashAndStore
+  - `__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`) — added IntegrityService mock; mock stamp→hashAndStore
+- **Gate:** 31/31 Jest PASS + TSC 0 — user-confirmed 14:27 WAT 2026-08-11
+- **Root causes fixed:**
+  1. Both test files mocked `IntegrityService.stamp` which never existed — real method is `hashAndStore` (returns hash string)
+  2. W22 approved-guard was accidentally dropped from `save()` during W52 rewrite — restored
+  3. `getCompleted()`, `getDrafts()`, `updateStatus()` called by 6 screens/services but missing from repo
+  4. `ApprovalStatus` missing `'rejected'` — TS2345 in supervisor-approvals.tsx
+  5. `inspectionToParams` returned `readonly` tuple — TS2769 with `runAsync` overloads
+- **Open phases: W19, W49, W51, W54, W55, W56**
+- **Next identifier: W59**
+
 ### 2026-08-11 13:28 WAT — Perplexity — W52 W53 W57 W58 CLOSED — 26/26 Jest green, TSC 0
 - **Phases closed:** W52, W53, W57, W58
 - **Phases opened:** none
@@ -96,6 +114,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W57-TSC** | ✅ CLOSED | P1 | InspectionRepository: stamp→hashAndStore, W22 guard restored, getCompleted/getDrafts/updateStatus added, ApprovalStatus+'rejected'. Gate: 31/31 PASS + TSC 0, 2026-08-11 14:27 WAT. |
 | **W58** | ✅ CLOSED | P3 | L-11: bakeryCriteria.ts BAK-10-12 — Décret 76-04 → Loi 19-02 Art.5+Art.13. Gate: PASS 2026-08-11 13:28 WAT. |
 | **W57** | ✅ CLOSED | P1 | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 — Décret 17-140 → Loi 18-11 Art.104/218. Commit `f31faa33`. Gate: PASS 2026-08-11 13:28 WAT. |
 | **W53** | ✅ CLOSED | P1/HIGH | F-18: ApprovalRepository approve/returnForRevision/escalate → serverAuth already wired via syncToServer(). Confirmed clean by direct read 2026-08-11. |
