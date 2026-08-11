@@ -1,10 +1,10 @@
-# Décret exécutif n° 09-335 du Aouel Dhou El Kaada 1430 correspondant au 20 octobre 2009 fixant les modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants des installations industrielles
+﻿# Décret exécutif n° 09-335 du Aouel Dhou El Kaada 1430 correspondant au 20 octobre 2009 fixant les modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants des installations industrielles
 
 **Date de signature :** 20 octobre 2009 (Aouel Dhou El Kaada 1430)  
 **Journal Officiel :** N° 68, 25 octobre 2009  
 **Source PDF :** Fourni par l'utilisateur (`Décret 09-335.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 > ⚠️ **ABROGÉ par le décret exécutif n° 25-63 du 28 janvier 2025 (JO N° 07/2025)** — voir `decret-25-63-plans-intervention-catastrophes.md`

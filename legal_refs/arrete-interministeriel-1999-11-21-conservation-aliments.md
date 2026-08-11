@@ -1,10 +1,10 @@
-# Arrêté interministériel du 13 Chaâbane 1420 correspondant au 21 novembre 1999 relatif aux températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires
+﻿# Arrêté interministériel du 13 Chaâbane 1420 correspondant au 21 novembre 1999 relatif aux températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires
 
 **Date de signature :** 21 novembre 1999 (13 Chaâbane 1420)  
 **Journal Officiel :** N° 87, 30 Chaâbane 1420 (8 décembre 1999) — pages 15 à 17  
 **Source PDF :** Fourni par l'utilisateur (`Arrêté interministériel du 21 novembre 1999.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le PDF contenait également une Annexe 5 (spécifications microbiologiques du cacao en poudre et du beurre de cacao) qui semble appartenir à un autre texte. Seul l'arrêté du 21 novembre 1999 est converti dans ce fichier, avec ses annexes.

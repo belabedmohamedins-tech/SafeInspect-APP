@@ -1,10 +1,10 @@
-# Loi n° 04-08 du 27 Joumada Ethania 1425 correspondant au 14 août 2004 relative aux conditions d'exercice des activités commerciales
+﻿# Loi n° 04-08 du 27 Joumada Ethania 1425 correspondant au 14 août 2004 relative aux conditions d'exercice des activités commerciales
 
 **Date de signature :** 14 août 2004 (27 Joumada Ethania 1425)  
 **Journal Officiel :** N° 52, 2 Rajab 1425 (18 août 2004) — pages 4 à 8  
 **Source PDF :** Fourni par l'utilisateur (`nLOI 04-08.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le fichier PDF contenait également la Loi n° 04-09 (énergies renouvelables). Seule la Loi n° 04-08 est convertie dans ce fichier, conformément à la règle d'un fichier par instrument.

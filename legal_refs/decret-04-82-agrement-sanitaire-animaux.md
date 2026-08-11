@@ -1,10 +1,10 @@
-# Décret exécutif n° 04-82 du 26 Moharram 1425 correspondant au 18 mars 2004 fixant les conditions et modalités d’agrément sanitaire des établissements dont l’activité est liée aux animaux, produits animaux et d’origine animale ainsi que de leur transport
+﻿# Décret exécutif n° 04-82 du 26 Moharram 1425 correspondant au 18 mars 2004 fixant les conditions et modalités d’agrément sanitaire des établissements dont l’activité est liée aux animaux, produits animaux et d’origine animale ainsi que de leur transport
 
 **Date de signature :** 18 mars 2004 (26 Moharram 1425)  
 **Journal Officiel :** N° 17, 29 Moharram 1425 (21 mars 2004) — pages 3 à 5  
 **Source PDF :** Fourni par l'utilisateur (`nDécret 04-82.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le fichier PDF contenait également le Décret exécutif n° 04-83. Seul le décret 04-82 est converti dans ce fichier. Les annexes (tarifs phytosanitaires) qui figuraient précédemment dans ce fichier ont été retirées car elles appartiennent au Décret 04-83, qui fera l'objet d'un fichier séparé.

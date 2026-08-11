@@ -1,10 +1,10 @@
-# Décret exécutif n° 22-167 du 18 Ramadhan 1443 correspondant au 19 avril 2022 modifiant et complétant le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l’environnement
+﻿# Décret exécutif n° 22-167 du 18 Ramadhan 1443 correspondant au 19 avril 2022 modifiant et complétant le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l’environnement
 
 **Date de signature :** 19 avril 2022 (18 Ramadhan 1443)  
 **Journal Officiel :** N° 29, 23 Ramadhan 1443 (24 avril 2022) — pages 5 à 11  
 **Source PDF :** Fourni par l'utilisateur (`22-167.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

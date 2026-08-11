@@ -1,4 +1,4 @@
-# Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
+﻿# Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
 
 ---
 
@@ -14,7 +14,7 @@
 - Décret exécutif n° 24-196 du 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés — voir `decret-24-196-etablissements-classes-modification.md`
 
 **Date de cette conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 
 ---
 

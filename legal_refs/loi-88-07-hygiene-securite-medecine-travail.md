@@ -1,10 +1,10 @@
-# Loi n° 88-07 du 26 janvier 1988 relative à l’hygiène, à la sécurité et à la médecine du travail
+﻿# Loi n° 88-07 du 26 janvier 1988 relative à l’hygiène, à la sécurité et à la médecine du travail
 
 **Date de signature :** 26 janvier 1988  
 **Journal Officiel :** N° 4 du 27 janvier 1988 — pages 64 et suivantes  
 **Source :** Fourni par l'utilisateur (texte intégral)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

@@ -1,9 +1,9 @@
-# Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration
+﻿# Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration
 
 **Date de signature :** 7 mai 2025 (9 Dhou El Kaâda 1446)  
 **Journal Officiel :** Source PDF fournie par l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le texte est complet. L'arrêté a été signé par les ministres du commerce intérieur, de l'intérieur, de l'enseignement supérieur, de l'agriculture, du tourisme et de la santé.

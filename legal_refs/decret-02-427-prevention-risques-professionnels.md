@@ -1,10 +1,10 @@
-# Décret exécutif n° 02-427 du 3 Chaoual 1423 correspondant au 7 décembre 2002 relatif aux conditions d'organisation de l'instruction, de l'information et de la formation des travailleurs dans le domaine de la prévention des risques professionnels
+﻿# Décret exécutif n° 02-427 du 3 Chaoual 1423 correspondant au 7 décembre 2002 relatif aux conditions d'organisation de l'instruction, de l'information et de la formation des travailleurs dans le domaine de la prévention des risques professionnels
 
 **Date de signature :** 7 décembre 2002 (3 Chaoual 1423)  
 **Journal Officiel :** N° 82, 7 Chaoual 1423 (11 décembre 2002) — pages 15 à 17  
 **Source PDF :** Fourni par l'utilisateur (`Décret 02-427.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

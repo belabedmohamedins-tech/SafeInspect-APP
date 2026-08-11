@@ -1,9 +1,9 @@
-# Décret exécutif n° 2006-138 du 16 Rabie El Aouel 1427 correspondant au 15 avril 2006 réglementant l'émission dans l'atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s'exerce leur contrôle
+﻿# Décret exécutif n° 2006-138 du 16 Rabie El Aouel 1427 correspondant au 15 avril 2006 réglementant l'émission dans l'atmosphère de gaz, fumées, vapeurs, particules liquides ou solides, ainsi que les conditions dans lesquelles s'exerce leur contrôle
 
 **Date de signature :** 15 avril 2006 (16 Rabie El Aouel 1427)  
 **Journal Officiel :** Source PDF fournie par l'utilisateur et corrigée par extraction vision  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le texte des articles 7 à 19 et des annexes I et II a été extrait verbatim du Journal Officiel via un système de vision. L'ensemble du décret est désormais complet.

@@ -1,11 +1,11 @@
-# Loi n° 2001-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets
+﻿# Loi n° 2001-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets
 
 **Date de signature :** 12 décembre 2001 (27 Ramadhan 1422)  
 **Signataire :** Abdelaziz BOUTEFLIKA, Président de la République  
 **Journal Officiel :** N° 77 — 15 décembre 2001  
 **Source PDF convertie :** `Loi 01-19.pdf` (Space files SafeInspect)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 
 > ⚠️ **AVERTISSEMENT** : Vérifier contre le texte original du JORADP avant de s'appuyer sur ce fichier pour toute décision légale ou d'application.
 

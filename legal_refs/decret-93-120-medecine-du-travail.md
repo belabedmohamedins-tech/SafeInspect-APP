@@ -1,10 +1,10 @@
-# Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
+﻿# Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
 
 **Date de signature :** 15 mai 1993  
 **Journal Officiel :** N° 33, 19 mai 1993 — pages 7 à 11  
 **Source PDF :** Fourni par l'utilisateur (`decret 93-120.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.

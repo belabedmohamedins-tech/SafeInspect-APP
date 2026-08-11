@@ -1,10 +1,10 @@
-# Loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005 relative à l'eau
+﻿# Loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005 relative à l'eau
 
 **Date de signature :** 4 août 2005 (28 Joumada Ethania 1426)  
 **Journal Officiel :** N° 60, 30 Rajab 1426 (4 septembre 2005) — pages 1 à 18  
 **Source PDF :** Fourni par l'utilisateur (`loi 05-12.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** La loi est complète, avec ses 183 articles. Aucune annexe n'est attachée à ce texte.

@@ -1,11 +1,11 @@
-# Loi n° 03-10 du 19 juillet 2003
+﻿# Loi n° 03-10 du 19 juillet 2003
 ## Relative à la protection de l'environnement dans le cadre du développement durable
 
 **Date de signature :** 19 juillet 2003 (19 Joumada El Oula 1424)  
 **Journal Officiel :** N° 43 — 20 juillet 2003  
 **Source PDF :** Texte intégral en français (JORADP N° 43 — 2003)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

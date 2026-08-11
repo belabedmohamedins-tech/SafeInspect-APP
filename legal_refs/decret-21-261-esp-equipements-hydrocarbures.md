@@ -1,9 +1,9 @@
-# Décret exécutif n° 21-261 du 2 Dhou El Kaâda 1442 correspondant au 13 juin 2021 portant réglementation des équipements sous pression (ESP) et des équipements électriques destinés à être intégrés aux installations relevant du secteur des hydrocarbures
+﻿# Décret exécutif n° 21-261 du 2 Dhou El Kaâda 1442 correspondant au 13 juin 2021 portant réglementation des équipements sous pression (ESP) et des équipements électriques destinés à être intégrés aux installations relevant du secteur des hydrocarbures
 
 **Date de signature :** 13 juin 2021 (2 Dhou El Kaâda 1442)  
 **Journal Officiel :** Source PDF fournie par l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

@@ -1,10 +1,10 @@
-# Décret exécutif n° 06-141 du 20 Rabie El Aouel 1427 correspondant au 19 avril 2006 définissant les valeurs limites des rejets d'effluents liquides industriels
+﻿# Décret exécutif n° 06-141 du 20 Rabie El Aouel 1427 correspondant au 19 avril 2006 définissant les valeurs limites des rejets d'effluents liquides industriels
 
 **Date de signature :** 19 avril 2006 (20 Rabie El Aouel 1427)  
 **Journal Officiel :** N° 26, 24 Rabie El Aouel 1427 (23 avril 2006) — pages 4 à 9  
 **Source PDF :** Fourni par l'utilisateur (`decret 06-141.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

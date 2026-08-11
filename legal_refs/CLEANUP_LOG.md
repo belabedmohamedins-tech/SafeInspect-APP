@@ -1,4 +1,4 @@
-# CLEANUP_LOG — legal_refs
+﻿# CLEANUP_LOG — legal_refs
 
 > **LIRE EN PREMIER dans toute nouvelle session avant de faire quoi que ce soit.**
 > Ce fichier est la source de vérité sur l'état du dépôt. Il évite de repousser des fichiers déjà présents.

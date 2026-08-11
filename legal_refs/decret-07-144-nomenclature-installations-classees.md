@@ -1,4 +1,4 @@
-# Décret exécutif n° 07-144 du 19 mai 2007
+﻿# Décret exécutif n° 07-144 du 19 mai 2007
 ## Fixant la nomenclature des installations classées pour la protection de l'environnement
 
 > **Source officielle :** Journal Officiel de la République Algérienne (JORADP) N° 34 — 22 mai 2007 (5 Joumada El Oula 1428)

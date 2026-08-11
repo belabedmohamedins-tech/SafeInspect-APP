@@ -1,10 +1,10 @@
-# Loi n° 04-20 du 13 Dhou El Kaâda 1425 correspondant au 25 décembre 2004 relative à la prévention des risques majeurs et à la gestion des catastrophes dans le cadre du développement durable
+﻿# Loi n° 04-20 du 13 Dhou El Kaâda 1425 correspondant au 25 décembre 2004 relative à la prévention des risques majeurs et à la gestion des catastrophes dans le cadre du développement durable
 
 **Date de signature :** 25 décembre 2004 (13 Dhou El Kaâda 1425)  
 **Journal Officiel :** N° 84, 5 Moharram 1426 (14 février 2005) — pages 1 à 17  
 **Source PDF :** Fourni par l'utilisateur (`Loi 04-20.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.

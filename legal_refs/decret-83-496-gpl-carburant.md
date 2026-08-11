@@ -1,10 +1,10 @@
-# Décret n° 83-496 du 13 août 1983 relatif aux conditions d'utilisation et de distribution du gaz de pétrole liquéfié (GPL) comme carburant sur les véhicules automobiles
+﻿# Décret n° 83-496 du 13 août 1983 relatif aux conditions d'utilisation et de distribution du gaz de pétrole liquéfié (GPL) comme carburant sur les véhicules automobiles
 
 **Date de signature :** 13 août 1983 (4 Dhou El Kaâda 1403)  
 **Journal Officiel :** N° 42, 7 Dhou El Kaâda 1403 (16 août 1983) — pages 256 à 258 (extrait)  
 **Source PDF :** Fourni par l'utilisateur (`Décret 83-496.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur l'extraction :** Les articles 9 à 21 ont été extraits par l'utilisateur via un système de vision, avec le texte arabe original et la traduction française. Ce fichier est désormais complet.

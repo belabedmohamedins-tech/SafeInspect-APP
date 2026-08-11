@@ -1,10 +1,10 @@
-# Décret exécutif n° 90-245 du 18 août 1990 portant réglementation des appareils à pression de gaz
+﻿# Décret exécutif n° 90-245 du 18 août 1990 portant réglementation des appareils à pression de gaz
 
 **Date de signature :** 18 août 1990  
 **Journal Officiel :** N° 36, 22 août 1990 — pages 998 à 1003  
 **Source PDF :** Fourni par l'utilisateur (`Décret 90-245 du 18 août 1990 (appareils à pression de gaz).pdf`) — converti sous responsabilité de l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le texte du décret 90-245 est complet. Le PDF contenait également le décret 90-246 (appareils à pression de vapeur) et d'autres textes. Seul le décret 90-245 est converti dans ce fichier.

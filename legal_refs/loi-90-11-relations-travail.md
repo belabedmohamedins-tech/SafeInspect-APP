@@ -1,10 +1,10 @@
-# Loi n° 90-11 du 21 avril 1990 relative aux relations de travail
+﻿# Loi n° 90-11 du 21 avril 1990 relative aux relations de travail
 
 **Date de signature :** 21 avril 1990  
 **Journal Officiel :** N° 25, 6 mai 1990 — pages 1 à 29 (extrait)  
 **Source PDF :** Fourni par l'utilisateur (`LOI 90-11.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents. La loi a été modifiée par plusieurs textes ultérieurs (notamment en 1991, 1994, 1996, 1997, 2015, 2017, 2022). Les modifications sont indiquées en note dans le corps du texte.

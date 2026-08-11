@@ -1,10 +1,10 @@
-# Décret exécutif n° 11-125 du 17 Rabie Ethani 1432 correspondant au 22 mars 2011 relatif à la qualité de l'eau de consommation humaine
+﻿# Décret exécutif n° 11-125 du 17 Rabie Ethani 1432 correspondant au 22 mars 2011 relatif à la qualité de l'eau de consommation humaine
 
 **Date de signature :** 22 mars 2011 (17 Rabie Ethani 1432)  
 **Journal Officiel :** N° 18, 18 Rabie Ethani 1432 (23 mars 2011) — pages 6 à 9  
 **Source PDF :** Fourni par l'utilisateur (`decret 11-125.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

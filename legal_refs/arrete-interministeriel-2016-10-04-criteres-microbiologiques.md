@@ -1,10 +1,10 @@
-# Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires
+﻿# Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires
 
 **Date de signature :** 4 octobre 2016 (2 Moharram 1438)  
 **Journal Officiel :** N° 39, 8 Chaoual 1438 (2 juillet 2017) — pages 11 à 32  
 **Source PDF :** Fourni par l'utilisateur (`Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le texte est complet. L'arrêté abroge les dispositions de l'arrêté du 14 Safar 1415 (23 juillet 1994).

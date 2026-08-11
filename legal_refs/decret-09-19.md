@@ -1,4 +1,4 @@
-# Décret exécutif n° 2009-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
+﻿# Décret exécutif n° 2009-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
 
 **Date de signature :** 20 janvier 2009 (23 Moharram 1430)  
 **Signataire :** Ahmed OUYAHIA, Premier ministre  
