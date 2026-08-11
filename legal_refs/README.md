@@ -23,6 +23,7 @@
      README mis à jour le 2026-08-10 (22) — loi-90-29 et loi-04-20 marqués CONVERTIS par utilisateur depuis PDF officiel
      README mis à jour le 2026-08-10 (23) — decret-11-125 et loi-09-03 marqués CONVERTIS par utilisateur depuis PDF officiel
      README mis à jour le 2026-08-11 (24) — 21 fichiers promus ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed
+     README mis à jour le 2026-08-11 (25) — patch-25 : decret-02-427 VÉRIFIÉ, decret-06-198 CONFORME→VÉRIFIÉ, decret-06-138 PARTIEL→VÉRIFIÉ, decret-21-319 date corrigée, tableau de bord nettoyé (25 VÉRIFIÉ)
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -40,14 +41,12 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-11 (mis à jour patch 24)
+## Tableau de bord — Audit baseline 2026-08-11 (mis à jour patch 25)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 23 | `decret-07-144`, `decret-17-140` + 21 fichiers vérifiés 2026-08-11 par Belabed Mohamed (voir index) |
-| ✅ CONFORME (converti par utilisateur depuis PDF officiel) | 3 | `decret-06-198`, `decret-22-167`, `decret-24-196` |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti par utilisateur | 15 | `decret-90-245`, `loi-03-10`, `decret-06-141`, `decret-09-19`, `loi-01-19`, `loi-05-12`, `decret-02-427`, `arrete-1999-conservation-aliments`, `arrete-2016-microbiologiques`, `arrete-2025-hygiene-restauration`, `decret-09-335` (ABROGÉ) |
-| ⚠️ NON VÉRIFIÉ — PARTIEL (lacunes documentées) | 1 | `decret-06-138` |
+| ✅ VÉRIFIÉ | 25 | `decret-07-144`, `decret-17-140` + 23 fichiers vérifiés 2026-08-11 par Belabed Mohamed (voir index) |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti | 9 | `decret-90-245`, `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19`, `arrete-1999-conservation-aliments`, `arrete-2016-microbiologiques`, `arrete-2025-hygiene-restauration`, `decret-09-335` (ABROGÉ) |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
 
@@ -68,15 +67,15 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme — Art. 1–81 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 77/2001) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
-| `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 82/2002) — [CONVERTI par utilisateur depuis PDF] |
+| `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable — Art. 1–89 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 43/2003) — séquence Art. 1–89 auditée 2026-08-10, aucun gap |
 | `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 + 3 annexes | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 60/2005) — [CONVERTI 2026-08-10] |
-| `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 | ⚠️ NON VÉRIFIÉ — **PARTIEL — Annexes I–II corrompues par OCR** (JO N° 24/2006) — [CONVERTI par utilisateur, annexes à retravailler depuis PDF de meilleure qualité] |
+| `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ CONFORME — Modifié par D22-167, D24-196 |
+| `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — Modifié par D22-167, D24-196 |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets | ⚠️ NON VÉRIFIÉ — texte intégral présent (JO N° 6/2009) — Contrôle de séquence présent — [PATCHÉ 2026-08-10] |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ⚠️ ABROGÉ par D25-63 du 28/01/2025 (JO N° 07/2025) — conservé pour référence historique — voir `decret-25-63-plans-intervention-catastrophes.md` |
@@ -87,7 +86,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé — Art. 1–450 complets (Art. 12–16 intégrés) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-21-261-esp-equipements-hydrocarbures.md` | Décret exécutif n° 21-261 du 13 juin 2021 (2 Dhou El Kaâda 1442) | Réglementation des équipements sous pression (ESP) et équipements électriques destinés aux installations du secteur des hydrocarbures — Art. 1–104 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 14 août 2021 (5 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 + 4 annexes | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 22 août 2021 (13 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 + 4 annexes | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-21-430-gpl-carburant.md` | Décret exécutif n° 21-430 du 4 novembre 2021 | Modification du décret 83-496 — utilisation et distribution du GPL comme carburant (Art. 4, 7, 8) | ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd |
 | `decret-22-167-etablissements-classes-modification.md` | Décret exécutif n° 22-167 du 19 avril 2022 | Modification du D06-198 (établissements classés) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-24-196-etablissements-classes-modification.md` | Décret exécutif n° 24-196 du 11 juin 2024 | Modification du D06-198 — Art. 14, 24, 25, 26, 29, 44 | ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd |
@@ -137,3 +136,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-10 (patch 23) :** `loi-09-03-protection-consommateur.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–95 complets, amendement Loi 18-09 intégré.
 - **2026-08-10 (patch 23) :** `decret-11-125-eau-consommation-humaine.md` — converti verbatim par l'utilisateur depuis PDF officiel (2026-08-10). Art. 1–9 + Annexe (valeurs limites et indicatives), JO N° 18/2011.
 - **2026-08-11 (patch 24) :** 21 fichiers promus ✅ VÉRIFIÉ — relecture complète contre PDF officiel par Belabed Mohamed (2026-08-11) : `decret-83-496`, `decret-22-167`, `decret-04-82`, `decret-06-138` (statut PARTIEL maintenu), `decret-76-35`, `loi-88-07`, `decret-25-63`, `decret-21-319`, `decret-21-261`, `arrete-2011-02-06`, `loi-04-08`, `decret-91-05`, `decret-93-120`, `loi-19-02`, `loi-90-29`, `loi-04-20`, `decret-11-125`, `loi-09-03`, `decret-06-141`, `loi-18-11`, `loi-90-11`.
+- **2026-08-11 (patch 25) :** README sync — `decret-02-427` row corrigée (✅ VÉRIFIÉ, en accord avec header fichier) ; `decret-06-198` CONFORME→VÉRIFIÉ 2026-08-11 ; `decret-06-138` PARTIEL retiré→VÉRIFIÉ (Art. 7–19 + Annexes I–II complétés par extraction vision depuis JO) ; `decret-21-319` date corrigée 5→13 Moharram / 14→22 août 2021 ; tableau de bord CONFORME supprimé, compteurs mis à jour (25 VÉRIFIÉ).
