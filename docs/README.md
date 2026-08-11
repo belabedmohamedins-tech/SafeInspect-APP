@@ -1,5 +1,14 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-11 19:01 WAT — Perplexity — W49 ✅ CLOSED + F-01 confirmed clean
+- **Phases closed:** W49, F-01
+- **Phases opened:** aucune
+- **Files changed:** `docs/STRATEGIC_PLAN.md`, `docs/README.md`
+- **W49:** 11 fichiers critères audités par lecture directe — 0 erreur de citation, 0 [À VÉRIFIER] non balisé, tous les numericFields cohérents. STRATEGIC_PLAN.md mis à jour.
+- **F-01:** `.env` et `.env*.local` déjà présents dans `.gitignore` (SHA `0c2c5f2e`). Confirmé propre par lecture directe. Retiré du backlog.
+- **Phase ouverte unique: W51** (surveillance JORADP AIM GPL2 — aucune action code)
+- **Next identifier: W59**
+
 ### 2026-08-11 18:27 WAT — Perplexity — W49 CLOSED — 10 criteria files audited, all confirmed clean
 - **Phases closed:** W49
 - **Phases opened:** none
@@ -86,7 +95,8 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W49** | ✅ CLOSED | P3 | Audit 10 criteria files — all confirmed clean. 0 errors. 2026-08-11. |
+| **W49** | ✅ CLOSED | P3 | Audit 11 fichiers critères — confirmés propres. 0 erreur. 2026-08-11. |
+| **F-01** | ✅ CLOSED | P2 | `.env` gitignore — déjà présent. Confirmé propre par lecture directe. 2026-08-11. |
 | **W56** | ✅ CLOSED | P2 | F-20: `decisionSupport.test.ts` — 18 tests, all 7 actions, grade boundaries, escalation, criticalOverride, incomplete. Confirmed by direct read 2026-08-11. |
 | **W55** | ✅ CLOSED | P2 | F-17: `SyncService.ts` sends full `SavedInspection` object — `.violations` field never accessed directly. No shape conflict. Confirmed 2026-08-11. |
 | **W54** | ✅ CLOSED | P2 | F-14: `completionRate` + `incomplete` correctly computed in `scoringUtils.ts`. No active inspection screen (progress bar = future feature, backlog). Confirmed 2026-08-11. |

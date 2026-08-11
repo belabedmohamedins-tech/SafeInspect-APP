@@ -105,6 +105,8 @@
 | **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | Gate: PASS 2026-08-11. |
 | **W19** | legal_refs corpus 100% VÉRIFIÉ — 34/34 | 2026-08-11 | Patch-27 commit `9cc418bb`. Verified by Belabed Mohamed. |
 | **W57-TSC** | InspectionRepository: stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected' | 2026-08-11 | Gate: 31/31 Jest PASS + TSC 0, user-confirmed 14:27 WAT. |
+| **W49** | Audit criteria files — 11 files confirmés propres par lecture directe | 2026-08-11 | Direct read: `baseFoodCriteria.ts`, `baseGeneralCriteria.ts`, `baseCompressedGasCriteria.ts`, `carpenteryCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `produceStorageCriteria.ts`. 0 erreur de citation, 0 [À VÉRIFIER] non balisé, tous les numericFields cohérents. |
+| **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read — `.env` + `.env*.local` already present in `.gitignore`. No code change needed. |
 
 ---
 
@@ -113,7 +115,6 @@
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication. |
-| **W49** | Audit 16 unaudited criteria files | P3 | `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. |
 
 ---
 
@@ -121,7 +122,6 @@
 
 | Item | What's needed |
 |---|---|
-| F-01: `.env` not gitignored | Confirm .env has no secrets committed, then add to .gitignore. Quick fix. |
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL, then update fallback. |
 | F-02: stale Node/Expo version comment | Cosmetic. |
 | F-03: migration naming `001_` reused | Cosmetic. |
@@ -171,5 +171,4 @@
 
 ## Execution Order (Current Session)
 
-1. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
-2. **W49** (P3) — Audit 16 unaudited criteria files.
+1. **W51** (P1) — Surveillance uniquement. Aucune action code avant publication JORADP confirmée.
