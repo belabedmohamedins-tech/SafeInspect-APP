@@ -1,5 +1,21 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-11 15:10 WAT — Perplexity — legal_refs patches 25+26 — 30/34 VÉRIFIÉ
+- **Phases closed:** none (legal_refs maintenance)
+- **Phases opened:** none
+- **Files changed:**
+  - `legal_refs/README.md` (patches 25, 26, 26c) — dashboard 23→25→30 ✅ VÉRIFIÉ — 4 NON VÉRIFIÉ restants
+  - `legal_refs/arrete-interministeriel-1999-11-21-conservation-aliments.md` — header VÉRIFIÉ (patch-26 API)
+  - `legal_refs/decret-09-335-plans-internes-intervention.md` — header VÉRIFIÉ (patch-26 API)
+  - `legal_refs/decret-90-245-appareils-pression-gaz.md` — header VÉRIFIÉ (patch-26b PowerShell, commit `414b7f8f`)
+  - `legal_refs/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` — header VÉRIFIÉ (patch-26b PowerShell)
+  - `legal_refs/arrete-interministeriel-2025-05-07-hygiene-restauration.md` — header VÉRIFIÉ (patch-26b PowerShell)
+  - patch-25 (commit `b2fbc81c`): decret-02-427, decret-06-198, decret-06-138 VÉRIFIÉ ; decret-21-319 date 13 Moharram/22 août corrigée
+- **Source de vérification :** relecture verbatim contre PDF officiel par Belabed Mohamed — 2026-08-11
+- **État legal_refs :** 30 ✅ VÉRIFIÉ | 4 ⚠️ NON VÉRIFIÉ (`loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19`) | 1 🔴 PROJET
+- **Open phases: W19, W49, W51, W54, W55, W56**
+- **Next identifier: W59**
+
 ### 2026-08-11 14:27 WAT — Perplexity — W57-TSC CLOSED — 31/31 Jest green, TSC 0 errors
 - **Phases closed:** W57-TSC (IntegrityService.stamp → hashAndStore; missing repo methods; ApprovalStatus union)
 - **Phases opened:** none
@@ -124,7 +140,7 @@
 | **W56** | 🟠 OPEN | P2 | F-20: add real test coverage for decisionSupport.ts (grade boundaries + escalation logic) |
 | **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: AIM GPL2 publication status — 6 GPL criteria tagged [À VÉRIFIER] |
 | **W49** | 🟠 OPEN | P3 | Audit 16 unaudited criteria files |
-| **W19** | 🟠 OPEN | P0 | legal_refs/ stubs (3 arrêtés — user working in parallel) |
+| **W19** | 🟠 OPEN | P0 | legal_refs/ NON VÉRIFIÉ restants : `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19` (4 fichiers) |
 | **W48** | ✅ CLOSED | — | BGN-02-02 test 20/20 green. Commit `0eb33bf`. 2026-08-10. |
 | **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved by W46. Direct read 2026-08-10. |
 | **W43** | ✅ CLOSED | — | gplCriteria.ts phantom 21-430 citations → 83-496 + AIM GPL2 + Loi 19-02. |
