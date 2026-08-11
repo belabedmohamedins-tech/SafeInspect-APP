@@ -1,13 +1,16 @@
-﻿# Décret exécutif n° 2009-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
+# Décret exécutif n° 09-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
 
 **Date de signature :** 20 janvier 2009 (23 Moharram 1430)  
-**Signataire :** Ahmed OUYAHIA, Premier ministre  
-**Journal Officiel :** N° 6 — 25 janvier 2009  
-**Source PDF convertie :** `decret 09-19.pdf` (Space files SafeInspect)  
-**Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
+**Journal Officiel :** À déterminer  
+**Source PDF :** Fourni par l'utilisateur (`decret 09-19.pdf`)  
+**Date de conversion :** 2026-08-11  
+**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni  
+
+> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
+
+## PRÉAMBULE
 
 Le Premier ministre,
 
@@ -39,25 +42,25 @@ Décrète :
 
 ---
 
-## CHAPITRE I — DISPOSITIONS GÉNÉRALES
+## CHAPITRE I — DISPOSITIONS GENERALES
 
-### Article 1er
+**Article 1er**
 
 Conformément aux dispositions des articles 4 et 7 du décret exécutif n° 97-40 du 9 Ramadhan 1417 correspondant au 18 janvier 1997, modifié et complété, susvisé, le présent décret a pour objet de réglementer l'activité de collecte des déchets spéciaux.
 
 ---
 
-## CHAPITRE II — DISPOSITIONS RELATIVES À L'AGRÉMENT
+## CHAPITRE II — DISPOSITIONS RELATIVES A L'AGREMENT
 
-### Article 2
+**Article 2**
 
 Toute personne physique ou morale désirant exercer l'activité de collecte des déchets spéciaux doit répondre aux dispositions fixées par le présent décret et disposer d'un agrément délivré par décision du ministre chargé de l'environnement.
 
-### Article 3
+**Article 3**
 
 La demande d'agrément d'exercice de collecte des déchets spéciaux est adressée par lettre recommandée au ministre chargé de l'environnement.
 
-### Article 4
+**Article 4**
 
 Le dossier de la demande d'agrément est constitué de :
 
@@ -70,11 +73,11 @@ c) la description, pour chaque catégorie de déchets spéciaux à collecter, de
 d) la liste du personnel affecté à la collecte et les attestations de leur qualification;
 
 e) le plan de collecte des déchets spéciaux, faisant ressortir les informations :
-- la wilaya ou les wilayas couverte(s) par la collecte;
-- les modalités de collecte;
-- les mesures destinées à éviter ou faire face à tout danger pour la santé de l'homme et/ou pour l'environnement.
+   - la wilaya ou les wilayas couverte(s) par la collecte;
+   - les modalités de collecte;
+   - les mesures destinées à éviter ou faire face à tout danger pour la santé de l'homme et/ou pour l'environnement.
 
-### Article 5
+**Article 5**
 
 La décision de l'agrément est délivrée pour une ou plusieurs catégories de déchets spéciaux. Elle fixe les prescriptions techniques relatives à la collecte de ces déchets.
 
@@ -82,7 +85,7 @@ Le wali ou les walis territorialement compétent(s), est (sont) destinataires d'
 
 Le refus de la demande doit être motivé et notifié au demandeur.
 
-### Article 6
+**Article 6**
 
 L'agrément de la collecte est valable pour une durée de cinq (5) ans. Il peut être renouvelé selon les modalités prévues dans le présent décret.
 
@@ -90,15 +93,15 @@ L'agrément de la collecte est valable pour une durée de cinq (5) ans. Il peut 
 
 ## CHAPITRE III — DROITS ET OBLIGATIONS DU COLLECTEUR
 
-### Article 7
+**Article 7**
 
-Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
+Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
 
-### Article 8
+**Article 8**
 
 Tout collecteur doit tenir un registre de collecte coté et paraphé. Ce registre est mis à la disposition des services chargés de l'environnement territorialement compétents à chaque contrôle.
 
-### Article 9
+**Article 9**
 
 Le registre de collecte contient notamment les indications suivantes :
 
@@ -114,23 +117,23 @@ e) les éléments d'identification des destinataires;
 
 f) la mention de tout accident survenu lors de la collecte et les mesures prises pour y remédier.
 
-### Article 10
+**Article 10**
 
-Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
+Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
 
 ---
 
-## CHAPITRE IV — DISPOSITIONS RELATIVES AU CONTRÔLE
+## CHAPITRE IV — DISPOSITIONS RELATIVES AU CONTROLE
 
-### Article 11
+**Article 11**
 
 L'activité de collecte est assujettie à un contrôle des services chargés de l'environnement territorialement compétents.
 
-### Article 12
+**Article 12**
 
 En cas de constat de situation de non conformité aux dispositions du présent décret ou aux lois et règlements en vigueur, les services chargés de l'environnement territorialement compétents saisissent le ministre chargé de l'environnement pour la suspension ou le retrait de l'agrément après mise en demeure du collecteur.
 
-### Article 13
+**Article 13**
 
 En cas de retrait de l'agrément, le collecteur doit prendre toutes les dispositions nécessaires pour veiller à ce que les déchets spéciaux se trouvant en sa détention ne provoquent aucune nuisance, et de faire procéder immédiatement à la remise des déchets spéciaux collectés soit aux détenteurs initiaux soit à d'autres collecteurs sous le contrôle des services chargés de l'environnement territorialement compétents.
 
@@ -138,37 +141,54 @@ En cas de retrait de l'agrément, le collecteur doit prendre toutes les disposit
 
 ## CHAPITRE V — DISPOSITIONS FINALES
 
-### Article 14
+**Article 14**
 
 Le collecteur est responsable de son activité dans les conditions définies par les lois et règlements en vigueur, notamment en matière de protection de l'environnement.
 
-### Article 15
+**Article 15**
 
 Les personnes physiques ou morales exerçant, à la date de publication du présent décret au Journal officiel, l'activité de collecte des déchets spéciaux disposent d'un délai d'une (1) année pour se conformer aux dispositions du présent décret.
 
-### Article 16
+**Article 16**
 
 Les modalités d'application du présent décret sont fixées, en tant que de besoin, par arrêté du ministre chargé de l'environnement.
 
-### Article 17
+**Article 17**
 
 Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 23 Moharram 1430 correspondant au 20 janvier 2009.
 
-**Ahmed OUYAHIA**
+Ahmed OUYAHIA.
+
+---
+
+## MODIFICATIONS
+
+Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
 
 ---
 
 ## Contrôle de séquence
 
-| Chapitre | Articles |
-|---|---|
-| I — Dispositions générales | Art. 1er |
-| II — Dispositions relatives à l'agrément | Art. 2–6 |
-| III — Droits et obligations du collecteur | Art. 7–10 |
-| IV — Dispositions relatives au contrôle | Art. 11–13 |
-| V — Dispositions finales | Art. 14–17 |
+| Article | Présent |
+|---------|---------|
+| Article 1er | ✅ |
+| Article 2 | ✅ |
+| Article 3 | ✅ |
+| Article 4 | ✅ |
+| Article 5 | ✅ |
+| Article 6 | ✅ |
+| Article 7 | ✅ |
+| Article 8 | ✅ |
+| Article 9 | ✅ |
+| Article 10 | ✅ |
+| Article 11 | ✅ |
+| Article 12 | ✅ |
+| Article 13 | ✅ |
+| Article 14 | ✅ |
+| Article 15 | ✅ |
+| Article 16 | ✅ |
+| Article 17 | ✅ |
 
-**Articles présents :** Art. 1er à 17 — séquence complète et continue.  
-**Gaps :** Aucun.
+**Aucune lacune détectée.** Tous les articles de 1er à 17 sont présents dans l'ordre séquentiel.
