@@ -1,6 +1,6 @@
 // src/__tests__/repositories/InspectionRepository.test.ts
 // W22: verify save() throws INSPECTION_LOCKED for approved inspections.
-// W52-fix: mock IntegrityService.stamp (rename from hashAndStore — W5 renamed the method).
+// W57-FIX: mock IntegrityService.hashAndStore (W5 method name — stamp never existed).
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
 import { SavedInspection } from '../../types';
@@ -22,8 +22,8 @@ jest.mock('../../repositories/AuditLogRepository', () => ({
 }));
 jest.mock('../../services/IntegrityService', () => ({
   IntegrityService: {
-    // W5 renamed hashAndStore → stamp; mock must match the call site.
-    stamp: jest.fn().mockImplementation((insp: unknown) => Promise.resolve(insp)),
+    // hashAndStore returns the hash string; save() embeds it via { ...inspection, integrityHash: hash }
+    hashAndStore: jest.fn().mockResolvedValue('mock-hash-abc'),
   },
 }));
 jest.mock('../../services/capFactory', () => ({
@@ -63,7 +63,6 @@ beforeEach(() => {
 describe('InspectionRepository.save — W22 immutability guard', () => {
   it('throws INSPECTION_LOCKED when existing row is approved', async () => {
     mockGetFirst.mockResolvedValueOnce({
-      status: 'completed',
       approval_status: 'approved',
     });
     await expect(
@@ -75,7 +74,6 @@ describe('InspectionRepository.save — W22 immutability guard', () => {
 
   it('does NOT throw when existing row has approval_status = pending', async () => {
     mockGetFirst.mockResolvedValueOnce({
-      status: 'completed',
       approval_status: 'pending',
     });
     await expect(

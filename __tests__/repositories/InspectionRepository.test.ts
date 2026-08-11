@@ -5,16 +5,15 @@
  * W52-FIX: replaced await import() in cleanup blocks with require() — Jest
  *   runs under CJS transform and rejects dynamic ESM imports without
  *   --experimental-vm-modules. require() is equivalent here.
- * W57-FIX: added IntegrityService.stamp mock — W5 renamed hashAndStore → stamp;
- *   without the mock every save() call crashes in the Node/Jest environment.
- *   stamp returns the inspection unchanged (identity mock) so data is preserved.
+ * W57-FIX: mock IntegrityService.hashAndStore (not stamp — stamp never existed).
+ *   hashAndStore returns the hash string; save() embeds it in the blob.
  */
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import type { SavedInspection } from '../../src/types';
 
 jest.mock('../../src/services/IntegrityService', () => ({
   IntegrityService: {
-    stamp: jest.fn().mockImplementation((insp: unknown) => Promise.resolve(insp)),
+    hashAndStore: jest.fn().mockResolvedValue('mock-hash-abc'),
   },
 }));
 
@@ -33,8 +32,6 @@ function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspecti
 }
 
 beforeEach(async () => {
-  // Clear only non-approved rows so approved-guard tests can seed their own state.
-  // For most tests the table is empty going in; approved-guard tests clean up after.
   try { await InspectionRepository.clear(); } catch { /* may throw if approved row exists */ }
 });
 
@@ -81,7 +78,6 @@ describe('InspectionRepository', () => {
       makeInspection({ id, approvalStatus: 'approved' }),
     );
     await expect(InspectionRepository.delete(id)).rejects.toThrow('INSPECTION_LOCKED');
-    // cleanup — require() avoids --experimental-vm-modules requirement
     const { getDb } = require('../../src/db/schema');
     const db = await getDb();
     await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
@@ -100,9 +96,7 @@ describe('InspectionRepository', () => {
     await expect(
       InspectionRepository.deleteMany(['w52-dm-ok', 'w52-dm-locked']),
     ).rejects.toThrow('INSPECTION_LOCKED');
-    // Both rows must still exist (atomic: nothing deleted)
     expect(await InspectionRepository.getById('w52-dm-ok')).not.toBeNull();
-    // cleanup — require() avoids --experimental-vm-modules requirement
     const { getDb } = require('../../src/db/schema');
     const db = await getDb();
     await db.runAsync('DELETE FROM inspections WHERE id IN (?, ?)', ['w52-dm-ok', 'w52-dm-locked']);
@@ -123,7 +117,6 @@ describe('InspectionRepository', () => {
     await InspectionRepository.save(makeInspection({ id, approvalStatus: 'approved' }));
     await expect(InspectionRepository.clear()).rejects.toThrow('INSPECTION_LOCKED');
     expect(await InspectionRepository.getAll()).not.toHaveLength(0);
-    // cleanup — require() avoids --experimental-vm-modules requirement
     const { getDb } = require('../../src/db/schema');
     const db = await getDb();
     await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
