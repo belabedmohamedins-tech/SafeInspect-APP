@@ -6,6 +6,11 @@
 //
 // W24: clear() now logs AUDIT_LOG_CLEARED BEFORE deleting rows so the
 //      wipe is always traceable (legal defensibility requirement).
+//
+// W52: added 'INSPECTION_DELETE_BLOCKED' — logged when delete/deleteMany/clear
+//      is blocked because an approved inspection is in the selection.
+// W53: added 'SERVER_SYNC_PENDING' — logged by ApprovalRepository.syncToServer()
+//      when the server call fails; picked up by the sync engine for retry.
 
 import { getDb } from '../db/schema';
 
@@ -15,6 +20,8 @@ export type AuditAction =
   | 'INSPECTION_SAVED'
   | 'INSPECTION_DELETED'
   | 'INSPECTION_BULK_DELETED'
+  | 'INSPECTION_DELETE_BLOCKED'
+  | 'SERVER_SYNC_PENDING'
   | 'AGENDA_ITEM_SAVED'
   | 'AGENDA_ITEM_DELETED'
   | 'SETTINGS_CHANGED'
