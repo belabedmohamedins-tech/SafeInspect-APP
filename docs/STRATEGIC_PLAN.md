@@ -79,7 +79,7 @@
 | W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct | 2026-08-09 | Confirmed clean. |
 | W17 | BFD-02-02: 15cm/5cm tagged [حكم مهني] confirmed | 2026-08-09 | Confirmed clean. |
 | W20 | Close 3 open legal unverifieds + delete allCriteria dead-code | 2026-08-09 | 0 [À VÉRIFIER] in codebase. |
-| W13 | L-06: UPD-AX2-01 "500m buffer" clarified | 2026-08-09 | Confirmed: product/domain decision needed (notice-radius vs. siting-distance). No code change until decided. |
+| W13 | L-06: UPD-AX2-01 "500m buffer" clarified | 2026-08-09 | Confirmed: product/domain decision needed. No code change until decided. |
 | W14 | L-07: GAZ station vapor-recovery tag | 2026-08-09 | Confirmed clean. |
 | W15 | criteriaByActivity rubrique fallback confirmed clean | 2026-08-09 | No code change needed. |
 | W10 | Abattoir wastewater [À VÉRIFIER] — Option C tag applied | 2026-08-09 | Confirmed clean. |
@@ -96,9 +96,15 @@
 | W47 | BGN-07-04 confirmed resolved by W46 | 2026-08-10 | Direct read confirmed. |
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
-| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` (impl) + `f439cc8c` (6 tests). User: run `npx jest __tests__/repositories/InspectionRepository.test.ts` + `npx tsc --noEmit`. |
-| **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. User: run `npx jest src/__tests__/semiPharmaCriteria.test.ts` + `npx tsc --noEmit`. |
-| **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | User: apply fix + run `npx jest src/__tests__/bakeryCriteria.test.ts` + `npx tsc --noEmit`. |
+| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` + `f439cc8c` + `ef1db661`. Gate: 26/26 Jest PASS 2026-08-11. |
+| **W53** | F-18: ApprovalRepository → serverAuth wiring | 2026-08-11 | Confirmed clean by direct read — `ApprovalRepository` already wires via `syncToServer()` fire-and-forget. No code change needed. |
+| **W54** | F-14: scoringUtils.ts completion-rate reconciliation | 2026-08-11 | Confirmed clean by direct read — `completionRate` and `incomplete` correctly computed and exposed in `ScoringResult`. No progress-bar screen exists yet (future feature, W49+). No code change needed. |
+| **W55** | F-17: SavedInspection.violations shape vs sync.ts | 2026-08-11 | Confirmed clean by direct read — `SyncService.ts` sends entire `SavedInspection` object; never accesses `.violations` field directly. No shape conflict possible. |
+| **W56** | F-20: decisionSupport.ts real test coverage | 2026-08-11 | Confirmed by direct read — `src/__tests__/decisionSupport.test.ts` already has 18 test cases covering all 7 DecisionAction paths, grade A/B/C/D boundaries, escalation, criticalOverride, incomplete, and nextVisitDays. No code change needed. |
+| **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. Gate: PASS 2026-08-11. |
+| **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | Gate: PASS 2026-08-11. |
+| **W19** | legal_refs corpus 100% VÉRIFIÉ — 34/34 | 2026-08-11 | Patch-27 commit `9cc418bb`. Verified by Belabed Mohamed. |
+| **W57-TSC** | InspectionRepository: stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected' | 2026-08-11 | Gate: 31/31 Jest PASS + TSC 0, user-confirmed 14:27 WAT. |
 
 ---
 
@@ -106,13 +112,8 @@
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W53** | F-18 remaining: ApprovalRepository → serverAuth wiring | P1/HIGH | `server/src/routes/sync.ts` creates PENDING record and sends push notification correctly. `ApprovalRepository.approve()/reject()/escalate()` never call `serverAuth.ts`'s `approveInspection()/rejectInspection()`. Fix: call after successful local action with offline-queue/retry. |
-| **W54** | F-14 loose end: scoringUtils.ts completion-rate reconciliation | P2 | Three formulas for "evaluated": live progress bar, finish-gate, `scoringUtils.ts` completion-rate. Not confirmed reconciled. Quick read of scoringUtils.ts needed. |
-| **W55** | F-17 loose end: SavedInspection.violations shape check | P2 | `src/types.ts` `SavedInspection.violations` shape vs. what `sync.ts` expects — not confirmed matching. Quick read of types.ts + sync.ts. |
-| **W56** | F-20: decisionSupport.ts real test coverage | P2 | Only `typeof suggestDecision` test exists. Need tests for grade A/B/C/D boundaries + escalation logic. |
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication of arrêté under Décret 21-319 Art.92. |
-| **W49** | Audit 16 unaudited criteria files | P3 | Lower-stakes workshop/light-industrial files: `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. |
-| **W19** | legal_refs/ stubs (3 arrêtés) | P0 | User working in parallel. `arrete-interministeriel-1999`, `2016-criteres-microbiologiques`, `2025-liaison-froide` all have [MANQUANT] stubs. |
+| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication. |
+| **W49** | Audit 16 unaudited criteria files | P3 | `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. |
 
 ---
 
@@ -124,11 +125,12 @@
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL, then update fallback. |
 | F-02: stale Node/Expo version comment | Cosmetic. |
 | F-03: migration naming `001_` reused | Cosmetic. |
-| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision: is this criterion about siting distance or about Décret 07-144's rayon d'affichage? Answer changes the fix entirely. |
-| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation that Annexe II is operative standard for abattoirs (strongly indicated — g/t units vs. mg/L makes Annexe I structurally inapplicable). Then update ABT-AX4-01/04B + SLH-05-04 through 04D. |
-| legal_refs Issue #1: decret-83-496 Art.4/7/8 inline amendment notice | Add `> Modification Décret 21-430` inline at each amended article, not only in end-of-file note. |
-| legal_refs Issue #2: loi-09-03 ✅ VÉRIFIÉ status | Revert to ⚠️ NON VÉRIFIÉ — no named human reviewer. One-line fix. |
+| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision: is this criterion about siting distance or about Décret 07-144's rayon d'affichage? |
+| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation needed. |
+| legal_refs Issue #1: decret-83-496 Art.4/7/8 inline amendment notice | Add `> Modification Décret 21-430` inline at each amended article. |
+| legal_refs Issue #2: loi-09-03 ✅ VÉRIFIÉ status | Revert to ⚠️ NON VÉRIFIÉ — no named human reviewer. |
 | legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
+| Active inspection screen | No screen for filling in items in real time yet. Required for completionRate progress bar (W54 confirmed feature-gap, not bug). |
 
 ---
 
@@ -156,26 +158,18 @@
 | Décret 09-19 | Déchets dangereux import | ✅ Present |
 | Décret 02-427 | Prévention risques pro | ✅ Present |
 | Décret 06-141 | Rejets effluents liquides | ✅ Present — Art.1–14 + Annexe I + II |
-| Décret 21-430 | GPL-C modification (3 arts only) | ✅ Present — 3-art amending decree confirmed |
+| Décret 21-430 | GPL-C modification (3 arts only) | ✅ Present |
 | Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
 | Décret 76-35 | IGH incendie | ✅ Present |
-| AIM GPL2 v14.03.2022 | GPL station technique rules | ⚠️ Present but UNPUBLISHED — no JORADP trace. W51 OPEN. |
-| Arrêté 2025 liaison froide | Conservation températures | ⚠️ STUB — W19 OPEN |
-| Arrêté 2016 critères microbiologiques | Microbiologie alimentaire | ⚠️ STUB — W19 OPEN |
-| Arrêté 1999 températures conservation | Conservation alimentaire | ⚠️ STUB — W19 OPEN |
+| AIM GPL2 v14.03.2022 | GPL station technique rules | ⚠️ UNPUBLISHED — no JORADP trace. W51 OPEN. |
 
 ---
 
 ## Execution Order (Current Session)
 
-1. **W53** (P1/HIGH) — Wire `ApprovalRepository` approve/reject/escalate → `serverAuth.ts` with offline queue.
-2. **W54** (P2) — Read `scoringUtils.ts` to confirm completion-rate formula reconciled.
-3. **W55** (P2) — Read `types.ts` + `sync.ts` to confirm violations shape match.
-4. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
-5. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
-6. **W19** (P0) — User fills 3 arrêté stubs in parallel.
-7. **W49** (P3) — Perplexity reads + patches 16 unaudited criteria files.
+1. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
+2. **W49** (P3) — Audit 16 unaudited criteria files.

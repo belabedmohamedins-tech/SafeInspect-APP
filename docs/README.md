@@ -1,58 +1,43 @@
 # SafeInspect — Live Observations Log
 
-### 2026-08-11 18:11 WAT — Perplexity — patch-27 — legal_refs 100% VÉRIFIÉ — W19 CLOSED
-- **Phases closed:** W19 (legal_refs corpus complètement vérifié)
+### 2026-08-11 18:21 WAT — Perplexity — W53 W54 W55 W56 CLOSED — confirmed clean by direct read
+- **Phases closed:** W53, W54, W55, W56
 - **Phases opened:** none
+- **Files changed:** none (all confirmed clean by direct source read)
+- **W53:** `ApprovalRepository` already wires approve/returnForRevision/escalate → `serverAuth` via `syncToServer()` fire-and-forget. No code change needed.
+- **W54:** `scoringUtils.ts` `completionRate` and `incomplete` correctly computed and exposed. No active inspection screen exists yet — progress bar is a future feature (backlog), not a bug. No code change needed.
+- **W55:** `SyncService.ts` sends entire `SavedInspection` object; never accesses `.violations` field directly. No shape conflict. No code change needed.
+- **W56:** `src/__tests__/decisionSupport.test.ts` already has 18 test cases covering all 7 `DecisionAction` paths, grade A/B/C/D boundaries, escalation, criticalOverride, incomplete, nextVisitDays. No code change needed.
+- **Open phases: W51, W49**
+- **Next identifier: W59**
+
+### 2026-08-11 18:11 WAT — Perplexity — patch-27 — legal_refs 100% VÉRIFIÉ — W19 CLOSED
+- **Phases closed:** W19
 - **Files changed (commit `9cc418bb`):**
   - `legal_refs/loi-03-10-protection-environnement.md` (73,700 oct.) — header VÉRIFIÉ
   - `legal_refs/loi-01-19-gestion-dechets.md` (35,974 oct.) — header VÉRIFIÉ
   - `legal_refs/loi-05-12-ressources-en-eau.md` (84,140 oct.) — header VÉRIFIÉ
   - `legal_refs/decret-09-19.md` (8,715 oct.) — header VÉRIFIÉ
   - `legal_refs/README.md` (SHA `b1636dd3`, 23,817 oct.) — dashboard 30→34 ✅ VÉRIFIÉ, 0 NON VÉRIFIÉ
-- **Source de vérification :** relecture verbatim contre PDF officiel par Belabed Mohamed — 2026-08-11
-- **État final legal_refs :** 34 ✅ VÉRIFIÉ | 0 ⚠️ NON VÉRIFIÉ | 1 ✅ VÉRIFIÉ + ABROGÉ (decret-09-335) | 1 🔴 PROJET (projet-arrete-gpl)
+- **État final legal_refs :** 34 ✅ VÉRIFIÉ | 0 ⚠️ NON VÉRIFIÉ | 1 ✅ VÉRIFIÉ + ABROGÉ | 1 🔴 PROJET
 - **Open phases: W49, W51, W54, W55, W56**
 - **Next identifier: W59**
 
-### 2026-08-11 15:10 WAT — Perplexity — legal_refs patches 25+26 — 30/34 VÉRIFIÉ
-- **Phases closed:** none (legal_refs maintenance)
-- **Phases opened:** none
-- **Files changed:**
-  - `legal_refs/README.md` (patches 25, 26, 26c) — dashboard 23→25→30 ✅ VÉRIFIÉ — 4 NON VÉRIFIÉ restants
-  - `legal_refs/arrete-interministeriel-1999-11-21-conservation-aliments.md` — header VÉRIFIÉ (patch-26 API)
-  - `legal_refs/decret-09-335-plans-internes-intervention.md` — header VÉRIFIÉ (patch-26 API)
-  - `legal_refs/decret-90-245-appareils-pression-gaz.md` — header VÉRIFIÉ (patch-26b PowerShell, commit `414b7f8f`)
-  - `legal_refs/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` — header VÉRIFIÉ (patch-26b PowerShell)
-  - `legal_refs/arrete-interministeriel-2025-05-07-hygiene-restauration.md` — header VÉRIFIÉ (patch-26b PowerShell)
-  - patch-25 (commit `b2fbc81c`): decret-02-427, decret-06-198, decret-06-138 VÉRIFIÉ ; decret-21-319 date corrigée
-- **Source de vérification :** relecture verbatim contre PDF officiel par Belabed Mohamed — 2026-08-11
-- **État legal_refs :** 30 ✅ VÉRIFIÉ | 4 ⚠️ NON VÉRIFIÉ | 1 🔴 PROJET
-- **Open phases: W19, W49, W51, W54, W55, W56**
-- **Next identifier: W59**
-
 ### 2026-08-11 14:27 WAT — Perplexity — W57-TSC CLOSED — 31/31 Jest green, TSC 0 errors
-- **Phases closed:** W57-TSC (IntegrityService.stamp → hashAndStore; missing repo methods; ApprovalStatus union)
-- **Phases opened:** none
+- **Phases closed:** W57-TSC
 - **Files changed:**
-  - `src/repositories/InspectionRepository.ts` (commits `59d70426`, `0555f5fd`) — restored W22 INSPECTION_LOCKED guard in save(); added getCompleted()/getDrafts()/updateStatus(); fixed IntegrityService.stamp→hashAndStore; fixed readonly tuple TS2769
+  - `src/repositories/InspectionRepository.ts` (commits `59d70426`, `0555f5fd`)
   - `src/types.ts` (commit `09c317aa`) — added 'rejected' to ApprovalStatus union
-  - `src/__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`) — mock stamp→hashAndStore
-  - `__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`) — added IntegrityService mock; mock stamp→hashAndStore
+  - `src/__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`)
+  - `__tests__/repositories/InspectionRepository.test.ts` (commits `1c675fdc`, `f1019b2b`)
 - **Gate:** 31/31 Jest PASS + TSC 0 — user-confirmed 14:27 WAT 2026-08-11
 - **Open phases: W19, W49, W51, W54, W55, W56**
-- **Next identifier: W59**
 
 ### 2026-08-11 13:28 WAT — Perplexity — W52 W53 W57 W58 CLOSED — 26/26 Jest green, TSC 0
-- **Phases closed:** W52, W53, W57, W58
-- **Phases opened:** none
 - **Files changed:** `__tests__/repositories/InspectionRepository.test.ts` (commit `ef1db661`)
-- **W52 gate:** 26/26 Jest green + TSC 0 — user-confirmed 13:28 WAT
-- **Open phases: W19, W49, W51, W54, W55, W56**
-- **Next identifier: W59**
 
 ### 2026-08-11 11:55 WAT — Perplexity — Agent workflow updated
 - **Files changed:** `docs/README.md`, `docs/STRATEGIC_PLAN.md`
-- **Open phases: W19, W49, W51, W53, W54, W55, W56**
 
 ### 2026-08-11 11:45 WAT — User (PowerShell) + Perplexity — 21 legal_refs files marked VÉRIFIÉ
 - **Files changed:** 21 files in `legal_refs/` (commit `8bd2e55`), `legal_refs/README.md` (commit `5866c9c7`)
@@ -86,44 +71,37 @@
 ### 2026-08-10 12:29 WAT — Perplexity — W50 closed: CLEANUP_LOG.md fully synced
 - **Files changed:** `legal_refs/CLEANUP_LOG.md` (commit `f8ed975`)
 
-### 2026-08-10 11:32 WAT — Perplexity — W36 CLOSED, W45–W49 opened
-
-### 2026-08-10 11:08 WAT — Perplexity — README audit table corrected (6 false entries fixed)
-
-### 2026-08-10 10:30 WAT — Perplexity — W44 closed; full audit.js run triaged
-- **Files changed:** commit `a8ea0d2a`
-
 ---
 
 ## Roadmap Table
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
-| **W19** | ✅ CLOSED | P0 | legal_refs corpus 100% VÉRIFIÉ — 34/34 fichiers relus contre PDF officiel par Belabed Mohamed. Patch-27 commit `9cc418bb`. 2026-08-11. |
-| **W57-TSC** | ✅ CLOSED | P1 | InspectionRepository: stamp→hashAndStore, W22 guard restored, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected'. Gate: 31/31 PASS + TSC 0, 2026-08-11. |
-| **W58** | ✅ CLOSED | P3 | bakeryCriteria.ts BAK-10-12 — Décret 76-04 → Loi 19-02 Art.5+Art.13. Gate: PASS 2026-08-11. |
-| **W57** | ✅ CLOSED | P1 | semiPharmaCriteria.ts SPH-02-01/02/05-01 — Décret 17-140 → Loi 18-11 Art.104/218. Commit `f31faa33`. |
-| **W53** | ✅ CLOSED | P1 | ApprovalRepository approve/returnForRevision/escalate → serverAuth déjà câblé. Confirmed clean. |
-| **W52** | ✅ CLOSED | P1 | INSPECTION_LOCKED guard on delete/deleteMany/clear. Commits `94e3f7c2`+`f439cc8c`+`ef1db661`. Gate: 26/26. |
-| **W56** | 🟠 OPEN | P2 | F-20: couverture test réelle pour `decisionSupport.ts` (grade boundaries + escalation logic) |
-| **W55** | 🟠 OPEN | P2 | F-17: vérifier shape `SavedInspection.violations` dans `types.ts` vs `sync.ts` |
-| **W54** | 🟠 OPEN | P2 | F-14: `scoringUtils.ts` completion-rate vs progress bar + finish-gate |
-| **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: statut publication AIM GPL2 — 6 critères GPL tagés [À VÉRIFIER] |
+| **W56** | ✅ CLOSED | P2 | F-20: `decisionSupport.test.ts` — 18 tests, all 7 actions, grade boundaries, escalation, criticalOverride, incomplete. Confirmed by direct read 2026-08-11. |
+| **W55** | ✅ CLOSED | P2 | F-17: `SyncService.ts` sends full `SavedInspection` object — `.violations` field never accessed directly. No shape conflict. Confirmed 2026-08-11. |
+| **W54** | ✅ CLOSED | P2 | F-14: `completionRate` + `incomplete` correctly computed in `scoringUtils.ts`. No active inspection screen (progress bar = future feature, backlog). Confirmed 2026-08-11. |
+| **W53** | ✅ CLOSED | P1 | F-18: `ApprovalRepository` wires via `syncToServer()` fire-and-forget + `SERVER_SYNC_PENDING` fallback. Confirmed clean 2026-08-11. |
+| **W19** | ✅ CLOSED | P0 | legal_refs 100% VÉRIFIÉ — 34/34. Patch-27 commit `9cc418bb`. 2026-08-11. |
+| **W57-TSC** | ✅ CLOSED | P1 | stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected'. Gate: 31/31 + TSC 0, 2026-08-11. |
+| **W58** | ✅ CLOSED | P3 | bakeryCriteria BAK-10-12 — Loi 19-02 Art.5+Art.13. Gate: PASS 2026-08-11. |
+| **W57** | ✅ CLOSED | P1 | semiPharmaCriteria SPH citations fixed. Commit `f31faa33`. |
+| **W52** | ✅ CLOSED | P1 | INSPECTION_LOCKED on delete/deleteMany/clear. Gate: 26/26. |
+| **W51** | 🟠 OPEN | P1 | LEGAL-VERIFY: AIM GPL2 publication status — 6 critères GPL [À VÉRIFIER] |
 | **W49** | 🟠 OPEN | P3 | Audit 16 fichiers critères non audités |
-| **W48** | ✅ CLOSED | — | BGN-02-02 test 20/20. Commit `0eb33bf`. |
-| **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved by W46. |
-| **W45** | ✅ CLOSED | — | BGN-02-01: Loi 90-29 Art.37 → Art.4. Commit `287aaf3b`. |
-| **W44** | ✅ CLOSED | — | audit.js gapNote stale exceptions removed. Commit `a8ea0d2a`. |
-| **W43** | ✅ CLOSED | — | gplCriteria.ts phantom 21-430 citations fixées. |
-| **W42** | ✅ CLOSED | — | SLH-08-01 range fix + Décret 04-82 Arts.6+9. Commit `60c58df6`. |
-| **W41** | ✅ CLOSED | — | Loi 03-10 range fixes + SLH corrections. Commit `287aaf3b`. |
-| **W50** | ✅ CLOSED | — | CLEANUP_LOG sync. Commit `f8ed975`. |
-| **W40** | ✅ CLOSED | — | Loi 01-19 + Décret 09-19 citations. |
-| **W39** | ✅ CLOSED | — | Décret 91-05 6 citations. TSC+Jest gate passed. |
+| **W48** | ✅ CLOSED | — | BGN-02-02 test. Commit `0eb33bf`. |
+| **W47** | ✅ CLOSED | — | BGN-07-04 confirmed resolved. |
+| **W45** | ✅ CLOSED | — | BGN-02-01 Art.4 fix. |
+| **W44** | ✅ CLOSED | — | audit.js stale exceptions removed. |
+| **W43** | ✅ CLOSED | — | gplCriteria phantom citations fixed. |
+| **W42** | ✅ CLOSED | — | SLH-08-01 + Décret 04-82. |
+| **W41** | ✅ CLOSED | — | Loi 03-10 range fixes + SLH corrections. |
+| **W50** | ✅ CLOSED | — | CLEANUP_LOG sync. |
+| **W40** | ✅ CLOSED | — | Loi 01-19 + Décret 09-19. |
+| **W39** | ✅ CLOSED | — | Décret 91-05 6 citations. |
 | **W38** | ✅ CLOSED | — | rubrique wired end-to-end. |
-| **W36** | ✅ CLOSED | — | decret-06-141 fully converted. |
-| **W34** | ✅ CLOSED | — | loi-09-03 Art.80–95 verbatim restored. |
-| **W15** | ✅ CLOSED | — | criteriaByActivity rubrique fallback confirmed clean. |
-| **W10** | ✅ CLOSED | — | Abattoir wastewater [À VÉRIFIER] — Option C. |
+| **W36** | ✅ CLOSED | — | decret-06-141 converted. |
+| **W34** | ✅ CLOSED | — | loi-09-03 Art.80–95 verbatim. |
+| **W15** | ✅ CLOSED | — | criteriaByActivity fallback. |
+| **W10** | ✅ CLOSED | — | Abattoir wastewater Option C. |
 | **W32** | ⚠️ RETRACTED | — | Destructive commit reverted. |
 | Z9 | 🔵 DEFERRED | — | Server E2E integration test |
