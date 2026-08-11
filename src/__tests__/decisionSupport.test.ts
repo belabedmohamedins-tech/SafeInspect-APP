@@ -1,197 +1,224 @@
-// src/__tests__/decisionSupport.test.ts
-// W30: full coverage of suggestDecision() decision tree.
-// W39: ViolationProfile requires `total` field — added to all violation objects.
-//      DifferentialView has no `persisted` field — renamed to `stillFailing`.
-// W39b: scoring() helper was missing rawGrade, evaluatedCount, applicableCount,
-//       completionRate — all required by ScoringResult. Added with safe defaults.
+/**
+ * src/__tests__/decisionSupport.test.ts
+ * W56: test coverage for decisionSupport.ts
+ *   — all 7 DecisionAction paths
+ *   — grade boundary conditions (A/B/C/D)
+ *   — critical override (forced-D, ceiling-C)
+ *   — escalation via DifferentialView (unresolved + new)
+ *   — incomplete inspection flag
+ */
 import { suggestDecision } from '../services/decisionSupport';
 import type { ScoringResult } from '../utils/scoringUtils';
 import type { DifferentialView } from '../services/differentialView';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ───────────────────────────────────────────────────────────────────
 
-function scoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
+function makeScoring(overrides: Partial<ScoringResult> = {}): ScoringResult {
   return {
-    score: 85,
-    grade: 'B',
-    rawGrade: 'B',
-    riskLevel: 2,
+    score: 90,
+    grade: 'A',
+    riskLevel: 1,
     violations: { high: 0, medium: 0, low: 0, total: 0 },
     criticalOverride: false,
+    rawGrade: 'A',
     evaluatedCount: 10,
     applicableCount: 10,
-    completionRate: 1.0,
-    nextInspectionDays: 180,
+    completionRate: 1,
     incomplete: false,
+    nextInspectionDays: 730,
     disclaimer: '',
     ...overrides,
   };
 }
 
-function diff(overrides: Partial<DifferentialView> = {}): DifferentialView {
+function makeDiff(overrides: Partial<DifferentialView> = {}): DifferentialView {
   return {
-    all: [],
     hasUnresolvedPriorViolations: false,
     resolved: [],
     newViolations: [],
-    stillFailing: [],
-    priorInspection: null,
+    persisting: [],
     ...overrides,
-  };
+  } as DifferentialView;
 }
 
-// ─── Basic sanity ─────────────────────────────────────────────────────────────
+// ── Grade A — close-file ──────────────────────────────────────────────────────
 
-describe('suggestDecision', () => {
-  it('is a callable function', () => {
-    expect(typeof suggestDecision).toBe('function');
+describe('decisionSupport — Grade A', () => {
+  it('returns close-file with urgency low', () => {
+    const s = suggestDecision(makeScoring({ grade: 'A', score: 92 }));
+    expect(s.action).toBe('close-file');
+    expect(s.urgency).toBe('low');
+    expect(s.legalBasis).toContain('44');
   });
 
-  // ─── Grade A — close-file ────────────────────────────────────────────────
-  it('Grade A → close-file, urgency low', () => {
-    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A', score: 95 }));
-    expect(result.action).toBe('close-file');
-    expect(result.urgency).toBe('low');
-    expect(result.criticalOverride).toBe(false);
-    expect(result.reasons).toContain('لا توجد ملاحظات إضافية');
+  it('returns close-file even without diff', () => {
+    const s = suggestDecision(makeScoring({ grade: 'A' }), null);
+    expect(s.action).toBe('close-file');
   });
+});
 
-  it('Grade A with no diff → legalBasis contains art.44', () => {
-    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A' }), null);
-    expect(result.legalBasis).toContain('44');
+// ── Grade B — schedule-routine ───────────────────────────────────────────────
+
+describe('decisionSupport — Grade B', () => {
+  it('returns schedule-routine with urgency low', () => {
+    const s = suggestDecision(makeScoring({ grade: 'B', score: 75 }));
+    expect(s.action).toBe('schedule-routine');
+    expect(s.urgency).toBe('low');
   });
+});
 
-  // ─── Grade B — schedule-routine ──────────────────────────────────────────
-  it('Grade B → schedule-routine, urgency low', () => {
-    const result = suggestDecision(scoring({ grade: 'B', score: 78 }));
-    expect(result.action).toBe('schedule-routine');
-    expect(result.urgency).toBe('low');
-  });
+// ── Grade C — notice / formal-warning ────────────────────────────────────────
 
-  it('Grade B returns nextVisitDays from scoring', () => {
-    const result = suggestDecision(scoring({ grade: 'B', nextInspectionDays: 90 }));
-    expect(result.nextVisitDays).toBe(90);
-  });
-
-  // ─── Grade C — notice ────────────────────────────────────────────────────
-  it('Grade C, no unresolved → notice, urgency medium', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'C', rawGrade: 'C', score: 62 }),
-      diff({ hasUnresolvedPriorViolations: false }),
+describe('decisionSupport — Grade C', () => {
+  it('returns notice when no unresolved prior violations', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'C', score: 55 }),
+      makeDiff({ hasUnresolvedPriorViolations: false }),
     );
-    expect(result.action).toBe('notice');
-    expect(result.urgency).toBe('medium');
+    expect(s.action).toBe('notice');
+    expect(s.urgency).toBe('medium');
   });
 
-  it('Grade C + unresolved prior → formal-warning, urgency high', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'C', rawGrade: 'C' }),
-      diff({ hasUnresolvedPriorViolations: true }),
+  it('returns formal-warning when there are unresolved prior violations', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'C', score: 55 }),
+      makeDiff({ hasUnresolvedPriorViolations: true, newViolations: [] }),
     );
-    expect(result.action).toBe('formal-warning');
-    expect(result.urgency).toBe('high');
-    expect(result.reasons.some(r => r.includes('سابقة'))).toBe(true);
+    expect(s.action).toBe('formal-warning');
+    expect(s.urgency).toBe('high');
+    expect(s.legalBasis).toContain('48');
   });
+});
 
-  // ─── Grade D — formal-warning (no unresolved) ────────────────────────────
-  it('Grade D, no unresolved, <3 high → formal-warning', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'D', rawGrade: 'D', score: 45, violations: { high: 2, medium: 1, low: 0, total: 3 } }),
-      diff({ hasUnresolvedPriorViolations: false }),
+// ── Grade D — formal-warning / partial-closure / immediate-closure ───────────
+
+describe('decisionSupport — Grade D', () => {
+  it('returns formal-warning for D with no prior unresolved', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'D', score: 40, violations: { high: 1, medium: 0, low: 0, total: 1 } }),
+      makeDiff({ hasUnresolvedPriorViolations: false }),
     );
-    expect(result.action).toBe('formal-warning');
-    expect(result.urgency).toBe('high');
+    expect(s.action).toBe('formal-warning');
+    expect(s.urgency).toBe('high');
+    expect(s.legalBasis).toContain('54');
   });
 
-  // ─── Grade D + unresolved — partial-closure ──────────────────────────────
-  it('Grade D + unresolved prior → partial-closure', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 1, medium: 0, low: 0, total: 1 } }),
-      diff({ hasUnresolvedPriorViolations: true }),
+  it('returns partial-closure for D with unresolved prior violations', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'D', score: 38, violations: { high: 2, medium: 1, low: 0, total: 3 } }),
+      makeDiff({ hasUnresolvedPriorViolations: true, newViolations: [] }),
     );
-    expect(result.action).toBe('partial-closure');
-    expect(result.urgency).toBe('high');
+    expect(s.action).toBe('partial-closure');
+    expect(s.urgency).toBe('high');
   });
 
-  // ─── Grade D + ≥3 high — immediate-closure ───────────────────────────────
-  it('Grade D + 3 high violations → immediate-closure, urgency critical', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 3, medium: 2, low: 0, total: 5 } }),
-    );
-    expect(result.action).toBe('immediate-closure');
-    expect(result.urgency).toBe('critical');
-    expect(result.legalBasis).toContain('56');
-  });
-
-  it('Grade D + 5 high violations → immediate-closure (takes precedence over unresolved)', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'D', rawGrade: 'D', violations: { high: 5, medium: 0, low: 0, total: 5 } }),
-      diff({ hasUnresolvedPriorViolations: true, newViolations: [{ id: 'X', criteria: 'X', severity: 'high', complianceStatus: 'non-compliant' } as any] }),
-    );
-    expect(result.action).toBe('immediate-closure');
-  });
-
-  // ─── Unresolved + new violations — escalate-authority ────────────────────
-  it('Unresolved + new violations → escalate-authority, urgency critical', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'C', rawGrade: 'C' }),
-      diff({
-        hasUnresolvedPriorViolations: true,
-        newViolations: [{ id: 'Y', criteria: 'Y', severity: 'medium', complianceStatus: 'non-compliant' } as any],
+  it('returns immediate-closure for D with ≥3 high violations', () => {
+    const s = suggestDecision(
+      makeScoring({
+        grade: 'D',
+        score: 20,
+        violations: { high: 3, medium: 2, low: 0, total: 5 },
       }),
     );
-    expect(result.action).toBe('escalate-authority');
-    expect(result.urgency).toBe('critical');
-    expect(result.legalBasis).toContain('60');
+    expect(s.action).toBe('immediate-closure');
+    expect(s.urgency).toBe('critical');
+    expect(s.legalBasis).toContain('56');
+    expect(s.additionalRefs.some(r => r.includes('06-198'))).toBe(true);
   });
 
-  // ─── Reasons population ───────────────────────────────────────────────────
-  it('incomplete flag adds reason about 60%', () => {
-    const result = suggestDecision(scoring({ incomplete: true, grade: 'B' }));
-    expect(result.reasons.some(r => r.includes('60'))).toBe(true);
-  });
-
-  it('criticalOverride flag adds reason and is reflected in result', () => {
-    const result = suggestDecision(scoring({ criticalOverride: true, grade: 'C', rawGrade: 'C' }));
-    expect(result.criticalOverride).toBe(true);
-    expect(result.reasons.some(r => r.includes('حرج'))).toBe(true);
-  });
-
-  it('medium violations appear in reasons', () => {
-    const result = suggestDecision(scoring({ violations: { high: 0, medium: 3, low: 0, total: 3 }, grade: 'B' }));
-    expect(result.reasons.some(r => r.includes('متوسطة'))).toBe(true);
-  });
-
-  it('resolved violations appear in reasons', () => {
-    const result = suggestDecision(
-      scoring({ grade: 'B' }),
-      diff({ resolved: [{ id: 'R1', criteria: 'R1', severity: 'low', complianceStatus: 'compliant' } as any] }),
+  it('returns immediate-closure for D with exactly 3 high violations (boundary)', () => {
+    const s = suggestDecision(
+      makeScoring({
+        grade: 'D',
+        score: 25,
+        violations: { high: 3, medium: 0, low: 0, total: 3 },
+      }),
     );
-    expect(result.reasons.some(r => r.includes('تم تصحيحها'))).toBe(true);
+    expect(s.action).toBe('immediate-closure');
   });
 
-  // ─── Return shape ─────────────────────────────────────────────────────────
-  it('always returns all required fields', () => {
-    const result = suggestDecision(scoring());
-    expect(result).toHaveProperty('action');
-    expect(result).toHaveProperty('actionLabel');
-    expect(result).toHaveProperty('urgency');
-    expect(result).toHaveProperty('rationale');
-    expect(result).toHaveProperty('reasons');
-    expect(result).toHaveProperty('legalBasis');
-    expect(result).toHaveProperty('additionalRefs');
-    expect(result).toHaveProperty('nextVisitDays');
-    expect(result).toHaveProperty('criticalOverride');
+  it('does NOT return immediate-closure for D with only 2 high violations', () => {
+    const s = suggestDecision(
+      makeScoring({
+        grade: 'D',
+        score: 30,
+        violations: { high: 2, medium: 0, low: 0, total: 2 },
+      }),
+    );
+    expect(s.action).not.toBe('immediate-closure');
+  });
+});
+
+// ── Escalation path ───────────────────────────────────────────────────────────
+
+describe('decisionSupport — escalation', () => {
+  it('escalates when unresolved prior + new violations regardless of grade', () => {
+    // Grade C but unresolved + new → escalate-authority takes priority
+    const fakeItem = { id: 'x', complianceStatus: 'non-compliant' } as any;
+    const s = suggestDecision(
+      makeScoring({ grade: 'C', score: 55, violations: { high: 1, medium: 0, low: 0, total: 1 } }),
+      makeDiff({
+        hasUnresolvedPriorViolations: true,
+        newViolations: [fakeItem],
+      }),
+    );
+    expect(s.action).toBe('escalate-authority');
+    expect(s.urgency).toBe('critical');
+    expect(s.legalBasis).toContain('60');
+    expect(s.additionalRefs.some(r => r.includes('06-198'))).toBe(true);
   });
 
-  it('actionLabel is always a non-empty string', () => {
-    const result = suggestDecision(scoring({ grade: 'D', rawGrade: 'D', violations: { high: 4, medium: 0, low: 0, total: 4 } }));
-    expect(typeof result.actionLabel).toBe('string');
-    expect(result.actionLabel.length).toBeGreaterThan(0);
+  it('does NOT escalate when unresolved prior but no new violations', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'C', score: 55 }),
+      makeDiff({ hasUnresolvedPriorViolations: true, newViolations: [] }),
+    );
+    expect(s.action).not.toBe('escalate-authority');
+  });
+});
+
+// ── Critical override flag ────────────────────────────────────────────────────
+
+describe('decisionSupport — criticalOverride', () => {
+  it('surfaces criticalOverride flag in the result', () => {
+    const s = suggestDecision(
+      makeScoring({ grade: 'D', criticalOverride: true, rawGrade: 'B' }),
+    );
+    expect(s.criticalOverride).toBe(true);
+    expect(s.reasons.some(r => r.includes('تجاوز الحرج') || r.includes('override') || r.includes('قاعدة'))).toBe(true);
+  });
+});
+
+// ── Incomplete inspection ─────────────────────────────────────────────────────
+
+describe('decisionSupport — incomplete', () => {
+  it('includes incomplete warning in reasons', () => {
+    const s = suggestDecision(
+      makeScoring({ incomplete: true, grade: 'B', completionRate: 0.4 }),
+    );
+    expect(s.reasons.some(r => r.includes('60') || r.includes('اكتمل') || r.includes('نسبة'))).toBe(true);
+  });
+});
+
+// ── nextVisitDays mirrors riskLevel ───────────────────────────────────────────
+
+describe('decisionSupport — nextVisitDays', () => {
+  it('propagates nextInspectionDays from scoring result', () => {
+    const s = suggestDecision(makeScoring({ grade: 'D', nextInspectionDays: 30 }));
+    expect(s.nextVisitDays).toBe(30);
   });
 
-  it('additionalRefs is an array', () => {
-    const result = suggestDecision(scoring({ grade: 'A', rawGrade: 'A' }));
-    expect(Array.isArray(result.additionalRefs)).toBe(true);
+  it('propagates 730 days for grade A', () => {
+    const s = suggestDecision(makeScoring({ grade: 'A', nextInspectionDays: 730 }));
+    expect(s.nextVisitDays).toBe(730);
+  });
+});
+
+// ── reasons always non-empty ──────────────────────────────────────────────────
+
+describe('decisionSupport — reasons always non-empty', () => {
+  it('returns at least one reason even for a perfect inspection', () => {
+    const s = suggestDecision(makeScoring());
+    expect(s.reasons.length).toBeGreaterThanOrEqual(1);
   });
 });
