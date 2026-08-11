@@ -3,6 +3,8 @@
 // SQLite-backed implementation.
 //
 // W5:  SHA-256 integrity hashing on save (IntegrityService).
+// W22: save() throws INSPECTION_LOCKED if the existing row has approval_status
+//      = 'approved'. Approved reports are legally immutable.
 // W52: INSPECTION_LOCKED guard — delete(), deleteMany(), clear() all throw
 //      'INSPECTION_LOCKED' and log INSPECTION_DELETE_BLOCKED before any
 //      mutation if an affected inspection has approvalStatus = 'approved'.
@@ -76,10 +78,22 @@ export const InspectionRepository = {
   },
 
   // ── save ──────────────────────────────────────────────────────────────────
+  // W22: approved inspections are legally immutable — any attempt to overwrite
+  //      an approved row throws INSPECTION_LOCKED before any mutation occurs.
   async save(inspection: SavedInspection): Promise<void> {
+    const db = await getDb();
+
+    // W22 guard: check existing row approval status before any mutation.
+    const existing = await db.getFirstAsync<{ approval_status: string | null }>(
+      'SELECT approval_status FROM inspections WHERE id = ?',
+      [inspection.id],
+    );
+    if (existing?.approval_status === 'approved') {
+      throw new Error('INSPECTION_LOCKED');
+    }
+
     // W5: compute integrity hash before persisting
     const withHash = await IntegrityService.stamp(inspection);
-    const db = await getDb();
     await db.runAsync(
       `INSERT INTO inspections (id, data, facility_id, status, approval_status)
        VALUES (?,?,?,?,?)
