@@ -2,6 +2,7 @@
 // Audit Log — read-only chronological event log with filter and clear
 // W39: added AUDIT_LOG_CLEARED to ACTION_LABELS/ICONS/COLORS;
 //      clear() now passes inspector name from settings (falls back to 'مفتش').
+// W52/W53: added INSPECTION_DELETE_BLOCKED + SERVER_SYNC_PENDING to all three maps.
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -23,36 +24,42 @@ import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 type FilterValue = 'all' | AuditAction;
 
 const ACTION_LABELS: Record<AuditAction, string> = {
-  INSPECTION_SAVED:       'حفظ تفتيش',
-  INSPECTION_DELETED:     'حذف تفتيش',
-  INSPECTION_BULK_DELETED:'حذف مجموعة',
-  AGENDA_ITEM_SAVED:      'حفظ مهمة',
-  AGENDA_ITEM_DELETED:    'حذف مهمة',
-  SETTINGS_CHANGED:       'تغيير الإعدادات',
-  BACKUP_RESTORED:        'استعادة نسخة احتياطية',
-  AUDIT_LOG_CLEARED:      'مسح سجل الأحداث',
+  INSPECTION_SAVED:              'حفظ تفتيش',
+  INSPECTION_DELETED:            'حذف تفتيش',
+  INSPECTION_BULK_DELETED:       'حذف مجموعة',
+  INSPECTION_DELETE_BLOCKED:     'حذف محظور — تقرير معتمد',
+  SERVER_SYNC_PENDING:           'مزامنة معلقة — تعذر الاتصال بالخادم',
+  AGENDA_ITEM_SAVED:             'حفظ مهمة',
+  AGENDA_ITEM_DELETED:           'حذف مهمة',
+  SETTINGS_CHANGED:              'تغيير الإعدادات',
+  BACKUP_RESTORED:               'استعادة نسخة احتياطية',
+  AUDIT_LOG_CLEARED:             'مسح سجل الأحداث',
 };
 
 const ACTION_ICONS: Record<AuditAction, string> = {
-  INSPECTION_SAVED:       'clipboard',
-  INSPECTION_DELETED:     'trash',
-  INSPECTION_BULK_DELETED:'trash',
-  AGENDA_ITEM_SAVED:      'calendar',
-  AGENDA_ITEM_DELETED:    'calendar-times-o',
-  SETTINGS_CHANGED:       'cog',
-  BACKUP_RESTORED:        'database',
-  AUDIT_LOG_CLEARED:      'eraser',
+  INSPECTION_SAVED:              'clipboard',
+  INSPECTION_DELETED:            'trash',
+  INSPECTION_BULK_DELETED:       'trash',
+  INSPECTION_DELETE_BLOCKED:     'lock',
+  SERVER_SYNC_PENDING:           'cloud-upload',
+  AGENDA_ITEM_SAVED:             'calendar',
+  AGENDA_ITEM_DELETED:           'calendar-times-o',
+  SETTINGS_CHANGED:              'cog',
+  BACKUP_RESTORED:               'database',
+  AUDIT_LOG_CLEARED:             'eraser',
 };
 
 const ACTION_COLORS: Record<AuditAction, string> = {
-  INSPECTION_SAVED:       Colors.success,
-  INSPECTION_DELETED:     Colors.danger,
-  INSPECTION_BULK_DELETED:Colors.danger,
-  AGENDA_ITEM_SAVED:      Colors.primary,
-  AGENDA_ITEM_DELETED:    Colors.warning,
-  SETTINGS_CHANGED:       Colors.textSecondary,
-  BACKUP_RESTORED:        '#8e44ad',
-  AUDIT_LOG_CLEARED:      Colors.textSecondary,
+  INSPECTION_SAVED:              Colors.success,
+  INSPECTION_DELETED:            Colors.danger,
+  INSPECTION_BULK_DELETED:       Colors.danger,
+  INSPECTION_DELETE_BLOCKED:     Colors.warning,
+  SERVER_SYNC_PENDING:           '#f39c12',
+  AGENDA_ITEM_SAVED:             Colors.primary,
+  AGENDA_ITEM_DELETED:           Colors.warning,
+  SETTINGS_CHANGED:              Colors.textSecondary,
+  BACKUP_RESTORED:               '#8e44ad',
+  AUDIT_LOG_CLEARED:             Colors.textSecondary,
 };
 
 const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
