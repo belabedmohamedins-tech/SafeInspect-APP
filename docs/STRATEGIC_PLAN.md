@@ -2,7 +2,7 @@
 
 > This is the single source of truth for phase numbering and execution order.
 > Before opening a new phase, read this file to find the highest existing letter/number.
-> Claude and Perplexity coordinate through this file — not through memory.
+> Perplexity coordinates through this file — not through memory.
 
 ---
 
@@ -73,7 +73,7 @@
 | W31-3 | Decret-07-144: tag rubrique gap 1243–2922 as [MANQUANT] | 2026-08-09 | Commit `bc1eb6d`. |
 | W31-4 | Split bundled arrêté file into 3 separate files | 2026-08-09 | Commit `bc1eb6d`. |
 | W31-1 | audit.js cross-ref false-positive fix | 2026-08-09 | Commit `4c79ed3`. |
-| W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by Claude direct read. W31 FULLY CLOSED. |
+| W31-5 | README broken links confirmed valid | 2026-08-09 | Confirmed by direct read. W31 FULLY CLOSED. |
 | W11 | BGN-02-06 ventilation: Décret 93-120 removed, Décret 91-05 Art.11 confirmed | 2026-08-09 | Confirmed clean. |
 | W12 | semiPharmaCriteria: Décret 17-140 scope correct for food; Loi 18-11 confirmed | 2026-08-09 | Confirmed food-scope issue exists → W57. |
 | W16 | BFD-08-01: Loi 09-03 Art.12+6 confirmed correct | 2026-08-09 | Confirmed clean. |
@@ -96,9 +96,9 @@
 | W47 | BGN-07-04 confirmed resolved by W46 | 2026-08-10 | Direct read confirmed. |
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
-| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` (impl) + `f439cc8c` (6 tests). TSC+Jest gate → Claude. |
-| **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. TSC+Jest gate → Claude. |
-| **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | Code fix → Claude (commit + TSC+Jest gate). |
+| **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` (impl) + `f439cc8c` (6 tests). User: run `npx jest __tests__/repositories/InspectionRepository.test.ts` + `npx tsc --noEmit`. |
+| **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. User: run `npx jest src/__tests__/semiPharmaCriteria.test.ts` + `npx tsc --noEmit`. |
+| **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | User: apply fix + run `npx jest src/__tests__/bakeryCriteria.test.ts` + `npx tsc --noEmit`. |
 
 ---
 
@@ -111,7 +111,7 @@
 | **W55** | F-17 loose end: SavedInspection.violations shape check | P2 | `src/types.ts` `SavedInspection.violations` shape vs. what `sync.ts` expects — not confirmed matching. Quick read of types.ts + sync.ts. |
 | **W56** | F-20: decisionSupport.ts real test coverage | P2 | Only `typeof suggestDecision` test exists. Need tests for grade A/B/C/D boundaries + escalation logic. |
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication of arrêté under Décret 21-319 Art.92. |
-| **W49** | Audit 16 unaudited criteria files | P3 | Lower-stakes workshop/light-industrial files: `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. Claude reads → Perplexity patches any wrong citations. |
+| **W49** | Audit 16 unaudited criteria files | P3 | Lower-stakes workshop/light-industrial files: `mechanicCriteria.ts`, `blacksmithCriteria.ts`, `carpenteryCriteria.ts`, `carWashCriteria.ts`, `marbleCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts` + 9 others. |
 | **W19** | legal_refs/ stubs (3 arrêtés) | P0 | User working in parallel. `arrete-interministeriel-1999`, `2016-criteres-microbiologiques`, `2025-liaison-froide` all have [MANQUANT] stubs. |
 
 ---
@@ -178,4 +178,4 @@
 4. **W56** (P2) — Add grade-boundary + escalation tests for `decisionSupport.ts`.
 5. **W51** (P1) — Monitor only. No code action until JORADP publication confirmed.
 6. **W19** (P0) — User fills 3 arrêté stubs in parallel.
-7. **W49** (P3) — Claude reads 16 unaudited criteria files; Perplexity patches.
+7. **W49** (P3) — Perplexity reads + patches 16 unaudited criteria files.
