@@ -19,6 +19,10 @@
 //   was folded to process.env[''] → '' regardless of runtime assignments.
 //   Splitting the key across Array.join() produces a runtime expression that
 //   Babel cannot statically evaluate.
+// W61: approveInspection/rejectInspection corrected to target
+//   /api/approvals/by-inspection/:inspectionId/approve|reject — the previous
+//   /inspections/:id/approve path targeted a route that was never implemented
+//   anywhere in server/src/routes/ (SPEC 09, Problem 3).
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
@@ -64,7 +68,7 @@ async function secureDelete(key: string): Promise<void> {
     : AsyncStorage.removeItem(key);
 }
 
-// ── JWT helpers ──────────────────────────────────────────────────────────────────
+// ── JWT helpers ────────────────────────────────────────────────────────────────────────
 
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
   try {
@@ -84,7 +88,7 @@ function isTokenExpired(token: string): boolean {
   return Date.now() / 1000 > (payload.exp as number) - 60;
 }
 
-// ── Token storage ─────────────────────────────────────────────────────────────────
+// ── Token storage ─────────────────────────────────────────────────────────────────────────────
 
 export interface ServerTokens {
   accessToken:  string;
@@ -106,14 +110,14 @@ export async function clearTokens(): Promise<void> {
   ]);
 }
 
-// ── Refresh ──────────────────────────────────────────────────────────────────────
+// ── Refresh ───────────────────────────────────────────────────────────────────────────────
 
 export async function refreshAccessToken(): Promise<string | null> {
   const refreshToken = await secureGet(StorageKeys.JWT_REFRESH_TOKEN);
   if (!refreshToken) return null;
 
   try {
-    const res = await globalThis.fetch(`${getApiUrl()}/auth/refresh`, {
+    const res = await globalThis.fetch(`${getApiUrl()}/api/auth/refresh`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ refreshToken }),
@@ -132,7 +136,7 @@ export async function refreshAccessToken(): Promise<string | null> {
   }
 }
 
-// ── Public API ───────────────────────────────────────────────────────────────────
+// ── Public API ─────────────────────────────────────────────────────────────────────────────
 
 /**
  * Returns a valid (non-expired) access token, refreshing silently if needed.
@@ -163,7 +167,7 @@ export interface LoginResult {
  */
 export async function login(matricule: string, password: string): Promise<LoginResult> {
   try {
-    const res = await globalThis.fetch(`${getApiUrl()}/auth/login`, {
+    const res = await globalThis.fetch(`${getApiUrl()}/api/auth/login`, {
       method:  'POST',
       headers: { 'Content-Type': 'application/json' },
       body:    JSON.stringify({ matricule, password }),
@@ -217,7 +221,7 @@ export async function registerPushToken(pushToken: string): Promise<void> {
   if (!accessToken) return;
 
   try {
-    await globalThis.fetch(`${getApiUrl()}/notifications/register`, {
+    await globalThis.fetch(`${getApiUrl()}/api/notifications/register`, {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -230,7 +234,7 @@ export async function registerPushToken(pushToken: string): Promise<void> {
   }
 }
 
-// ── Approval workflow ─────────────────────────────────────────────────────────────
+// ── Approval workflow ────────────────────────────────────────────────────────────────────────────
 
 export interface ApprovalResult {
   ok:     boolean;
@@ -239,8 +243,12 @@ export interface ApprovalResult {
 
 /**
  * Supervisor approves a submitted inspection report.
- * POST /inspections/:inspectionId/approve
+ * POST /api/approvals/by-inspection/:inspectionId/approve
  * Body: { note?: string }
+ *
+ * W61: corrected from the nonexistent /inspections/:id/approve path.
+ * The server resolves the associated Approval record internally via inspectionId,
+ * so the client never needs to know about the separate Approval.id (SPEC 09, option a).
  */
 export async function approveInspection(
   inspectionId: string,
@@ -251,7 +259,7 @@ export async function approveInspection(
 
   try {
     const res = await globalThis.fetch(
-      `${getApiUrl()}/inspections/${encodeURIComponent(inspectionId)}/approve`,
+      `${getApiUrl()}/api/approvals/by-inspection/${encodeURIComponent(inspectionId)}/approve`,
       {
         method:  'POST',
         headers: {
@@ -275,10 +283,10 @@ export async function approveInspection(
 
 /**
  * Supervisor rejects a submitted inspection report.
- * POST /inspections/:inspectionId/reject
+ * POST /api/approvals/by-inspection/:inspectionId/reject
  * Body: { reason: string }
- * reason is optional here — callers that have a rejection UI should pass it;
- * callers without a prompt pass no reason (defaults to empty string).
+ *
+ * W61: corrected from the nonexistent /inspections/:id/reject path.
  */
 export async function rejectInspection(
   inspectionId: string,
@@ -289,7 +297,7 @@ export async function rejectInspection(
 
   try {
     const res = await globalThis.fetch(
-      `${getApiUrl()}/inspections/${encodeURIComponent(inspectionId)}/reject`,
+      `${getApiUrl()}/api/approvals/by-inspection/${encodeURIComponent(inspectionId)}/reject`,
       {
         method:  'POST',
         headers: {
