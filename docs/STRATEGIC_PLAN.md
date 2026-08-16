@@ -107,7 +107,8 @@
 | **W57-TSC** | InspectionRepository: stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected' | 2026-08-11 | Gate: 31/31 Jest PASS + TSC 0, user-confirmed 14:27 WAT. |
 | **W49** | Audit criteria files — 11 files confirmés propres par lecture directe | 2026-08-11 | Direct read: `baseFoodCriteria.ts`, `baseGeneralCriteria.ts`, `baseCompressedGasCriteria.ts`, `carpenteryCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `produceStorageCriteria.ts`. 0 erreur de citation, 0 [À VÉRIFIER] non balisé, tous les numericFields cohérents. |
 | **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read — `.env` + `.env*.local` already present in `.gitignore`. No code change needed. |
-| **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | All 5 files (`loi-05-12` 84KB, `loi-03-10` 73KB, `loi-18-11` 450 arts., `loi-01-19` 36KB, `loi-09-03` 95 arts.) read fully without truncation. Split unnecessary. Write-rule (PowerShell for patches) already enforced. No files modified. |
+| **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | All 5 files read without truncation in session. Split declared unnecessary — SUPERSEDED by W60 finding that loi-18-11 (189KB) truncated at ~70%. |
+| **W60** | loi-18-11-sante.md (189KB) split en 3 parties lisibles API | 2026-08-16 | partie1 (68KB, Arts.1–164) + partie2 (48KB, Arts.165–264) + partie3 (76KB, Arts.265–450). Commit `698a793`. User PowerShell split confirmed. SPLIT FILES REGISTRY updated in Space Instructions. |
 
 ---
 
@@ -135,7 +136,7 @@
 
 ---
 
-## Next Phase Identifier: **W60**
+## Next Phase Identifier: **W61**
 
 ---
 
@@ -149,7 +150,7 @@
 | Loi 01-19 | Gestion des déchets | ✅ Present |
 | Loi 04-20 | Risques majeurs | ✅ Present |
 | Loi 19-02 | Sécurité incendie | ✅ Present |
-| Loi 18-11 | Santé | ✅ Present |
+| Loi 18-11 | Santé | ✅ Present — split 3 parties (W60) |
 | Loi 90-11 | Travail | ✅ Present |
 | Loi 05-12 | Eau | ✅ Present |
 | Décret 91-05 | Hygiène/sécurité travail | ✅ Present |
