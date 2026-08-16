@@ -27,21 +27,27 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 ## 🗺️ Roadmap des corrections — état au 2026-08-16
 
-### Sprint A — Parité W42 : correction plage EIE Loi 03-10 (المواد 15–22 → 14–21)
+### ✅ Sprint A — CLÔTURÉ — Parité W42 : correction plage EIE Loi 03-10
 
 > **Contexte :** L'audit W42 a révélé que toutes les références à la Loi 03-10 (EIE) citant `المواد 15–22` sont incorrectes.
 > L'Art.14 est l'article racine de l'obligation EIE (manquant), et l'Art.22 traite des instruments fiscaux (hors sujet).
-> La plage correcte est **Art.14–21**. Confirmé par lecture directe sur `abattoirCriteria.ts` et `slaughterhouseSmallCriteria.ts` (W42).
+> La plage correcte est **Art.14–21**. Confirmé par lecture directe de chaque fichier criteria.
+>
+> **Note BAK-10-13 :** Cas distinct — plage `15–18` doublement erronée (manquait Art.14 ET Art.19–21). Corrigée vers `14–21`.
+> **Note PRD-01-01 :** Aucune référence EIE dans `produceStorageCriteria.ts` — entrée backlog retirée.
+> **Note `baseFoodCriteria.ts` :** Aucune référence Loi 03-10 EIE — rien à corriger.
 
 | # | Fichier criteria | Critère | Ancienne plage | Nouvelle plage | Statut | Commit |
 |---|---|---|---|---|---|---|
-| 1 | `updCriteria.ts` | UPD-AX10-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | [commit](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/main) |
+| 1 | `updCriteria.ts` | UPD-AX10-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | — |
 | 2 | `couvoirCriteria.ts` | COU-AX10-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | — |
 | 3 | `semiPharmaCriteria.ts` | SPH-06-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | — |
 | 4 | `slaughterhouseSmallCriteria.ts` | SLH-08-01 | المواد 15–22 | المواد 14–21 | ✅ Déjà corrigé en W42 | — |
 | 5 | `gplCriteria.ts` | GPL-05-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | [67e5458](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/67e5458bb6bceabcfae08c18005b75e480a6641f) |
-| 6 | `produceStorageCriteria.ts` | PRD-01-01 | المواد 15–22 | المواد 14–21 | ⏳ En cours | — |
-| 7 | Autres fichiers à confirmer | — | — | — | 🔍 À auditer | — |
+| 6 | `coldRoomCriteria.ts` | CLD-19-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | [bc689df](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/bc689dfa73e8a963a539bcd104bcf635b4b2e741) |
+| 7 | `bakeryCriteria.ts` | BAK-10-13 | المواد 15–18 ⚠️ | المواد 14–21 | ✅ Appliqué 2026-08-16 | [cd72db4](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/cd72db43cb28790d6781ca4b8b6aeadb00aae3a0) |
+| — | `produceStorageCriteria.ts` | — | — | — | ✅ Vérifié — aucune ref EIE | — |
+| — | `baseFoodCriteria.ts` | — | — | — | ✅ Vérifié — aucune ref EIE | — |
 
 ---
 
@@ -73,11 +79,9 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 | Priorité | Fichier criteria | Critère | Nature du problème | Bloquant ? |
 |---|---|---|---|---|
-| 🔴 Haute | `produceStorageCriteria.ts` | PRD-01-01 | EIE plage 15–22 → 14–21 (Sprint A étape 6) | Non |
-| 🟡 Moyenne | `coldRoomCriteria.ts` | CLD-* | À auditer — plage EIE à confirmer | À vérifier |
-| 🟡 Moyenne | `baseFoodCriteria.ts` | BF-* | À auditer — plage EIE à confirmer | À vérifier |
-| 🟡 Moyenne | `bakeryCriteria.ts` | BKR-* | À auditer — plage EIE à confirmer | À vérifier |
 | 🟠 Basse | AIM GPL2 | Tous GPL-02-* | Publication JORADP non confirmée — à surveiller | ⛔ Bloqué humain |
+
+> **Backlog EIE entièrement traité** — tous les fichiers criteria ont été lus et corrigés ou confirmés sans erreur.
 
 ---
 
@@ -89,19 +93,19 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 | [audit-01-baseGeneralCriteria.md](audit-01-baseGeneralCriteria.md) | `baseGeneralCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-02-baseCompressedGasCriteria.md](audit-02-baseCompressedGasCriteria.md) | `baseCompressedGasCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-03-gplCriteria.md](audit-03-gplCriteria.md) | `gplCriteria.ts` | W43 fantômes + W51 AIM GPL2 + Sprint A EIE | AIM GPL2 JORADP | — | ✅ Sprint A |
-| [audit-04-baseFoodCriteria.md](audit-04-baseFoodCriteria.md) | `baseFoodCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-04-baseFoodCriteria.md](audit-04-baseFoodCriteria.md) | `baseFoodCriteria.ts` | — | — | — | ✅ Vérifié — aucune ref EIE |
 | [audit-05-abattoirCriteria.md](audit-05-abattoirCriteria.md) | `abattoirCriteria.ts` | EIE 14–21 | — | — | ✅ Corrigé W42 |
-| [audit-06-bakeryCriteria.md](audit-06-bakeryCriteria.md) | `bakeryCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-06-bakeryCriteria.md](audit-06-bakeryCriteria.md) | `bakeryCriteria.ts` | EIE 15–18 → 14–21 | — | — | ✅ Sprint A |
 | [audit-07-blacksmithCriteria.md](audit-07-blacksmithCriteria.md) | `blacksmithCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-08-carWashCriteria.md](audit-08-carWashCriteria.md) | `carWashCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-09-carpenteryCriteria.md](audit-09-carpenteryCriteria.md) | `carpenteryCriteria.ts` | — | — | — | 🔍 À traiter |
-| [audit-10-coldRoomCriteria.md](audit-10-coldRoomCriteria.md) | `coldRoomCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-10-coldRoomCriteria.md](audit-10-coldRoomCriteria.md) | `coldRoomCriteria.ts` | EIE 15–22 → 14–21 | — | — | ✅ Sprint A |
 | [audit-11-couvoirCriteria.md](audit-11-couvoirCriteria.md) | `couvoirCriteria.ts` | EIE 14–21 | — | — | ✅ Sprint A |
 | [audit-12-marbleCriteria.md](audit-12-marbleCriteria.md) | `marbleCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-13-mechanicCriteria.md](audit-13-mechanicCriteria.md) | `mechanicCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-14-paintShopCriteria.md](audit-14-paintShopCriteria.md) | `paintShopCriteria.ts` | — | — | — | 🔍 À traiter |
 | [audit-15-printingCriteria.md](audit-15-printingCriteria.md) | `printingCriteria.ts` | — | — | — | 🔍 À traiter |
-| [audit-16-produceStorageCriteria.md](audit-16-produceStorageCriteria.md) | `produceStorageCriteria.ts` | EIE 14–21 | — | — | ⏳ Sprint A en cours |
+| [audit-16-produceStorageCriteria.md](audit-16-produceStorageCriteria.md) | `produceStorageCriteria.ts` | — | — | — | ✅ Vérifié — aucune ref EIE |
 | [audit-17-semiPharmaCriteria.md](audit-17-semiPharmaCriteria.md) | `semiPharmaCriteria.ts` | EIE 14–21 | — | — | ✅ Sprint A |
 | [audit-18-slaughterhouseSmallCriteria.md](audit-18-slaughterhouseSmallCriteria.md) | `slaughterhouseSmallCriteria.ts` | EIE 14–21 | — | — | ✅ Corrigé W42 |
 | [audit-19-uabCriteria.md](audit-19-uabCriteria.md) | `uabCriteria.ts` | — | — | — | 🔍 À traiter |
@@ -121,12 +125,12 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 | Statut | Nombre |
 |---|---|
 | Fichiers audit reçus | 27 / 27 |
-| Patches appliqués (Sprint A + W42/W43/W51) | 8 |
-| En cours (Sprint A) | 1 (PRD-01-01) |
-| Backlog identifié | 4 |
+| Patches appliqués (Sprint A + W42/W43/W51) | 10 |
+| En cours | 0 |
+| Backlog EIE | ✅ Entièrement traité |
 | LEGAL VERIFY ouverts | 1 (AIM GPL2 JORADP) |
 | Patches bloqués | 1 (AIM GPL2 — confirmation humaine) |
 
 ---
 
-*Dernière mise à jour : 2026-08-16 par Perplexity (agent engineering SafeInspect)*
+*Dernière mise à jour : 2026-08-16 — Sprint A clôturé par Perplexity (agent engineering SafeInspect)*
