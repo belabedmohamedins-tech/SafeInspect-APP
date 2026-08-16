@@ -9,27 +9,40 @@
 //
 // Usage:
 //   import { apiClient } from './apiClient';
-//   const res = await apiClient('/facilities');
-//   const res = await apiClient('/sync/inspections', { method: 'POST', body: JSON.stringify(data) });
+//   const res = await apiClient('/facilities');            → POST ${BASE}/api/facilities
+//   const res = await apiClient('/sync/inspections', …);  → POST ${BASE}/api/sync/inspections
+//
+// Note: callers pass paths WITHOUT the /api prefix — this wrapper adds it.
+// This matches the server’s mount convention: app.use(`/api/${name}`, router).
+// W61: added /api prefix, aligned getApiUrl() to throw on missing env.
 
 import { getAccessToken, refreshAccessToken } from './serverAuth';
 
 // Computed key — defeats babel-plugin-transform-inline-environment-variables
 const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 function getApiUrl(): string {
-  return ((process.env[SYNC_API_URL_KEY] ?? '').trim()) || 'http://localhost:3000';
+  const url = ((process.env[SYNC_API_URL_KEY] ?? '').trim());
+  if (!url) {
+    throw new Error(
+      'EXPO_PUBLIC_SYNC_API_URL is not set. Configure it in your .env file before using server features.',
+    );
+  }
+  return url;
 }
 
 /**
  * Authenticated fetch wrapper.
+ * Prepends /api to every path so callers stay decoupled from the server mount convention.
  * Returns the raw Response object so callers can handle status codes themselves.
- * Throws only on network errors (DNS failure, connection refused, etc.).
+ * Throws only on network errors (DNS failure, connection refused, etc.) or missing env.
  */
 export async function apiClient(
   path: string,
   init: RequestInit = {},
 ): Promise<Response> {
-  const url = `${getApiUrl()}${path}`;
+  // Normalise: ensure path starts with / then prepend /api
+  const normPath = path.startsWith('/') ? path : `/${path}`;
+  const url = `${getApiUrl()}/api${normPath}`;
 
   const buildHeaders = (token: string | null): Record<string, string> => ({
     'Content-Type': 'application/json',
