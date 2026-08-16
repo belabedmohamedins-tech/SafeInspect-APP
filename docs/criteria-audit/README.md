@@ -8,7 +8,7 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 ## Règles d'utilisation
 
-1. **Ces fichiers sont des instructions de patch — pas des sources légales canoniques.**  
+1. **Ces fichiers sont des instructions de patch — pas des sources légales canoniques.**
    La source de vérité légale reste `/legal_refs/`.
 
 2. **Trois niveaux de confiance :**
@@ -25,13 +25,94 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 ---
 
-## Index des fichiers
+## 🗺️ Roadmap des corrections — état au 2026-08-16
 
-> À compléter au fur et à mesure des pushes manuels.
+### Sprint A — Parité W42 : correction plage EIE Loi 03-10 (المواد 15–22 → 14–21)
+
+> **Contexte :** L'audit W42 a révélé que toutes les références à la Loi 03-10 (EIE) citant `المواد 15–22` sont incorrectes.
+> L'Art.14 est l'article racine de l'obligation EIE (manquant), et l'Art.22 traite des instruments fiscaux (hors sujet).
+> La plage correcte est **Art.14–21**. Confirmé par lecture directe sur `abattoirCriteria.ts` et `slaughterhouseSmallCriteria.ts` (W42).
+
+| # | Fichier criteria | Critère | Ancienne plage | Nouvelle plage | Statut | Commit |
+|---|---|---|---|---|---|---|
+| 1 | `updCriteria.ts` | UPD-AX10-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | [commit](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/main) |
+| 2 | `couvoirCriteria.ts` | COU-AX10-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | — |
+| 3 | `semiPharmaCriteria.ts` | SPH-06-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | — |
+| 4 | `slaughterhouseSmallCriteria.ts` | SLH-08-01 | المواد 15–22 | المواد 14–21 | ✅ Déjà corrigé en W42 | — |
+| 5 | `gplCriteria.ts` | GPL-05-01 | المواد 15–22 | المواد 14–21 | ✅ Appliqué 2026-08-16 | [67e5458](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/67e5458bb6bceabcfae08c18005b75e480a6641f) |
+| 6 | `produceStorageCriteria.ts` | PRD-01-01 | المواد 15–22 | المواد 14–21 | ⏳ En cours | — |
+| 7 | Autres fichiers à confirmer | — | — | — | 🔍 À auditer | — |
+
+---
+
+### Sprints antérieurs — corrections appliquées
+
+#### W43 — Correction références fantômes Décret 21-430
+
+> **Contexte :** Le Décret 21-430 ne contient que 3 articles (Art.1 objet, Art.2 modificatif, Art.3 publication).
+> Toutes les références à des articles inexistants (Art.3, Art.4, Art.5, Art.6, Art.10, Art.13, Art.15, Art.16) étaient des références fantômes.
+> Règle opérationnelle : 83-496 Art.7 tel que modifié par 21-430 Art.2.
+
+| Fichier criteria | Critères corrigés | Statut |
+|---|---|---|
+| `gplCriteria.ts` | GPL-01-01, GPL-01-02, GPL-02-02, GPL-03-01, GPL-03-02, GPL-04-01, GPL-04-02 | ✅ Appliqué W43 |
+
+#### W51 — Marquage AIM GPL2 non publié au JORADP
+
+> **Contexte :** L'Arrêté interministériel AIM GPL2 (v14.03.2022) n'a aucune trace de publication au JORADP au 2026-08-10.
+> Le Décret 21-319 Art.92 délègue la réglementation mais l'arrêté reste une maquette non contraignante.
+> Tous les critères citant AIM GPL2 ont été marqués `[À VÉRIFIER — W51]`.
+
+| Fichier criteria | Critères marqués | Statut |
+|---|---|---|
+| `gplCriteria.ts` | GPL-02-01, GPL-02-02, GPL-02-03, GPL-03-01, GPL-03-02, GPL-04-01 | ✅ Marqué W51 |
+
+---
+
+### Backlog — corrections identifiées, non encore appliquées
+
+| Priorité | Fichier criteria | Critère | Nature du problème | Bloquant ? |
+|---|---|---|---|---|
+| 🔴 Haute | `produceStorageCriteria.ts` | PRD-01-01 | EIE plage 15–22 → 14–21 (Sprint A étape 6) | Non |
+| 🟡 Moyenne | `coldRoomCriteria.ts` | CLD-* | À auditer — plage EIE à confirmer | À vérifier |
+| 🟡 Moyenne | `baseFoodCriteria.ts` | BF-* | À auditer — plage EIE à confirmer | À vérifier |
+| 🟡 Moyenne | `bakeryCriteria.ts` | BKR-* | À auditer — plage EIE à confirmer | À vérifier |
+| 🟠 Basse | AIM GPL2 | Tous GPL-02-* | Publication JORADP non confirmée — à surveiller | ⛔ Bloqué humain |
+
+---
+
+## Index des fichiers d'audit
 
 | Fichier | Criteria cible | Patches certains | LEGAL VERIFY | Merge/Restructure | Statut |
 |---|---|---|---|---|---|
-| *(à remplir)* | | | | | |
+| [audit-00-CROSS-CUTTING-FINDINGS.md](audit-00-CROSS-CUTTING-FINDINGS.md) | Tous fichiers | Transversal | — | — | 📋 Référence |
+| [audit-01-baseGeneralCriteria.md](audit-01-baseGeneralCriteria.md) | `baseGeneralCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-02-baseCompressedGasCriteria.md](audit-02-baseCompressedGasCriteria.md) | `baseCompressedGasCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-03-gplCriteria.md](audit-03-gplCriteria.md) | `gplCriteria.ts` | W43 fantômes + W51 AIM GPL2 + Sprint A EIE | AIM GPL2 JORADP | — | ✅ Sprint A |
+| [audit-04-baseFoodCriteria.md](audit-04-baseFoodCriteria.md) | `baseFoodCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-05-abattoirCriteria.md](audit-05-abattoirCriteria.md) | `abattoirCriteria.ts` | EIE 14–21 | — | — | ✅ Corrigé W42 |
+| [audit-06-bakeryCriteria.md](audit-06-bakeryCriteria.md) | `bakeryCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-07-blacksmithCriteria.md](audit-07-blacksmithCriteria.md) | `blacksmithCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-08-carWashCriteria.md](audit-08-carWashCriteria.md) | `carWashCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-09-carpenteryCriteria.md](audit-09-carpenteryCriteria.md) | `carpenteryCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-10-coldRoomCriteria.md](audit-10-coldRoomCriteria.md) | `coldRoomCriteria.ts` | — | EIE plage | — | 🟡 Backlog |
+| [audit-11-couvoirCriteria.md](audit-11-couvoirCriteria.md) | `couvoirCriteria.ts` | EIE 14–21 | — | — | ✅ Sprint A |
+| [audit-12-marbleCriteria.md](audit-12-marbleCriteria.md) | `marbleCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-13-mechanicCriteria.md](audit-13-mechanicCriteria.md) | `mechanicCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-14-paintShopCriteria.md](audit-14-paintShopCriteria.md) | `paintShopCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-15-printingCriteria.md](audit-15-printingCriteria.md) | `printingCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-16-produceStorageCriteria.md](audit-16-produceStorageCriteria.md) | `produceStorageCriteria.ts` | EIE 14–21 | — | — | ⏳ Sprint A en cours |
+| [audit-17-semiPharmaCriteria.md](audit-17-semiPharmaCriteria.md) | `semiPharmaCriteria.ts` | EIE 14–21 | — | — | ✅ Sprint A |
+| [audit-18-slaughterhouseSmallCriteria.md](audit-18-slaughterhouseSmallCriteria.md) | `slaughterhouseSmallCriteria.ts` | EIE 14–21 | — | — | ✅ Corrigé W42 |
+| [audit-19-uabCriteria.md](audit-19-uabCriteria.md) | `uabCriteria.ts` | — | — | — | 🔍 À traiter |
+| [audit-20-updCriteria.md](audit-20-updCriteria.md) | `updCriteria.ts` | EIE 14–21 | — | — | ✅ Sprint A |
+| [audit-21-ADDENDUM-missing-laws-confirmed.md](audit-21-ADDENDUM-missing-laws-confirmed.md) | Transversal | — | — | — | 📋 Référence |
+| [audit-22-ADDENDUM2-missing-laws-from-docs.md](audit-22-ADDENDUM2-missing-laws-from-docs.md) | Transversal | — | — | — | 📋 Référence |
+| [audit-23-ADDENDUM3-manual-chapters-3-and-5.md](audit-23-ADDENDUM3-manual-chapters-3-and-5.md) | Transversal | — | — | — | 📋 Référence |
+| [audit-24-ADDENDUM4-manual-chapter-2-waste.md](audit-24-ADDENDUM4-manual-chapter-2-waste.md) | Transversal | — | — | — | 📋 Référence |
+| [audit-25-ADDENDUM5-manual-chapter-4-and-decret-17-140-verification.md](audit-25-ADDENDUM5-manual-chapter-4-and-decret-17-140-verification.md) | Transversal | — | — | — | 📋 Référence |
+| [audit-26-ADDENDUM6-manual-chapter-1-and-decret-06-141-verification.md](audit-26-ADDENDUM6-manual-chapter-1-and-decret-06-141-verification.md) | Transversal | — | — | — | 📋 Référence |
+| [legal_refs_audit_report.md](legal_refs_audit_report.md) | `/legal_refs/` | — | — | — | 📋 Référence |
 
 ---
 
@@ -39,7 +120,13 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 | Statut | Nombre |
 |---|---|
-| Fichiers audit reçus | 0 / 28 |
-| Patches appliqués | 0 |
-| LEGAL VERIFY ouverts | 0 |
-| Patches bloqués | 0 |
+| Fichiers audit reçus | 27 / 27 |
+| Patches appliqués (Sprint A + W42/W43/W51) | 8 |
+| En cours (Sprint A) | 1 (PRD-01-01) |
+| Backlog identifié | 4 |
+| LEGAL VERIFY ouverts | 1 (AIM GPL2 JORADP) |
+| Patches bloqués | 1 (AIM GPL2 — confirmation humaine) |
+
+---
+
+*Dernière mise à jour : 2026-08-16 par Perplexity (agent engineering SafeInspect)*
