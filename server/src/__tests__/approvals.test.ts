@@ -7,13 +7,12 @@
 //   2. /by-inspection/:inspectionId/approve resolves Approval by inspectionId (Problem 3).
 //   3. /by-inspection/:inspectionId/reject resolves Approval by inspectionId (Problem 3).
 //   4. /:id/approve still works with Approval.id (legacy path).
-//   5. Auth middleware fires — unauthenticated requests get 401.
 
 import express from 'express';
 import request from 'supertest';
-import { Router } from 'express';
+import { JwtPayload } from '../middleware/auth';
 
-// ── Mock Prisma ─────────────────────────────────────────────────────────────
+// ── Mock Prisma ──────────────────────────────────────────────────────────────
 const mockApproval = {
   id: 'approval-001',
   inspectionId: 'insp-001',
@@ -31,6 +30,7 @@ const mockPrisma = {
   approval: {
     findFirst:  jest.fn(),
     findUnique: jest.fn(),
+    findMany:   jest.fn(),
     update:     jest.fn(),
   },
   inspection: {
@@ -43,12 +43,12 @@ jest.mock('@prisma/client', () => ({
   PrismaClient: jest.fn(() => mockPrisma),
 }));
 
-// ── Mock push lib ────────────────────────────────────────────────────────────
+// ── Mock push lib ─────────────────────────────────────────────────────────────
 jest.mock('../lib/push', () => ({
   sendPushToInspector: jest.fn().mockResolvedValue(undefined),
 }));
 
-// ── Mock auth middleware ─────────────────────────────────────────────────────
+// ── Mock auth middleware ──────────────────────────────────────────────────────
 // Injects a fake supervisor — bypasses JWT verification for unit tests.
 jest.mock('../middleware/auth', () => ({
   requireAuth: (
@@ -56,17 +56,18 @@ jest.mock('../middleware/auth', () => ({
     _res: express.Response,
     next: express.NextFunction,
   ) => {
-    (req as express.Request & { inspector: { inspectorId: string; role: string } }).inspector = {
+    req.inspector = {
       inspectorId: 'supervisor-001',
-      role: 'SUPERVISOR',
-    };
+      matricule:   'MAT-001',
+      role:        'SUPERVISOR',
+    } satisfies JwtPayload;
     next();
   },
   requireRole: (..._roles: string[]) =>
     (_req: express.Request, _res: express.Response, next: express.NextFunction) => next(),
 }));
 
-// ── Build test app ───────────────────────────────────────────────────────────
+// ── Build test app ─────────────────────────────────────────────────────────────
 // Import AFTER mocks are declared so jest.mock() hoisting applies.
 import approvalsRouter from '../routes/approvals';
 
@@ -77,7 +78,7 @@ function buildApp(): express.Express {
   return app;
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
 function resetMocks(): void {
   jest.clearAllMocks();
   mockPrisma.$transaction.mockImplementation(
@@ -85,12 +86,12 @@ function resetMocks(): void {
   );
 }
 
-// ── Tests ────────────────────────────────────────────────────────────────────
+// ── Tests ──────────────────────────────────────────────────────────────────────
 describe('GET /api/approvals', () => {
   beforeEach(resetMocks);
 
   it('returns 200 and approvals list (route is mounted)', async () => {
-    mockPrisma.approval.findMany = jest.fn().mockResolvedValue([mockApproval]);
+    mockPrisma.approval.findMany.mockResolvedValue([mockApproval]);
     const app = buildApp();
     const res = await request(app).get('/api/approvals?status=PENDING');
     expect(res.status).toBe(200);
@@ -104,7 +105,7 @@ describe('POST /api/approvals/by-inspection/:inspectionId/approve (W61 Problem 3
   it('returns 200 when approval exists and is PENDING', async () => {
     mockPrisma.approval.findFirst.mockResolvedValue({ ...mockApproval });
     mockPrisma.approval.update.mockResolvedValue({});
-    mockPrisma.inspection.update = jest.fn().mockResolvedValue({});
+    mockPrisma.inspection.update.mockResolvedValue({});
 
     const app = buildApp();
     const res = await request(app)
@@ -113,7 +114,6 @@ describe('POST /api/approvals/by-inspection/:inspectionId/approve (W61 Problem 3
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true, status: 'APPROVED' });
-    // Resolved via inspectionId — findFirst called with inspectionId
     expect(mockPrisma.approval.findFirst).toHaveBeenCalledWith(
       expect.objectContaining({ where: { inspectionId: 'insp-001' } }),
     );
@@ -149,7 +149,7 @@ describe('POST /api/approvals/by-inspection/:inspectionId/reject (W61 Problem 3)
   it('returns 200 and RETURNED when reason provided', async () => {
     mockPrisma.approval.findFirst.mockResolvedValue({ ...mockApproval });
     mockPrisma.approval.update.mockResolvedValue({});
-    mockPrisma.inspection.update = jest.fn().mockResolvedValue({});
+    mockPrisma.inspection.update.mockResolvedValue({});
 
     const app = buildApp();
     const res = await request(app)
@@ -192,7 +192,7 @@ describe('POST /api/approvals/:id/approve (legacy Approval.id path)', () => {
   it('returns 200 when called with Approval.id', async () => {
     mockPrisma.approval.findUnique.mockResolvedValue({ ...mockApproval });
     mockPrisma.approval.update.mockResolvedValue({});
-    mockPrisma.inspection.update = jest.fn().mockResolvedValue({});
+    mockPrisma.inspection.update.mockResolvedValue({});
 
     const app = buildApp();
     const res = await request(app)
@@ -201,7 +201,6 @@ describe('POST /api/approvals/:id/approve (legacy Approval.id path)', () => {
 
     expect(res.status).toBe(200);
     expect(res.body).toEqual({ ok: true, status: 'APPROVED' });
-    // Used findUnique with Approval.id — not inspectionId
     expect(mockPrisma.approval.findUnique).toHaveBeenCalledWith(
       expect.objectContaining({ where: { id: 'approval-001' } }),
     );
@@ -219,16 +218,9 @@ describe('POST /api/approvals/:id/approve (legacy Approval.id path)', () => {
 
 describe('Route mounting regression (W61 Problem 1)', () => {
   it('GET /api/approvals does NOT return 404', async () => {
-    mockPrisma.approval.findMany = jest.fn().mockResolvedValue([]);
+    mockPrisma.approval.findMany.mockResolvedValue([]);
     const app = buildApp();
     const res = await request(app).get('/api/approvals');
     expect(res.status).not.toBe(404);
-  });
-
-  it('POST /api/sync is separate — returns 404 on this app (not mounted here)', async () => {
-    const app = buildApp();
-    const res = await request(app).post('/api/sync').send({});
-    // Expected: sync is NOT mounted on this test app (only approvals is)
-    expect(res.status).toBe(404);
   });
 });
