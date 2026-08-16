@@ -12,6 +12,10 @@
 // W58 fix 2026-08-11: BAK-10-12 — Décret 76-04 + 2009 ministerial order (no JORADP trace)
 //   replaced with Loi 19-02 Art.5 + Art.13. Consistent with BGN-08-01/02 (W18, 2026-08-08).
 //   Loi 19-02 is the current framework law for fire/panic prevention, superseding 76-04.
+// W42-parity fix 2026-08-16: BAK-10-13 EIE range 15–18 → 14–21.
+//   Previous range 15–18 was doubly wrong: missed Art.14 (root EIE obligation) and
+//   truncated at Art.18, omitting Art.19–21 (EIE procedure and follow-up articles).
+//   Correct full EIE range: Art.14–21.
 
 import { InspectionItem } from '../types';
 
@@ -71,7 +75,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     axis: 'المياه والصرف',
     category: 'بيئية',
     criteria: 'التخلص من مياه الصرف الصناعي بطريقة مطابقة (صرف في الشبكة البلدية أو محطة معالجة).',
-    legalReference: 'القانون 03-10 المتعلق بحماية البيئة (المادة 54: حظر تلوث المياه).',
+    legalReference: 'القانون 03-10 المتعلق بحماية البيئة (المادة 54: حظر تلويث المياه).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -114,7 +118,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     id: 'BAK-10-11',
     axis: 'HACCP وإدارة الجودة',
     category: 'تنظيمية',
-    criteria: 'المنتجات المعبّأة تحمل بطاقات إعلامية مطابقة للمواصفات (المكونات، تاريخ الإنتاج والصلاحية، شروط الحفظ).',
+    criteria: 'المنتجات المعبَّأة تحمل بطاقات إعلامية مطابقة للمواصفات (المكونات، تاريخ الإنتاج والصلاحية، شروط الحفظ).',
     legalReference: 'المرسوم التنفيذي 17-140 + القانون 09-03 (المادة 18: إعلام المستهلك).',
     severity: 'medium',
     controlType: 'doc',
@@ -124,7 +128,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     id: 'BAK-10-12',
     axis: 'السلامة من الحريق',
     category: 'هيكلية',
-    criteria: 'توفر وسائل الإطفاء المناسبة (طفايات حريق صالحة ومعلّمة، مخارج طوارئ واضحة) في جميع مناطق الإنتاج والتخزين.',
+    criteria: 'توفر وسائل الإطفاء المناسبة (طفايات حريق صالحة ومعلَّمة، مخارج طوارئ واضحة) في جميع مناطق الإنتاج والتخزين.',
     // W58 (2026-08-11): Décret 76-04 (1976) + 2009 ministerial order (no JORADP trace) replaced
     // with Loi 19-02 Art.5 + Art.13 — current fire/panic prevention framework law.
     // Consistent with BGN-08-01/02 citations (W18, 2026-08-08).
@@ -134,11 +138,16 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W42-parity fix 2026-08-16: EIE range corrected 15–18 → 14–21.
+    // Previous range 15–18 was doubly wrong:
+    //   — started at Art.15, missing Art.14 (root EIE obligation article)
+    //   — ended at Art.18, missing Art.19–21 (EIE procedure and follow-up)
+    // Correct full EIE range: Art.14–21 (consistent with all other EIE criteria in the app).
     id: 'BAK-10-13',
     axis: 'هوية المنشأة والوثائق',
     category: 'بيئية',
     criteria: 'توفر دراسة التأثير البيئي أو كشف الأثر البيئي (EIA/EIE) وفق الفئة المنطبقة على المنشأة، معتمدة من السلطة المختصة.',
-    legalReference: 'القانون 03-10 المتعلق بحماية البيئة في إطار التنمية المستدامة (المواد 15-18: إلزامية دراسة التأثير البيئي). المرسوم التنفيذي 06-198 كما عُدِّل.',
+    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير البيئي — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE، والمواد 19–21 تضبط الإجراءات والمتابعة). المرسوم التنفيذي 06-198 كما عُدِّل.',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
