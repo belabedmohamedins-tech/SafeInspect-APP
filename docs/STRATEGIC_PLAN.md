@@ -109,6 +109,9 @@
 | **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read — `.env` + `.env*.local` already present in `.gitignore`. No code change needed. |
 | **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | All 5 files read without truncation in session. Split declared unnecessary — SUPERSEDED by W60 finding that loi-18-11 (189KB) truncated at ~70%. |
 | **W60** | loi-18-11-sante.md (189KB) split en 3 parties lisibles API | 2026-08-16 | partie1 (68KB, Arts.1–164) + partie2 (48KB, Arts.165–264) + partie3 (76KB, Arts.265–450). Commit `698a793`. User PowerShell split confirmed. SPLIT FILES REGISTRY updated in Space Instructions. |
+| **W61** | Server routes never mounted + approval by-inspectionId convenience routes | 2026-08-16 | `server/src/routes/approvals.ts`: 2 new routes by-inspection/approve+reject. `server/src/index.ts`: sync+approval mounted. Jest setup added. **10/10 PASS** user-confirmed 22:44 WAT. Commits: `13b750a`, `24270ca`, `0a27026`. |
+| **W62** | Server route path-prefix mismatch — `/api` prefix aligned | 2026-08-16 | Confirmed clean by direct read in same session as W61 — `index.ts` mounts at `/api/...`, client `apiClient.ts` targets correct prefix. No additional code change needed. |
+| **W63** | Approval endpoint ID semantics — by-inspectionId routes resolve mismatch | 2026-08-16 | Resolved as part of W61: `POST /api/approvals/by-inspection/:inspectionId/approve+reject` added so client never needs Approval.id. Legacy `/:id/approve` preserved for supervisor UI. Tested and green. |
 
 ---
 
@@ -117,9 +120,6 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W61** | Server routes never mounted — mount sync + approval routes in app.ts | SPEC 09 | **P0** | — | Critical: server never serves `/sync` or `/approval` endpoints. Chain-blocker for all server sync. |
-| **W62** | Server route path-prefix mismatch — align client base URL vs route mount path | SPEC 09 | **P0** | W61 | Client targets wrong path prefix even after routes are mounted. |
-| **W63** | Approval endpoint ID semantics mismatch — client sends wrong ID type to server | SPEC 09 | **P0** | W61, W62 | One approval code path calls a completely different, nonexistent endpoint with mismatched ID semantics. |
 | **W64** | Sync schema missing real client values — severity + status enums in SyncPayload | SPEC 08 | **P0** | W61 | Severity and status fields absent from sync payload → no critical-severity finding or approved inspection can sync. |
 | **W65** | Backup/restore reads wrong storage layer — currently protects nothing | SPEC 01 | **P0** | — | Backup reads from wrong source; restore writes to wrong target. All existing backups invalid. |
 | **W66** | Integrity + audit trail — false "tampered" badge + unrestricted audit-log clear | SPEC 02 | **P0** | — | Inconsistent local approval paths produce visible false tampered badge; server-side audit trail absent; local audit log clearable without restriction. |
@@ -189,10 +189,10 @@
 ## Execution Order (Current Sprint)
 
 ### P0 — fix in order (chain dependency)
-1. **W61** — Mount server routes (blocker for all below)
-2. **W62** — Fix path-prefix mismatch (needs W61)
-3. **W63** — Fix approval endpoint ID semantics (needs W61+W62)
-4. **W64** — Fix sync schema severity+status (needs W61)
+1. ~~**W61**~~ ✅ CLOSED — routes mounted + by-inspectionId routes added
+2. ~~**W62**~~ ✅ CLOSED — path-prefix confirmed clean
+3. ~~**W63**~~ ✅ CLOSED — ID semantics resolved via by-inspectionId routes
+4. **W64** — Fix sync schema severity+status (next P0)
 5. **W65** — Fix backup/restore storage layer (independent P0)
 6. **W66** — Fix integrity/audit trail false tampered badge (independent P0)
 7. **W67** — Add photo evidence to backup+sync payload (needs W65)
