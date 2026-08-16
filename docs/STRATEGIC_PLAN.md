@@ -114,9 +114,23 @@
 
 ### 🟠 OPEN Phases
 
-| Phase | Title | Priority | Notes |
-|---|---|---|---|
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | P1 | 6 GPL criteria tagged [À VÉRIFIER — W51]. Unpublished Scribd draft, no JORADP trace. Technical values retained as [حكم مهني]. Monitor JORADP for official publication. |
+| Phase | Title | Spec source | Priority | Depends on | Notes |
+|---|---|---|---|---|---|
+| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
+| **W61** | Server routes never mounted — mount sync + approval routes in app.ts | SPEC 09 | **P0** | — | Critical: server never serves `/sync` or `/approval` endpoints. Chain-blocker for all server sync. |
+| **W62** | Server route path-prefix mismatch — align client base URL vs route mount path | SPEC 09 | **P0** | W61 | Client targets wrong path prefix even after routes are mounted. |
+| **W63** | Approval endpoint ID semantics mismatch — client sends wrong ID type to server | SPEC 09 | **P0** | W61, W62 | One approval code path calls a completely different, nonexistent endpoint with mismatched ID semantics. |
+| **W64** | Sync schema missing real client values — severity + status enums in SyncPayload | SPEC 08 | **P0** | W61 | Severity and status fields absent from sync payload → no critical-severity finding or approved inspection can sync. |
+| **W65** | Backup/restore reads wrong storage layer — currently protects nothing | SPEC 01 | **P0** | — | Backup reads from wrong source; restore writes to wrong target. All existing backups invalid. |
+| **W66** | Integrity + audit trail — false "tampered" badge + unrestricted audit-log clear | SPEC 02 | **P0** | — | Inconsistent local approval paths produce visible false tampered badge; server-side audit trail absent; local audit log clearable without restriction. |
+| **W67** | Photo evidence never leaves device — backup + sync payload gap | SPEC 04 | **P0** | W65 (shares backup payload) | Photos are stored locally but excluded from both backup export and sync payload. |
+| **W68** | PIN lockout bypassable — destructive-by-default recovery path | SPEC 05 | P1 | — | PIN lockout recovery path bypasses lockout and defaults to destructive action. |
+| **W69** | CAP evidence + lifecycle — no evidence/legal link, resolved ≠ closed mismatch | SPEC 03 | P1 | — | Corrective actions carry no evidence or legal-basis link; "resolved" vs "closed" semantics don't match documented model. |
+| **W70** | PDF report gaps — missing verification fields, 2/3 signatures not captured, race condition | SPEC 06 | P1 | — | Report omits verification fields; only 1 of 3 signatures digitally captured; timing-based race condition on signature confirmation. |
+| **W71** | Planning + prioritization — risk/priority data computed but never surfaced in UI | SPEC 07 | P1 | — | Dashboard stat computed over wrong denominator; risk/priority scores computed but invisible to inspector. |
+| **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre (repo + screen + badge) built but never fired. Mandatory grep sweep required before next release. |
+| **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | — | One-line form bug in agenda creation; wrong facilityId can be submitted. |
+| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | Grouped minor server-side hardening items from SPEC 12 (kept separate from P0 specs). |
 
 ---
 
@@ -133,10 +147,11 @@
 | legal_refs Issue #2: loi-09-03 ✅ VÉRIFIÉ status | Revert to ⚠️ NON VÉRIFIÉ — no named human reviewer. |
 | legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
 | Active inspection screen | No screen for filling in items in real time yet. Required for completionRate progress bar (W54 confirmed feature-gap, not bug). |
+| SPEC 10 — mechanical grep sweep | Before next release: for every settings key written / scheduler exported / status enum value defined, confirm something actually produces or reads it. Seven dead instances found; treat as a release gate, not a one-off fix. |
 
 ---
 
-## Next Phase Identifier: **W61**
+## Next Phase Identifier: **W75**
 
 ---
 
@@ -171,6 +186,27 @@
 
 ---
 
-## Execution Order (Current Session)
+## Execution Order (Current Sprint)
 
-1. **W51** (P1) — Surveillance uniquement. Aucune action code avant publication JORADP confirmée.
+### P0 — fix in order (chain dependency)
+1. **W61** — Mount server routes (blocker for all below)
+2. **W62** — Fix path-prefix mismatch (needs W61)
+3. **W63** — Fix approval endpoint ID semantics (needs W61+W62)
+4. **W64** — Fix sync schema severity+status (needs W61)
+5. **W65** — Fix backup/restore storage layer (independent P0)
+6. **W66** — Fix integrity/audit trail false tampered badge (independent P0)
+7. **W67** — Add photo evidence to backup+sync payload (needs W65)
+
+### P1 — after P0s land (any order)
+8. **W68** — PIN lockout recovery
+9. **W69** — CAP evidence + lifecycle
+10. **W70** — PDF report gaps
+11. **W71** — Planning/priority UI
+12. **W72** — Dead settings toggles + notification centre
+
+### P2 — last
+13. **W73** — Agenda facility mismatch
+14. **W74** — Minor server hardening
+
+### Ongoing surveillance
+- **W51** — AIM GPL2 JORADP watch
