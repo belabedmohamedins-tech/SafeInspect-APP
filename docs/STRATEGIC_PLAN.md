@@ -107,6 +107,7 @@
 | **W57-TSC** | InspectionRepository: stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected' | 2026-08-11 | Gate: 31/31 Jest PASS + TSC 0, user-confirmed 14:27 WAT. |
 | **W49** | Audit criteria files — 11 files confirmés propres par lecture directe | 2026-08-11 | Direct read: `baseFoodCriteria.ts`, `baseGeneralCriteria.ts`, `baseCompressedGasCriteria.ts`, `carpenteryCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `produceStorageCriteria.ts`. 0 erreur de citation, 0 [À VÉRIFIER] non balisé, tous les numericFields cohérents. |
 | **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read — `.env` + `.env*.local` already present in `.gitignore`. No code change needed. |
+| **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | All 5 files (`loi-05-12` 84KB, `loi-03-10` 73KB, `loi-18-11` 450 arts., `loi-01-19` 36KB, `loi-09-03` 95 arts.) read fully without truncation. Split unnecessary. Write-rule (PowerShell for patches) already enforced. No files modified. |
 
 ---
 
@@ -134,7 +135,7 @@
 
 ---
 
-## Next Phase Identifier: **W59**
+## Next Phase Identifier: **W60**
 
 ---
 

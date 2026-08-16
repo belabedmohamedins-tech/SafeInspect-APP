@@ -1,5 +1,13 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-16 19:06 WAT — Perplexity — W59 CLOSED — large-file read audit, split unnecessary
+- **Phases closed:** W59
+- **Phases opened:** none
+- **Files changed:** docs/README.md, docs/STRATEGIC_PLAN.md
+- **W59:** Read audit of all 5 legal_refs files > 40K octets (`loi-05-12` 84KB, `loi-03-10` 73KB, `loi-18-11` 450 arts., `loi-01-19` 36KB, `loi-09-03` 95 arts.). All read fully without truncation in this session. Split unnecessary — would break criteria citations and README cross-refs. Write-rule already enforced (PowerShell for any patch on large files). No files modified.
+- **Open phases: W51**
+- **Next identifier: W60**
+
 ### 2026-08-11 19:01 WAT — Perplexity — W49 ✅ CLOSED + F-01 confirmed clean
 - **Phases closed:** W49, F-01
 - **Phases opened:** aucune
@@ -95,6 +103,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W59** | ✅ CLOSED | P3 | Large-file read audit — all 5 files > 40KB readable without truncation. Split unnecessary. Write-rule enforced. 2026-08-16. |
 | **W49** | ✅ CLOSED | P3 | Audit 11 fichiers critères — confirmés propres. 0 erreur. 2026-08-11. |
 | **F-01** | ✅ CLOSED | P2 | `.env` gitignore — déjà présent. Confirmé propre par lecture directe. 2026-08-11. |
 | **W56** | ✅ CLOSED | P2 | F-20: `decisionSupport.test.ts` — 18 tests, all 7 actions, grade boundaries, escalation, criticalOverride, incomplete. Confirmed by direct read 2026-08-11. |
