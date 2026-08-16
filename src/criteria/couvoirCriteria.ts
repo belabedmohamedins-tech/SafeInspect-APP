@@ -1,5 +1,8 @@
 import { InspectionItem } from '../types';
 // W4 fix (2026-08-08): add COU-AX10-01 (EIA, doc, high) → 23 items total.
+// W42-parity (2026-08-16): COU-AX10-01 legalReference Loi 03-10 range 15-18 → 14–21.
+//   Art.14 = root EIE obligation article. Art.22 = fiscal instruments (unrelated).
+//   Confirmed by W42 direct read on abattoirCriteria.ts and slaughterhouseSmallCriteria.ts.
 export const couvoirSpecificCriteria: InspectionItem[] = [
   {
     id: 'COU-AX1-01',
@@ -224,11 +227,15 @@ export const couvoirSpecificCriteria: InspectionItem[] = [
   },
   {
     // W4 fix 2026-08-08: add COU-AX10-01 EIA criterion to reach 23 items
+    // W42-parity (2026-08-16): Loi 03-10 EIE range corrected 15-18 → 14–21.
+    // Art.14 = root EIE obligation article (missed by old range).
+    // Art.22 = fiscal instruments — completely unrelated to EIE.
+    // Confirmed by W42 direct read on abattoirCriteria.ts and slaughterhouseSmallCriteria.ts.
     id: 'COU-AX10-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة التأثير البيئي (EIA) أو ما يعادلها وفق فئة المنشأة، معتمدة من السلطة المختصة، مع تطبيق تدابير تخفيف الأثر البيئي الواردة فيها.',
-    legalReference: 'القانون 03-10 المتعلق بحماية البيئة في إطار التنمية المستدامة (المواد 15-18: إلزامية دراسة التأثير البيئي للمنشآت المصنفة). المرسوم التنفيذي 06-198 كما عُدِّل.',
+    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 06-198 كما عُدِّل.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
