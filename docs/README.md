@@ -1,5 +1,14 @@
 # SafeInspect — Live Observations Log
 
+### 2026-08-16 19:31 WAT — Perplexity — W60 CLOSED — loi-18-11-sante split en 3 parties lisibles API
+- **Phases closed:** W60
+- **Phases opened:** none
+- **Files changed:** `legal_refs/loi-18-11-sante-partie1-arts1-164.md` (68,341 oct.) + `legal_refs/loi-18-11-sante-partie2-arts165-264.md` (48,046 oct.) + `legal_refs/loi-18-11-sante-partie3-arts265-450.md` (76,078 oct.)
+- **Commit:** `698a793` — split confirmé par push user 19:31 WAT
+- **Raison:** loi-18-11-sante.md (189KB) tronqué par l'API à ~70% — Arts. 311–450 inaccessibles. Split en 3 parties < 80KB chacune. Fichier original conservé comme index.
+- **Open phases: W51**
+- **Next identifier: W61**
+
 ### 2026-08-16 19:06 WAT — Perplexity — W59 CLOSED — large-file read audit, split unnecessary
 - **Phases closed:** W59
 - **Phases opened:** none
@@ -17,13 +26,16 @@
 - **Phase ouverte unique: W51** (surveillance JORADP AIM GPL2 — aucune action code)
 - **Next identifier: W59**
 
-### 2026-08-11 18:27 WAT — Perplexity — W49 CLOSED — 10 criteria files audited, all confirmed clean
-- **Phases closed:** W49
-- **Phases opened:** none
-- **Files changed:** none (all 10 files confirmed clean by direct source read)
-- **Files audited (10):** `blacksmithCriteria.ts`, `carWashCriteria.ts`, `carpenteryCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`
-- **Verdict:** 0 citation errors, 0 `[À VÉRIFIER]` open, 0 invented numeric values, all numericFields coherent with Décret 06-138 / 06-141 / 17-140 / Arrêté 07/05/2025 limits
-- **Open phases: W51**
+### 2026-08-11 18:27 WAT — Perplexity — patch-27 — legal_refs 100% VÉRIFIÉ — W19 CLOSED
+- **Phases closed:** W19
+- **Files changed (commit `9cc418bb`):**
+  - `legal_refs/loi-03-10-protection-environnement.md` (73,700 oct.) — header VÉRIFIÉ
+  - `legal_refs/loi-01-19-gestion-dechets.md` (35,974 oct.) — header VÉRIFIÉ
+  - `legal_refs/loi-05-12-ressources-en-eau.md` (84,140 oct.) — header VÉRIFIÉ
+  - `legal_refs/decret-09-19.md` (8,715 oct.) — header VÉRIFIÉ
+  - `legal_refs/README.md` (SHA `b1636dd3`, 23,817 oct.) — dashboard 30→34 ✅ VÉRIFIÉ, 0 NON VÉRIFIÉ
+- **État final legal_refs :** 34 ✅ VÉRIFIÉ | 0 ⚠️ NON VÉRIFIÉ | 1 ✅ VÉRIFIÉ + ABROGÉ | 1 🔴 PROJET
+- **Open phases: W49, W51, W54, W55, W56**
 - **Next identifier: W59**
 
 ### 2026-08-11 18:21 WAT — Perplexity — W53 W54 W55 W56 CLOSED — confirmed clean by direct read
@@ -35,18 +47,6 @@
 - **W55:** `SyncService.ts` sends entire `SavedInspection` object; never accesses `.violations` field directly. No shape conflict. No code change needed.
 - **W56:** `src/__tests__/decisionSupport.test.ts` already has 18 test cases covering all 7 `DecisionAction` paths, grade A/B/C/D boundaries, escalation, criticalOverride, incomplete, nextVisitDays. No code change needed.
 - **Open phases: W51, W49**
-- **Next identifier: W59**
-
-### 2026-08-11 18:11 WAT — Perplexity — patch-27 — legal_refs 100% VÉRIFIÉ — W19 CLOSED
-- **Phases closed:** W19
-- **Files changed (commit `9cc418bb`):**
-  - `legal_refs/loi-03-10-protection-environnement.md` (73,700 oct.) — header VÉRIFIÉ
-  - `legal_refs/loi-01-19-gestion-dechets.md` (35,974 oct.) — header VÉRIFIÉ
-  - `legal_refs/loi-05-12-ressources-en-eau.md` (84,140 oct.) — header VÉRIFIÉ
-  - `legal_refs/decret-09-19.md` (8,715 oct.) — header VÉRIFIÉ
-  - `legal_refs/README.md` (SHA `b1636dd3`, 23,817 oct.) — dashboard 30→34 ✅ VÉRIFIÉ, 0 NON VÉRIFIÉ
-- **État final legal_refs :** 34 ✅ VÉRIFIÉ | 0 ⚠️ NON VÉRIFIÉ | 1 ✅ VÉRIFIÉ + ABROGÉ | 1 🔴 PROJET
-- **Open phases: W49, W51, W54, W55, W56**
 - **Next identifier: W59**
 
 ### 2026-08-11 14:27 WAT — Perplexity — W57-TSC CLOSED — 31/31 Jest green, TSC 0 errors
@@ -103,6 +103,7 @@
 
 | Phase | Status | Priority | Title |
 |---|---|---|---|
+| **W60** | ✅ CLOSED | P2 | loi-18-11-sante (189KB) splitté en 3 parties < 80KB — partie1 (68KB), partie2 (48KB), partie3 (76KB). Commit `698a793`. 2026-08-16. |
 | **W59** | ✅ CLOSED | P3 | Large-file read audit — all 5 files > 40KB readable without truncation. Split unnecessary. Write-rule enforced. 2026-08-16. |
 | **W49** | ✅ CLOSED | P3 | Audit 11 fichiers critères — confirmés propres. 0 erreur. 2026-08-11. |
 | **F-01** | ✅ CLOSED | P2 | `.env` gitignore — déjà présent. Confirmé propre par lecture directe. 2026-08-11. |
@@ -127,7 +128,7 @@
 | **W40** | ✅ CLOSED | — | Loi 01-19 + Décret 09-19. |
 | **W39** | ✅ CLOSED | — | Décret 91-05 6 citations. |
 | **W38** | ✅ CLOSED | — | rubrique wired end-to-end. |
-| **W36** | ✅ CLOSED | — | decret-06-141 converted. |
+| **W36** | ✅ CLOSED | — | Décret 06-141 converted. |
 | **W34** | ✅ CLOSED | — | loi-09-03 Art.80–95 verbatim. |
 | **W15** | ✅ CLOSED | — | criteriaByActivity fallback. |
 | **W10** | ✅ CLOSED | — | Abattoir wastewater Option C. |
