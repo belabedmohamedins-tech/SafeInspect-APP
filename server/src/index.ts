@@ -1,5 +1,5 @@
 // server/src/index.ts — SafeInspect API server entry point
-import express from 'express';
+import express, { Router } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import fs from 'fs';
@@ -40,9 +40,11 @@ async function loadRoutes(): Promise<void> {
     try {
       // eslint-disable-next-line @typescript-eslint/no-var-requires
       const mod = require(`./routes/${name}`) as { default?: unknown; router?: unknown };
-      const router = mod.default ?? mod.router;
-      if (router) {
-        app.use(`/api/${name}`, router);
+      const candidate = mod.default ?? mod.router;
+      // Guard: only mount if it looks like an Express Router (has a 'handle' function).
+      // Casting unknown → Router is safe here because we verify the shape at runtime.
+      if (candidate && typeof (candidate as Router).use === 'function') {
+        app.use(`/api/${name}`, candidate as Router);
         console.log(`[routes] Mounted /api/${name}`);
       } else {
         console.warn(`[routes] ${name}.ts has no default export or .router — skipped`);
