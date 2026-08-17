@@ -70,6 +70,7 @@ export default function HomeScreen() {
           totalDrafts={stats.totalDrafts}
           nonCompliantFacilities={stats.nonCompliantFacilities}
           openCapCount={stats.openCapCount}
+          highRiskCount={stats.highRiskCount}
         />
 
         {/* W71 — priority reinspection list */}
@@ -92,7 +93,7 @@ export default function HomeScreen() {
           title="آخر التفتيشات المكتملة"
           items={completedInspections}
           emptyIcon="file-text"
-          emptyText="لا توجد تفتيشات مكتملة"
+          emptyText="لا توجد تفتيشات مكتلة"
           emptyActionLabel="+ بدء تفتيش"
           onItemPress={ins => router.push(`/reports/${ins.id}`)}
           onViewAll={() => router.push('/screens/reports')}

@@ -22,6 +22,7 @@ const EMPTY: HomeData = {
     totalDrafts:            0,
     nonCompliantFacilities: 0,
     openCapCount:           0,
+    highRiskCount:          0,
   },
 };
 

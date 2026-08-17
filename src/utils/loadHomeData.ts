@@ -30,6 +30,8 @@ export interface HomeData {
     totalDrafts:            number;
     nonCompliantFacilities: number;
     openCapCount:           number;
+    /** Count of completed inspections with grade D or ≥3 high violations */
+    highRiskCount:          number;
   };
 }
 
@@ -80,16 +82,15 @@ export async function loadHomeData(): Promise<HomeData> {
   const completedInspections  = completed.slice(-3).reverse();
   const inProgressInspections = drafts.slice(-3).reverse();
 
-  // ── Stats — denominator is ALL completed, not the display slice ──────────
-  // W71 FIX: was computed over completedInspections (slice of 3). Now uses
-  // the full `completed` array so the KPI reflects the real population.
+  // ── Stats — all computed over full `completed` array ────────────────────
   let nonCompliant = 0;
+  let highRiskCount = 0;
   completed.forEach(ins => {
     if (getComplianceSummary(ins.items).nonCompliant > 0) nonCompliant++;
+    if (ins.grade === 'D' || (ins.violations?.high ?? 0) >= 3) highRiskCount++;
   });
 
   // ── Priority facilities — top 5 by reinspection urgency ─────────────────
-  // Deduplicate: keep only the most recent inspection per facility.
   const latestPerFacility = new Map<string, SavedInspection>();
   completed.forEach(ins => {
     const existing = latestPerFacility.get(ins.facilityId);
@@ -126,6 +127,7 @@ export async function loadHomeData(): Promise<HomeData> {
       totalDrafts:            drafts.length,
       nonCompliantFacilities: nonCompliant,
       openCapCount:           openCap.length,
+      highRiskCount,
     },
   };
 }
