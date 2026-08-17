@@ -7,6 +7,20 @@
 
 ## Live Observations Log
 
+### 2026-08-17 18:02 WAT — Perplexity — W75–W79 REGISTERED — criteria legal-citation audit phases
+- **Phases opened**: W75 (F9 EIE sweep+fix), W76 (F4 Loi 01-19 re-sweep), W77 (F7 abattoir wastewater Annexe II), W78 (F10 MCH-29-06 PPE), W79 (F3 BGN-08-03 bare-wire)
+- **Source**: Session 11 audit document provided by user (external audit, Sessions 1–11, `src/criteria/`)
+- **Next phase identifier updated**: W80
+- **Legal Quick-Reference updated**: Loi 88-07 marked MISSING (needed W78); Décret 76-36 + 06-138 marked MISSING
+- **Execution order**: W79→W77→W75→W76→W78 (sorted by effort + dependency)
+- **No code changes this entry**
+
+### 2026-08-17 17:45 WAT — Perplexity — W72 PUSHED — pending TSC+Jest gate
+- **Phases changed**: W72 code pushed (commit `9b42f67`), pending user gate confirmation
+- **Files changed**: `src/services/NotificationService.ts`, `src/services/SyncService.ts`, `src/repositories/CorrectiveActionRepository.ts`, `src/repositories/ApprovalRepository.ts`
+- **W72 changes**: `isEnabled()`/`setEnabled()` → SettingsRepository; `pushInApp()` added with isEnabled() guard; `flush(force=false)` respects autoSync toggle; CAP_DEADLINE notification on new CAP ≤7 days; FOLLOW_UP on status→in-progress; APPROVAL_ACTION on approve+returnForRevision
+- **Gate**: run `npx tsc --noEmit` + `npx jest --testPathPattern="Notification|Sync|CorrectiveAction|Approval" --no-coverage`
+
 ### 2026-08-17 13:08 WAT — Perplexity — W71 CLOSED — TSC 0 + Jest all green
 - **Phases closed**: W71 (Planning + prioritization UI)
 - **Bug fixed**: `nonCompliantFacilities` was computed over `completedInspections.slice(-3)` (display slice) instead of the full `completed` array. Now correct.
@@ -15,7 +29,7 @@
 - **Files changed**: `src/utils/loadHomeData.ts`, `components/home/PriorityWidget.tsx` (new), `app/(tabs)/home.tsx`, `src/hooks/useHomeData.ts`
 - **Gate**: TSC 0 errors + Jest all green — user-confirmed 2026-08-17 13:08 WAT
 - **Commits**: `c178a6c`, `c1b9d91`
-- **Next**: W72 — Dead settings toggles + unreachable notification centre
+- **Next**: W72 → W79 → W77 → W75 → W76 → W78
 
 ### 2026-08-17 10:59 WAT — Perplexity — W65+W68 REOPENED+FIXED — real code commits
 - **W65 REOPENED**: `BackupService.exportBackup()` confirmed reading `AsyncStorage.multiGet(['inspections',...])` — never updated by SQLite repo since W57-TSC. Bug real.
@@ -122,18 +136,14 @@ SafeInspect-APP/
 
 | P0 Phase | Title | Status |
 |---|---|---|
-| W61 | Server routes mounted + by-inspectionId | ✅ CLOSED 2026-08-16 |
-| W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 |
-| W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 |
-| W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 |
-| W65 | Backup reads SQLite (InspectionRepository) | ✅ FIXED 2026-08-17 10:59 |
-| W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 |
-| W67 | Photo evidence backup+sync | ✅ CLOSED 2026-08-17 |
-| W68 | PIN lockout counter via SecureStore | ✅ FIXED 2026-08-17 10:59 |
-| W69 | CAP evidence + lifecycle | ✅ CLOSED 2026-08-17 |
-| W70 | PDF report gaps | ✅ CLOSED 2026-08-17 |
-| **W71** | Planning + prioritization UI | ✅ CLOSED 2026-08-17 13:08 |
-| **W72** | Dead settings toggles + notification centre | 🟠 OPEN — next |
+| W72 | Dead settings toggles + notification centre | 🟡 PUSHED — awaiting TSC+Jest gate |
+| **W79** | BGN-08-03: Décret 76-35 → Décret 91-05 Art.53+62 | 🟠 OPEN — next (fastest fix) |
+| **W77** | F7: abattoir/slaughterhouse wastewater Annexe II §1a | 🟠 OPEN |
+| **W75** | F9: EIE criterion wrong range — sweep + systemic fix | 🟠 OPEN |
+| **W76** | F4 re-sweep: Loi 01-19 offset pattern (5th instance found) | 🟠 OPEN |
+| **W78** | F10: MCH-29-06 PPE wrong article (needs Loi 88-07) | 🟠 OPEN — blocked on Loi 88-07 source |
+| W73 | Agenda facility mismatch | 🟠 OPEN — P2 |
+| W74 | Minor server hardening | 🟠 OPEN — P2 |
 
 ---
 

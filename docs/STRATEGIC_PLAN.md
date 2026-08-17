@@ -120,6 +120,7 @@
 | **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read. |
 | **W70** | PDF report gaps | 2026-08-17 | Confirmed clean by direct read. |
 | **W71** | Planning + prioritization UI — nonCompliantFacilities denominator fix + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91`. TSC 0 + Jest all green — user-confirmed 13:08 WAT. |
+| **W72** | Dead settings toggles + unreachable notification centre | 2026-08-17 | Commits pushed `9b42f67`. Pending user TSC+Jest gate confirmation. |
 
 ---
 
@@ -128,9 +129,13 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre built but never fired. |
-| **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | — | One-line form bug in agenda creation; wrong facilityId can be submitted. |
-| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | Grouped minor server-side hardening items from SPEC 12. |
+| **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | W72 gate | One-line form bug in agenda creation; wrong facilityId can be submitted. |
+| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | W72 gate | Grouped minor server-side hardening items from SPEC 12. |
+| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | Session 11 audit | P1 | — | 5 confirmed instances (GPL-05-01, CLD-19-01, BAK-10-13, COU-AX10-01, SLH-08-01). 13 files not yet swept (blacksmith, carpentry, printing, produceStorage, semiPharma, uab, upd, baseCompressedGas, carWash, paintShop, abattoir — marble+mechanic confirmed clean). Correct range: Art. 14–21 (Loi 03-10). Fix = find-replace once sweep complete. |
+| **W76** | F4 reopened — Loi 01-19 offset pattern re-sweep | Session 11 audit | P1 | — | 5th instance found: MCH-29-09 cites Art.29 (wrong — no such burn-ban article in Loi 01-19). carWash + paintShop cleared prematurely in Session 9 — re-sweep required. All unaudited files must be swept for Loi 01-19 citations in Art.29–36 range. |
+| **W77** | F7 — Apply Décret 06-141 Annexe II §1a wastewater fix to abattoir + slaughterhouse | Session 11 audit | P1 | — | Verified fix known: abattoirCriteria.ts + slaughterhouseSmallCriteria.ts must switch from Annexe I (generic) to Annexe II §1a figures (DBO5=250 g/t, DCO=800 g/t, MES=200 g/t, volume=6 m³/t). Art.3 transition tolerance (5-year old installations) also not yet referenced — add if applicable. |
+| **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 → Loi 88-07 Art.6 | Session 11 audit | P1 | — | Confirmed wrong: Décret 91-05 Art.6 is ventilation, not PPE. Real source: Loi 88-07 Art.6 (parent law, cross-referenced by Décret 91-05 Art.25). Loi 88-07 not yet in legal_refs/ — must be sourced first. |
+| **W79** | F3 remaining — BGN-08-03 Décret 76-35 → Décret 91-05 Art.53+62 | Session 11 audit | P1 | — | Source verified in Session 11: Décret 91-05 Art.53(b) (bare-wire prohibition) + Art.62(6) (periodic electrical inspection). Fix = update legalRef in baseGeneralCriteria.ts BGN-08-03. Single-criterion fix, no sweep needed. |
 
 ---
 
@@ -148,10 +153,15 @@
 | legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
 | Active inspection screen | No screen for filling in items in real time yet. |
 | SPEC 10 — mechanical grep sweep | Before next release: confirm every settings key written / scheduler exported has a reader. |
+| MCH-29-05 (heavy-metal params) | Missing-requirement opportunity — Décret 06-141 Annexe II §3 lists cyanure/Cu/Ni/Zn/Pb/HC/phénol for mechanical industry. No criterion asserts these. Product decision: add numeric sub-criteria or leave as inspector note? |
+| MCH-29-08 Loi 01-19 Art.28 | Content not confirmed either way — flagged open. Verify against Loi 01-19 full text before acting. |
+| BAK-10-12 Décret 76-04 vs 76-36 | W58 replaced with Loi 19-02. If a separate general-safety decree is needed, Décret 76-36 (ERP) is the candidate but text not yet sourced. |
+| Décret 06-138 citations (paintShop, marble) | Several criteria assume Art.11 + Annexe I — none verified against actual text. Source file needed. |
+| COU-AX7-03 Loi 18-11 worker medical exams | Loi 18-11 now available (split W60) — verify Art. against actual text when couvoirCriteria.ts is fully audited. |
 
 ---
 
-## Next Phase Identifier: **W75**
+## Next Phase Identifier: **W80**
 
 ---
 
@@ -168,6 +178,7 @@
 | Loi 18-11 | Santé | ✅ Present — split 3 parties (W60) |
 | Loi 90-11 | Travail | ✅ Present |
 | Loi 05-12 | Eau | ✅ Present |
+| Loi 88-07 | Hygiène/sécurité travail (loi-mère) | ❌ MISSING — needed for W78 (F10 PPE fix) |
 | Décret 91-05 | Hygiène/sécurité travail | ✅ Present |
 | Décret 93-120 | Médecine du travail | ✅ Present |
 | Décret 06-198 | Établissements classés | ✅ Present |
@@ -181,7 +192,9 @@
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present |
+| Décret 76-35 | IGH incendie | ✅ Present — confirmed NOT applicable to SafeInspect facility types (high-rise ≥28m only) |
+| Décret 76-36 | ERP sécurité (candidat BAK-10-12) | ❌ MISSING — unconfirmed if correct source |
+| Décret 06-138 | Émissions poussières (paintShop/marble) | ❌ MISSING — several criteria assume Art.11+Annexe I unverified |
 | AIM GPL2 v14.03.2022 | GPL station technique rules | ⚠️ UNPUBLISHED — no JORADP trace. W51 OPEN. |
 
 ---
@@ -189,11 +202,16 @@
 ## Execution Order (Current Sprint)
 
 ### P1 — in order
-1. **W72** — Dead settings toggles + notification centre
+1. **W72** — Dead settings toggles + notification centre (pending user TSC+Jest gate)
+2. **W79** — BGN-08-03: single-criterion fix, fastest P1 (source already verified)
+3. **W77** — F7: abattoir/slaughterhouse wastewater Annexe II §1a (source verified)
+4. **W75** — F9 sweep + fix: EIE wrong range across all unswept files (systemic, high-leverage)
+5. **W76** — F4 re-sweep: Loi 01-19 offset pattern (5 confirmed + unknown remaining)
+6. **W78** — F10 PPE fix: needs Loi 88-07 sourced first
 
 ### P2 — after P1s
-2. **W73** — Agenda facility mismatch
-3. **W74** — Minor server hardening
+7. **W73** — Agenda facility mismatch
+8. **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch
