@@ -7,6 +7,18 @@
 
 ## Live Observations Log
 
+### 2026-08-17 23:23 WAT — Perplexity — W84 CLOSED + W85 OPEN — SPEC 10 settings key audit
+- **Phase closed**: W84 (SPEC 10 — settings key writer/reader symmetry audit)
+- **Phase opened**: W85 (fix — add missing StorageKeys + patch settings.tsx)
+- **Audit result**: Direct read of `src/repositories/keys.ts` + `SettingsRepository.ts` + `app/screens/settings.tsx`
+- **3 mismatches found**:
+  - `settings.tsx` writes/reads `'notifications'` — NOT in StorageKeys
+  - `settings.tsx` writes/reads `'autoSync'` — NOT in StorageKeys
+  - `settings.tsx` writes/reads `'darkMode'` — NOT in StorageKeys
+- **Impact**: All 3 toggles silently broken across app restarts — value never correctly persisted/read
+- **Next**: W85 — add `NOTIFICATIONS_UI`, `AUTO_SYNC`, `DARK_MODE` to StorageKeys + patch settings.tsx + check SyncService reader
+- **SPEC 10 removed from backlog** — promoted to active W85
+
 ### 2026-08-17 22:10 WAT — Perplexity — W82 CLOSED — Finding 3 PPE/machine-guard legal refs fully verified
 - **Phases closed**: W82 (Finding 3 — Loi 90-11 / Décret 93-120 misuse in PPE + machine-guard criteria)
 - **Audit result**: All 6 criteria files inspected by direct live read:
@@ -98,16 +110,12 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W72** | Dead settings toggles + notification centre | ✅ CLOSED 19:21 WAT |
-| **W73** | Agenda facility mismatch | ✅ PHANTOM — already clean |
-| **W74** | Server hardening (rate-limit + batch guard) | ✅ CLOSED 20:04 WAT |
-| **W75–79** | Legal citation sweeps | ✅ ALL CLOSED |
-| **W80** | 3 false legal_refs flags corrected | ✅ CLOSED 20:15 WAT |
-| **W81** | Décret 76-36 MISSING → Present | ✅ CLOSED 20:48 WAT |
-| **W82** | Finding 3 — PPE/machine-guard legal refs audit | ✅ CLOSED 22:10 WAT |
+| **W83** | Phantom backlog — active inspection screen | ✅ CLOSED — confirmed clean by direct code read |
+| **W84** | SPEC 10 — settings key audit | ✅ CLOSED — 3 mismatches found → W85 |
+| **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 🟠 OPEN — release blocker |
 | **W51** | AIM GPL2 JORADP watch | 🟠 ONGOING SURVEILLANCE |
 
-**P1 + P2 sprint fully exhausted. Finding 3 CLOSED. Legal Quick-Reference: 0 ❌ MISSING entries.**
+**W85 is the active release blocker. 3 settings toggles silently broken across restarts.**
 
 ---
 
