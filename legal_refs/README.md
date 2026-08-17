@@ -30,6 +30,7 @@
      README mis à jour le 2026-08-17 (29) — D04-82 dédup : animaux.md supprimé, elevage.md promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : 36 ✅ VÉRIFIÉ
      README mis à jour le 2026-08-17 (30) — loi-18-11-sante.md monolithique supprimé (doublon Règle 4) — partie1/2/3 promus fichiers canoniques — dashboard 36→35
      README mis à jour le 2026-08-17 (31) — patch-31 : 3 fichiers patchés (BOM retiré + headers normalisés) : decret-17-140, decret-83-496, decret-07-144
+     README mis à jour le 2026-08-17 (32) — decret-76-36-rectificatif indexé + decret-07-144 statut normalisé “✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed”
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -47,11 +48,11 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 31)
+## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 32)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 35 | Voir index — 34 vérifiés avant le 2026-08-11 + 2 nouveaux vérifiés le 2026-08-17 (loi-88-07 + decret-04-82-elevage) + 3 splits loi-18-11 — monolithique loi-18-11 supprimé (doublon) |
+| ✅ VÉRIFIÉ | 36 | Voir index — + `decret-76-36-incendie-panique.md` indexé comme rectificatif vérifié ; `decret-07-144` statut normalisé avec relecteur nommé |
 | ⚠️ NON VÉRIFIÉ — texte intégral converti | 0 | — |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` (✅ VÉRIFIÉ) |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
@@ -66,6 +67,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 |---|---|---|---|
 | `loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets (JO N° 4/1988) — Modifiée par Loi 17-13 (Arts. 37–39) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel [CONVERTI 2026-08-17] |
 | `decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `decret-76-36-incendie-panique.md` | Décret n° 76-36 du 20 février 1976 (rectificatif) | Rectificatif relatif à la protection contre les risques d'incendie et de panique dans les établissements recevant du public — corrections des articles 20, 24 et 27 — JO N° 67/1976 | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — rectificatif verbatim relu contre PDF officiel |
 | `decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 — Modifié par D21-430 (Art. 4, 7, 8) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel — [PATCHÉ 2026-08-17 : BOM retiré] |
 | `decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 (JO N° 36/1990) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -82,7 +84,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original — Modifié par D22-167 et D24-196 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed |
-| `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ — verbatim JO N° 34, 22 mai 2007 — W33 — 2026-08-09 — [PATCHÉ 2026-08-17 : BOM retiré + header standard ajouté] |
+| `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — verbatim JO N° 34, 22 mai 2007 — [PATCHÉ 2026-08-17 : BOM retiré + header standard ajouté] |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets (JO N° 6/2009) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — ⚠️ ABROGÉ par D25-63 du 28/01/2025 — conservé pour référence historique |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -151,3 +153,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-17 (patch 29) :** D04-82 dédupé — `decret-04-82-agrement-sanitaire-animaux.md` supprimé (doublon BOM + contrôle séquence non-tableau) — `decret-04-82-agrement-sanitaire-elevage.md` promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : **36 ✅ VÉRIFIÉ** (corrigé : un seul fichier D04-82).
 - **2026-08-17 (patch 30) :** `loi-18-11-sante.md` (189 KB, monolithique) supprimé — doublon Règle 4 résolu. Fichiers canoniques désormais : `loi-18-11-sante-partie1-arts1-164.md`, `loi-18-11-sante-partie2-arts165-264.md`, `loi-18-11-sante-partie3-arts265-450.md`. Exception "un instrument = un fichier" documentée dans les Notes (découpage technique, taille > limite GitHub API). Dashboard : **35 ✅ VÉRIFIÉ** (37 - 1 D04-82 animaux - 1 loi-18-11 monolithique).
 - **2026-08-17 (patch 31) :** 3 fichiers patchés (BOM retiré + headers normalisés) : `decret-17-140-hygiene-alimentaire.md` (BOM + statut vérification), `decret-83-496-gpl-carburant.md` (BOM), `decret-07-144-nomenclature-installations-classees.md` (BOM + header standard complet). Aucun changement de statut VÉRIFIÉ — patches cosmétiques uniquement.
+- **2026-08-17 (patch 32) :** `decret-76-36-incendie-panique.md` indexé comme rectificatif vérifié ; `decret-07-144-nomenclature-installations-classees.md` statut README normalisé en `✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed`.
