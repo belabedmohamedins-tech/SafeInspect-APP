@@ -55,7 +55,6 @@
 //     (installations classées subject to prior authorization OR declaration) +
 //     Art.77 (penal article: 50,000–500,000 DA fine + 2 months–2 years prison
 //     for operating an installation classée without required authorization).
-//     Art.18 confirmed to address EIE preparer accreditation — wrong domain.
 // W45 (2026-08-10): BGN-02-01 wrong article corrected after direct read of
 //   legal_refs/loi-90-29-urbanisme.md (AUDIT_STATE Session 10 / Finding F5).
 //   Loi 90-29 Art.37 confirmed = setting atmospheric emission value limits —
@@ -76,6 +75,11 @@
 //   impacts on neighbouring properties — a near-exact match for this criterion
 //   (noise, odours, emissions, vibrations affecting residents/neighbours).
 //   Art.4 retained as secondary supporting basis; Art.8 promoted to primary.
+// W49 (2026-08-17): BGN-08-03 wrong instrument corrected after direct source-read.
+//   Previous ref: Décret 76-35 (IGH fire-safety decree) — wrong domain, applies only
+//   to immeubles de grande hauteur, not general workplace electrical safety.
+//   Replaced with Décret exécutif 91-05 Art.17 (safe electrical installations in workplaces)
+//   + Loi 90-11 as general occupational safety basis.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -436,7 +440,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'سلامة',
     criteria: 'سلامة التركيبات الكهربائية: أسلاك سليمة، لوحات توزيع مغلقة، لا توجد أسلاك عارية أو تركيبات خطرة ظاهرة، وتأريض مناسب للأجهزة الحساسة.',
-    legalReference: 'المرسوم التنفيذي 76-35 (اشتراطات حماية العمال الكهربائية) + القانون 90-11 المتعلق بعلاقات العمل (السلامة المهنية).',
+    legalReference: 'المرسوم التنفيذي 91-05 المادة 17 (سلامة التركيبات الكهربائية في أماكن العمل ووجوب مطابقتها لقواعد الوقاية) + القانون 90-11 المتعلق بعلاقات العمل المادة 6 (إلزامية حماية صحة وسلامة العمال).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
