@@ -11,8 +11,10 @@
 
 **Status:** IN PROGRESS. `legal_refs/` now ~28 content files. Critical defect F1 confirmed. Two
 major citation-error clusters found (Décret 91-05: F3; Loi 01-19: F4). F7 CLOSED (2026-08-17).
-F8 CLOSED (2026-08-17) — scope confirmed + all phantom articles already patched in W43/W60.
-**Last updated:** 2026-08-17 (Session 11)
+F8 CLOSED (2026-08-17). F6 CLOSED (2026-08-17, Session 12 — not a duplicate after direct read).
+BFD-08-01 CLOSED (2026-08-17, Session 12 — already patched W16). BFD-02-02 CLOSED (2026-08-17,
+Session 12 — already patched W17). BGN-01-02 CLOSED W19 (2026-08-17).
+**Last updated:** 2026-08-17 (Session 12)
 
 ---
 
@@ -33,8 +35,8 @@ F8 CLOSED (2026-08-17) — scope confirmed + all phantom articles already patche
 ### 2a. Criteria files — `src/criteria/` (17 activity-specific + 3 base)
 | File | Size | Status |
 |---|---|---|
-| baseGeneralCriteria.ts | 31.7 KB | ✅ FULLY TRIAGED (Session 11) — all criteria checked and patched. BGN-08-03 confirmed correct (Décret 91-05 Art.17, W49). BGN-09-02 confirmed correct (Décret 02-427 = formation/information workers on occupational risks — exact match for EPI-training criterion). No open [À VÉRIFIER] remain. |
-| baseFoodCriteria.ts | 10.7 KB | DONE — 12/12 criteria audited |
+| baseGeneralCriteria.ts | 31.7 KB | ✅ FULLY TRIAGED (Session 11/12) — all criteria checked and patched. BGN-08-03 confirmed correct (Décret 91-05 Art.17, W49). BGN-09-02 confirmed correct (Décret 02-427 = formation/information workers on occupational risks — exact match for EPI-training criterion). BGN-01-02 [À VÉRIFIER] CLOSED W19 (2026-08-17): full read of Décret 06-198 (50 arts) — no register obligation found; Art.62 retained as best available + [حكم مهني]. No open [À VÉRIFIER] remain. |
+| baseFoodCriteria.ts | 10.7 KB | ✅ FULLY TRIAGED (Session 12) — 12/12 criteria audited. BFD-08-01 ✅ CLOSED: already patched W16 — Art.12 + Art.6 + Décret 17-140 + [حكم مهني 2-year retention]. BFD-02-02 ✅ CLOSED: already patched W17 — [حكم مهني] 15cm/5cm in place. No open items. |
 | baseCompressedGasCriteria.ts | 2.8 KB | NOT AUDITED |
 | abattoirCriteria.ts | 20.4 KB | ✅ F7 CLOSED (Session 11) — Décret 06-141 Annexe II §1a read and confirmed. ABT-AX6-01/02/04 switched from Annexe I generic mg/L to Annexe II sector-specific g/t (F7-fix 2026-08-17). No open [À VÉRIFIER] remain in this file. |
 | bakeryCriteria.ts | 8.6 KB | NOT AUDITED |
@@ -50,7 +52,7 @@ F8 CLOSED (2026-08-17) — scope confirmed + all phantom articles already patche
 | printingCriteria.ts | 8.3 KB | NOT AUDITED |
 | produceStorageCriteria.ts | 5.5 KB | NOT AUDITED |
 | semiPharmaCriteria.ts | 7.6 KB | NOT AUDITED — note: Loi 18-11 (santé publique) now available in legal_refs/, likely relevant here |
-| slaughterhouseSmallCriteria.ts | 12.9 KB | ✅ F7 CLOSED (Session 11) — SLH-05-04/04B/04C/04D switched to Décret 06-141 Annexe II §1a g/t values (F7-fix 2026-08-17). No open [À VÉRIFIER] remain. F6 (SLH-08-01 redundancy with BGN-10-01) still open — criterion present but flagged for removal. |
+| slaughterhouseSmallCriteria.ts | 12.9 KB | ✅ FULLY TRIAGED (Session 12) — F7 CLOSED (Session 11): SLH-05-04/04B/04C/04D switched to Décret 06-141 Annexe II §1a g/t values (F7-fix 2026-08-17). F6 CLOSED (Session 12): SLH-08-01 read directly — NOT a duplicate of BGN-10-01. SLH-08-01 adds abattoir-specific EIE scope (DBO5/odour/noise/slaughter-waste pollutant thresholds, renewal-at-extension trigger, Décret 06-198 ref) absent from generic BGN-10-01. Criterion retained as legitimate specialisation. No open [À VÉRIFIER] remain. |
 | uabCriteria.ts | 25.8 KB | NOT AUDITED |
 | updCriteria.ts | 15.1 KB | NOT AUDITED |
 | src/criteria/index.ts | 3.0 KB (aggregator) | AUDITED — see Finding F2 (dead-code hazard) |
@@ -113,7 +115,7 @@ activity filtering. Confirmed unused by both real consumers (`checklists.tsx`,
 `useChecklistData.ts`). Not live today, but one accidental import from bypassing all
 applicability logic. Recommend deleting or clearly marking test-only.
 
-### F3 — Décret 91-05 citation cluster (baseGeneralCriteria.ts) — ALL PATCHED
+### F3 — Décret 91-05 citation cluster (baseGeneralCriteria.ts) — ✅ ALL PATCHED
 Verified full 68-article text. All 6 confirmed-wrong citations were corrected in W39 (2026-08-09)
 and subsequent passes. Summary for the record:
 
@@ -127,7 +129,7 @@ and subsequent passes. Summary for the record:
 | BGN-07-04 (sealing cracks/pests) | Art. 14 | Art. 2–3 + [حكم مهني] ✅ |
 | BGN-09-01 (noise limit) | Art. 9 | Art. 15 ✅ |
 
-### F4 — Loi 01-19 citation-offset pattern — ALL PATCHED
+### F4 — Loi 01-19 citation-offset pattern — ✅ ALL PATCHED
 Full 72-article text verified. All 4 wrong citations corrected:
 
 | Criterion | Was wrong | Corrected to |
@@ -137,16 +139,21 @@ Full 72-article text verified. All 4 wrong citations corrected:
 | SLH-05-04 (blood/entrails separation) | Art. 34 | Loi 03-10 Art.30 retained; Loi 01-19 ref removed ✅ |
 | SLH-05-05 (closed containers + handler) | Art. 17 | Art. 15/16 ✅ |
 
-### F5 — Loi 03-10 spot-checks — ALL PATCHED
+### F5 — Loi 03-10 spot-checks — ✅ ALL PATCHED
 - BGN-10-01: Art. 15–22 → Art. 14–21 ✅ (W41 2026-08-10)
 - BGN-08-06: Art. 18 → Art. 63 + Art. 77 ✅ (W41 2026-08-10)
 - BGN-02-01: Art. 37 → Art. 4 + [حكم مهني] ✅ (W45 2026-08-10)
 - BGN-02-02: Art. 8 added as primary ✅ (W48 2026-08-10)
 
-### F6 — Redundancy: SLH-08-01 duplicates BGN-10-01 — OPEN
-`slaughterhouseSmallCriteria.ts`'s EIE criterion (`SLH-08-01`) cites nearly identical legal bases
-to the universal `BGN-10-01`. **Verdict: REMOVE `SLH-08-01`** — straight duplicate. Pending
-implementation decision.
+### F6 — Redundancy: SLH-08-01 vs BGN-10-01 — ✅ CLOSED (2026-08-17, Session 12)
+**Direct read of `slaughterhouseSmallCriteria.ts` confirms SLH-08-01 is NOT a duplicate.**
+BGN-10-01 = generic EIE obligation (Loi 03-10 Art.14–21 + Décret 07-145).
+SLH-08-01 adds abattoir-specific scope absent from BGN-10-01:
+- Named pollutant thresholds (DBO5, odours, noise, slaughter waste) in criteria text
+- Renewal obligation upon capacity extension or material change
+- Décret 06-198 reference tying EIE to classified-establishment permit regime
+**Verdict revised: RETAIN SLH-08-01.** The prior "straight duplicate" assessment was made
+without direct read. Criterion is legitimate specialisation, not redundancy.
 
 ### F7 — Décret 06-141 wastewater units — ✅ CLOSED (2026-08-17, Session 11)
 Décret 06-141 Annexe II §1a read in full (legal_refs/ confirmed ✅ VÉRIFIÉ 2026-08-11).
@@ -180,14 +187,28 @@ All phantom article numbers were already corrected in W43:
 GPL-03-01/02, GPL-04-01 — source has no confirmed JORADP publication trace (Scribd draft only).
 Technical values retained as [حكم مهني]. Not a citation-error — a source-status flag.
 
-### Legacy items still open
-- `BFD-08-01` (Loi 09-03 Art. 19): confirmed INCORRECT — Art. 19 = consumer right of
-  withdrawal, unrelated to traceability. Needs correct citation (likely Décret 17-140) or
-  `[حكم مهني]` tag. MODIFY pending.
-- `BFD-02-02`: cites Décret 17-140 generically for specific storage clearances (≥15cm floor,
-  ≥5cm wall) not found in the decree's actual text. MODIFY pending.
-- `BGN-01-02` `[À VÉRIFIER]`: no explicit record-keeping register article found in Loi 03-10 or
-  Décret 06-198 — still open. Low risk (Art. 62 retained as best available).
+### Legacy items — ✅ ALL CLOSED (Session 12)
+
+#### BFD-08-01 — ✅ CLOSED (2026-08-17, Session 12)
+Direct read of `baseFoodCriteria.ts` confirms patch W16 already applied:
+- Loi 09-03 Art.19 (wrong — consumer right of withdrawal) **removed**
+- Replaced with: Art.12 (autocontrôle — obligation to keep conformity records) + Art.6
+  (hygiene/storage documentation) + Décret 17-140 (product traceability) + [حكم مهني: mدة
+  الاحتفاظ بالسجلات سنتان — لا نص جزائري صريح بالمدة]
+- No further action needed in code.
+
+#### BFD-02-02 — ✅ CLOSED (2026-08-17, Session 12)
+Direct read of `baseFoodCriteria.ts` confirms patch W17 already applied:
+- legalReference retains Décret 17-140 for general storage hygiene
+- [حكم مهني: الحدود الدنيا 15 سم/5 سم وفق الممارسة المهنية الغذائية المعتمدة — لا نص جزائري
+  صريح بالأرقام] tag in place
+- No further action needed in code.
+
+#### BGN-01-02 [À VÉRIFIER] — ✅ CLOSED W19 (2026-08-17, Session 11/12)
+Full read of Décret 06-198 (50 articles). No explicit record-keeping register obligation found
+in any of the 50 articles. Art.62 (Loi 03-10 — general documentation obligation) retained as
+best available legal basis. [حكم مهني] tag applied in baseGeneralCriteria.ts (W19-CLOSE).
+No further action needed.
 
 ### Verified correct (positive findings, not exhaustive)
 - `BGN-01-01`: Décret 24-196 3-year grace period confirmed. Exact end-date still open.
@@ -247,13 +268,12 @@ Art. 3–4, 9, 13, 15, 17; Loi 90-29 Art. 4, 8, 52, 56/75; Décret 02-427 Arts. 
 Décret 06-141 Annexe II §1a (abattoirs sector values confirmed); Décret 83-496 Art. 7, 8, 10,
 11, 16 (as amended by 21-430 Art.2).
 
-**CONFIRMED INCORRECT (historical):** Loi 09-03 Art. 19 (BFD-08-01); Loi 01-19 Art. 32/30/17/34
-(F4 — all patched); Décret 91-05 Art. 14/7/16/9 misapplied (F3 — all patched); Loi 03-10 Art.
-18 (BGN-08-06 — patched) and Art. 15–22 range (BGN-10-01 — patched); Loi 90-29 Art. 37
-(BGN-02-01 — patched); Décret 21-430 phantom Art. 5/6/10/15/16 (F8 — all patched in W43).
+**CONFIRMED INCORRECT (historical):** Loi 09-03 Art. 19 (BFD-08-01 — patched W16); Loi 01-19
+Art. 32/30/17/34 (F4 — all patched); Décret 91-05 Art. 14/7/16/9 misapplied (F3 — all patched);
+Loi 03-10 Art. 18 (BGN-08-06 — patched) and Art. 15–22 range (BGN-10-01 — patched); Loi 90-29
+Art. 37 (BGN-02-01 — patched); Décret 21-430 phantom Art. 5/6/10/15/16 (F8 — all patched W43).
 
 **UNVERIFIED — DO NOT IMPLEMENT AS VERIFIED LAW:**
-- BFD-02-02's 15cm/5cm storage clearance figures (no source found)
 - Exact end-date of the Décret 24-196 grace period (3 years from which trigger date?)
 - Décret 06-198 Art. 20 (cited in a types.ts comment re: 'warning' sanction tier)
 - Décret 04-82 (veterinary accreditation) — not in legal_refs/ yet
@@ -287,20 +307,28 @@ Décret 06-141 Annexe II §1a (abattoirs sector values confirmed); Décret 83-49
 - **F8 CLOSED:** User confirmed `تركيب GPL/C` = vehicle GPL/C conversion workshops. Décret
   21-430/83-496 is the correct instrument. Phantom article fixes (W43) and GPL-05-01 range
   fix (W60: Art.15–21) already applied. gplCriteria.ts fully patched.
+- **BGN-01-02 [À VÉRIFIER] CLOSED W19:** Full read of Décret 06-198 (50 articles). No
+  register obligation found. Art.62 retained + [حكم مهني] tag applied.
 - **AUDIT_STATE updated** to reflect Session 11 closures.
 
+### Session 12 (2026-08-17, Perplexity):
+- **F6 CLOSED (revised verdict):** Direct read of `slaughterhouseSmallCriteria.ts` — SLH-08-01
+  is NOT a straight duplicate of BGN-10-01. It adds abattoir-specific EIE scope (pollutant
+  thresholds by name, renewal-at-extension trigger, Décret 06-198 ref). Criterion retained.
+- **BFD-08-01 CLOSED:** Direct read of `baseFoodCriteria.ts` confirms W16 patch already in
+  place: Art.12 + Art.6 + Décret 17-140 + [حكم مهني 2-year retention]. AUDIT_STATE was
+  incorrectly listing this as "MODIFY pending" — code was already correct.
+- **BFD-02-02 CLOSED:** Direct read confirms W17 patch already in place: [حكم مهني] 15cm/5cm
+  tag applied. AUDIT_STATE was incorrectly listing this as "MODIFY pending" — code was correct.
+- **No criteria files modified this session** — all closures are AUDIT_STATE alignment only.
+
 **Recommended next session:**
-1. **F6 — SLH-08-01 removal**: straight duplicate of BGN-10-01 (EIE); one-line deletion.
-2. **BFD-08-01**: Loi 09-03 Art.19 confirmed wrong — replace with correct citation
-   (Décret 17-140 or [حكم مهني]).
-3. **BFD-02-02**: Décret 17-140 storage-clearance figures (15cm/5cm) not in decree text —
-   tag [حكم مهني] or locate the correct source.
-4. **BGN-01-02** `[À VÉRIFIER]`: no record-keeping article found yet in Loi 03-10 or
-   Décret 06-198 — either close as [حكم مهني] or check arrêtés.
-5. **Décret 04-82** (veterinary accreditation — Art.6 + Art.9 cited in slaughterhouseSmall
+1. **AIM GPL2 W51**: if official JORADP arrêté text surfaces, close W51 across GPL-02-01/02/03,
+   GPL-03-01/02, GPL-04-01.
+2. **Décret 04-82** (veterinary accreditation — Art.6 + Art.9 cited in slaughterhouseSmall
    and abattoirCriteria): source not in legal_refs/. Low risk but unverified.
-6. **AIM GPL2 publication status**: if official JORADP arrêté text surfaces, close W51.
-7. **16 criteria files still not audited** — next priority after above legacy items:
+3. **16 criteria files still not audited** — next priority:
    `uabCriteria.ts` (25.8 KB, largest unaudited file) or `couvoirCriteria.ts` (16.7 KB).
-8. **F1** remains the highest-severity open item (silently wrong checklists in production) —
+4. **F1** remains the highest-severity open item (silently wrong checklists in production) —
    implementation fix, not audit scope, but should be escalated.
+5. **F2** (allCriteria dead export) — low severity but easy cleanup.
