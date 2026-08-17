@@ -97,7 +97,7 @@
 | W48 | BGN-02-02 test added — 20/20 green | 2026-08-10 | Commit `0eb33bf`. |
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
 | **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` + `f439cc8c` + `ef1db661`. Gate: 26/26 Jest PASS 2026-08-11. |
-| **W53** | F-18: ApprovalRepository → serverAuth wiring | 2026-08-11 | Confirmed clean by direct read — `ApprovalRepository` already wires via `syncToServer()` fire-and-forget. No code change needed. |
+| **W53** | F-18: ApprovalRepository → serverAuth wiring | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
 | **W54** | F-14: scoringUtils.ts completion-rate reconciliation | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
 | **W55** | F-17: SavedInspection.violations shape vs sync.ts | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
 | **W56** | F-20: decisionSupport.ts real test coverage | 2026-08-11 | 18 test cases confirmed by direct read. No code change needed. |
@@ -113,19 +113,19 @@
 | **W62** | Server route path-prefix mismatch | 2026-08-16 | Confirmed clean by direct read. |
 | **W63** | Approval endpoint ID semantics | 2026-08-16 | Resolved as part of W61. |
 | **W64** | Sync schema missing real client values | 2026-08-17 | Confirmed clean by direct read — full SavedInspection sent. |
-| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — exportBackup() now calls InspectionRepository.getAll(); importBackup() calls InspectionRepository.save() per inspection. |
+| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | ✅ FIXED — exportBackup() → InspectionRepository.getAll(); importBackup() → save() per inspection. |
 | **W66** | Integrity + audit trail | 2026-08-17 | Confirmed clean by direct read. |
 | **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read. |
-| **W68** | PIN lockout bypassable via AsyncStorage clear | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — getFailedAttempts/incrementFailedAttempts/resetFailedAttempts now use secureGet/secureSet/secureDelete. |
+| **W68** | PIN lockout bypassable via AsyncStorage clear | 2026-08-17 | ✅ FIXED — counters now use secureGet/secureSet/secureDelete. |
 | **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read. |
 | **W70** | PDF report gaps | 2026-08-17 | Confirmed clean by direct read. |
 | **W71** | Planning + prioritization UI — nonCompliantFacilities denominator fix + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91`. TSC 0 + Jest all green — user-confirmed 13:08 WAT. |
-| **W72** | Dead settings toggles + unreachable notification centre | 2026-08-17 | Commits pushed `9b42f67`. Pending user TSC+Jest gate confirmation. |
+| **W72** | Dead settings toggles + unreachable notification centre | 2026-08-17 | ✅ CLOSED — TSC 0 + Jest all green — user-confirmed 19:21 WAT. Commit `9b42f67`. |
 | **W79** | F3 remaining — BGN-08-03 Décret 76-35 → Décret 91-05 Art.17 + Loi 90-11 | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. Fix already present as W49. |
-| **W77** | F7 — Décret 06-141 Annexe II §1a wastewater fix (abattoir + slaughterhouse) | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D all use Annexe II §1a g/t values + pH 5.5–8.5. |
-| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | 2026-08-17 | ✅ CLOSED — 13/13 files swept. All EIE criteria use Art.14–21. No residual Art.15–22 instance found. |
+| **W77** | F7 — Décret 06-141 Annexe II §1a wastewater fix (abattoir + slaughterhouse) | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. |
+| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | 2026-08-17 | ✅ CLOSED — 13/13 files swept. All EIE criteria use Art.14–21. |
 | **W76** | F4 reopened — Loi 01-19 Art.29–36 offset pattern re-sweep | 2026-08-17 | ✅ CLOSED — MCH-29-09 Art.29 confirmed correct. No active miscitation found. |
-| **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 (ventilation) → Loi 88-07 Art.6 (PPE) + D91-05 Art.62§2 | 2026-08-17 | ✅ CLOSED — commit `cee92fb`. +1/-1 diff confirmed. Loi 88-07 confirmed present in legal_refs/ (38 165 B). |
+| **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 → Loi 88-07 Art.6 + D91-05 Art.62§2 | 2026-08-17 | ✅ CLOSED — commit `cee92fb`. +1/-1 diff confirmed. |
 
 ---
 
@@ -133,9 +133,9 @@
 
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | W72 gate | One-line form bug in agenda creation; wrong facilityId can be submitted. |
-| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | W72 gate | Grouped minor server-side hardening items from SPEC 12. |
+| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP. |
+| **W73** | Agenda add facility mismatch — form bug, wrong facilityId can be submitted | SPEC 11 | P1 | — | W72 gate now clear. |
+| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | W72 gate now clear. |
 
 ---
 
@@ -153,11 +153,11 @@
 | legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
 | Active inspection screen | No screen for filling in items in real time yet. |
 | SPEC 10 — mechanical grep sweep | Before next release: confirm every settings key written / scheduler exported has a reader. |
-| MCH-29-05 (heavy-metal params) | Missing-requirement opportunity — Décret 06-141 Annexe II §3 lists cyanure/Cu/Ni/Zn/Pb/HC/phénol for mechanical industry. No criterion asserts these. Product decision: add numeric sub-criteria or leave as inspector note? |
-| MCH-29-08 Loi 01-19 Art.28 | Content not confirmed either way — flagged open. Verify against Loi 01-19 full text before acting. |
-| BAK-10-12 Décret 76-04 vs 76-36 | W58 replaced with Loi 19-02. If a separate general-safety decree is needed, Décret 76-36 (ERP) is the candidate but text not yet sourced. |
-| Décret 06-138 citations (paintShop, marble) | Several criteria assume Art.11 + Annexe I — none verified against actual text. Source file needed. |
-| COU-AX7-03 Loi 18-11 worker medical exams | Loi 18-11 now available (split W60) — verify Art. against actual text when couvoirCriteria.ts is fully audited. |
+| MCH-29-05 (heavy-metal params) | Décret 06-141 Annexe II §3 lists cyanure/Cu/Ni/Zn/Pb/HC/phénol for mechanical industry. Add criteria or leave as inspector note? |
+| MCH-29-08 Loi 01-19 Art.28 | Not confirmed — verify against Loi 01-19 full text before acting. |
+| BAK-10-12 Décret 76-04 vs 76-36 | W58 replaced with Loi 19-02. Décret 76-36 (ERP) candidate but text not yet sourced. |
+| Décret 06-138 citations (paintShop, marble) | Several criteria assume Art.11 + Annexe I — none verified. Source file needed. |
+| COU-AX7-03 Loi 18-11 worker medical exams | Loi 18-11 now available (split W60) — verify when couvoirCriteria.ts is fully audited. |
 
 ---
 
@@ -192,7 +192,7 @@
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present — confirmed NOT applicable to SafeInspect facility types (high-rise ≥28m only) |
+| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable to SafeInspect facility types (high-rise ≥28m only) |
 | Décret 76-36 | ERP sécurité (candidat BAK-10-12) | ❌ MISSING — unconfirmed if correct source |
 | Décret 06-138 | Émissions poussières (paintShop/marble) | ❌ MISSING — several criteria assume Art.11+Annexe I unverified |
 | AIM GPL2 v14.03.2022 | GPL station technique rules | ⚠️ UNPUBLISHED — no JORADP trace. W51 OPEN. |
@@ -201,17 +201,11 @@
 
 ## Execution Order (Current Sprint)
 
-### P1 — all done
-- ~~W75~~ ✅ CLOSED 2026-08-17
-- ~~W76~~ ✅ CLOSED 2026-08-17
-- ~~W77~~ ✅ CLOSED 2026-08-17
-- ~~W78~~ ✅ CLOSED 2026-08-17
-- ~~W79~~ ✅ CLOSED 2026-08-17
-- **W72** — pending user TSC+Jest gate confirmation
+### P1 — NEXT
+1. **W73** — Agenda facility mismatch (one-line form bug)
 
-### P2 — after W72 gate
-- **W73** — Agenda facility mismatch
-- **W74** — Minor server hardening
+### P2
+2. **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch
