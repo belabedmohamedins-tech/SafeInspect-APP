@@ -94,11 +94,16 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 Art.8 + Décret 93-120 (médecine du travail, unrelated)
+    // with correct Décret 91-05 Arts.16-17 (PPE obligation when collective protection impossible).
+    // Décret 91-05 Art.16: "des appareils de protection individuelle appropriés doivent être mis
+    // à la disposition des travailleurs" when collective measures are impossible.
+    // Décret 91-05 Art.17: workers exposed to extreme temperatures must be provided special equipment.
     id: 'BSM-04-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة: قفازات مقاومة للحرارة، نظارات وجه (درع وجه) عند اللحام أو الطحن، واقٍ للسمع عند الأعمال الصوتية الشديدة.',
-    legalReference: 'القانون 90-11 المادة 8 + المرسوم 93-120.',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (توفير وسائل الوقاية الشخصية عند استحالة الحماية الجماعية وتجهيز العمال المعرّضين لدرجات حرارة قصوى).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -114,11 +119,17 @@ export const blacksmithCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 + Décret 93-120 (médecine du travail, unrelated)
+    // with correct Décret 91-05 Arts.39-41 (machine guards and emergency stop requirements).
+    // Décret 91-05 Art.39: "dispositifs de commande... à la portée des conducteurs".
+    // Décret 91-05 Art.40: machines must be arranged so workers cannot be reached by moving parts.
+    // Décret 91-05 Art.41: dangerous machine organs must be rendered inaccessible — guards, grilles,
+    // barriers, hand-guards, or equivalent protective devices.
     id: 'BSM-04-03',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر حمايات على الآلات الدوارة (مناشير، أقراص طحن) وأزرار إيقاف طارئ في متناول المشغّل.',
-    legalReference: 'القانون 90-11 + المرسوم 93-120 (اشتراطات حماية الآلات الدوارة وأزرار الإيقاف الطارئ).',
+    legalReference: 'المرسوم 91-05 المواد 39-41 (اشتراطات حماية الآلات الدوارة وأجهزة الوقاية وأزرار الإيقاف الطارئ في متناول المشغّل).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
