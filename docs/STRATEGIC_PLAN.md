@@ -98,6 +98,7 @@
 | **W78** | MCH-29-06 PPE wrong article | 2026-08-17 | Commit `cee92fb`. +1/-1. |
 | **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean. No code change. |
 | **W80** | 3 false flags corrected (06-138 MISSING, 09-03 UNVERIFIÉ, 83-496 Art.4/7/8 PHANTOM) | 2026-08-17 | Confirmed by direct source read this session. No code change. |
+| **W81** | Décret 76-36 ❌ MISSING → ✅ Present (rectificatif J.O. n°67/1976) | 2026-08-17 | `decret-76-36-incendie-panique.md` confirmed present (SHA 2b71182). Rectificatif corrections Art.20/24/27. Texte intégral J.O. n°21/1976 non numérisé. |
 
 ---
 
@@ -122,12 +123,12 @@
 | SPEC 10 — mechanical grep sweep | Settings key writer/reader symmetry check before next release. |
 | MCH-29-05 (heavy-metal params) | Décret 06-141 Annexe II §3 — product decision needed. |
 | MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting. |
-| BAK-10-12 Décret 76-36 | Text not yet sourced. |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited. |
+| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé — sourcer si critères ERP s’appuient sur articles spécifiques. |
 
 ---
 
-## Next Phase Identifier: **W81**
+## Next Phase Identifier: **W82**
 
 ---
 
@@ -159,7 +160,7 @@
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
 | Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (high-rise ≥28m only) |
-| Décret 76-36 | ERP sécurité | ❌ MISSING |
+| Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 (corrections Art.20/24/27). Texte intégral J.O. n°21/1976 non numérisé. |
 | Décret 06-138 | Émissions poussières | ✅ Present — Art.1–19 + Annexes I/II, ✅ VÉRIFIÉ 2026-08-11 (confirmed W80) |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51 OPEN |
 
