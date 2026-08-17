@@ -24,11 +24,15 @@ export const marbleCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 (unrelated general labour law)
+    // with Décret 91-05 Arts.16-17 (collective/individual protection obligation, ventilation priority).
+    // Décret 93-120 retained ONLY for the occupational disease (silicosis) monitoring obligation —
+    // it is the correct reference for that specific aspect (Art.2 lists silicosis as occupational disease).
     id: 'MRB-03-01',
     axis: 'المياه المستعملة والغبار',
     category: 'بيئية',
     criteria: 'توفر تهوية فعالة ونظام سحب غبار (شفاط سير + منخل مرشح) للحد من التعرض لغبار السيليكا المسبب للسحار.',
-    legalReference: 'المرسوم 93-120 (حماية العمال من الأمراض المهنية) + القانون 90-11.',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (أولوية الحماية الجماعية والتهوية قبل اللجوء لوسائل الوقاية الفردية) + المرسوم 93-120 المادة 2 (السحار السيليكاوي ضمن قائمة الأمراض المهنية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -67,18 +71,21 @@ export const marbleCriteria: InspectionItem[] = [
     id: 'MRB-04-02',
     axis: 'المياه المستعملة والغبار',
     category: 'تنظيمية',
-    criteria: 'الحصول على رخصة تصريف صناعي من مديرية الموارد المائية (أو ما يعادلها) قبل التصريف في الشبكة العمومية أو الوسط الطبيعي، واحترام شروطها من حيث نقاط التصريف والقيم الحدودية للمواد العالقة والمواد الكيميائية.',
+    criteria: 'الحصول على رخصة تصريف صناعي من مديرية الموارد المائية (أو ما يعادلها) قبل التصريف في الشبكة العمومية أو الوسط الطبيعي، واحترام شروطها.',
     legalReference: 'القانون 05-12 المتعلق بالمياه (المادة 46: حظر التلوث) + المرسوم 06-141 (القيم القصوى للمصبات الصناعية) + التنظيم المتعلق برخص التفريغ الصادرة عن مصالح الموارد المائية.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 (unrelated) with Décret 91-05 Arts.16-17 (PPE obligation).
+    // Décret 93-120 removed from this criterion: it governs occupational disease surveillance,
+    // not PPE supply. PPE obligation for silica dust = Décret 91-05 Arts.16-17.
     id: 'MRB-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
-    criteria: 'توفر وسائل وقاية شخصية: كمامات بخارية FFP2 أو جهاز تنفس خارجي، نظارات، قفازات، واقي سمعي عند القطع بالفلينسة.',
-    legalReference: 'المرسوم 93-120 + القانون 90-11.',
+    criteria: 'توفر وسائل وقاية شخصية: كمامات بخارية FFP2 أو جهاز تنفس خارجي، نظارات، قفازات، واقٍ سمعي عند القطع بالفلينسة.',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (توفير وسائل الوقاية الشخصية عند استحالة الحماية الجماعية وتجهيز العمال المعرّضين للغبار والأعمال الصوتية الشديدة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -87,7 +94,7 @@ export const marbleCriteria: InspectionItem[] = [
     id: 'MRB-05-02',
     axis: 'السلامة المهنية',
     category: 'سلامة',
-    criteria: 'توفر مطفأة حريق واحدة على الأقل بحالة صالحة مع التحقق من بطاقة الصيانة السنوية (تاريخ آخر فحص وتاريخ انتهاء الصلاحية)، ومخارج طوارئ واضحة التسمية خالية من العوائق.',
+    criteria: 'توفر مطفأة حريق واحدة على الأقل بحالة صالحة مع التحقق من بطاقة الصيانة السنوية، ومخارج طوارئ واضحة التسمية خالية من العوائق.',
     legalReference: 'القانون 19-02 (الوقاية من الحريق).',
     severity: 'high',
     controlType: 'visual',
@@ -104,26 +111,27 @@ export const marbleCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 + Décret 93-120 (médecine du travail, unrelated to guards)
+    // with correct Décret 91-05 Arts.39-41 (machine guards and emergency stop requirements).
+    // Décret 91-05 Art.39: commandes à portée du conducteur.
+    // Décret 91-05 Art.40: disposition des machines pour protéger les travailleurs des parties mobiles.
+    // Décret 91-05 Art.41: organes dangereux inaccessibles — gardes, grilles, barrières.
     id: 'MRB-05-04',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر حمايات ميكانيكية (واقيات) على أجهزة القطع الدوارة (فلينسة، منشار رخام) مع وجود أزرار إيقاف طارئ في متناول المشغّل.',
-    legalReference: 'القانون 90-11 + المرسوم 93-120 (اشتراطات حماية الآلات الدوارة وأزرار الإيقاف الطارئ).',
+    legalReference: 'المرسوم 91-05 المواد 39-41 (اشتراطات حماية الآلات الدوارة وأجهزة الوقاية وأزرار الإيقاف الطارئ في متناول المشغّل).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
     // Phase 7.1: periodic silica dust air quality measurement.
-    // Value 0.1 mg/m³ is the occupational exposure limit for respirable free silica (93-120 context).
-    // Algerian law (06-138) mandates the monitoring obligation; the numeric threshold comes from
-    // occupational-hygiene practice — this is a [SILENCE]/[INTL] borderline case, correctly
-    // acknowledged in the criterion text. Do not change without legal verification.
     id: 'MRB-05-05',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
-    criteria: 'إجراء قياس دوري لتركيز غبار السيليكا (الكوارتز الحر) في هواء بيئة العمل (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية المحددة (0.1 ملغ/م³ للسيليكا الحرة القابلة للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
-    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من السحار السيليكاوي).',
+    criteria: 'إجراء قياس دوري لتركيز غبار السيليكا (الكوارتز الحر) في هواء بيئة العمل (مرة في السنة على الأقل) بواسطة مختبر معتمد، والتحقق من عدم تجاوز القيم الحدية (0.1 ملغ/م³ للسيليكا الحرة القابلة للاستنشاق)؛ وتوثيق نتائج القياسات والإجراءات التصحيحية عند الاقتضاء.',
+    legalReference: 'القانون 03-10 المادة 52 (التزام المنشآت المصنّفة بمراقبة انبعاثاتها الهوائية) + المرسوم 06-138 (القيم القصوى للانبعاثات الهوائية الصناعية) + المرسوم 93-120 (حماية العمال من السحار السيليكاوي).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
