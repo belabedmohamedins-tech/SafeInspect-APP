@@ -97,6 +97,7 @@
 | **W77** | Abattoir/SLH wastewater Décret 06-141 | 2026-08-17 | Clean. No code change. |
 | **W78** | MCH-29-06 PPE wrong article | 2026-08-17 | Commit `cee92fb`. +1/-1. |
 | **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean. No code change. |
+| **W80** | 3 false flags corrected (06-138 MISSING, 09-03 UNVERIFIÉ, 83-496 Art.4/7/8 PHANTOM) | 2026-08-17 | Confirmed by direct source read this session. No code change. |
 
 ---
 
@@ -117,20 +118,16 @@
 | F-03: migration naming `001_` reused | Cosmetic. |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision. |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation needed. |
-| legal_refs Issue #1: decret-83-496 Art.4/7/8 inline amendment notice | Add `> Modification Décret 21-430` inline at each amended article. |
-| legal_refs Issue #2: loi-09-03 VÉRIFIÉ status | Revert to NON VÉRIFIÉ — no named human reviewer. |
-| legal_refs Issue #3: loi-03-10 missing header | Add mandatory header block + sequence section. |
 | Active inspection screen | No screen for filling items in real time yet. |
 | SPEC 10 — mechanical grep sweep | Settings key writer/reader symmetry check before next release. |
 | MCH-29-05 (heavy-metal params) | Décret 06-141 Annexe II §3 — product decision needed. |
 | MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting. |
 | BAK-10-12 Décret 76-36 | Text not yet sourced. |
-| Décret 06-138 citations (paintShop, marble) | Source file needed. |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited. |
 
 ---
 
-## Next Phase Identifier: **W80**
+## Next Phase Identifier: **W81**
 
 ---
 
@@ -140,7 +137,7 @@
 |---|---|---|
 | Loi 90-29 | Aménagement + territoire | ✅ Present |
 | Loi 03-10 | Environnement | ✅ Present |
-| Loi 09-03 | Protection du consommateur | ✅ Present — Art.1–95 verbatim |
+| Loi 09-03 | Protection du consommateur | ✅ Present — Art.1–95 verbatim, ✅ VÉRIFIÉ 2026-08-11 |
 | Loi 01-19 | Gestion des déchets | ✅ Present |
 | Loi 04-20 | Risques majeurs | ✅ Present |
 | Loi 19-02 | Sécurité incendie | ✅ Present |
@@ -156,14 +153,14 @@
 | Décret 02-427 | Prévention risques pro | ✅ Present |
 | Décret 06-141 | Rejets effluents liquides | ✅ Present |
 | Décret 21-430 | GPL-C modification | ✅ Present |
-| Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
+| Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present — Art.4/7/8 amendment notices inline (confirmed W80) |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
 | Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (high-rise ≥28m only) |
 | Décret 76-36 | ERP sécurité | ❌ MISSING |
-| Décret 06-138 | Émissions poussières | ❌ MISSING |
+| Décret 06-138 | Émissions poussières | ✅ Present — Art.1–19 + Annexes I/II, ✅ VÉRIFIÉ 2026-08-11 (confirmed W80) |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51 OPEN |
 
 ---
