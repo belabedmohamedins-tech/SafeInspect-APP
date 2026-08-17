@@ -17,11 +17,21 @@ import { Router } from 'express';
 import bcrypt    from 'bcryptjs';
 import jwt       from 'jsonwebtoken';
 import { z }     from 'zod';
+import rateLimit from 'express-rate-limit';
 import { PrismaClient } from '@prisma/client';
 import { requireAuth } from '../middleware/auth';
 
 const router = Router();
 const prisma = new PrismaClient();
+
+// ── Rate limiter: max 10 login attempts per IP per 15 minutes ─────────────────
+const loginRateLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'عدد المحاولات تجاوز الحد المسموح. حاول مجدداً بعد 15 دقيقة.' },
+});
 
 // ── POST /auth/login ─────────────────────────────────────────────────────────
 const LoginSchema = z.object({
@@ -29,7 +39,7 @@ const LoginSchema = z.object({
   password:  z.string().min(4).max(128),
 });
 
-router.post('/login', async (req, res) => {
+router.post('/login', loginRateLimiter, async (req, res) => {
   const parsed = LoginSchema.safeParse(req.body);
   if (!parsed.success) {
     res.status(400).json({ error: 'بيانات غير صحيحة', details: parsed.error.issues });

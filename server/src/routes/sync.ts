@@ -22,6 +22,9 @@ import { sendPushToSupervisors } from '../lib/push';
 const router = Router();
 const prisma = new PrismaClient();
 
+// ── Batch size guard (DoS protection) ────────────────────────────────────────
+const MAX_BATCH = 500;
+
 // ── Zod schemas (relaxed — device data is the source of truth) ───────────────
 
 const InspectionItemSchema = z.object({
@@ -146,6 +149,19 @@ router.post('/', requireAuth, async (req, res) => {
   }
 
   const { inspections, actions, agenda } = parsed.data;
+
+  // ── Batch size guard ──────────────────────────────────────────────────────
+  if (
+    inspections.length > MAX_BATCH ||
+    actions.length     > MAX_BATCH ||
+    agenda.length      > MAX_BATCH
+  ) {
+    res.status(400).json({
+      error: `Batch too large. Maximum ${MAX_BATCH} items per array per request.`,
+    });
+    return;
+  }
+
   const inspectorId = req.inspector!.inspectorId;
   let synced  = 0;
   let skipped = 0;
