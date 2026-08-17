@@ -149,16 +149,15 @@ export const gplCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 10.2: EIA trigger criterion — modelled on UPD-AX10-01
-    // W42-parity (2026-08-16): Loi 03-10 EIE range corrected 15–22 → 14–21.
-    // Art.14 = root EIE obligation article (missed by old range).
-    // Art.22 = fiscal instruments — completely unrelated to EIE.
-    // Confirmed by W42 direct read on abattoirCriteria.ts and slaughterhouseSmallCriteria.ts.
+    // W60 FIX (2026-08-17): Loi 03-10 correct EIE range = Art.15-21.
+    // Art.14 = définition EIE (not the obligation). Art.15 = root EIE obligation article.
+    // Art.16 = contenu EIE. Art.17-20 = enquête publique. Art.21 = condition préalable au permis.
+    // W42 comment was wrong: claimed Art.14 = root obligation — corrected by direct read W60.
     id: 'GPL-05-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود الأخطار المحددة فيها (تسرب الغاز، الانفجار، الحريق)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في طاقة التخزين أو نوع النشاط.',
-    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (إدراج نشاط تخزين وتركيب GPL/C في قائمة المنشآت المصنفة ذات التأثير البيئي).',
+    legalReference: 'القانون 03-10 المواد 15–21 (المادة 15: الالتزام الجذري بدراسة EIE للمشاريع ذات التأثير على البيئة؛ المادة 16: محتوى الدراسة؛ المواد 17–20: إجراءات التحقيق العام؛ المادة 21: دراسة EIE شرط مسبق للحصول على رخصة البناء أو الاستغلال). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (إدراج نشاط تخزين وتركيب GPL/C في قائمة المنشآت المصنفة ذات التأثير البيئي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
