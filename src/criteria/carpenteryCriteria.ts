@@ -74,21 +74,30 @@ export const carpenteryCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 + Décret 93-120 (médecine du travail, unrelated)
+    // with correct Décret 91-05 Arts.39-41 (machine guards and emergency stop requirements).
+    // Décret 91-05 Art.39: commandes à portée du conducteur.
+    // Décret 91-05 Art.40: disposition des machines pour protéger les travailleurs des parties mobiles.
+    // Décret 91-05 Art.41: organes dangereux inaccessibles — gardes, grilles, barrières, protège-mains.
     id: 'CRP-04-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر واقيات على الآلات الدوارة والمناشير الدائرية، مع وجود أزرار إيقاف طارئ في متناول المشغّل.',
-    legalReference: 'القانون 90-11 + المرسوم 93-120 (اشتراطات حماية الآلات الدوارة وأزرار الإيقاف الطارئ).',
+    legalReference: 'المرسوم 91-05 المواد 39-41 (اشتراطات حماية الآلات الدوارة وأجهزة الوقاية وأزرار الإيقاف الطارئ في متناول المشغّل).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 Art.8 + Décret 93-120 (médecine du travail, unrelated)
+    // with correct Décret 91-05 Arts.16-17 (PPE obligation).
+    // Décret 91-05 Art.16: PPE must be provided when collective protection is impossible.
+    // Décret 91-05 Art.17: special equipment for workers exposed to extreme temperatures/dust.
     id: 'CRP-04-02',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية: كمامات من غبار الخشب (FFP2 على الأقل)، واقٍ للعينين، واقٍ للسمع عند الأعمال الصوتية.',
-    legalReference: 'القانون 90-11 المادة 8 + المرسوم 93-120.',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (توفير وسائل الوقاية الشخصية عند استحالة الحماية الجماعية وتجهيز العمال المعرّضين للغبار والأعمال الصوتية الشديدة).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
