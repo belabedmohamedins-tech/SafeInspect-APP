@@ -1,4 +1,4 @@
-﻿# Décret exécutif n° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017
+# Décret exécutif n° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017
 ## fixant les conditions d'hygiène et de salubrité lors du processus de mise à la consommation des denrées alimentaires destinées à la consommation humaine
 
 ---
@@ -10,6 +10,10 @@
 **Journal Officiel :** JORADP n° 24 du 19 Rajab 1438 / 16 avril 2017
 
 **Source PDF converti :** Decret-17-140.pdf (JORADP n° 24, 16 avril 2017)
+
+**Date de conversion :** 2026-08-10
+
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 
 **Note de langue :** Le texte officiel publié dans ce JORADP est en arabe. La traduction française ci-dessous est une retranscription fidèle du texte arabe original. Vérifier contre le texte arabe original en cas de doute.
 
