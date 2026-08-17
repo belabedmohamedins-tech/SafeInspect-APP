@@ -1,4 +1,10 @@
 // src/repositories/AuthRepository.ts
+//
+// W68 FIX: PIN_FAILED_ATTEMPTS now routed through secureGet/secureSet/
+// secureDelete instead of AsyncStorage directly. An attacker who clears
+// AsyncStorage could previously bypass the lockout counter; storing in
+// SecureStore (Keychain/Keystore on native) prevents this.
+// AsyncStorage fallback is preserved for web platform (isNative() === false).
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as LocalAuth from 'expo-local-authentication';
@@ -51,7 +57,8 @@ export const AuthRepository = {
     } else {
       await secureSet(StorageKeys.APP_PIN, pin);
     }
-    await AsyncStorage.removeItem(StorageKeys.PIN_FAILED_ATTEMPTS);
+    // W68: reset counter via SecureStore, not AsyncStorage.
+    await secureDelete(StorageKeys.PIN_FAILED_ATTEMPTS);
   },
 
   /**
@@ -60,23 +67,25 @@ export const AuthRepository = {
    */
   clearPin: async (): Promise<void> => {
     await secureDelete(StorageKeys.APP_PIN);
-    await AsyncStorage.removeItem(StorageKeys.PIN_FAILED_ATTEMPTS);
+    // W68: reset counter via SecureStore, not AsyncStorage.
+    await secureDelete(StorageKeys.PIN_FAILED_ATTEMPTS);
   },
 
+  // W68: all three counter methods now use secureGet/secureSet/secureDelete.
   getFailedAttempts: async (): Promise<number> => {
-    const val = await AsyncStorage.getItem(StorageKeys.PIN_FAILED_ATTEMPTS);
+    const val = await secureGet(StorageKeys.PIN_FAILED_ATTEMPTS);
     return val ? parseInt(val, 10) : 0;
   },
 
   incrementFailedAttempts: async (): Promise<number> => {
     const current = await AuthRepository.getFailedAttempts();
     const next = current + 1;
-    await AsyncStorage.setItem(StorageKeys.PIN_FAILED_ATTEMPTS, String(next));
+    await secureSet(StorageKeys.PIN_FAILED_ATTEMPTS, String(next));
     return next;
   },
 
   resetFailedAttempts: (): Promise<void> =>
-    AsyncStorage.removeItem(StorageKeys.PIN_FAILED_ATTEMPTS).then(() => {}),
+    secureDelete(StorageKeys.PIN_FAILED_ATTEMPTS),
 
   isLockedOut: async (): Promise<boolean> => {
     const attempts = await AuthRepository.getFailedAttempts();

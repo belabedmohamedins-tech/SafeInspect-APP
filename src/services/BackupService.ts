@@ -28,12 +28,19 @@
 //     "missing photo" fallback in the checklist card.
 //
 // v1 backup files are still accepted on import (no photoUriMap field).
+//
+// W65 FIX: exportBackup() now reads inspections from InspectionRepository
+// (SQLite) instead of AsyncStorage — which was never written by the
+// repository since W57-TSC migrated to SQLite.
+// importBackup() now restores inspections via InspectionRepository.save()
+// instead of AsyncStorage.multiSet for the 'inspections' key.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as DocumentPicker from 'expo-document-picker';
 import * as FileSystem from 'expo-file-system/legacy';
 import * as Sharing from 'expo-sharing';
 import { AgendaItem, Facility, InspectionItem, SavedInspection } from '../types';
+import { InspectionRepository } from '../repositories/InspectionRepository';
 import { rescheduleAll } from './NotificationService';
 
 export const BACKUP_VERSION = 2;
@@ -107,23 +114,24 @@ export interface BackupPayload {
 // ─── Storage keys ─────────────────────────────────────────────────────────────
 
 const KEYS = {
-  inspections:   'inspections',
-  agenda:        'agenda',
-  userFacilities:'userFacilities',
-  officeName:    'officeName',
-  inspectorName: 'inspectorName',
+  agenda:          'agenda',
+  userFacilities:  'userFacilities',
+  officeName:      'officeName',
+  inspectorName:   'inspectorName',
   inspectionCause: 'inspectionCause',
-  organisation:  '@settings/organisation',
-  department:    '@settings/department',
-  showGrade:     '@settings/showGrade',
-  lastBackupAt:  '@backup/lastExportedAt',
+  organisation:    '@settings/organisation',
+  department:      '@settings/department',
+  showGrade:       '@settings/showGrade',
+  lastBackupAt:    '@backup/lastExportedAt',
 } as const;
 
 // ─── Export ───────────────────────────────────────────────────────────────────
 
 export async function exportBackup(): Promise<BackupPayload> {
-  const keys = [
-    KEYS.inspections,
+  // W65: read inspections from SQLite via InspectionRepository, not AsyncStorage.
+  const inspections = await InspectionRepository.getAll();
+
+  const settingKeys = [
     KEYS.agenda,
     KEYS.userFacilities,
     KEYS.officeName,
@@ -133,12 +141,8 @@ export async function exportBackup(): Promise<BackupPayload> {
     KEYS.department,
     KEYS.showGrade,
   ];
-  const pairs = await AsyncStorage.multiGet(keys);
+  const pairs = await AsyncStorage.multiGet(settingKeys);
   const map = Object.fromEntries(pairs.map(([k, v]) => [k, v]));
-
-  const inspections: SavedInspection[] = map[KEYS.inspections]
-    ? JSON.parse(map[KEYS.inspections]!)
-    : [];
 
   const payload: BackupPayload = {
     version: BACKUP_VERSION,
@@ -221,8 +225,21 @@ export async function importBackup(): Promise<ImportResult | null> {
     ? applyPhotoUriMap(payload.inspections, payload.photoUriMap)
     : payload.inspections;
 
+  // W65: restore inspections into SQLite via InspectionRepository.save().
+  // Each save() upserts atomically and is guarded by the W22 INSPECTION_LOCKED
+  // check — approved inspections will throw; non-fatal, we continue.
+  for (const inspection of restoredInspections) {
+    try {
+      await InspectionRepository.save(inspection);
+    } catch (err: unknown) {
+      // Approved inspections are legally immutable — skip silently.
+      if (err instanceof Error && err.message === 'INSPECTION_LOCKED') continue;
+      throw err;
+    }
+  }
+
+  // Restore non-inspection data to AsyncStorage (agenda + settings repos not yet on SQLite).
   await AsyncStorage.multiSet([
-    [KEYS.inspections,    JSON.stringify(restoredInspections)],
     [KEYS.agenda,         JSON.stringify(payload.agenda)],
     [KEYS.userFacilities, JSON.stringify(payload.userFacilities ?? [])],
     [KEYS.officeName,      payload.settings?.officeName      ?? ''],

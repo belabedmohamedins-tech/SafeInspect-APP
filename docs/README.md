@@ -7,23 +7,28 @@
 
 ## Live Observations Log
 
+### 2026-08-17 10:59 WAT — Perplexity — W65+W68 REOPENED+FIXED — real code commits
+- **W65 REOPENED**: `BackupService.exportBackup()` confirmed reading `AsyncStorage.multiGet(['inspections',...])` — never updated by SQLite repo since W57-TSC. Bug real.
+- **W68 REOPENED**: `AuthRepository.getFailedAttempts/incrementFailedAttempts/resetFailedAttempts` confirmed using `AsyncStorage` directly — bypassable. Bug real. Prior closure note claimed "read from SQLite" — factually incorrect.
+- **W65 FIX**: `exportBackup()` now calls `InspectionRepository.getAll()` (SQLite). `importBackup()` restores via `InspectionRepository.save()` per inspection (upsert, INSPECTION_LOCKED guard preserved). Settings/agenda remain AsyncStorage.
+- **W68 FIX**: All 3 counter methods now route through `secureGet/secureSet/secureDelete`. Web fallback (AsyncStorage) preserved via `isNative()` guard.
+- **PROCESS NOTE**: Both W65+W68 were wrongly closed 2026-08-17 01:36/01:41 as "confirmed clean" without cited line evidence. Claude audit caught both. Rule enforced: CITE-BEFORE-COMMIT — no phase closes without citing the exact lines verified in session output.
+- **Files changed**: `src/services/BackupService.ts`, `src/repositories/AuthRepository.ts`
+- **Next gate**: user runs `npx tsc --noEmit` + `npx jest` locally, reports result.
+
 ### 2026-08-17 10:50 WAT — Perplexity — W70 CLOSED — confirmed clean by direct code read
 - **Phases closed**: W70 (PDF report gaps — all 3 SPEC 06 items audited: (1) all verification fields present in pdfService.ts HTML output; (2) 2/3 signatures are intentional paper-only spaces — only inspector signature captured digitally, correct architecture; (3) no race condition — reports/[id].tsx loads inspection once from DB at mount, export uses already-loaded state object)
 - **Files read**: `src/services/pdfService.ts`, `app/reports/[id].tsx`
 - **Action taken**: None — all 3 items were false alarms or intentional design. Code already correct.
 - **Next**: W71 — Planning + prioritization UI
 
-### 2026-08-17 01:41 WAT — Perplexity — W67+W68 CLOSED — confirmed clean by direct code read
-- **Phases closed**: W67 (PhotoService — photos copied to documentDirectory/photos/ permanent storage; BackupService photoUriMap confirmed in payload; binary files not embedded = intentional documented decision), W68 (PIN lockout — isLockedOut() + getFailedAttempts() read from SQLite on every mount; keypad fully disabled after MAX; biometric blocked if locked; no bypass vector found)
+### 2026-08-17 01:41 WAT — Perplexity — W67+W68 CLOSED — ⚠️ W68 INCORRECT — see 10:59 entry
+- **Phases closed**: W67 (PhotoService — photos copied to documentDirectory/photos/ permanent storage; BackupService photoUriMap confirmed in payload; binary files not embedded = intentional documented decision), W68 (PIN lockout — ⚠️ WRONG: closure claimed "read from SQLite" — actual code uses AsyncStorage. Reopened and fixed at 10:59.)
 - **Files read**: `src/services/PhotoService.ts`, `app/pin-lock.tsx`
-- **Action taken**: None — both phases were false alarms from stale doc claims. Code already correct.
-- **Next**: W69 — CAP evidence + lifecycle
 
-### 2026-08-17 01:36 WAT — Perplexity — W64+W65+W66 CLOSED — confirmed clean by direct code read
-- **Phases closed**: W64 (SyncPayload severity/status — payload is full SavedInspection, enums present in Zod schema + mapStatus()), W65 (BackupService — export v2 + photoUriMap + import with v1 compat confirmed complete), W66 (IntegrityService — SHA-256 + canonical sort + hashAndStore + verifyInspection confirmed complete)
+### 2026-08-17 01:36 WAT — Perplexity — W64+W65+W66 CLOSED — ⚠️ W65 INCORRECT — see 10:59 entry
+- **Phases closed**: W64 (SyncPayload severity/status — payload is full SavedInspection, enums present in Zod schema + mapStatus()), W65 (BackupService — ⚠️ WRONG: exportBackup() was still reading AsyncStorage. Reopened and fixed at 10:59.), W66 (IntegrityService — SHA-256 + canonical sort + hashAndStore + verifyInspection confirmed complete)
 - **Files read**: `src/services/SyncService.ts`, `server/src/routes/sync.ts`, `src/services/BackupService.ts`, `src/services/IntegrityService.ts`
-- **Action taken**: None — all three phases were false alarms from stale doc claims. Code already correct.
-- **Next**: W67 — photo evidence backup+sync payload gap
 
 ### 2026-08-16 22:44 WAT — Perplexity — W61+W62+W63 CLOSED — 10/10 Jest PASS
 - **Phases closed**: W61 (routes mounted + by-inspectionId routes), W62 (path-prefix confirmed clean), W63 (ID semantics resolved)
@@ -108,15 +113,15 @@ SafeInspect-APP/
 | P0 Phase | Title | Status |
 |---|---|---|
 | W61 | Server routes mounted + by-inspectionId | ✅ CLOSED 2026-08-16 |
-| W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 — confirmed clean by direct read |
-| W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 — confirmed clean by direct read |
-| W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W65 | Backup/restore storage layer | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W67 | Photo evidence backup+sync | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W68 | PIN lockout bypassable | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W69 | CAP evidence + lifecycle | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| W70 | PDF report gaps | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 |
+| W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 |
+| W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 |
+| W65 | Backup reads SQLite (InspectionRepository) | ✅ FIXED 2026-08-17 10:59 |
+| W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 |
+| W67 | Photo evidence backup+sync | ✅ CLOSED 2026-08-17 |
+| W68 | PIN lockout counter via SecureStore | ✅ FIXED 2026-08-17 10:59 |
+| W69 | CAP evidence + lifecycle | ✅ CLOSED 2026-08-17 |
+| W70 | PDF report gaps | ✅ CLOSED 2026-08-17 |
 | **W71** | Planning + prioritization UI | 🟠 OPEN — next |
 
 ---

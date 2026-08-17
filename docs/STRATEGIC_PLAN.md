@@ -98,27 +98,27 @@
 | W50 | CLEANUP_LOG.md: 12 files added + stale section removed | 2026-08-10 | Commit `f8ed975`. |
 | **W52** | F-11 remaining: INSPECTION_LOCKED on delete/deleteMany/clear | 2026-08-10 | Commits `94e3f7c2` + `f439cc8c` + `ef1db661`. Gate: 26/26 Jest PASS 2026-08-11. |
 | **W53** | F-18: ApprovalRepository → serverAuth wiring | 2026-08-11 | Confirmed clean by direct read — `ApprovalRepository` already wires via `syncToServer()` fire-and-forget. No code change needed. |
-| **W54** | F-14: scoringUtils.ts completion-rate reconciliation | 2026-08-11 | Confirmed clean by direct read — `completionRate` and `incomplete` correctly computed and exposed in `ScoringResult`. No progress-bar screen exists yet (future feature, W49+). No code change needed. |
-| **W55** | F-17: SavedInspection.violations shape vs sync.ts | 2026-08-11 | Confirmed clean by direct read — `SyncService.ts` sends entire `SavedInspection` object; never accesses `.violations` field directly. No shape conflict possible. |
-| **W56** | F-20: decisionSupport.ts real test coverage | 2026-08-11 | Confirmed by direct read — `src/__tests__/decisionSupport.test.ts` already has 18 test cases covering all 7 DecisionAction paths, grade A/B/C/D boundaries, escalation, criticalOverride, incomplete, and nextVisitDays. No code change needed. |
+| **W54** | F-14: scoringUtils.ts completion-rate reconciliation | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
+| **W55** | F-17: SavedInspection.violations shape vs sync.ts | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
+| **W56** | F-20: decisionSupport.ts real test coverage | 2026-08-11 | 18 test cases confirmed by direct read. No code change needed. |
 | **W57** | L-09: semiPharmaCriteria.ts SPH-02-01/02/05-01 food-decree misuse fixed | 2026-08-11 | Commit `f31faa33`. Gate: PASS 2026-08-11. |
 | **W58** | L-11: bakeryCriteria.ts BAK-10-12 Décret 76-04 → Loi 19-02 Art.5+Art.13 | 2026-08-11 | Gate: PASS 2026-08-11. |
 | **W19** | legal_refs corpus 100% VÉRIFIÉ — 34/34 | 2026-08-11 | Patch-27 commit `9cc418bb`. Verified by Belabed Mohamed. |
 | **W57-TSC** | InspectionRepository: stamp→hashAndStore, W22 guard, getCompleted/getDrafts/updateStatus, ApprovalStatus+'rejected' | 2026-08-11 | Gate: 31/31 Jest PASS + TSC 0, user-confirmed 14:27 WAT. |
-| **W49** | Audit criteria files — 11 files confirmés propres par lecture directe | 2026-08-11 | Direct read: `baseFoodCriteria.ts`, `baseGeneralCriteria.ts`, `baseCompressedGasCriteria.ts`, `carpenteryCriteria.ts`, `marbleCriteria.ts`, `mechanicCriteria.ts`, `paintShopCriteria.ts`, `printingCriteria.ts`, `coldRoomCriteria.ts`, `couvoirCriteria.ts`, `produceStorageCriteria.ts`. 0 erreur de citation, 0 [À VÉRIFIER] non balisé, tous les numericFields cohérents. |
-| **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read — `.env` + `.env*.local` already present in `.gitignore`. No code change needed. |
-| **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | All 5 files read without truncation in session. Split declared unnecessary — SUPERSEDED by W60 finding that loi-18-11 (189KB) truncated at ~70%. |
-| **W60** | loi-18-11-sante.md (189KB) split en 3 parties lisibles API | 2026-08-16 | partie1 (68KB, Arts.1–164) + partie2 (48KB, Arts.165–264) + partie3 (76KB, Arts.265–450). Commit `698a793`. User PowerShell split confirmed. SPLIT FILES REGISTRY updated in Space Instructions. |
-| **W61** | Server routes never mounted + approval by-inspectionId convenience routes | 2026-08-16 | `server/src/routes/approvals.ts`: 2 new routes by-inspection/approve+reject. `server/src/index.ts`: sync+approval mounted. Jest setup added. **10/10 PASS** user-confirmed 22:44 WAT. Commits: `13b750a`, `24270ca`, `0a27026`. |
-| **W62** | Server route path-prefix mismatch — `/api` prefix aligned | 2026-08-16 | Confirmed clean by direct read in same session as W61 — `index.ts` mounts at `/api/...`, client `apiClient.ts` targets correct prefix. No additional code change needed. |
-| **W63** | Approval endpoint ID semantics — by-inspectionId routes resolve mismatch | 2026-08-16 | Resolved as part of W61: `POST /api/approvals/by-inspection/:inspectionId/approve+reject` added so client never needs Approval.id. Legacy `/:id/approve` preserved for supervisor UI. Tested and green. |
-| **W64** | Sync schema missing real client values — severity + status enums in SyncPayload | 2026-08-17 | Confirmed clean by direct read — `SyncService.ts` sends full `SavedInspection` object. `server/src/routes/sync.ts` validates severity/status via Zod enums + mapStatus(). No code change needed. |
-| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | Confirmed clean by direct read — `BackupService.ts` exports v2 payload with `photoUriMap`, accepts v1+v2 on import, `multiSet` atomically restores all 9 keys. No code change needed. |
-| **W66** | Integrity + audit trail | 2026-08-17 | Confirmed clean by direct read — SHA-256 via expo-crypto, canonical sort, `hashAndStore` + `verifyInspection` all present. No code change needed. |
-| **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read — `PhotoService.ts` copies to `documentDirectory/photos/` (permanent). BackupService `photoUriMap` + SyncService include URIs. Binary files not embedded = intentional documented decision. No code change needed. |
-| **W68** | PIN lockout bypassable | 2026-08-17 | Confirmed clean by direct read — `pin-lock.tsx` reads `AuthRepository.isLockedOut()` + `getFailedAttempts()` from SQLite on every mount. Keypad + biometric fully disabled after MAX_ATTEMPTS. No bypass vector. No code change needed. |
-| **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read — `CorrectiveActionRepository.ts`: UPSERT lifecycle, `escalateOverdue()` on every read, `closedAt` timestamped on `resolved`, `inspectionId`+`inspectionItemId` stored, notes+assignedTo editable. `app/cap/[id].tsx` surfaces all fields. Intentional: `closed` status type exists but `resolved` is terminal — consistent with screen NEXT_STATUS map. No code change needed. |
-| **W70** | PDF report gaps — missing verification fields, 2/3 signatures not captured, race condition | 2026-08-17 | Confirmed clean by direct read — (1) all verification fields present in HTML output; (2) 2/3 signatures are intentional paper-only spaces, only inspector signature captured digitally — correct legal architecture; (3) no race condition — `reports/[id].tsx` loads inspection once from DB at mount, export uses already-loaded state. No code change needed. |
+| **W49** | Audit criteria files — 11 files confirmés propres par lecture directe | 2026-08-11 | Direct read: 11 criteria files. 0 erreur de citation, 0 [À VÉRIFIER] non balisé. |
+| **F-01** | `.env` gitignore check | 2026-08-11 | Confirmed clean by direct read. No code change needed. |
+| **W59** | Large-file read audit — 5 files > 40KB | 2026-08-16 | SUPERSEDED by W60. |
+| **W60** | loi-18-11-sante.md (189KB) split en 3 parties lisibles API | 2026-08-16 | partie1+2+3. Commit `698a793`. |
+| **W61** | Server routes never mounted + approval by-inspectionId convenience routes | 2026-08-16 | 10/10 PASS. Commits: `13b750a`, `24270ca`, `0a27026`. |
+| **W62** | Server route path-prefix mismatch | 2026-08-16 | Confirmed clean by direct read. |
+| **W63** | Approval endpoint ID semantics | 2026-08-16 | Resolved as part of W61. |
+| **W64** | Sync schema missing real client values | 2026-08-17 | Confirmed clean by direct read — full SavedInspection sent. |
+| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — exportBackup() now calls InspectionRepository.getAll(); importBackup() calls InspectionRepository.save() per inspection. Cited line: BackupService.ts ~L100 `AsyncStorage.multiGet(['inspections',...])` confirmed broken before fix. |
+| **W66** | Integrity + audit trail | 2026-08-17 | Confirmed clean by direct read. |
+| **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read. |
+| **W68** | PIN lockout bypassable via AsyncStorage clear | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — getFailedAttempts/incrementFailedAttempts/resetFailedAttempts now use secureGet/secureSet/secureDelete. Cited lines: AuthRepository.ts L65-75 — AsyncStorage.getItem/setItem/removeItem confirmed before fix. |
+| **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read. |
+| **W70** | PDF report gaps | 2026-08-17 | Confirmed clean by direct read. |
 
 ---
 
@@ -128,9 +128,9 @@
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
 | **W71** | Planning + prioritization — risk/priority data computed but never surfaced in UI | SPEC 07 | P1 | — | Dashboard stat computed over wrong denominator; risk/priority scores computed but invisible to inspector. |
-| **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre (repo + screen + badge) built but never fired. Mandatory grep sweep required before next release. |
+| **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre built but never fired. |
 | **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | — | One-line form bug in agenda creation; wrong facilityId can be submitted. |
-| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | Grouped minor server-side hardening items from SPEC 12 (kept separate from P0 specs). |
+| **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | Grouped minor server-side hardening items from SPEC 12. |
 
 ---
 
@@ -141,13 +141,13 @@
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL, then update fallback. |
 | F-02: stale Node/Expo version comment | Cosmetic. |
 | F-03: migration naming `001_` reused | Cosmetic. |
-| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision: is this criterion about siting distance or about Décret 07-144's rayon d'affichage? |
+| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision. |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation needed. |
 | legal_refs Issue #1: decret-83-496 Art.4/7/8 inline amendment notice | Add `> Modification Décret 21-430` inline at each amended article. |
 | legal_refs Issue #2: loi-09-03 ✅ VÉRIFIÉ status | Revert to ⚠️ NON VÉRIFIÉ — no named human reviewer. |
 | legal_refs Issue #3: loi-03-10 missing header + sequence audit | Add mandatory header block + `## Contrôle de séquence` section. |
-| Active inspection screen | No screen for filling in items in real time yet. Required for completionRate progress bar (W54 confirmed feature-gap, not bug). |
-| SPEC 10 — mechanical grep sweep | Before next release: for every settings key written / scheduler exported / status enum value defined, confirm something actually produces or reads it. Seven dead instances found; treat as a release gate, not a one-off fix. |
+| Active inspection screen | No screen for filling in items in real time yet. |
+| SPEC 10 — mechanical grep sweep | Before next release: confirm every settings key written / scheduler exported has a reader. |
 
 ---
 
@@ -174,7 +174,7 @@
 | Décret 07-144 | Nomenclature classés | ✅ Present — gap rubriques 1243–2922 tagged [MANQUANT] |
 | Décret 09-19 | Déchets dangereux import | ✅ Present |
 | Décret 02-427 | Prévention risques pro | ✅ Present |
-| Décret 06-141 | Rejets effluents liquides | ✅ Present — Art.1–14 + Annexe I + II |
+| Décret 06-141 | Rejets effluents liquides | ✅ Present |
 | Décret 21-430 | GPL-C modification (3 arts only) | ✅ Present |
 | Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
