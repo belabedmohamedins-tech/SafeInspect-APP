@@ -11,11 +11,15 @@
 // fired in a non-blocking, non-throwing wrapper (syncToServer). If the server
 // is unreachable the local action is already committed; an audit entry with
 // action 'SERVER_SYNC_PENDING' is appended so the sync engine can retry later.
+//
+// W72: approve() and returnForRevision() fire APPROVAL_ACTION in-app
+//      notifications (fire-and-forget via pushInApp, never throws).
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { StorageKeys } from './keys';
 import { ApprovalStatus, SavedInspection } from '../types';
 import { AuditLogRepository } from './AuditLogRepository';
 import * as serverAuth from '../services/serverAuth';
+import { pushInApp } from '../services/NotificationService';
 
 export interface ApprovalRecord {
   inspectionId: string;
@@ -138,6 +142,13 @@ export const ApprovalRepository = {
       supervisorName,
       { inspectionId, facilityName: q[idx].facilityName, detail: `اعتمد المشرف ${supervisorName}` },
     );
+    // W72: in-app notification — approval confirmed.
+    void pushInApp({
+      type: 'APPROVAL_ACTION',
+      title: `✅ تم اعتماد التقرير — ${q[idx].facilityName}`,
+      body: `اعتمد ${supervisorName} التقرير${note ? `: ${note}` : ''}`,
+      link: { screen: '/screens/approval-queue' },
+    });
     // W53: non-blocking server sync
     void syncToServer(inspectionId, supervisorName, () =>
       serverAuth.approveInspection(inspectionId, note)
@@ -174,6 +185,13 @@ export const ApprovalRepository = {
       supervisorName,
       { inspectionId, facilityName: q[idx].facilityName, detail: `أعيد المشرف: ${reason}` },
     );
+    // W72: in-app notification — returned for revision.
+    void pushInApp({
+      type: 'APPROVAL_ACTION',
+      title: `↩️ أُعيد التقرير للمراجعة — ${q[idx].facilityName}`,
+      body: `${supervisorName}: ${reason}`,
+      link: { screen: '/screens/approval-queue' },
+    });
     // W53: non-blocking server sync
     void syncToServer(inspectionId, supervisorName, () =>
       serverAuth.rejectInspection(inspectionId, reason)

@@ -2,9 +2,16 @@
 //
 // Z5: migrated from AsyncStorage to expo-sqlite.
 // All business logic preserved: overdue escalation, ring-sort, stats, CAP lifecycle.
+//
+// W72: save() fires a CAP_DEADLINE in-app notification when a new CAP is
+//      created with a deadline within the next 7 days.
+//      updateStatus() fires a FOLLOW_UP notification when status becomes
+//      'in-progress'.
+//      Both calls are fire-and-forget via pushInApp() and never throw.
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
+import { pushInApp } from '../services/NotificationService';
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -191,6 +198,8 @@ export const CorrectiveActionRepository = {
 
   /**
    * Upserts a corrective action and returns the full persisted record.
+   * W72: fires CAP_DEADLINE notification when a new CAP has a deadline
+   * within the next 7 days.
    */
   async save(
     action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> &
@@ -199,6 +208,7 @@ export const CorrectiveActionRepository = {
     const db = await getDb();
     const now = new Date().toISOString();
     const id  = /* istanbul ignore next */ action.id ?? makeId();
+    const isNew = !action.id;
     const record: CorrectiveAction = {
       ...action,
       id,
@@ -228,9 +238,29 @@ export const CorrectiveActionRepository = {
         record.createdAt, record.updatedAt, record.closedAt ?? null,
       ],
     );
+
+    // W72: fire CAP_DEADLINE notification for new CAPs with near deadline.
+    if (isNew) {
+      const daysUntil = Math.ceil(
+        (new Date(record.deadline).getTime() - Date.now()) / 86_400_000,
+      );
+      if (daysUntil >= 0 && daysUntil <= 7) {
+        void pushInApp({
+          type: 'CAP_DEADLINE',
+          title: `⚠️ موعد إجراء تصحيحي — ${record.facilityName}`,
+          body: `${record.criteria} — الموعد النهائي: ${record.deadline}`,
+          link: { screen: '/screens/cap' },
+        });
+      }
+    }
+
     return record;
   },
 
+  /**
+   * Update status of a corrective action.
+   * W72: fires FOLLOW_UP notification when status becomes 'in-progress'.
+   */
   async updateStatus(
     id: string,
     status: CorrectiveAction['status'],
@@ -246,6 +276,22 @@ export const CorrectiveActionRepository = {
        WHERE id = ?`,
       [status, notes ?? null, now, closedAt, id],
     );
+
+    // W72: fire FOLLOW_UP notification when a CAP starts being worked on.
+    if (status === 'in-progress') {
+      const row = await db.getFirstAsync<CapRow>(
+        'SELECT * FROM corrective_actions WHERE id = ?',
+        [id],
+      );
+      if (row) {
+        void pushInApp({
+          type: 'FOLLOW_UP',
+          title: `🔄 متابعة إجراء تصحيحي — ${row.facility_name}`,
+          body: `${row.criteria} — قيد التنفيذ`,
+          link: { screen: '/screens/cap' },
+        });
+      }
+    }
   },
 
   async delete(id: string): Promise<void> {

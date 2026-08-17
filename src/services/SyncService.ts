@@ -29,6 +29,11 @@
 //     (b) the local copy is still in AsyncStorage and is NOT deleted here —
 //         only the sync-queue entry is dropped.
 //
+// W72 — autoSync toggle:
+//   flush() now reads SettingsRepository('autoSync'). If the user has
+//   disabled auto-sync in Settings the scheduled flush() is a no-op.
+//   Manual calls from Backup screen are unaffected (pass force=true).
+//
 // ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to `process.env.KEY`:
 //   babel-preset-expo ships babel-plugin-transform-inline-environment-variables
 //   which replaces the static form `process.env.EXPO_PUBLIC_*` with the
@@ -57,6 +62,13 @@ const SYNC_API_URL_KEY = 'EXPO_PUBLIC_SYNC_API_URL';
 
 function getSyncApiUrl(): string | undefined {
   return (process.env[SYNC_API_URL_KEY] ?? '').trim() || undefined;
+}
+
+// W72: lazy SettingsRepository to avoid circular dep.
+function getSettingsRepository() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  return require('../repositories/SettingsRepository').SettingsRepository as
+    typeof import('../repositories/SettingsRepository').SettingsRepository;
 }
 
 export interface SyncQueueItem {
@@ -134,7 +146,22 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
   await writeQueue(queue);
 }
 
-export async function flush(): Promise<number> {
+/**
+ * Flush the sync queue.
+ *
+ * @param force  When true, bypasses the autoSync setting check.
+ *               Pass force=true for manual syncs (Backup screen);
+ *               omit (defaults false) for scheduled background flushes.
+ */
+export async function flush(force = false): Promise<number> {
+  // W72: respect the autoSync toggle for scheduled (non-forced) runs.
+  if (!force) {
+    try {
+      const all = await getSettingsRepository().getAll();
+      if (all['autoSync'] === 'false') return 0;
+    } catch { /* if settings unreadable, proceed */ }
+  }
+
   const SYNC_API_URL = getSyncApiUrl();
   if (!SYNC_API_URL) return 0;
 

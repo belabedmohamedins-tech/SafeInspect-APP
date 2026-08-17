@@ -6,20 +6,24 @@
 //   scheduleLocalNotification   — low-level one-shot schedule
 //   cancelNotification          — cancel by id
 //   cancelAllNotifications      — cancel all
-//   isEnabled                   — read persisted toggle (AsyncStorage)
-//   setEnabled                  — persist toggle
+//   isEnabled                   — reads SettingsRepository key 'notifications' (W72)
+//   setEnabled                  — writes SettingsRepository key 'notifications' (W72)
 //   requestPermission           — request OS permission, returns granted boolean
 //   scheduleForAgendaItem       — schedule a reminder for an AgendaItem
 //   cancelForAgendaItem         — cancel the reminder for an AgendaItem
 //   rescheduleAll               — reschedule all agenda items (used by BackupService)
+//   pushInApp                   — append to NotificationRepository (W72)
+//
+// W72: isEnabled / setEnabled now read/write SettingsRepository('notifications')
+//      instead of the old AsyncStorage AGENDA_NOTIF_ENABLED key so the
+//      Settings screen toggle is the single source of truth.
+//      pushInApp() guards on isEnabled() before writing to the in-app centre.
 //
 // ⚠️  expo-notifications Android remote push was removed from Expo Go in
 //     SDK 53. The import is therefore LAZY (require at runtime, not top-level)
 //     so that the module loads safely inside Expo Go without crashing.
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import Constants from 'expo-constants';
-import { StorageKeys } from '../repositories/keys';
 
 // ─── Expo Go guard ───────────────────────────────────────────────────────────
 const IS_EXPO_GO = Constants.appOwnership === 'expo';
@@ -67,12 +71,20 @@ export async function cancelAllNotifications(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
 }
 
-// ─── Enabled toggle (AsyncStorage) ────────────────────────────────────────────
+// ─── Enabled toggle — W72: unified via SettingsRepository ────────────────────
+// Lazy import to avoid circular dep (SettingsRepository → db → no cycle here,
+// but keeps startup order clean).
+function getSettingsRepository() {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  return require('../repositories/SettingsRepository').SettingsRepository as
+    typeof import('../repositories/SettingsRepository').SettingsRepository;
+}
+
 export async function isEnabled(): Promise<boolean> {
   try {
-    const val = await AsyncStorage.getItem(StorageKeys.AGENDA_NOTIF_ENABLED);
-    // Default to true if not yet set
-    return val === null ? true : val === 'true';
+    const all = await getSettingsRepository().getAll();
+    // Default true if key has never been set.
+    return all['notifications'] !== 'false';
   } catch {
     return true;
   }
@@ -80,7 +92,7 @@ export async function isEnabled(): Promise<boolean> {
 
 export async function setEnabled(enabled: boolean): Promise<void> {
   try {
-    await AsyncStorage.setItem(StorageKeys.AGENDA_NOTIF_ENABLED, String(enabled));
+    await getSettingsRepository().set('notifications', enabled ? 'true' : 'false');
   } catch { /* ignore */ }
 }
 
@@ -92,6 +104,28 @@ export async function requestPermission(): Promise<boolean> {
     return status === 'granted';
   } catch {
     return false;
+  }
+}
+
+// ─── In-app notification centre (W72) ────────────────────────────────────────
+/**
+ * Append an in-app notification to the persistent NotificationRepository.
+ * No-ops silently if notifications are disabled in Settings.
+ * Use this for CAP deadlines, approval actions, follow-ups, etc.
+ */
+export async function pushInApp(
+  item: Parameters<typeof import('../repositories/NotificationRepository').NotificationRepository.append>[0],
+): Promise<void> {
+  try {
+    if (!(await isEnabled())) return;
+    // Lazy import to avoid circular dep.
+    const { NotificationRepository } =
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      require('../repositories/NotificationRepository') as
+        typeof import('../repositories/NotificationRepository');
+    await NotificationRepository.append(item);
+  } catch (e) {
+    console.warn('[NotificationService] pushInApp error:', e);
   }
 }
 
