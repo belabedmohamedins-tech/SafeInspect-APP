@@ -118,6 +118,7 @@
 | **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read — `PhotoService.ts` copies to `documentDirectory/photos/` (permanent). BackupService `photoUriMap` + SyncService include URIs. Binary files not embedded = intentional documented decision. No code change needed. |
 | **W68** | PIN lockout bypassable | 2026-08-17 | Confirmed clean by direct read — `pin-lock.tsx` reads `AuthRepository.isLockedOut()` + `getFailedAttempts()` from SQLite on every mount. Keypad + biometric fully disabled after MAX_ATTEMPTS. No bypass vector. No code change needed. |
 | **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read — `CorrectiveActionRepository.ts`: UPSERT lifecycle, `escalateOverdue()` on every read, `closedAt` timestamped on `resolved`, `inspectionId`+`inspectionItemId` stored, notes+assignedTo editable. `app/cap/[id].tsx` surfaces all fields. Intentional: `closed` status type exists but `resolved` is terminal — consistent with screen NEXT_STATUS map. No code change needed. |
+| **W70** | PDF report gaps — missing verification fields, 2/3 signatures not captured, race condition | 2026-08-17 | Confirmed clean by direct read — (1) all verification fields present in HTML output; (2) 2/3 signatures are intentional paper-only spaces, only inspector signature captured digitally — correct legal architecture; (3) no race condition — `reports/[id].tsx` loads inspection once from DB at mount, export uses already-loaded state. No code change needed. |
 
 ---
 
@@ -126,7 +127,6 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W70** | PDF report gaps — missing verification fields, 2/3 signatures not captured, race condition | SPEC 06 | P1 | — | Report omits verification fields; only 1 of 3 signatures digitally captured; timing-based race condition on signature confirmation. |
 | **W71** | Planning + prioritization — risk/priority data computed but never surfaced in UI | SPEC 07 | P1 | — | Dashboard stat computed over wrong denominator; risk/priority scores computed but invisible to inspector. |
 | **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre (repo + screen + badge) built but never fired. Mandatory grep sweep required before next release. |
 | **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | — | One-line form bug in agenda creation; wrong facilityId can be submitted. |
@@ -189,13 +189,12 @@
 ## Execution Order (Current Sprint)
 
 ### P1 — in order
-1. **W70** — PDF report gaps (vérifier `src/services/pdfService.ts` + signature screens avant d'agir)
-2. **W71** — Planning/priority UI
-3. **W72** — Dead settings toggles + notification centre
+1. **W71** — Planning/priority UI
+2. **W72** — Dead settings toggles + notification centre
 
 ### P2 — after P1s
-4. **W73** — Agenda facility mismatch
-5. **W74** — Minor server hardening
+3. **W73** — Agenda facility mismatch
+4. **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch

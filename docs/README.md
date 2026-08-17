@@ -7,6 +7,12 @@
 
 ## Live Observations Log
 
+### 2026-08-17 10:50 WAT — Perplexity — W70 CLOSED — confirmed clean by direct code read
+- **Phases closed**: W70 (PDF report gaps — all 3 SPEC 06 items audited: (1) all verification fields present in pdfService.ts HTML output; (2) 2/3 signatures are intentional paper-only spaces — only inspector signature captured digitally, correct architecture; (3) no race condition — reports/[id].tsx loads inspection once from DB at mount, export uses already-loaded state object)
+- **Files read**: `src/services/pdfService.ts`, `app/reports/[id].tsx`
+- **Action taken**: None — all 3 items were false alarms or intentional design. Code already correct.
+- **Next**: W71 — Planning + prioritization UI
+
 ### 2026-08-17 01:41 WAT — Perplexity — W67+W68 CLOSED — confirmed clean by direct code read
 - **Phases closed**: W67 (PhotoService — photos copied to documentDirectory/photos/ permanent storage; BackupService photoUriMap confirmed in payload; binary files not embedded = intentional documented decision), W68 (PIN lockout — isLockedOut() + getFailedAttempts() read from SQLite on every mount; keypad fully disabled after MAX; biometric blocked if locked; no bypass vector found)
 - **Files read**: `src/services/PhotoService.ts`, `app/pin-lock.tsx`
@@ -102,14 +108,16 @@ SafeInspect-APP/
 | P0 Phase | Title | Status |
 |---|---|---|
 | W61 | Server routes mounted + by-inspectionId | ✅ CLOSED 2026-08-16 |
-| W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 |
-| W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 |
+| W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 — confirmed clean by direct read |
+| W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 — confirmed clean by direct read |
 | W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W65 | Backup/restore storage layer | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W67 | Photo evidence backup+sync | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W68 | PIN lockout bypassable | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| **W69** | CAP evidence + lifecycle | 🟠 OPEN — next |
+| W69 | CAP evidence + lifecycle | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| W70 | PDF report gaps | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| **W71** | Planning + prioritization UI | 🟠 OPEN — next |
 
 ---
 
