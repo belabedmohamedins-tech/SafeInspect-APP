@@ -27,6 +27,7 @@
      README mis à jour le 2026-08-11 (26) — patch-26 : arrete-1999 + decret-09-335 promus VÉRIFIÉ via API ; decret-90-245 + arrete-2016 + arrete-2025 promus VÉRIFIÉ via PowerShell — dashboard 25→30 VÉRIFIÉ — 4 NON VÉRIFIÉ restants
      README mis à jour le 2026-08-11 (27) — patch-27 : loi-03-10, loi-01-19, loi-05-12, decret-09-19 promus ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — dashboard 30→34 VÉRIFIÉ — 0 NON VÉRIFIÉ
      README mis à jour le 2026-08-17 (28) — +4 entrées manquantes : decret-04-82-agrement-sanitaire-elevage, loi-18-11-sante-partie1/2/3 — dashboard 34→37 — loi-88-07 statut mis à jour [CONVERTI 2026-08-17]
+     README mis à jour le 2026-08-17 (29) — D04-82 dédup : animaux.md supprimé, elevage.md promu fichier canonique unique — note D04-83 intégrée dans elevage.md — dashboard 37→36
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -44,11 +45,11 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 28)
+## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 29)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 37 | Voir index — 34 vérifiés avant le 2026-08-11 + 3 nouveaux vérifiés le 2026-08-17 |
+| ✅ VÉRIFIÉ | 36 | Voir index — 34 vérifiés avant le 2026-08-11 + 2 nouveaux vérifiés le 2026-08-17 (loi-88-07 + decret-04-82-elevage) + 3 splits loi-18-11 |
 | ⚠️ NON VÉRIFIÉ — texte intégral converti | 0 | — |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` (✅ VÉRIFIÉ) |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
@@ -72,8 +73,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable — Art. 1–89 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `decret-04-82-agrement-sanitaire-animaux.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 (version avec annexes) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `decret-04-82-agrement-sanitaire-elevage.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Agrément sanitaire des établissements d'élevage — Art. 1–18 complets, sans annexes (JO N° 17/2004) — utilisé pour citations SLH-05-02/03 (Art. 10+11) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel [CONVERTI 2026-08-17] |
+| `decret-04-82-agrement-sanitaire-elevage.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 complets (JO N° 17/2004) — Fichier canonique unique (note D04-83 intégrée) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -146,4 +146,5 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-11 (patch 25) :** README sync — `decret-02-427` VÉRIFIÉ ; `decret-06-198` CONFORME→VÉRIFIÉ ; `decret-06-138` VÉRIFIÉ (Art. 7–19 + Annexes I–II complétés par extraction vision) ; `decret-21-319` date corrigée 13 Moharram/22 août ; dashboard 25 VÉRIFIÉ.
 - **2026-08-11 (patch 26) :** 5 fichiers promus ✅ VÉRIFIÉ par Belabed Mohamed — `arrete-1999-conservation-aliments`, `decret-09-335` (via API patch-26) ; `decret-90-245`, `arrete-2016-microbiologiques`, `arrete-2025-hygiene-restauration` (via PowerShell patch-26b + git push `96bba5c`). Dashboard : **30 ✅ VÉRIFIÉ**.
 - **2026-08-11 (patch 27) :** 4 fichiers promus ✅ VÉRIFIÉ par Belabed Mohamed — `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19` — dashboard : **34 ✅ VÉRIFIÉ** — 0 NON VÉRIFIÉ.
-- **2026-08-17 (patch 28) :** 4 entrées manquantes ajoutées à l'index : `decret-04-82-agrement-sanitaire-elevage` (converti 2026-08-17 par Belabed Mohamed) + `loi-18-11-sante-partie1/2/3` (splits du fichier intégral vérifié). `loi-88-07` statut mis à jour [CONVERTI 2026-08-17]. Dashboard : **37 ✅ VÉRIFIÉ**. Note : `decret-04-82` existe en deux fichiers distincts dans ce dossier — `agrement-sanitaire-animaux.md` (version avec annexes, vérifiée 2026-08-11) et `agrement-sanitaire-elevage.md` (version sans annexes, utilisée pour citations SLH criteria, vérifiée 2026-08-17) — les deux couvrent le même instrument D04-82 mais avec un contenu légèrement différent ; conserver les deux jusqu'à clarification par l'utilisateur.
+- **2026-08-17 (patch 28) :** 4 entrées manquantes ajoutées à l'index : `decret-04-82-agrement-sanitaire-elevage` (converti 2026-08-17) + `loi-18-11-sante-partie1/2/3` (splits). `loi-88-07` statut mis à jour. Dashboard : **37 ✅ VÉRIFIÉ**.
+- **2026-08-17 (patch 29) :** D04-82 dédupé — `decret-04-82-agrement-sanitaire-animaux.md` supprimé (doublon BOM + contrôle séquence non-tableau) — `decret-04-82-agrement-sanitaire-elevage.md` promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : **36 ✅ VÉRIFIÉ** (corrigé : un seul fichier D04-82).
