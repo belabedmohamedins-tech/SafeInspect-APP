@@ -33,20 +33,21 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Phase 7.1: periodic ambient VOC measurement inside the printing workshop — complements
-    // PRT-07-01 (stack emission). Uses décret 06-138 Art. 4 + Loi 90-11 Art. 7 (workplace air quality).
+    // Phase 7.1: periodic ambient VOC measurement inside the printing workshop.
+    // W82 note: Loi 90-11 Art.7 (general right to health protection) removed — too generic for this
+    // criterion. Replaced with Décret 91-05 Art.9 (employer obligation to maintain safe working
+    // atmosphere) + Décret 06-138 Art.4 (monitoring obligation for industrial air emissions).
     id: 'PRT-02-03',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'بيئية',
     criteria: 'إجراء قياس دوري لتركيز المركبات العضوية المتطايرة (VOC) في هواء بيئة العمل داخل ورشة الطباعة (مرة في السنة على الأقل) للتحقق من عدم تجاوز الحدود المهنية المسموح بها، وتوثيق النتائج.',
-    legalReference: 'القانون 90-11 المادة 7 (حماية صحة العمال من المخاطر الكيميائية) + المرسوم 06-138 المادة 4 (رصد جودة الهواء في بيئة العمل).',
+    legalReference: 'المرسوم 91-05 المادة 9 (التزام صاحب العمل بضمان سلامة جو العمل) + المرسوم 06-138 المادة 4 (رصد جودة الهواء في بيئة العمل الصناعية).',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
   {
     // Phase A: VOC stack-emission measurement — Décret 06-138 Annex I general limit 150 mg/Nm³.
-    // Printing inks and solvents are a primary VOC source. Annual measurement mandatory.
     id: 'PRT-07-01',
     axis: 'الانبعاثات الهوائية',
     category: 'بيئية',
@@ -115,18 +116,22 @@ export const printingCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
-    // Renamed PRT-04-01 → PRT-05-01 (occupational safety axis renumbered)
+    // W82: FIXED — replaced wrong Loi 90-11 Art.8 + Décret 91-05 Art.6 (general provisions,
+    // unrelated to PPE obligation) with correct Décret 91-05 Arts.16-17.
+    // Décret 91-05 Art.16: PPE must be provided when collective protection is impossible.
+    // Décret 91-05 Art.17: special PPE for workers exposed to chemical/solvent hazards.
     id: 'PRT-05-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة: كمامات، نظارات وقاية، قفازات مقاومة للمذيبات لعمال الطباعة.',
-    legalReference: 'القانون 90-11 المادة 8 + المرسوم التنفيذي 91-05 المادة 6.',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (توفير وسائل الوقاية الشخصية عند استحالة الحماية الجماعية وتجهيز العمال المعرّضين للمذيبات الكيميائية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
   {
-    // Renamed PRT-04-02 → PRT-05-02; added Loi 90-11 Art. 6 (obligation générale de sécurité incendie)
+    // Renamed PRT-04-02 → PRT-05-02; Loi 90-11 Art.6 retained — general fire safety obligation,
+    // not targeted by Finding 3 (which concerns PPE/machine-guard misuse of Loi 90-11).
     id: 'PRT-05-02',
     axis: 'السلامة المهنية',
     category: 'سلامة',
