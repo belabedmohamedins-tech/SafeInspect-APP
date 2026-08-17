@@ -1,0 +1,104 @@
+
+=== 21-430.pdf => decret-21-430-gpl-carburant.md coverage 0.9987 ===
+
+=== 22-167.pdf => decret-22-167-etablissements-classes-modification.md coverage 0.932 ===
+replace 0 35 préambule le premier ministre sur le rapport de la ministre de l environnement vu la constitution notamment ses articles 112 5 et 141 alinéa 2 vu la loi n 11 10 du 20 rajab 1432
+replace 37 56 22 juin 2011 modifiée et complétée relative à la commune vu la loi n 12 07 du 28 rabie
+replace 57 69 aouel 1433 correspondant au 21 février 2012 relative à la wilaya vu
+replace 72 79 18 337 du 17 rabie ethani 1440
+replace 81 109 25 décembre 2018 portant création de circonscriptions administratives dans les grandes villes et dans certaines villes nouvelles et déterminant les règles de leur organisation et fonctionnement vu le
+replace 110 120 présidentiel n 21 275 du 19 dhou el kaâda 1442
+replace 122 156 30 juin 2021 portant nomination du premier ministre vu le décret présidentiel n 21 281 du 26 dhou el kaâda 1442 correspondant au 7 juillet 2021 modifié portant nomination des membres du gouvernement vu
+replace 206 225 nomenclature des installations classées pour la protection de l environnement vu le décret exécutif n 07 145 du 2
+insert 228 301 1428 correspondant au 19 mai 2007 modifié et complété déterminant le champ d application le contenu et les modalités d approbation des études et des notices d impact sur l environnement vu le décret exécutif n 1519 du 4 rabie ethani 1436 correspondant au 25 janvier 2015 modifié et complété fixant les modalités d instruction et de délivrance des actes d urbanisme vu le décret exécutif n 20 357 du 14 rabie ethani
+replace 307 315 fixant les attributions du ministre de l environnement
+
+=== Décret02-427.pdf => decret-02-427-prevention-risques-professionnels.md coverage 0.9837 ===
+replace 10 17 du travail et de la sécurité sociale
+replace 41 52 l hygiène à la sécurité et à la médecine du travail
+
+=== Décret04-82.pdf => decret-04-82-agrement-sanitaire-animaux.md coverage 0.9963 ===
+
+=== Décret06-138.pdf => decret-06-138-emissions-atmospheriques.md coverage 0.9776 ===
+
+=== LOI04-08.pdf => loi-04-08-activites-commerciales.md coverage 0.9989 ===
+
+=== LOI90-11.pdf => loi-90-11-relations-travail.md coverage 0.9981 ===
+replace 8324 8330 conventions et accords collectifs de travail
+
+=== Loi-03-10.pdf => loi-03-10-protection-environnement.md coverage 0.9566 ===
+insert 399 429 2001 14 du 29 joumada el oula 1422 correspondant au 19 août 2001 relative à l organisation la sécurité et la police de la circulation routière vu la loi n
+insert 473 525 2001 19 du 27 ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion au contrôle et à l élimination des déchets vu la loi n 2001 20 du 27 ramadhan 1422 correspondant au 12 décembre 2001 relative à l aménagement et au développement durable du territoire vu la loi n
+insert 541 570 vu la loi n 2002 01 du 22 dhou el kâada 1422 correspondant au 5 février 2002 relative à l électricité et à la distribution du gaz par canalisation
+insert 596 623 vu la loi n 2002 02 du 22 dhou el kâada 1422 correspondant au 5 février 2002 relative à la protection et à la valorisation du littoral
+insert 648 674 2003 03 du 16 dhou el hidja 1423 correspondant au 17 février 2003 relative aux zones d expansion et aux sites touristiques vu la loi n
+insert 715 745 vu le décret n 63 344 du 11 septembre 1963 portant adhésion à la convention internationale pour la prévention de la pollution des eaux de la mer par les hydrocarbures
+replace 1904 1926 abiotiques et biotiques telles que l air l atmosphère l eau le sol et le sous sol la faune et la flore
+replace 1927 1946 compris le patrimoine génétique les interactions entre lesdites ressources ainsi que les sites les paysages et les monuments naturels
+replace 2110 2125 aire protégée une zone spécialement consacrée à la préservation de la diversité biologique et des
+insert 2633 2645 les modalités d application du présent article sont précisées par voie réglementaire
+
+=== Loi01-19.pdf => loi-01-19-gestion-dechets.md coverage 0.9611 ===
+insert 1976 2152 19 il est interdit à tout générateur et ou détenteur de déchets spéciaux dangereux de les remettre ou de les faire remettre à toute autre personne que l exploitant d une installation autorisée pour le traitement de cette catégorie de déchets tout exploitant d une installation non autorisée pour le traitement desdits déchets toute personne qui remet ou fait remettre des déchets spéciaux dangereux est responsable des dégâts et dommages induits par la violation des dispositions du présent article autant que la personne ayant accepté lesdits déchets article 20 le dépôt l enfouissement et l immersion des déchets spéciaux dangereux dans des lieux autres que les sites et les installations qui leur sont réservés sont interdits article 21 les déchets issus des activités de soins doivent obéir à une gestion spécifique leur élimination est à la charge des établissements qui les génèrent et doit être pratiquée de manière à éviter toute atteinte à la santé publique et ou à l environnement les modal
+insert 5184 5196 modifications cette loi ne mentionne pas d abrogation explicite de textes antérieurs
+
+=== Loi04-20.pdf => loi-04-20-risques-majeurs.md coverage 0.9548 ===
+insert 941 1012 1 la présente loi a pour objet d édicter les règles de prévention des risques majeurs et de gestion des catastrophes dans le cadre du développement durable l ensemble des actes relevant de la prévention des risques majeurs et de la gestion des catastrophes sont des actes d intérêt public et qui à ce titre peuvent déroger à la législation en vigueur dans les limites fixées par la présente loi art
+insert 1400 1448 le principe de participation en vertu duquel chaque citoyen doit avoir accès à la connaissance des aléas qu il encourt aux informations relatives aux facteurs de vulnérabilité s y rapportant ainsi qu à l ensemble du dispositif de prévention de ces risques majeurs et de gestion des catastrophes
+replace 2135 2150 chapitre 1 des règles et des prescriptions générales applicables à tous les risques majeurs art
+insert 2159 2177 une meilleure connaissance de l aléa ou du risque concerné l amélioration de la prévisibilité de sa survenance
+replace 6074 6079 bâtiments et les installations existants
+replace 6082 6116 projets de construction prendre en compte les spécificités des personnes à mobilité réduite et prévoir à cet effet les mesures nécessaires en matière d alerte d évacuation d hébergement de transport et de ravitaillement
+
+=== arrete-interministeriel-2011-02-06-permis-construire-energie.pdf => arrete-interministeriel-2011-02-06-permis-construire-energie.md coverage 0.996 ===
+insert 3185 3190 le ministre de l habitat
+
+=== dec21-261.pdf => decret-21-261-esp-equipements-hydrocarbures.md coverage 0.9322 ===
+insert 2472 2480 alliages d aluminium qui ne peuvent être trempés
+insert 4703 4755 les bouteilles de gaz doivent subir une vérification externe avant chaque remplissage le chargé de l inspection périodique établit un compte rendu daté et signé mentionnant les résultats des inspections réglementaires qui ont été effectuées ainsi que les recommandations et les actions correctives qui doivent être pris en charge par l exploitant
+replace 6291 6315 ont été éprouvés à la pression réglementaire ou normativement requise les rapports des contrôles art 49 les dispositions de l article 48 ci dessus
+replace 6316 6321 appliquent également aux esp introduits
+replace 6325 6341 en transit lorsque les conditions de transit le justifient chapitre 2 equipements electriques section 1 conception
+replace 6353 6369 destinés à être intégrés aux installations relevant du secteur des hydrocarbures à savoir a les équipements
+insert 6370 6399 intégrés aux installations situées dans les zones classées à risque d explosion b les équipements électriques intégrés aux installations situées en dehors des zones classées à risque d explosion
+replace 6415 6434 ou dont la tension d essai est supérieure à dix 10 kilovolts c les appareils de levage et accessoires
+replace 6435 6442 auxquels un risque d explosion est associé
+replace 6461 6631 chapitre et aux normes aux standards issus des meilleures pratiques internationales et aux règles de l art applicables art 52 le dimensionnement des équipements cités à l article 50 a et b ci dessus doit être basé sur la température maximale de l air ambiant pour les équipements installés à l intérieur des bâtiments et locaux ou à l extérieur l altitude du site d installation ou d exploitation l humidité la pollution art 53 les équipements cités à l article 50 a et b ci dessus doivent être conçus pour supporter les courants de court circuit les surcharges passagères et les surtensions dans les conditions normales et exceptionnelles d exploitation art 54 les équipements cités à l article 50 a ci dessus doivent être conçus conformément à la classification des zones à risque d explosion les équipements électriques les systèmes de protection cathodique et les accessoires électriques destinés à être installés dans les zones classées à risque d explosion doivent être certifiés par un organis
+
+=== decret09-19.pdf => decret-09-19.md coverage 0.9508 ===
+replace 705 719 d adresser annuellement aux services chargés de l environnement territorialement compétents une déclaration décrivant
+replace 826 832 de souscrire pour l exercice de
+replace 834 853 une police d assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité
+insert 1126 1138 modifications ce décret ne mentionne pas d abrogation explicite de textes antérieurs
+
+=== decret21-319.pdf => decret-21-319-autorisation-exploitation-hydrocarbures.md coverage 0.9317 ===
+replace 340 685 les modalités d approbation des études et des notices d impact sur l environnement leur contenu et la périodicité de leur actualisation les modalités d approbation des études et des notices de dangers leur contenu et la périodicité de leur actualisation les modalités d approbation des études de risques relatives aux activités de recherche et leur contenu la procédure d enquête publique relative aux activités d hydrocarbures art 2 au sens du présent décret il est entendu par commission de wilaya chargée du contrôle des activités d hydrocarbures ci après dénommée commission hydrocarbures la commission instituée par l article 19 du présent décret danger une propriété intrinsèque d une substance d un agent d une source d énergie ou d une situation qui peut provoquer des dommages pour les personnes les biens et l environnement demandeur le prospecteur l entreprise nationale les parties contractantes l opérateur amont l opérateur aval et le concessionnaire installation unité ou ensemble d un
+insert 7585 7591 raffinage de pétrole et de condensat
+insert 7638 7676 a 3 ouvrages de transport d hydrocarbures par canalisation à l exception des réseaux de collectes et de dessertes des conduites d évacuation des réseaux des produits pétroliers et des réseaux de gaz desservant exclusivement le marché national
+insert 7755 7763 a 4 canalisation de transport de produits pétroliers
+insert 7785 7812 a 5 installations de stockage de carburants y compris les installations de chargement ou de déchargement associées à ces stockages à l exception des stations de services
+insert 7845 7857 a 6 installations portuaires de chargement ou de déchargement de navire pétrolier
+insert 7867 7877 a 7 installations assurant les opérations de transformation des hydrocarbures
+insert 7924 7933 a 8 installation de remplissage de gaz inflammables liquéfiés
+insert 7977 8147 stockage de gaz inflammable liquéfié br la quantité susceptible d être présente dans l installation étant supérieure ou égale à 200 t a 10 unités de fabrication stockage ou de distribution de bitumes fabrication stockage ou distribution de bitumes br la quantité susceptible d être présente dans l installation étant supérieure ou égale à 500 t tableau b liste des installations relevant des activités d hydrocarbures soumise à notice d impact sur l environnement et notice de dangers installations ouvrages relevant des hydrocarbures designation de l activite b 1 installation de remplissage de gaz inflammables liquéfiés remplissage ou distribution de gaz inflammable liquéfié br la quantité susceptible d être présente dans l installation étant supérieure à 6 t mais inférieure à 200 t b 2 installation de stockage de gaz inflammables liquéfiés y compris les installations de chargement ou de déchargement associées à ces stockages stockage de gaz inflammable liquéfié br la quantité susceptible d
+insert 8158 8172 la quantité susceptible d être présente dans l installation étant inférieure à 500 t
+
+=== loi05-12.pdf => loi-05-12-ressources-en-eau.md coverage 0.9942 ===
+insert 7135 7148 installer des dispositifs de mesure ou de comptage des consommations d eau d
+insert 7176 7186 de respecter les droits des autres utilisateurs de l eau
+insert 11239 11248 chapitre 1 des prérogatives de la police des eaux
+insert 11905 11918 les équipements et matériels ayant servi à commettre l infraction peuvent être confisqués
+insert 12697 12716 modifications cette loi abroge la loi n 83 17 du 16 juillet 1983 portant code des eaux art 180
+
+=== loi09-03.pdf => loi-09-03-protection-consommateur.md coverage 0.9939 ===
+
+=== loi18-11.pdf => loi-18-11-sante.md coverage 0.9841 ===
+replace 0 12 préambule vu le décret législatif n 93 18 du 15 rajab 1414
+replace 15 21 décembre 1993 portant loi de finances
+insert 148 449 vu l ordonnance n 75 58 du 26 septembre 1975 modifiée et complétée portant code civil vu la loi n 81 10 du 11 juillet 1981 relative aux conditions d emploi des travailleurs étrangers vu la loi n 83 11 du 2 juillet 1983 modifiée et complétée relative aux assurances sociales vu la loi n 83 13 du 2 juillet 1983 modifiée et complétée relative aux accidents du travail et aux maladies professionnelles vu la loi n 84 10 du 11 février 1984 modifiée et complétée relative au service civil vu la loi n 84 11 du 9 juin 1984 modifiée et complétée portant code de la famille vu la loi n 84 17 du 7 juillet 1984 modifiée et complétée relative aux lois de finances vu la loi n 85 05 du 16 février 1985 modifiée et complétée relative à la protection et à la promotion de la santé vu la loi n 87 17 du 1er août 1987 relative à la protection phytosanitaire vu la loi n 88 01 du 12 janvier 1988 portant loi d orientation sur les entreprises publiques économiques notamment son titre iii vu la loi n 88 07 du 26 janv
+insert 3625 3641 les conditions de mise en oeuvre des dispositions du présent article sont fixées par voie réglementaire
+insert 17130 17140 établissements de santé section 1 missions des structures et des
+insert 24492 24577 il est tenu également de la mise en place de dispositifs et de procédures opératoires standardisées écrites permettant de respecter les normes de qualité nécessaires à chaque étape du recueil des données de la documentation des cas d évènements et d effets indésirables de leur validation évaluation archivage et leur déclaration ainsi que de la garantie de la protection des données il doit soumettre un rapport annuel de sécurité au ministre chargé de la santé et au comité d éthique médicale pour les études cliniques
+
+=== loi19-02.pdf => loi-19-02-incendie-panique.md coverage 0.9761 ===
+replace 2810 2898 chapitre 7 des sanctions section 1 du contrôle et de la constatation des infractions art 30 outre les officiers et les agents de police judiciaire les officiers de la protection civile sont habilités à constater et à relever les infractions prévues par la présente loi les conditions requises des officiers de la protection civile et les modalités de leurs désignation sont fixées par voie réglementaire art 31 pour l exercice de leurs fonctions les officiers de la protection civile prêtent devant la juridiction territorialement compétente le serment suivant
