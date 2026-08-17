@@ -27,7 +27,8 @@
      README mis à jour le 2026-08-11 (26) — patch-26 : arrete-1999 + decret-09-335 promus VÉRIFIÉ via API ; decret-90-245 + arrete-2016 + arrete-2025 promus VÉRIFIÉ via PowerShell — dashboard 25→30 VÉRIFIÉ — 4 NON VÉRIFIÉ restants
      README mis à jour le 2026-08-11 (27) — patch-27 : loi-03-10, loi-01-19, loi-05-12, decret-09-19 promus ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — dashboard 30→34 VÉRIFIÉ — 0 NON VÉRIFIÉ
      README mis à jour le 2026-08-17 (28) — +4 entrées manquantes : decret-04-82-agrement-sanitaire-elevage, loi-18-11-sante-partie1/2/3 — dashboard 34→37 — loi-88-07 statut mis à jour [CONVERTI 2026-08-17]
-     README mis à jour le 2026-08-17 (29) — D04-82 dédup : animaux.md supprimé, elevage.md promu fichier canonique unique — note D04-83 intégrée dans elevage.md — dashboard 37→36
+     README mis à jour le 2026-08-17 (29) — D04-82 dédup : animaux.md supprimé, elevage.md promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : 36 ✅ VÉRIFIÉ
+     README mis à jour le 2026-08-17 (30) — loi-18-11-sante.md monolithique supprimé (doublon Règle 4) — partie1/2/3 promus fichiers canoniques — dashboard 36→35
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -45,11 +46,11 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 29)
+## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 30)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 36 | Voir index — 34 vérifiés avant le 2026-08-11 + 2 nouveaux vérifiés le 2026-08-17 (loi-88-07 + decret-04-82-elevage) + 3 splits loi-18-11 |
+| ✅ VÉRIFIÉ | 35 | Voir index — 34 vérifiés avant le 2026-08-11 + 2 nouveaux vérifiés le 2026-08-17 (loi-88-07 + decret-04-82-elevage) + 3 splits loi-18-11 — monolithique loi-18-11 supprimé (doublon) |
 | ⚠️ NON VÉRIFIÉ — texte intégral converti | 0 | — |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` (✅ VÉRIFIÉ) |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
@@ -87,10 +88,9 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-17-140-hygiene-alimentaire.md` | Décret exécutif n° 17-140 du 11 avril 2017 | Conditions d'hygiène et de salubrité — mise à la consommation des denrées alimentaires — Art. 1–64 complets | ✅ VÉRIFIÉ — texte intégral Art. 1–64 |
-| `loi-18-11-sante.md` | Loi n° 18-11 du 2 juillet 2018 | Santé — Art. 1–450 complets (fichier intégral monolithique) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `loi-18-11-sante-partie1-arts1-164.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 1 | Santé — Art. 1–164 (fichier split pour usage IA — référence principale : `loi-18-11-sante.md`) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — split du fichier intégral vérifié |
-| `loi-18-11-sante-partie2-arts165-264.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 2 | Santé — Art. 165–264 (fichier split pour usage IA — référence principale : `loi-18-11-sante.md`) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — split du fichier intégral vérifié |
-| `loi-18-11-sante-partie3-arts265-450.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 3 | Santé — Art. 265–450 (fichier split pour usage IA — référence principale : `loi-18-11-sante.md`) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — split du fichier intégral vérifié |
+| `loi-18-11-sante-partie1-arts1-164.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 1/3 | Santé — Art. 1–164 (fichier canonique — instrument découpé en 3 parties pour raisons techniques) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed |
+| `loi-18-11-sante-partie2-arts165-264.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 2/3 | Santé — Art. 165–264 (fichier canonique — instrument découpé en 3 parties pour raisons techniques) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed |
+| `loi-18-11-sante-partie3-arts265-450.md` | Loi n° 18-11 du 2 juillet 2018 — Partie 3/3 | Santé — Art. 265–450 (fichier canonique — instrument découpé en 3 parties pour raisons techniques) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed |
 | `loi-19-02-incendie-panique.md` | Loi n° 19-02 du 17 juillet 2019 | Règles générales de prévention des risques d'incendie et de panique | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-21-261-esp-equipements-hydrocarbures.md` | Décret exécutif n° 21-261 du 13 juin 2021 (2 Dhou El Kaâda 1442) | Réglementation des équipements sous pression (ESP) et équipements électriques destinés aux installations du secteur des hydrocarbures — Art. 1–104 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-21-319-autorisation-exploitation-hydrocarbures.md` | Décret exécutif n° 21-319 du 22 août 2021 (13 Moharram 1443) | Régime d'autorisation d'exploitation des installations et ouvrages hydrocarbures — études d'impact, études de dangers, enquête publique — Art. 1er–98 + 4 annexes | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -110,7 +110,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **`audit.js`** — Script d'audit natif de ce dossier. Il analyse les fichiers `.md` de `/legal_refs/` (vérification des headers, séquences d'articles, cohérence du README). **Intentionnellement colocalisé ici. Ne pas déplacer, ne pas signaler comme anomalie.**
 - Aucun fichier PDF ne doit être stocké dans ce dossier — les PDFs ne sont pas lisibles par les outils IA sur GitHub.
 - Pour ajouter un nouveau texte : transcrire verbatim depuis le PDF source, respecter la convention de nommage `{type}-{numéro}-{sujet-court}.md`, mettre à jour cet index.
-- Un instrument = un fichier. Ne jamais regrouper plusieurs arrêtés ou décrets dans un seul fichier.
+- Un instrument = un fichier. Ne jamais regrouper plusieurs arrêtés ou décrets dans un seul fichier. Exception documentée : loi-18-11 est découpée en 3 parties pour raisons techniques (taille > limite GitHub API).
 - **Renommages effectués le 2026-08-09 :** `Decret-07-144.md` → `decret-07-144-nomenclature-installations-classees.md` ; `Decret-17-140.md` → `decret-17-140-hygiene-alimentaire.md`. Les anciens fichiers ont été supprimés.
 - **2026-08-09 :** `decret-06-141-rejets-industriels-liquides.md` (STUB) supprimé — `decret-06-141-rejets-effluents-liquides.md` conservé comme fichier canonique.
 - **2026-08-09 :** `decret-22-167` et `decret-24-196` ajoutés — structure un fichier par instrument pour D06-198 et ses modificatifs.
@@ -148,3 +148,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-11 (patch 27) :** 4 fichiers promus ✅ VÉRIFIÉ par Belabed Mohamed — `loi-03-10`, `loi-01-19`, `loi-05-12`, `decret-09-19` — dashboard : **34 ✅ VÉRIFIÉ** — 0 NON VÉRIFIÉ.
 - **2026-08-17 (patch 28) :** 4 entrées manquantes ajoutées à l'index : `decret-04-82-agrement-sanitaire-elevage` (converti 2026-08-17) + `loi-18-11-sante-partie1/2/3` (splits). `loi-88-07` statut mis à jour. Dashboard : **37 ✅ VÉRIFIÉ**.
 - **2026-08-17 (patch 29) :** D04-82 dédupé — `decret-04-82-agrement-sanitaire-animaux.md` supprimé (doublon BOM + contrôle séquence non-tableau) — `decret-04-82-agrement-sanitaire-elevage.md` promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : **36 ✅ VÉRIFIÉ** (corrigé : un seul fichier D04-82).
+- **2026-08-17 (patch 30) :** `loi-18-11-sante.md` (189 KB, monolithique) supprimé — doublon Règle 4 résolu. Fichiers canoniques désormais : `loi-18-11-sante-partie1-arts1-164.md`, `loi-18-11-sante-partie2-arts165-264.md`, `loi-18-11-sante-partie3-arts265-450.md`. Exception "un instrument = un fichier" documentée dans les Notes (découpage technique, taille > limite GitHub API). Dashboard : **35 ✅ VÉRIFIÉ** (37 - 1 D04-82 animaux - 1 loi-18-11 monolithique).
