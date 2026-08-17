@@ -2,7 +2,12 @@
 import { useFocusEffect } from 'expo-router';
 import { useCallback, useState } from 'react';
 import { AgendaItem, Facility } from '../types';
-import { loadHomeData, getFacilityForAgenda as _getFacility, HomeData } from '../utils/loadHomeData';
+import {
+  loadHomeData,
+  getFacilityForAgenda as _getFacility,
+  HomeData,
+  PriorityFacility,
+} from '../utils/loadHomeData';
 
 const EMPTY: HomeData = {
   officeName:            '',
@@ -11,12 +16,12 @@ const EMPTY: HomeData = {
   inProgressInspections: [],
   recentFacilities:      [],
   userFacilities:        [],
+  priorityFacilities:    [],
   stats: {
     totalCompleted:         0,
     totalDrafts:            0,
     nonCompliantFacilities: 0,
     openCapCount:           0,
-    highRiskCount:          0,
   },
 };
 

@@ -9,6 +9,7 @@ import HomeFAB from '../../components/home/HomeFAB';
 import HomeHeader from '../../components/home/HomeHeader';
 import InspectionSection from '../../components/home/InspectionSection';
 import NearDeadlineWidget from '../../components/home/NearDeadlineWidget';
+import PriorityWidget from '../../components/home/PriorityWidget';
 import StatsBar from '../../components/home/StatsBar';
 import { Colors } from '../../constants';
 import { useHomeData } from '../../src/hooks/useHomeData';
@@ -19,7 +20,8 @@ export default function HomeScreen() {
   const router = useRouter();
   const {
     officeName, agendaItems, completedInspections,
-    inProgressInspections, recentFacilities, stats, getFacilityForAgenda,
+    inProgressInspections, recentFacilities, stats,
+    priorityFacilities, getFacilityForAgenda,
   } = useHomeData();
 
   useEffect(() => {
@@ -68,8 +70,10 @@ export default function HomeScreen() {
           totalDrafts={stats.totalDrafts}
           nonCompliantFacilities={stats.nonCompliantFacilities}
           openCapCount={stats.openCapCount}
-          highRiskCount={stats.highRiskCount}
         />
+
+        {/* W71 — priority reinspection list */}
+        <PriorityWidget facilities={priorityFacilities} />
 
         {/* Phase-13: CAP status breakdown */}
         <CapStatsWidget />
