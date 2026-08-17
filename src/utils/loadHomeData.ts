@@ -19,8 +19,14 @@ export interface HomeData {
   stats: {
     totalCompleted:         number;
     totalDrafts:            number;
+    /** Count of completed inspections with at least one non-compliant item.
+     *  W71 FIX: was computed over completedInspections.slice(-3) — wrong denominator.
+     *  Now computed over ALL completed inspections. */
     nonCompliantFacilities: number;
     openCapCount:           number;
+    /** Count of completed inspections with riskLevel >= 3 OR grade 'D'.
+     *  These are the highest-priority facilities to reinspect. */
+    highRiskCount:          number;
   };
 }
 
@@ -66,9 +72,16 @@ export async function loadHomeData(): Promise<HomeData> {
   const inProgressInspections = drafts.slice(-3).reverse();
 
   // ── Stats ────────────────────────────────────────────────────────────────
+  // W71 FIX: both counters computed over ALL completed inspections,
+  // not just the 3 displayed on the home screen.
   let nonCompliant = 0;
-  completedInspections.forEach(ins => {
+  let highRiskCount = 0;
+
+  completed.forEach(ins => {
     if (getComplianceSummary(ins.items).nonCompliant > 0) nonCompliant++;
+    if ((ins.riskLevel !== undefined && ins.riskLevel >= 3) || ins.grade === 'D') {
+      highRiskCount++;
+    }
   });
 
   return {
@@ -83,6 +96,7 @@ export async function loadHomeData(): Promise<HomeData> {
       totalDrafts:            drafts.length,
       nonCompliantFacilities: nonCompliant,
       openCapCount:           openCap.length,
+      highRiskCount,
     },
   };
 }

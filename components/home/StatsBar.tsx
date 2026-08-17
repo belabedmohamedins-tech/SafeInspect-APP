@@ -8,6 +8,8 @@ interface Props {
   totalDrafts: number;
   nonCompliantFacilities: number;
   openCapCount: number;
+  /** W71: count of completed inspections with riskLevel ≥ 3 or grade D */
+  highRiskCount: number;
 }
 
 export default function StatsBar({
@@ -15,6 +17,7 @@ export default function StatsBar({
   totalDrafts,
   nonCompliantFacilities,
   openCapCount,
+  highRiskCount,
 }: Props) {
   const router = useRouter();
 
@@ -25,6 +28,12 @@ export default function StatsBar({
       <StatItem label="مسودات" value={totalDrafts} color={Colors.warning} />
       <View style={styles.separator} />
       <StatItem label="غير مطابق" value={nonCompliantFacilities} color={Colors.danger} />
+      <View style={styles.separator} />
+      <StatItem
+        label="خطر عالٍ"
+        value={highRiskCount}
+        color={highRiskCount > 0 ? Colors.danger : Colors.textSecondary}
+      />
       <View style={styles.separator} />
       <TouchableOpacity
         style={styles.item}
@@ -53,8 +62,8 @@ function StatItem({ label, value, color }: { label: string; value: number; color
 const styles = StyleSheet.create({
   container:  { flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', backgroundColor: Colors.textInverse, marginHorizontal: 12, marginTop: 6, marginBottom: 10, padding: 14, borderRadius: 12, elevation: 1, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.06, shadowRadius: 2 },
   item:       { alignItems: 'center', flex: 1, position: 'relative' },
-  value:      { fontSize: 22, fontWeight: 'bold' },
-  label:      { fontSize: 11, color: Colors.textSecondary, marginTop: 2, textAlign: 'center' },
+  value:      { fontSize: 20, fontWeight: 'bold' },
+  label:      { fontSize: 10, color: Colors.textSecondary, marginTop: 2, textAlign: 'center' },
   separator:  { width: 1, height: 32, backgroundColor: Colors.border },
   dot:        { position: 'absolute', top: 0, right: 4, width: 8, height: 8, borderRadius: 4, backgroundColor: Colors.danger },
 });

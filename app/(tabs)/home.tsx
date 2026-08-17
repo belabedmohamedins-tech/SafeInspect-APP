@@ -68,6 +68,7 @@ export default function HomeScreen() {
           totalDrafts={stats.totalDrafts}
           nonCompliantFacilities={stats.nonCompliantFacilities}
           openCapCount={stats.openCapCount}
+          highRiskCount={stats.highRiskCount}
         />
 
         {/* Phase-13: CAP status breakdown */}
