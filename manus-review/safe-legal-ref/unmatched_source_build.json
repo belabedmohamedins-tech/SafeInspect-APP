@@ -1,0 +1,80 @@
+[
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "20sep831.pdf",
+    "source_pdf_sha256": "3bcff58b00c77a3259eb0079ca4c43c3b4757bd5f6c247a00af58847a4c195fd",
+    "source_pdf_pages": 40,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-20sep831.md",
+    "extracted_pages": 41
+  },
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "20sep832.pdf",
+    "source_pdf_sha256": "eb24b5f554c60db437e5078a2016b763f59cd9cc39504c00ed12de191d83336f",
+    "source_pdf_pages": 40,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-20sep832.md",
+    "extracted_pages": 41
+  },
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "Arrêtéintermin.du31août1983(équipementvéhiculesGPLC).pdf",
+    "source_pdf_sha256": "a7d5afc398923bde304746275a557069ecc77dbc8273a888c5dfc991bb6edf40",
+    "source_pdf_pages": 30,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-arrtintermin-du31aot1983-quipementvhiculesgplc.md",
+    "extracted_pages": 31
+  },
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "Arrêtéinterministérieldu20septembre1983(stationsdistributionGPL).pdf",
+    "source_pdf_sha256": "3bcff58b00c77a3259eb0079ca4c43c3b4757bd5f6c247a00af58847a4c195fd",
+    "source_pdf_pages": 40,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-arrtinterministrieldu20septembre1983-stationsdistributiongpl.md",
+    "extracted_pages": 41
+  },
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "loi18-09fr.pdf",
+    "source_pdf_sha256": "ba1745708cdc2c333632bf61148acdf1f5460a6ed0c7dd72c7f930b501bf8371",
+    "source_pdf_pages": 2,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-loi18-09fr.md",
+    "extracted_pages": 3
+  },
+  {
+    "document_type": "unmatched-source-reference",
+    "source_pdf": "manuel-installation-gpl-web(1).pdf",
+    "source_pdf_sha256": "ee364a3a7bcbfc74548a49f0629bd53273b398e6efdb18c9ae9ec00fff1f2511",
+    "source_pdf_pages": 44,
+    "source_repository_commit": "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1",
+    "conversion_method": "native page-preserving extraction; no instrument mapping available",
+    "quality_status": "unmatched-source-review-required",
+    "authority": "source PDF or official Journal Officiel; this Markdown is derived",
+    "known_limitation": "No matching legal Markdown was found in the audited repository; do not infer the instrument identity or legal scope from this file alone",
+    "markdown": "source-only-manuel-installation-gpl-web-1.md",
+    "extracted_pages": 45
+  }
+]
