@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "decret11-125.pdf"
+source_pdf_sha256: "873b7d10a39a1c9f96ebfa18f3c21b85c0bd9bfc207959e13c75e8e75c635bea"
+source_pdf_pages: 4
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.7797
+automated_source_mode: "native"
+article_page_markers_added: 9
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 11-125 du 17 Rabie Ethani 1432 correspondant au 22 mars 2011 relatif à la qualité de l'eau de consommation humaine
 
-**Date de signature :** 22 mars 2011 (17 Rabie Ethani 1432)  
-**Journal Officiel :** N° 18, 18 Rabie Ethani 1432 (23 mars 2011) — pages 6 à 9  
-**Source PDF :** Fourni par l'utilisateur (`decret 11-125.pdf`)  
-**Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 22 mars 2011 (17 Rabie Ethani 1432)
+**Journal Officiel :** N° 18, 18 Rabie Ethani 1432 (23 mars 2011) — pages 6 à 9
+**Source PDF :** Fourni par l'utilisateur (`decret 11-125.pdf`)
+**Date de conversion :** 2026-08-10
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -33,18 +50,23 @@ Après approbation du Président de la République ;
 
 ## DÉCRÈTE
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 1; page_mapping: automated -->
 **Article 1er.** — En application des dispositions de l'article 112 de la loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005, modifiée et complétée, susvisée, le présent décret a pour objet de fixer les paramètres de qualité de l'eau de consommation humaine ainsi que les modalités de contrôle de conformité.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 2; page_mapping: automated -->
 **Art. 2.** — Les paramètres de qualité fixés par le présent décret sont applicables à l'eau de consommation humaine définie à l'article 111 de la loi n° 05-12 du 28 Joumada Ethania 1426 correspondant au 4 août 2005, susvisée, à l'exception des eaux minérales naturelles, des eaux de source, des eaux dites "eaux de table" et des eaux thermales.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 3; page_mapping: automated -->
 **Art. 3.** — Au sens du présent décret, il est entendu par :
 
 — **valeurs limites** : valeurs maximales fixées pour certains paramètres chimiques, radionucléides et microbiologiques et dont le dépassement constitue un danger potentiel pour la santé des personnes ;
 
 — **valeurs indicatives** : valeurs de référence fixées pour certains paramètres organoleptiques et physico-chimiques à des fins de contrôle du fonctionnement des installations de production, de traitement et de distribution d'eau et d'évaluation des risques pour la santé des personnes.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 4; page_mapping: automated -->
 **Art. 4.** — Les valeurs limites et les valeurs indicatives des paramètres de qualité de l'eau de consommation humaine sont annexées au présent décret.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 5; page_mapping: automated -->
 **Art. 5.** — La vérification de la conformité de l'eau de consommation humaine aux paramètres de qualité est effectuée au moyen d'analyses d'échantillons prélevés au niveau des points suivants :
 
 — au compteur particulier pour les eaux fournies par un réseau public de distribution ;
@@ -53,6 +75,7 @@ Après approbation du Président de la République ;
 
 — conformément à la réglementation en vigueur pour les eaux fournies à partir de citernes mobiles.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 6; page_mapping: automated -->
 **Art. 6.** — La vérification de la conformité de l'eau de consommation humaine incombe, suivant le cas :
 
 — à l'organisme exploitant tout ou partie du service public d'alimentation en eau potable ;
@@ -63,12 +86,15 @@ Après approbation du Président de la République ;
 
 — à toutes les institutions de contrôle habilitées par la législation et la réglementation en vigueur.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 7; page_mapping: automated -->
 **Art. 7.** — Lorsqu'il est constaté que l'eau de consommation humaine a cessé d'être conforme aux valeurs limites et aux valeurs indicatives fixées par le présent décret, l'organisme exploitant ou le titulaire d'autorisation ou de concession, concernés au sens de l'article 6 ci-dessus, sont tenus de suspendre la distribution de l'eau.
 
 Aucun rétablissement de la distribution de l'eau ne peut être effectué sans qu'une enquête ne détermine les causes de non-conformité et sans la prise de mesures correctives nécessaires en vue de rétablir la qualité de l'eau.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 8; page_mapping: automated -->
 **Art. 8.** — L'organisme exploitant du service public d'alimentation en eau potable est tenu d'informer les usagers, par tous moyens appropriés, de toute suspension de la distribution et/ou des mesures correctives décidées au titre de l'article 7 ci-dessus.
 
+<!-- source_pdf: decret11-125.pdf; source_page: 1; article: 9; page_mapping: automated -->
 **Art. 9.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 17 Rabie Ethani 1432 correspondant au 22 mars 2011.

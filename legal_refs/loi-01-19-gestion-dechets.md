@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "Loi01-19.pdf"
+source_pdf_sha256: "c0ba079c2f9a7f7a47ae2f0845425589d210aaf06a629ae887f7d7ee115e569e"
+source_pdf_pages: 14
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "automated-high-coverage-human-review-required"
+automated_pdf_word_coverage: 0.9611
+automated_source_mode: "native"
+article_page_markers_added: 72
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 # Loi n° 01-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets
 
-**Date de signature :** 12 décembre 2001 (27 Ramadhan 1422)  
-**Journal Officiel :** À déterminer (probablement JO N° 86 de 2001)  
-**Source PDF :** Fourni par l'utilisateur (`Loi 01-19.pdf`)  
-**Date de conversion :** 2026-08-11  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni  
+**Date de signature :** 12 décembre 2001 (27 Ramadhan 1422)
+**Journal Officiel :** À déterminer (probablement JO N° 86 de 2001)
+**Source PDF :** Fourni par l'utilisateur (`Loi 01-19.pdf`)
+**Date de conversion :** 2026-08-11
+**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni
 
 > **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 
@@ -66,10 +83,12 @@ Promulque la loi dont la teneur suit:
 
 ### Chapitre 1
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 2; article: 1; page_mapping: automated -->
 **Article 1**
 
 La présente loi a pour objet de fixer les modalités de gestion, de contrôle et de traitement des déchets.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 2; article: 2; page_mapping: automated -->
 **Article 2**
 
 La gestion, le contrôle et l'élimination des déchets reposent sur les principes suivants:
@@ -80,6 +99,7 @@ La gestion, le contrôle et l'élimination des déchets reposent sur les princip
 - le traitement écologiquement rationnel des déchets;
 - l'information et la sensibilisation des citoyens sur les risques présentés par les déchets et leur impact sur la santé et l'environnement, ainsi que les mesures prises pour prévenir, réduire ou compenser ces risques.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 2; article: 3; page_mapping: automated -->
 **Article 3**
 
 Au sens de la présente loi on entend par:
@@ -122,10 +142,12 @@ Au sens de la présente loi on entend par:
 
 **Mouvement des déchets:** toute opération de transport, de transit, d'importation et d'exportation des déchets.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 3; article: 4; page_mapping: automated -->
 **Article 4**
 
 Les dispositions de la présente loi s'appliquent à tous les déchets au sens de l'article 3 ci-dessus, à l'exception des déchets radioactifs, des effluents gazeux, des eaux usées, des explosifs déclassés, des épaves d'aéronefs et des épaves maritimes.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 5; page_mapping: automated -->
 **Article 5**
 
 Les déchets au sens de la présente loi sont classifiés comme suit:
@@ -140,6 +162,7 @@ La nomenclature des déchets, y compris les déchets spéciaux dangereux, est fi
 
 ### CHAPITRE II — OBLIGATIONS GENERALES
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 6; page_mapping: automated -->
 **Article 6**
 
 Tout générateur et/ou détenteur de déchets doit prendre les mesures nécessaires pour éviter autant que faire se peut la production de déchets, notamment par:
@@ -148,26 +171,31 @@ Tout générateur et/ou détenteur de déchets doit prendre les mesures nécessa
 - l'abstention de mettre sur le marché des produits générant des déchets non biodégradables,
 - l'abstention d'utilisation de matières susceptibles de créer des risques pour les personnes, notamment pour la fabrication des emballages.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 7; page_mapping: automated -->
 **Article 7**
 
 Tout générateur et/ou détenteur de déchets est tenu d'assurer ou de faire assurer la valorisation des déchets engendrés par les matières qu'il importe ou écoule et les produits qu'il fabrique.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 8; page_mapping: automated -->
 **Article 8**
 
 Lorsque le générateur et/ou le détenteur de déchets est dans l'impossibilité d'éviter de générer et/ou de valoriser ses déchets, il est tenu d'assurer ou de faire assurer, à ses frais, l'élimination de ses déchets de façon écologiquement rationnelle, conformément aux dispositions de la présente loi et de ses textes d'application.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 9; page_mapping: automated -->
 **Article 9**
 
 La réutilisation d'emballages de produits chimiques pour contenir directement des produits alimentaires est interdite.
 
 Cette interdiction doit être obligatoirement indiquée sur les emballages de produits chimiques, par des signaux apparents avertissant des risques qui menacent la santé des personnes, du fait de la réutilisation de ces emballages pour le stockage de produits alimentaires.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 10; page_mapping: automated -->
 **Article 10**
 
 L'utilisation de produits recyclés susceptibles de créer des risques pour les personnes dans la fabrication d'emballages destinés à contenir directement des produits alimentaires ou des objets destinés à être manipulés par les enfants est interdite.
 
 Les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 4; article: 11; page_mapping: automated -->
 **Article 11**
 
 La valorisation et/ou l'élimination des déchets doivent s'effectuer dans des conditions conformes aux normes de l'environnement, et ce notamment sans:
@@ -182,10 +210,12 @@ La valorisation et/ou l'élimination des déchets doivent s'effectuer dans des c
 
 ### Chapitre 1 — Obligations des générateurs et détenteurs
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 5; article: 12; page_mapping: automated -->
 **Article 12**
 
 Il est institué un plan national de gestion des déchets spéciaux.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 5; article: 13; page_mapping: automated -->
 **Article 13**
 
 Le plan national de gestion des déchets spéciaux porte notamment sur:
@@ -196,16 +226,19 @@ Le plan national de gestion des déchets spéciaux porte notamment sur:
 - l'emplacement des sites et des installations de traitement existants,
 - les besoins en capacité de traitement des déchets, en tenant compte des capacités installées, des priorités retenues pour la création de nouvelles installations ainsi que des moyens économiques et financiers nécessaires à leur mise en œuvre.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 5; article: 14; page_mapping: automated -->
 **Article 14**
 
 Le plan national de gestion des déchets spéciaux est élaboré par le ministère chargé de l'environnement en coordination avec les ministères chargés de l'industrie, de l'énergie, de la santé, de l'agriculture, du transport, du commerce, des collectivités locales, de l'aménagement du territoire, des ressources en eau, de l'urbanisme, des finances et de la défense nationale, et tout autre organisme ou établissement concernés.
 
 Les modalités et procédures d'élaboration, de publication et de révision de ce plan sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 5; article: 15; page_mapping: automated -->
 **Article 15**
 
 Les déchets spéciaux ne peuvent être traités que dans des installations autorisées par le ministre chargé de l'environnement conformément aux dispositions réglementaires en vigueur.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 5; article: 16; page_mapping: automated -->
 **Article 16**
 
 Les générateurs et/ou les détenteurs des déchets spéciaux sont tenus d'assurer ou de faire assurer, à leur charge, la gestion de leurs déchets.
@@ -214,10 +247,12 @@ Ils peuvent à cet effet, décider de s'associer dans des groupements agréés c
 
 Les modalités d'agrément de ces groupements sont fixées par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 17; page_mapping: automated -->
 **Article 17**
 
 Le mélange de déchets spéciaux dangereux avec d'autres déchets est interdit.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 18; page_mapping: automated -->
 **Article 18**
 
 Les générateurs et/ou les détenteurs des déchets spéciaux dangereux sont tenus de déclarer au ministre chargé de l'environnement les informations relatives à la nature, la quantité et aux caractéristiques des déchets.
@@ -226,6 +261,7 @@ Ils sont également tenus de fournir périodiquement les informations ayant trai
 
 Les modalités d'application des dispositions du présent article sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 19; page_mapping: automated -->
 **Article 19**
 
 Il est interdit à tout générateur et/ou détenteur de déchets spéciaux dangereux de les remettre ou de les faire remettre à:
@@ -235,16 +271,19 @@ Il est interdit à tout générateur et/ou détenteur de déchets spéciaux dang
 
 Toute personne qui remet ou fait remettre des déchets spéciaux dangereux est responsable des dégâts et dommages induits par la violation des dispositions du présent article autant que la personne ayant accepté lesdits déchets.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 20; page_mapping: automated -->
 **Article 20**
 
 Le dépôt, l'enfouissement et l'immersion des déchets spéciaux dangereux dans des lieux autres que les sites et les installations qui leur sont réservés sont interdits.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 21; page_mapping: automated -->
 **Article 21**
 
 Les déchets issus des activités de soins doivent obéir à une gestion spécifique. Leur élimination est à la charge des établissements qui les génèrent et doit être pratiquée de manière à éviter toute atteinte à la santé publique et/ou à l'environnement.
 
 Les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 6; article: 22; page_mapping: automated -->
 **Article 22**
 
 En cas de non admission des déchets spéciaux dans une installation autorisée pour le traitement de cette catégorie de déchets, l'exploitant de ladite installation est tenu de notifier, par écrit, au détenteur des déchets les raisons ayant motivé son refus et d'en informer le ministre chargé de l'environnement.
@@ -253,6 +292,7 @@ En cas de refus non fondé, le ministre chargé de l'environnement prend une dé
 
 La décision précise la nature et la quantité des déchets à traiter et la durée de la prestation imposée.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 7; article: 23; page_mapping: automated -->
 **Article 23**
 
 Au cas où les déchets sont abandonnés, déposés ou traités contrairement aux prescriptions de la présente loi et de ses textes d'application, la juridiction compétente peut, après mise en demeure du contrevenant, ordonner d'assurer d'office l'élimination desdits déchets à la charge de celui-ci.
@@ -261,18 +301,21 @@ Au cas où les déchets sont abandonnés, déposés ou traités contrairement au
 
 ### Chapitre 2 — Mouvement des déchets
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 7; article: 24; page_mapping: automated -->
 **Article 24**
 
 Le transport des déchets spéciaux dangereux est soumis à autorisation du ministre chargé de l'environnement après avis du ministre chargé des transports.
 
 Les modalités d'application des dispositions du présent article sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 7; article: 25; page_mapping: automated -->
 **Article 25**
 
 L'importation des déchets spéciaux dangereux est strictement interdite.
 
 Les modalités d'application des dispositions du présent article sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 7; article: 26; page_mapping: automated -->
 **Article 26**
 
 L'exportation et le transit des déchets spéciaux dangereux sont prohibés vers les pays qui en interdisent l'importation et vers les pays qui n'ont pas interdit cette importation en l'absence de leurs accords spécifiques et écrits.
@@ -283,12 +326,14 @@ L'autorisation de transit est assortie de l'apposition de scellés sur les conte
 
 Les modalités d'application des dispositions du présent article sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 7; article: 27; page_mapping: automated -->
 **Article 27**
 
 Lorsque des déchets sont introduits sur le territoire national d'une manière illicite, le ministre chargé de l'environnement doit enjoindre à leur détenteur ou leur transporteur d'assurer leur retour vers le pays d'origine dans un délai fixé par le ministre.
 
 Si le contrevenant ne s'exécute pas, le ministre chargé de l'environnement peut prendre toutes dispositions utiles pour assurer le retour de ces déchets à la charge du contrevenant.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 8; article: 28; page_mapping: automated -->
 **Article 28**
 
 Lorsque des déchets sont exportés de manière contraire aux dispositions de la présente loi, le ministre chargé de l'environnement doit enjoindre au producteur ou aux personnes ayant contribué à l'exportation d'assurer leur retour sur le territoire national.
@@ -301,10 +346,12 @@ En cas d'inexécution, il prend toutes dispositions utiles pour assurer ce retou
 
 ### Chapitre 1 — Organe de gestion
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 8; article: 29; page_mapping: automated -->
 **Article 29**
 
 Il est institué un schéma communal de gestion des déchets ménagers et assimilés.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 8; article: 30; page_mapping: automated -->
 **Article 30**
 
 Le schéma communal de gestion des déchets ménagers et assimilés porte notamment sur:
@@ -315,6 +362,7 @@ Le schéma communal de gestion des déchets ménagers et assimilés porte notamm
 - les priorités à retenir pour la réalisation de nouvelles installations,
 - le choix des options concernant les systèmes de collecte, de transport et de tri des déchets, en tenant compte des moyens économiques et financiers nécessaires à leur mise en œuvre.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 8; article: 31; page_mapping: automated -->
 **Article 31**
 
 Le schéma communal de gestion des déchets ménagers et assimilés est élaboré sous l'autorité du président de l'assemblée populaire communale.
@@ -323,6 +371,7 @@ Ce schéma, qui doit couvrir l'ensemble du territoire de la commune, doit être 
 
 Les modalités et procédures d'élaboration, de publication et de révision de ce schéma sont définies par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 8; article: 32; page_mapping: automated -->
 **Article 32**
 
 La gestion des déchets ménagers et assimilés relève de la responsabilité de la commune conformément à la législation régissant les collectivités locales.
@@ -333,6 +382,7 @@ Le groupement de deux ou plusieurs communes peut décider de s'associer pour une
 
 Les modalités d'application du présent article sont fixées par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 33; page_mapping: automated -->
 **Article 33**
 
 La commune peut concéder, selon un cahier des charges type, tout ou partie de la gestion des déchets ménagers et assimilés ainsi que les déchets encombrants et les déchets spéciaux générés en petite quantité par les ménages, à des personnes physiques ou morales de droit public ou de droit privé, conformément à la législation en vigueur régissant les collectivités locales.
@@ -341,6 +391,7 @@ La commune peut concéder, selon un cahier des charges type, tout ou partie de l
 
 ### Chapitre 2 — Dispositions générales
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 34; page_mapping: automated -->
 **Article 34**
 
 Les services publics désignés à l'article 32 de la présente loi comprennent:
@@ -350,10 +401,12 @@ Les services publics désignés à l'article 32 de la présente loi comprennent:
 - la mise en place d'un dispositif permanent d'information et de sensibilisation des habitants sur les effets nocifs des déchets sur la santé publique et/ou l'environnement et sur les mesures destinées à prévenir lesdits effets;
 - la mise en œuvre de mesures incitatives visant le développement et la promotion de systèmes de tri des déchets ménagers et assimilés.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 35; page_mapping: automated -->
 **Article 35**
 
 Tout détenteur de déchets ménagers et assimilés est tenu d'utiliser le système de tri, de collecte et de transport, mis à sa disposition par les organes désignés à l'article 32 de la présente loi.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 36; page_mapping: automated -->
 **Article 36**
 
 La collecte, le transport et le traitement des déchets ménagers et assimilés issus des activités industrielles, commerciales, artisanales, de soins ou autres activités constituent des prestations rémunérées.
@@ -364,20 +417,24 @@ Les modalités d'application du présent article sont fixées par voie réglemen
 
 ## TITRE IV — DECHETS INERTES
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 37; page_mapping: automated -->
 **Article 37**
 
 La collecte, le tri, le transport et la mise en décharge des déchets inertes sont à la charge de leurs générateurs.
 
 Le dépôt, le rejet et l'abandon des déchets inertes sont interdits sur tout site non désigné à cet effet et notamment sur la voie publique.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 9; article: 38; page_mapping: automated -->
 **Article 38**
 
 Dans le cadre de son plan d'aménagement et de développement et conformément au schéma de gestion approuvé, la commune initie toute action et mesure visant l'implantation, l'aménagement et la gestion des sites des décharges désignés pour recevoir les déchets inertes.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 39; page_mapping: automated -->
 **Article 39**
 
 Les déchets inertes non valorisables ne peuvent être déposés que dans des sites aménagés à cet effet.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 40; page_mapping: automated -->
 **Article 40**
 
 Les modalités d'application des dispositions du présent titre sont fixées par voie réglementaire.
@@ -388,12 +445,14 @@ Les modalités d'application des dispositions du présent titre sont fixées par
 
 ### Chapitre 1 — Aménagement et exploitation
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 41; page_mapping: automated -->
 **Article 41**
 
 Les conditions de choix de sites d'implantation, d'aménagement, de réalisation, de modification, de process et d'extension des installations de traitement des déchets sont régies par la réglementation relative aux études d'impact sur l'environnement et par les dispositions de la présente loi et de ses textes d'application.
 
 Dans le cas où l'installation de traitement est à implanter sur un terrain en location ou en jouissance, la demande tendant à l'obtention de la décision de prise en considération de l'étude d'impact sur l'environnement comporte obligatoirement une pièce attestant que le propriétaire du terrain connaît la nature des activités projetées.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 42; page_mapping: automated -->
 **Article 42**
 
 Toute installation de traitement des déchets est soumise, préalablement à sa mise en service, à:
@@ -402,6 +461,7 @@ Toute installation de traitement des déchets est soumise, préalablement à sa 
 - une autorisation du wali territorialement compétent pour les déchets ménagers et assimilés;
 - une autorisation du président de l'Assemblée populaire communale territorialement compétent pour les déchets inertes.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 43; page_mapping: automated -->
 **Article 43**
 
 En cas de fin d'exploitation ou de fermeture définitive d'une installation de traitement des déchets, l'exploitant est tenu de réhabiliter le site en vue de le remettre dans son état initial ou dans l'état fixé par l'autorité compétente.
@@ -410,10 +470,12 @@ L'exploitant est tenu d'assurer la surveillance du site pendant une période fix
 
 Sans préjudice des poursuites pénales qui peuvent être exercées et lorsque l'exploitant refuse de procéder à la remise en état du site, l'autorité administrative compétente effectue d'office et aux frais de l'exploitant les travaux nécessaires à la réhabilitation du site.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 10; article: 44; page_mapping: automated -->
 **Article 44**
 
 Les prescriptions techniques fixant les règles générales d'aménagement et d'exploitation des installations de traitement des déchets et les conditions d'admission des déchets au niveau de ces installations de traitement sont fixées par voie réglementaire.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 45; page_mapping: automated -->
 **Article 45**
 
 La mise en activité des installations de traitement des déchets est conditionnée par la souscription d'une assurance couvrant tous les risques y compris les risques d'accidents de pollution.
@@ -422,20 +484,24 @@ La mise en activité des installations de traitement des déchets est conditionn
 
 ### Chapitre 2 — Surveillance et contrôle
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 46; page_mapping: automated -->
 **Article 46**
 
 Outre les organes habilités en la matière par les lois et règlements en vigueur, la surveillance et le contrôle des installations de traitement des déchets sont exercés conformément aux dispositions de la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 47; page_mapping: automated -->
 **Article 47**
 
 Les exploitants des installations de traitement de déchets sont tenus de fournir toutes les informations requises aux autorités de surveillance et de contrôle.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 48; page_mapping: automated -->
 **Article 48**
 
 Lorsque l'exploitation d'une installation de traitement des déchets présente des dangers ou des inconvénients graves sur la santé publique et/ou l'environnement, l'autorité administrative compétente ordonne à l'exploitant de prendre immédiatement les mesures nécessaires pour remédier à de telles situations.
 
 Si l'intéressé n'obtempère pas, ladite autorité prend d'office les mesures conservatoires nécessaires aux frais du responsable et/ou suspend tout ou partie de l'activité incriminée.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 49; page_mapping: automated -->
 **Article 49**
 
 Pour l'exercice de la surveillance sus-mentionnée, l'autorité désignée à l'article 46 ci-dessus peut, en cas de besoin, faire appel à une expertise pour effectuer les analyses nécessaires à l'évaluation des nuisances et de leurs impacts sur la santé publique et/ou l'environnement.
@@ -444,16 +510,19 @@ Pour l'exercice de la surveillance sus-mentionnée, l'autorité désignée à l'
 
 ## TITRE VI — DISPOSITIONS FINANCIERES
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 50; page_mapping: automated -->
 **Article 50**
 
 Les coûts inhérents au transport et au traitement des déchets spéciaux et inertes sont à la charge de leurs générateurs et/ou de leurs détenteurs.
 
 La gestion des sites des décharges de déchets inertes constitue selon les modalités de l'article 39 de la présente loi une ressource pour les communes.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 51; page_mapping: automated -->
 **Article 51**
 
 Au sens de la présente loi, la collecte, le transport, le stockage et l'élimination des déchets ou tous autres services se rapportant à la gestion des déchets ménagers et assimilés, donnent lieu à la perception d'impôts, de taxes et de redevances dont la nomenclature et le montant sont fixés par la législation en vigueur.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 11; article: 52; page_mapping: automated -->
 **Article 52**
 
 Outre les avantages prévus par la législation en vigueur, des mesures incitatives sont octroyées par l'Etat pour encourager le développement des activités de collecte, de tri, de transport, de valorisation et d'élimination des déchets selon des modalités qui sont fixées par la réglementation.
@@ -462,80 +531,94 @@ Outre les avantages prévus par la législation en vigueur, des mesures incitati
 
 ## TITRE VII — DISPOSITIONS PENALES
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 53; page_mapping: automated -->
 **Article 53**
 
 Est chargée de la recherche et de la constatation des infractions aux dispositions de la présente loi, la police chargée de la protection de l'environnement et ce, conformément aux dispositions de la loi n° 83-03 du 5 février 1983 relative à la protection de l'environnement.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 54; page_mapping: automated -->
 **Article 54**
 
 Les infractions aux dispositions de la présente loi sont constatées par des procès-verbaux conformément aux règles prévues par le code de procédure pénale.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 55; page_mapping: automated -->
 **Article 55**
 
 Toute personne physique qui jette, abandonne des déchets ménagers et assimilés ou refuse d'utiliser le système de collecte et de tri mis à sa disposition par les organes désignés à l'article 32 de la présente loi est punie d'une amende de cinq cents (500) à cinq mille dinars (5.000) dinars.
 
 En cas de récidive, l'amende est portée au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 56; page_mapping: automated -->
 **Article 56**
 
 Toute personne physique exerçant une activité industrielle, commerciale, artisanale ou toute autre activité, qui jette, abandonne des déchets ménagers et assimilés, ou refuse d'utiliser le système de collecte et de tri mis à sa disposition par les organes désignés à l'article 32 de la présente loi, est punie d'une amende de dix mille (10.000) à cinquante mille (50.000) dinars.
 
 En cas de récidive, l'amende est portée au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 57; page_mapping: automated -->
 **Article 57**
 
 Quiconque dépose, jette ou abandonne des déchets inertes sur tout site non désigné à cet effet et notamment sur la voie publique est puni d'une amende de dix mille (10.000) à cinquante mille (50.000) dinars.
 
 En cas de récidive, l'amende est portée au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 58; page_mapping: automated -->
 **Article 58**
 
 Toute infraction aux dispositions de l'article 21 de la présente loi est punie d'une amende de cinquante mille (50.000) à cent mille (100.000) dinars.
 
 En cas de récidive, l'amende est portée au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 59; page_mapping: automated -->
 **Article 59**
 
 Toute infraction aux dispositions de l'article 10 de la présente loi est punie d'une amende de cent mille (100.000) à deux cent mille (200.000) dinars.
 
 En cas de récidive, l'amende est portée au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 12; article: 60; page_mapping: automated -->
 **Article 60**
 
 Toute infraction aux dispositions de l'article 9 de la présente loi, est punie d'un emprisonnement de deux (2) mois à un (1) an et d'une amende de deux cent mille (200.000) à quatre cent mille (400.000) dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 61; page_mapping: automated -->
 **Article 61**
 
 Toute infraction aux dispositions de l'article 17 de la présente loi est punie d'un emprisonnement de trois (3) mois à deux (2) ans et d'une amende de trois cent mille (300.000) à cinq cent mille (500.000) dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 62; page_mapping: automated -->
 **Article 62**
 
 Quiconque remet ou fait remettre des déchets spéciaux dangereux en vue de leur traitement, à une personne exploitant une installation non autorisée pour le traitement de cette catégorie de déchets, est puni d'un emprisonnement de six (6) mois à deux (2) ans et d'une amende de quatre cent mille (400.000) à huit cent mille (800.000) dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 63; page_mapping: automated -->
 **Article 63**
 
 Quiconque exploite une installation de traitement des déchets sans se conformer aux dispositions de la présente loi est puni d'un emprisonnement de huit (8) mois à trois (3) ans et d'une amende de cinq cent mille (500.000) à neuf cent mille (900.000) dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 64; page_mapping: automated -->
 **Article 64**
 
 Quiconque dépose, jette, enfouit, abandonne ou immerge des déchets spéciaux dangereux dans des lieux non réservés à cet effet, est puni d'un emprisonnement de 1 (un) an à trois (3) ans et d'une amende de six cent mille (600.000) à neuf cent mille (900.000) dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 65; page_mapping: automated -->
 **Article 65**
 
 Toute infraction aux dispositions de l'article 43 de la présente loi est punie d'un emprisonnement de six (6) mois à dix-huit (18) mois et d'une amende de sept cent mille (700.000) à un million (1.000.000) de dinars ou de l'une de ces deux peines seulement.
 
 En cas de récidive, les peines sont portées au double.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 66; page_mapping: automated -->
 **Article 66**
 
 Quiconque importe, exporte ou fait transiter des déchets spéciaux dangereux en infraction aux dispositions de la présente loi est puni d'un emprisonnement de cinq (5) ans à huit (8) ans et d'une amende d'un million (1.000.000) à cinq millions (5.000.000) de dinars ou de l'une de ces deux peines seulement.
@@ -546,6 +629,7 @@ En cas de récidive, les peines sont portées au double.
 
 ## TITRE VIII — DISPOSITION PARTICULIERE
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 13; article: 67; page_mapping: automated -->
 **Article 67**
 
 Il est créé un organisme public chargé de promouvoir les activités de collecte, de tri, de transport, de traitement, de valorisation et d'élimination des déchets.
@@ -556,22 +640,27 @@ Ses missions ainsi que les modalités de son organisation et de son fonctionneme
 
 ## TITRE IX — DISPOSITIONS TRANSITOIRES
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 14; article: 68; page_mapping: automated -->
 **Article 68**
 
 Les communes de plus de 100.000 habitants disposent d'un délai de deux (2) ans, à compter de la date de publication de la présente loi au Journal officiel de la République algérienne démocratique et populaire, pour se conformer aux dispositions de l'article 29 de la présente loi.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 14; article: 69; page_mapping: automated -->
 **Article 69**
 
 Les exploitants des installations existantes de traitement des déchets spéciaux et des déchets ménagers et assimilés disposent d'un délai de cinq (5) ans, à compter de la date de publication de la présente loi, pour se conformer aux dispositions de la présente loi.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 14; article: 70; page_mapping: automated -->
 **Article 70**
 
 Les exploitants des sites des déchets inertes, disposent d'un délai de trois (3) ans, à compter de la date de publication de la présente loi, pour se conformer aux dispositions de la présente loi.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 14; article: 71; page_mapping: automated -->
 **Article 71**
 
 Les détenteurs de stocks existants de déchets spéciaux et de déchets spéciaux dangereux disposent d'un délai de deux (2) ans, à compter de la date de publication de la présente loi, pour se conformer aux dispositions de la présente loi.
 
+<!-- source_pdf: Loi01-19.pdf; source_page: 14; article: 72; page_mapping: automated -->
 **Article 72**
 
 La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.

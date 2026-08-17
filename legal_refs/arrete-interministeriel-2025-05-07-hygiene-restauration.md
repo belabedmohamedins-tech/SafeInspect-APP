@@ -1,388 +1,404 @@
-# Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration
+---
+document_type: "legal-reference"
+source_pdf: "ArrÃªtÃ©interministÃ©rieldu9DhouElKaÃ¢da1446correspondantau7mai2025fixantlesconditionsparticuliÃ¨resdâ€™hygiÃ¨neetdesalubritÃ©applicablesdanslesÃ©tablissementsderestauration.pdf"
+source_pdf_sha256: "eb35fb3a9a50af4c019c281c396a470e0fa81bad8ed950a6aebf780289d50c77"
+source_pdf_pages: 5
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-Markdown preserved; source encoding decoded as cp1252; native source comparison"
+quality_status: "low-coverage-review-required"
+automated_pdf_word_coverage: 0.6123
+automated_source_mode: "native"
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages"
+---
 
-**Date de signature :** 7 mai 2025 (9 Dhou El Kaâda 1446)  
-**Journal Officiel :** Source PDF fournie par l'utilisateur  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification : ? VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
-> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
 
-**Note sur la source :** Le texte est complet. L'arrêté a été signé par les ministres du commerce intérieur, de l'intérieur, de l'enseignement supérieur, de l'agriculture, du tourisme et de la santé.
+# ArrÃªtÃ© interministÃ©riel du 9 Dhou El KaÃ¢da 1446 correspondant au 7 mai 2025 fixant les conditions particuliÃ¨res d'hygiÃ¨ne et de salubritÃ© applicables dans les Ã©tablissements de restauration
+
+**Date de signature :** 7 mai 2025 (9 Dhou El KaÃ¢da 1446)
+**Journal Officiel :** Source PDF fournie par l'utilisateur
+**Date de conversion :** 2026-08-09
+**Statut de vÃ©rification : ? VÃ‰RIFIÃ‰ 2026-08-11 par Belabed Mohamed â€” converti et relu contre PDF officiel
+> **AVERTISSEMENT :** Veuillez vÃ©rifier ce texte par rapport au texte original du JORADP avant toute dÃ©cision lÃ©gale ou d'exÃ©cution.
+
+**Note sur la source :** Le texte est complet. L'arrÃªtÃ© a Ã©tÃ© signÃ© par les ministres du commerce intÃ©rieur, de l'intÃ©rieur, de l'enseignement supÃ©rieur, de l'agriculture, du tourisme et de la santÃ©.
 
 ---
 
-## PRÉAMBULE
+## PRÃ‰AMBULE
 
 MINISTERE DU COMMERCE INTERIEUR ET DE LA REGULATION DU MARCHE NATIONAL
 
-Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.
+ArrÃªtÃ© interministÃ©riel du 9 Dhou El KaÃ¢da 1446 correspondant au 7 mai 2025 fixant les conditions particuliÃ¨res d'hygiÃ¨ne et de salubritÃ© applicables dans les Ã©tablissements de restauration.
 
-— — — —
+â€” â€” â€” â€”
 
-Le ministre du commerce intérieur et de la régulation du marché national,
+Le ministre du commerce intÃ©rieur et de la rÃ©gulation du marchÃ© national,
 
-Le ministre de l’intérieur, des collectivités locales et de l'aménagement du territoire,
+Le ministre de lâ€™intÃ©rieur, des collectivitÃ©s locales et de l'amÃ©nagement du territoire,
 
-Le ministre de l'enseignement supérieur et de la recherche scientifique,
+Le ministre de l'enseignement supÃ©rieur et de la recherche scientifique,
 
-Le ministre de l'agriculture, du développement rural et de la pêche,
+Le ministre de l'agriculture, du dÃ©veloppement rural et de la pÃªche,
 
-La ministre du tourisme et de l’artisanat, et
+La ministre du tourisme et de lâ€™artisanat, et
 
-Le ministre de la santé.
+Le ministre de la santÃ©.
 
-Vu le décret présidentiel n° 24-374 du 16 Joumada El Oula 1446 correspondant au 18 novembre 2024, modifié, portant nomination des membres du Gouvernement ;
+Vu le dÃ©cret prÃ©sidentiel nÂ° 24-374 du 16 Joumada El Oula 1446 correspondant au 18 novembre 2024, modifiÃ©, portant nomination des membres du Gouvernement ;
 
-Vu le décret exécutif n° 11-379 du 25 Dhou El Hidja 1432 correspondant au 21 novembre 2011 fixant les attributions du ministre de la santé, de la population et de la réforme hospitalière ;
+Vu le dÃ©cret exÃ©cutif nÂ° 11-379 du 25 Dhou El Hidja 1432 correspondant au 21 novembre 2011 fixant les attributions du ministre de la santÃ©, de la population et de la rÃ©forme hospitaliÃ¨re ;
 
-Vu le décret exécutif n° 13-77 du 18 Rabie El Aouel 1434 correspondant au 30 janvier 2013 fixant les attributions du ministre de l'enseignement supérieur et de la recherche scientifique ;
+Vu le dÃ©cret exÃ©cutif nÂ° 13-77 du 18 Rabie El Aouel 1434 correspondant au 30 janvier 2013 fixant les attributions du ministre de l'enseignement supÃ©rieur et de la recherche scientifique ;
 
-Vu le décret exécutif n° 13-378 du 5 Moharram 1435 correspondant au 9 novembre 2013 fixant les conditions et les modalités relatives à l’information du consommateur ;
+Vu le dÃ©cret exÃ©cutif nÂ° 13-378 du 5 Moharram 1435 correspondant au 9 novembre 2013 fixant les conditions et les modalitÃ©s relatives Ã  lâ€™information du consommateur ;
 
-Vu le décret exécutif n° 16-05 du 29 Rabie El Aouel 1437 correspondant au 10 janvier 2016, modifié et complété, fixant les attributions du ministre de l’aménagement du territoire, du tourisme et de l’artisanat ;
+Vu le dÃ©cret exÃ©cutif nÂ° 16-05 du 29 Rabie El Aouel 1437 correspondant au 10 janvier 2016, modifiÃ© et complÃ©tÃ©, fixant les attributions du ministre de lâ€™amÃ©nagement du territoire, du tourisme et de lâ€™artisanat ;
 
-Vu le décret exécutif n° 16-299 du 23 Safar 1438 correspondant au 23 novembre 2016 fixant les conditions et les modalités d'utilisation des objets et des matériaux destinés à être mis en contact avec les denrées alimentaires ainsi que les produits de nettoyage de ces matériaux ;
+Vu le dÃ©cret exÃ©cutif nÂ° 16-299 du 23 Safar 1438 correspondant au 23 novembre 2016 fixant les conditions et les modalitÃ©s d'utilisation des objets et des matÃ©riaux destinÃ©s Ã  Ãªtre mis en contact avec les denrÃ©es alimentaires ainsi que les produits de nettoyage de ces matÃ©riaux ;
 
-Vu le décret exécutif n° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017 fixant les conditions d'hygiène et de salubrité lors du processus de mise à la consommation humaine des denrées alimentaires, notamment son article 59 ;
+Vu le dÃ©cret exÃ©cutif nÂ° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017 fixant les conditions d'hygiÃ¨ne et de salubritÃ© lors du processus de mise Ã  la consommation humaine des denrÃ©es alimentaires, notamment son article 59 ;
 
-Vu le décret exécutif n° 18-331 du 14 Rabie Ethani 1440 correspondant au 22 décembre 2018 fixant les attributions du ministre de l’intérieur, des collectivités locales et de l’aménagement du territoire ;
+Vu le dÃ©cret exÃ©cutif nÂ° 18-331 du 14 Rabie Ethani 1440 correspondant au 22 dÃ©cembre 2018 fixant les attributions du ministre de lâ€™intÃ©rieur, des collectivitÃ©s locales et de lâ€™amÃ©nagement du territoire ;
 
-Vu le décret exécutif n° 19-151 du 23 Chaâbane 1440 correspondant au 29 avril 2019 définissant et organisant l'activité de restauration de tourisme ;
+Vu le dÃ©cret exÃ©cutif nÂ° 19-151 du 23 ChaÃ¢bane 1440 correspondant au 29 avril 2019 dÃ©finissant et organisant l'activitÃ© de restauration de tourisme ;
 
-Vu le décret exécutif n° 25-76 du 12 Chaâbane 1446 correspondant au 11 février 2025 fixant les attributions du ministre de l'agriculture, du développement rural et de la pêche ;
+Vu le dÃ©cret exÃ©cutif nÂ° 25-76 du 12 ChaÃ¢bane 1446 correspondant au 11 fÃ©vrier 2025 fixant les attributions du ministre de l'agriculture, du dÃ©veloppement rural et de la pÃªche ;
 
-Vu le décret exécutif n° 25-99 du 11 Ramadhan 1446 correspondant au 11 mars 2025 fixant les attributions du ministre du commerce intérieur et de la régulation du marché national ;
+Vu le dÃ©cret exÃ©cutif nÂ° 25-99 du 11 Ramadhan 1446 correspondant au 11 mars 2025 fixant les attributions du ministre du commerce intÃ©rieur et de la rÃ©gulation du marchÃ© national ;
 
-Vu l’arrêté interministériel du 13 Chaâbane 1420 correspondant au 21 novembre 1999 relatif aux températures et procédés de conservation par réfrigération, congélation ou surgélation des denrées alimentaires ;
+Vu lâ€™arrÃªtÃ© interministÃ©riel du 13 ChaÃ¢bane 1420 correspondant au 21 novembre 1999 relatif aux tempÃ©ratures et procÃ©dÃ©s de conservation par rÃ©frigÃ©ration, congÃ©lation ou surgÃ©lation des denrÃ©es alimentaires ;
 
-Vu l’arrêté interministériel du 15 Joumada El Oula 1435 correspondant au 17 mars 2014 portant adoption du règlement technique fixant les règles relatives aux denrées alimentaires « halal » ;
+Vu lâ€™arrÃªtÃ© interministÃ©riel du 15 Joumada El Oula 1435 correspondant au 17 mars 2014 portant adoption du rÃ¨glement technique fixant les rÃ¨gles relatives aux denrÃ©es alimentaires Â« halal Â» ;
 
-## ARRÊTENT
-
----
-
-### Section 1 — Objet et champ d'application
-
-**Article 1er.** — En application des dispositions de l’article 59 du décret exécutif n° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017 susvisé, le présent arrêté a pour objet de fixer les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.
-
-**Art. 2.** — Les dispositions du présent arrêté s’appliquent aux établissements de restauration sous toutes leurs formes y compris la vente ambulante et les distributeurs automatiques.
+## ARRÃŠTENT
 
 ---
 
-### Section 2 — Définitions
+### Section 1 â€” Objet et champ d'application
 
-**Art. 3.** — Au sens du présent arrêté, il est entendu par :
+**Article 1er.** â€” En application des dispositions de lâ€™article 59 du dÃ©cret exÃ©cutif nÂ° 17-140 du 14 Rajab 1438 correspondant au 11 avril 2017 susvisÃ©, le prÃ©sent arrÃªtÃ© a pour objet de fixer les conditions particuliÃ¨res d'hygiÃ¨ne et de salubritÃ© applicables dans les Ã©tablissements de restauration.
 
-— **Etablissements de restauration** : lieux où les aliments sont préparés, exposés, mis en vente, servis ou distribués au consommateur ;
-
-— **Etablissements de restauration collective** : lieux où est exercée l’activité de restauration hors domicile et où les aliments sont fournis à un groupe de consommateurs réguliers ;
-
-— **Cuisine centrale** : établissement dont une partie, au moins, de son activité consiste à la réalisation de préparations culinaires destinées à être livrées à un restaurant satellite ou plus, ou à un groupe de personnes ;
-
-— **Restaurant satellite** : établissement conçu pour recevoir, stocker, présenter sur place, assembler ou déconditionner, le cas échéant, des aliments préparés dans une cuisine centrale ;
-
-— **Libre service** : établissement de restauration où les clients se servent eux-mêmes ;
-
-— **Préparations culinaires** : préparations destinées à être consommées froides ou chaudes y compris les boissons, les repas rapides et légers, les sandwichs, les grillades, les pizzas et autres aliments similaires ;
-
-— **Liaison froide** : opération de conservation des préparations culinaires après leur préparation et avant leur présentation au consommateur par le froid, pour assurer leur stabilité microbiologique ;
-
-— **Liaison chaude** : opération de conservation des préparations culinaires après leur préparation et avant leur présentation au consommateur par la chaleur, pour assurer leur stabilité microbiologique.
+**Art. 2.** â€” Les dispositions du prÃ©sent arrÃªtÃ© sâ€™appliquent aux Ã©tablissements de restauration sous toutes leurs formes y compris la vente ambulante et les distributeurs automatiques.
 
 ---
 
-### Section 3 — Aménagement, équipements, matériels et ustensiles
+### Section 2 â€” DÃ©finitions
 
-**Art. 4.** — Tout établissement de restauration doit être d’une dimension suffisante eu égard à la nature de son utilisation, salubre, convenablement aéré et suffisamment éclairé, d’une manière générale répondre aux conditions d’hygiène et de salubrité, conformément à la législation et à la réglementation en vigueur.
+**Art. 3.** â€” Au sens du prÃ©sent arrÃªtÃ©, il est entendu par :
 
-**Art. 5.** — L'établissement de restauration doit être aménagé de sorte à distinguer, notamment les zones réservées :
+â€” **Etablissements de restauration** : lieux oÃ¹ les aliments sont prÃ©parÃ©s, exposÃ©s, mis en vente, servis ou distribuÃ©s au consommateur ;
 
-— à la réception et au stockage des denrées alimentaires ;
+â€” **Etablissements de restauration collective** : lieux oÃ¹ est exercÃ©e lâ€™activitÃ© de restauration hors domicile et oÃ¹ les aliments sont fournis Ã  un groupe de consommateurs rÃ©guliers ;
 
-— à la préparation des aliments :
+â€” **Cuisine centrale** : Ã©tablissement dont une partie, au moins, de son activitÃ© consiste Ã  la rÃ©alisation de prÃ©parations culinaires destinÃ©es Ã  Ãªtre livrÃ©es Ã  un restaurant satellite ou plus, ou Ã  un groupe de personnes ;
 
-— au conditionnement et au stockage des aliments préparés :
+â€” **Restaurant satellite** : Ã©tablissement conÃ§u pour recevoir, stocker, prÃ©senter sur place, assembler ou dÃ©conditionner, le cas Ã©chÃ©ant, des aliments prÃ©parÃ©s dans une cuisine centrale ;
 
-— à la restauration, le cas échéant :
+â€” **Libre service** : Ã©tablissement de restauration oÃ¹ les clients se servent eux-mÃªmes ;
 
-— aux matériels d'entretien et aux produits nettoyants tels que les balais, les aspirateurs, les détergents et les désinfectants :
+â€” **PrÃ©parations culinaires** : prÃ©parations destinÃ©es Ã  Ãªtre consommÃ©es froides ou chaudes y compris les boissons, les repas rapides et lÃ©gers, les sandwichs, les grillades, les pizzas et autres aliments similaires ;
 
-— au dépôt momentané des contenants de déchets ou des sacs étanches à usage unique réservés aux déchets :
+â€” **Liaison froide** : opÃ©ration de conservation des prÃ©parations culinaires aprÃ¨s leur prÃ©paration et avant leur prÃ©sentation au consommateur par le froid, pour assurer leur stabilitÃ© microbiologique ;
 
-— aux vestiaires :
-
-— aux installations sanitaires réservées au personnel :
-
-— aux installations sanitaires réservées à la clientèle servie à l'intérieur des établissements de restauration où s'exercent les activités sédentaires.
-
-**Art. 6.** — Pour les établissements de restauration situés dans les grandes surfaces commerciales, les marchés, les foires et les établissements de restauration disposant de moins de cinquante (50) places, les installations sanitaires peuvent être communes au personnel et à la clientèle.
-
-**Art. 7.** — Les installations sanitaires réservées à la clientèle doivent être séparées des zones de préparation et de restauration, bien entretenues, propres, éclairées et équipées d'un miroir, d'un lavabo alimenté d'eau courante, du savon liquide, d'essuie-mains à usage unique ou d'un sèche mains, d'une poubelle propre, d'une cuvette de toilette avec une chasse d'eau en état de fonctionnement et du papier hygiénique.
-
-**Art. 8.** — Les établissements de restauration doivent disposer d'équipements et de matériels adéquats, conformément aux dispositions fixées par la réglementation en vigueur.
-
-Les équipements de stockage sous réfrigération et/ou congélation doivent être munis d'un système d'enregistrement de température, placé de façon à permettre sa consultation facilement.
-
-**Art. 9.** — N'est pas tolérée dans les lieux d'entreposage et de préparation des aliments, la présence d'objets et de produits susceptibles de contaminer les aliments ainsi que d'animaux et de plantes en pot et fleurs en vase.
-
-**Art. 10.** — La zone réservée à la préparation des aliments doit être bien aérée et munie d'une hotte aspirante et filtrante de capacité suffisante.
-
-Les éviers doivent toujours être propres et en bon état, alimentés d'eau courante froide et chaude.
-
-Le traitement des denrées alimentaires et le nettoyage des ustensiles, ne doivent pas être effectués en même temps.
-
-Les torchons réservés à essuyer les ustensiles et ceux réservés à essuyer les mains ainsi que les chiffons, doivent être propres et utilisés uniquement à cette fin.
-
-**Art. 11.** — Tout matériel ayant été en contact avec des denrées alimentaires crues, doit être nettoyé avant tout contact avec les préparations culinaires.
-
-Les plans de travail, plateaux de tables, planchers et leurs abords doivent être nettoyés une fois par jour et autant de fois que nécessaire.
-
-Les récipients, les emballages ou les conditionnements utilisés pendant le service, le transport ou l'entreposage des denrées alimentaires crues ou préparées dans les établissements de restauration, doivent être conçus d'une manière garantissant la conservation de ces denrées alimentaires, conformément aux conditions de salubrité satisfaisantes.
-
-**Art. 12.** — L'établissement de restauration doit disposer d'une boîte à pharmacie contenant des produits nécessaires aux premiers soins.
+â€” **Liaison chaude** : opÃ©ration de conservation des prÃ©parations culinaires aprÃ¨s leur prÃ©paration et avant leur prÃ©sentation au consommateur par la chaleur, pour assurer leur stabilitÃ© microbiologique.
 
 ---
 
-### Section 4 — Hygiène des denrées alimentaires utilisées dans la réalisation des préparations culinaires
+### Section 3 â€” AmÃ©nagement, Ã©quipements, matÃ©riels et ustensiles
 
-**Art. 13.** — Les denrées alimentaires utilisées pour la réalisation des préparations culinaires doivent être conservées à l'abri des souillures, conformément aux conditions d'hygiène permettant de préserver leur bonne qualité et leur salubrité.
+**Art. 4.** â€” Tout Ã©tablissement de restauration doit Ãªtre dâ€™une dimension suffisante eu Ã©gard Ã  la nature de son utilisation, salubre, convenablement aÃ©rÃ© et suffisamment Ã©clairÃ©, dâ€™une maniÃ¨re gÃ©nÃ©rale rÃ©pondre aux conditions dâ€™hygiÃ¨ne et de salubritÃ©, conformÃ©ment Ã  la lÃ©gislation et Ã  la rÃ©glementation en vigueur.
 
-Les denrées alimentaires ne doivent présenter aucune trace de moisissures ou d'altération lors de leur entreposage, de leur cuisson ou de leur présentation au consommateur.
+**Art. 5.** â€” L'Ã©tablissement de restauration doit Ãªtre amÃ©nagÃ© de sorte Ã  distinguer, notamment les zones rÃ©servÃ©es :
 
-Les denrées alimentaires doivent être placées sur des étagères, ou dans des casiers ou des paniers qui leur sont réservés à cet effet et sont tenus en parfait état de propreté.
+â€” Ã  la rÃ©ception et au stockage des denrÃ©es alimentaires ;
 
-**Art. 14.** — Les denrées alimentaires utilisées dans la réalisation des préparations culinaires, ou préparées dans les établissements de restauration qui ne sont pas destinées à une utilisation ou à une consommation immédiate, doivent être entreposées dans des équipements frigorifiques permettant de les maintenir à des températures fixées par la réglementation en vigueur.
+â€” Ã  la prÃ©paration des aliments :
 
-**Art. 15.** — Les denrées alimentaires crues doivent être traitées dans une zone séparée de celle où sont réalisées les préparations culinaires prêtes à la consommation.
+â€” au conditionnement et au stockage des aliments prÃ©parÃ©s :
 
-Toutefois, pour les établissements de restauration qui ne peuvent disposer de zone séparée, les denrées alimentaires crues et les préparations culinaires prêtes à la consommation peuvent être traité dans une même zone, à condition que le traitement ne s'effectue en même temps et que cette zone soit nettoyée et désinfectée, après chaque opération.
+â€” Ã  la restauration, le cas Ã©chÃ©ant :
 
-**Art. 16.** — Les denrées alimentaires congelées peuvent être cuites directement sans avoir été décongelées. Toutefois, les gros morceaux de viandes doivent être décongelés avant la cuisson.
+â€” aux matÃ©riels d'entretien et aux produits nettoyants tels que les balais, les aspirateurs, les dÃ©tergents et les dÃ©sinfectants :
 
-La décongélation ne doit être effectué que dans :
+â€” au dÃ©pÃ´t momentanÃ© des contenants de dÃ©chets ou des sacs Ã©tanches Ã  usage unique rÃ©servÃ©s aux dÃ©chets :
 
-— un équipement frigorifique maintenu à une température inférieure ou égale à + 4°C ; ou
+â€” aux vestiaires :
 
-— un four à micro-ondes à condition que la décongélation soit suivie, immédiatement, de la phase de cuisson.
+â€” aux installations sanitaires rÃ©servÃ©es au personnel :
 
-**Art. 17.** — Les huiles alimentaires comestibles doivent être filtrées avant chaque opération de friture, au moyen d'un filtre spécialement conçu à cet effet.
+â€” aux installations sanitaires rÃ©servÃ©es Ã  la clientÃ¨le servie Ã  l'intÃ©rieur des Ã©tablissements de restauration oÃ¹ s'exercent les activitÃ©s sÃ©dentaires.
 
-La qualité des huiles alimentaires comestibles utilisées dans l’opération de friture, doit être contrôlée concernant les critères liés à l'odeur, à la saveur et à la couleur et doivent être remplacées en cas de changement de l’un de ces critères.
+**Art. 6.** â€” Pour les Ã©tablissements de restauration situÃ©s dans les grandes surfaces commerciales, les marchÃ©s, les foires et les Ã©tablissements de restauration disposant de moins de cinquante (50) places, les installations sanitaires peuvent Ãªtre communes au personnel et Ã  la clientÃ¨le.
 
-**Art. 18.** — Les denrées alimentaires déjà servies au consommateur, ne peuvent plus être remises à la consommation de nouveau, à l'exception de celles qui n'ont pas été déconditionnées et qui se conservent à température ambiante.
+**Art. 7.** â€” Les installations sanitaires rÃ©servÃ©es Ã  la clientÃ¨le doivent Ãªtre sÃ©parÃ©es des zones de prÃ©paration et de restauration, bien entretenues, propres, Ã©clairÃ©es et Ã©quipÃ©es d'un miroir, d'un lavabo alimentÃ© d'eau courante, du savon liquide, d'essuie-mains Ã  usage unique ou d'un sÃ¨che mains, d'une poubelle propre, d'une cuvette de toilette avec une chasse d'eau en Ã©tat de fonctionnement et du papier hygiÃ©nique.
 
-Le déconditionnement des denrées alimentaires destinées au tranchage ou au service, s'effectue au fur et à mesure de leur utilisation, conformément aux conditions d'hygiène évitant leur contamination.
+**Art. 8.** â€” Les Ã©tablissements de restauration doivent disposer d'Ã©quipements et de matÃ©riels adÃ©quats, conformÃ©ment aux dispositions fixÃ©es par la rÃ©glementation en vigueur.
 
-Les informations relatives à l'identification de la denrée alimentaire et à sa date limite de consommation, doivent être conservées durant toute la durée de détention de celle-ci.
+Les Ã©quipements de stockage sous rÃ©frigÃ©ration et/ou congÃ©lation doivent Ãªtre munis d'un systÃ¨me d'enregistrement de tempÃ©rature, placÃ© de faÃ§on Ã  permettre sa consultation facilement.
 
----
+**Art. 9.** â€” N'est pas tolÃ©rÃ©e dans les lieux d'entreposage et de prÃ©paration des aliments, la prÃ©sence d'objets et de produits susceptibles de contaminer les aliments ainsi que d'animaux et de plantes en pot et fleurs en vase.
 
-### Section 5 — Préparations culinaires en liaison chaude
+**Art. 10.** â€” La zone rÃ©servÃ©e Ã  la prÃ©paration des aliments doit Ãªtre bien aÃ©rÃ©e et munie d'une hotte aspirante et filtrante de capacitÃ© suffisante.
 
-**Art. 19.** — En liaison chaude, les préparations culinaires doivent être, dès la fin de la cuisson, mises, immédiatement, dans des récipients fermés par couvercle, jusqu'au moment de leur remise au consommateur et la température à cœur de ces préparations doit être constamment égale ou supérieure à + 63°C.
+Les Ã©viers doivent toujours Ãªtre propres et en bon Ã©tat, alimentÃ©s d'eau courante froide et chaude.
 
-Ces préparations culinaires doivent être consommées le plutôt que possible et le jour même de leur cuisson.
+Le traitement des denrÃ©es alimentaires et le nettoyage des ustensiles, ne doivent pas Ãªtre effectuÃ©s en mÃªme temps.
 
----
+Les torchons rÃ©servÃ©s Ã  essuyer les ustensiles et ceux rÃ©servÃ©s Ã  essuyer les mains ainsi que les chiffons, doivent Ãªtre propres et utilisÃ©s uniquement Ã  cette fin.
 
-### Section 6 — Préparations culinaires en liaison froide
+**Art. 11.** â€” Tout matÃ©riel ayant Ã©tÃ© en contact avec des denrÃ©es alimentaires crues, doit Ãªtre nettoyÃ© avant tout contact avec les prÃ©parations culinaires.
 
-**Art. 20.** — En liaison froide, les préparations culinaires destinées à être consommées froides doivent être conditionnées, immédiatement après leur cuisson, en unités individuelles ou non individuelles.
+Les plans de travail, plateaux de tables, planchers et leurs abords doivent Ãªtre nettoyÃ©s une fois par jour et autant de fois que nÃ©cessaire.
 
-Le refroidissement rapide de ces préparations culinaires est opéré d'une manière à réduire leur température à cœur à + 10°C en moins de deux heures, le cas échéant, être entreposées jusqu'à leur utilisation finale, et ce, dans un équipement frigorifique dont la température est comprise entre 0°C et + 4°C.
+Les rÃ©cipients, les emballages ou les conditionnements utilisÃ©s pendant le service, le transport ou l'entreposage des denrÃ©es alimentaires crues ou prÃ©parÃ©es dans les Ã©tablissements de restauration, doivent Ãªtre conÃ§us d'une maniÃ¨re garantissant la conservation de ces denrÃ©es alimentaires, conformÃ©ment aux conditions de salubritÃ© satisfaisantes.
 
-Ces préparations culinaires sont retirées de l’équipement frigorifique et conservées à une température inférieure ou égale à + 10°C pour une durée maximale de deux (2) heures, avant leur consommation.
-
-**Art. 21.** — La durée de conservation des préparations culinaires réfrigérées ne peut excéder trois (3) jours, y compris le jour de leur préparation et le jour de leur consommation.
-
-Toutes préparations culinaires réfrigérées entreposées ne comportant pas les informations relatives à l'identification du produit et à sa date de préparation, sont considérées non conformes.
+**Art. 12.** â€” L'Ã©tablissement de restauration doit disposer d'une boÃ®te Ã  pharmacie contenant des produits nÃ©cessaires aux premiers soins.
 
 ---
 
-### Section 7 — Hygiène de la zone de restauration et des locaux similaires
+### Section 4 â€” HygiÃ¨ne des denrÃ©es alimentaires utilisÃ©es dans la rÃ©alisation des prÃ©parations culinaires
 
-**Art. 22.** — La zone réservée à la restauration où sont servis et consommés les aliments, est interdite à la présence d’animaux et son aménagement ne doit constituer aucun risque d'insalubrité pour ces aliments.
+**Art. 13.** â€” Les denrÃ©es alimentaires utilisÃ©es pour la rÃ©alisation des prÃ©parations culinaires doivent Ãªtre conservÃ©es Ã  l'abri des souillures, conformÃ©ment aux conditions d'hygiÃ¨ne permettant de prÃ©server leur bonne qualitÃ© et leur salubritÃ©.
 
-Cette zone doit être bien aérée, suffisamment éclairée, climatisée et aménagée pour la circulation des personnes handicapées moteurs.
+Les denrÃ©es alimentaires ne doivent prÃ©senter aucune trace de moisissures ou d'altÃ©ration lors de leur entreposage, de leur cuisson ou de leur prÃ©sentation au consommateur.
 
-Les tables doivent être nettoyées après le départ de chaque client.
+Les denrÃ©es alimentaires doivent Ãªtre placÃ©es sur des Ã©tagÃ¨res, ou dans des casiers ou des paniers qui leur sont rÃ©servÃ©s Ã  cet effet et sont tenus en parfait Ã©tat de propretÃ©.
 
-Les nappes, les serviettes et les sets de table réutilisables doivent être maintenus propres ou jetés lorsqu’ils sont à usage unique.
+**Art. 14.** â€” Les denrÃ©es alimentaires utilisÃ©es dans la rÃ©alisation des prÃ©parations culinaires, ou prÃ©parÃ©es dans les Ã©tablissements de restauration qui ne sont pas destinÃ©es Ã  une utilisation ou Ã  une consommation immÃ©diate, doivent Ãªtre entreposÃ©es dans des Ã©quipements frigorifiques permettant de les maintenir Ã  des tempÃ©ratures fixÃ©es par la rÃ©glementation en vigueur.
 
-**Art. 23.** — Lorsque les préparations culinaires sont exposées dans la zone de restauration, l'emplacement, le classement et la manière de présentation de celles-ci doivent être choisis, afin d'éviter tous risques de contamination.
+**Art. 15.** â€” Les denrÃ©es alimentaires crues doivent Ãªtre traitÃ©es dans une zone sÃ©parÃ©e de celle oÃ¹ sont rÃ©alisÃ©es les prÃ©parations culinaires prÃªtes Ã  la consommation.
 
-Les préparations culinaires destinées à être consommées froides et les préparations culinaires destinées à être consommées chaudes doivent être exposées dans des emplacements séparés, aménagés à cet effet et en quantité suffisante pour un usage rapide et leur renouvellement s’effectue au fur et à mesure du besoin.
+Toutefois, pour les Ã©tablissements de restauration qui ne peuvent disposer de zone sÃ©parÃ©e, les denrÃ©es alimentaires crues et les prÃ©parations culinaires prÃªtes Ã  la consommation peuvent Ãªtre traitÃ© dans une mÃªme zone, Ã  condition que le traitement ne s'effectue en mÃªme temps et que cette zone soit nettoyÃ©e et dÃ©sinfectÃ©e, aprÃ¨s chaque opÃ©ration.
 
-**Art. 24.** — Dans le cas d’un libre service, il est tenu :
+**Art. 16.** â€” Les denrÃ©es alimentaires congelÃ©es peuvent Ãªtre cuites directement sans avoir Ã©tÃ© dÃ©congelÃ©es. Toutefois, les gros morceaux de viandes doivent Ãªtre dÃ©congelÃ©s avant la cuisson.
 
-— d’aménager les étals dédiés à la distribution des préparations culinaires de manière que les aliments présentés soient tenus à l'abri des souillures ;
+La dÃ©congÃ©lation ne doit Ãªtre effectuÃ© que dans :
 
-— de présenter en vitrine réfrigérée à + 4°C, les préparations culinaires destinées à être consommées froides, avec ou sans conditionnement.
+â€” un Ã©quipement frigorifique maintenu Ã  une tempÃ©rature infÃ©rieure ou Ã©gale Ã  + 4Â°C ; ou
 
-Les préparations culinaires citées ci-dessus, non consommées, peuvent être conservées pour une consommation ultérieure conformément aux dispositions des articles 20 et 21 du présent arrêté.
+â€” un four Ã  micro-ondes Ã  condition que la dÃ©congÃ©lation soit suivie, immÃ©diatement, de la phase de cuisson.
 
----
+**Art. 17.** â€” Les huiles alimentaires comestibles doivent Ãªtre filtrÃ©es avant chaque opÃ©ration de friture, au moyen d'un filtre spÃ©cialement conÃ§u Ã  cet effet.
 
-### Section 8 — Hygiène du personnel
+La qualitÃ© des huiles alimentaires comestibles utilisÃ©es dans lâ€™opÃ©ration de friture, doit Ãªtre contrÃ´lÃ©e concernant les critÃ¨res liÃ©s Ã  l'odeur, Ã  la saveur et Ã  la couleur et doivent Ãªtre remplacÃ©es en cas de changement de lâ€™un de ces critÃ¨res.
 
-**Art. 25.** — Le personnel des établissements de restauration est astreint à une propreté vestimentaire, corporelle et doit prendre toutes les précautions nécessaires, conformément à la réglementation en vigueur, pour éviter tout risque de contamination.
+**Art. 18.** â€” Les denrÃ©es alimentaires dÃ©jÃ  servies au consommateur, ne peuvent plus Ãªtre remises Ã  la consommation de nouveau, Ã  l'exception de celles qui n'ont pas Ã©tÃ© dÃ©conditionnÃ©es et qui se conservent Ã  tempÃ©rature ambiante.
 
-Il n’est permis au caissier ni de toucher aux aliments ni de servir le consommateur.
+Le dÃ©conditionnement des denrÃ©es alimentaires destinÃ©es au tranchage ou au service, s'effectue au fur et Ã  mesure de leur utilisation, conformÃ©ment aux conditions d'hygiÃ¨ne Ã©vitant leur contamination.
 
-Le personnel chargé de la manipulation des aliments doit éviter de manier de l'argent. Dans le cas contraire, il doit se laver les mains avant de manipuler à nouveau les aliments.
-
----
-
-### Section 9 — Service
-
-**Art. 26.** — Le personnel doit utiliser des pinces, des fourchettes ou des cuillères propres pour manipuler, servir ou vendre les aliments.
-
-Est interdit d’empiler les assiettes remplies les unes sur les autres lors de la présentation, du rangement ou du service.
-
-**Art. 27.** — Est interdit au personnel intervenant de souffler dans les sacs en plastique ou dans d’autres emballages utilisés pour les denrées alimentaires.
-
-**Art. 28.** — Les boissons préalablement conditionnées, doivent être servies dans leur récipient d'origine, hermétiquement fermé.
-
-Les boissons, non conditionnées préalablement, doivent être servies dans des récipients, fabriqués en matières destinées à être en contact avec les denrées alimentaires, bien fermés au moyen de leurs couvercles.
-
-**Art. 29.** — Les fruits coupés et les autres denrées alimentaires consommés en l'état, doivent être présentés, conformément aux règles d’hygiène et de salubrité des denrées alimentaires, dans un présentoir ou autre équipement fermé.
-
-**Art. 30.** — Les préparations culinaires et les boissons préparées non vendues doivent être éliminées à la fin de la journée, à l’exception de celles qui sont prévues au dernier alinéa de l’article 24 ci-dessus.
+Les informations relatives Ã  l'identification de la denrÃ©e alimentaire et Ã  sa date limite de consommation, doivent Ãªtre conservÃ©es durant toute la durÃ©e de dÃ©tention de celle-ci.
 
 ---
 
-### Section 10 — Programme d'entretien, de nettoyage, de désinfection et de collecte des déchets
+### Section 5 â€” PrÃ©parations culinaires en liaison chaude
 
-**Art. 31.** — Un programme d'entretien, de nettoyage et de désinfection doit être affiché dans les établissements de restauration comportant, notamment :
+**Art. 19.** â€” En liaison chaude, les prÃ©parations culinaires doivent Ãªtre, dÃ¨s la fin de la cuisson, mises, immÃ©diatement, dans des rÃ©cipients fermÃ©s par couvercle, jusqu'au moment de leur remise au consommateur et la tempÃ©rature Ã  cÅ“ur de ces prÃ©parations doit Ãªtre constamment Ã©gale ou supÃ©rieure Ã  + 63Â°C.
 
-— les zones, les équipements et les ustensiles à nettoyer :
-
-— la répartition des tâches :
-
-— les méthodes et la fréquence de nettoyage :
-
-— le plan de lutte contre les ravageurs, les rongeurs et les particules nuisibles.
-
-**Art. 32.** — La collecte des déchets et des détritus doit être effectuée dans des sacs hermétiquement fermés et étanches à usage unique ou dans des contenants étanches munis de couvercles, placés dans la zone de préparation.
-
-Les contenants doivent être nettoyés et désinfectés avant leur réintroduction dans cette zone.
+Ces prÃ©parations culinaires doivent Ãªtre consommÃ©es le plutÃ´t que possible et le jour mÃªme de leur cuisson.
 
 ---
 
-### Section 11 — Transport
+### Section 6 â€” PrÃ©parations culinaires en liaison froide
 
-**Art. 33.** — Les véhicules et/ou les récipients réservés au transport des préparations culinaires destinées à être consommées chaudes, doivent être conçus ou aménagés pour maintenir la température de ces préparations à + 63°C, au moins.
+**Art. 20.** â€” En liaison froide, les prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides doivent Ãªtre conditionnÃ©es, immÃ©diatement aprÃ¨s leur cuisson, en unitÃ©s individuelles ou non individuelles.
 
-**Art. 34.** — Les véhicules et/ou les récipients réservés au transport des préparations culinaires destinées à être consommées froides, doivent être conçus ou aménagés pour maintenir la température de ces préparations à + 4°C.
+Le refroidissement rapide de ces prÃ©parations culinaires est opÃ©rÃ© d'une maniÃ¨re Ã  rÃ©duire leur tempÃ©rature Ã  cÅ“ur Ã  + 10Â°C en moins de deux heures, le cas Ã©chÃ©ant, Ãªtre entreposÃ©es jusqu'Ã  leur utilisation finale, et ce, dans un Ã©quipement frigorifique dont la tempÃ©rature est comprise entre 0Â°C et + 4Â°C.
 
-**Art. 35.** — Les récipients réutilisables réservés au transport des préparations culinaires doivent être nettoyés, lavés et désinfectés par un procédé adéquat, dès qu'ils sont vidés et avant leur réutilisation.
+Ces prÃ©parations culinaires sont retirÃ©es de lâ€™Ã©quipement frigorifique et conservÃ©es Ã  une tempÃ©rature infÃ©rieure ou Ã©gale Ã  + 10Â°C pour une durÃ©e maximale de deux (2) heures, avant leur consommation.
 
----
+**Art. 21.** â€” La durÃ©e de conservation des prÃ©parations culinaires rÃ©frigÃ©rÃ©es ne peut excÃ©der trois (3) jours, y compris le jour de leur prÃ©paration et le jour de leur consommation.
 
-### Section 12 — Restaurants ambulants et restaurants en plein air
-
-**Art. 36.** — La restauration ambulante n'est autorisée que dans des véhicules dont l'aménagement répond aux conditions d'hygiène et de salubrité fixées par la législation et la réglementation en vigueur.
-
-Dans le cas d'un véhicule routier, la cabine du conducteur doit être séparée par une cloison du compartiment de restauration, permettant la mise en œuvre des bonnes pratiques d'hygiène afin de protéger les aliments de toute contamination.
-
-**Art. 37.** — Les véhicules doivent être dotés d'un stock suffisant en eau potable conservée dans des récipients propres réservés à cet effet.
-
-**Art. 38.** — Lorsque la restauration ambulante fait partie intégrante des prestations de services durant le voyage, les préparations culinaires doivent être transportées et conditionnées, le cas échéant, dans des récipients isothermes.
-
-Ces récipients doivent maintenir les préparations culinaires, jusqu'à la consommation à une température de :
-
-• + 63°C, température minimale de conservation des préparations culinaires destinées à être consommées chaudes pendant le transport :
-
-• + 4°C, température maximale de conservation des préparations culinaires destinées à être consommées froides pendant le transport.
-
-**Art. 39.** — Dans le cas de la restauration en plein air, toutes les mesures relatives au respect des règles d'hygiène doivent être prises pour protéger les aliments de toute contamination.
-
-Est interdit d’abandonner les déchets liquides ou solides, les restes et les détritus sur le lieu de stationnement du véhicule.
+Toutes prÃ©parations culinaires rÃ©frigÃ©rÃ©es entreposÃ©es ne comportant pas les informations relatives Ã  l'identification du produit et Ã  sa date de prÃ©paration, sont considÃ©rÃ©es non conformes.
 
 ---
 
-### Section 13 — Distributeurs automatiques de préparations culinaires
+### Section 7 â€” HygiÃ¨ne de la zone de restauration et des locaux similaires
 
-**Art. 40.** — Les distributeurs automatiques de préparations culinaires doivent être placés à l'abri de toute source de contamination ou de dénaturation. Ils doivent être munis, le cas échéant, d’équipements protégeant les préparations culinaires de la pollution.
+**Art. 22.** â€” La zone rÃ©servÃ©e Ã  la restauration oÃ¹ sont servis et consommÃ©s les aliments, est interdite Ã  la prÃ©sence dâ€™animaux et son amÃ©nagement ne doit constituer aucun risque d'insalubritÃ© pour ces aliments.
 
-**Art. 41.** — Lorsque les préparations culinaires sont exposées dans les distributeurs automatiques, elles doivent être :
+Cette zone doit Ãªtre bien aÃ©rÃ©e, suffisamment Ã©clairÃ©e, climatisÃ©e et amÃ©nagÃ©e pour la circulation des personnes handicapÃ©es moteurs.
 
-— transportées depuis leur lieu de préparation et d’entreposage, conformément aux conditions fixées par la réglementation en vigueur ;
+Les tables doivent Ãªtre nettoyÃ©es aprÃ¨s le dÃ©part de chaque client.
 
-— maintenues à l'abri des souillures provenant, notamment des pièces de monnaies et des billets de banque.
+Les nappes, les serviettes et les sets de table rÃ©utilisables doivent Ãªtre maintenus propres ou jetÃ©s lorsquâ€™ils sont Ã  usage unique.
 
-**Art. 42.** — La température de conservation des préparations culinaires mises en vente dans les distributeurs automatiques, doit être :
+**Art. 23.** â€” Lorsque les prÃ©parations culinaires sont exposÃ©es dans la zone de restauration, l'emplacement, le classement et la maniÃ¨re de prÃ©sentation de celles-ci doivent Ãªtre choisis, afin d'Ã©viter tous risques de contamination.
 
-— de + 63°C, s'il s'agit des préparations culinaires destinées à être consommées chaudes ;
+Les prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides et les prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es chaudes doivent Ãªtre exposÃ©es dans des emplacements sÃ©parÃ©s, amÃ©nagÃ©s Ã  cet effet et en quantitÃ© suffisante pour un usage rapide et leur renouvellement sâ€™effectue au fur et Ã  mesure du besoin.
 
-— de 0°C à + 4°C, s'il s'agit des préparations culinaires destinées à être consommées froides.
+**Art. 24.** â€” Dans le cas dâ€™un libre service, il est tenu :
 
-Les préparations culinaires doivent être conditionnées de manière appropriée, les protégeant de toute source de contamination.
+â€” dâ€™amÃ©nager les Ã©tals dÃ©diÃ©s Ã  la distribution des prÃ©parations culinaires de maniÃ¨re que les aliments prÃ©sentÃ©s soient tenus Ã  l'abri des souillures ;
 
-**Art. 43.** — Les distributeurs automatiques de préparations culinaires doivent être nettoyés et désinfectés régulièrement, notamment lors du renouvellement des préparations culinaires mises en vente.
+â€” de prÃ©senter en vitrine rÃ©frigÃ©rÃ©e Ã  + 4Â°C, les prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides, avec ou sans conditionnement.
 
-**Art. 44.** — Le distributeur automatique de préparations culinaires doit comporter le numéro d'identification de l'équipement, l'adresse et le numéro de téléphone de son propriétaire.
-
-Le contact avec le propriétaire du distributeur automatique ou son représentant doit être possible à tout moment considérant qu’il en est responsable.
-
-Les clés de cet équipement doivent être disponibles en permanence, afin de permettre aux agents de contrôle habilités de l’ouvrir.
+Les prÃ©parations culinaires citÃ©es ci-dessus, non consommÃ©es, peuvent Ãªtre conservÃ©es pour une consommation ultÃ©rieure conformÃ©ment aux dispositions des articles 20 et 21 du prÃ©sent arrÃªtÃ©.
 
 ---
 
-### Section 14 — Dispositions diverses
+### Section 8 â€” HygiÃ¨ne du personnel
 
-**Art. 45.** — Le responsable de l'établissement de restauration collective doit conserver des plats témoins mis à la disposition des agents de contrôle habilités.
+**Art. 25.** â€” Le personnel des Ã©tablissements de restauration est astreint Ã  une propretÃ© vestimentaire, corporelle et doit prendre toutes les prÃ©cautions nÃ©cessaires, conformÃ©ment Ã  la rÃ©glementation en vigueur, pour Ã©viter tout risque de contamination.
 
-Les plats témoins sont des échantillons de 150 g représentatifs des différents aliments servis aux consommateurs, qui doivent être étiquetés en mentionnant clairement la date du prélèvement de l’échantillon.
+Il nâ€™est permis au caissier ni de toucher aux aliments ni de servir le consommateur.
 
-Les plats témoins doivent être conservés dans des récipients destinés à être mis en contact avec les denrées alimentaires, conformément aux conditions d’hygiène fixées par la réglementation en vigueur, pendant une durée de cinq (5) jours en froid positif (de 0°C à + 4°C), à compter de la date de consommation.
+Le personnel chargÃ© de la manipulation des aliments doit Ã©viter de manier de l'argent. Dans le cas contraire, il doit se laver les mains avant de manipuler Ã  nouveau les aliments.
 
-**Art. 46.** — Lors d’une opération de contrôle, le responsable de l'établissement de restauration doit présenter tous les documents nécessaires, notamment :
+---
 
-— une fiche portant les dates d’intervention du prestataire du service de nettoyage, de dératisation et de désinfection, signée par ce dernier ;
+### Section 9 â€” Service
 
-— le programme de nettoyage ;
+**Art. 26.** â€” Le personnel doit utiliser des pinces, des fourchettes ou des cuillÃ¨res propres pour manipuler, servir ou vendre les aliments.
 
-— une fiche de réception des denrées alimentaires ;
+Est interdit dâ€™empiler les assiettes remplies les unes sur les autres lors de la prÃ©sentation, du rangement ou du service.
 
-— les certificats de salubrité des denrées alimentaires d’origine animale pour les restaurants collectifs et les cuisines centrales ;
+**Art. 27.** â€” Est interdit au personnel intervenant de souffler dans les sacs en plastique ou dans dâ€™autres emballages utilisÃ©s pour les denrÃ©es alimentaires.
 
-— les fiches d'entretien des hottes et des extracteurs de vapeur ;
+**Art. 28.** â€” Les boissons prÃ©alablement conditionnÃ©es, doivent Ãªtre servies dans leur rÃ©cipient d'origine, hermÃ©tiquement fermÃ©.
 
-— une fiche de contrôle des huiles de friture ;
+Les boissons, non conditionnÃ©es prÃ©alablement, doivent Ãªtre servies dans des rÃ©cipients, fabriquÃ©s en matiÃ¨res destinÃ©es Ã  Ãªtre en contact avec les denrÃ©es alimentaires, bien fermÃ©s au moyen de leurs couvercles.
 
-— un certificat médical d’aptitude du personnel, délivré par un service compétent ;
+**Art. 29.** â€” Les fruits coupÃ©s et les autres denrÃ©es alimentaires consommÃ©s en l'Ã©tat, doivent Ãªtre prÃ©sentÃ©s, conformÃ©ment aux rÃ¨gles dâ€™hygiÃ¨ne et de salubritÃ© des denrÃ©es alimentaires, dans un prÃ©sentoir ou autre Ã©quipement fermÃ©.
 
-— une attestation de formation du personnel en matière d’hygiène alimentaire ;
+**Art. 30.** â€” Les prÃ©parations culinaires et les boissons prÃ©parÃ©es non vendues doivent Ãªtre Ã©liminÃ©es Ã  la fin de la journÃ©e, Ã  lâ€™exception de celles qui sont prÃ©vues au dernier alinÃ©a de lâ€™article 24 ci-dessus.
 
-— une fiche des produits d'entretien et de nettoyage utilisés ;
+---
 
-— les fiches d'enregistrement de non conformité des produits.
+### Section 10 â€” Programme d'entretien, de nettoyage, de dÃ©sinfection et de collecte des dÃ©chets
 
-**Art. 47.** — Les responsables des établissements de restauration doivent se conformer aux dispositions du présent arrêté, dans un délai de six (6) mois, à compter de la date de sa publication au Journal officiel.
+**Art. 31.** â€” Un programme d'entretien, de nettoyage et de dÃ©sinfection doit Ãªtre affichÃ© dans les Ã©tablissements de restauration comportant, notamment :
 
-**Art. 48.** — Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
+â€” les zones, les Ã©quipements et les ustensiles Ã  nettoyer :
 
-Fait à Alger, le 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025.
+â€” la rÃ©partition des tÃ¢ches :
+
+â€” les mÃ©thodes et la frÃ©quence de nettoyage :
+
+â€” le plan de lutte contre les ravageurs, les rongeurs et les particules nuisibles.
+
+**Art. 32.** â€” La collecte des dÃ©chets et des dÃ©tritus doit Ãªtre effectuÃ©e dans des sacs hermÃ©tiquement fermÃ©s et Ã©tanches Ã  usage unique ou dans des contenants Ã©tanches munis de couvercles, placÃ©s dans la zone de prÃ©paration.
+
+Les contenants doivent Ãªtre nettoyÃ©s et dÃ©sinfectÃ©s avant leur rÃ©introduction dans cette zone.
+
+---
+
+### Section 11 â€” Transport
+
+**Art. 33.** â€” Les vÃ©hicules et/ou les rÃ©cipients rÃ©servÃ©s au transport des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es chaudes, doivent Ãªtre conÃ§us ou amÃ©nagÃ©s pour maintenir la tempÃ©rature de ces prÃ©parations Ã  + 63Â°C, au moins.
+
+**Art. 34.** â€” Les vÃ©hicules et/ou les rÃ©cipients rÃ©servÃ©s au transport des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides, doivent Ãªtre conÃ§us ou amÃ©nagÃ©s pour maintenir la tempÃ©rature de ces prÃ©parations Ã  + 4Â°C.
+
+**Art. 35.** â€” Les rÃ©cipients rÃ©utilisables rÃ©servÃ©s au transport des prÃ©parations culinaires doivent Ãªtre nettoyÃ©s, lavÃ©s et dÃ©sinfectÃ©s par un procÃ©dÃ© adÃ©quat, dÃ¨s qu'ils sont vidÃ©s et avant leur rÃ©utilisation.
+
+---
+
+### Section 12 â€” Restaurants ambulants et restaurants en plein air
+
+**Art. 36.** â€” La restauration ambulante n'est autorisÃ©e que dans des vÃ©hicules dont l'amÃ©nagement rÃ©pond aux conditions d'hygiÃ¨ne et de salubritÃ© fixÃ©es par la lÃ©gislation et la rÃ©glementation en vigueur.
+
+Dans le cas d'un vÃ©hicule routier, la cabine du conducteur doit Ãªtre sÃ©parÃ©e par une cloison du compartiment de restauration, permettant la mise en Å“uvre des bonnes pratiques d'hygiÃ¨ne afin de protÃ©ger les aliments de toute contamination.
+
+**Art. 37.** â€” Les vÃ©hicules doivent Ãªtre dotÃ©s d'un stock suffisant en eau potable conservÃ©e dans des rÃ©cipients propres rÃ©servÃ©s Ã  cet effet.
+
+**Art. 38.** â€” Lorsque la restauration ambulante fait partie intÃ©grante des prestations de services durant le voyage, les prÃ©parations culinaires doivent Ãªtre transportÃ©es et conditionnÃ©es, le cas Ã©chÃ©ant, dans des rÃ©cipients isothermes.
+
+Ces rÃ©cipients doivent maintenir les prÃ©parations culinaires, jusqu'Ã  la consommation Ã  une tempÃ©rature de :
+
+â€¢ + 63Â°C, tempÃ©rature minimale de conservation des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es chaudes pendant le transport :
+
+â€¢ + 4Â°C, tempÃ©rature maximale de conservation des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides pendant le transport.
+
+**Art. 39.** â€” Dans le cas de la restauration en plein air, toutes les mesures relatives au respect des rÃ¨gles d'hygiÃ¨ne doivent Ãªtre prises pour protÃ©ger les aliments de toute contamination.
+
+Est interdit dâ€™abandonner les dÃ©chets liquides ou solides, les restes et les dÃ©tritus sur le lieu de stationnement du vÃ©hicule.
+
+---
+
+### Section 13 â€” Distributeurs automatiques de prÃ©parations culinaires
+
+**Art. 40.** â€” Les distributeurs automatiques de prÃ©parations culinaires doivent Ãªtre placÃ©s Ã  l'abri de toute source de contamination ou de dÃ©naturation. Ils doivent Ãªtre munis, le cas Ã©chÃ©ant, dâ€™Ã©quipements protÃ©geant les prÃ©parations culinaires de la pollution.
+
+**Art. 41.** â€” Lorsque les prÃ©parations culinaires sont exposÃ©es dans les distributeurs automatiques, elles doivent Ãªtre :
+
+â€” transportÃ©es depuis leur lieu de prÃ©paration et dâ€™entreposage, conformÃ©ment aux conditions fixÃ©es par la rÃ©glementation en vigueur ;
+
+â€” maintenues Ã  l'abri des souillures provenant, notamment des piÃ¨ces de monnaies et des billets de banque.
+
+**Art. 42.** â€” La tempÃ©rature de conservation des prÃ©parations culinaires mises en vente dans les distributeurs automatiques, doit Ãªtre :
+
+â€” de + 63Â°C, s'il s'agit des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es chaudes ;
+
+â€” de 0Â°C Ã  + 4Â°C, s'il s'agit des prÃ©parations culinaires destinÃ©es Ã  Ãªtre consommÃ©es froides.
+
+Les prÃ©parations culinaires doivent Ãªtre conditionnÃ©es de maniÃ¨re appropriÃ©e, les protÃ©geant de toute source de contamination.
+
+**Art. 43.** â€” Les distributeurs automatiques de prÃ©parations culinaires doivent Ãªtre nettoyÃ©s et dÃ©sinfectÃ©s rÃ©guliÃ¨rement, notamment lors du renouvellement des prÃ©parations culinaires mises en vente.
+
+**Art. 44.** â€” Le distributeur automatique de prÃ©parations culinaires doit comporter le numÃ©ro d'identification de l'Ã©quipement, l'adresse et le numÃ©ro de tÃ©lÃ©phone de son propriÃ©taire.
+
+Le contact avec le propriÃ©taire du distributeur automatique ou son reprÃ©sentant doit Ãªtre possible Ã  tout moment considÃ©rant quâ€™il en est responsable.
+
+Les clÃ©s de cet Ã©quipement doivent Ãªtre disponibles en permanence, afin de permettre aux agents de contrÃ´le habilitÃ©s de lâ€™ouvrir.
+
+---
+
+### Section 14 â€” Dispositions diverses
+
+**Art. 45.** â€” Le responsable de l'Ã©tablissement de restauration collective doit conserver des plats tÃ©moins mis Ã  la disposition des agents de contrÃ´le habilitÃ©s.
+
+Les plats tÃ©moins sont des Ã©chantillons de 150 g reprÃ©sentatifs des diffÃ©rents aliments servis aux consommateurs, qui doivent Ãªtre Ã©tiquetÃ©s en mentionnant clairement la date du prÃ©lÃ¨vement de lâ€™Ã©chantillon.
+
+Les plats tÃ©moins doivent Ãªtre conservÃ©s dans des rÃ©cipients destinÃ©s Ã  Ãªtre mis en contact avec les denrÃ©es alimentaires, conformÃ©ment aux conditions dâ€™hygiÃ¨ne fixÃ©es par la rÃ©glementation en vigueur, pendant une durÃ©e de cinq (5) jours en froid positif (de 0Â°C Ã  + 4Â°C), Ã  compter de la date de consommation.
+
+**Art. 46.** â€” Lors dâ€™une opÃ©ration de contrÃ´le, le responsable de l'Ã©tablissement de restauration doit prÃ©senter tous les documents nÃ©cessaires, notamment :
+
+â€” une fiche portant les dates dâ€™intervention du prestataire du service de nettoyage, de dÃ©ratisation et de dÃ©sinfection, signÃ©e par ce dernier ;
+
+â€” le programme de nettoyage ;
+
+â€” une fiche de rÃ©ception des denrÃ©es alimentaires ;
+
+â€” les certificats de salubritÃ© des denrÃ©es alimentaires dâ€™origine animale pour les restaurants collectifs et les cuisines centrales ;
+
+â€” les fiches d'entretien des hottes et des extracteurs de vapeur ;
+
+â€” une fiche de contrÃ´le des huiles de friture ;
+
+â€” un certificat mÃ©dical dâ€™aptitude du personnel, dÃ©livrÃ© par un service compÃ©tent ;
+
+â€” une attestation de formation du personnel en matiÃ¨re dâ€™hygiÃ¨ne alimentaire ;
+
+â€” une fiche des produits d'entretien et de nettoyage utilisÃ©s ;
+
+â€” les fiches d'enregistrement de non conformitÃ© des produits.
+
+**Art. 47.** â€” Les responsables des Ã©tablissements de restauration doivent se conformer aux dispositions du prÃ©sent arrÃªtÃ©, dans un dÃ©lai de six (6) mois, Ã  compter de la date de sa publication au Journal officiel.
+
+**Art. 48.** â€” Le prÃ©sent arrÃªtÃ© sera publiÃ© au Journal officiel de la RÃ©publique algÃ©rienne dÃ©mocratique et populaire.
+
+Fait Ã  Alger, le 9 Dhou El KaÃ¢da 1446 correspondant au 7 mai 2025.
 
 | | |
 |:---|:---|
-| Le ministre du commerce intérieur et de la régulation du marché national | Le ministre de l’intérieur, des collectivités locales et de l’aménagement du territoire |
+| Le ministre du commerce intÃ©rieur et de la rÃ©gulation du marchÃ© national | Le ministre de lâ€™intÃ©rieur, des collectivitÃ©s locales et de lâ€™amÃ©nagement du territoire |
 | Tayeb ZITOUNI | Brahim MERAD |
-| Le ministre de l’agriculture, du développement rural et de la pêche | La ministre du tourisme et de l’artisanat |
+| Le ministre de lâ€™agriculture, du dÃ©veloppement rural et de la pÃªche | La ministre du tourisme et de lâ€™artisanat |
 | Youcef CHERFA | Houria MEDDAHI |
-| Le ministre de l’enseignement supérieur et de la recherche scientifique | Le ministre de la santé |
+| Le ministre de lâ€™enseignement supÃ©rieur et de la recherche scientifique | Le ministre de la santÃ© |
 | Kamel BADDARI | Abdellak SAIHI |
 
 ---
 
-## Contrôle de séquence
+## ContrÃ´le de sÃ©quence
 
-Liste des articles de l'Arrêté interministériel du 9 Dhou El Kaâda 1446 dans l'ordre numérique :
+Liste des articles de l'ArrÃªtÃ© interministÃ©riel du 9 Dhou El KaÃ¢da 1446 dans l'ordre numÃ©rique :
 
 1er, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48.
 
-**Intégrité du texte :** L'arrêté est complet. Tous les articles sont présents.
+**IntÃ©gritÃ© du texte :** L'arrÃªtÃ© est complet. Tous les articles sont prÃ©sents.
 
-**Note :** Ce texte a été signé par six ministres : Commerce intérieur, Intérieur, Enseignement supérieur, Agriculture, Tourisme et Santé.
+**Note :** Ce texte a Ã©tÃ© signÃ© par six ministres : Commerce intÃ©rieur, IntÃ©rieur, Enseignement supÃ©rieur, Agriculture, Tourisme et SantÃ©.
 
 ---

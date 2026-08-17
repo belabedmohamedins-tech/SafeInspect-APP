@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "loi19-02.pdf"
+source_pdf_sha256: "02862952ea3d26ddda8caed7cbfbe3c95ad003d74d8da2ebbeaa05014ae9e54e"
+source_pdf_pages: 24
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "automated-high-coverage-human-review-required"
+automated_pdf_word_coverage: 0.9761
+automated_source_mode: "native"
+article_page_markers_added: 47
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Loi n° 19-02 du 14 Dhou El Kaâda 1440 correspondant au 17 juillet 2019 relative aux règles générales de prévention des risques d'incendie et de panique
 
-**Date de signature :** 17 juillet 2019 (14 Dhou El Kaâda 1440)  
-**Journal Officiel :** N° 46, 18 Dhou El Kaâda 1440 (21 juillet 2019) — pages 5 à 10  
-**Source PDF :** Fourni par l'utilisateur (`loi 19-02.pdf`)  
-**Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 17 juillet 2019 (14 Dhou El Kaâda 1440)
+**Journal Officiel :** N° 46, 18 Dhou El Kaâda 1440 (21 juillet 2019) — pages 5 à 10
+**Source PDF :** Fourni par l'utilisateur (`loi 19-02.pdf`)
+**Date de conversion :** 2026-08-10
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible pour la Loi n° 19-02. Tous les articles sont présents. Le fichier source contenait également d'autres instruments (lois 19-03, 19-04, décrets, arrêtés) qui ne sont pas inclus dans ce fichier conformément à la règle "un fichier par instrument".
@@ -57,6 +74,7 @@ Promulque la loi dont la teneur suit :
 
 ### Section 1 — Objet
 
+<!-- source_pdf: loi19-02.pdf; source_page: 5; article: 1; page_mapping: automated -->
 **Article 1er.** — La présente loi a pour objet de définir les règles générales de prévention des risques d'incendie et de panique, visant à :
 
 — protéger les personnes et les biens contre les risques d'incendie et de panique ;
@@ -69,10 +87,12 @@ Promulque la loi dont la teneur suit :
 
 — limiter la propagation de l'incendie aux constructions voisines.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 5; article: 2; page_mapping: automated -->
 **Art. 2.** — Toute étude, réalisation, aménagement ou modification des établissements, immeubles ou bâtiments à usage d'habitation, selon leur classement, doit respecter les normes et les mesures de sécurité propre à assurer la protection des personnes et des biens contre les risques d'incendie et de panique, conformément aux dispositions de la présente loi et des textes pris pour son application.
 
 ### Section 2 — Définitions
 
+<!-- source_pdf: loi19-02.pdf; source_page: 5; article: 3; page_mapping: automated -->
 **Art. 3.** — Il est entendu au sens de la présente loi par :
 
 1- **Incendie** : combustion qui se développe sans contrôle dans le temps et dans l'entourage du feu.
@@ -109,24 +129,34 @@ Promulque la loi dont la teneur suit :
 
 ## CHAPITRE 2 — DES OBLIGATIONS DU CONSTRUCTEUR, DE L'INSTALLATEUR D'EQUIPEMENTS, DU PROPRIETAIRE, DE L'EXPLOITANT ET DU GERANT
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 4; page_mapping: automated -->
 **Art. 4.** — Le constructeur, l'installateur d'équipements, le propriétaire et l'exploitant de l'établissement recevant du public et /ou de l'immeuble de grande ou de très grande hauteur ou de la construction à usage d'habitation sont tenus, chacun en ce qui le concerne, de s'assurer que les matériaux utilisés, les installations ou les équipements sont établis et maintenus en conformité avec les dispositions de la présente loi.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 5; page_mapping: automated -->
 **Art. 5.** — Le propriétaire, le cas échéant, le gérant ou l'exploitant est tenu de faire effectuer les vérifications périodiques des installations de détection d'incendie, de désenfumage et de ventilation, ainsi que toutes les installations fonctionnant automatiquement et les moyens de lutte contre l'incendie.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 6; page_mapping: automated -->
 **Art. 6.** — Le propriétaire, le cas échéant, le gérant ou l'exploitant est tenu de présenter les documents relatifs aux mesures de sécurité et de prévention, lors des contrôles effectués par les personnes, dûment habilitées.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 7; page_mapping: automated -->
 **Art. 7.** — Le propriétaire, le cas échéant, le gérant ou l'exploitant est tenu, en cas de modification apportée aux établissements recevant du public et/ou immeubles, de s'assurer du respect des procédures administratives et des mesures de sécurité prévues par la présente loi.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 8; page_mapping: automated -->
 **Art. 8.** — Le constructeur et l'installateur d'équipements sont tenus, chacun en ce qui le concerne, de justifier par des documents que les matériaux, les éléments de construction et les équipements utilisés dans la construction et l'équipement présentent, par rapport à leur comportement au feu, les qualités de réaction et de résistance appropriées, tant pour les immeubles et les locaux que pour les aménagements intérieurs.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 9; page_mapping: automated -->
 **Art. 9.** — Le constructeur est tenu de prévoir les aménagements nécessaires, lors de la conception, l'étude et la réalisation, de l'établissement recevant du public et /ou de l'immeuble de grande ou de très grande hauteur ou de la construction à usage d'habitation, pour assurer l'accessibilité, la circulation et l'évacuation des personnes à mobilité réduite, en cas de sinistre.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 10; page_mapping: automated -->
 **Art. 10.** — L'installateur d'équipements est tenu de prévoir les équipements nécessaires pour assurer l'accessibilité, la circulation et l'évacuation des personnes à mobilité réduite en cas de sinistre, conformément aux normes en vigueur.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 6; article: 11; page_mapping: automated -->
 **Art. 11.** — L'aménagement de locaux à sommeil au sein des établissements recevant du public et des immeubles de grande et de très grande hauteur, en cours d'exploitation, est soumis à une autorisation préalable délivrée par la commission de wilaya prévue à l'article 27 de la présente loi.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 12; page_mapping: automated -->
 **Art. 12.** — L'exploitant d'un établissement recevant du public et/ou d'un immeuble de grande ou de très grande hauteur est tenu de disposer de tous équipements et moyens lui permettant de vérifier, à tout moment, le nombre du public admis à l'intérieur de son établissement ou de son immeuble.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 13; page_mapping: automated -->
 **Art. 13.** — L'exploitant d'un établissement recevant du public et/ou un immeuble de grande et de très grande hauteur ne doit en aucun cas, pendant la présence du public, procéder à la fermeture, à la condamnation ou à l'obturation d'un ou de plusieurs dégagements de secours déterminés lors de la délivrance de l'autorisation d'exploitation.
 
 Ces dégagements doivent être toujours libres, aucun objet, marchandise ou matériel ne doit faire obstacle à la circulation des personnes ou réduire la largeur des issues de secours au-dessus des minima prévus par l'autorisation d'exploitation.
@@ -137,20 +167,24 @@ Ces dégagements doivent être toujours libres, aucun objet, marchandise ou mat�
 
 ### Section 1 — Des établissements recevant du public
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 14; page_mapping: automated -->
 **Art. 14.** — Les établissements recevant du public sont classés, selon la nature de leurs activités, en types, et selon le nombre du public admis, en catégories.
 
 Les types et les catégories des établissements recevant du public, ainsi que les mesures de sécurité contre les risques d'incendie et de panique y applicables, sont fixés par voie réglementaire.
 
 ### Section 2 — Des immeubles de grande et de très grande hauteurs
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 15; page_mapping: automated -->
 **Art. 15.** — Les immeubles prévus par cette loi sont classés en immeubles de grande hauteur et en immeubles de très grande hauteur.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 16; page_mapping: automated -->
 **Art. 16.** — Les immeubles de grande et de très grande hauteurs disposent d'au moins, un poste central de sécurité incendie et d'un local de gestion des interventions.
 
 Les critères de classement des immeubles ainsi que les mesures de sécurité contre les risques d'incendie et de panique y applicables, sont définis par voie réglementaire.
 
 ### Section 3 — Des bâtiments à usage d'habitation
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 17; page_mapping: automated -->
 **Art. 17.** — Les bâtiments à usage d'habitation sont classés en quatre (4) familles :
 
 **1ère famille :**
@@ -185,8 +219,10 @@ Les mesures de sécurité contre les risques d'incendie applicables, pour chaque
 
 ## CHAPITRE 4 — DES MATERIAUX ET ELEMENTS DE CONSTRUCTION
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 18; page_mapping: automated -->
 **Art. 18.** — Les matériaux et les éléments de construction sont classés en différentes catégories, en fonction de leur interaction au feu.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 7; article: 19; page_mapping: automated -->
 **Art. 19.** — Le comportement des matériaux et des éléments de construction, en cas d'incendie, est évalué, selon leur résistance et leur réaction au feu.
 
 La classification et les conditions auxquelles doivent répondre ces matériaux et éléments de construction, sont définies par voie réglementaire.
@@ -195,10 +231,12 @@ La classification et les conditions auxquelles doivent répondre ces matériaux 
 
 ## CHAPITRE 5 — DE L'ETUDE DE RISQUE ET DE L'AUTORISATION D'EXPLOITATION
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 20; page_mapping: automated -->
 **Art. 20.** — Sans préjudice des dispositions législatives en vigueur, le dossier de demande de permis de construire, d'aménagement ou d'exploitation des établissements, immeubles ou bâtiments prévus par la présente loi, est accompagné d'une notice de sécurité élaborée par un bureau d'études spécialisé en sécurité incendie.
 
 Les modalités d'agrément des bureaux d'études cités ci-dessus, sont fixés par voie réglementaire.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 21; page_mapping: automated -->
 **Art. 21.** — L'exploitant d'un établissement recevant du public de première catégorie, d'un immeuble de grande ou de très grande hauteur est tenu, selon leur classement, d'élaborer un plan de prévention et un plan d'intervention contre les risques d'incendie et de panique.
 
 Il est tenu d'organiser, conjointement, avec les services de la protection civile des exercices de simulation périodiques, pour tester l'efficacité et la fiabilité des plans d'intervention.
@@ -207,14 +245,17 @@ Le plan de prévention des risques d'incendie et de panique détermine les mesur
 
 Le plan d'intervention détermine les modalités d'organisation des secours et les procédures de mise en œuvre des moyens d'intervention et des dispositifs d'alerte et d'évacuation, en cas de sinistre.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 22; page_mapping: automated -->
 **Art. 22.** — Les plans de prévention et d'intervention contre les risques d'incendie et de panique sont approuvés par le wali, territorialement compétent, après avis des services de la protection civile.
 
 Les modalités d'élaboration et de mise en œuvre de ces plans, sont fixées par voie réglementaire.
 
 ### Section 2 — De l'autorisation d'exploitation
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 23; page_mapping: automated -->
 **Art. 23.** — L'exploitation des établissements recevant du public et immeubles de grande et de très grande hauteurs, en fonction de leur classement, est soumise à une autorisation délivrée par le wali, territorialement compétent, après avis de la commission de prévention des risques d'incendie et de panique prévue à l'article 27 ci-dessous.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 24; page_mapping: automated -->
 **Art. 24.** — L'exploitant est tenu de demander une autorisation de régularisation auprès de la commission de wilaya, en cas de modification de la nature de l'activité de l'établissement ou de l'immeuble qu'il exploite.
 
 Le dossier de demande de l'autorisation d'exploitation ou de l'autorisation de régularisation, ainsi que les conditions et les modalités de délivrance de ces autorisations, sont fixées par voie réglementaire.
@@ -223,8 +264,10 @@ Le dossier de demande de l'autorisation d'exploitation ou de l'autorisation de r
 
 ## CHAPITRE 6 — DES COMMISSIONS DE PREVENTION DES RISQUES D'INCENDIE ET DE PANIQUE
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 25; page_mapping: automated -->
 **Art. 25.** — Il est créé auprès du ministère chargé de l'intérieur une commission centrale de prévention des risques d'incendie et de panique, dénommée ci-après la « commission centrale ».
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 26; page_mapping: automated -->
 **Art. 26.** — La commission centrale constitue l'organe de consultation, d'élaboration et d'approbation des mesures indispensables à prévenir les risques d'incendie et de panique et du suivi de leur mise en œuvre.
 
 A ce titre, elle est chargée notamment :
@@ -239,8 +282,10 @@ A ce titre, elle est chargée notamment :
 
 Des sous-commissions, peuvent être constituées, au sein de la commission centrale.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 27; page_mapping: automated -->
 **Art. 27.** — Il est institué, au niveau de chaque wilaya, une commission de wilaya de prévention des risques d'incendie et de panique, dénommée ci-après la « commission de wilaya ».
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 28; page_mapping: automated -->
 **Art. 28.** — La commission de wilaya est l'organe technique de prévention contre les risques d'incendie et de panique.
 
 A ce titre, elle est chargée, notamment :
@@ -251,6 +296,7 @@ A ce titre, elle est chargée, notamment :
 
 — de proposer des mesures de sécurité complémentaires.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 8; article: 29; page_mapping: automated -->
 **Art. 29.** — La composition, les missions et le fonctionnement de la commission centrale et des commissions de wilayas, sont fixés par voie réglementaire.
 
 ---
@@ -259,14 +305,17 @@ A ce titre, elle est chargée, notamment :
 
 ### Section 1 — Du contrôle et de la constatation des infractions
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 30; page_mapping: automated -->
 **Art. 30.** — Outre les officiers et les agents de police judiciaire, les officiers de la protection civile sont habilités à constater et à relever les infractions prévues par la présente loi.
 
 Les conditions requises des officiers de la protection civile et les modalités de leurs désignation sont fixées par voie réglementaire.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 31; page_mapping: automated -->
 **Art. 31.** — Pour l'exercice de leurs fonctions, les officiers de la protection civile prêtent devant la juridiction, territorialement compétente, le serment suivant :
 
 « أﻗﺴﻢ ﺑﺎﻟﻠﻪ اﻟﻌﻠﻴﻢ أن أﻗﻮم ﺑﻌﻤﻠﻲ ﻋﻠﻰ أﻛﻤﻞ وﺟﻪ وأن أؤدي ﻣﻬﻤﺘﻲ ﺑﺄﻣﺎﻧﺔ ودﻗﺔ وﻧﺰاﻫﺔ وأﻛﺘﻢ ﺳﺮﻫﺎ وأﺗﻌﻤﺪ ﺑﺎﺣﺘﺮام أﺧﻼﻗﻴﺎﺗﻬﺎ وأﻟﺘﺰم ﻓﻲ ﻛﻞ »
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 32; page_mapping: automated -->
 **Art. 32.** — La constatation des infractions prévues par la présente loi donne lieu à l'établissement d'un procès-verbal dans lequel sont mentionnés l'identité de l'officier de police judiciaire ou de l'agent habilité, l'identité du contrevenant, la date et le lieu du contrôle effectué, les faits constatés et les déclarations recueillies.
 
 Les officiers et les agents, prévus par la présente loi, joignent au procès-verbal tout document ou toute pièce à conviction, le cas échéant.
@@ -279,6 +328,7 @@ Lorsque l'infraction relevée a trait à l'inobservation des mesures de sécurit
 
 ### Section 2 — Des sanctions administratives
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 33; page_mapping: automated -->
 **Art. 33.** — Sans préjudice des sanctions pénales, l'inobservation des mesures de sécurité prévues par la présente loi et les textes pris pour son application donne lieu aux sanctions administratives ci-après :
 
 — la mise en demeure :
@@ -287,6 +337,7 @@ Lorsque l'infraction relevée a trait à l'inobservation des mesures de sécurit
 
 — le retrait définitif de l'autorisation d'exploitation.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 34; page_mapping: automated -->
 **Art. 34.** — Le wali, territorialement compétent, met en demeure le contrevenant, en vue d'observer les mesures de sécurité, dans un délai qui ne peut excéder six (6) mois.
 
 Passé ce délai, le wali prend un arrêté de fermeture administrative qui ne saurait dépasser trente (30) jours, maximum.
@@ -295,38 +346,51 @@ En cas de persistance de l'infraction, le wali procède au retrait définitif de
 
 ### Section 3 — Des dispositions pénales
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 35; page_mapping: automated -->
 **Art. 35.** — Quiconque s'oppose aux officiers et aux agents de contrôle dans le cadre de l'accomplissement de leurs missions s'expose aux sanctions prévues à l'article 148 du code pénal.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 36; page_mapping: automated -->
 **Art. 36.** — Quiconque exploite un établissement recevant du public et/ou un immeuble de grande et de très grande hauteurs sans l'autorisation d'exploitation prévue à l'article 23 de la présente loi, est puni d'un emprisonnement de six (6) mois à deux (2) ans et d'une amende de 500.000 DA à 1.000.000 DA, ou l'une de ces deux peines.
 
 Est puni de la même peine quiconque procède à la modification de la nature de l'activité de l'établissement ou de l'immeuble qu'il exploite sans autorisation de régularisation.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 37; page_mapping: automated -->
 **Art. 37.** — Tout exploitant d'un établissement recevant du public et/ou d'un immeuble de grande ou de très grande hauteur qui reçoit le public en dépassement de l'effectif fixé par la catégorie à laquelle appartient cet établissement ou immeuble, est puni de deux (2) mois à un (1) an d'emprisonnement et d'une amende de 200.000 DA à 500.000 DA, ou l'une de ces deux peines.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 38; page_mapping: automated -->
 **Art. 38.** — Toute fausse déclaration ayant pour objet de bénéficier de l'autorisation d'exploitation est passible des peines prévues par le code pénal.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 39; page_mapping: automated -->
 **Art. 39.** — Tout exploitant d'un établissement recevant du public et/ou d'un immeuble de grande et de très grande hauteurs qui procède pendant la présence du public à la fermeture, à la condamnation ou à l'obturation d'un ou de plusieurs dégagements de secours déterminés lors de la délivrance de l'autorisation d'exploitation, est puni de six (6) mois à deux (2) ans d'emprisonnement et d'une amende de 500.000 DA à 1.000.000 DA, ou l'une de ces deux peines.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 9; article: 40; page_mapping: automated -->
 **Art. 40.** — Tout exploitant d'un établissement recevant du public et/ou d'un immeuble de grande ou de très grande hauteur qui aménage un ou des local(aux) à sommeil, sans l'autorisation préalable prévue à l'article 11 de la présente loi, est puni d'une amende de 200.000 DA à 500.000 DA.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 41; page_mapping: automated -->
 **Art. 41.** — Tout constructeur et/ou installateur d'équipements dont il a été prouvé, après constatation des agents habilités, que les matériaux, les éléments de construction et les équipements qu'il a utilisé sont non conformes aux documents attestant des qualités de leur réaction et de leur résistance au feu, est puni de deux (2) mois à une (1) année d'emprisonnement et d'une amende de 200.000 DA à 500.000 DA, ou de l'une des deux peines.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 42; page_mapping: automated -->
 **Art. 42.** — Tout constructeur et/ou installateur d'équipements qui ne justifie pas par des documents que les matériaux, les éléments de construction et les équipements qu'il utilise dans les immeubles, les locaux et les aménagements intérieurs, présentent par rapport à leur comportement au feu les qualités de réaction et de résistance appropriées en cas d'incendie, est puni d'une amende de 400.000 DA à 1.000.000 DA.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 43; page_mapping: automated -->
 **Art. 43.** — La responsabilité pénale de la personne morale est retenue pour les infractions prévues par la présente loi, conformément aux peines prévues par le code pénal.
 
 ---
 
 ## CHAPITRE 8 — DISPOSITIONS FINALES
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 44; page_mapping: automated -->
 **Art. 44.** — La mise en conformité des établissements, immeubles ou bâtiments existants, avec les dispositions de la présente loi, doit intervenir dans un délai maximal de cinq (5) ans, à compter de la date de sa publication au Journal officiel de la République algérienne démocratique et populaire.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 45; page_mapping: automated -->
 **Art. 45.** — Les dispositions de la présente loi ne s'appliquent pas aux établissements, immeubles et bâtiments relevant du ministère de la défense nationale.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 46; page_mapping: automated -->
 **Art. 46.** — Sont abrogées, les dispositions de l'ordonnance n° 76-04 du 20 février 1976 relative aux règles applicables en matière de sécurité contre les risques d'incendie et de panique et à la création de commissions de prévention et de protection civile.
 
 Toutefois, les textes pris en application de l'ordonnance susvisée, demeurent en vigueur, jusqu'à la publication des textes réglementaires prévus par la présente loi.
 
+<!-- source_pdf: loi19-02.pdf; source_page: 10; article: 47; page_mapping: automated -->
 **Art. 47.** — La présente loi sera publiée au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 14 Dhou El Kaâda 1440 correspondant au 17 juillet 2019.

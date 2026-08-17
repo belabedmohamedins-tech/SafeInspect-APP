@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "decret06-141.pdf"
+source_pdf_sha256: "d855449eeb52abc6aa4c1b5b38de2fb767a760d5f4eff210d1f94363bd433c55"
+source_pdf_pages: 27
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "low-coverage-review-required"
+automated_pdf_word_coverage: 0.6487
+automated_source_mode: "native"
+article_page_markers_added: 14
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 06-141 du 20 Rabie El Aouel 1427 correspondant au 19 avril 2006 définissant les valeurs limites des rejets d'effluents liquides industriels
 
-**Date de signature :** 19 avril 2006 (20 Rabie El Aouel 1427)  
-**Journal Officiel :** N° 26, 24 Rabie El Aouel 1427 (23 avril 2006) — pages 4 à 9  
-**Source PDF :** Fourni par l'utilisateur (`decret 06-141.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 19 avril 2006 (20 Rabie El Aouel 1427)
+**Journal Officiel :** N° 26, 24 Rabie El Aouel 1427 (23 avril 2006) — pages 4 à 9
+**Source PDF :** Fourni par l'utilisateur (`decret 06-141.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -35,12 +52,15 @@ Vu le décret exécutif n° 93-160 du 10 juillet 1993 réglementant les rejets d
 
 ## DÉCRÈTE
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 1; page_mapping: automated -->
 **Article 1er.** — En application des dispositions de l'article 10 de la loi n° 03-10 du 19 juillet 2003, susvisée, le présent décret a pour objet de définir les valeurs limites des rejets d'effluents liquides industriels.
 
 ## SECTION 1 — DES DISPOSITIONS PRELIMINAIRES
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 2; page_mapping: automated -->
 **Art. 2.** — Au sens du présent décret on entend par rejet d'effluents liquides industriels tout déversement, écoulement, jet et dépôt d'un liquide direct ou indirect qui provient d'une activité industrielle.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 3; page_mapping: automated -->
 **Art. 3.** — Les valeurs limites de rejets d'effluents liquides industriels sont celles fixées en annexe du présent décret.
 
 Toutefois, en attendant la mise à niveau des installations industrielles anciennes dans un délai de cinq (5) ans, les valeurs limites des rejets d'effluents liquides industriels prennent en charge l'ancienneté des installations industrielles en déterminant une tolérance pour les rejets d'effluents liquides industriels émanant de ces installations. Ces valeurs sont fixées et annexées au présent décret.
@@ -51,26 +71,34 @@ En outre et en raison des particularités propres aux technologies utilisées, d
 
 ## SECTION 2 — DES PRESCRIPTIONS TECHNIQUES RELATIVES AUX REJETS D'EFFLUENTS LIQUIDES INDUSTRIELS
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 4; page_mapping: automated -->
 **Art. 4.** — Toutes les installations générant des rejets d'effluents liquides industriels doivent être conçues, construites et exploitées de manière à ce que leurs rejets d'effluents liquides industriels ne dépassent pas à la sortie de l'installation les valeurs limites des rejets définies en annexe du présent décret et doivent être dotées d'un dispositif de traitement approprié de manière à limiter la charge de pollution rejetée.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 5; page_mapping: automated -->
 **Art. 5.** — Les installations de traitement doivent être conçues, exploitées et entretenues de manière à réduire à leur minimum les durées d'indisponibilité pendant lesquelles elles ne peuvent assurer pleinement leur fonction.
 
 Si une indisponibilité est susceptible de conduire à un dépassement des valeurs limites imposées, l'exploitant doit prendre les dispositions nécessaires pour réduire la pollution émise en réduisant ou en arrêtant, si besoin, les activités concernées.
 
 ## SECTION 3 — DU CONTROLE DES REJETS D'EFFLUENTS LIQUIDES INDUSTRIELS
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 6; page_mapping: automated -->
 **Art. 6.** — Au titre de l'autocontrôle et de l'autosurveillance les exploitants d'installations générant des rejets d'effluents liquides industriels doivent tenir un registre où sont consignés la date et les résultats des analyses qu'ils effectuent selon des modalités fixées par arrêté du ministre chargé de l'environnement et, le cas échéant, du ministre chargé du secteur concerné.
 
 Les mesures sont effectuées sous la responsabilité de l'exploitant et à ses frais dans les conditions fixées par la réglementation en vigueur.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 7; page_mapping: automated -->
 **Art. 7.** — Les résultats des analyses doivent être mises à la disposition des services de contrôle habilités.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 8; page_mapping: automated -->
 **Art. 8.** — Les services habilités en la matière effectuent des contrôles périodiques et ou inopinés des caractéristiques physiques, chimiques et biologiques des rejets d'effluents liquides industriels visant à s'assurer de leur conformité aux valeurs limites fixés en annexe du présent décret.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 9; page_mapping: automated -->
 **Art. 9.** — Le contrôle des rejets comporte un examen des lieux, des mesures et analyses opérées sur place et des prélèvements d'échantillons aux fins d'analyses.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 4; article: 10; page_mapping: automated -->
 **Art. 10.** — L'exploitant de l'installation concernée est tenu d'expliquer, commenter ou fonder tout dépassement éventuellement constaté et fournir les actions correctives mises en œuvre ou envisagées.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 5; article: 11; page_mapping: automated -->
 **Art. 11.** — Les opérations de contrôle, telles que définies ci-dessus, donnent lieu à la rédaction d'un procès-verbal établi à cet effet.
 
 Le procès-verbal comporte :
@@ -87,10 +115,13 @@ Le procès-verbal comporte :
 
 — le nom du ou des laboratoires destinataires de l'échantillon prélevé.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 5; article: 12; page_mapping: automated -->
 **Art. 12.** — Les méthodes d'échantillonnage, de conservation et de manipulation des échantillons ainsi que les modalités d'analyses sont effectuées selon les normes algériennes en vigueur.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 5; article: 13; page_mapping: automated -->
 **Art. 13.** — Toutes dispositions contraires au présent décret et notamment les dispositions du décret exécutif n° 93-160 du 10 juillet 1993, susvisé, sont abrogées.
 
+<!-- source_pdf: decret06-141.pdf; source_page: 5; article: 14; page_mapping: automated -->
 **Art. 14.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 20 Rabie El Aouel 1427 correspondant au 19 avril 2006.

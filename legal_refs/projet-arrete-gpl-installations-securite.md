@@ -1,9 +1,26 @@
+---
+document_type: "legal-reference"
+source_pdf: null
+source_pdf_sha256: null
+source_pdf_pages: null
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "project-no-official-source"
+automated_pdf_word_coverage: null
+automated_source_mode: null
+article_page_markers_added: 0
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Projet d'arrêté interministériel du … 1443 correspondant au … 2021, fixant les règles techniques et de sécurité applicables aux installations et points de vente GPL, dont la capacité globale est inférieure ou égale à six tonnes, ainsi que les modalités de leur contrôle
 
-**Date estimée :** 2021 (1443) — Projet non encore publié au Journal Officiel  
-**Source PDF :** Fourni par l'utilisateur (`Règles de sécurité pour installations GPL.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ⚠️ PROJET — NON VÉRIFIÉ  
+**Date estimée :** 2021 (1443) — Projet non encore publié au Journal Officiel
+**Source PDF :** Fourni par l'utilisateur (`Règles de sécurité pour installations GPL.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ⚠️ PROJET — NON VÉRIFIÉ
 > **AVERTISSEMENT :** Il s'agit d'un projet d'arrêté interministériel. Ce texte n'a pas encore été publié au Journal Officiel et ne constitue pas un texte juridiquement contraignant dans sa forme actuelle. Veuillez consulter le JORADP pour la version définitive éventuellement promulguée.
 
 **Note sur la source :** Ce document est un projet. Les références aux annexes 3, 4 et 5 indiquent des modèles à définir. Les articles 13 et 14 comportent des mentions incomplètes ("X"). Le présent document est converti à titre d'information et ne remplace pas la consultation du texte officiel définitif.

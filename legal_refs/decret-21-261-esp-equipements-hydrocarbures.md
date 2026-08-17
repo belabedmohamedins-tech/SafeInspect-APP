@@ -1,9 +1,25 @@
-﻿# Décret exécutif n° 21-261 du 2 Dhou El Kaâda 1442 correspondant au 13 juin 2021 portant réglementation des équipements sous pression (ESP) et des équipements électriques destinés à être intégrés aux installations relevant du secteur des hydrocarbures
+---
+document_type: "legal-reference"
+source_pdf: "dec21-261.pdf"
+source_pdf_sha256: "cba9b4363b75e9c4ce6a38730e37670dedf2c9e361e5eedfb2d46160dc4946cc"
+source_pdf_pages: 14
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; Article 56 corrected against source PDF"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.9322
+automated_source_mode: "native"
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages"
+---
 
-**Date de signature :** 13 juin 2021 (2 Dhou El Kaâda 1442)  
-**Journal Officiel :** Source PDF fournie par l'utilisateur  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
+# Décret exécutif n° 21-261 du 2 Dhou El Kaâda 1442 correspondant au 13 juin 2021 portant réglementation des équipements sous pression (ESP) et des équipements électriques destinés à être intégrés aux installations relevant du secteur des hydrocarbures
+
+**Date de signature:** 13 juin 2021 (2 Dhou El Kaâda 1442)
+**Journal Officiel :** Source PDF fournie par l'utilisateur
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -384,7 +400,7 @@ L'exploitant est tenu de mettre à jour ce dossier et de le conserver sur le lie
 
 — le dossier final approuvé ;
 
-— le listing des équipements de sécurité, leurs caractéristiques techniques et au besoin leurs certificats de taraqe et/ou d'étalonnage ;
+— le listing des équipements de sécurité, leurs caractéristiques techniques et au besoin leurs certificats de tarage et/ou d'étalonnage ;
 
 — le registre d'inspection ;
 
@@ -506,51 +522,53 @@ Lorsqu'un équipement a subi une réparation majeure ou une modification, une re
 
 ### Section 1 — Conception
 
-**Art. 50.** — Sont soumis aux dispositions du présent chapitre, les équipements électriques destinés à être intégrés aux installations relevant du secteur des hydrocarbures, à savoir :
+<!-- Source: dec21-261.pdf, PDF pages 11–12; Articles 50–57 reconciled against the attached source PDF on 2026-08-17. -->
 
-a) les équipements électriques intégrés aux installations situées dans les zones classées à risque d'explosion ;
+**Art. 50.** — Sont soumis au présent décret, qu’ils soient fabriqués localement ou importés de l’étranger :
 
-b) les équipements électriques intégrés aux installations situées en dehors des zones classées à risque d'explosion dont la tension de service est supérieure ou égale à cinq mille cinq cents (5500) volts ou dont la tension d'essai est supérieure à dix (10) kilovolts ;
+— les équipements électriques, leurs composants et leurs accessoires électriques dont la tension de service est supérieure ou égale à cinq mille cinq cents (5500) volts ;
 
-c) les appareils de levage et accessoires électriques auxquels un risque d'explosion est associé.
+— la résistance de mise à la terre du neutre ;
 
-**Art. 51.** — Les équipements cités à l'article 50 ci-dessus, doivent être conçus conformément aux exigences du présent chapitre et aux normes, aux standards issus des meilleures pratiques internationales et aux règles de l'art applicables.
+— les postes électriques isolés par un gaz approprié.
 
-**Art. 52.** — Le dimensionnement des équipements cités à l'article 50 (a) et (b) ci-dessus, doit être basé sur :
+Les enveloppes sous pression de ce gaz des différents compartiments sont soumises aux dispositions du présent décret, régissant les ESP.
 
-— la température maximale de l'air ambiant pour les équipements installés à l'intérieur des bâtiments et locaux ou à l'extérieur ;
+— l’ensemble des équipements de production d’énergie de sources renouvelables, qui alimentent en énergie électrique les équipements, les installations et les ouvrages relevant du secteur des hydrocarbures ;
 
-— l'altitude du site d'installation ou d'exploitation ;
+— l’ensemble des équipements et des systèmes de protection cathodique, utilisés pour la protection des installations et ouvrages contre la corrosion.
 
-— l'humidité ;
+**Art. 51.** — Ne sont pas soumis aux dispositions du présent décret, notamment :
 
-— la pollution.
+— les lignes électriques aériennes y compris les câbles électriques nus ;
 
-**Art. 53.** — Les équipements cités à l'article 50 (a) et (b) ci-dessus doivent être conçus pour supporter les courants de court-circuit, les surcharges passagères et les surtensions, dans les conditions normales et exceptionnelles d'exploitation.
+— les isolateurs des lignes électriques aériennes ;
 
-**Art. 54.** — Les équipements cités à l'article 50 (a) ci-dessus doivent être conçus conformément à la classification des zones à risque d'explosion.
+— les accessoires de raccordement des câbles électriques, notamment les extrémités et les jonctions de câbles.
 
-Les équipements électriques, les systèmes de protection cathodique et les accessoires électriques destinés à être installés dans les zones classées à risque d'explosion doivent être certifiés par un organisme tiers habilité, en tant qu'équipement apte à être utilisé en zones classées à risque d'explosion.
+**Art. 52.** — La conception des équipements électriques et des systèmes de protection cathodique cités à l’article 50 ci-dessus, doit être conforme aux exigences du présent décret ainsi qu’aux normes et aux standards issus des meilleures pratiques internationales applicables dans le domaine industriel, en tenant compte des sollicitations correspondant à l’usage envisagé et des conditions de fonctionnement.
 
-**Art. 55.** — La conception des systèmes de protection cathodique doit être effectuée conformément aux normes et aux standards issus des meilleures pratiques internationales applicables dans l'industrie pétrolière et gazière.
+**Art. 53.** — La conception des équipements électriques et des systèmes de protection cathodique cités à l’article 50 ci-dessus, destinés à l’exploitation dans une installation et ouvrage, où la température ambiante peut dépasser les quarante degrés Celsius (40°C), doit prendre en compte une température de design d’un minimum de cinq degrés Celsius (5°C) en plus de la température ambiante précitée.
 
-La protection cathodique doit être appliquée sur les parties enterrées ou immergées des installations et ouvrages des hydrocarbures. La protection cathodique doit être assurée conformément aux règles de l'art.
+Pour les équipements électriques et les systèmes de protection cathodique destinés à l’exploitation dans un climat saharien, la température de design doit être de cinquante-cinq degrés Celsius (55°C).
 
-**Art. 56.** — Le maître de l'ouvrage doit transmettre à l'ARH pour approbation, un dossier technique des systèmes de protection cathodique.
+Le maître de l’ouvrage doit s’assurer que les équipements électriques et le système de protection cathodique, soient adaptés aux conditions d’exploitation.
 
-Ce dossier comporte, notamment :
+**Art. 54.** — Le calcul du courant de court-circuit des installations doit être dûment pris en compte lors de la conception des équipements électriques.
 
-— l'étude de dimensionnement des systèmes de protection cathodique ;
+**Art. 55.** — La classification des zones dangereuses doit être dûment prise en compte lors de la conception des équipements électriques et des systèmes de protection cathodique.
 
-— les caractéristiques techniques des équipements intégrés aux systèmes de protection cathodique ;
+Les équipements électriques et les systèmes de protection cathodique installés dans les zones classées à risque d’explosion doivent être certifiés pour leur utilisation dans une atmosphère explosive.
 
-— les plans d'implantation des systèmes de protection cathodique ;
+<!-- Source: dec21-261.pdf, PDF pages 11–12; Articles 50–57 reconciled against the attached source PDF on 2026-08-17. -->
 
-— le plan de surveillance des systèmes de protection cathodique ;
+**Art. 56.** — L'étude de dimensionnement des systèmes de protection cathodique des installations et des ouvrages, doit être établie par un service d'inspection pré-qualifié de l'exploitant ou par un organisme tiers habilité et ce, conformément aux normes et aux standards issus des meilleures pratiques internationales applicables dans le domaine industriel.
 
-— les certificats attestant que les équipements des systèmes de protection cathodique peuvent être utilisés dans un environnement à risque d'explosion.
+Le maître de l'ouvrage doit concevoir et installer des systèmes de protection cathodique provisoires pour protéger les installations, les ouvrages et les bacs de stockage avant leur mise en produit, et ce, conformément aux normes et standards applicables dans le domaine industriel.
 
-Le contenu de ce dossier est précisé par directive de l'ARH.
+Les interférences dues aux courants alternatifs ou continus générés par des installations et des ouvrages tiers, les lignes de transports électriques et autres sources de courants, doivent être prises en considération dans l'étude de dimensionnement des systèmes de protection cathodique.
+
+Aussi, le système de mise à la terre doit être compatible avec les systèmes de protection cathodique.
 
 **Art. 57.** — Le maître de l'ouvrage doit transmettre à l'ARH pour approbation, un dossier technique des systèmes de protection cathodique.
 

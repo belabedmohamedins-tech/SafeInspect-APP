@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "arrete-interministeriel-2011-02-06-permis-construire-energie.pdf"
+source_pdf_sha256: "e73c90e451ba28af12643c978b0b3d49ef7e203754200a8f42a7b8f8cda202bd"
+source_pdf_pages: 5
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "automated-high-coverage-human-review-required"
+automated_pdf_word_coverage: 0.996
+automated_source_mode: "native"
+article_page_markers_added: 22
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Arrêté interministériel du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 relatif aux procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière
 
-**Date de signature :** 6 février 2011 (3 Rabie El Aouel 1432)  
-**Journal Officiel :** N° 23, 13 Joumada El Oula 1432 (17 avril 2011) — pages 17 à 21  
-**Source PDF :** Fourni par l'utilisateur (`arrete-interministeriel-2011-02-06-permis-construire-energie.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 6 février 2011 (3 Rabie El Aouel 1432)
+**Journal Officiel :** N° 23, 13 Joumada El Oula 1432 (17 avril 2011) — pages 17 à 21
+**Source PDF :** Fourni par l'utilisateur (`arrete-interministeriel-2011-02-06-permis-construire-energie.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 > **Note de correction (2026-08-10) :** Le texte source comportait une erreur de frappe dans la formule de signature finale : la date hégirienne y était écrite « 3 Rabie El Aouel **1431** » au lieu de « 3 Rabie El Aouel **1432** ». La version officielle publiée au Journal Officiel n° 23 du 17 avril 2011 porte bien **1432**, correspondant au 6 février 2011. La correction a été apportée après vérification par l'utilisateur sur le JORADP. Le texte ci-dessous reflète la version officielle.
@@ -63,8 +80,10 @@ Vu l'arrêté interministériel du Aouel Rabie Ethani 1420 correspondant au 14 j
 
 ## CHAPITRE 1er — OBJET ET CHAMP D'APPLICATION
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 2; article: 1; page_mapping: automated -->
 **Article 1er.** — En application des alinéas 2 et 3 de l'article 1er du décret exécutif n° 91-176 du 28 mai 1991, modifié et complété, susvisé, le présent arrêté a pour objet de définir les procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière régis par la loi n° 02-01 du 5 février 2002, susvisée.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 2; article: 2; page_mapping: automated -->
 **Art. 2.** — Au sens du présent arrêté, on entend par :
 
 — ouvrage d'énergie électrique et/ou gazière : tout ouvrage de production, de transport ou de distribution d'énergie électrique et/ou de distribution de gaz par canalisation ;
@@ -87,18 +106,23 @@ Vu l'arrêté interministériel du Aouel Rabie Ethani 1420 correspondant au 14 j
 
 ## CHAPITRE 2 — PROCEDURE D'INSTRUCTION ET DE DELIVRANCE DU PERMIS DE CONSTRUIRE
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 2; article: 3; page_mapping: automated -->
 **Art. 3.** — Toute construction, transformation de construction d'un ouvrage d'énergie électrique ou gazière est subordonnée à la possession du permis de construire, conformément à la législation et à la réglementation en vigueur, notamment l'article 52 de la loi n° 90-29 du 1er décembre 1990, et les articles 33 et 35 du décret exécutif n° 91-176 du 28 mai 1991, susvisés.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 2; article: 4; page_mapping: automated -->
 **Art. 4.** — Les modalités d'instruction et de délivrance du permis de construire pour un ouvrage d'énergie électrique ou gazière sont celles prévues par le décret exécutif n° 91-176 du 28 mai 1991, susvisé, et par les dispositions du présent arrêté.
 
 Les pièces constitutives de la demande de permis de construire définies aux articles 6 à 11 du présent arrêté doivent être établies et visées conformément aux dispositions de la législation et de la réglementation en vigueur.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 3; article: 5; page_mapping: automated -->
 **Art. 5.** — Lorsque la construction de l'ouvrage nécessite une expropriation, l'établissement de servitudes d'utilité publique ou le bénéfice de l'occupation de terrains et droits annexes, le dossier de demande correspondant est adressé au wali territorialement compétent, à défaut d'accord amiable entre l'opérateur et les personnes concernées.
 
 Dans ce cas, le wali délivre, dans les conditions et formes prévues par les lois et règlements en vigueur et dans les délais fixés, les arrêtés y afférents.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 3; article: 6; page_mapping: automated -->
 **Art. 6.** — La demande du permis de construire doit être formulée et signée par le propriétaire ou l'opérateur ou son mandataire, conformément à la réglementation en vigueur.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 3; article: 7; page_mapping: automated -->
 **Art. 7.** — Pour les ouvrages de production d'électricité, la demande de permis de construire est accompagnée d'un dossier comprenant les pièces suivantes :
 
 — une autorisation d'exploiter, préalable à toute construction, délivrée par la commission de l'électricité et du gaz (CREG), conformément à la réglementation en vigueur ;
@@ -121,6 +145,7 @@ Dans ce cas, le wali délivre, dans les conditions et formes prévues par les lo
 
 — l'étude de danger, visée et approuvée par les services de la protection civile territorialement compétents.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 3; article: 8; page_mapping: automated -->
 **Art. 8.** — Pour les ouvrages de transport d'énergie électrique, la demande de permis de construire est accompagnée d'un dossier comprenant, selon le cas, les pièces suivantes :
 
 **Pour les lignes aériennes et souterraines HT haute tension de transport de l'électricité :**
@@ -165,6 +190,7 @@ Dans ce cas, le wali délivre, dans les conditions et formes prévues par les lo
 
 — un plan définissant les limites du périmètre de protection, conformément à la réglementation en vigueur.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 3; article: 9; page_mapping: automated -->
 **Art. 9.** — Pour les ouvrages de distribution d'énergie électrique (lignes électriques et postes de transformation), la demande de permis de construire est accompagnée d'un dossier comprenant les pièces suivantes :
 
 **Pour les lignes électriques :**
@@ -191,6 +217,7 @@ Dans ce cas, le wali délivre, dans les conditions et formes prévues par les lo
 
 Les modalités définies dans le présent article ne s'appliquent pas aux ouvrages de distribution d'énergie électrique contenus dans les programmes d'électrification initiés par l'Etat, qui sont soumis à la procédure spéciale décrite dans les articles 16, 17,18, 19 et 20 du présent arrêté.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 4; article: 10; page_mapping: automated -->
 **Art. 10.** — Pour les ouvrages de transport du gaz pour le marché national, la demande de permis de construire concernant les canalisations et/ou les ouvrages annexes (postes de détente et autres) de gaz en haute pression est accompagnée d'un dossier comprenant les pièces suivantes :
 
 — un mémoire descriptif précisant les caractéristiques de l'ouvrage ;
@@ -223,12 +250,14 @@ Les modalités définies dans le présent article ne s'appliquent pas aux ouvrag
 
 — l'étude de danger, s'il y a lieu.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 4; article: 11; page_mapping: automated -->
 **Art. 11.** — Pour les ouvrages de distribution du gaz par canalisation et ouvrages annexes, la demande de permis de construire doit être accompagnée d'un dossier comprenant les pièces suivantes :
 
 — un plan du réseau indiquant le tracé de la (des) canalisation(s) ;
 
 — une fiche des caractéristiques techniques du réseau.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 4; article: 12; page_mapping: automated -->
 **Art. 12.** — La demande de permis de construire relative à une station fixe de compression de gaz ou à une station de gaz de pétrole liquéfié est accompagnée d'un dossier comprenant, selon le cas, les pièces suivantes :
 
 **Pour la station de compression de gaz et la station de gaz de pétrole liquéfié :**
@@ -261,6 +290,7 @@ Les modalités définies dans le présent article ne s'appliquent pas aux ouvrag
 
 — un plan des zones de sécurité.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 4; article: 13; page_mapping: automated -->
 **Art. 13.** — La demande de permis de construire et les dossiers qui l'accompagnent sont à adresser en huit (8) exemplaires au wali territorialement compétent du lieu d'implantation envisagé pour l'ouvrage.
 
 Le wali saisi transmet la demande aux services de l'Etat chargés de l'urbanisme au niveau de la wilaya, pour instruction et consultation, conformément aux dispositions législatives et réglementaires en vigueur.
@@ -271,6 +301,7 @@ Lorsque l'ouvrage est susceptible de traverser le territoire de plusieurs wilaya
 
 Le délai de validité du permis de construire est fixé à cinq (5) ans, conformément aux dispositions réglementaires en vigueur.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 14; page_mapping: automated -->
 **Art. 14.** — Ne sont pas assujettis aux procédures d'instruction et de délivrance du permis de construire les travaux et interventions sur les réseaux de distribution portant sur :
 
 — les modifications et les extensions sur les ouvrages existants ;
@@ -279,14 +310,17 @@ Le délai de validité du permis de construire est fixé à cinq (5) ans, confor
 
 — toutes réalisations d'ouvrages dont l'emprise au sol est inférieure à deux mètres carrés (2 m2).
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 15; page_mapping: automated -->
 **Art. 15.** — Les travaux et autres interventions sur la voie publique (lignes moyenne tension, basse tension, conduites gaz moyenne pression et basse pression, etc...), donnent lieu à une permission de voierie délivrée par les services compétents de l'assemblée populaire communale territorialement compétente.
 
 ---
 
 ## CHAPITRE 3 — PROCEDURE SPECIALE APPLICABLE AUX PROGRAMMES INITIES PAR L'ETAT EN MATIERE D'ELECTRIFICATION, DE TRANSPORT ET DE DISTRIBUTION DU GAZ
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 16; page_mapping: automated -->
 **Art. 16.** — La construction des ouvrages de distribution d'électricité et/ou de transport et de distribution du gaz par canalisation, entrant dans le cadre d'un programme de développement des réseaux d'électrification et de distribution publique du gaz par canalisation, est réalisée sur la base d'un permis de construire délivré par le wali concerné, dans les conditions définies ci-après.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 17; page_mapping: automated -->
 **Art. 17.** — Une demande de permis de construire valable pour l'ensemble des ouvrages de distribution d'électricité, de transport et de distribution du gaz décidés pour la wilaya pour le programme concerné est adressée au wali territorialement compétent.
 
 La demande est accompagnée :
@@ -295,6 +329,7 @@ La demande est accompagnée :
 
 — d'un état des renseignements physiques et financiers relatifs aux ouvrages à construire.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 18; page_mapping: automated -->
 **Art. 18.** — Le wali dispose d'un délai de quatre (4) mois pour instruire la demande. Le wali doit, soit délivrer le permis de construire, soit faire part de ses observations ou inviter le demandeur à apporter des modifications.
 
 Lorsque le dossier de demande de permis de construire nécessite un complément de documents ou de renseignements faisant défaut ou de modifications requises, le délai de quatre (4) mois est interrompu à compter de la date de notification de ces remarques et reprend à compter de la date de réception desdits documents ou renseignements.
@@ -303,10 +338,12 @@ La demande ainsi complétée est réintroduite auprès du wali qui, au terme d'u
 
 En tout état de cause, le permis de construire devra intervenir dans le délai maximum de cinq (5) mois qui suit la saisine du wali par le demandeur.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 19; page_mapping: automated -->
 **Art. 19.** — Pour chaque commune à électrifier et/ou à alimenter en gaz, la réalisation de la partie basse tension pour les ouvrages de distribution d'électricité ou moyenne pression pour les ouvrages de distribution de gaz, est effectuée sur la base de projets de tracés étudiés et arrêtés par le demandeur conjointement avec les services techniques de la wilaya concernée.
 
 A partir desdits tracés, le wali de la wilaya concernée délivre le permis de construire pour les ouvrages implantés dans le territoire de la wilaya, dans un délai de deux (2) mois à compter de la date de dépôt de la demande.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 20; page_mapping: automated -->
 **Art. 20.** — La durée de validité du permis de construire est fixée pour une période de cinq (5) ans à partir de la date de délivrance de ce permis.
 
 Son effet est annulé si les travaux ne sont pas achevés dans la période de cinq (5) ans à partir de la date de délivrance du permis de construire de l'ouvrage énergétique en question, ou si les travaux ont été interrompus pour une période d'au moins cinq (5) ans.
@@ -317,8 +354,10 @@ Au-delà de cette période de cinq (5) ans une demande de prolongation ou de ren
 
 ## CHAPITRE 4 — PROCEDURES COMMUNES A L'EXERCICE DES DROITS RATTACHES A LA REALISATION DES OUVRAGES
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 21; page_mapping: automated -->
 **Art. 21.** — La réalisation des ouvrages d'énergie électrique et d'énergie gazière, objet du présent arrêté, bénéficie des servitudes et droits annexes définis au titre XIV de la loi n° 02-01 du 5 février 2002, susvisée.
 
+<!-- source_pdf: arrete-interministeriel-2011-02-06-permis-construire-energie.pdf; source_page: 5; article: 22; page_mapping: automated -->
 **Art. 22.** — Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 3 Rabie El Aouel 1432 correspondant au 6 février 2011.

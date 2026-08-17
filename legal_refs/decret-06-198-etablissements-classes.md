@@ -1,19 +1,36 @@
+---
+document_type: "legal-reference"
+source_pdf: "Decret06-198.pdf"
+source_pdf_sha256: "6b647f94c20e569c44868d3b363d1c26ab7496d3bb9f397470e05fbd42949288"
+source_pdf_pages: 7
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.8797
+automated_source_mode: "native"
+article_page_markers_added: 1
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
 
 ---
 
-> ⚠️ **NON VÉRIFIÉ** — Transcription verbatim depuis le PDF source ci-dessous.  
+> ⚠️ **NON VÉRIFIÉ** — Transcription verbatim depuis le PDF source ci-dessous.
 > **Vérifier contre le texte original JORADP avant tout usage juridique ou décisionnel.**
 
-**Titre officiel :** Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement  
-**Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)  
-**Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14  
-**Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
+**Titre officiel :** Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
+**Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)
+**Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14
+**Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)
 **Modifié par :**
 - Décret exécutif n° 22-167 — voir `decret-22-167-etablissements-classes-modification.md`
 - Décret exécutif n° 24-196 du 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés — voir `decret-24-196-etablissements-classes-modification.md`
 
-**Date de cette conversion :** 2026-08-09  
+**Date de cette conversion :** 2026-08-09
 **Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 
 ---
@@ -514,6 +531,7 @@ Fait à Alger, le 4 Joumada El Oula 1427 correspondant au 31 mai 2006.
 
 ## Contrôle de séquence
 
+<!-- source_pdf: Decret06-198.pdf; source_page: 1; article: 1; page_mapping: automated -->
 **Art. 1 à 50 — tous présents et transcrits dans l'ordre.**
 
 Séquence complète : Art. 1 — Art. 2 — Art. 3 — Art. 4 — Art. 5 — Art. 6 — Art. 7 — Art. 8 — Art. 9 — Art. 10 — Art. 11 — Art. 12 — Art. 13 — **Art. 14 ⚠️** — Art. 15 — Art. 16 — Art. 17 — Art. 18 — Art. 19 — Art. 20 — Art. 21 — Art. 22 — Art. 23 — **Art. 24 ⚠️** — **Art. 25 ⚠️** — **Art. 26 ⚠️** — Art. 27 — Art. 28 — **Art. 29 ⚠️** — Art. 30 — Art. 31 — Art. 32 — Art. 33 — Art. 34 — Art. 35 — Art. 36 — Art. 37 — Art. 38 — Art. 39 — Art. 40 — Art. 41 — Art. 42 — Art. 43 — **Art. 44 ⚠️** — Art. 45 — Art. 46 — Art. 47 — Art. 48 — Art. 49 — Art. 50

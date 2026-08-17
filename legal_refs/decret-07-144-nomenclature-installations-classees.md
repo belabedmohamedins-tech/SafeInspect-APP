@@ -1,3 +1,20 @@
+---
+document_type: "legal-reference"
+source_pdf: "Décret07-144.pdf"
+source_pdf_sha256: "3afa3c006a6575484a7efa5be2f5fee2b69191338adebb76063583c15e8b1d1d"
+source_pdf_pages: 102
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "low-coverage-review-required"
+automated_pdf_word_coverage: 0.1985
+automated_source_mode: "native"
+article_page_markers_added: 4
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 07-144 du 19 mai 2007
 ## Fixant la nomenclature des installations classées pour la protection de l'environnement
 
@@ -9,8 +26,10 @@
 
 ## Articles
 
+<!-- source_pdf: Décret07-144.pdf; source_page: 1; article: 1; page_mapping: automated -->
 **Art. 1er.** — En application des dispositions de l'article 23 de la loi n° 03-10 du 19 Joumada El Oula 1424 correspondant au 19 juillet 2003, susvisée, le présent décret a pour objet de fixer la nomenclature des installations classées pour la protection de l'environnement.
 
+<!-- source_pdf: Décret07-144.pdf; source_page: 1; article: 2; page_mapping: automated -->
 **Art. 2.** — La nomenclature des installations classées pour la protection de l'environnement est une classification qui comporte :
 
 - **A** — L'attribution d'un numéro de rubrique à quatre chiffres, structuré comme suit : le premier chiffre représente la substance utilisée ou l'activité ; le second chiffre représente la catégorie de danger (très toxique, toxique, inflammable, comburante, explosible, corrosive et combustible) ou la branche d'activité. Les deux derniers chiffres représentent le type d'activité.
@@ -19,8 +38,10 @@
 - **D** — La détermination du rayon d'affichage de l'installation classée.
 - **E** — Les documents à joindre à la demande d'autorisation d'exploitation des établissements classés à savoir, selon le cas, l'étude d'impact sur l'environnement, l'étude de danger, la notice d'impact sur l'environnement et le rapport sur les produits dangereux.
 
+<!-- source_pdf: Décret07-144.pdf; source_page: 1; article: 3; page_mapping: automated -->
 **Art. 3.** — La nomenclature des installations classées est annexée au présent décret.
 
+<!-- source_pdf: Décret07-144.pdf; source_page: 1; article: 4; page_mapping: automated -->
 **Art. 4.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 > Fait à Alger, le 2 Joumada El Oula 1428 correspondant au 19 mai 2007.

@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "decret93-120.pdf"
+source_pdf_sha256: "76483748e70f4d46b922a040bd6669b4e5503702cb743ff5fac25869225e390f"
+source_pdf_pages: 5
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "ocr-review-required"
+automated_pdf_word_coverage: 0.4915
+automated_source_mode: "OCR"
+article_page_markers_added: 10
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
 
-**Date de signature :** 15 mai 1993  
-**Journal Officiel :** N° 33, 19 mai 1993 — pages 7 à 11  
-**Source PDF :** Fourni par l'utilisateur (`decret 93-120.pdf`)  
-**Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 15 mai 1993
+**Journal Officiel :** N° 33, 19 mai 1993 — pages 7 à 11
+**Source PDF :** Fourni par l'utilisateur (`decret 93-120.pdf`)
+**Date de conversion :** 2026-08-10
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.
@@ -45,14 +62,17 @@ Vu le décret exécutif n° 92-492 du 28 décembre 1992 modifiant et complétant
 
 ## DÉCRÈTE
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 1; page_mapping: unavailable -->
 **Article 1er.** — Le présent décret, pris en application de l'article 45-1 de la loi n° 88-07 du 26 janvier 1988 et de l'article 76 de la loi n° 85-05 du 16 février 1985 susvisées, a pour objet de fixer les règles générales d'organisation et de fonctionnement de la médecine du travail au sein de tout organisme employeur tel que prévu à l'article 2 de la loi n° 88-07 du 26 janvier 1988 relative à l'hygiène, à la sécurité et à la médecine du travail.
 
 ---
 
 ## Chapitre I — Organisation et financement de la médecine du travail
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 2; page_mapping: unavailable -->
 **Art. 2.** — En application des articles 13 et 14 de la loi n° 88-07 du 26 janvier 1988 susvisée, la création d'un service de médecine du travail au sein de tout organisme employeur est obligatoire lorsque le temps nécessaire à un médecin du travail pour exercer sa mission est égal ou supérieur à la durée mensuelle légale de travail applicable au corps médical, et ce, compte tenu des normes fixées à l'article 3 ci-dessous.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 2; article: 3; page_mapping: automated -->
 **Art. 3.** — Le temps nécessaire à un médecin du travail pour exercer sa mission tel que prévu à l'article 2 ci-dessus est calculé sur la base des horaires minimaux suivants :
 
 — une heure de travail par mois pour dix travailleurs fortement exposés.
@@ -63,6 +83,7 @@ Les horaires prévus ci-dessus peuvent être augmentés, compte tenu de critère
 
 Un arrêté interministériel des ministres chargés respectivement du travail et de la santé, déterminera les travaux où les travailleurs sont fortement exposés aux risques professionnels.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 4; page_mapping: unavailable -->
 **Art. 4.** — Lorsque les normes fixées aux articles 2 et 3 ci-dessus ne sont pas réunies, la médecine du travail est assurée par les structures ou personnes prévues à l'article 14 de la loi n° 88-07 du 26 janvier 1988 susvisée et dans les conditions précisées ci-après :
 
 1° Dans le cas de la création d'un service inter-organismes de médecine du travail, celle-ci s'effectue sur une base territoriale et en fonction des critères de proximité et de concentration.
@@ -71,18 +92,23 @@ Un arrêté interministériel des ministres chargés respectivement du travail e
 
 3° Dans le cas de l'établissement d'une convention, selon une convention-type, avec toute structure compétente en médecine du travail ou tout médecin habilité, celle-ci est établie après accord du secteur sanitaire territorialement compétent, lequel devra examiner la demande de l'organisme employeur et y donner suite dans un délai maximum de quatre vingt dix jours.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 5; page_mapping: unavailable -->
 **Art. 5.** — Est considérée comme structure compétente en médecine du travail tel que prévu au 3ème alinéa de l'article 4 ci-dessus, toute structure créée conformément aux dispositions de la loi n° 85-05 du 16 février 1985 susvisée et dont l'activité exclusive est la médecine du travail.
 
 Les compétences territoriale, professionnelle, le nombre d'organismes employeurs ainsi que les effectifs maximums de travailleurs pris en charge par la structure compétente sont fixés par la décision de création de chaque structure.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 6; page_mapping: unavailable -->
 **Art. 6.** — Est considéré comme médecin habilité à exercer la médecine du travail, tel que prévu au 3ème alinéa de l'article 4 ci-dessus, tout médecin titulaire d'un diplôme de spécialité de médecine du travail et autorisé à exercer à titre privé.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 7; page_mapping: unavailable -->
 **Art. 7.** — La création des services interorganismes de médecine du travail est soumise à l'autorisation préalable du ministère chargé de la santé conformément aux articles 10 et 17 de la loi n° 85-05 du 16 février 1985 susvisée.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 8; page_mapping: unavailable -->
 **Art. 8.** — L'habilitation prévue à l'article 16 de la loi n° 88-07 du 26 janvier 1988 susvisée concerne les médecins généralistes ou spécialistes exerçant ou appelés à exercer des activités de médecine du travail et ce à titre transitoire jusqu'à une date qui sera fixée par arrêté du ministre chargé de la santé.
 
 Cette habilitation peut être retirée par décision du ministre chargé de la santé.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 9; page_mapping: unavailable -->
 **Art. 9.** — En application des articles 13, 14 et 28 de la loi n° 88-07 du 26 janvier 1988 susvisée, l'organisme employeur est tenu selon le cas :
 
 — de prendre en charge la totalité des frais d'équipement et de fonctionnement du service de médecine du travail créé en son sein ;
@@ -91,10 +117,13 @@ Cette habilitation peut être retirée par décision du ministre chargé de la s
 
 — de participer, dans les cas prévus à l'article 4-2ème et 3ème, ci-dessus au financement de la médecine du travail selon les modalités fixées par la convention-type prévue à l'article 14 de la loi n° 88-07 du 26 janvier 1988 susvisée.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 10; page_mapping: unavailable -->
 **Art. 10.** — Dans tous les cas énumérés à l'article 9 ci-dessus, l'organisme employeur prend en charge les frais occasionnés par les examens complémentaires et les analyses effectuées dans le cadre de la médecine du travail en application de l'article 18 de la loi n° 88-07 du 26 janvier 1988 susvisée.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 11; page_mapping: unavailable -->
 **Art. 11.** — Les normes en matière de moyens humains, de locaux et d'équipement des services de médecine du travail sont fixées par arrêté du ministre chargé de la santé.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 12; page_mapping: unavailable -->
 **Art. 12.** — En application de l'article 15 de la loi n° 88-07 du 26 janvier 1988 susvisée, la structure chargée particulièrement de la médecine du travail assure les tâches prévues à l'article 15 de la loi précitée, dans le cadre des dispositions respectives :
 
 — du décret n° 81-242 du 5 septembre 1981 et du décret n° 84-26 du 11 février 1984 susvisés en ce qui concerne le secteur sanitaire ou toute structure concernée ;
@@ -105,6 +134,7 @@ Cette habilitation peut être retirée par décision du ministre chargé de la s
 
 ## Chapitre II — Prérogatives du médecin du travail
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 13; page_mapping: unavailable -->
 **Art. 13.** — La visite médicale d'embauchage prévue à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée comporte un examen clinique complet et des examens para-cliniques appropriés. Elle a pour objet:
 
 — de rechercher si le travailleur n'est pas atteint d'une affection dangereuse pour les autres travailleurs ;
@@ -117,12 +147,15 @@ Cette habilitation peut être retirée par décision du ministre chargé de la s
 
 — de rechercher les postes auxquels, du point de vue médical, le travailleur ne peut être affecté et ceux qui lui conviendraient le mieux.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 14; page_mapping: unavailable -->
 **Art. 14.** — Toute reconversion de poste fait l'objet d'une nouvelle visite médicale destinée à s'assurer de l'aptitude du travailleur au poste de travail envisagé.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 3; article: 15; page_mapping: automated -->
 **Art. 15.** — Dans le cadre des examens périodiques et spéciaux prévus à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée, tout organisme employeur est tenu de soumettre à un examen médical périodique, au moins une fois par an, ses travailleurs en vue de s'assurer du maintien de leur aptitude aux postes de travail occupés.
 
 Toutefois, pour les travailleurs prévus à l'article 16 ci-dessous, cette périodicité est fixée à deux fois par an au moins.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 16; page_mapping: unavailable -->
 **Art. 16.** — Outre les apprentis, soumis à une surveillance médicale particulière conformément à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée, les travailleurs prévus à l'article précédent soumis à des examens périodiques et spéciaux sont :
 
 — les travailleurs particulièrement exposés aux risques professionnels ;
@@ -139,14 +172,17 @@ Toutefois, pour les travailleurs prévus à l'article 16 ci-dessous, cette péri
 
 — les femmes enceintes et les mères d'un enfant de moins de deux ans.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 17; page_mapping: unavailable -->
 **Art. 17.** — Les examens médicaux obligatoires de reprise prévus à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée ont lieu après une absence pour cause de maladie professionnelle ou d'accident du travail, après un congé de maternité, une absence d'au moins vingt et un (21) jours pour cause de maladie ou d'accident non professionnel, ou en cas d'absences répétées pour cause de maladie non professionnelle.
 
 Le médecin du travail est informé de ces absences par l'organisme employeur préalablement à la reprise de travail.
 
 Le médecin du travail n'est pas habilité à vérifier le bien fondé des absences pour cause de maladie ou d'accident.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 3; article: 18; page_mapping: automated -->
 **Art. 18.** — Tout travailleur peut bénéficier à sa demande d'une visite médicale assurée par le médecin du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 19; page_mapping: unavailable -->
 **Art. 19.** — Dans le cadre des dispositions de l'article 18 de la loi n° 88-07 du 26 janvier 1988 susvisée, le médecin du travail peut faire effectuer des examens complémentaires ou avoir recours à un spécialiste en vue notamment :
 
 — de déterminer l'aptitude médicale au poste de travail et notamment de dépister les affections comportant une contre-indication au poste de travail considéré ;
@@ -155,10 +191,13 @@ Le médecin du travail n'est pas habilité à vérifier le bien fondé des absen
 
 — de dépister les maladies professionnelles ou à caractère professionnel.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 20; page_mapping: unavailable -->
 **Art. 20.** — Le temps nécessité par les examens médicaux prévus aux articles 13 à 19 ci-dessus est décompté comme temps de travail pour les travailleurs concernés.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 21; page_mapping: unavailable -->
 **Art. 21.** — Le médecin du travail participe aux travaux des organes légalement constitués au sein des organismes employeurs pour toutes les questions relatives à l'hygiène, à la sécurité et à la médecine du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 22; page_mapping: unavailable -->
 **Art. 22.** — Le médecin du travail est le conseiller de l'organisme employeur en ce qui concerne notamment :
 
 — l'amélioration des conditions de vie et de travail au sein de l'organisme employeur ;
@@ -173,10 +212,12 @@ Le médecin du travail n'est pas habilité à vérifier le bien fondé des absen
 
 — l'éducation du personnel dans les domaines de la santé, de l'hygiène et de la sécurité en milieu de travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 23; page_mapping: unavailable -->
 **Art. 23.** — En vue de proposer les mesures d'adaptation des postes de travail telles que prévues à l'article 22 ci-dessus, le médecin du travail procède à l'analyse de ces postes au plan de l'hygiène, de la physiologie et de la psychologie du travail.
 
 Le médecin du travail participe à la réadaptation et à la rééducation des handicapés et des accidentés du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 24; page_mapping: unavailable -->
 **Art. 24.** — Le médecin du travail doit être informé par les services compétents de l'organisme employeur:
 
 — de la nature et de la composition des produits utilisés, de leurs modalités d'emploi ainsi que des postes où ces produits sont manipulés ;
@@ -185,16 +226,21 @@ Le médecin du travail participe à la réadaptation et à la rééducation des 
 
 — des résultats de toutes les mesures et analyses effectuées.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 4; article: 25; page_mapping: automated -->
 **Art. 25.** — Le temps que le médecin du travail est tenu de consacrer à la surveillance du milieu de travail au sein de l'organisme employeur et à l'amélioration des conditions de travail, doit être modulé en fonction de la nature des risques, des effectifs et de la forme d'organisation de la médecine du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 4; article: 26; page_mapping: automated -->
 **Art. 26.** — Le médecin du travail dispose du libre accès à tous les locaux de travail ou destinés au bien être des travailleurs de l'organisme employeur, et ce quel que soit le type d'organisation de la médecine du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 4; article: 27; page_mapping: automated -->
 **Art. 27.** — Outre les tâches de prévention prévues aux articles 13 à 26 ci-dessus, le médecin du travail organise le traitement des maladies professionnelles et à caractère professionnel des soins d'urgence aux travailleurs victimes d'accidents ou de malaises, ainsi que la prise en charge et le suivi des traitements ambulatoires qui peuvent être prescrits aux travailleurs, et ce, en liaison avec les autres structures de santé.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 4; article: 28; page_mapping: automated -->
 **Art. 28.** — En application de l'article 54 de la loi n° 85-05 du 16 février 1985 susvisée, le médecin du travail est tenu de déclarer tous les cas de maladies à déclaration obligatoire dont il a connaissance dans les conditions prévues par la législation et la réglementation en vigueur.
 
 Il déclare en outre les maladies à caractère professionnel, et ce, conformément à l'article 68 de la loi n° 83-13 du 02 juillet 1983 susvisée.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 29; page_mapping: unavailable -->
 **Art. 29.** — Outre le rapport annuel d'activité prévu à l'article 37 ci-dessous, les documents obligatoirement établis par le médecin du travail sont notamment :
 
 — le dossier médical individuel ;
@@ -217,12 +263,14 @@ Un arrêté interministériel des ministres chargés respectivement de la santé
 
 ## Chapitre III — Auxiliaires médicaux et soins d'urgence
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 30; page_mapping: unavailable -->
 **Art. 30.** — Dans le cas de l'organisation d'un service de médecine du travail au sein de l'organisme employeur tel que prévu à l'article 14 alinéa 2 de la loi n° 88-07 du 26 janvier 1988 susvisée, l'organisme employeur doit s'assurer à temps complet le concours d'auxiliaires médicaux ayant l'autorisation d'exercer.
 
 En cas de travail de nuit, un service de garde doit être assuré.
 
 Un arrêté du ministre chargé de la santé précisera les modalités d'application du présent article.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 31; page_mapping: unavailable -->
 **Art. 31.** — Dans le cadre de l'organisation des soins d'urgence telle que prévue à l'article 12 avant dernier alinéa de la loi n° 88-07 du 26 janvier 1988 susvisée, chaque lieu de travail est équipé au minimum d'une trousse de premier secours facilement repérable et accessible placée sous la responsabilité d'un secouriste et contenant des instructions claires pour les premiers soins à donner.
 
 Dans chaque lieu où sont effectués des travaux dangereux, un ou plusieurs travailleurs recevront obligatoirement l'instruction nécessaire pour donner les premiers soins d'urgence.
@@ -233,18 +281,23 @@ La présence des secouristes ainsi formés ne dispense pas les employeurs des ob
 
 ## Chapitre IV — Contrôle des activités de médecine du travail
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 32; page_mapping: unavailable -->
 **Art. 32.** — En application des articles 31 et 33 de la loi n° 88-07 du 26 janvier 1988 susvisée, l'inspecteur du travail est chargé de veiller au respect, par les organismes employeurs, de leurs obligations en matière de médecine du travail.
 
 L'action du médecin chargé de la fonction de contrôle et d'inspection concerne, en particulier, les tâches de contrôle et d'inspection portant sur l'organisation et le fonctionnement des structures de médecine du travail prévues à l'article 14 de la loi n° 88-07 au 26 janvier 1988 précitée.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 5; article: 33; page_mapping: automated -->
 **Art. 33.** — Les médecins chargés de la fonction de contrôle et d'inspection sont chargés d'orienter, de coordonner et d'évaluer l'action des médecins du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 5; article: 34; page_mapping: automated -->
 **Art. 34.** — Les médecins chargés de la fonction de contrôle et d'inspection sont recrutés au plan national parmi les médecins spécialistes en médecine du travail et nommés par arrêté du ministre chargé de la santé.
 
 L'arrêté de nomination fixe la compétence territoriale du médecin chargé de la fonction de contrôle et d'inspection.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 35; page_mapping: unavailable -->
 **Art. 35.** — Les médecins chargés de la fonction de contrôle et d'inspection disposent du libre accès dans les entreprises, unités ou établissements. Ils peuvent procéder ou faire procéder à toute enquête ou tout prélèvement aux fins d'analyses qu'ils jugent utiles pour contrôle de l'application de la réglementation en matière de médecine du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: 5; article: 36; page_mapping: automated -->
 **Art. 36.** — Conformément à l'article 17 de la loi n° 88-07 du 26 janvier 1988 susvisée, les avis du médecin du travail, que l'organisme employeur est tenu de prendre en considération, concernent notamment:
 
 — les décisions médicales ;
@@ -257,6 +310,7 @@ L'arrêté de nomination fixe la compétence territoriale du médecin chargé de
 
 Dans le cas où l'avis du médecin du travail n'est pas pris en considération celui-ci saisit l'inspecteur du travail territorialement compétent qui instruit le dossier en relation avec le médecin chargé de la fonction de contrôle et d'inspection compétent.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 37; page_mapping: unavailable -->
 **Art. 37.** — Le médecin du travail établit en fin d'année un rapport faisant état de l'organisation et du fonctionnement des activités médicales effectuées.
 
 Il procède également, à l'établissement, à l'étude et à l'exploitation des statistiques sur l'état sanitaire des travailleurs en rapport avec le milieu de travail.
@@ -265,8 +319,10 @@ Ce rapport, accompagné des observations des représentants des travailleurs est
 
 Un rapport-type du médecin du travail est fixé par arrêté interministériel des ministères chargés respectivement de la santé et du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 38; page_mapping: unavailable -->
 **Art. 38.** — Le secteur sanitaire établit une synthèse de l'ensemble des activités de médecine du travail et la transmet aux ministres chargés respectivement de la santé et du travail.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 39; page_mapping: unavailable -->
 **Art. 39.** — En application des dispositions de l'article 31 de la loi n° 88-07 du 26 janvier 1988 susvisée, le délai fixé par l'inspection du travail à l'organisme employeur pour les prescriptions donnant lieu, à l'application de la procédure de mise en demeure ne peut être inférieur aux délais minimaux d'exécution prévues ci-après :
 
 1° délai minimum de trois (3) mois pour les prescriptions prévues aux articles 2, 4, 9 et 11 ;
@@ -277,6 +333,7 @@ Un rapport-type du médecin du travail est fixé par arrêté interministériel 
 
 4° délai minimum d'un (1) jour pour les prescriptions prévues aux articles 26 et 36.
 
+<!-- source_pdf: decret93-120.pdf; source_page: unverified; article: 40; page_mapping: unavailable -->
 **Art. 40.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 15 mai 1993.

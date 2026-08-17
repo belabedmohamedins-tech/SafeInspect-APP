@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "Décret02-427.pdf"
+source_pdf_sha256: "d462fb0b4d5ad92272b430ce7fe45ec89d6870d9ada9c6a74229ef62937c1534"
+source_pdf_pages: 24
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "automated-high-coverage-human-review-required"
+automated_pdf_word_coverage: 0.9837
+automated_source_mode: "native"
+article_page_markers_added: 24
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 02-427 du 3 Chaoual 1423 correspondant au 7 décembre 2002 relatif aux conditions d'organisation de l'instruction, de l'information et de la formation des travailleurs dans le domaine de la prévention des risques professionnels
 
-**Date de signature :** 7 décembre 2002 (3 Chaoual 1423)  
-**Journal Officiel :** N° 82, 7 Chaoual 1423 (11 décembre 2002) — pages 15 à 17  
-**Source PDF :** Fourni par l'utilisateur (`Décret 02-427.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 7 décembre 2002 (3 Chaoual 1423)
+**Journal Officiel :** N° 82, 7 Chaoual 1423 (11 décembre 2002) — pages 15 à 17
+**Source PDF :** Fourni par l'utilisateur (`Décret 02-427.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -33,12 +50,15 @@ Vu le décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de l
 
 ## CHAPITRE 1 — DISPOSITIONS GENERALES
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 3; article: 1; page_mapping: automated -->
 **Article 1er.** — En application des dispositions de l'article 22 de la loi n° 88-07 du 26 janvier 1988, susvisée, le présent décret a pour objet de fixer les conditions d'organisation de l'instruction, de l'information et de la formation des travailleurs dans le domaine de la prévention des risques professionnels.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 3; article: 2; page_mapping: automated -->
 **Art. 2.** — L'instruction, l'information et la formation à la prévention des risques professionnels ont pour objectif de prévenir les travailleurs sur les risques professionnels auxquels ils peuvent être exposés, les mesures de prévention et les précautions à prendre pour assurer leur propre sécurité ainsi que celle des autres personnes exerçant sur le même lieu de travail et dans leur environnement immédiat.
 
 Elles visent également à prévenir l'éventualité des accidents en milieu de travail.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 4; article: 3; page_mapping: automated -->
 **Art. 3.** — L'employeur est tenu d'organiser au profit des travailleurs des actions d'instruction, d'information et de formation notamment sur :
 
 — les risques liés aux différentes opérations entrant dans le cadre de leur travail, ainsi que les mesures à prendre et les moyens à mettre en œuvre pour se protéger ;
@@ -47,56 +67,72 @@ Elles visent également à prévenir l'éventualité des accidents en milieu de 
 
 Les actions prévues ci-dessus constituent des éléments obligatoires du programme annuel de l'entreprise en matière de prévention des risques professionnels.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 4; article: 4; page_mapping: automated -->
 **Art. 4.** — La commission paritaire d'hygiène et de sécurité participe de plein droit à la préparation des actions menées au titre du présent décret et veille à leur mise en œuvre effective.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 5; article: 5; page_mapping: automated -->
 **Art. 5.** — Le médecin du travail ainsi que le chargé du service ou le préposé à l'hygiène et à la sécurité sont associés à l'élaboration de ces actions.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 5; article: 6; page_mapping: automated -->
 **Art. 6.** — Le comité de participation, ou à défaut, les délégués du personnel, sont obligatoirement consultés sur les conditions d'organisation des actions d'instruction, d'information et de formation des travailleurs notamment les programmes et les modalités de leur exécution.
 
 ---
 
 ## CHAPITRE 2 — L'INSTRUCTION ET L'INFORMATION DES TRAVAILLEURS
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 6; article: 7; page_mapping: automated -->
 **Art. 7.** — L'instruction et l'information des travailleurs visent à expliquer aux travailleurs et à les sensibiliser sur les risques professionnels et les mesures de prévention à prendre pour les éviter.
 
 Les actions d'instruction et d'information s'effectuent sur les lieux de travail à travers la distribution de tout document rédigé ou illustré et l'organisation de conférences et de campagnes de sécurité ainsi que par voie d'affiches et avis à l'intention des travailleurs.
 
 Les actions comportent également des séances d'éducation sanitaire.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 6; article: 8; page_mapping: automated -->
 **Art. 8.** — Des instructions sont données sur les moyens et mesures à mettre en œuvre en cas d'incident technique ou d'accident du travail.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 6; article: 9; page_mapping: automated -->
 **Art. 9.** — En fonction des risques à prévenir, des séances d'explication des mesures de sécurité prescrites sont organisées en milieu de travail.
 
 ---
 
 ## CHAPITRE 3 — LA FORMATION DES TRAVAILLEURS
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 7; article: 10; page_mapping: automated -->
 **Art. 10.** — La formation à la sécurité a pour objet de doter les travailleurs des connaissances nécessaires en matière de prévention des risques professionnels et les dispositions à prendre en cas d'accident de travail ou de sinistre.
 
 Elle a également pour objet de préparer les travailleurs sur la conduite à tenir lorsqu'une personne est victime d'un accident de travail ou d'une intoxication sur le lieu de travail.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 7; article: 11; page_mapping: automated -->
 **Art. 11.** — La formation est dispensée par des organismes de prévention et des établissements de formation ou d'études compétents en la matière.
 
 Elle peut l'être également par des centres de formation relevant des entreprises qui en disposent selon des modalités qui seront fixées par arrêté conjoint du ministre chargé du travail et du ou des ministres concernés.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 8; article: 12; page_mapping: automated -->
 **Art. 12.** — L'agrément des établissements et centres prévus à l'article 11 ci-dessus et l'homologation des programmes dispensés en matière de formation des travailleurs relèvent de la compétence du ministre chargé du travail.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 8; article: 13; page_mapping: automated -->
 **Art. 13.** — La formation comprend une partie théorique et une autre partie pratique. Elle intègre un enseignement en organisation du travail, en hygiène, en sécurité et en médecine du travail.
 
 Elle tient compte du niveau d'instruction, de la qualification et de l'expérience professionnelle des travailleurs à qui elle est destinée.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 9; article: 14; page_mapping: automated -->
 **Art. 14.** — La formation est dispensée sur le lieu de travail ; la partie théorique est assurée dans un local réunissant les conditions nécessaires à la conduite d'une activité pédagogique.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 9; article: 15; page_mapping: automated -->
 **Art. 15.** — Lorsque la nécessité d'étudier un risque spécifique impose la réunion de conditions particulières, les cours se déroulent au sein d'une structure de formation disposant de locaux et de moyens appropriés et en adéquation avec la nature de la formation.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 9; article: 16; page_mapping: automated -->
 **Art. 16.** — La formation est sanctionnée par une attestation de stage délivrée par l'organisme ou la structure chargés de la formation.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 9; article: 17; page_mapping: automated -->
 **Art. 17.** — La formation s'effectue pendant l'horaire normal de travail ; le temps consacré à la formation est considéré comme temps de travail.
 
 Durant la période de la formation, la rémunération est maintenue conformément à la législation et la réglementation en vigueur.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 9; article: 18; page_mapping: automated -->
 **Art. 18.** — Lorsque la formation est destinée aux travailleurs, les membres de la commission paritaire d'hygiène et de sécurité disposant d'une qualification adéquate en la matière, sanctionnée par un diplôme, peuvent être associés à son organisation.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 10; article: 19; page_mapping: automated -->
 **Art. 19.** — Des formations appropriées sont dispensées :
 
 — aux travailleurs nouvellement recrutés, quelle que soit la durée de leur relation de travail ;
@@ -111,14 +147,17 @@ Durant la période de la formation, la rémunération est maintenue conformémen
 
 Ces formations peuvent être également dispensées en cas d'accident du travail ou de maladie professionnelle ou à caractère professionnel graves.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 10; article: 20; page_mapping: automated -->
 **Art. 20.** — En fonction de la nature des risques à étudier, la durée de la formation ne peut être inférieure à une semaine ni supérieure à trois (3) semaines.
 
 ---
 
 ## CHAPITRE 4 — DISPOSITIONS PARTICULIERES A LA FORMATION DES MEMBRES DES COMMISSIONS D'HYGIENE ET SECURITE
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 10; article: 21; page_mapping: automated -->
 **Art. 21.** — Les membres de la commission paritaire d'hygiène et de sécurité bénéficient d'une formation appropriée pendant l'exercice de leur mandat.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 10; article: 22; page_mapping: automated -->
 **Art. 22.** — La durée de la formation prévue à l'article 21 ci-dessus est fixée au maximum à cinq (5) jours.
 
 En cas de renouvellement de mandat, la formation est également renouvelée ; elle consiste en une actualisation des connaissances et un perfectionnement. Elle doit avoir un caractère plus spécialisé, tenant compte de l'expérience acquise au cours du mandat écoulé.
@@ -129,8 +168,10 @@ La formation dispensée dans ce cas constitue un complément à celle organisée
 
 ## CHAPITRE 5 — DISPOSITIONS FINALES
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 10; article: 23; page_mapping: automated -->
 **Art. 23.** — Des textes ultérieurs préciseront, en tant que de besoin, les modalités d'application du présent décret.
 
+<!-- source_pdf: Décret02-427.pdf; source_page: 11; article: 24; page_mapping: automated -->
 **Art. 24.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 3 Chaoual 1423 correspondant au 7 décembre 2002.

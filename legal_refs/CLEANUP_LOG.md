@@ -1,3 +1,20 @@
+---
+document_type: "repository-document"
+source_pdf: null
+source_pdf_sha256: null
+source_pdf_pages: null
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "repository-document"
+automated_pdf_word_coverage: null
+automated_source_mode: null
+article_page_markers_added: 0
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# CLEANUP_LOG — legal_refs
 
 > **LIRE EN PREMIER dans toute nouvelle session avant de faire quoi que ce soit.**

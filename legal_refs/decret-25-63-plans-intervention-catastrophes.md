@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "decret-25-63-plans-intervention-catastrophes.pdf"
+source_pdf_sha256: "c1eb671c32e8e95dcc4525a90a07f04b50f273fc9ed5bcfacf130bf9b924f0a3"
+source_pdf_pages: 5
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.7809
+automated_source_mode: "native"
+article_page_markers_added: 30
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 25-63 du 28 Rajab 1446 correspondant au 28 janvier 2025 fixant les conditions et les modalités d'élaboration, de mise en œuvre et de gestion des plans d'intervention en matière de risques de catastrophes
 
-**Date de signature :** 28 janvier 2025 (28 Rajab 1446)  
-**Journal Officiel :** N° 07, 6 Chaâbane 1446 (5 février 2025) — pages 10 à 15  
-**Source PDF :** Fourni par l'utilisateur (`decret-25-63-plans-intervention-catastrophes.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 28 janvier 2025 (28 Rajab 1446)
+**Journal Officiel :** N° 07, 6 Chaâbane 1446 (5 février 2025) — pages 10 à 15
+**Source PDF :** Fourni par l'utilisateur (`decret-25-63-plans-intervention-catastrophes.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF contient également une partie du Décret exécutif n° 25-62 (relatif à la commission de wilaya pour la gestion des déchets de catastrophes). Seul le décret 25-63 est converti dans ce fichier.
@@ -75,6 +92,7 @@ Vu le décret exécutif n° 23-411 du 6 Joumada El Oula 1445 correspondant au 20
 
 ## DÉCRÈTE
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 2; article: 1; page_mapping: automated -->
 **Article 1er.** — En application des dispositions des articles 73 et 76 de la loi n° 24-04 du 16 Chaâbane 1445 correspondant au 26 février 2024 portant les règles de prévention, d'intervention et de réduction des risques de catastrophes dans le cadre du développement durable, le présent décret a pour objet de fixer les conditions et les modalités d'élaboration, de mise en œuvre et de gestion des plans particuliers d'intervention et des plans internes d'intervention en matière de risques de catastrophes désignés, conjointement, ci-après « plans d'intervention ».
 
 ---
@@ -83,14 +101,17 @@ Vu le décret exécutif n° 23-411 du 6 Joumada El Oula 1445 correspondant au 20
 
 ### Section 1 — Du plan particulier d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 2; article: 2; page_mapping: automated -->
 **Art. 2.** — Le plan particulier d'intervention est un document qui définit l'ensemble des mesures de prévention, d'organisation et de coordination des secours en cas d'un risque de catastrophe ayant des effets sur l'installation ou sur l'ouvrage industriel, en vue de protéger les personnes, les biens et l'environnement.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 2; article: 3; page_mapping: automated -->
 **Art. 3.** — Le plan particulier d'intervention vise à faire face aux :
 
 — risques causés par l'installation ou l'ouvrage industriel lui-même, dont les effets peuvent engendrer un risque de catastrophe ;
 
 — risques de catastrophes, quelle que soit leur nature, qui peuvent affecter les installations ou les ouvrages industriels et peuvent impacter la santé des personnes, des biens et de l'environnement.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 2; article: 4; page_mapping: automated -->
 **Art. 4.** — Font l'objet d'un plan particulier d'intervention, les installations et les ouvrages industriels suivants :
 
 — les établissements classés pour la protection de l'environnement dont l'étude de danger conclut que les effets des risques peuvent dépasser les limites de l'installation ou de l'ouvrage industriel et causer ainsi des dommages aux personnes, aux biens ou à l'environnement ;
@@ -101,18 +122,23 @@ Vu le décret exécutif n° 23-411 du 6 Joumada El Oula 1445 correspondant au 20
 
 — les installations et les ouvrages des activités d'hydrocarbures.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 5; page_mapping: automated -->
 **Art. 5.** — Le plan particulier d'intervention pour les zones industrielles, porte sur l'ensemble des installations et ouvrages industriels, y compris les installations et les lignes de transport par canalisations des hydrocarbures et du gaz et les installations et les ouvrages des activités d'hydrocarbures situés dans cette zone industrielle.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 6; page_mapping: automated -->
 **Art. 6.** — Un arrêté du wali, territorialement compétent, fixe la liste des installations et des ouvrages industriels faisant l'objet d'un plan particulier d'intervention, sur proposition de la commission citée à l'article 14 ci-dessous.
 
 ### Section 2 — Du plan interne d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 7; page_mapping: automated -->
 **Art. 7.** — Le plan interne d'intervention est un document qui fixe les modalités de planification et de gestion des interventions et des secours, lors de la survenance d'un accident, à l'intérieur de l'installation ou de l'ouvrage industriel et les moyens mobilisés à ce titre, et définit au titre de l'installation ou de l'ouvrage industriel concerné, l'ensemble des mesures de prévention, notamment les systèmes d'alarme et d'alerte, et les études techniques y afférentes.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 1; article: 8; page_mapping: automated -->
 **Art. 8.** — Le plan interne d'intervention s'applique aux installations industrielles et aux lignes de transport par canalisations des hydrocarbures qui, par danger d'incendie, d'explosion ou d'émanation de substances toxiques, peuvent créer des risques pour les travailleurs, la population et les biens ainsi que pour l'environnement.
 
 ### Section 3 — Des installations et ouvrages industriels soumis à des réglementations spécifiques
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 1; article: 9; page_mapping: automated -->
 **Art. 9.** — Sont exclus du champ d'application du présent décret, les installations et les ouvrages industriels soumis à des réglementations spécifiques, notamment :
 
 — les installations, ouvrages industriels et aires de stockage relevant du ministère de la défense nationale ;
@@ -125,6 +151,7 @@ Vu le décret exécutif n° 23-411 du 6 Joumada El Oula 1445 correspondant au 20
 
 ### Section 1 — Des conditions et des modalités d'élaboration des plans d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 1; article: 10; page_mapping: automated -->
 **Art. 10.** — Les plans d'intervention sont élaborés à la charge de l'exploitant de l'installation ou de l'ouvrage industriel sur la base :
 
 — d'une étude de vulnérabilité de l'installation ou de l'ouvrage industriel aux risques de catastrophes pour les plans particuliers d'intervention ;
@@ -133,14 +160,18 @@ Vu le décret exécutif n° 23-411 du 6 Joumada El Oula 1445 correspondant au 20
 
 Ces études doivent déterminer, selon le cas, le degré de vulnérabilité aux risques ou le degré de dangerosité susceptibles d'atteindre les installations ou les ouvrages industriels et les mesures à prendre pour garantir leur capacité à y faire face.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 11; page_mapping: automated -->
 **Art. 11.** — L'étude de vulnérabilité et l'étude de danger citées à l'article 10 ci-dessus, sont élaborés à la charge de l'exploitant de l'installation ou de l'ouvrage industriel, qui fait recours aux bureaux d'études agréés par l'Etat, conformément à la réglementation en vigueur.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 12; page_mapping: automated -->
 **Art. 12.** — Les plans d'intervention sont élaborés par des institutions habilitées de l'Etat ou par des bureaux d'études agréés par l'Etat, selon un canevas fixé par arrêté conjoint du ministre chargé de l'intérieur, du ministre chargé de l'industrie et du ministre chargé de l'environnement. Ces plans doivent se baser sur des études et documents probants et scientifiquement prouvés.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 13; page_mapping: automated -->
 **Art. 13.** — Les institutions et organismes habilités de l'Etat sont tenus de fournir tout document et toutes informations nécessaires à l'élaboration des plans d'intervention.
 
 ### Section 2 — Des conditions et des modalités d'approbation des plans d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 3; article: 14; page_mapping: automated -->
 **Art. 14.** — Il est créé par arrêté du wali, au niveau de chaque wilaya, une commission chargée de l'approbation des projets des plans d'intervention, désignée ci-après la « commission ».
 
 La commission, présidée par le wali, territorialement compétent, ou son représentant, est composée des membres suivants ou de leurs représentants :
@@ -187,12 +218,15 @@ L'exploitant de l'installation ou de l'ouvrage industriel concerné est tenu d'a
 
 Le secrétariat de la commission est assuré par la direction de la protection civile de wilaya.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 15; page_mapping: automated -->
 **Art. 15.** — La commission doit statuer sur la demande d'approbation du projet du plan d'intervention dans un délai n'excédant pas trois (3) mois, à compter de la date du dépôt de la demande. Dépassé ce délai, le projet du plan d'intervention est considéré recevable.
 
 La commission peut demander un aménagement du plan ou un complément d'études, dans ce cas le délai prévu dans l'alinéa précédent commence à courir à partir de la date du dépôt du projet du plan d'intervention modifié.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 16; page_mapping: automated -->
 **Art. 16.** — Les attributions et les modalités de fonctionnement de la commission sont fixées par arrêté du wali, territorialement compétent.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 17; page_mapping: automated -->
 **Art. 17.** — Après leur approbation, une copie des plans d'intervention est transmise aux exploitants de l'installation ou de l'ouvrage industriel ainsi qu'aux intervenants concernés par leur mise en œuvre.
 
 En outre, une copie du plan particulier d'intervention est transmise aux communes concernées et aux wilayas limitrophes lorsque les effets des risques particuliers identifiés peuvent s'étendre aux territoires de ces wilayas.
@@ -203,12 +237,14 @@ En outre, une copie du plan particulier d'intervention est transmise aux commune
 
 ### Section 1 — Des modalités de mise en œuvre et d'évaluation des plans d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 18; page_mapping: automated -->
 **Art. 18.** — Les travailleurs des installations et des ouvrages industriels doivent être :
 
 — informés, formés et sensibilisés aux risques liés à l'exploitation des installations et des ouvrages industriels et à l'utilisation des équipements et procédés techniques, de leurs conséquences, ainsi qu'à la conduite à tenir en cas d'accident ;
 
 — consultés dans l'élaboration des plans d'intervention qui seront mis à leur disposition.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 19; page_mapping: automated -->
 **Art. 19.** — En cas d'accident industriel, l'exploitant déclenche le plan interne d'intervention et prend en charge la direction des opérations internes et informe les services de la protection civile en leur communiquant, instantanément, toutes les informations y afférentes, notamment :
 
 — les circonstances de l'accident ;
@@ -219,10 +255,13 @@ En outre, une copie du plan particulier d'intervention est transmise aux commune
 
 — les données disponibles pour évaluer les effets de l'accident sur les personnes, les biens et l'environnement.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 20; page_mapping: automated -->
 **Art. 20.** — Le directeur de la protection civile de wilaya informe, immédiatement, le wali de la situation et lui communique les données relatives à l'accident afin d'engager, le cas échéant, les mesures nécessaires pour la prise en charge médicale des victimes, ainsi que la protection des personnes, des biens et de l'environnement.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 4; article: 21; page_mapping: automated -->
 **Art. 21.** — En cas de d'incapacité des moyens d'intervention de l'installation ou de l'ouvrage industriel de faire face à l'accident, l'exploitant demande l'intervention des services de la protection civile qui assurent aussitôt la direction des opérations et informent le wali pour un éventuel déclenchement du plan particulier d'intervention.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 22; page_mapping: automated -->
 **Art. 22.** — Le directeur de wilaya de l'industrie ou de l'énergie, selon le cas, doit :
 
 — recueillir, au moyen d'investigations, les informations nécessaires pour une analyse globale de l'accident ;
@@ -231,22 +270,26 @@ En outre, une copie du plan particulier d'intervention est transmise aux commune
 
 — formuler des recommandations concernant les futures mesures de prévention et d'intervention.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 23; page_mapping: automated -->
 **Art. 23.** — Le plan particulier d'intervention est déclenché par le wali dans les cas suivants :
 
 — la survenance d'une catastrophe telle que définie par le plan particulier d'intervention ;
 
 — lorsque les moyens du plan interne d'intervention s'avèrent insuffisants pour faire face à l'accident.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 24; page_mapping: automated -->
 **Art. 24.** — Un programme annuel d'exercices de simulation des plans particuliers d'intervention, est élaboré et adopté par la commission, en concertation avec l'exploitant de l'installation ou de l'ouvrage industriel considéré.
 
 Par ailleurs, l'exploitant doit réaliser des exercices de simulation du plan interne d'intervention afin de tester sa fiabilité. Ces exercices doivent avoir lieu, au moins, deux (2) fois par an.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 25; page_mapping: automated -->
 **Art. 25.** — A chaque déclenchement des plans d'intervention et après chaque exercice de simulation, la commission établit un rapport d'évaluation de sa mise en œuvre.
 
 Le wali, territorialement compétent, transmet le rapport au ministre chargé de l'intérieur, au ministre chargé de l'environnement et au ministre concerné par l'installation ou l'ouvrage industriel.
 
 ### Section 2 — Des modalités d'actualisation des plans d'intervention
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 26; page_mapping: automated -->
 **Art. 26.** — Les plans d'intervention sont réexaminés pour une éventuelle actualisation à la demande du directeur de l'environnement ou du directeur de l'industrie de wilaya, ainsi que dans les cas suivants :
 
 — à l'initiative de l'exploitant en cas de modification de l'installation et de l'ouvrage industriel, de l'aire de stockage, de la nature et des quantités de matières et/ou de substances dangereuses pouvant avoir des répercussions importantes ;
@@ -259,6 +302,7 @@ Le wali, territorialement compétent, transmet le rapport au ministre chargé de
 
 — en cas de changement de la législation ou de la réglementation y afférentes.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 27; page_mapping: automated -->
 **Art. 27.** — Le ministre chargé de l'industrie ou le ministre chargé de l'énergie, selon le cas, tient, dans le cadre d'un système d'information, un fichier rassemblant les renseignements sur les accidents survenus sur le territoire national, les causes qui les ont provoqués, les mesures adoptées et les expériences acquises, afin de permettre aux institutions, organismes et aux opérateurs économiques d'utiliser ces informations pour actualiser et améliorer leurs pratiques quant à faire face aux risques de catastrophes.
 
 Les modalités d'application du présent article sont définies par arrêté conjoint du ministre chargé de l'intérieur, du ministre chargé de l'industrie et du ministre chargé de l'énergie.
@@ -267,12 +311,15 @@ Les modalités d'application du présent article sont définies par arrêté con
 
 ## CHAPITRE 4 — DISPOSITIONS TRANSITOIRES ET FINALES
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 28; page_mapping: automated -->
 **Art. 28.** — Les exploitants des installations et des ouvrages industriels en état de fonctionnement à la date de publication du présent décret et qui ne disposent pas de plans d'intervention, sont tenus de se conformer à ses dispositions dans un délai n'excédant pas une (1) année, à compter de la date de son entrée en vigueur.
 
 Les exploitants des installations et des ouvrages industriels qui ne sont pas en service à la date d'entrée en vigueur du présent décret, ne peuvent exercer qu'après l'approbation des plans d'intervention de leurs installations ou ouvrage industriel par la commission citée à l'article 14 ci-dessus.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 29; page_mapping: automated -->
 **Art. 29.** — Sont abrogées, toutes les dispositions contraires au présent décret, notamment le décret exécutif n° 15-71 du 21 Rabie Ethani 1436 correspondant au 11 février 2015 fixant les conditions et modalités d'élaboration et d'adoption des plans particuliers d'intervention pour les installations ou ouvrages et le décret exécutif n° 09-335 du Aouel Dhou El Kâada 1430 correspondant au 20 octobre 2009 fixant les modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants des installations industrielles.
 
+<!-- source_pdf: decret-25-63-plans-intervention-catastrophes.pdf; source_page: 5; article: 30; page_mapping: automated -->
 **Art. 30.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 28 Rajab 1446 correspondant au 28 janvier 2025.

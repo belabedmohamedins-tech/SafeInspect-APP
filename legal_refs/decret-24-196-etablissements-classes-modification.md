@@ -1,9 +1,26 @@
+---
+document_type: "legal-reference"
+source_pdf: "decret24-196.pdf"
+source_pdf_sha256: "d6dd1d9360ac6359ed0f754994e3e79f2d2e917ce0a5551a2e2d0cfed99d04ea"
+source_pdf_pages: 2
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.8415
+automated_source_mode: "native"
+article_page_markers_added: 3
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 # Décret exécutif n° 24-196 du 5 Dhou El Hidja 1445 correspondant au 11 juin 2024 modifiant et complétant le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement
 
-**Date de signature :** 11 juin 2024 (5 Dhou El Hidja 1445)  
-**Journal Officiel :** Publié le 19 juin 2024 (13 Dhou El Hidja 1445) — Source PDF fournie par l'utilisateur  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
+**Date de signature :** 11 juin 2024 (5 Dhou El Hidja 1445)
+**Journal Officiel :** Publié le 19 juin 2024 (13 Dhou El Hidja 1445) — Source PDF fournie par l'utilisateur
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd
 
 **Note sur l'extraction :** L'intégralité du texte de ce décret est présente dans l'extraction fournie.
 
@@ -31,8 +48,10 @@ Vu le décret exécutif n° 23-381 du 13 Rabie Ethani 1445 correspondant au 28 o
 
 ## DÉCRÈTE
 
+<!-- source_pdf: decret24-196.pdf; source_page: 1; article: 1; page_mapping: automated -->
 **Article 1er.** — Le présent décret a pour objet de modifier et de compléter certaines dispositions du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006, modifié et complété, définissant la réglementation applicable aux établissements classés pour la protection de l'environnement.
 
+<!-- source_pdf: decret24-196.pdf; source_page: 1; article: 2; page_mapping: automated -->
 **Art. 2.** — Les dispositions des articles 14, 24, 25, 26, 29 et 44 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006, modifié et complété, susvisé, sont modifiées, complétées et rédigées comme suit :
 
 « **Art. 14.** — L'étude de danger doit comporter les éléments suivants :
@@ -95,6 +114,7 @@ Le déclarant peut introduire un recours dans un délai de 10 jours, à compter 
 
 « **Art. 44.** — Tout exploitant d'un établissement classé existant n'ayant pas fait l'objet d'autorisation ou de déclaration d'exploitation, doit procéder à la régularisation de sa situation, dans un délai n'excédant pas trois (3) ans, à compter de la date de promulgation du présent décret. ».
 
+<!-- source_pdf: decret24-196.pdf; source_page: 2; article: 3; page_mapping: automated -->
 **Art. 3.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 5 Dhou El Hidja 1445 correspondant au 11 juin 2024.

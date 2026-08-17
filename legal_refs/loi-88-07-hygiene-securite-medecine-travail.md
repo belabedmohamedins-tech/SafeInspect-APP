@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: null
+source_pdf_sha256: null
+source_pdf_pages: null
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "unmatched-source"
+automated_pdf_word_coverage: null
+automated_source_mode: null
+article_page_markers_added: 0
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Loi n° 88-07 du 26 janvier 1988 relative à l’hygiène, à la sécurité et à la médecine du travail
 
-**Date de signature :** 26 janvier 1988  
-**Journal Officiel :** N° 4 du 27 janvier 1988 — pages 64 et suivantes  
-**Source :** Fourni par l'utilisateur (texte intégral)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 26 janvier 1988
+**Journal Officiel :** N° 4 du 27 janvier 1988 — pages 64 et suivantes
+**Source :** Fourni par l'utilisateur (texte intégral)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "22-167.pdf"
+source_pdf_sha256: "3395a327b38d81869666aa6f65bdb4c926ac60fccfb568bcdbc3729d66c6616a"
+source_pdf_pages: 23
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "partial-review-required"
+automated_pdf_word_coverage: 0.932
+automated_source_mode: "native"
+article_page_markers_added: 12
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 ﻿# Décret exécutif n° 22-167 du 18 Ramadhan 1443 correspondant au 19 avril 2022 modifiant et complétant le décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l’environnement
 
-**Date de signature :** 19 avril 2022 (18 Ramadhan 1443)  
-**Journal Officiel :** N° 29, 23 Ramadhan 1443 (24 avril 2022) — pages 5 à 11  
-**Source PDF :** Fourni par l'utilisateur (`22-167.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Date de signature :** 19 avril 2022 (18 Ramadhan 1443)
+**Journal Officiel :** N° 29, 23 Ramadhan 1443 (24 avril 2022) — pages 5 à 11
+**Source PDF :** Fourni par l'utilisateur (`22-167.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -39,8 +56,10 @@ Vu le décret exécutif n° 20-357 du 14 Rabie Ethani 1442 correspondant au 30 n
 
 ## DÉCRÈTE
 
+<!-- source_pdf: 22-167.pdf; source_page: 5; article: 1; page_mapping: automated -->
 **Article 1er.** — Le présent décret a pour objet de modifier et de compléter certaines dispositions du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l’environnement.
 
+<!-- source_pdf: 22-167.pdf; source_page: 5; article: 2; page_mapping: automated -->
 **Art. 2.** — Les dispositions de l’article 2 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont modifiées et complétées comme suit :
 
 « Art. 2. — Au sens du présent décret, il est entendu par :
@@ -57,6 +76,7 @@ Promoteur du projet : toute personne physique ou morale, de droit public ou priv
 
 Exploitant : toute personne physique ou morale, de droit public ou privé qui détient, exploite ou fait exploiter l’établissement classé et les installations classées qui en relèvent ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 5; article: 3; page_mapping: automated -->
 **Art. 3.** — Les dispositions de l’article 3 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont complétées comme suit :
 
 « Art. 3. — Les établissements classés sont subdivisés en quatre (4) catégories :
@@ -69,6 +89,7 @@ Etablissement classé de deuxième catégorie : comportant, au moins, une instal
 
 ................................ (le reste sans changement) .................... »
 
+<!-- source_pdf: 22-167.pdf; source_page: 6; article: 4; page_mapping: automated -->
 **Art. 4.** — Les dispositions des articles 6, 16 et 17 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont modifiées et rédigées comme suit :
 
 « Art. 6. — L’autorisation d’exploitation d’un établissement classé, est octroyée à l’issue d’une procédure comportant les phases citées ci-après :
@@ -95,6 +116,7 @@ La décision d’accord préalable de création des établissements classés de 
 
 « **Art. 17.** — La décision d’accord préalable de création de l’établissement classé, doit transcrire l’ensemble des prescriptions mentionnées dans les décisions d’approbation respectivement de l’étude ou de la notice d’impact sur l’environnement et de l’étude de danger, pour permettre leur prise en charge lors de la réalisation de l’établissement classé ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 6; article: 5; page_mapping: automated -->
 **Art. 5.** — Les dispositions de l’article 20 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont complétées comme suit :
 
 « Art 20. – L’autorisation d’exploitation est délivrée selon le cas :
@@ -105,10 +127,12 @@ La décision d’accord préalable de création des établissements classés de 
 
 — .................... (le reste sans changement) .................... ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 7; article: 6; page_mapping: automated -->
 **Art. 6.** — Les dispositions de l’article 27 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont modifiées et rédigées comme suit :
 
 « Art. 27. — Toute modification structurelle ou conjoncturelle dans l'exploitation, le fonctionnement et la production de l'établissement classé de quatrième catégorie, et notamment celles qui entraînent une modification des éléments déclarés dans les documents prévus à l'article 25 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, doivent faire l'objet d'une nouvelle déclaration ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 7; article: 7; page_mapping: automated -->
 **Art. 7.** — Les dispositions des articles 29, 30 et 40 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont modifiées, complétées et rédigées comme suit :
 
 « Art. 29. — La commission, présidée par le wali territorialement compétent ou par son représentant, est composée :
@@ -155,10 +179,12 @@ Le wali territorialement compétent transmet le dossier de déclaration, dans un
 
 L’autorisation ou la déclaration d’exploitation de l’établissement classé est modifiée en conséquence respectivement par l’autorité l’ayant délivré ou accepté ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 7; article: 8; page_mapping: automated -->
 **Art. 8.** — Les dispositions de l’article 41 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont complétées et rédigées comme suit :
 
 « Art. 41. — Si l’établissement classé ou, au moins, une de ses installations est mis(e) à l’arrêt définitif, son exploitant est tenu de remettre le site, objet de la mise à l’arrêt définitif, dans un état tel qu’il ne s’y manifeste aucun danger ou inconvénient pour l’environnement ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 8; article: 9; page_mapping: automated -->
 **Art. 9.** — Les dispositions des articles 42 et 44 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, sont modifiées et rédigées comme suit :
 
 « Art. 42. — L’exploitant doit déclarer la mise à l’arrêt définitif de son établissement classé ou d’au moins, une de ses installations.
@@ -167,6 +193,7 @@ Les conditions et les modalités de mise à l’arrêt définitif de l’établi
 
 « Art. 44. — Tout exploitant d’un établissement classé existant n'ayant pas fait l'objet d'autorisation ou de déclaration d’exploitation doit, dans un délai n’excédant pas une (1) année, à compter de la date de promulgation du présent décret, procéder à la régularisation de la situation de son établissement classé existant ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 8; article: 10; page_mapping: automated -->
 **Art. 10.** — Il est inséré au niveau des dispositions du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé, les articles 44 bis, 44 bis 1, 44 bis 2, 44 bis 3, 44 bis 4, 44 bis 5, 44 bis 6, 44 bis 7, 44 bis 8, 44 bis 9 et 44 bis 10, rédigés comme suit :
 
 « Art. 44 bis. — Au titre de la régularisation de la situation des établissements classés existants soumis au régime d’autorisation d’exploitation, toute demande d’autorisation d’exploitation est précédée par l’approbation de l’audit environnemental et de l’étude de danger.
@@ -237,8 +264,10 @@ La décision d’approbation de l’audit environnemental de l’établissement 
 
 « Art. 44 bis 10. — Au titre de la régularisation de la situation d’un établissement classé existant soumis au régime de déclaration d’exploitation, l’exploitant doit déposer un dossier de déclaration d’exploitation conformément aux dispositions des articles 24 et 25 du décret exécutif n° 06- 198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 susvisé ».
 
+<!-- source_pdf: 22-167.pdf; source_page: 9; article: 11; page_mapping: automated -->
 **Art. 11.** — Les dispositions des articles 8, 43, 46, 47 et 48 du décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l’environnement, sont abrogées.
 
+<!-- source_pdf: 22-167.pdf; source_page: 9; article: 12; page_mapping: automated -->
 **Art. 12.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 18 Ramadhan 1443 correspondant au 19 avril 2022.

@@ -1,10 +1,27 @@
+---
+document_type: "legal-reference"
+source_pdf: "21-430.pdf"
+source_pdf_sha256: "e1f0d00d4cdc25ee9ef0eb2655ece4d505f3ef721f0eb135d03cd19ce093df27"
+source_pdf_pages: 28
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "automated-high-coverage-human-review-required"
+automated_pdf_word_coverage: 0.9987
+automated_source_mode: "native"
+article_page_markers_added: 3
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 # Décret exécutif n° 21-430 du 28 Rabie El Aouel 1443 correspondant au 4 novembre 2021 modifiant le décret n° 83-496 du 13 août 1983 relatif aux conditions d'utilisation et de distribution du gaz de pétrole liquéfié (GPL) comme carburant sur les véhicules automobiles
 
-**Date de signature :** 4 novembre 2021 (28 Rabie El Aouel 1443)  
-**Journal Officiel :** N° 85, 2 Rabie Ethani 1443 (7 novembre 2021) — pages 11  
-**Source PDF :** Fourni par l'utilisateur (`21-430.pdf`)  
-**Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
+**Date de signature :** 4 novembre 2021 (28 Rabie El Aouel 1443)
+**Journal Officiel :** N° 85, 2 Rabie Ethani 1443 (7 novembre 2021) — pages 11
+**Source PDF :** Fourni par l'utilisateur (`21-430.pdf`)
+**Date de conversion :** 2026-08-09
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -35,8 +52,10 @@ Vu le décret exécutif n° 21-239 du 19 Chaoual 1442 correspondant au 31 mai 20
 
 ## DÉCRÈTE
 
+<!-- source_pdf: 21-430.pdf; source_page: 5; article: 1; page_mapping: automated -->
 **Article 1er.** — Le présent décret a pour objet de modifier certaines dispositions du décret n° 83-496 du 13 août 1983 relatif aux conditions d'utilisation et de distribution du gaz de pétrole liquéfié (GPL) comme carburant sur les véhicules automobiles.
 
+<!-- source_pdf: 21-430.pdf; source_page: 5; article: 2; page_mapping: automated -->
 **Art. 2.** — Les dispositions des articles 4, 7 et 8 du décret n° 83-496 du 13 août 1983 susvisé, sont modifiées et rédigées comme suit :
 
 « **Art. 4.** — Le GPL-carburant peut être utilisé sur les véhicules automobiles, séparément ou mélangé avec un ou plusieurs carburants, y compris ceux à motorisation hybride ».
@@ -63,6 +82,7 @@ La mise en exploitation d'équipements permettant l'utilisation du GPL-carburant
 
 Le ministre chargé des mines peut déléguer les organismes compétents et agréés pour effectuer le contrôle et la supervision des épreuves réglementaires sur ces équipements et pour s'assurer de leur conformité. Ces organismes adressent les procès-verbaux de contrôle et supervision au service compétent du ministère chargé des mines ».
 
+<!-- source_pdf: 21-430.pdf; source_page: 5; article: 3; page_mapping: automated -->
 **Art. 3.** — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 28 Rabie El Aouel 1443 correspondant au 4 novembre 2021.

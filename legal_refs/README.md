@@ -1,3 +1,20 @@
+---
+document_type: "repository-document"
+source_pdf: null
+source_pdf_sha256: null
+source_pdf_pages: null
+source_repository_commit: "1cd6cb9db4c0dbf81e0329bd3116f9704f936df1"
+conversion_method: "repository-markdown-preserved; page markers added automatically"
+quality_status: "repository-document"
+automated_pdf_word_coverage: null
+automated_source_mode: null
+article_page_markers_added: 0
+authority: "source PDF or official Journal Officiel; this Markdown is derived"
+high_risk_rule: "verify exact quotations, numbers, units, dates, penalties, exceptions, tables, annexes, amendments, and OCR passages against the source PDF"
+---
+
+> **AI SAFETY NOTICE:** This is a derived Markdown reference. The source PDF or official Journal Officiel remains authoritative. Verify high-risk claims against the cited PDF page.
+
 <!-- ============================================================
      README mis à jour le 2026-08-09 — Audit grep corpus complet
      README mis à jour le 2026-08-09 (2) — D22-167 + D24-196 ajoutés, D06-198 row corrigée
@@ -30,15 +47,15 @@
 
 # legal_refs — Index des textes légaux de référence SafeInspect
 
-> **Dossier canonique unique.** Tous les textes légaux de référence pour SafeInspect se trouvent ici et uniquement ici.  
+> **Dossier canonique unique.** Tous les textes légaux de référence pour SafeInspect se trouvent ici et uniquement ici.
 > `docs/legal_sources/` **a été supprimé définitivement** (confirmé le 2026-08-09 — voir `CLEANUP_LOG.md`). Ce dossier n'existe plus et ne doit pas être recréé.
 
-Chaque fichier `.md` est une transcription verbatim du texte officiel publié au Journal Officiel de la République Algérienne (JORADP).  
+Chaque fichier `.md` est une transcription verbatim du texte officiel publié au Journal Officiel de la République Algérienne (JORADP).
 Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP original avant tout usage légal.
 
 ## Fichiers non-MD dans ce dossier
 
-> ℹ️ **`audit.js` appartient à ce dossier.** C'est le script d'audit natif qui analyse le contenu de `/legal_refs/` (vérification des headers, séquences d'articles, cohérence README). Il est intentionnellement colocalisé avec les fichiers qu'il audite. **Ne pas le déplacer, ne pas le signaler comme anomalie.**  
+> ℹ️ **`audit.js` appartient à ce dossier.** C'est le script d'audit natif qui analyse le contenu de `/legal_refs/` (vérification des headers, séquences d'articles, cohérence README). Il est intentionnellement colocalisé avec les fichiers qu'il audite. **Ne pas le déplacer, ne pas le signaler comme anomalie.**
 > De même, `CLEANUP_LOG.md` est un journal d'opérations internes, pas un texte légal.
 
 ---
