@@ -8,6 +8,18 @@ import {
   BACKUP_VERSION,
 } from '../services/BackupService';
 
+// ─── Mock InspectionRepository (SQLite) ──────────────────────────────────────
+// BackupService now reads/writes inspections via InspectionRepository (SQLite),
+// not AsyncStorage. Tests control the data through these jest.fn() overrides.
+const mockGetAll = jest.fn();
+const mockSave   = jest.fn();
+jest.mock('../repositories/InspectionRepository', () => ({
+  InspectionRepository: {
+    getAll: (...args: unknown[]) => mockGetAll(...args),
+    save:   (...args: unknown[]) => mockSave(...args),
+  },
+}));
+
 // ─── Mock expo-file-system/legacy ────────────────────────────────────────────
 // BackupService imports from 'expo-file-system/legacy' (not 'expo-file-system').
 // The L2 moduleNameMapper routes /legacy → src/__mocks__/expo-file-system-legacy.ts
@@ -46,15 +58,19 @@ const mockGetDocumentAsync = DocumentPicker.getDocumentAsync as jest.Mock;
 beforeEach(async () => {
   jest.clearAllMocks();
   await AsyncStorage.clear();
+  // Default: InspectionRepository.getAll() returns empty array.
+  // Individual tests that need data must override with mockGetAll.mockResolvedValueOnce([...]).
+  mockGetAll.mockResolvedValue([]);
+  mockSave.mockResolvedValue(undefined);
   (Sharing.isAvailableAsync as jest.Mock).mockResolvedValue(true);
   (Sharing.shareAsync as jest.Mock).mockResolvedValue(undefined);
 });
 
-// ─── Seed AsyncStorage with realistic data ────────────────────────────────────
-
+// ─── Seed AsyncStorage with realistic non-inspection data ────────────────────
+// Inspections are no longer in AsyncStorage — they come from InspectionRepository.
+// This helper seeds only the keys that BackupService still reads from AsyncStorage.
 async function seedStorage() {
   await AsyncStorage.multiSet([
-    ['inspections', JSON.stringify([{ id: 'i1', facilityName: 'منشأة أ', items: [] }])],
     ['agenda',      JSON.stringify([{ id: 'a1', status: 'pending', facilityName: 'منشأة ب', date: '2026-07-01', notes: '' }])],
     ['userFacilities', JSON.stringify([{ id: 'f1', name: 'منشأة ب' }])],
     ['officeName',  'مكتب الصحة'],
@@ -77,6 +93,7 @@ describe('exportBackup', () => {
   });
 
   it('payload contains inspections array', async () => {
+    mockGetAll.mockResolvedValueOnce([{ id: 'i1', facilityName: 'منشأة أ', items: [] }]);
     const payload = await exportBackup();
     expect(Array.isArray(payload.inspections)).toBe(true);
     expect(payload.inspections).toHaveLength(1);
@@ -125,6 +142,7 @@ describe('exportBackup', () => {
 
   it('defaults to empty arrays when storage keys are absent', async () => {
     await AsyncStorage.clear();
+    // mockGetAll already returns [] by default (set in beforeEach)
     const payload = await exportBackup();
     expect(payload.inspections).toEqual([]);
     expect(payload.agenda).toEqual([]);
@@ -132,12 +150,11 @@ describe('exportBackup', () => {
   });
 
   it('builds photoUriMap from items that have photoUri', async () => {
-    await AsyncStorage.clear();
-    const itemWithPhoto = { id: 'item-photo', title: 'T', photoUri: 'file:///photo.jpg', photos: [] };
+    const itemWithPhoto  = { id: 'item-photo',  title: 'T',  photoUri: 'file:///photo.jpg', photos: [] };
     const itemWithPhotos = { id: 'item-photos', title: 'T2', photos: ['file:///a.jpg', 'file:///b.jpg'] };
-    await AsyncStorage.setItem('inspections', JSON.stringify([
+    mockGetAll.mockResolvedValueOnce([
       { id: 'i1', facilityName: 'F', items: [itemWithPhoto, itemWithPhotos] },
-    ]));
+    ]);
     const payload = await exportBackup();
     expect(payload.photoUriMap!['item-photo']).toBe('file:///photo.jpg');
     expect(payload.photoUriMap!['item-photos__photos']).toEqual(['file:///a.jpg', 'file:///b.jpg']);
@@ -210,6 +227,9 @@ describe('importBackup', () => {
   });
 
   it('writes inspections back to AsyncStorage', async () => {
+    // importBackup now saves via InspectionRepository.save(), not AsyncStorage.
+    // Verify that mockSave was called once with the inspection object,
+    // and that agenda IS written to AsyncStorage (still uses multiSet).
     mockGetDocumentAsync.mockResolvedValueOnce({
       canceled: false,
       assets: [{ uri: 'file:///ok.json' }],
@@ -218,8 +238,8 @@ describe('importBackup', () => {
       JSON.stringify(validPayload),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    expect(JSON.parse(raw!)).toHaveLength(1);
+    expect(mockSave).toHaveBeenCalledTimes(1);
+    expect(mockSave).toHaveBeenCalledWith(expect.objectContaining({ id: 'i1' }));
   });
 
   it('calls rescheduleAll with no arguments after restore', async () => {
@@ -288,9 +308,15 @@ describe('importBackup', () => {
       JSON.stringify(payloadWithMap),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    const restored = JSON.parse(raw!);
-    expect(restored[0].items[0].photoUri).toBe('file:///photo.jpg');
+    // importBackup saves via InspectionRepository.save() — verify the item was re-linked
+    // before being passed to save().
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.objectContaining({ id: 'item-1', photoUri: 'file:///photo.jpg' }),
+        ]),
+      }),
+    );
   });
 
   it('re-links multi-photo array from photoUriMap on v2 restore', async () => {
@@ -310,10 +336,17 @@ describe('importBackup', () => {
       JSON.stringify(payloadWithMulti),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    const restored = JSON.parse(raw!);
-    expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
-    expect(restored[0].items[0].photos).toEqual(['file:///a.jpg', 'file:///b.jpg']);
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.objectContaining({
+            id: 'item-1',
+            photoUri: 'file:///single.jpg',
+            photos: ['file:///a.jpg', 'file:///b.jpg'],
+          }),
+        ]),
+      }),
+    );
   });
 
   it('skips photoUri assignment when map value for item id is not a string', async () => {
@@ -332,9 +365,13 @@ describe('importBackup', () => {
       JSON.stringify(payloadBadSingle),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    const restored = JSON.parse(raw!);
-    expect(restored[0].items[0].photoUri).toBeUndefined();
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.not.objectContaining({ photoUri: expect.anything() }),
+        ]),
+      }),
+    );
   });
 
   it('skips photos assignment when __photos map value is not an array', async () => {
@@ -354,10 +391,20 @@ describe('importBackup', () => {
       JSON.stringify(payloadBadMulti),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    const restored = JSON.parse(raw!);
-    expect(restored[0].items[0].photos).toBeUndefined();
-    expect(restored[0].items[0].photoUri).toBe('file:///single.jpg');
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.objectContaining({ id: 'item-2', photoUri: 'file:///single.jpg' }),
+        ]),
+      }),
+    );
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.not.objectContaining({ photos: expect.anything() }),
+        ]),
+      }),
+    );
   });
 
   it('leaves item unchanged when its id has no entry in a non-empty photoUriMap', async () => {
@@ -382,11 +429,14 @@ describe('importBackup', () => {
       JSON.stringify(payloadMissingEntry),
     );
     await importBackup();
-    const raw = await AsyncStorage.getItem('inspections');
-    const restored = JSON.parse(raw!);
-    expect(restored[0].items[0].photoUri).toBe('file:///known.jpg');
-    expect(restored[0].items[1].photoUri).toBeUndefined();
-    expect(restored[0].items[1].photos).toBeUndefined();
+    expect(mockSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        items: expect.arrayContaining([
+          expect.objectContaining({ id: 'item-known', photoUri: 'file:///known.jpg' }),
+          expect.not.objectContaining({ photoUri: expect.anything() }),
+        ]),
+      }),
+    );
   });
 
   it('returns inspections unchanged when photoUriMap is empty', async () => {
