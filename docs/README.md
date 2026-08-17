@@ -7,6 +7,18 @@
 
 ## Live Observations Log
 
+### 2026-08-17 22:10 WAT — Perplexity — W82 CLOSED — Finding 3 PPE/machine-guard legal refs fully verified
+- **Phases closed**: W82 (Finding 3 — Loi 90-11 / Décret 93-120 misuse in PPE + machine-guard criteria)
+- **Audit result**: All 6 criteria files inspected by direct live read:
+  - `blacksmithCriteria.ts` BSM-04-01 + BSM-04-03: patched commit `8433bea` (+13/-2)
+  - `paintingCriteria.ts` PNT-04-01: patched previous session
+  - `uabCriteria.ts` UAB-AX7-07: confirmed clean (Phase B/Z2 — [INTL] flag already present)
+  - `carpenteryCriteria.ts` CRP-04-01 + CRP-04-02: confirmed clean (W82 comment already applied)
+  - `marbleCriteria.ts` MRB-05-01: confirmed clean (W82 comment already applied)
+  - `printingCriteria.ts` PRT-05-01: confirmed clean (W82 comment already applied)
+- **Finding 3**: FULLY CLOSED — 0 incorrect Loi 90-11 / Décret 93-120 PPE/machine-guard citations remain
+- **Next Phase**: W83
+
 ### 2026-08-17 20:48 WAT — Perplexity — W80+W81 CLOSED — legal_refs false flags corrected
 - **Phases closed**: W80 (3 false MISSING/UNVERIFIE flags), W81 (Décret 76-36 MISSING → Present)
 - **W80 findings**: Décret 06-138 was ❌ MISSING in docs but ✅ present (Art.1–19 + Annexes I/II, VÉRIFIÉ 2026-08-11). loi-09-03 VÉRIFIÉ status confirmed. decret-83-496 Art.4/7/8 amendment notices already inline — phantom backlog items removed.
@@ -92,9 +104,10 @@ SafeInspect-APP/
 | **W75–79** | Legal citation sweeps | ✅ ALL CLOSED |
 | **W80** | 3 false legal_refs flags corrected | ✅ CLOSED 20:15 WAT |
 | **W81** | Décret 76-36 MISSING → Present | ✅ CLOSED 20:48 WAT |
+| **W82** | Finding 3 — PPE/machine-guard legal refs audit | ✅ CLOSED 22:10 WAT |
 | **W51** | AIM GPL2 JORADP watch | 🟠 ONGOING SURVEILLANCE |
 
-**P1 + P2 sprint fully exhausted. Legal Quick-Reference: 0 ❌ MISSING entries.**
+**P1 + P2 sprint fully exhausted. Finding 3 CLOSED. Legal Quick-Reference: 0 ❌ MISSING entries.**
 
 ---
 

@@ -99,6 +99,7 @@
 | **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean. No code change. |
 | **W80** | 3 false flags corrected (06-138 MISSING, 09-03 UNVERIFIÉ, 83-496 Art.4/7/8 PHANTOM) | 2026-08-17 | Confirmed by direct source read this session. No code change. |
 | **W81** | Décret 76-36 ❌ MISSING → ✅ Present (rectificatif J.O. n°67/1976) | 2026-08-17 | `decret-76-36-incendie-panique.md` confirmed present (SHA 2b71182). Rectificatif corrections Art.20/24/27. Texte intégral J.O. n°21/1976 non numérisé. |
+| **W82** | Finding 3 — PPE/machine-guard legal refs full audit (6 criteria files) | 2026-08-17 | blacksmith BSM-04-01/03 patched (commit `8433bea`). painting PNT-04-01 patched prev session. uab/carpentry/marble/printing confirmed clean by direct live read. 0 incorrect Loi 90-11/Décret 93-120 PPE citations remain. |
 
 ---
 
@@ -124,11 +125,11 @@
 | MCH-29-05 (heavy-metal params) | Décret 06-141 Annexe II §3 — product decision needed. |
 | MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting. |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited. |
-| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé — sourcer si critères ERP s’appuient sur articles spécifiques. |
+| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé — sourcer si critères ERP s'appuient sur articles spécifiques. |
 
 ---
 
-## Next Phase Identifier: **W82**
+## Next Phase Identifier: **W83**
 
 ---
 
