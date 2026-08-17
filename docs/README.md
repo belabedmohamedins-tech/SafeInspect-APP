@@ -7,6 +7,16 @@
 
 ## Live Observations Log
 
+### 2026-08-17 19:14 WAT — Perplexity — W78 CLOSED — MCH-29-06 PPE legal ref corrected
+- **Phases closed**: W78 (F10 MCH-29-06 PPE wrong article)
+- **Root cause confirmed by direct read**: Décret 91-05 Art.6 = ventilation/aération ("l'aération doit avoir lieu soit par ventilation mécanique..."). Loi 88-07 Art.6 = PPE obligatoires ("le travailleur doit bénéficier des vêtements spéciaux, équipements et dispositifs individuels de protection"). CITE-BEFORE-COMMIT rule applied — both articles cited from live tool output before commit.
+- **Loi 88-07 status**: ✅ Already present in legal_refs/ (38 165 octets) — STRATEGIC_PLAN Legal Quick-Reference was WRONG (showed MISSING). Corrected.
+- **Code change**: `src/criteria/mechanicCriteria.ts` MCH-29-06 legalReference: removed `القانون 90-11 المادة 8` (Loi 90-11 = relations de travail, hors sujet PPE) + `المرسوم 91-05 المادة 6` (ventilation). Added `القانون 88-07 المادة 6` (PPE) + `المرسوم 91-05 المادة 62 بند 2` (vérifications périodiques moyens protection individuelle).
+- **Diff**: +1 / -1 confirmed by get_commit stats — no content loss
+- **Commit**: [cee92fbfb4fe342a5a51d2253785e49483672a03](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/cee92fbfb4fe342a5a51d2253785e49483672a03)
+- **TSC/Jest**: No logic change — pure string fix in legalReference. TSC/Jest gate not required.
+- **Next P1**: W73 (agenda facility mismatch) or W72 gate confirmation
+
 ### 2026-08-17 18:58 WAT — Perplexity — W76 CLOSED — Loi 01-19 Art.29–36 sweep complete
 - **Phases closed**: W76 (F4 Loi 01-19 offset pattern re-sweep)
 - **Files read (direct source read)**: `src/criteria/mechanicCriteria.ts`, `src/criteria/carWashCriteria.ts`, `src/criteria/paintShopCriteria.ts`, `src/criteria/baseGeneralCriteria.ts`
@@ -148,9 +158,9 @@ SafeInspect-APP/
 | P1 Phase | Title | Status |
 |---|---|---|
 | W72 | Dead settings toggles + notification centre | 🟡 PUSHED — awaiting TSC+Jest gate |
-| **W75** | F9: EIE criterion wrong range — sweep + systemic fix | ✅ CLOSED — all 13 files swept, all Art.14–21 confirmed |
-| **W76** | F4 re-sweep: Loi 01-19 offset pattern | ✅ CLOSED — MCH-29-09 Art.29 confirmed correct; no active miscitation found |
-| **W78** | F10: MCH-29-06 PPE wrong article (needs Loi 88-07) | 🟠 OPEN — blocked on Loi 88-07 source |
+| **W75** | F9: EIE criterion wrong range — sweep + systemic fix | ✅ CLOSED |
+| **W76** | F4 re-sweep: Loi 01-19 offset pattern | ✅ CLOSED |
+| **W78** | F10: MCH-29-06 PPE wrong article | ✅ CLOSED — commit cee92fb |
 | W73 | Agenda facility mismatch | 🟠 OPEN — P2 |
 | W74 | Minor server hardening | 🟠 OPEN — P2 |
 

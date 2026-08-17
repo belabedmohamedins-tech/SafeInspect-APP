@@ -123,8 +123,9 @@
 | **W72** | Dead settings toggles + unreachable notification centre | 2026-08-17 | Commits pushed `9b42f67`. Pending user TSC+Jest gate confirmation. |
 | **W79** | F3 remaining — BGN-08-03 Décret 76-35 → Décret 91-05 Art.17 + Loi 90-11 | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. Fix already present as W49. |
 | **W77** | F7 — Décret 06-141 Annexe II §1a wastewater fix (abattoir + slaughterhouse) | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D all use Annexe II §1a g/t values + pH 5.5–8.5. |
-| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | 2026-08-17 | ✅ CLOSED — 13/13 files swept. All EIE criteria use Art.14–21. No residual Art.15–22 instance found. Confirmed by direct read of all criteria files. No code change needed. |
-| **W76** | F4 reopened — Loi 01-19 Art.29–36 offset pattern re-sweep | 2026-08-17 | ✅ CLOSED — MCH-29-09 Art.29 confirmed correct (حرق النفايات في الهواء الطلق — exact subject match). `carWashCriteria.ts`, `paintShopCriteria.ts`, `baseGeneralCriteria.ts` contain no active Art.29–36 miscitation. No code change needed. Confirmed by direct read of 4 criteria files. |
+| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | 2026-08-17 | ✅ CLOSED — 13/13 files swept. All EIE criteria use Art.14–21. No residual Art.15–22 instance found. |
+| **W76** | F4 reopened — Loi 01-19 Art.29–36 offset pattern re-sweep | 2026-08-17 | ✅ CLOSED — MCH-29-09 Art.29 confirmed correct. No active miscitation found. |
+| **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 (ventilation) → Loi 88-07 Art.6 (PPE) + D91-05 Art.62§2 | 2026-08-17 | ✅ CLOSED — commit `cee92fb`. +1/-1 diff confirmed. Loi 88-07 confirmed present in legal_refs/ (38 165 B). |
 
 ---
 
@@ -135,7 +136,6 @@
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
 | **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | W72 gate | One-line form bug in agenda creation; wrong facilityId can be submitted. |
 | **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | W72 gate | Grouped minor server-side hardening items from SPEC 12. |
-| **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 → Loi 88-07 Art.6 | Session 11 audit | P1 | — | Confirmed wrong: Décret 91-05 Art.6 is ventilation, not PPE. Real source: Loi 88-07 Art.6 (parent law, cross-referenced by Décret 91-05 Art.25). Loi 88-07 not yet in legal_refs/ — must be sourced first. |
 
 ---
 
@@ -178,7 +178,7 @@
 | Loi 18-11 | Santé | ✅ Present — split 3 parties (W60) |
 | Loi 90-11 | Travail | ✅ Present |
 | Loi 05-12 | Eau | ✅ Present |
-| Loi 88-07 | Hygiène/sécurité travail (loi-mère) | ❌ MISSING — needed for W78 (F10 PPE fix) |
+| Loi 88-07 | Hygiène/sécurité travail (loi-mère) | ✅ Present — 38 165 B (confirmed W78) |
 | Décret 91-05 | Hygiène/sécurité travail | ✅ Present |
 | Décret 93-120 | Médecine du travail | ✅ Present |
 | Décret 06-198 | Établissements classés | ✅ Present |
@@ -201,15 +201,17 @@
 
 ## Execution Order (Current Sprint)
 
-### P1 — in order
-1. **W72** — Dead settings toggles + notification centre (pending user TSC+Jest gate)
-2. ~~**W75**~~ — ✅ CLOSED 2026-08-17
-3. ~~**W76**~~ — ✅ CLOSED 2026-08-17
-4. **W78** — F10 PPE fix: needs Loi 88-07 sourced first — **NEXT**
+### P1 — all done
+- ~~W75~~ ✅ CLOSED 2026-08-17
+- ~~W76~~ ✅ CLOSED 2026-08-17
+- ~~W77~~ ✅ CLOSED 2026-08-17
+- ~~W78~~ ✅ CLOSED 2026-08-17
+- ~~W79~~ ✅ CLOSED 2026-08-17
+- **W72** — pending user TSC+Jest gate confirmation
 
-### P2 — after P1s
-5. **W73** — Agenda facility mismatch
-6. **W74** — Minor server hardening
+### P2 — after W72 gate
+- **W73** — Agenda facility mismatch
+- **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch
