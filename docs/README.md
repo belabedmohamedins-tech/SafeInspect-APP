@@ -7,6 +7,12 @@
 
 ## Live Observations Log
 
+### 2026-08-17 01:41 WAT — Perplexity — W67+W68 CLOSED — confirmed clean by direct code read
+- **Phases closed**: W67 (PhotoService — photos copied to documentDirectory/photos/ permanent storage; BackupService photoUriMap confirmed in payload; binary files not embedded = intentional documented decision), W68 (PIN lockout — isLockedOut() + getFailedAttempts() read from SQLite on every mount; keypad fully disabled after MAX; biometric blocked if locked; no bypass vector found)
+- **Files read**: `src/services/PhotoService.ts`, `app/pin-lock.tsx`
+- **Action taken**: None — both phases were false alarms from stale doc claims. Code already correct.
+- **Next**: W69 — CAP evidence + lifecycle
+
 ### 2026-08-17 01:36 WAT — Perplexity — W64+W65+W66 CLOSED — confirmed clean by direct code read
 - **Phases closed**: W64 (SyncPayload severity/status — payload is full SavedInspection, enums present in Zod schema + mapStatus()), W65 (BackupService — export v2 + photoUriMap + import with v1 compat confirmed complete), W66 (IntegrityService — SHA-256 + canonical sort + hashAndStore + verifyInspection confirmed complete)
 - **Files read**: `src/services/SyncService.ts`, `server/src/routes/sync.ts`, `src/services/BackupService.ts`, `src/services/IntegrityService.ts`
@@ -101,9 +107,9 @@ SafeInspect-APP/
 | W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W65 | Backup/restore storage layer | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
 | W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
-| **W67** | Photo evidence backup+sync | 🟠 OPEN — next |
-| W68 | PIN lockout bypassable | 🟠 OPEN |
-| W69 | CAP evidence + lifecycle | 🟠 OPEN |
+| W67 | Photo evidence backup+sync | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| W68 | PIN lockout bypassable | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| **W69** | CAP evidence + lifecycle | 🟠 OPEN — next |
 
 ---
 
