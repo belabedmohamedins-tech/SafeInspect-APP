@@ -34,7 +34,6 @@ export const paintShopCriteria: InspectionItem[] = [
   },
   {
     // Phase 7.1 + Phase 11b + Phase A fix: VOC max corrected to 150 mg/Nm³ (Décret 06-138 Annex I general limit).
-    // Previous incorrect value was 20 mg/Nm³. warningMax set to 130 mg/Nm³.
     id: 'PNT-02-03',
     axis: 'التهوية ومنع التلوث الهوائي',
     category: 'بيئية',
@@ -113,11 +112,15 @@ export const paintShopCriteria: InspectionItem[] = [
     complianceStatus: 'not-evaluated',
   },
   {
+    // W82: FIXED — replaced wrong Loi 90-11 Art.8 + Décret 91-05 Art.6 (general provisions,
+    // unrelated to specific PPE obligation) with correct Décret 91-05 Arts.16-17.
+    // Décret 91-05 Art.16: PPE must be provided when collective protection is impossible.
+    // Décret 91-05 Art.17: special PPE for workers exposed to chemical/solvent hazards.
     id: 'PNT-04-01',
     axis: 'السلامة المهنية',
     category: 'سلامة',
     criteria: 'توفر وسائل وقاية شخصية ملائمة: كمامات، نظارات وقاية، قفازات مقاومة للمذيبات لعمال الدهان.',
-    legalReference: 'القانون 90-11 المادة 8 (التزام صاحب العمل بتوفير وسائل الوقاية الشخصية الملائمة) + المرسوم التنفيذي 91-05 المادة 6 (الحد الأدنى من معدات الوقاية الشخصية في الأنشطة ذات المخاطر الكيميائية).',
+    legalReference: 'المرسوم 91-05 المواد 16-17 (توفير وسائل الوقاية الشخصية عند استحالة الحماية الجماعية وتجهيز العمال المعرّضين للمذيبات الكيميائية).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
