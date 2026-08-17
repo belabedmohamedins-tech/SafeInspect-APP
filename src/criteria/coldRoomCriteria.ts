@@ -88,14 +88,14 @@ export const coldRoomSpecificCriteria: InspectionItem[] = [
   },
   {
     // Phase 10.2: EIA trigger criterion — modelled on UPD-AX10-01
-    // W42-parity (2026-08-16): Loi 03-10 EIE range corrected 15–22 → 14–21.
-    // Art.14 = root EIE obligation article (missed by old range).
-    // Art.22 = fiscal instruments — completely unrelated to EIE.
+    // W60 FIX: Loi 03-10 EIE range corrected 14–21 → 15–21.
+    // Art.15 = root EIE obligation (Art.14 = definitions, not the operative obligation).
+    // Art.22 = fiscal instruments — unrelated to EIE.
     id: 'CLD-19-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (مبردات، ضجيج، مواد كيميائية للتبريد)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في طاقة التخزين أو نوع المبردات.',
-    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196.',
+    legalReference: 'القانون 03-10 المواد 15–21 (المادة 15: الالتزام الجذري بدراسة EIE؛ المادة 16: محتوى الدراسة؛ المواد 17–20: إجراءات التحقيق العام؛ المادة 21: شرط مسبق للحصول على رخصة البناء أو الاستغلال). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
