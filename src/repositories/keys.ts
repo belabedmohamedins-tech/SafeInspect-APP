@@ -33,6 +33,13 @@ export const StorageKeys = {
   OFFICE_NAME:             'OFFICE_NAME',
   INSPECTOR_NAME:          'INSPECTOR_NAME',
   INSPECTION_CAUSE:        'INSPECTION_CAUSE',
+  // UI preference keys (written by settings.tsx, read by SyncService / NotificationService)
+  /** autoSync toggle — stored as 'true'/'false' string */
+  AUTO_SYNC:               'autoSync',
+  /** darkMode toggle — stored as 'true'/'false' string */
+  DARK_MODE:               'darkMode',
+  /** push-notifications UI toggle — stored as 'true'/'false' string */
+  NOTIFICATIONS_UI:        'notifications',
   // Phase-1 additions
   // NOTE: @ prefix replaced with _ prefix — SecureStore only allows alphanumeric, ".", "-", "_"
   SCHEMA_VERSION:          '_schema_version',

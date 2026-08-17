@@ -8,6 +8,7 @@ import { Href, useRouter } from 'expo-router';
 import { useTranslation } from '../../src/i18n';
 import { SettingsRepository } from '../../src/repositories/SettingsRepository';
 import { AuthRepository } from '../../src/repositories/AuthRepository';
+import { StorageKeys } from '../../src/repositories/keys';
 
 export default function SettingsScreen() {
   const router = useRouter();
@@ -24,9 +25,9 @@ export default function SettingsScreen() {
     const all = await SettingsRepository.getAll();
     const pin = await AuthRepository.getPin();
     setPinEnabled(!!pin);
-    setNotifEnabled(all['notifications'] !== 'false');
-    setAutoSyncEnabled(all['autoSync'] !== 'false');
-    setDarkMode(all['darkMode'] === 'true');
+    setNotifEnabled(all[StorageKeys.NOTIFICATIONS_UI] !== 'false');
+    setAutoSyncEnabled(all[StorageKeys.AUTO_SYNC] !== 'false');
+    setDarkMode(all[StorageKeys.DARK_MODE] === 'true');
     setLoading(false);
   }, []);
 
@@ -56,17 +57,17 @@ export default function SettingsScreen() {
 
   const handleNotifToggle = async (value: boolean) => {
     setNotifEnabled(value);
-    await SettingsRepository.set('notifications', value ? 'true' : 'false');
+    await SettingsRepository.set(StorageKeys.NOTIFICATIONS_UI, value ? 'true' : 'false');
   };
 
   const handleAutoSyncToggle = async (value: boolean) => {
     setAutoSyncEnabled(value);
-    await SettingsRepository.set('autoSync', value ? 'true' : 'false');
+    await SettingsRepository.set(StorageKeys.AUTO_SYNC, value ? 'true' : 'false');
   };
 
   const handleDarkModeToggle = async (value: boolean) => {
     setDarkMode(value);
-    await SettingsRepository.set('darkMode', value ? 'true' : 'false');
+    await SettingsRepository.set(StorageKeys.DARK_MODE, value ? 'true' : 'false');
   };
 
   const handleLanguageChange = async (lang: 'ar' | 'fr') => {

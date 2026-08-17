@@ -30,9 +30,13 @@
 //         only the sync-queue entry is dropped.
 //
 // W72 — autoSync toggle:
-//   flush() now reads SettingsRepository('autoSync'). If the user has
-//   disabled auto-sync in Settings the scheduled flush() is a no-op.
+//   flush() now reads SettingsRepository(StorageKeys.AUTO_SYNC). If the user
+//   has disabled auto-sync in Settings the scheduled flush() is a no-op.
 //   Manual calls from Backup screen are unaffected (pass force=true).
+//
+// W84 — key symmetry fix:
+//   Raw string 'autoSync' replaced with StorageKeys.AUTO_SYNC to ensure
+//   writer (settings.tsx) and reader (flush()) use the identical key.
 //
 // ⚠️  ENV ACCESS — do NOT change `process.env[KEY]` back to `process.env.KEY`:
 //   babel-preset-expo ships babel-plugin-transform-inline-environment-variables
@@ -154,11 +158,12 @@ export async function enqueue(inspection: SavedInspection): Promise<void> {
  *               omit (defaults false) for scheduled background flushes.
  */
 export async function flush(force = false): Promise<number> {
-  // W72: respect the autoSync toggle for scheduled (non-forced) runs.
+  // W72/W84: respect the autoSync toggle for scheduled (non-forced) runs.
+  // Uses StorageKeys.AUTO_SYNC to match the key written by settings.tsx.
   if (!force) {
     try {
       const all = await getSettingsRepository().getAll();
-      if (all['autoSync'] === 'false') return 0;
+      if (all[StorageKeys.AUTO_SYNC] === 'false') return 0;
     } catch { /* if settings unreadable, proceed */ }
   }
 
