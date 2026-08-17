@@ -7,6 +7,13 @@
 
 ## Live Observations Log
 
+### 2026-08-17 18:41 WAT — Perplexity — W75 CLOSED — EIE sweep 13/13 files confirmed clean
+- **Phases closed**: W75 (F9 EIE criterion wrong article range — full sweep of all 13 remaining files)
+- **Files read**: `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`, `uabCriteria.ts`, `updCriteria.ts`, `semiPharmaCriteria.ts`, `baseCompressedGasCriteria.ts`, `abattoirCriteria.ts` (+ blacksmith/carpentry/carWash/marble/mechanic swept in prior session)
+- **Finding**: All EIE criteria already use Art. 14–21 (UPD-AX10-01, SPH-06-01 — both corrected W42). No residual Art.15–22 instance found anywhere. `abattoirCriteria.ts` has no standalone EIE criterion. `uabCriteria.ts` UAB-AX1-03 mentions EIE concept but cites Loi 03-10 générale (no range) — acceptable.
+- **No code change needed — confirmed clean by direct read**
+- **Next**: W76 (F4 Loi 01-19 offset pattern re-sweep)
+
 ### 2026-08-17 18:08 WAT — Perplexity — W79+W77 CLOSED — confirmed clean by direct code read
 - **Phases closed**: W79 (BGN-08-03 bare-wire — fix W49 already present: Décret 91-05 Art.17 + Loi 90-11), W77 (abattoir/slaughterhouse wastewater — F7-fix already present: Annexe II §1a g/t in ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D, pH 5.5–8.5)
 - **Files read**: `src/criteria/baseGeneralCriteria.ts`, `src/criteria/abattoirCriteria.ts`, `src/criteria/slaughterhouseSmallCriteria.ts`
@@ -134,8 +141,8 @@ SafeInspect-APP/
 | P1 Phase | Title | Status |
 |---|---|---|
 | W72 | Dead settings toggles + notification centre | 🟡 PUSHED — awaiting TSC+Jest gate |
-| **W75** | F9: EIE criterion wrong range — sweep + systemic fix (13 files remaining) | 🟠 OPEN — next |
-| **W76** | F4 re-sweep: Loi 01-19 offset pattern | 🟠 OPEN |
+| **W75** | F9: EIE criterion wrong range — sweep + systemic fix | ✅ CLOSED — all 13 files swept, all Art.14–21 confirmed |
+| **W76** | F4 re-sweep: Loi 01-19 offset pattern | 🟠 OPEN — next |
 | **W78** | F10: MCH-29-06 PPE wrong article (needs Loi 88-07) | 🟠 OPEN — blocked on Loi 88-07 source |
 | W73 | Agenda facility mismatch | 🟠 OPEN — P2 |
 | W74 | Minor server hardening | 🟠 OPEN — P2 |

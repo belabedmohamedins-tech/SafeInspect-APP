@@ -121,8 +121,9 @@
 | **W70** | PDF report gaps | 2026-08-17 | Confirmed clean by direct read. |
 | **W71** | Planning + prioritization UI — nonCompliantFacilities denominator fix + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91`. TSC 0 + Jest all green — user-confirmed 13:08 WAT. |
 | **W72** | Dead settings toggles + unreachable notification centre | 2026-08-17 | Commits pushed `9b42f67`. Pending user TSC+Jest gate confirmation. |
-| **W79** | F3 remaining — BGN-08-03 Décret 76-35 → Décret 91-05 Art.17 + Loi 90-11 | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. Fix already present as W49 (baseGeneralCriteria.ts, header comment line W49, legalRef = Art.17 + Loi 90-11). No code change needed. |
-| **W77** | F7 — Décret 06-141 Annexe II §1a wastewater fix (abattoir + slaughterhouse) | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. Fix already present (F7-fix 2026-08-17 header comments in both files). ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D all use Annexe II §1a g/t values + pH 5.5–8.5. No code change needed. |
+| **W79** | F3 remaining — BGN-08-03 Décret 76-35 → Décret 91-05 Art.17 + Loi 90-11 | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. Fix already present as W49. |
+| **W77** | F7 — Décret 06-141 Annexe II §1a wastewater fix (abattoir + slaughterhouse) | 2026-08-17 | ✅ CLOSED — confirmed clean by direct read. ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D all use Annexe II §1a g/t values + pH 5.5–8.5. |
+| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | 2026-08-17 | ✅ CLOSED — 13/13 files swept. All EIE criteria use Art.14–21. No residual Art.15–22 instance found. Confirmed by direct read of all criteria files. No code change needed. |
 
 ---
 
@@ -133,7 +134,6 @@
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
 | **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | W72 gate | One-line form bug in agenda creation; wrong facilityId can be submitted. |
 | **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | W72 gate | Grouped minor server-side hardening items from SPEC 12. |
-| **W75** | F9 — EIE criterion wrong article range: full sweep + systemic fix | Session 11 audit | P1 | — | 5 confirmed instances (GPL-05-01, CLD-19-01, BAK-10-13, COU-AX10-01, SLH-08-01). 13 files not yet swept (blacksmith, carpentry, printing, produceStorage, semiPharma, uab, upd, baseCompressedGas, carWash, paintShop, abattoir — marble+mechanic confirmed clean). Correct range: Art. 14–21 (Loi 03-10). Fix = find-replace once sweep complete. |
 | **W76** | F4 reopened — Loi 01-19 offset pattern re-sweep | Session 11 audit | P1 | — | 5th instance found: MCH-29-09 cites Art.29 (wrong — no such burn-ban article in Loi 01-19). carWash + paintShop cleared prematurely in Session 9 — re-sweep required. All unaudited files must be swept for Loi 01-19 citations in Art.29–36 range. |
 | **W78** | F10 — MCH-29-06 PPE wrong article: Décret 91-05 Art.6 → Loi 88-07 Art.6 | Session 11 audit | P1 | — | Confirmed wrong: Décret 91-05 Art.6 is ventilation, not PPE. Real source: Loi 88-07 Art.6 (parent law, cross-referenced by Décret 91-05 Art.25). Loi 88-07 not yet in legal_refs/ — must be sourced first. |
 
@@ -203,8 +203,8 @@
 
 ### P1 — in order
 1. **W72** — Dead settings toggles + notification centre (pending user TSC+Jest gate)
-2. **W75** — F9 sweep + fix: EIE wrong range across all unswept files (systemic, high-leverage)
-3. **W76** — F4 re-sweep: Loi 01-19 offset pattern (5 confirmed + unknown remaining)
+2. ~~**W75**~~ — ✅ CLOSED 2026-08-17
+3. **W76** — F4 re-sweep: Loi 01-19 offset pattern (5 confirmed + unknown remaining) — **NEXT**
 4. **W78** — F10 PPE fix: needs Loi 88-07 sourced first
 
 ### P2 — after P1s
