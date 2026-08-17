@@ -38,11 +38,18 @@
 //              Décret 09-19 Arts.4-8 (too broad) → Art.2 (approval scope/definition)
 //              + Art.6 (conditions for granting approval to collector/transporter).
 //   BGN-04-07: Loi 01-19 Art.30 (import/export of hazardous waste — wrong domain)
-//              → [À VÉRIFIER — open W40]: Art.30 covers transboundary movement, not
-//              unlicensed incineration. Best available basis: Loi 01-19 Art.11
-//              (disposal conditions: no emission, no danger to health/environment)
-//              + Décret 07-205 (approved incinerator requirements). Open a LEGAL-VERIFY
-//              phase to locate the explicit prohibition article.
+//              → LEGAL-VERIFY opened 2026-08-09, CLOSED 2026-08-17 after full read
+//              of all 72 articles of Loi 01-19 (no gap confirmed).
+//              FINDING: "incinération" does not appear anywhere in Loi 01-19.
+//              Best available legal basis confirmed: Art.15 (special waste treated ONLY
+//              in authorized installations) + Art.19 (prohibition to hand DSD to any
+//              non-authorized operator — covers unlicensed on-site incineration) +
+//              Art.63 (criminal penalty: 8 months–3 years + 500k–900k DA for operating
+//              a waste treatment installation without compliance) + Décret 07-205
+//              (technical requirements for authorized hazardous-waste incinerators).
+//              [حكم مهني — W40 مغلق]: no explicit "self-incineration ban" article exists
+//              in Loi 01-19; the combination of Art.15+19+63 is the strongest available
+//              legal foundation after exhaustive reading.
 // W41 (2026-08-10): 2 wrong article citations corrected after direct read of
 //   legal_refs/loi-03-10-protection-environnement.md (all 89 articles confirmed).
 //   BGN-10-01: Loi 03-10 "Art.15–22" → "Art.14–21".
@@ -80,6 +87,10 @@
 //   to immeubles de grande hauteur, not general workplace electrical safety.
 //   Replaced with Décret exécutif 91-05 Art.17 (safe electrical installations in workplaces)
 //   + Loi 90-11 as general occupational safety basis.
+// W40-CLOSE (2026-08-17): BGN-04-07 legalReference finalized after LEGAL-VERIFY.
+//   Full read of Loi 01-19 (72 articles, no gap) confirmed: word "incinération" absent.
+//   Previous placeholder (Art.11 + Décret 07-205 + [À VÉRIFIER open]) replaced with
+//   Art.15 + Art.19 + Art.63 + Décret 07-205 — strongest available basis confirmed.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -341,8 +352,16 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'النظافة العامة وتسيير النفايات',
     category: 'بيئية',
     criteria: 'حظر الحرق الذاتي للنفايات الخطرة أو الطبية داخل المنشأة (محارق غير مرخصة)؛ وتُحوَّل هذه النفايات حصراً إلى مرافق الإحراق المعتمدة.',
-    // W40 (2026-08-09): CORRECTED. [À VÉRIFIER — open W40].
-    legalReference: 'القانون 01-19 المادة 11 (شروط التخلص من النفايات: دون إحداث انبعاثات أو تعريض الصحة والبيئة والجوار للخطر — يُشكِّل الأساس القانوني المتاح لحظر الحرق غير المرخص) + المرسوم التنفيذي 07-205 (الاشتراطات التقنية لمحارق النفايات الخطرة المعتمدة). [À VÉRIFIER — W40 مفتوح]: لم يُعثر حتى الآن على مادة صريحة تحظر الحرق الذاتي للنفايات الخطرة داخل المنشأة في القانون 01-19 (المادة 30 تتعلق بالحركة العابرة للحدود — موضوع مختلف). يُفتح فصل LEGAL-VERIFY لتحديد المرجع الصريح قبل إغلاق W40.',
+    // W40-CLOSE (2026-08-17): LEGAL-VERIFY completed — full read of Loi 01-19 (72 arts, no gap).
+    // "Incinération" does not appear anywhere in Loi 01-19.
+    // Art.15: special waste must be treated ONLY in installations authorized by the minister.
+    // Art.19: prohibition to hand DSD to any person operating a non-authorized installation
+    //         — this is the closest explicit prohibition covering unlicensed on-site incineration.
+    // Art.63: criminal penalty for operating any waste treatment installation without compliance.
+    // [حكم مهني — W40 مغلق]: no article explicitly names "self-incineration" as prohibited;
+    // Art.15 + Art.19 + Art.63 combination is the strongest available legal foundation confirmed
+    // after exhaustive reading of all 72 articles.
+    legalReference: 'القانون 01-19 المادة 15 (وجوب معالجة النفايات الخاصة في منشآت مرخصة حصراً من طرف الوزير المكلف بالبيئة — الأساس الصريح لحظر أي معالجة حرارية غير مرخصة) + المادة 19 (حظر تسليم النفايات الخاصة الخطرة لأي شخص يستغل منشأة غير مرخصة للمعالجة — يُغطي المحارق الداخلية غير المعتمدة) + المادة 63 (العقوبة الجزائية: حبس من 8 أشهر إلى 3 سنوات وغرامة من 500.000 إلى 900.000 دج لكل من يستغل منشأة معالجة النفايات دون مطابقة أحكام القانون) + المرسوم التنفيذي 07-205 (الاشتراطات التقنية لمحارق النفايات الخطرة المعتمدة — يُحدد ما يجب توفره للحصول على الترخيص). [حكم مهني — W40 مغلق]: لا توجد مادة صريحة في القانون 01-19 تحظر الحرق الذاتي بهذه الصياغة تحديداً (النص كاملاً مقروء — 72 مادة بلا ثغرة)؛ المواد المذكورة هي أفضل وأقوى أساس قانوني متاح بعد البحث الاستيعابي.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -393,12 +412,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'مكافحة النواقل',
     category: 'نظافة',
     criteria: 'سدّ الشقوق والفراغات في الجدران وحول الأنابيب ونقاط عبور الأسلاك لمنع دخول الآفات.',
-    // W46 (2026-08-10): CORRECTED — Art.14 (general sanitary layout — too broad, same
-    // W39 error pattern) → Art.2 + Art.3 + [حكم مهني].
-    // Art.2: employer's general obligation to maintain premises clean and intact.
-    // Art.3: surface material requirements including impermeability and absence of cracks.
-    // No article in Décret 91-05 or any Algerian decree explicitly mandates sealing
-    // wall cracks specifically for pest ingress prevention.
+    // W46 (2026-08-10): CORRECTED — Art.14 → Art.2 + Art.3 + [حكم مهني].
     legalReference: 'المرسوم التنفيذي 91-05 المادة 2 (إلزامية صاحب العمل في المحافظة على نظافة أماكن العمل وسلامة بنيتها) + المادة 3 (اشتراطات مواد السطوح: غير منفذة وخالية من الشقوق — أقرب أساس قانوني متاح). [حكم مهني — W46]: لا توجد مادة صريحة في المرسوم 91-05 أو أي مرسوم جزائري تُلزم صراحةً بسدّ الشقوق لمنع دخول الآفات — يعتمد المفتش حكمه المهني ومعايير مكافحة الآفات المتعارف عليها.',
     severity: 'medium',
     controlType: 'visual',
