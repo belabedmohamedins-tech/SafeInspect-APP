@@ -4,9 +4,11 @@
 **Journal Officiel :** N° 17, 29 Moharram 1425 (21 mars 2004) — pages 3 à 5  
 **Source PDF :** Fourni par l'utilisateur (`Décret 04-82.pdf`)  
 **Date de conversion :** 2026-08-17  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-17] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel  
 
-> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+
+**Note sur la source :** Le fichier PDF source contenait également le Décret exécutif n° 04-83 (fixant les tarifs pour le recouvrement des produits des ressources liées au contrôle phytosanitaire et à l'homologation des produits phytosanitaires à usage agricole). Seul le décret 04-82 est converti dans ce fichier. Le Décret 04-83 est hors scope SafeInspect — aucun fichier D04-83 n'est à créer.
 
 ---
 
