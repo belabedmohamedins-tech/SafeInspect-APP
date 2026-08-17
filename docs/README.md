@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-08-17 20:48 WAT — Perplexity — W80+W81 CLOSED — legal_refs false flags corrected
+- **Phases closed**: W80 (3 false MISSING/UNVERIFIE flags), W81 (Décret 76-36 MISSING → Present)
+- **W80 findings**: Décret 06-138 was ❌ MISSING in docs but ✅ present (Art.1–19 + Annexes I/II, VÉRIFIÉ 2026-08-11). loi-09-03 VÉRIFIÉ status confirmed. decret-83-496 Art.4/7/8 amendment notices already inline — phantom backlog items removed.
+- **W81 findings**: `decret-76-36-incendie-panique.md` added by user — confirmed present. Contains rectificatif only (corrections Art.20/24/27 titles). Texte intégral J.O. n°21/1976 not yet digitised — noted in backlog.
+- **Files changed**: `docs/STRATEGIC_PLAN.md` (commits `1f9688d`, `aa7b4df`)
+- **Next Phase**: W82
+- **Legal Quick-Reference**: 0 ❌ MISSING entries remain.
+
 ### 2026-08-17 20:04 WAT — Perplexity — W74 CLOSED — TSC 0 + Jest 10/10
 - **Gate result**: User confirmed TSC 0 + Jest 10/10 PASS 2026-08-17 20:04 WAT
 - **Phase closed**: W74 (server hardening: rate-limit login 10/15min + sync batch guard max 500)
@@ -82,9 +90,11 @@ SafeInspect-APP/
 | **W73** | Agenda facility mismatch | ✅ PHANTOM — already clean |
 | **W74** | Server hardening (rate-limit + batch guard) | ✅ CLOSED 20:04 WAT |
 | **W75–79** | Legal citation sweeps | ✅ ALL CLOSED |
+| **W80** | 3 false legal_refs flags corrected | ✅ CLOSED 20:15 WAT |
+| **W81** | Décret 76-36 MISSING → Present | ✅ CLOSED 20:48 WAT |
 | **W51** | AIM GPL2 JORADP watch | 🟠 ONGOING SURVEILLANCE |
 
-**P1 + P2 sprint fully exhausted.**
+**P1 + P2 sprint fully exhausted. Legal Quick-Reference: 0 ❌ MISSING entries.**
 
 ---
 
