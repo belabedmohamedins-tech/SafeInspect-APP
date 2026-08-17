@@ -7,12 +7,19 @@
 
 ## Live Observations Log
 
+### 2026-08-17 18:58 WAT — Perplexity — W76 CLOSED — Loi 01-19 Art.29–36 sweep complete
+- **Phases closed**: W76 (F4 Loi 01-19 offset pattern re-sweep)
+- **Files read (direct source read)**: `src/criteria/mechanicCriteria.ts`, `src/criteria/carWashCriteria.ts`, `src/criteria/paintShopCriteria.ts`, `src/criteria/baseGeneralCriteria.ts`
+- **Finding**: MCH-29-09 Art.29 confirmed **correct** — Loi 01-19 Art.29 is the open-air burning ban for non-hazardous waste (حرق النفايات في الهواء الطلق), which is the exact subject of that criterion (pneus). No active Loi 01-19 Art.29–36 miscitation found in any checked file. Art.29 mention in `baseGeneralCriteria.ts` is in a comment log documenting a prior correction (W19) — code was already correct.
+- **No code change — confirmed clean by direct read**
+- **Next**: W78 (F10 MCH-29-06 PPE wrong article — needs Loi 88-07 sourced first)
+
 ### 2026-08-17 18:41 WAT — Perplexity — W75 CLOSED — EIE sweep 13/13 files confirmed clean
 - **Phases closed**: W75 (F9 EIE criterion wrong article range — full sweep of all 13 remaining files)
 - **Files read**: `paintShopCriteria.ts`, `printingCriteria.ts`, `produceStorageCriteria.ts`, `uabCriteria.ts`, `updCriteria.ts`, `semiPharmaCriteria.ts`, `baseCompressedGasCriteria.ts`, `abattoirCriteria.ts` (+ blacksmith/carpentry/carWash/marble/mechanic swept in prior session)
 - **Finding**: All EIE criteria already use Art. 14–21 (UPD-AX10-01, SPH-06-01 — both corrected W42). No residual Art.15–22 instance found anywhere. `abattoirCriteria.ts` has no standalone EIE criterion. `uabCriteria.ts` UAB-AX1-03 mentions EIE concept but cites Loi 03-10 générale (no range) — acceptable.
 - **No code change needed — confirmed clean by direct read**
-- **Next**: W76 (F4 Loi 01-19 offset pattern re-sweep)
+- **Next**: W76 (F4 Loi 01-19 re-sweep)
 
 ### 2026-08-17 18:08 WAT — Perplexity — W79+W77 CLOSED — confirmed clean by direct code read
 - **Phases closed**: W79 (BGN-08-03 bare-wire — fix W49 already present: Décret 91-05 Art.17 + Loi 90-11), W77 (abattoir/slaughterhouse wastewater — F7-fix already present: Annexe II §1a g/t in ABT-AX6-01/02/04 + SLH-05-04/04B/04C/04D, pH 5.5–8.5)
@@ -69,7 +76,7 @@
 - **Phases closed**: W61, W62, W63
 - **Commits**: `13b750a`, `24270ca`, `0a27026`
 
-### 2026-08-16 21:00 WAT — Perplexity — W60 CLOSED — loi-18-11 split 3 parties
+### 2026-08-16 21:00 WAT — Perplexity — W60 CLOSED — loi-18-11-sante split 3 parties
 - **Phases closed**: W60
 - **Commit**: `698a793` (user PowerShell push)
 
@@ -142,7 +149,7 @@ SafeInspect-APP/
 |---|---|---|
 | W72 | Dead settings toggles + notification centre | 🟡 PUSHED — awaiting TSC+Jest gate |
 | **W75** | F9: EIE criterion wrong range — sweep + systemic fix | ✅ CLOSED — all 13 files swept, all Art.14–21 confirmed |
-| **W76** | F4 re-sweep: Loi 01-19 offset pattern | 🟠 OPEN — next |
+| **W76** | F4 re-sweep: Loi 01-19 offset pattern | ✅ CLOSED — MCH-29-09 Art.29 confirmed correct; no active miscitation found |
 | **W78** | F10: MCH-29-06 PPE wrong article (needs Loi 88-07) | 🟠 OPEN — blocked on Loi 88-07 source |
 | W73 | Agenda facility mismatch | 🟠 OPEN — P2 |
 | W74 | Minor server hardening | 🟠 OPEN — P2 |
