@@ -4,7 +4,12 @@
 //   Art.14 is the root EIE obligation article (missed by the old range).
 //   Art.22 = fiscal instruments — completely unrelated to EIE. Confirmed by direct read.
 //   Décret 04-82 Arts.6 (SLH-05-02) + Arts.9 (SLH-05-03) confirmed correct by direct read.
-//   ABT-AX6-02 [À VÉRIFIER] on Annex II g/tonne — intentional per W10 decision. No change.
+// F7-fix (2026-08-17): Décret 06-141 Annexe II §1a confirmed — switched Annexe I mg/L values
+//   to sector-specific Annexe II g/t (abattoirs et transformation de la viande).
+//   SLH-05-04: critère + legalReference updated to g/t Annexe II values.
+//   SLH-05-04B: DCO limit 120 mg/L → 800 g/t, numericField unit corrected.
+//   SLH-05-04C: MES 35 mg/L → matière décantable 200 g/t, label + numericField corrected.
+//   SLH-05-04D: pH min 6.5 → 5.5 per Annexe II abattoirs (5.5–8.5).
 import { InspectionItem } from '../types';
 
 export const slaughterhouseSmallCriteria: InspectionItem[] = [
@@ -46,17 +51,22 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    criteria: 'فصل الدم والأحشاء والمحتويات الصلبة عن مياه الغسل قبل وصولها إلى الحفرة المتعفنة أو شبكة الصرف، مع تجميعها في أوعية أو حاويات مخصصة. عند التصريف في الشبكة العمومية أو الوسط الطبيعي: قياس المعاملات عند نقطة التصريف والتحقق من عدم تجاوز: DBO5 ≤35 ملغ/ل، DCO ≤120 ملغ/ل، MES ≤35 ملغ/ل، pH بين 6.5 و8.5.',
-    legalReference: 'المادة 34 من القانون 01-19 المؤرخ في 12 ديسمبر 2001 المتعلق بتسيير النفايات ومراقبتها وإزالتها، والمادة 12 من القانون 03-10 المؤرخ في 19 يوليو 2003 المتعلق بحماية البيئة (منع صرف مخلفات الذبح مباشرة دون معالجة). المرسوم التنفيذي 06-141 الملحق الأول (القيم القصوى للمصبات الصناعية السائلة: DBO5 ≤35، DCO ≤120، MES ≤35، pH 6.5–8.5).',
+    // F7-fix (2026-08-17): switched from Annexe I generic mg/L to Annexe II §1a g/t.
+    // Décret 06-141 Annexe II §1a (Abattoirs et transformation de la viande):
+    // DBO5 ≤ 250 g/t | DCO ≤ 800 g/t | Matière décantable ≤ 200 g/t
+    // Volume ≤ 6 m³/t carcasse | pH 5.5–8.5
+    // numericField measures volume (m³/t) as the primary on-site verifiable indicator.
+    criteria: 'فصل الدم والأحشاء والمحتويات الصلبة عن مياه الغسل قبل وصولها إلى الحفرة المتعفنة أو شبكة الصرف. عند التصريف في الشبكة العمومية أو الوسط الطبيعي: قياس المعاملات عند نقطة التصريف والتحقق من عدم تجاوز القيم الخاصة بالمسالخ (الملحق II للمرسوم 06-141): DBO5 ≤ 250 غ/ط، DCO ≤ 800 غ/ط، مادة قابلة للترسيب ≤ 200 غ/ط، حجم الصرف ≤ 6 م³/طن ذبيحة، pH بين 5.5 و8.5.',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ (قيم خاصة بالمسالخ ومنشآت تحويل اللحوم — وحدة: غ/طن ذبيحة). القانون 03-10 المادة 12. القانون 01-19 المادة 12 (منع صرف مخلفات الذبح مباشرة دون معالجة).',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      unit: 'mg/L',
-      labelAr: 'DBO5 عند نقطة التصريف',
-      max: 35,
-      warningMax: 28,
-      step: 1,
+      unit: 'm³/t',
+      labelAr: 'حجم مياه الصرف (م³/طن ذبيحة)',
+      max: 6,
+      warningMax: 5,
+      step: 0.1,
       upperLimit: true,
     },
   },
@@ -64,17 +74,18 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04B',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    criteria: 'قياس الطلب الكيميائي للأكسجين (DCO) عند نقطة التصريف النهائي والتحقق من عدم تجاوز 120 ملغ/ل.',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق الأول (القيمة القصوى لـ DCO: 120 ملغ/ل).',
+    // F7-fix (2026-08-17): DCO limit corrected — Annexe II §1a abattoirs = 800 g/t (not 120 mg/L).
+    criteria: 'قياس الطلب الكيميائي للأكسجين (DCO) عند نقطة التصريف النهائي والتحقق من عدم تجاوز 800 غ/طن ذبيحة (وفق الملحق II للمرسوم 06-141 الخاص بالمسالخ).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ — القيمة القصوى لـ DCO للمسالخ: 800 غ/طن ذبيحة.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      unit: 'mg/L',
-      labelAr: 'DCO عند نقطة التصريف',
-      max: 120,
-      warningMax: 100,
-      step: 1,
+      unit: 'g/t',
+      labelAr: 'DCO عند نقطة التصريف (غ/طن ذبيحة)',
+      max: 800,
+      warningMax: 650,
+      step: 10,
       upperLimit: true,
     },
   },
@@ -82,17 +93,19 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04C',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    criteria: 'قياس المواد العالقة الكلية (MES) عند نقطة التصريف النهائي والتحقق من عدم تجاوز 35 ملغ/ل.',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق الأول (القيمة القصوى لـ MES: 35 ملغ/ل).',
+    // F7-fix (2026-08-17): parameter corrected — Annexe II §1a abattoirs has no MES row;
+    // the correct parameter is "Matière décantable" ≤ 200 g/t (not MES ≤ 35 mg/L).
+    criteria: 'قياس المواد القابلة للترسيب عند نقطة التصريف النهائي والتحقق من عدم تجاوز 200 غ/طن ذبيحة (وفق الملحق II للمرسوم 06-141 الخاص بالمسالخ — المعيار: مادة قابلة للترسيب، لا MES).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ — القيمة القصوى للمادة القابلة للترسيب للمسالخ: 200 غ/طن ذبيحة.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      unit: 'mg/L',
-      labelAr: 'MES عند نقطة التصريف',
-      max: 35,
-      warningMax: 28,
-      step: 1,
+      unit: 'g/t',
+      labelAr: 'المادة القابلة للترسيب (غ/طن ذبيحة)',
+      max: 200,
+      warningMax: 160,
+      step: 5,
       upperLimit: true,
     },
   },
@@ -100,17 +113,18 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04D',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    criteria: 'قياس درجة الحموضة (pH) لمياه الصرف عند نقطة التصريف النهائي والتحقق من بقائها في النطاق المسموح به (6.5–8.5).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق الأول (نطاق pH المسموح: 6.5–8.5).',
+    // F7-fix (2026-08-17): pH min corrected 6.5 → 5.5 per Annexe II §1a abattoirs.
+    criteria: 'قياس درجة الحموضة (pH) لمياه الصرف عند نقطة التصريف النهائي والتحقق من بقائها في النطاق المسموح به للمسالخ (5.5–8.5 وفق الملحق II للمرسوم 06-141).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ (المسالخ) — نطاق pH المسموح: 5.5–8.5.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
       unit: 'pH',
       labelAr: 'درجة الحموضة عند نقطة التصريف',
-      min: 6.5,
+      min: 5.5,
       max: 8.5,
-      warningMin: 6.8,
+      warningMin: 6.0,
       warningMax: 8.2,
       step: 0.1,
       upperLimit: false,

@@ -9,9 +9,12 @@
 //   Add ABT-AX5-01 cold room °C numericField (min:0, max:5).
 //   ABT-AX1-01 → severity:'high', controlType:'doc'.
 // W10-C (2026-08-09): ABT-AX6-02 legalReference tagged [À VÉRIFIER] — Annex I mg/L values
-//   are used as interim. Décret 06-141 Annex II uses g/tonne-of-slaughtered-animal units
-//   (sector-specific). Pending JORADP JO verbatim verification before switching to Annex II
-//   and adding a throughput numeric field. Do not remove tag until Annex II confirmed.
+//   used as interim pending JORADP JO verbatim verification of Annex II g/tonne unit.
+// F7-fix (2026-08-17): [À VÉRIFIER] CLOSED — Décret 06-141 Annexe II §1a confirmed from
+//   legal_refs/decret-06-141-rejets-effluents-liquides.md (✅ VÉRIFIÉ 2026-08-11).
+//   ABT-AX6-01/02: switched from Annexe I generic mg/L to Annexe II §1a sector-specific g/t.
+//   ABT-AX6-02: added throughput numericField (volume m³/t carcasse ≤6).
+//   ABT-AX6-04: pH range corrected 6.5–8.5 → 5.5–8.5 per Annexe II abattoirs.
 
 import { InspectionItem } from '../types';
 
@@ -152,8 +155,8 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     id: 'ABT-AX6-01',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'وجود محطة معالجة مياه الصرف أو عقد مع هيئة معتمدة، مع مراقبة دورية للمعايير المطابقة للمرسوم 06-141.',
-    legalReference: 'القانون 03-10 المادة 54. القانون 05-12 المادة 46. المرسوم التنفيذي 06-141 الملحق I (DBO5 ≤ 35، DCO ≤ 120، MES ≤ 35، pH 6.5–8.5).',
+    criteria: 'وجود محطة معالجة مياه الصرف أو عقد مع هيئة معتمدة، مع مراقبة دورية للمعايير المطابقة للمرسوم 06-141 الملحق II (قيم خاصة بالمسالخ ومنشآت تحويل اللحوم).',
+    legalReference: 'القانون 03-10 المادة 54. القانون 05-12 المادة 46. المرسوم التنفيذي 06-141 الملحق II §1أ (قيم خاصة بالمسالخ: DBO5 ≤ 250 غ/ط، DCO ≤ 800 غ/ط، مادة قابلة للترسيب ≤ 200 غ/ط، حجم ≤ 6 م³/ط ذبيحة مُعالَجة، pH 5.5–8.5).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -162,16 +165,25 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     id: 'ABT-AX6-02',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    // W10-C [À VÉRIFIER]: Currently citing Annex I generic limits (mg/L). Décret 06-141
-    // Annex II provides slaughterhouse/meat-processing-specific limits expressed in
-    // g/tonne-of-slaughtered-animal — a load-based unit requiring the facility's daily
-    // throughput (kg/day) to evaluate. Switch to Annex II + add throughput numericField
-    // once JORADP JO verbatim of Annex II is verified. Phase W10 OPEN.
-    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى المقررة (DBO5 ≤ 35 ملغ/ل، DCO ≤ 120 ملغ/ل، MES ≤ 35 ملغ/ل). [À VÉRIFIER: الملحق I — القيم بوحدة ملغ/ل مؤقتة؛ الملحق II يستخدم وحدة غ/طن ذبيحة — تحقق من نص JORADP قبل التعديل]',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق I (قيم التصريف الصناعي القصوى — مسلخ أو منشأة تحويل اللحوم). [À VÉRIFIER — W10: الملحق II يُطبَّق على المسلخ بوحدة غ/طن — يتطلب تحقق JORADP]',
+    // F7-fix (2026-08-17): [À VÉRIFIER] CLOSED. Décret 06-141 Annexe II §1a confirmed:
+    // Abattoirs et transformation de la viande — sector-specific limits in g/tonne carcasse.
+    // DBO5 ≤ 250 g/t | DCO ≤ 800 g/t | Matière décantable ≤ 200 g/t | Volume ≤ 6 m³/t
+    // pH 5.5–8.5 (not 6.5–8.5 as in Annexe I).
+    // numericField now measures volume (m³/t carcasse) — the primary load-based indicator
+    // inspectors can verify against the facility's throughput register.
+    criteria: 'نتائج تحاليل مياه الصرف الصناعي الدورية ضمن القيم القصوى الخاصة بالمسالخ (الملحق II للمرسوم 06-141): DBO5 ≤ 250 غ/ط ذبيحة، DCO ≤ 800 غ/ط، مادة قابلة للترسيب ≤ 200 غ/ط، حجم الصرف ≤ 6 م³/طن ذبيحة مُعالَجة.',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ — قيم التصريف الخاصة بالمسالخ ومنشآت تحويل اللحوم (وحدة: غ/طن ذبيحة). المرسوم مؤكَّد من legal_refs/decret-06-141-rejets-effluents-liquides.md ✅.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
+    numericField: {
+      labelAr: 'حجم مياه الصرف المقاس (م³/طن ذبيحة)',
+      unit: 'm³/t',
+      max: 6,
+      warningMax: 5,
+      step: 0.1,
+      upperLimit: true,
+    },
   },
   {
     id: 'ABT-AX6-03',
@@ -187,15 +199,17 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
     id: 'ABT-AX6-04',
     axis: 'معالجة مياه الصرف الصناعي',
     category: 'بيئية',
-    criteria: 'قيمة pH لمياه الصرف ضمن المدى المسموح به (6.5–8.5 وفق الملحق I للمرسوم 06-141).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق I — قيمة pH المقبولة (6.5–8.5).',
+    // F7-fix (2026-08-17): pH range corrected — Annexe II §1a abattoirs = 5.5–8.5
+    // (not 6.5–8.5 which is the Annexe I generic range).
+    criteria: 'قيمة pH لمياه الصرف ضمن المدى المسموح به للمسالخ (5.5–8.5 وفق الملحق II للمرسوم 06-141).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ (المسالخ) — نطاق pH المقبول: 5.5–8.5.',
     severity: 'medium',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
       labelAr: 'قيمة pH لمياه الصرف المقاسة',
       unit: 'pH',
-      min: 6.5,
+      min: 5.5,
       max: 8.5,
       step: 0.1,
     },
