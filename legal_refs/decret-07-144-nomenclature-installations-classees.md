@@ -1,9 +1,16 @@
-﻿# Décret exécutif n° 07-144 du 19 mai 2007
-## Fixant la nomenclature des installations classées pour la protection de l'environnement
+# Décret exécutif n° 07-144 du 2 Joumada El Oula 1428 correspondant au 19 mai 2007 fixant la nomenclature des installations classées pour la protection de l'environnement
 
-> **Source officielle :** Journal Officiel de la République Algérienne (JORADP) N° 34 — 22 mai 2007 (5 Joumada El Oula 1428)
-> **✅ COMPLET — Art. 1–4 + Annexe complète rubriques 1000–2922, extraits verbatim du PDF JO N° 34/2007**
-> **Phase W33 — patch ciblé appliqué le 2026-08-09**
+**Date de signature :** 19 mai 2007 (2 Joumada El Oula 1428)
+
+**Journal Officiel :** JORADP n° 34 du 5 Joumada El Oula 1428 / 22 mai 2007
+
+**Source PDF :** Fourni par l'utilisateur (`Décret 07-144.pdf`)
+
+**Date de conversion :** 2026-08-09
+
+**Statut de vérification :** ⚠️ NON VÉRIFIÉ — texte extrait verbatim du PDF fourni, non relu contre JORADP original
+
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
 
@@ -35,8 +42,8 @@
 1. **Substances :** Les éléments chimiques et leurs composés tels qu'ils se présentent à l'état naturel ou tels qu'ils sont obtenus par tout procédé de production contenant éventuellement tout additif nécessaire pour préserver la stabilité du produit et toute impureté résultant du procédé, à l'exclusion de tout solvant pouvant être séparé sans affecter la stabilité de la substance ni modifier sa composition.
 2. **Préparations :** Les mélanges ou solutions composés de deux substances ou plus.
 3. **Catégories de danger :**
-   - a) Très toxiques : substances ou préparations qui, par inhalation, ingestion ou pénétration cutanée en très petites quantités, entraînent la mort ou des risques aigus ou chroniques.
-   - b) Toxiques : substances et préparations qui, par inhalation, ingestion ou pénétration cutanée en petites quantités, entraînent la mort ou des risques aigus ou chroniques.
+   - a) Très toxiques : substances ou préparations qui, par inhalation, ingéstion ou pénétration cutanée en très petites quantités, entraînent la mort ou des risques aigus ou chroniques.
+   - b) Toxiques : substances et préparations qui, par inhalation, ingéstion ou pénétration cutanée en petites quantités, entraînent la mort ou des risques aigus ou chroniques.
    - c) Comburantes : substances ou préparations qui, au contact d'autres substances, notamment des substances inflammables, présentent une réaction fortement exothermique.
    - d) Explosibles : substances ou préparations solides, liquides, pâteuses ou gélatineuses qui, même sans intervention d'oxygène atmosphérique, peuvent présenter une réaction exothermique avec développement rapide de gaz et qui, dans des conditions d'essais déterminées, détonent, déflagrent rapidement ou, sous l'effet de la chaleur, explosent en cas de confinement partiel.
    - e) Inflammables : substances ou préparations liquides, dont le point d'éclair est égal ou supérieur à 21°C et inférieur ou égal à 55°C.
@@ -122,7 +129,7 @@
 | 1236 | Diacétate de 1-propène-2-chloro-1,3-diol (fabrication, mise en œuvre, stockage de). 1. Fabrication. 2. Emploi ou stockage : ≥ 10 kg | AM / AW | 4 / 3 |
 | 1237 | Difluorure d'oxygène (fabrication, mise en œuvre, stockage de). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 10 kg ; b) < 10 kg | AW / AM / AW | 4 / 3 / 4 |
 | 1238 | Diméthylnitrosamine (fabrication, mise en œuvre, stockage de). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 1 kg ; b) < 1 kg | AM / AW / AM | 3 / 1 / 6 |
-| 1239 | Diisocyanate de diphénylméthane (MDI) (fabrication industrielle, emploi ou stockage de). a) ≥ 200 t ; b) > 20 t < 200 t ; c) ≤ 20 t | AM / AW / APAPC | 4 / 2 / 3 |
+| 1239 | Diisocyanate de dipénylméthane (MDI) (fabrication industrielle, emploi ou stockage de). a) ≥ 200 t ; b) > 20 t < 200 t ; c) ≤ 20 t | AM / AW / APAPC | 4 / 2 / 3 |
 | 1240 | Dioxyde de chlore (fabrication, stockage ou emploi du). 1. En phase gazeuse : a) ≥ 10 kg ; b) < 10 kg. 2. En solution aqueuse > 1 g/l : a) > 10 t de dioxyde de chlore ; b) ≤ 10 t | AW / APAPC / AW / APAPC | 1 / 0,5 / 1 / 0,5 |
 | 1241 | Éther méthylique monochloré (fabrication, mise en œuvre, stockage de l'). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 1 kg ; b) < 1 kg | AM / AM / AW | 4 / 4 / 2 |
 | 1242 | Éthylèneimine (fabrication, mise en œuvre, stockage de l'). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 1 t ; b) < 1 t | AM / AM / AW / APAPC | 4 / 4 / 2 / 4 |
@@ -149,10 +156,10 @@
 | 1263 | Phosphore (fabrication du) | AM | 3 |
 | 1264 | Phosphore (dépôts de). 1. ≥ 200 kg ; 2. < 200 kg | AW / APAPC | 1 / 0,5 |
 | 1265 | Plomb (fonderies de chlorure de) | AW | 1 |
-| 1266 | Polychlorobiphényles, polychloroterphényles (PCB). 1. Utilisation de composants contenant > 30 l de produits. 2. Mise en œuvre : a) > 1 000 l ; b) > 100 l ≤ 1 000 l. 3. Réparation, récupération, décontamination, démontage : quantité > 50 l | AW / APAPC / APAPC / AW / APAPC | 1 / 1 / 2 / 1 / 2 |
+| 1266 | Polychlorobiphenyles, polychloroterphényles (PCB). 1. Utilisation de composants contenant > 30 l de produits. 2. Mise en œuvre : a) > 1 000 l ; b) > 100 l ≤ 1 000 l. 3. Réparation, récupération, décontamination, démontage : quantité > 50 l | AW / APAPC / APAPC / AW / APAPC | 1 / 1 / 2 / 1 / 2 |
 | 1267 | Propylèneimine (fabrication, mise en œuvre, stockage de). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 50 t ; b) < 50 t | AM / AM / AW | 4 / 3 / 1 |
 | 1268 | Sodium (fabrication, mise en œuvre, stockage de sélénite de). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 100 kg ; b) < 100 kg | AM / AM / AW | 4 / 3 / 1 |
-| 1269 | Substances et préparations toxiques particulières (stockage, emploi, fabrication industrielle, formulation et conditionnement de ou à base de). 1. 4-aminodiphényle, benzidine, chlorure de N,N-diméthylcarbamoyle, diméthylnitrosamine, 2-naphtylamine, oxyde de bis (chlorométhyle), etc. : a) ≥ 1 kg ; b) < 1 kg. 2. 4,4' méthylène-bis (2-chloroaniline) : a) ≥ 10 kg ; b) < 10 kg. 3. Acide arsénieux et sels, trioxyde d'arsenic : a) ≥ 100 kg ; b) < 100 kg. 4. Isocyanate de méthyle : a) ≥ 150 kg ; b) < 150 kg. 5. Composés du nickel pulvérulents (monoxyde, dioxyde, sulfure de nickel, etc.) : a) ≥ 1 t ; b) < 1 t. 6. Hydrogène arsénié, hydrogène phosphoré : a) ≥ 1 t ; b) < 1 t. 7. Acide arsénique et sels, pentoxyde d'arsenic : a) ≥ 2 t ; b) ≥ 1 t < 2 t ; c) < 1 t. 8. Éthylèneimine : a) ≥ 20 t ; b) ≥ 10 t < 20 t ; c) < 10 t. 9. Dérivés alkylés du plomb : a) ≥ 50 t ; b) ≥ 5 t < 50 t ; c) < 5 t. 10. Diisocyanate de toluylène : a) ≥ 100 t ; b) ≥ 10 t < 100 t ; c) < 10 t. 11. Polychlorodibenzofuranes et polychlorodibenzodioxines (y compris TCDD) : a) ≥ 1 kg ; b) < 1 kg | AM / AW / AM / AW / AM / AW / AM / AW / AM / AW / APAPC / AM / AW / APAPC / AM / AW / APAPC / AM / AW / APAPC / AM / AW | 6 / 3 / 6 / 3 / 6 / 3 / 6 / 3 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 |
+| 1269 | Substances et préparations toxiques particulières (stockage, emploi, fabrication industrielle, formulation et conditionnement de ou à base de). 1. 4-aminodiphenyle, benzidine, chlorure de N,N-diméthylcarbamoyle, diméthylnitrosamine, 2-naphţylamine, oxyde de bis (chlorométhyle), etc. : a) ≥ 1 kg ; b) < 1 kg. 2. 4,4' méthylène-bis (2-chloroaniline) : a) ≥ 10 kg ; b) < 10 kg. 3. Acide arsénieux et sels, trioxyde d'arsenic : a) ≥ 100 kg ; b) < 100 kg. 4. Isocyanate de méthyle : a) ≥ 150 kg ; b) < 150 kg. 5. Composés du nickel pulvérulents (monoxyde, dioxyde, sulfure de nickel, etc.) : a) ≥ 1 t ; b) < 1 t. 6. Hydrogène arsénié, hydrogène phosphoré : a) ≥ 1 t ; b) < 1 t. 7. Acide arsénique et sels, pentoxyde d'arsenic : a) ≥ 2 t ; b) ≥ 1 t < 2 t ; c) < 1 t. 8. Éthylèneimine : a) ≥ 20 t ; b) ≥ 10 t < 20 t ; c) < 10 t. 9. Dérivés alkylés du plomb : a) ≥ 50 t ; b) ≥ 5 t < 50 t ; c) < 5 t. 10. Diisocyanate de touylène : a) ≥ 100 t ; b) ≥ 10 t < 100 t ; c) < 10 t. 11. Polychlorodibenzofuranes et polychlorodibenzodioxines (y compris TCDD) : a) ≥ 1 kg ; b) < 1 kg | AM / AW / AM / AW / AM / AW / AM / AW / AM / AW / APAPC / AM / AW / APAPC / AM / AW / APAPC / AM / AW / APAPC / AM / AW | 6 / 3 / 6 / 3 / 6 / 3 / 6 / 3 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 / 1,5 / 6 / 3 |
 | 1270 | Sulfure de bis (2-chloroéthyle) (fabrication, mise en œuvre, stockage de). 1. Fabrication. 2. Emploi ou stockage : a) ≥ 1 kg ; b) < 1 kg | AM / AW / APAPC / AM | 6 / 3 / 1,5 / 6 |
 | 1271 | Trioxyde de soufre (emploi ou stockage de). 1. ≥ 75 t ; 2. > 2 t < 75 t ; 3. ≤ 2 t | AM / AW / APAPC | 3 / 3 / 1,5 |
 | 1272 | Varech (fabrication de soudes brutes de) | AW | — |
@@ -353,7 +360,7 @@
 | 2900 | Divers | — | — |
 | 2910 | Accumulateurs (Ateliers de charge d') — puissance maximale de courant continu > 10 kW | APAPC | — |
 | 2911 | Antenne relais de téléphonie mobile | D | — |
-| 2912 | Ateliers de réparations et d'entretien (lavage, graissage, etc.) de véhicules et engins à moteur y compris les activités de carrosserie et de tôlerie. 1. Réparation et entretien : a) Surface > 5 000 m² ; b) Surface > 500 m² ≤ 5 000 m² ; c) Surface ≤ 500 m². 2. Vernis, peinture, apprêt (application, cuisson, séchage) sur véhicules : a) quantité maximale > 100 kg/jour ; b) quantité maximale > 10 kg/jour ou solvants annuels > 0,5 tonne | AM / AW / APAPC / D / AW / APAPC | 1 / 0,5 / 1 / 0,5 / 1 / 0,5 |
+| 2912 | Ateliers de réparations et d'entretien (lavage, graissage, etc.) de véhicules et engins à moteur y compris les activités de carrosserie et de tôlerie. 1. Réparation et entretien : a) Surface > 5 000 m² ; b) Surface > 500 m² ≤ 5 000 m² ; c) Surface ≤ 500 m². 2. Vernis, peinture, aprêt (application, cuisson, séchage) sur véhicules : a) quantité maximale > 100 kg/jour ; b) quantité maximale > 10 kg/jour ou solvants annuels > 0,5 tonne | AM / AW / APAPC / D / AW / APAPC | 1 / 0,5 / 1 / 0,5 / 1 / 0,5 |
 | 2913 | Chauffage (procédés de) utilisant comme fluide caloporteur des corps organiques combustibles. 1. Température ≥ point éclair : a) > 1 000 l ; b) > 100 l ≤ 1 000 l. 2. Température < point éclair : a) > 250 l | AW / APAPC / AW | 1 / 0,5 / 1 |
 | 2914 | Combustion — puissance thermique maximale définie comme la quantité maximale de combustible susceptible d'être consommée par seconde, exprimée en PCI. A. Gaz naturel, GPL, fioul domestique, charbon, fuels lourds ou biomasse : 1. ≥ 100 MW ; 2. ≥ 20 MW < 100 MW ; 3. > 2 MW < 20 MW ; 4. < 2 MW. B. Autres produits, puissance > 0,1 MW | DA / AM / AW / APAPC / DAW | 5 / 3 / 1 / — / — |
 | 2915 | Éponge (lavage, décoloration et séchage des) | APAPC | 0,5 |
@@ -363,7 +370,7 @@
 | 2919 | Parcs de stationnement couverts et garages-hôtels de véhicules à moteur. 1. > 1 000 véhicules ; 2. > 250 véhicules ≤ 1 000 véhicules ; 3. < 250 véhicules | AM / AW / D | 1 / 0,5 / — |
 | 2920 | Réfrigération ou compression (installations de) fonctionnant à des pressions effectives > 10⁵ Pa. 1. Fluides inflammables ou toxiques, puissance absorbée : a) > 300 kW ; b) > 20 kW ≤ 300 kW. 2. Autres cas : a) > 500 kW ; b) > 50 kW ≤ 500 kW | AW / APAPC / APAPC / APAPC | 1 / 0,5 / 1 / 0,5 |
 | 2921 | Traitement et développement des surfaces photosensibles à base argentique. 1. Radiographie industrielle : a) > 20 000 m² ; b) ≥ 2 000 m² ≤ 20 000 m². 2. Autres cas (médicale, arts graphiques, photographie, cinéma) : a) > 50 000 m² ; b) ≥ 5 000 m² ≤ 50 000 m² | D / APAPC / D / APAPC | 1 / 1 / 1 / 1 |
-| 2922 | Vernis, peinture, apprêt, colle, enduit, etc. (application, cuisson, séchage de) sur support quelconque (métal, bois, plastique, cuir, papier, textile, …), à l'exclusion des activités couvertes par les rubriques 1613, 2416, 2413, 2912. 1. Produits à base de liquides, application par procédé «au trempé» : a) > 1 000 l ; b) > 100 l ≤ 1 000 l ; c) ≤ 1 000 l. 2. Application par tout procédé autre que le «trempé» (pulvérisation, enduction, …) : a) > 100 kg/jour ; b) > 10 kg/jour ≤ 100 kg/jour ; c) ≤ 100 kg/jour. 3. Poudres à base de résines organiques : a) > 200 kg/jour ; b) > 20 kg/jour ≤ 200 kg/jour ; c) ≤ 200 kg/jour. Nota : Coefficient 1 pour liquides inflammables de 1ère catégorie (éclair < 55°C) ou liquides halogénés. Coefficient 1/2 pour liquides de 2ème catégorie (éclair ≥ 55°C) ou < 10 % de solvants. Q = A + B/2. | AW / APAPC / D / AW / APAPC / D / AW / APAPC / D | 1 / 0,5 / 1 / 0,5 / 1 / 0,5 / 1 / 0,5 / 1 |
+| 2922 | Vernis, peinture, aprêt, colle, enduit, etc. (application, cuisson, séchage de) sur support quelconque (métal, bois, plastique, cuir, papier, textile, …), à l'exclusion des activités couvertes par les rubriques 1613, 2416, 2413, 2912. 1. Produits à base de liquides, application par procédé « au trempé » : a) > 1 000 l ; b) > 100 l ≤ 1 000 l ; c) ≤ 1 000 l. 2. Application par tout procédé autre que le « trempé » (pulvérisation, enduction, …) : a) > 100 kg/jour ; b) > 10 kg/jour ≤ 100 kg/jour ; c) ≤ 100 kg/jour. 3. Poudres à base de résines organiques : a) > 200 kg/jour ; b) > 20 kg/jour ≤ 200 kg/jour ; c) ≤ 200 kg/jour. Nota : Coefficient 1 pour liquides inflammables de 1ère catégorie (éclair < 55°C) ou liquides halogénés. Coefficient 1/2 pour liquides de 2ème catégorie (éclair ≥ 55°C) ou < 10 % de solvants. Q = A + B/2. | AW / APAPC / D / AW / APAPC / D / AW / APAPC / D | 1 / 0,5 / 1 / 0,5 / 1 / 0,5 / 1 / 0,5 / 1 |
 
 ---
 
