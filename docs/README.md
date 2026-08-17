@@ -7,12 +7,15 @@
 
 ## Live Observations Log
 
-### 2026-08-17 13:19 WAT — Perplexity — W71 CLOSED — planning + prioritization UI shipped
-- **Phases closed**: W71
-- **Files changed**: `src/utils/loadHomeData.ts`, `components/home/PriorityWidget.tsx`, `app/(tabs)/home.tsx`, `src/hooks/useHomeData.ts`
-- **Critical finding**: `nonCompliantFacilities` KPI was computed on `completedInspections.slice(-3)` instead of the full `completed` dataset. Fixed to use all completed inspections; added `highRiskCount` and a dashboard priority list for reinspection urgency.
-- **Validation**: user confirmed `npx tsc --noEmit` and `npx jest` all clean after follow-up fix for missing `highRiskCount` pass-through.
+### 2026-08-17 13:08 WAT — Perplexity — W71 CLOSED — TSC 0 + Jest all green
+- **Phases closed**: W71 (Planning + prioritization UI)
+- **Bug fixed**: `nonCompliantFacilities` was computed over `completedInspections.slice(-3)` (display slice) instead of the full `completed` array. Now correct.
+- **New**: `PriorityFacility` interface + `priorityScore()` function in `loadHomeData.ts`. Top-5 facilities by reinspection urgency (grade D=40/C=20/B=5 + highViolations) surfaced in dashboard via new `PriorityWidget` component.
+- **New**: `highRiskCount` added to `HomeData.stats` (grade D or ≥3 high violations), passed to `StatsBar`.
+- **Files changed**: `src/utils/loadHomeData.ts`, `components/home/PriorityWidget.tsx` (new), `app/(tabs)/home.tsx`, `src/hooks/useHomeData.ts`
+- **Gate**: TSC 0 errors + Jest all green — user-confirmed 2026-08-17 13:08 WAT
 - **Commits**: `c178a6c`, `c1b9d91`
+- **Next**: W72 — Dead settings toggles + unreachable notification centre
 
 ### 2026-08-17 10:59 WAT — Perplexity — W65+W68 REOPENED+FIXED — real code commits
 - **W65 REOPENED**: `BackupService.exportBackup()` confirmed reading `AsyncStorage.multiGet(['inspections',...])` — never updated by SQLite repo since W57-TSC. Bug real.
@@ -129,7 +132,8 @@ SafeInspect-APP/
 | W68 | PIN lockout counter via SecureStore | ✅ FIXED 2026-08-17 10:59 |
 | W69 | CAP evidence + lifecycle | ✅ CLOSED 2026-08-17 |
 | W70 | PDF report gaps | ✅ CLOSED 2026-08-17 |
-| **W71** | Planning + prioritization UI | ✅ CLOSED 2026-08-17 |
+| **W71** | Planning + prioritization UI | ✅ CLOSED 2026-08-17 13:08 |
+| **W72** | Dead settings toggles + notification centre | 🟠 OPEN — next |
 
 ---
 

@@ -113,12 +113,13 @@
 | **W62** | Server route path-prefix mismatch | 2026-08-16 | Confirmed clean by direct read. |
 | **W63** | Approval endpoint ID semantics | 2026-08-16 | Resolved as part of W61. |
 | **W64** | Sync schema missing real client values | 2026-08-17 | Confirmed clean by direct read — full SavedInspection sent. |
-| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — exportBackup() now calls InspectionRepository.getAll(); importBackup() calls InspectionRepository.save() per inspection. Cited line: BackupService.ts ~L100 `AsyncStorage.multiGet(['inspections',...])` confirmed broken before fix. |
+| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — exportBackup() now calls InspectionRepository.getAll(); importBackup() calls InspectionRepository.save() per inspection. |
 | **W66** | Integrity + audit trail | 2026-08-17 | Confirmed clean by direct read. |
 | **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read. |
-| **W68** | PIN lockout bypassable via AsyncStorage clear | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — getFailedAttempts/incrementFailedAttempts/resetFailedAttempts now use secureGet/secureSet/secureDelete. Cited lines: AuthRepository.ts L65-75 — AsyncStorage.getItem/setItem/removeItem confirmed before fix. |
+| **W68** | PIN lockout bypassable via AsyncStorage clear | 2026-08-17 | ✅ FIXED 2026-08-17 10:59 — getFailedAttempts/incrementFailedAttempts/resetFailedAttempts now use secureGet/secureSet/secureDelete. |
 | **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read. |
 | **W70** | PDF report gaps | 2026-08-17 | Confirmed clean by direct read. |
+| **W71** | Planning + prioritization UI — nonCompliantFacilities denominator fix + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91`. TSC 0 + Jest all green — user-confirmed 13:08 WAT. |
 
 ---
 
@@ -127,7 +128,6 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W71** | Planning + prioritization — risk/priority data computed but never surfaced in UI | SPEC 07 | P1 | — | Dashboard stat computed over wrong denominator; risk/priority scores computed but invisible to inspector. |
 | **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre built but never fired. |
 | **W73** | Agenda add facility mismatch — form bug can launch inspection for wrong facility | SPEC 11 | P2 | — | One-line form bug in agenda creation; wrong facilityId can be submitted. |
 | **W74** | Minor server hardening — input validation, error codes, rate limiting | SPEC 12 | P2 | — | Grouped minor server-side hardening items from SPEC 12. |
@@ -189,12 +189,11 @@
 ## Execution Order (Current Sprint)
 
 ### P1 — in order
-1. **W71** — Planning/priority UI
-2. **W72** — Dead settings toggles + notification centre
+1. **W72** — Dead settings toggles + notification centre
 
 ### P2 — after P1s
-3. **W73** — Agenda facility mismatch
-4. **W74** — Minor server hardening
+2. **W73** — Agenda facility mismatch
+3. **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch
