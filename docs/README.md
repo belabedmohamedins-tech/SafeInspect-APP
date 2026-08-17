@@ -7,6 +7,12 @@
 
 ## Live Observations Log
 
+### 2026-08-17 01:36 WAT — Perplexity — W64+W65+W66 CLOSED — confirmed clean by direct code read
+- **Phases closed**: W64 (SyncPayload severity/status — payload is full SavedInspection, enums present in Zod schema + mapStatus()), W65 (BackupService — export v2 + photoUriMap + import with v1 compat confirmed complete), W66 (IntegrityService — SHA-256 + canonical sort + hashAndStore + verifyInspection confirmed complete)
+- **Files read**: `src/services/SyncService.ts`, `server/src/routes/sync.ts`, `src/services/BackupService.ts`, `src/services/IntegrityService.ts`
+- **Action taken**: None — all three phases were false alarms from stale doc claims. Code already correct.
+- **Next**: W67 — photo evidence backup+sync payload gap
+
 ### 2026-08-16 22:44 WAT — Perplexity — W61+W62+W63 CLOSED — 10/10 Jest PASS
 - **Phases closed**: W61 (routes mounted + by-inspectionId routes), W62 (path-prefix confirmed clean), W63 (ID semantics resolved)
 - **Files changed**: `server/src/routes/approvals.ts`, `server/src/index.ts`, `server/src/__tests__/approvals.test.ts`, `server/package.json`
@@ -92,10 +98,12 @@ SafeInspect-APP/
 | W61 | Server routes mounted + by-inspectionId | ✅ CLOSED 2026-08-16 |
 | W62 | Path-prefix alignment | ✅ CLOSED 2026-08-16 |
 | W63 | Approval ID semantics | ✅ CLOSED 2026-08-16 |
-| **W64** | Sync schema severity+status | 🟠 OPEN — next |
-| W65 | Backup/restore storage layer | 🟠 OPEN |
-| W66 | Integrity/audit trail | 🟠 OPEN |
-| W67 | Photo evidence backup+sync | 🟠 OPEN |
+| W64 | Sync schema severity+status | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| W65 | Backup/restore storage layer | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| W66 | Integrity/audit trail | ✅ CLOSED 2026-08-17 — confirmed clean by direct read |
+| **W67** | Photo evidence backup+sync | 🟠 OPEN — next |
+| W68 | PIN lockout bypassable | 🟠 OPEN |
+| W69 | CAP evidence + lifecycle | 🟠 OPEN |
 
 ---
 
