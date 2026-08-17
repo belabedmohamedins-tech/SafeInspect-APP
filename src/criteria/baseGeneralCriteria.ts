@@ -91,6 +91,17 @@
 //   Full read of Loi 01-19 (72 articles, no gap) confirmed: word "incinération" absent.
 //   Previous placeholder (Art.11 + Décret 07-205 + [À VÉRIFIER open]) replaced with
 //   Art.15 + Art.19 + Art.63 + Décret 07-205 — strongest available basis confirmed.
+// W19-CLOSE (2026-08-17): BGN-01-02 [À VÉRIFIER] closed after full read of
+//   Décret 06-198 (50 articles, no gap — VÉRIFIÉ 2026-08-11 by Belabed Mohamed).
+//   FINDING: Décret 06-198 contains NO explicit article mandating maintenance of
+//   inspection registers (temperature logs, disinfection records, analysis results).
+//   Art.37 = post-accident report obligation (≠ routine record-keeping).
+//   Art.21 = technical prescriptions in the operating permit (≠ register obligation).
+//   No implementing arrêté with specific register obligations identified.
+//   CONCLUSION: Loi 03-10 Art.62 + Loi 09-03 Art.7 remain the strongest available
+//   legal foundation. [À VÉRIFIER] tag removed — verified exhaustively, no better
+//   source exists. [حكم مهني] tag added for specific register types (temperature
+//   logs, disinfection records) which have no explicit Algerian legal mandate.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -117,9 +128,13 @@ export const baseGeneralCriteria: InspectionItem[] = [
     criteria: 'وجود سجلات للتطهير، مراقبة درجات الحرارة (عند الاقتضاء)، نتائج التحاليل، والإعذارات السابقة محفوظة ومتاحة للمراقبة.',
     // W19 (2026-08-08): CORRECTED — previous ref Art.65 (obligation to notify accidents) ≠ record-keeping.
     // Art.62 (surveillance/control obligations for classified installations) is the closest match.
-    // [À VÉRIFIER — still open]: no explicit "record-keeping register" article found in Loi 03-10.
-    // Cross-check Décret 06-198 and its implementing arrêtés for specific register obligations.
-    legalReference: 'القانون 03-10 (حماية البيئة) المادة 62 (إلزامية الرقابة والمراقبة على المنشآت المصنفة) [À VÉRIFIER: تحديد المادة الصريحة في مسك السجلات — مراجعة المرسوم 06-198 المعدَّل والقرارات التطبيقية] + القانون 09-03 (حماية المستهلك وقمع الغش) المادة 7 (إلزامية تتبع المنتج وحفظ الوثائق).',
+    // W19-CLOSE (2026-08-17): [À VÉRIFIER] CLOSED after full read of Décret 06-198 (50 arts, no gap).
+    // FINDING: Décret 06-198 contains NO explicit register obligation — Art.37 = post-accident report
+    // only; Art.21 = technical prescriptions in operating permit. No implementing arrêté identified.
+    // CONCLUSION: Loi 03-10 Art.62 + Loi 09-03 Art.7 are the strongest available legal foundation.
+    // [حكم مهني]: specific register types (temperature logs, disinfection records) have no explicit
+    // Algerian legal mandate — inspector applies professional judgment on format and frequency.
+    legalReference: 'القانون 03-10 (حماية البيئة) المادة 62 (إلزامية الرقابة والمراقبة على المنشآت المصنفة) + القانون 09-03 (حماية المستهلك وقمع الغش) المادة 7 (إلزامية تتبع المنتج وحفظ الوثائق). [حكم مهني — W19 مغلق]: لا توجد مادة صريحة في القانون 03-10 أو المرسوم 06-198 (مقروء كاملاً — 50 مادة بلا ثغرة) تُلزم بمسك سجلات محددة (درجات الحرارة، التطهير، نتائج التحاليل) — يعتمد المفتش حكمه المهني ومتطلبات رخصة الاستغلال الفردية لكل منشأة.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
