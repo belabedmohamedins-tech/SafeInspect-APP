@@ -91,7 +91,7 @@
 | **W71** | Planning UI + PriorityWidget | 2026-08-17 | TSC 0 + Jest green. Commits `c178a6c`, `c1b9d91`. |
 | **W72** | Dead settings toggles + notification centre | 2026-08-17 | TSC 0 + Jest green 19:21 WAT. Commit `9b42f67`. |
 | **W73** | Agenda facility mismatch | 2026-08-17 | **PHANTOM** — `add.tsx` + `edit.tsx` already guard `!facilityId`. No code change. |
-| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | Commit `33dc3b8`. +27/-1. Pending TSC+Jest gate. |
+| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | ✅ CLOSED — TSC 0 + Jest 10/10 — user-confirmed 20:04 WAT. Commit `33dc3b8`. |
 | **W75** | EIE article range sweep (13 files) | 2026-08-17 | All clean. No code change. |
 | **W76** | Loi 01-19 offset re-sweep | 2026-08-17 | Clean. No code change. |
 | **W77** | Abattoir/SLH wastewater Décret 06-141 | 2026-08-17 | Clean. No code change. |
@@ -104,8 +104,7 @@
 
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP. |
-| **W74** | Server hardening — pending TSC+Jest gate | SPEC 12 | P1 | — | Code done. User must run: `cd server && npx tsc --noEmit && npx jest` |
+| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | surveillance | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
 
 ---
 
@@ -169,10 +168,11 @@
 
 ---
 
-## Execution Order (Current Sprint)
+## Execution Order
 
-### Gate pending
-- **W74** — run `cd server && npx tsc --noEmit && npx jest` and report result
+### ✅ Sprint P1 + P2 FULLY CLOSED — 2026-08-17
+
+All planned phases complete. No gate pending.
 
 ### Ongoing surveillance
-- **W51** — AIM GPL2 JORADP watch
+- **W51** — AIM GPL2 JORADP watch (6 GPL criteria tagged [À VÉRIFIER])
