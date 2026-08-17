@@ -112,9 +112,12 @@
 | **W61** | Server routes never mounted + approval by-inspectionId convenience routes | 2026-08-16 | `server/src/routes/approvals.ts`: 2 new routes by-inspection/approve+reject. `server/src/index.ts`: sync+approval mounted. Jest setup added. **10/10 PASS** user-confirmed 22:44 WAT. Commits: `13b750a`, `24270ca`, `0a27026`. |
 | **W62** | Server route path-prefix mismatch — `/api` prefix aligned | 2026-08-16 | Confirmed clean by direct read in same session as W61 — `index.ts` mounts at `/api/...`, client `apiClient.ts` targets correct prefix. No additional code change needed. |
 | **W63** | Approval endpoint ID semantics — by-inspectionId routes resolve mismatch | 2026-08-16 | Resolved as part of W61: `POST /api/approvals/by-inspection/:inspectionId/approve+reject` added so client never needs Approval.id. Legacy `/:id/approve` preserved for supervisor UI. Tested and green. |
-| **W64** | Sync schema missing real client values — severity + status enums in SyncPayload | 2026-08-17 | **Confirmed clean by direct read** — `SyncService.ts` sends full `SavedInspection` object. `server/src/routes/sync.ts` `InspectionItemSchema` validates `severity: z.enum(['low','medium','high'])` and `InspectionSchema` validates `status: z.enum(['completed','in-progress','draft'])` + `mapStatus()` maps to Prisma enums. No code change needed. |
-| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | **Confirmed clean by direct read** — `BackupService.ts` exports v2 payload with `photoUriMap`, accepts v1+v2 on import, `multiSet` atomically restores all 9 keys, `getLastBackupDate()` present. No code change needed. |
-| **W66** | Integrity + audit trail — false "tampered" badge + unrestricted audit-log clear | 2026-08-17 | **Confirmed clean by direct read** — `IntegrityService.ts` SHA-256 via expo-crypto, canonical sort (integrityHash omitted), `hashAndStore` + `verifyInspection` + `removeHash/removeHashes` all present. No code change needed. |
+| **W64** | Sync schema missing real client values — severity + status enums in SyncPayload | 2026-08-17 | Confirmed clean by direct read — `SyncService.ts` sends full `SavedInspection` object. `server/src/routes/sync.ts` validates severity/status via Zod enums + mapStatus(). No code change needed. |
+| **W65** | Backup/restore reads wrong storage layer | 2026-08-17 | Confirmed clean by direct read — `BackupService.ts` exports v2 payload with `photoUriMap`, accepts v1+v2 on import, `multiSet` atomically restores all 9 keys. No code change needed. |
+| **W66** | Integrity + audit trail | 2026-08-17 | Confirmed clean by direct read — SHA-256 via expo-crypto, canonical sort, `hashAndStore` + `verifyInspection` all present. No code change needed. |
+| **W67** | Photo evidence backup+sync payload gap | 2026-08-17 | Confirmed clean by direct read — `PhotoService.ts` copies to `documentDirectory/photos/` (permanent). BackupService `photoUriMap` + SyncService include URIs. Binary files not embedded = intentional documented decision. No code change needed. |
+| **W68** | PIN lockout bypassable | 2026-08-17 | Confirmed clean by direct read — `pin-lock.tsx` reads `AuthRepository.isLockedOut()` + `getFailedAttempts()` from SQLite on every mount. Keypad + biometric fully disabled after MAX_ATTEMPTS. No bypass vector. No code change needed. |
+| **W69** | CAP evidence + lifecycle | 2026-08-17 | Confirmed clean by direct read — `CorrectiveActionRepository.ts`: UPSERT lifecycle, `escalateOverdue()` on every read, `closedAt` timestamped on `resolved`, `inspectionId`+`inspectionItemId` stored, notes+assignedTo editable. `app/cap/[id].tsx` surfaces all fields. Intentional: `closed` status type exists but `resolved` is terminal — consistent with screen NEXT_STATUS map. No code change needed. |
 
 ---
 
@@ -123,9 +126,6 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | P1 | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W67** | Photo evidence never leaves device — backup + sync payload gap | SPEC 04 | **P0** | — | Photos stored locally but excluded from both backup export and sync payload. Read `BackupService.ts` + `SyncService.ts` + `PhotoService.ts` before acting. |
-| **W68** | PIN lockout bypassable — destructive-by-default recovery path | SPEC 05 | P1 | — | PIN lockout recovery path bypasses lockout and defaults to destructive action. |
-| **W69** | CAP evidence + lifecycle — no evidence/legal link, resolved ≠ closed mismatch | SPEC 03 | P1 | — | Corrective actions carry no evidence or legal-basis link; "resolved" vs "closed" semantics don't match documented model. |
 | **W70** | PDF report gaps — missing verification fields, 2/3 signatures not captured, race condition | SPEC 06 | P1 | — | Report omits verification fields; only 1 of 3 signatures digitally captured; timing-based race condition on signature confirmation. |
 | **W71** | Planning + prioritization — risk/priority data computed but never surfaced in UI | SPEC 07 | P1 | — | Dashboard stat computed over wrong denominator; risk/priority scores computed but invisible to inspector. |
 | **W72** | Dead settings toggles + unreachable notification centre | SPEC 10 | P1 | — | All 3 Settings toggles write keys nothing reads; entire Notification Centre (repo + screen + badge) built but never fired. Mandatory grep sweep required before next release. |
@@ -188,25 +188,14 @@
 
 ## Execution Order (Current Sprint)
 
-### P0 — fix in order (chain dependency)
-1. ~~**W61**~~ ✅ CLOSED — routes mounted + by-inspectionId routes added
-2. ~~**W62**~~ ✅ CLOSED — path-prefix confirmed clean
-3. ~~**W63**~~ ✅ CLOSED — ID semantics resolved via by-inspectionId routes
-4. ~~**W64**~~ ✅ CLOSED — confirmed clean by direct read
-5. ~~**W65**~~ ✅ CLOSED — confirmed clean by direct read
-6. ~~**W66**~~ ✅ CLOSED — confirmed clean by direct read
-7. **W67** — Photo evidence backup+sync (next P0 — verify vs actual code first)
+### P1 — in order
+1. **W70** — PDF report gaps (vérifier `src/services/pdfService.ts` + signature screens avant d'agir)
+2. **W71** — Planning/priority UI
+3. **W72** — Dead settings toggles + notification centre
 
-### P1 — after P0s land (any order)
-8. **W68** — PIN lockout recovery
-9. **W69** — CAP evidence + lifecycle
-10. **W70** — PDF report gaps
-11. **W71** — Planning/priority UI
-12. **W72** — Dead settings toggles + notification centre
-
-### P2 — last
-13. **W73** — Agenda facility mismatch
-14. **W74** — Minor server hardening
+### P2 — after P1s
+4. **W73** — Agenda facility mismatch
+5. **W74** — Minor server hardening
 
 ### Ongoing surveillance
 - **W51** — AIM GPL2 JORADP watch
