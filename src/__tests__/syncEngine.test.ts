@@ -7,13 +7,17 @@
 //   recursively until Jest aborts with "infinite loop" after 100 000 ticks.
 //   advanceTimersByTimeAsync(ms) advances the clock by exactly ms, triggering each
 //   setInterval callback exactly once — correct for a single-tick assertion.
+//
+// W89 FIX 2: SettingsRepository mock now uses getAll() (returns Record<string,string>)
+//   instead of get() (zero-arg, returns Settings object). syncEngine.ts was updated
+//   to call getAll() and inspect the raw 'autoSync' key.
 
 const SYNC_URL = 'https://example.com/api';
 const INTERVAL_MS = 100;
 
 jest.mock('../services/SyncService', () => ({ flush: jest.fn().mockResolvedValue(0) }));
 jest.mock('../repositories/SettingsRepository', () => ({
-  SettingsRepository: { get: jest.fn().mockResolvedValue(true) },
+  SettingsRepository: { getAll: jest.fn().mockResolvedValue({ autoSync: 'true' }) },
 }));
 jest.mock('@react-native-community/netinfo', () => ({
   default: { addEventListener: jest.fn().mockReturnValue(jest.fn()) },
@@ -48,7 +52,7 @@ describe('syncEngine', () => {
     jest.resetModules();
     jest.mock('../services/SyncService', () => ({ flush: jest.fn().mockResolvedValue(0) }));
     jest.mock('../repositories/SettingsRepository', () => ({
-      SettingsRepository: { get: jest.fn().mockResolvedValue(false) },
+      SettingsRepository: { getAll: jest.fn().mockResolvedValue({ autoSync: 'false' }) },
     }));
     jest.mock('@react-native-community/netinfo', () => ({
       default: { addEventListener: jest.fn().mockReturnValue(jest.fn()) },
@@ -66,7 +70,7 @@ describe('syncEngine', () => {
     jest.resetModules();
     jest.mock('../services/SyncService', () => ({ flush: jest.fn().mockResolvedValue(1) }));
     jest.mock('../repositories/SettingsRepository', () => ({
-      SettingsRepository: { get: jest.fn().mockResolvedValue(true) },
+      SettingsRepository: { getAll: jest.fn().mockResolvedValue({ autoSync: 'true' }) },
     }));
     jest.mock('@react-native-community/netinfo', () => ({
       default: { addEventListener: jest.fn().mockReturnValue(jest.fn()) },

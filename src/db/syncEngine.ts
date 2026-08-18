@@ -14,7 +14,7 @@
 //   - Silent no-op when EXPO_PUBLIC_SYNC_API_URL is not set so Expo Go /
 //     development builds are unaffected (same contract as SyncService).
 //   - Also a no-op when the user has disabled auto-sync via Settings
-//     (SettingsRepository.get('autoSync') === false). W72 fix.
+//     (SettingsRepository.getAll() key 'autoSync' === 'false'). W72 fix.
 //   - The NetInfo listener is defensive: if @react-native-community/netinfo
 //     is not installed the scheduler falls back to interval-only mode.
 //   - All flush() errors are caught and logged — a sync failure must never
@@ -30,7 +30,8 @@
 //    Using a computed key `process.env[KEY]` is opaque to the plugin and
 //    reads the live process.env object at call time.
 //
-// ⚠️  IMPORTS — keep require() (not import) for SyncService and NetInfo:
+// ⚠️  IMPORTS — keep require() (not import) for SyncService, SettingsRepository,
+//    and NetInfo:
 //    Dynamic require() is resolved through moduleNameMapper at call time;
 //    a static import would be hoisted and cached before mocks are wired.
 
@@ -40,15 +41,21 @@ function hasSyncUrl(): boolean {
   return Boolean((process.env[SYNC_API_URL_KEY] ?? '').trim());
 }
 
-/** W72: reads the autoSync setting at call-time (not cached). */
+/**
+ * W72: reads the autoSync setting at call-time (not cached).
+ * Uses getAll() to read raw key→value pairs so we avoid the
+ * zero-argument get() signature constraint on SettingsRepository.
+ */
 async function isAutoSyncEnabled(): Promise<boolean> {
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { SettingsRepository } = require('../repositories/SettingsRepository') as
       typeof import('../repositories/SettingsRepository');
-    const value = await SettingsRepository.get('autoSync');
+    const all = await SettingsRepository.getAll();
+    const raw = (all as Record<string, string>)['autoSync'];
     // Default true when unset — preserves behaviour for existing installs.
-    return value !== false && value !== 'false';
+    if (raw === undefined) return true;
+    return raw !== 'false' && raw !== '0' && raw !== '';
   } catch {
     return true;
   }

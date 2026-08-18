@@ -11,6 +11,9 @@
 //      is blocked because an approved inspection is in the selection.
 // W53: added 'SERVER_SYNC_PENDING' — logged by ApprovalRepository.syncToServer()
 //      when the server call fails; picked up by the sync engine for retry.
+// W66 FIX: added 'INSPECTION_STATUS_UPDATED' — logged by
+//      InspectionRepository.updateStatus() so every approve/reject/return action
+//      is traceable in the audit trail.
 
 import { getDb } from '../db/schema';
 
@@ -21,6 +24,7 @@ export type AuditAction =
   | 'INSPECTION_DELETED'
   | 'INSPECTION_BULK_DELETED'
   | 'INSPECTION_DELETE_BLOCKED'
+  | 'INSPECTION_STATUS_UPDATED'
   | 'SERVER_SYNC_PENDING'
   | 'AGENDA_ITEM_SAVED'
   | 'AGENDA_ITEM_DELETED'
