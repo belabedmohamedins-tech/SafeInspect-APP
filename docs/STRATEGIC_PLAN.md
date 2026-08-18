@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W89**
+> Next phase identifier: **W92**
 
 ---
 
@@ -117,10 +117,19 @@
 | **audit-log TSC** | `INSPECTION_STATUS_UPDATED` missing from 3 Record<AuditAction,string> | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). TSC 0 user-confirmed. |
 | **CorrectiveActionRepository.extended W85** | `db.runAsync is not a function` — jest.mock hoisting trap | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). Jest 0 failed user-confirmed. |
 | **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
+| **CAP test fixture severity** | `'major'` → `'high'` in BASE fixture | 2026-08-18 | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f). TSC 0 confirmed. |
 
 ---
 
-### 🟠 OPEN
+### 🔴 OPEN — Claude Audit Bugs (W89 / W90 / W91)
+
+| Phase | Title | Priority | Details |
+|---|---|---|---|
+| **W89** | `PriorityWidget.tsx` — `onPress` navigates to facilities list instead of `f.facilityId` | HIGH | One-line fix: `router.push({ pathname: '/facilities/[id]', params: { id: f.facilityId } })`. Pattern confirmed in `facilities/index.tsx`. Test: tap any row in PriorityWidget → must open that specific facility profile. |
+| **W90** | `apiClient.ts` — `EXPO_PUBLIC_API_URL` missing → silent `localhost` fallback | HIGH | Change: `const base = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000'` → throw `Error('EXPO_PUBLIC_API_URL is not configured')`. Also closes F-05. Confirm prod URL with user before pushing. |
+| **W91** | `server/src/routes/notifications.ts` does not exist — push tokens never registered | HIGH | `_layout.tsx` calls `registerPushToken()` at startup. `registerPushToken()` → `POST /api/notifications/register` → 404 silently swallowed. Build the route (store token in DB). Extends SPEC 12. |
+
+### 🟠 OPEN — Surveillance
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
@@ -132,7 +141,6 @@
 
 | Item | Blocker |
 |---|---|
-| F-05: prod API URL falls back to localhost | Confirm correct prod URL |
 | BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
@@ -180,6 +188,6 @@
 
 **All phases closed through W88 — 2026-08-18. TSC 0 + Jest 1233/0 (user-confirmed 22:41 WAT).**
 
-Active: **W51-SURV** (surveillance only) | Next phase identifier: **W89**.
+Active: **W89** / **W90** / **W91** (Claude audit bugs) | **W51-SURV** (surveillance) | Next phase identifier: **W92**.
 
-**Only item requiring human input: F-05 (confirm production API URL).**
+**W90 requires user input: confirm production API URL before fix is pushed.**

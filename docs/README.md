@@ -7,6 +7,13 @@
 
 ## Live Observations Log
 
+### 2026-08-18 23:31 WAT — Perplexity — 3 new Claude audit bugs registered as W89/W90/W91
+- **W89 OPEN:** `PriorityWidget.tsx` — `onPress` navigates to generic facilities list, ignores `f.facilityId`. One-line fix: use the same pattern as `facilities/index.tsx`.
+- **W90 OPEN:** `apiClient.ts` — missing `EXPO_PUBLIC_API_URL` silently falls back to `http://localhost:3000` in production. Should throw. (Related to F-05 backlog item.)
+- **W91 OPEN:** `server/src/routes/notifications.ts` does NOT exist. `_layout.tsx` calls `registerPushToken()` at startup → 404 silently swallowed by `try/catch`. Push token registration never works. Extends SPEC 12.
+- **TSC/Jest unchanged:** 0 errors / 1233 passed (last confirmed 22:41 WAT).
+- **No code changes this session — docs only.**
+
 ### 2026-08-18 22:41 WAT — Perplexity — TSC 0 + Jest 1233/0 ALL GREEN (user confirmed)
 - **TSC:** 0 errors — audit-log.tsx `INSPECTION_STATUS_UPDATED` fix confirmed clean
 - **Jest:** 1233 passed, 0 failed — CorrectiveActionRepository.extended W85 tests now green
@@ -15,7 +22,6 @@
   - CorrectiveActionRepository.extended.test.ts: jest.mock hoisting trap fixed (stable `dbMocks` object pattern)
   - baseGeneralCriteria.ts: confirmed current HEAD (`14e82d0`) is complete and correct — all 37 criteria present, file ends with `];`, BGN-10-01 reads `المواد 15–22`, BGN-08-06 reads Art.63+Art.77
 - **Commit:** [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed)
-- **No open items requiring immediate action.**
 
 ### 2026-08-18 22:30 WAT — Perplexity — baseGeneralCriteria.ts reconstruction verified ✅
 - **Root cause (confirmed by Claude trace):** commit `370a964` ("fix(BGN-10-01): correct W41 header comment") was a bad find/replace — 57 deletions vs 8 insertions destroyed BGN-09-01, BGN-09-02, BGN-10-01, and `];`, replacing them with a truncated, duplicate, unterminated copy of the BGN-08-06 `criteria` line. NOT a silent API truncation.
@@ -69,13 +75,21 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 22:41 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 23:31 WAT)
 
-### 🟡 OPEN ITEMS (need action)
+### 🔴 OPEN — New Claude Audit Bugs (W89/W90/W91)
+
+| Phase | Severity | Item | File | Fix summary |
+|---|---|---|---|---|
+| **W89** | HIGH | `PriorityWidget.tsx` — `onPress` ignores `f.facilityId`, navigates to facilities list | `app/components/PriorityWidget.tsx` | One-line fix: `router.push({ pathname: '/facilities/[id]', params: { id: f.facilityId } })` — same pattern as `facilities/index.tsx` |
+| **W90** | HIGH | `apiClient.ts` — missing env var silently falls back to `localhost:3000` | `src/services/apiClient.ts` | Throw `Error('EXPO_PUBLIC_API_URL is not set')` when env is missing, instead of silent fallback |
+| **W91** | HIGH | `server/src/routes/notifications.ts` missing — `registerPushToken()` silently 404s at every startup | `server/src/routes/notifications.ts` (to create) | Build the route. Extends SPEC 12. No push token is ever registered in production. |
+
+### 🟡 OPEN ITEMS (pre-existing)
 
 | ID | Severity | Item | Blocker / Notes |
 |---|---|---|---|
-| **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
+| **F-05** | LOW | Prod API URL falls back to `localhost` | W90 will close this. Confirm production URL with user first. |
 | **BGN-10-01** | LOW | Art.15–22 range — Claude flagged Art.14/22 status uncertain | Verify against JORADP original PDF before enforcement use. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
@@ -101,14 +115,14 @@
 | R1/R6 | Noise decree + Décret 93-184 citation check | W88 | 2026-08-18 direct read |
 | MCH-29-08 | Loi 01-19 Art.28 wrong domain | W88 | 2026-08-18 corrected to Art.18 |
 | baseGeneralCriteria truncation | File cut off mid-string (BGN-09-01/02 + BGN-10-01 + `];` lost) | Claude repair + manual push | 2026-08-18 commit `14e82d0` |
-| audit-log.tsx TSC | `INSPECTION_STATUS_UPDATED` missing from 3 Records | Commit `2c78a16` | **2026-08-18 TSC 0 user-confirmed** |
-| CorrectiveActionRepository.extended W85 Jest | `db.runAsync is not a function` — jest.mock hoisting trap | Commit `2c78a16` | **2026-08-18 Jest 0 failed user-confirmed** |
+| audit-log.tsx TSC | `INSPECTION_STATUS_UPDATED` missing from 3 Records | Commit `2c78a16` | 2026-08-18 TSC 0 user-confirmed |
+| CorrectiveActionRepository.extended W85 Jest | `db.runAsync is not a function` — jest.mock hoisting trap | Commit `2c78a16` | 2026-08-18 Jest 0 failed user-confirmed |
+| CAP test fixture severity | `'major'` → `'high'` in BASE fixture | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f) | 2026-08-18 TSC 0 confirmed |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
 | Item | Blocker |
 |---|---|
-| F-05: prod API URL falls back to localhost | Confirm correct prod URL |
 | BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
@@ -131,7 +145,7 @@ SafeInspect-APP/
 │   └── __tests__/              # Jest test suite (1233 tests)
 ├── server/
 │   ├── src/
-│   │   ├── routes/             # approvals.ts, sync.ts, auth.ts
+│   │   ├── routes/             # approvals.ts, sync.ts, auth.ts (notifications.ts MISSING → W91)
 │   │   ├── middleware/         # auth.ts (JWT)
 │   │   ├── lib/                # push.ts (Expo push)
 │   │   └── __tests__/          # 10 server tests
@@ -155,11 +169,12 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
+| **W89** | PriorityWidget facilityId nav bug | 🔴 OPEN |
+| **W90** | apiClient.ts localhost silent fallback → throw | 🔴 OPEN |
+| **W91** | notifications.ts route missing — push token never registered | 🔴 OPEN |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
 **All phases closed through W88. TSC 0 + Jest 1233/0 — 2026-08-18 22:41 WAT (user-confirmed).**
-
-**Only item requiring human input before next phase: F-05 (confirm production API URL).**
 
 ---
 
