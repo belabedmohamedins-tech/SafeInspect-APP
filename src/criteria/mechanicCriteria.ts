@@ -17,7 +17,10 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
     axis: 'النفايات الخطرة',
     category: 'بيئية',
     criteria: 'جمع الزيوت المستعملة وزيوت المحركات في حاويات محكمة ومانعة للتسرب وعدم طرحها في شبكة الصرف أو التربة أو المجرى العمومي.',
-    legalReference: 'القانون 01-19 المتعلق بتسيير النفايات، والمرسوم التنفيذي 93-162 المتعلق باسترجاع الزيوت المستعملة ومعالجتها.',
+    // W51 (2026-08-18): added Décret 09-19 Art.2+Art.6 — same pattern as MCH-29-09
+    // (tyre waste). Oil collection must go to an approved operator; the approval
+    // framework is Décret 09-19. Previously missing — closes G9 (Claude audit 2026-08-08).
+    legalReference: 'القانون 01-19 المتعلق بتسيير النفايات + المرسوم التنفيذي 93-162 المتعلق باسترجاع الزيوت المستعملة ومعالجتها + المرسوم التنفيذي 09-19 المادة 2 (تعريف نطاق اعتماد متعاملي جمع ونقل النفايات الخاصة الخطرة) + المادة 6 (شروط منح الاعتماد للمتعامل الجامع والناقل — وجوب التعاقد مع متعامل حامل لاعتماد ساري المفعول).',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
@@ -27,7 +30,11 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
     axis: 'النفايات الخطرة',
     category: 'بيئية',
     criteria: 'التعاقد مع مؤسسة معتمدة لجمع ونقل ومعالجة الزيوت المستعملة والفلاتر الملوثة وبقايا السوائل التقنية (فرامل، تبريد...).',
-    legalReference: 'القانون 01-19 والمرسوم 05-315 الذي يحدد كيفيات التصريح بالنفايات الخاصة الخطرة ووجوب التعامل مع متعاملين معتمدين.',
+    // W51 (2026-08-18): added Décret 09-19 Art.2+Art.6 — same pattern as MCH-29-09.
+    // MCH-29-04 is the "contract" criterion; the approval framework (Décret 09-19)
+    // is the legal basis that makes the approval requirement mandatory.
+    // Previously only Loi 01-19 + Décret 05-315 — closes G9 (Claude audit 2026-08-08).
+    legalReference: 'القانون 01-19 + المرسوم 05-315 الذي يحدد كيفيات التصريح بالنفايات الخاصة الخطرة ووجوب التعامل مع متعاملين معتمدين + المرسوم التنفيذي 09-19 المادة 2 (نطاق الاعتماد المطلوب لمتعاملي الجمع والنقل والمعالجة) + المادة 6 (شروط الحصول على الاعتماد — يُلزم صاحب النشاط بالتحقق من سريان اعتماد المتعامل المتعاقد معه).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
