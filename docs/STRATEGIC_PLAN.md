@@ -100,8 +100,9 @@
 | **W80** | 3 false flags corrected (06-138 MISSING, 09-03 UNVERIFIÉ, 83-496 Art.4/7/8 PHANTOM) | 2026-08-17 | Confirmed by direct source read this session. No code change. |
 | **W81** | Décret 76-36 ❌ MISSING → ✅ Present (rectificatif J.O. n°67/1976) | 2026-08-17 | `decret-76-36-incendie-panique.md` confirmed present (SHA 2b71182). Rectificatif corrections Art.20/24/27. Texte intégral J.O. n°21/1976 non numérisé. |
 | **W82** | Finding 3 — PPE/machine-guard legal refs full audit (6 criteria files) | 2026-08-17 | blacksmith BSM-04-01/03 patched (commit `8433bea`). painting PNT-04-01 patched prev session. uab/carpentry/marble/printing confirmed clean by direct live read. 0 incorrect Loi 90-11/Décret 93-120 PPE citations remain. |
-| **W83** | Phantom backlog entry removed — active inspection screen | 2026-08-17 | `app/screens/checklists.tsx` confirmed present (9.4 KB). User verified ✅/❌/⬜ tapping works in app. Backlog entry was incorrect speculation — confirmed clean by direct code read. |
-| **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | Direct read of `keys.ts` + `SettingsRepository.ts` + `settings.tsx`. 3 mismatched keys found: `'notifications'`, `'autoSync'`, `'darkMode'` used in settings.tsx are NOT in StorageKeys — fixes → W85. |
+| **W83** | Phantom backlog entry removed — active inspection screen | 2026-08-17 | `app/screens/checklists.tsx` confirmed present (9.4 KB). Backlog entry was incorrect speculation — confirmed clean by direct code read. |
+| **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | Direct read of `keys.ts` + `SettingsRepository.ts` + `settings.tsx`. 3 mismatched keys found: `'notifications'`, `'autoSync'`, `'darkMode'` not in StorageKeys — fixes → W85. |
+| **W85** | SPEC 10 fix — add AUTO_SYNC/DARK_MODE/NOTIFICATIONS_UI to StorageKeys + patch settings.tsx | 2026-08-18 | Commit `33e5cbf`. +12/-12 verified. `keys.ts` +7 lines, `settings.tsx` +5 lines. TSC/Jest gate ⏳ PENDING user confirmation. |
 
 ---
 
@@ -110,7 +111,6 @@
 | Phase | Title | Spec source | Priority | Depends on | Notes |
 |---|---|---|---|---|---|
 | **W51** | LEGAL-VERIFY: AIM GPL2 publication status | — | surveillance | — | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. |
-| **W85** | SPEC 10 fix — add AUTO_SYNC / DARK_MODE / NOTIFICATIONS_UI to StorageKeys + patch settings.tsx | W84 audit | HIGH — release blocker | W84 | 3 raw string keys in settings.tsx not backed by StorageKeys constants. Silently broken across app restarts. |
 
 ---
 

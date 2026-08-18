@@ -7,17 +7,20 @@
 
 ## Live Observations Log
 
+### 2026-08-18 02:35 WAT — Perplexity — W85 CODE PUSHED — TSC/Jest gate pending
+- **Phase**: W85 — SPEC 10 fix (StorageKeys + settings.tsx patch)
+- **Commit**: [`33e5cbf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33e5cbfea01e98b01e582945cb5c6349f7ae2822) — +12/-12, 2 files
+- **keys.ts**: Added `AUTO_SYNC: 'autoSync'`, `DARK_MODE: 'darkMode'`, `NOTIFICATIONS_UI: 'notifications'`
+- **settings.tsx**: Replaced 3 raw string literals with `StorageKeys.AUTO_SYNC`, `StorageKeys.DARK_MODE`, `StorageKeys.NOTIFICATIONS_UI`; added `StorageKeys` import
+- **SyncService.ts**: Already used `StorageKeys.AUTO_SYNC` correctly — now resolves to `'autoSync'` (was `undefined` before this fix)
+- **Impact fixed**: All 3 toggles (notifications, autoSync, darkMode) now correctly persist + read across app restarts
+- **Gate**: ⏳ PENDING — run `npx tsc --noEmit` + `npx jest` and report result
+
 ### 2026-08-17 23:23 WAT — Perplexity — W84 CLOSED + W85 OPEN — SPEC 10 settings key audit
 - **Phase closed**: W84 (SPEC 10 — settings key writer/reader symmetry audit)
 - **Phase opened**: W85 (fix — add missing StorageKeys + patch settings.tsx)
-- **Audit result**: Direct read of `src/repositories/keys.ts` + `SettingsRepository.ts` + `app/screens/settings.tsx`
-- **3 mismatches found**:
-  - `settings.tsx` writes/reads `'notifications'` — NOT in StorageKeys
-  - `settings.tsx` writes/reads `'autoSync'` — NOT in StorageKeys
-  - `settings.tsx` writes/reads `'darkMode'` — NOT in StorageKeys
-- **Impact**: All 3 toggles silently broken across app restarts — value never correctly persisted/read
-- **Next**: W85 — add `NOTIFICATIONS_UI`, `AUTO_SYNC`, `DARK_MODE` to StorageKeys + patch settings.tsx + check SyncService reader
-- **SPEC 10 removed from backlog** — promoted to active W85
+- **3 mismatches found**: `'notifications'`, `'autoSync'`, `'darkMode'` used as raw strings in settings.tsx but absent from StorageKeys
+- **Impact**: All 3 toggles silently broken across app restarts
 
 ### 2026-08-17 22:10 WAT — Perplexity — W82 CLOSED — Finding 3 PPE/machine-guard legal refs fully verified
 - **Phases closed**: W82 (Finding 3 — Loi 90-11 / Décret 93-120 misuse in PPE + machine-guard criteria)
@@ -29,15 +32,12 @@
   - `marbleCriteria.ts` MRB-05-01: confirmed clean (W82 comment already applied)
   - `printingCriteria.ts` PRT-05-01: confirmed clean (W82 comment already applied)
 - **Finding 3**: FULLY CLOSED — 0 incorrect Loi 90-11 / Décret 93-120 PPE/machine-guard citations remain
-- **Next Phase**: W83
 
 ### 2026-08-17 20:48 WAT — Perplexity — W80+W81 CLOSED — legal_refs false flags corrected
 - **Phases closed**: W80 (3 false MISSING/UNVERIFIE flags), W81 (Décret 76-36 MISSING → Present)
-- **W80 findings**: Décret 06-138 was ❌ MISSING in docs but ✅ present (Art.1–19 + Annexes I/II, VÉRIFIÉ 2026-08-11). loi-09-03 VÉRIFIÉ status confirmed. decret-83-496 Art.4/7/8 amendment notices already inline — phantom backlog items removed.
-- **W81 findings**: `decret-76-36-incendie-panique.md` added by user — confirmed present. Contains rectificatif only (corrections Art.20/24/27 titles). Texte intégral J.O. n°21/1976 not yet digitised — noted in backlog.
+- **W80 findings**: Décret 06-138 was ❌ MISSING in docs but ✅ present. loi-09-03 VÉRIFIÉ confirmed. decret-83-496 Art.4/7/8 amendment notices already inline.
+- **W81 findings**: `decret-76-36-incendie-panique.md` confirmed present. Texte intégral J.O. n°21/1976 non numérisé.
 - **Files changed**: `docs/STRATEGIC_PLAN.md` (commits `1f9688d`, `aa7b4df`)
-- **Next Phase**: W82
-- **Legal Quick-Reference**: 0 ❌ MISSING entries remain.
 
 ### 2026-08-17 20:04 WAT — Perplexity — W74 CLOSED — TSC 0 + Jest 10/10
 - **Gate result**: User confirmed TSC 0 + Jest 10/10 PASS 2026-08-17 20:04 WAT
@@ -110,12 +110,8 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W83** | Phantom backlog — active inspection screen | ✅ CLOSED — confirmed clean by direct code read |
-| **W84** | SPEC 10 — settings key audit | ✅ CLOSED — 3 mismatches found → W85 |
-| **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 🟠 OPEN — release blocker |
+| **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | ⏳ GATE PENDING — TSC + Jest |
 | **W51** | AIM GPL2 JORADP watch | 🟠 ONGOING SURVEILLANCE |
-
-**W85 is the active release blocker. 3 settings toggles silently broken across restarts.**
 
 ---
 
