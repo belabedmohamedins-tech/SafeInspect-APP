@@ -30,10 +30,18 @@ export async function buildBrief(facilityId: string): Promise<BriefData> {
     };
   }
 
-  const severityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+  // W86: critical must be 0 (highest priority). Without it, critical items
+  // received ?? 3 and sorted last — the opposite of correct behaviour.
+  const severityOrder: Record<string, number> = {
+    critical: 0,
+    high:     1,
+    medium:   2,
+    low:      3,
+  };
+
   const topViolations = last.items
     .filter(item => item.complianceStatus === 'non-compliant')
-    .sort((a, b) => (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3))
+    .sort((a, b) => (severityOrder[a.severity] ?? 4) - (severityOrder[b.severity] ?? 4))
     .slice(0, 3);
 
   return {
