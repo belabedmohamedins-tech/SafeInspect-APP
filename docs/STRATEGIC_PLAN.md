@@ -110,6 +110,10 @@
 | **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | 3 mismatched keys found → W85 |
 | **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 2026-08-18 | TSC 0 + Jest 1245/0. Commits: `33e5cbf`, `14b055c` |
 | **W86** | BackupService v3 photo embed + briefService critical sort | 2026-08-18 | TSC 0 + Jest 1257/0. Commit [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30) |
+| **W50** (new) | CGS-01-01: Décret 76-35 removed — wrong domain (IGH) | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Arrêté 16/07/1992 + Décret 06-198 Art.14 + Loi 19-02 Art.4 |
+| **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill — G9 closed | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Same pattern as MCH-29-09 |
+| **G3** (Claude audit) | CLD-17-01 + PRD-01-01 duplicate check | 2026-08-18 | CONFIRMED NOT DUPLICATES by direct source read. CLD-17-01 = cold-room product-type + capacity specifics. PRD-01-01 = wholesale olive/vegetable scope + Art.5+Art.13. Both evolved from BGN-01-01 baseline into legitimate facility-specific criteria. No code action. |
+| **G11** (Claude audit) | BGN-03-06 [حكم مهني] tag | 2026-08-18 | CONFIRMED already tagged in W19-CLOSE. No action. |
 
 ---
 
@@ -117,7 +121,8 @@
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W51** | LEGAL-VERIFY: AIM GPL2 publication status | Surveillance | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. No code action until published. |
+| **W51-SURV** | LEGAL-VERIFY: AIM GPL2 publication status | Surveillance | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. No code action until published. |
+| **R1/R6** | Algeria noise-exposure decree + Décret 93-184 verify | Low | Not attempted by Claude this round. Deferred. |
 
 ---
 
@@ -164,15 +169,15 @@
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only) |
+| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed from criteria (W49 BGN-08-03, W50 CGS-01-01). |
 | Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 |
 | Décret 06-138 | Émissions poussières | ✅ Present — VÉRIFIÉ 2026-08-11 |
-| AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51 OPEN |
+| AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51-SURV OPEN |
 
 ---
 
 ## Sprint Status
 
-**All phases closed through W86 — 2026-08-18. TSC 0 + Jest 1257/0.**
+**All phases closed through W86 + W50/W51/G3/G11 — 2026-08-18. TSC 0 + Jest 1257/0.**
 
-Only active item: **W51** surveillance (no code action until JORADP publishes AIM GPL2).
+Active items: **W51-SURV** (no code action until JORADP publishes AIM GPL2) | **R1/R6** (noise decree — deferred, low priority).
