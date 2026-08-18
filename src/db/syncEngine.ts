@@ -13,6 +13,8 @@
 // Design constraints:
 //   - Silent no-op when EXPO_PUBLIC_SYNC_API_URL is not set so Expo Go /
 //     development builds are unaffected (same contract as SyncService).
+//   - Also a no-op when the user has disabled auto-sync via Settings
+//     (SettingsRepository.get('autoSync') === false). W72 fix.
 //   - The NetInfo listener is defensive: if @react-native-community/netinfo
 //     is not installed the scheduler falls back to interval-only mode.
 //   - All flush() errors are caught and logged — a sync failure must never
@@ -38,8 +40,25 @@ function hasSyncUrl(): boolean {
   return Boolean((process.env[SYNC_API_URL_KEY] ?? '').trim());
 }
 
+/** W72: reads the autoSync setting at call-time (not cached). */
+async function isAutoSyncEnabled(): Promise<boolean> {
+  try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { SettingsRepository } = require('../repositories/SettingsRepository') as
+      typeof import('../repositories/SettingsRepository');
+    const value = await SettingsRepository.get('autoSync');
+    // Default true when unset — preserves behaviour for existing installs.
+    return value !== false && value !== 'false';
+  } catch {
+    return true;
+  }
+}
+
 async function safeFlush(): Promise<void> {
   if (!hasSyncUrl()) return;
+  // W72: honour the user's autoSync preference.
+  const enabled = await isAutoSyncEnabled();
+  if (!enabled) return;
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { flush } = require('../services/SyncService') as typeof import('../services/SyncService');

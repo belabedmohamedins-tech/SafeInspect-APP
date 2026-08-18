@@ -16,12 +16,16 @@
 //   2. Appends an INSPECTION_STATUS_UPDATED event to the audit log so every
 //      approve/reject/return action is traceable. Previously updateStatus()
 //      mutated the record with no hash update and no audit trail.
+// W85 FIX (SPEC 03): delete() and deleteMany() now cascade to
+//      CorrectiveActionRepository.deleteByInspection() so that deleting an
+//      inspection never leaves orphaned CAP rows.
 
 import { getDb } from '../db/schema';
 import { SavedInspection } from '../types';
 import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
 import { createCapItemsFromInspection } from '../services/capFactory';
+import { CorrectiveActionRepository } from './CorrectiveActionRepository';
 
 // ── Row shape returned by SQLite ────────────────────────────────────────────────
 interface InspectionRow {
@@ -195,6 +199,7 @@ export const InspectionRepository = {
 
   // ── delete ──────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED if the inspection is approved.
+  // W85 FIX: cascades deletion to corrective_actions so no orphaned CAPs remain.
   async delete(id: string): Promise<void> {
     const db = await getDb();
     const existingRow = await db.getFirstAsync<{ approval_status: string | null; facility_name: string | null }>(
@@ -210,6 +215,8 @@ export const InspectionRepository = {
       );
       throw new Error('INSPECTION_LOCKED');
     }
+    // W85: cascade — delete orphaned CAPs before removing the inspection row.
+    await CorrectiveActionRepository.deleteByInspection(id);
     await db.runAsync('DELETE FROM inspections WHERE id = ?', [id]);
     await AuditLogRepository.append(
       'INSPECTION_DELETED',
@@ -220,6 +227,7 @@ export const InspectionRepository = {
 
   // ── deleteMany ─────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED (atomically — nothing deleted) if any id is approved.
+  // W85 FIX: cascades deletion to corrective_actions for all deleted inspections.
   async deleteMany(ids: string[]): Promise<void> {
     if (ids.length === 0) return;
     const db = await getDb();
@@ -238,6 +246,10 @@ export const InspectionRepository = {
         );
         throw new Error('INSPECTION_LOCKED');
       }
+    }
+    // W85: cascade — delete all CAPs for these inspections before removing rows.
+    for (const id of ids) {
+      await CorrectiveActionRepository.deleteByInspection(id);
     }
     await db.runAsync(
       `DELETE FROM inspections WHERE id IN (${placeholders})`,

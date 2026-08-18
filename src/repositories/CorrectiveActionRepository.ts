@@ -8,6 +8,12 @@
 //      updateStatus() fires a FOLLOW_UP notification when status becomes
 //      'in-progress'.
 //      Both calls are fire-and-forget via pushInApp() and never throw.
+//
+// W85 FIX (SPEC 03): updateStatus() now stamps closedAt ONLY when status
+//      becomes 'closed' (inspector-verified), not 'resolved' (self-reported).
+//      The resolved→closed distinction is legally significant:
+//        'resolved' = facility self-reports fix (no evidence yet)
+//        'closed'   = inspector verified and signed off
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
@@ -260,6 +266,9 @@ export const CorrectiveActionRepository = {
   /**
    * Update status of a corrective action.
    * W72: fires FOLLOW_UP notification when status becomes 'in-progress'.
+   * W85 FIX: closedAt is stamped ONLY when status === 'closed' (inspector-verified).
+   *   'resolved' means the facility self-reported; 'closed' means the inspector
+   *   confirmed closure. Setting closedAt on 'resolved' collapsed both states into one.
    */
   async updateStatus(
     id: string,
@@ -268,45 +277,56 @@ export const CorrectiveActionRepository = {
   ): Promise<void> {
     const db = await getDb();
     const now = new Date().toISOString();
-    const closedAt = status === 'resolved' ? now : null;
-    await db.runAsync(
-      `UPDATE corrective_actions
-       SET status = ?, notes = COALESCE(?, notes), updated_at = ?,
-           closed_at = COALESCE(?, closed_at)
-       WHERE id = ?`,
-      [status, notes ?? null, now, closedAt, id],
-    );
+    // W85: only stamp closedAt when inspector-verified closure ('closed'),
+    // not when facility self-reports ('resolved').
+    const closedAt = status === 'closed' ? now : null;
+    const params: (string | null)[] = [status, now, closedAt];
+    let sql = `UPDATE corrective_actions
+       SET status = ?, updated_at = ?, closed_at = ?`;
+    if (notes !== undefined) {
+      sql += ', notes = ?';
+      params.push(notes);
+    }
+    sql += ' WHERE id = ?';
+    params.push(id);
+    await db.runAsync(sql, params);
 
-    // W72: fire FOLLOW_UP notification when a CAP starts being worked on.
+    // W72: fire FOLLOW_UP notification when CAP moves to in-progress.
     if (status === 'in-progress') {
-      const row = await db.getFirstAsync<CapRow>(
-        'SELECT * FROM corrective_actions WHERE id = ?',
+      const row = await db.getFirstAsync<{ facility_name: string; criteria: string }>(
+        'SELECT facility_name, criteria FROM corrective_actions WHERE id = ?',
         [id],
       );
       if (row) {
         void pushInApp({
           type: 'FOLLOW_UP',
-          title: `🔄 متابعة إجراء تصحيحي — ${row.facility_name}`,
-          body: `${row.criteria} — قيد التنفيذ`,
+          title: `🔄 إجراء تصحيحي قيد التنفيذ — ${row.facility_name}`,
+          body: row.criteria,
           link: { screen: '/screens/cap' },
         });
       }
     }
   },
 
-  async delete(id: string): Promise<void> {
-    await (await getDb()).runAsync(
-      'DELETE FROM corrective_actions WHERE id = ?', [id],
+  /**
+   * Delete all corrective actions for a given inspection.
+   * Called by InspectionRepository.delete() to prevent orphaned CAPs.
+   */
+  async deleteByInspection(inspectionId: string): Promise<void> {
+    const db = await getDb();
+    await db.runAsync(
+      'DELETE FROM corrective_actions WHERE inspection_id = ?',
+      [inspectionId],
     );
   },
 
-  async deleteByInspection(inspectionId: string): Promise<void> {
-    await (await getDb()).runAsync(
-      'DELETE FROM corrective_actions WHERE inspection_id = ?', [inspectionId],
-    );
+  async deleteById(id: string): Promise<void> {
+    const db = await getDb();
+    await db.runAsync('DELETE FROM corrective_actions WHERE id = ?', [id]);
   },
 
   async clear(): Promise<void> {
-    await (await getDb()).runAsync('DELETE FROM corrective_actions');
+    const db = await getDb();
+    await db.runAsync('DELETE FROM corrective_actions');
   },
 };
