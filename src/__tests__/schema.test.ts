@@ -25,7 +25,7 @@
 // is written via db.runAsync(INSERT INTO _migrations …).
 // Tests therefore assert execAsync call counts rather than withTransactionAsync.
 //
-// MIGRATION COUNT = 11 (update this comment when adding migrations):
+// MIGRATION COUNT = 15 (update this comment when adding migrations):
 //   001_create_inspections
 //   001_create_facilities
 //   001_create_agenda
@@ -37,8 +37,12 @@
 //   002_inspections_add_index_status
 //   002_corrective_actions_add_index_inspection
 //   003_facilities_add_rubrique
+//   004_cap_add_photo_uri
+//   004_cap_add_verified_by
+//   004_cap_add_verification_note
+//   004_cap_add_verification_photo_uri
 
-const MIGRATION_COUNT = 11;
+const MIGRATION_COUNT = 15;
 
 const ALL_MIGRATION_NAMES = [
   '001_create_inspections',
@@ -52,6 +56,10 @@ const ALL_MIGRATION_NAMES = [
   '002_inspections_add_index_status',
   '002_corrective_actions_add_index_inspection',
   '003_facilities_add_rubrique',
+  '004_cap_add_photo_uri',
+  '004_cap_add_verified_by',
+  '004_cap_add_verification_note',
+  '004_cap_add_verification_photo_uri',
 ];
 
 let mockAppliedMigrations: Set<string> = new Set();
