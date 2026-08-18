@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-08-18 18:27 WAT — Perplexity — W87 ✅ CLOSED — F-01/F-02/F-03 confirmed clean by direct source read
+- **Action:** Direct read of `.gitignore`, `src/db/schema.ts`, `package.json` to verify all three remaining "open" findings
+- **F-01 `.env` gitignore** — CONFIRMED CLEAN. Root `.gitignore` already has `.env` and `.env*.local`. Git root `.gitignore` is recursive — covers `server/.env` too. No code change needed.
+- **F-02 stale Node/Expo comment** — CONFIRMED CLEAN. `schema.ts` header says "expo-sqlite ≥15 / SDK 56" which exactly matches `package.json` (`expo-sqlite ~56.0.0`, SDK 56). No stale text.
+- **F-03 migration naming `001_` reused** — CONFIRMED NOT A BUG. `schema.ts` header documents the convention explicitly (Z12-15): numeric prefix groups batches, full name string is the PRIMARY KEY. Duplicate prefix is intentional and safe. SQLite keys on distinct full names like `001_create_inspections`, `001_create_facilities`, etc.
+- **No code changes. TSC 0 + Jest 1257/0 unchanged.**
+- **All actionable Claude audit findings now confirmed closed or moved to backlog (human decision required).**
+
 ### 2026-08-18 13:38 WAT — Perplexity — Claude audit cross-ref complete — definitive remaining-work list produced
 - **Action:** Cross-referenced all 20 Claude audit findings (F-01–F-20) against current source code (direct reads)
 - **Result:** All findings from the audit that were claimed fixed ARE confirmed fixed by direct code read:
@@ -79,46 +87,44 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 13:38 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 18:27 WAT)
 
-All 20 Claude audit findings verified against current code. Here is the complete and honest picture:
+All Claude audit findings (F-01–F-20) confirmed closed or moved to backlog. No remaining actionable items without human input.
 
 ### 🟡 OPEN ITEMS (need action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|---|
-| **F-01** | LOW | `.env` not in `.gitignore` | Quick fix. Verify `.gitignore` contains `.env`, `*.env`, `server/.env`. |
+|---|---|---|
 | **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
-| **F-02** | COSMETIC | Stale Node/Expo version comment | 1-line comment update only. |
-| **F-03** | COSMETIC | Migration naming `001_` reused | Cosmetic, not a functional bug. |
 | **R1/R6** | LOW | Algeria noise-exposure decree + Décret 93-184 verify | Legal citation check deferred. 2 criteria files potentially affected. |
 | **W51-SURV** | SURVEILLANCE | AIM GPL2 JORADP publication status | 6 GPL criteria tagged [À VÉRIFIER]. No action until published. |
 
-### ✅ CONFIRMED CLOSED (all verified by direct code read this session or prior)
+### ✅ CONFIRMED CLOSED (all verified by direct code read)
 
 | Finding | What it was | Closed by | Verified |
 |---|---|---|---|
+| F-01 | `.env` not in `.gitignore` | W87 | **2026-08-18 direct read — already covered** |
+| F-02 | Stale Node/Expo version comment | W87 | **2026-08-18 direct read — no stale comment** |
+| F-03 | Migration naming `001_` reused | W87 | **2026-08-18 direct read — intentional, documented** |
 | F-04/F-07 | SQLite layer dormant | Z5 | 2026-08-09 |
 | F-08 | Double CAP creation | W38 | 2026-08-09 |
 | F-09 | No autosave on background | W28 | 2026-08-09 |
 | F-10 | New facility categories invisible | W40 | 2026-08-09 |
-| F-11 | Approved inspections deletable | W52 | **2026-08-18 direct read** |
+| F-11 | Approved inspections deletable | W52 | 2026-08-18 direct read |
 | F-12 | Integrity badge non-functional | W5 | 2026-08-09 |
 | F-13 | Reinspection facility mismatch | W39 | 2026-08-09 |
 | F-14 | `evaluated` definition inconsistency | W27+W56 | 2026-08-09 |
 | F-15 | No auto follow-up for unable-to-verify | W41 | 2026-08-09 |
-| F-17 | Server↔mobile schema mismatch + violations shape | W64 | **2026-08-18 direct read** |
-| F-18 | Local approval never reaches server | W53 | **2026-08-18 direct read** |
+| F-17 | Server↔mobile schema mismatch + violations shape | W64 | 2026-08-18 direct read |
+| F-18 | Local approval never reaches server | W53 | 2026-08-18 direct read |
 | F-19 | Audit log clearable with no trace | W52 | 2026-08-09 |
-| F-20 | `decisionSupport.ts` test coverage | W56 | **2026-08-18 direct read** |
+| F-20 | `decisionSupport.ts` test coverage | W56 | 2026-08-18 direct read |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
 | Item | Blocker |
 |---|---|
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL |
-| F-02: stale Node/Expo version comment | Cosmetic — low priority |
-| F-03: migration naming `001_` reused | Cosmetic — not a functional bug |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
@@ -167,9 +173,9 @@ SafeInspect-APP/
 |---|---|---|
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
-**All other phases closed. TSC 0 + Jest 1257/0 — 2026-08-18.**
+**All phases closed through W87. TSC 0 + Jest 1257/0 — 2026-08-18.**
 
-**Remaining actionable work:** F-01 (`.env` gitignore), F-05 (prod URL — needs user input), R1/R6 (noise decree legal verify), cosmetics F-02/F-03.
+**Only remaining actionable item requiring human input: F-05 (prod API URL — confirm production URL).**
 
 ---
 

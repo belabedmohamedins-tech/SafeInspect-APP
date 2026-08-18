@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W87**
+> Next phase identifier: **W88**
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W86)
+### ✅ CLOSED — Recent Phases (W60 → W87)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -112,8 +112,9 @@
 | **W86** | BackupService v3 photo embed + briefService critical sort | 2026-08-18 | TSC 0 + Jest 1257/0. Commit [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30) |
 | **W50** (new) | CGS-01-01: Décret 76-35 removed — wrong domain (IGH) | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Arrêté 16/07/1992 + Décret 06-198 Art.14 + Loi 19-02 Art.4 |
 | **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill — G9 closed | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Same pattern as MCH-29-09 |
-| **G3** (Claude audit) | CLD-17-01 + PRD-01-01 duplicate check | 2026-08-18 | CONFIRMED NOT DUPLICATES by direct source read. CLD-17-01 = cold-room product-type + capacity specifics. PRD-01-01 = wholesale olive/vegetable scope + Art.5+Art.13. Both evolved from BGN-01-01 baseline into legitimate facility-specific criteria. No code action. |
+| **G3** (Claude audit) | CLD-17-01 + PRD-01-01 duplicate check | 2026-08-18 | CONFIRMED NOT DUPLICATES by direct source read. |
 | **G11** (Claude audit) | BGN-03-06 [حكم مهني] tag | 2026-08-18 | CONFIRMED already tagged in W19-CLOSE. No action. |
+| **W87** | F-01/F-02/F-03 confirmed clean — all false positives | 2026-08-18 | Direct reads: `.gitignore` already covers `.env`; schema.ts comment accurate (SDK 56); `001_` naming intentional+documented. No code change. |
 
 ---
 
@@ -131,8 +132,6 @@
 | Item | Blocker |
 |---|---|
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL |
-| F-02: stale Node/Expo version comment | Cosmetic — low priority |
-| F-03: migration naming `001_` reused | Cosmetic — low priority |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
@@ -178,6 +177,8 @@
 
 ## Sprint Status
 
-**All phases closed through W86 + W50/W51/G3/G11 — 2026-08-18. TSC 0 + Jest 1257/0.**
+**All phases closed through W87 — 2026-08-18. TSC 0 + Jest 1257/0.**
 
 Active items: **W51-SURV** (no code action until JORADP publishes AIM GPL2) | **R1/R6** (noise decree — deferred, low priority).
+
+**Only item requiring human input before next phase: F-05 (confirm production API URL).**
