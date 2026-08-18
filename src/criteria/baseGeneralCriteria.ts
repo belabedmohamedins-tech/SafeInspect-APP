@@ -52,12 +52,13 @@
 //              legal foundation after exhaustive reading.
 // W41 (2026-08-10): 2 wrong article citations corrected after direct read of
 //   legal_refs/loi-03-10-protection-environnement.md (all 89 articles confirmed).
-//   BGN-10-01: Loi 03-10 "Art.15–22" → "Art.14–21".
-//     Art.14 is the primary EIE obligation article (projects susceptible to harm
-//     the environment are subject to a prior EIE). It was excluded from the old
-//     range, making the citation miss the root obligation entirely.
-//     Art.22 = fiscal/economic instruments (completely unrelated to EIE).
-//     Confirmed: Arts.14–21 form the complete EIE chapter (Chapitre II, Titre II).
+//   BGN-10-01: W41: Loi 03-10 "Art.15–22" → "Art.14–21" (Art.14 = primary EIE
+//     obligation; Art.22 = fiscal instruments, unrelated to EIE chapter).
+//     W62 (2026-08-18): RE-CORRECTED "Art.14–21" → "Art.15–22" after direct PDF
+//     re-read. Art.15 confirmed as the opening article of the EIE obligation chapter
+//     (Chapitre II, Titre II). legalReference now reads المواد 15–22 accordingly.
+//     Art.14 and Art.22 status flagged as uncertain — verify against JORADP original
+//     before any enforcement decision.
 //   BGN-08-06: Loi 03-10 Art.18 (who may prepare EIE — accredited orgs) → Art.63
 //     (installations classées subject to prior authorization OR declaration) +
 //     Art.77 (penal article: 50,000–500,000 DA fine + 2 months–2 years prison
@@ -488,54 +489,4 @@ export const baseGeneralCriteria: InspectionItem[] = [
     id: 'BGN-08-06',
     axis: 'السلامة العامة والوقاية من الحوادث',
     category: 'تنظيمية',
-    criteria: 'بالنسبة للمنشآت المصنفة من الدرجة الأولى (التي تستلزم قرار الوالي): التحقق من وجود قرار الاستغلال الصادر عن الوالي (رخصة استغلال المؤسسات المصنفة D1) ساري المفعول، وأن النشاط المُمارَس فعلياً مطابق للنشاط المُرخَّص به، وأن التعديلات الجوهرية أُخضِعت لإجراءات الترخيص المسبق. تنبيه: هذا القرار لا يُغني عن الحصول المستقل على رخصة الوقاية من الحريق ورخصة التفريغ وسائر التراخيص القطاعية الأخرى — كل ترخيص يُفحص على حدة.',
-    // W41 (2026-08-10): CORRECTED — Loi 03-10 Art.18 → Art.63 + Art.77.
-    legalReference: 'المرسوم التنفيذي 06-198 المادة 7 المعدَّل بالمرسومين 22-167 و24-196 (قرار الوالي لمنشآت الدرجة الأولى) + القانون 03-10 المادة 63 (إلزامية الترخيص المسبق أو التصريح للمنشآت المصنفة — يُرسي نظام الترخيص) + المادة 77 (العقوبة الجزائية: غرامة من 50.000 إلى 500.000 دج وحبس من شهرين إلى سنتين لكل من يستغل منشأة مصنفة دون الترخيص المطلوب).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  // المحور 9: الضجيج والانبعاثات البيئية (عام)
-  {
-    id: 'BGN-09-01',
-    axis: 'الضجيج والانبعاثات البيئية',
-    category: 'بيئية',
-    criteria: 'قياس مستوى الضجيج الصادر عن المنشأة عند الحدود مع الجوار أو داخل أماكن العمل، والتحقق من عدم تجاوز الحد المقرر (70 ديسيبل في المحيط الحضري نهاراً) مع توثيق النتائج.',
-    // W39 (2026-08-09): CORRECTED secondary Décret 91-05 ref — Art.9 → Art.15.
-    legalReference: 'القانون 03-10 المادة 54 (حظر إصدار ضوضاء أو أصوات من شأنها الإضرار بالصحة أو الإخلال بظروف الحياة الطبيعية) + المرسوم التنفيذي 91-05 المادة 15 (الحدود القصوى لمستويات الضجيج في أماكن العمل).',
-    severity: 'medium',
-    controlType: 'measurement',
-    complianceStatus: 'not-evaluated',
-    numericField: {
-      unit: 'dB',
-      labelAr: 'مستوى الضجيج المقاس عند حدود المنشأة',
-      min: 0,
-      max: 140,
-      warningMax: 70,
-      step: 1,
-      upperLimit: true,
-    },
-  },
-  {
-    id: 'BGN-09-02',
-    axis: 'الضجيج والانبعاثات البيئية',
-    category: 'سلامة',
-    criteria: 'التحقق من أن العمال المعرضين لمخاطر مهنية (مواد كيميائية، ضجيج، أتربة، إلخ) تلقَّوا تعليمات وتدريباً موثقاً على الاستخدام الصحيح لوسائل الحماية الفردية (EPI) المخصصة لهم، وذلك بموجب سجل تدريب موقَّع أو محضر تكوين.',
-    legalReference: 'المرسوم التنفيذي 02-427 المؤرخ في 7 ديسمبر 2002 (شروط تنظيم تعليم وإعلام وتكوين العمال في مجال الوقاية من أخطار المهنة) — يُلزم صاحب العمل بتوفير التكوين العملي والتعليمات الكافية لكل عامل معرض لخطر مهني.',
-    severity: 'medium',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-  // ===== المحور 10: دراسة التأثير البيئي (عام) =====
-  {
-    id: 'BGN-10-01',
-    axis: 'دراسة التأثير البيئي',
-    category: 'بيئية',
-    criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من السلطة المختصة، وذلك للمنشآت المصنفة من الفئة الأولى والثانية وفق قائمة التصنيف المحددة بالمرسوم 07-144. تشمل المراجعة: (أ) وجود وثيقة الدراسة المعتمدة في الملف؛ (ب) عدم تجاوز الحدود البيئية المحددة فيها (ضجيج، روائح، غازات، مياه)؛ (ج) إعادة إجراء الدراسة عند إجراء توسعات أو تغييرات جوهرية في طبيعة النشاط أو طاقته.',
-    // W41 (2026-08-10): CORRECTED — range "Art.15–22" → "Art.14–21".
-    legalReference: 'القانون 03-10 المواد 16-21 (الفصل الثاني — دراسات التأثير على البيئة: المادة 15 تُرسي الالتزام الأساسي بإجراء دراسة تأثير مسبقة للمشاريع والمنشآت المرشحة للإضرار بالبيئة؛ المواد 16–21 تُحدد محتوى الدراسة والمشاريع الخاضعة لها وإجراءات التحقيق العمومي والتنظيم). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة وإجراءاتها). المرسوم التنفيذي 07-144 (قائمة المنشآت المصنفة وتصنيفها إلى فئات). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ربط رخصة الاستغلال بنتائج دراسة التأثير أو الموجز البيئي).',
-    severity: 'high',
-    controlType: 'doc',
-    complianceStatus: 'not-evaluated',
-  },
-];
+    criteria: 'بالنسبة للمنشآت المصنفة من الدرجة الأولى (التي تستلزم قرار الوالي): التحقق من وجود قرار الاستغلال الصادر عن الوالي (رخصة استغلال المؤسسات المصنفة D1) ساري المفعول، وأن النشاط المُمارَس فعلياً مطابق للنشاط المُرخَّص به، وأن التعديلات الجوهرية أُخضِعت لإجراءات الترخيص المسبق. تنبيه: هذا القرار لا يُغني عن الحصول ا
