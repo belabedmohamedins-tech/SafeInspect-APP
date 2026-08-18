@@ -16,6 +16,10 @@
 //   Previous range 15–18 was doubly wrong: missed Art.14 (root EIE obligation) and
 //   truncated at Art.18, omitting Art.19–21 (EIE procedure and follow-up articles).
 //   Correct full EIE range: Art.14–21.
+// W62 fix 2026-08-18: BAK-10-13 EIE range 14–21 → 15–22.
+//   Art.14 = PNAEDD duration (5 ans, modalités réglementaires) — hors sujet EIE.
+//   Art.22 = réalisation EIE par bureaux agréés à la charge du promoteur — pertinent.
+//   Confirmed by direct read of loi-03-10-protection-environnement.md this turn.
 
 import { InspectionItem } from '../types';
 
@@ -139,15 +143,18 @@ export const bakerySpecificCriteria: InspectionItem[] = [
   },
   {
     // W42-parity fix 2026-08-16: EIE range corrected 15–18 → 14–21.
-    // Previous range 15–18 was doubly wrong:
-    //   — started at Art.15, missing Art.14 (root EIE obligation article)
-    //   — ended at Art.18, missing Art.19–21 (EIE procedure and follow-up)
-    // Correct full EIE range: Art.14–21 (consistent with all other EIE criteria in the app).
+    // W62 fix 2026-08-18: EIE range corrected 14–21 → 15–22.
+    //   Art.14 = PNAEDD (durée 5 ans, modalités réglementaires) — hors sujet EIE.
+    //   Art.15 = obligation EIE/notice d'impact — RACINE de l'obligation.
+    //   Art.16 = contenu de l'étude d'impact.
+    //   Art.17–21 = établissements classés + EIE condition préalable à l'autorisation.
+    //   Art.22 = réalisation EIE par bureaux d'études agréés à la charge du promoteur — pertinent.
+    //   Confirmed by direct read of loi-03-10-protection-environnement.md (2026-08-18).
     id: 'BAK-10-13',
     axis: 'هوية المنشأة والوثائق',
     category: 'بيئية',
     criteria: 'توفر دراسة التأثير البيئي أو كشف الأثر البيئي (EIA/EIE) وفق الفئة المنطبقة على المنشأة، معتمدة من السلطة المختصة.',
-    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير البيئي — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE، والمواد 19–21 تضبط الإجراءات والمتابعة). المرسوم التنفيذي 06-198 كما عُدِّل.',
+    legalReference: 'القانون 03-10 المواد 15–22 (المادة 15: إلزامية EIE أو كشف الأثر البيئي؛ المادة 16: محتوى الدراسة؛ المواد 17–21: نظام المنشآت المصنفة وEIE شرط مسبق للترخيص؛ المادة 22: إنجاز الدراسة بمكتب دراسات معتمد على نفقة صاحب المشروع). المرسوم التنفيذي 06-198 كما عُدِّل.',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
