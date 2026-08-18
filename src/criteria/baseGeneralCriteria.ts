@@ -45,7 +45,7 @@
 //              in authorized installations) + Art.19 (prohibition to hand DSD to any
 //              non-authorized operator — covers unlicensed on-site incineration) +
 //              Art.63 (criminal penalty: 8 months–3 years + 500k–900k DA for operating
-//              a waste treatment installation without compliance) + Décret 07-205
+//              a waste treatment installation without compliance) + Décret 04-410
 //              (technical requirements for authorized hazardous-waste incinerators).
 //              [حكم مهني — W40 مغلق]: no explicit "self-incineration ban" article exists
 //              in Loi 01-19; the combination of Art.15+19+63 is the strongest available
@@ -90,8 +90,8 @@
 //   + Loi 90-11 as general occupational safety basis.
 // W40-CLOSE (2026-08-17): BGN-04-07 legalReference finalized after LEGAL-VERIFY.
 //   Full read of Loi 01-19 (72 articles, no gap) confirmed: word "incinération" absent.
-//   Previous placeholder (Art.11 + Décret 07-205 + [À VÉRIFIER open]) replaced with
-//   Art.15 + Art.19 + Art.63 + Décret 07-205 — strongest available basis confirmed.
+//   Previous placeholder (Art.11 + Décret 04-410 + [À VÉRIFIER open]) replaced with
+//   Art.15 + Art.19 + Art.63 + Décret 04-410 — strongest available basis confirmed.
 // W19-CLOSE (2026-08-17): BGN-01-02 [À VÉRIFIER] closed after full read of
 //   Décret 06-198 (50 articles, no gap — VÉRIFIÉ 2026-08-11 by Belabed Mohamed).
 //   FINDING: Décret 06-198 contains NO explicit article mandating maintenance of
@@ -377,7 +377,7 @@ export const baseGeneralCriteria: InspectionItem[] = [
     // [حكم مهني — W40 مغلق]: no article explicitly names "self-incineration" as prohibited;
     // Art.15 + Art.19 + Art.63 combination is the strongest available legal foundation confirmed
     // after exhaustive reading of all 72 articles.
-    legalReference: 'القانون 01-19 المادة 15 (وجوب معالجة النفايات الخاصة في منشآت مرخصة حصراً من طرف الوزير المكلف بالبيئة — الأساس الصريح لحظر أي معالجة حرارية غير مرخصة) + المادة 19 (حظر تسليم النفايات الخاصة الخطرة لأي شخص يستغل منشأة غير مرخصة للمعالجة — يُغطي المحارق الداخلية غير المعتمدة) + المادة 63 (العقوبة الجزائية: حبس من 8 أشهر إلى 3 سنوات وغرامة من 500.000 إلى 900.000 دج لكل من يستغل منشأة معالجة النفايات دون مطابقة أحكام القانون) + المرسوم التنفيذي 07-205 (الاشتراطات التقنية لمحارق النفايات الخطرة المعتمدة — يُحدد ما يجب توفره للحصول على الترخيص). [حكم مهني — W40 مغلق]: لا توجد مادة صريحة في القانون 01-19 تحظر الحرق الذاتي بهذه الصياغة تحديداً (النص كاملاً مقروء — 72 مادة بلا ثغرة)؛ المواد المذكورة هي أفضل وأقوى أساس قانوني متاح بعد البحث الاستيعابي.',
+    legalReference: 'القانون 01-19 المادة 15 (وجوب معالجة النفايات الخاصة في منشآت مرخصة حصراً من طرف الوزير المكلف بالبيئة — الأساس الصريح لحظر أي معالجة حرارية غير مرخصة) + المادة 19 (حظر تسليم النفايات الخاصة الخطرة لأي شخص يستغل منشأة غير مرخصة للمعالجة — يُغطي المحارق الداخلية غير المعتمدة) + المادة 63 (العقوبة الجزائية: حبس من 8 أشهر إلى 3 سنوات وغرامة من 500.000 إلى 900.000 دج لكل من يستغل منشأة معالجة النفايات دون مطابقة أحكام القانون) + المرسوم التنفيذي 04-410 (الاشتراطات التقنية لمحارق النفايات الخطرة المعتمدة — يُحدد ما يجب توفره للحصول على الترخيص). [حكم مهني — W40 مغلق]: لا توجد مادة صريحة في القانون 01-19 تحظر الحرق الذاتي بهذه الصياغة تحديداً (النص كاملاً مقروء — 72 مادة بلا ثغرة)؛ المواد المذكورة هي أفضل وأقوى أساس قانوني متاح بعد البحث الاستيعابي.',
     severity: 'high',
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
