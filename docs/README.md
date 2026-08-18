@@ -7,6 +7,18 @@
 
 ## Live Observations Log
 
+### 2026-08-18 13:31 WAT — Perplexity — W50 ✅ + W51 ✅ CLOSED — Legal citation fixes (Claude audit G9 + R9 second use)
+- **Phases closed:** W50 (CGS-01-01 Décret 76-35 removed), W51 (MCH-29-03/04 Décret 09-19 backfill → G9 closed)
+- **Files changed:**
+  - `src/criteria/baseCompressedGasCriteria.ts` — CGS-01-01: Décret 76-35 (IGH fire-safety — wrong domain) removed; replaced with Arrêté interministériel 16/07/1992 (bouteilles de gaz pressurisé) + Décret 06-198 Art.14 + Loi 19-02 Art.4. Same logic as W49 (BGN-08-03).
+  - `src/criteria/mechanicCriteria.ts` — MCH-29-03 + MCH-29-04: Décret 09-19 Art.2+Art.6 added; same pattern already correct on MCH-29-09 (tyre waste).
+- **No test changes needed** — legal reference fields only, no logic
+- **Commit:** [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) (+23 additions / -3 deletions, verified clean)
+- **Claude audit items resolved:** G9 (MCH-29-03/04 missing 09-19) ✅ CLOSED | R9 second use (CGS-01-01 76-35) ✅ CLOSED
+- **Remaining open from Claude audit:** G3 partial (BAK-10-01 evolved, CLD/PRD not checked), R1/R6 (noise decree) deferred
+
+---
+
 ### 2026-08-18 13:19 WAT — Perplexity — W86 ✅ CLOSED — TSC 0 + Jest 1257/0 all green
 - **Phases closed:** W86 (BackupService v3 photo embed + briefService critical severity sort)
 - **Files changed:**
