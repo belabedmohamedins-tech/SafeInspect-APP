@@ -12,7 +12,7 @@ const BASE: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> = {
   facilityId:       'fac-1',
   facilityName:     'Test Facility',
   criteria:         'Criterion A',
-  severity:         'major',
+  severity:         'high',
   deadline:         '2026-12-31',
   assignedTo:       'Inspector Ali',
   status:           'open',
