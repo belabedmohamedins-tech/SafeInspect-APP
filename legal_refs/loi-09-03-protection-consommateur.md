@@ -173,6 +173,8 @@ Les règles applicables en matière de sécurité des produits, sont fixées par
 
 **Art. 11.** — Tout produit mis à la consommation doit satisfaire à l'attente légitime du consommateur en ce qui concerne sa nature, son espèce, son origine, ses qualités substantielles, sa composition, sa teneur en principes utiles, son identité, ses quantités, son aptitude à l'emploi et les risques inhérents à son utilisation.
 
+> WARNING Modifie par Loi 18-09 du 10 juin 2018 -- voir loi-18-09-protection-consommateur.md
+
 Le produit doit également répondre à l'attente légitime du consommateur quant à sa provenance, aux résultats escomptés, aux spécifications réglementaires de ses emballages, à sa date de fabrication, à sa date limite de consommation, à son mode d'utilisation, aux conditions de sa conservation, aux précautions y afférentes et aux contrôles dont il a fait l'objet.
 
 **Art. 12.** — Tout intervenant est tenu de procéder aux contrôles de conformité du produit, préalablement à sa mise à la consommation, conformément aux dispositions législatives et réglementaires en vigueur.
@@ -412,6 +414,8 @@ Ce délai peut être prorogé lorsque les conditions techniques de contrôle et 
 Si la non conformité du produit est établie, il est prononcé sa saisie et le procureur de la République en est immédiatement informé.
 
 **Art. 60.** — Lorsque la non conformité d'un produit a été établie, les frais générés par les opérations de contrôle, d'analyses, de tests ou d'essais sont remboursés par l'intervenant défaillant.
+
+> ABROGE par Loi 18-09 du 10 juin 2018 (Art. 10) -- voir loi-18-09-protection-consommateur.md
 
 Lorsque la non conformité n'a pas été confirmée par les analyses, tests ou essais, la valeur de l'échantillon est remboursée à l'intervenant concerné, sur la base de la valeur consignée sur le procès-verbal de prélèvement.
 
