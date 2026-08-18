@@ -71,11 +71,16 @@ export const mechanicWorkshopCriteria: InspectionItem[] = [
   },
   {
     // T0.8: brake fluid and hydraulic fluid handling
+    // W88 (2026-08-18): Art.28 (illegal export/repatriation) was WRONG for this criterion.
+    // Correct: Art.18 = generators of hazardous waste must declare nature, quantity,
+    // and characteristics to the minister + provide periodic treatment reports.
+    // Art.28 = repatriation of illegally exported waste — completely unrelated to on-site
+    // brake/hydraulic fluid collection and handover to an approved operator.
     id: 'MCH-29-08',
     axis: 'النفايات الخطرة',
     category: 'بيئية',
     criteria: 'جمع سوائل الفرامل والسائل الهيدروليكية المستبدلة في حاويات محكمة وموسومة (مواد خطرة)، وعدم خلطها مع الزيوت المستعملة، مع التسليم لمتعامل معتمد وحفظ وثيقة التسليم.',
-    legalReference: 'القانون 01-19 المادة 28 (تصنيف وجرد النفايات الخطرة) + المرسوم 05-315 (بورديرو نقل النفايات الخطرة).',
+    legalReference: 'القانون 01-19 المادة 18 (إلزام منتج النفايات الخاصة الخطرة بالإفصاح عن طبيعتها وكميتها وخصائصها وإجراءات معالجتها) + المرسوم 05-315 (بورديرو نقل النفايات الخطرة).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
