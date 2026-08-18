@@ -426,4 +426,14 @@ export interface CorrectiveAction {
   createdAt: string;
   updatedAt: string;
   closedAt?: string;
+
+  // W89: Inspector verification evidence
+  /** Name/ID of the inspector who verified and closed this CAP. Stamped only on 'closed'. */
+  verifiedBy?: string;
+  /** Inspector's written closure confirmation. Required for legal defensibility. */
+  verificationNote?: string;
+  /** URI of closure photo taken by inspector as evidence. */
+  verificationPhotoUri?: string;
+  /** URI of violation photo copied from InspectionItem by capFactory. */
+  photoUri?: string;
 }
