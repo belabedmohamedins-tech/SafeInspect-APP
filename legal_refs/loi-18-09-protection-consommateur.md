@@ -4,9 +4,9 @@
 **Journal Officiel :** N° 35, 28 Ramadhan 1439 (13 juin 2018) — pages 5-6  
 **Source PDF :** Fourni par l'utilisateur (`loi 18-09fr.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-18] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-18 par Belabed Mohamed — relu contre PDF fourni
 
-> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
+> ⚠️ Vérifier par rapport au texte original JORADP avant toute décision juridique ou de contrôle.
 
 ---
 
@@ -118,9 +118,19 @@ Abdelaziz BOUTEFLIKA.
 
 ---
 
-## MODIFICATIONS
+## MODIFICATIONS APPORTÉES À LA LOI N° 09-03
 
-Cette loi modifie et complète la loi n° 09-03 du 25 février 2009 relative à la protection du consommateur et à la répression des fraudes, en apportant des modifications aux articles 11, 16, 19, 53, 54, 65, 66, 78, 79 et 85, en insérant les nouveaux articles 61 bis, 73 bis et 78 bis, et en abrogeant l'article 60 de la loi modifiée.
+Cette loi modifie et complète la loi n° 09-03 du 25 février 2009 relative à la protection du consommateur et à la répression des fraudes :
+
+- **Articles complétés/rédigés (Art. 2 L18-09) :** Art. 11, 16, 19, 53, 54
+- **Articles insérés (Art. 3 L18-09) :** Art. 61 bis
+- **Articles modifiés/complétés (Art. 4 L18-09) :** Art. 65
+- **Articles modifiés (Art. 5 L18-09) :** Art. 66
+- **Articles insérés (Art. 6 L18-09) :** Art. 73 bis
+- **Articles modifiés (Art. 7 L18-09) :** Art. 78
+- **Articles insérés (Art. 8 L18-09) :** Art. 78 bis
+- **Articles complétés (Art. 9 L18-09) :** Art. 79, 85
+- **Articles abrogés (Art. 10 L18-09) :** Art. 60
 
 ---
 
@@ -140,4 +150,4 @@ Cette loi modifie et complète la loi n° 09-03 du 25 février 2009 relative à 
 | Article 10 | ✅ |
 | Article 11 | ✅ |
 
-**Aucune lacune détectée.** Tous les articles de 1er à 11 sont présents dans l'ordre séquentiel.
+**Gaps détectés : aucun.** Articles 1er à 11 présents en séquence complète.
