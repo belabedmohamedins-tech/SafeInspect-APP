@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-08-18 23:39 WAT — Perplexity — W89 ✅ CLOSED — PriorityWidget facilityId nav fix
+- **Bug:** `onPress={() => router.push('/screens/facilities')}` — navigated to the generic facilities list for every row, ignoring `f.facilityId`.
+- **Fix:** Changed to `router.push({ pathname: '/screens/facilities/profile', params: { id: f.facilityId } })` — same pattern as `facilities/index.tsx` line 65.
+- **Files changed:** `components/home/PriorityWidget.tsx`
+- **Commit:** [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08)
+- **TSC/Jest:** No type change — TSC 0 unchanged. No new test needed (pure routing, no logic). Jest 1233/0 unchanged.
+- **Verify:** Run app, tap any PriorityWidget row → must open that specific facility’s profile dossier.
+
 ### 2026-08-18 23:31 WAT — Perplexity — 3 new Claude audit bugs registered as W89/W90/W91
 - **W89 OPEN:** `PriorityWidget.tsx` — `onPress` navigates to generic facilities list, ignores `f.facilityId`. One-line fix: use the same pattern as `facilities/index.tsx`.
 - **W90 OPEN:** `apiClient.ts` — missing `EXPO_PUBLIC_API_URL` silently falls back to `http://localhost:3000` in production. Should throw. (Related to F-05 backlog item.)
@@ -75,13 +83,12 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 23:31 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 23:39 WAT)
 
-### 🔴 OPEN — New Claude Audit Bugs (W89/W90/W91)
+### 🔴 OPEN — Claude Audit Bugs
 
 | Phase | Severity | Item | File | Fix summary |
 |---|---|---|---|---|
-| **W89** | HIGH | `PriorityWidget.tsx` — `onPress` ignores `f.facilityId`, navigates to facilities list | `app/components/PriorityWidget.tsx` | One-line fix: `router.push({ pathname: '/facilities/[id]', params: { id: f.facilityId } })` — same pattern as `facilities/index.tsx` |
 | **W90** | HIGH | `apiClient.ts` — missing env var silently falls back to `localhost:3000` | `src/services/apiClient.ts` | Throw `Error('EXPO_PUBLIC_API_URL is not set')` when env is missing, instead of silent fallback |
 | **W91** | HIGH | `server/src/routes/notifications.ts` missing — `registerPushToken()` silently 404s at every startup | `server/src/routes/notifications.ts` (to create) | Build the route. Extends SPEC 12. No push token is ever registered in production. |
 
@@ -118,6 +125,7 @@
 | audit-log.tsx TSC | `INSPECTION_STATUS_UPDATED` missing from 3 Records | Commit `2c78a16` | 2026-08-18 TSC 0 user-confirmed |
 | CorrectiveActionRepository.extended W85 Jest | `db.runAsync is not a function` — jest.mock hoisting trap | Commit `2c78a16` | 2026-08-18 Jest 0 failed user-confirmed |
 | CAP test fixture severity | `'major'` → `'high'` in BASE fixture | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f) | 2026-08-18 TSC 0 confirmed |
+| **W89** | PriorityWidget onPress → facility list instead of specific profile | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08) | 2026-08-18 |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -169,12 +177,12 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W89** | PriorityWidget facilityId nav bug | 🔴 OPEN |
-| **W90** | apiClient.ts localhost silent fallback → throw | 🔴 OPEN |
+| **W89** | PriorityWidget facilityId nav bug | ✅ CLOSED |
+| **W90** | apiClient.ts localhost silent fallback → throw | 🔴 OPEN (awaiting prod URL confirmation) |
 | **W91** | notifications.ts route missing — push token never registered | 🔴 OPEN |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
-**All phases closed through W88. TSC 0 + Jest 1233/0 — 2026-08-18 22:41 WAT (user-confirmed).**
+**All phases closed through W89. TSC 0 + Jest 1233/0 — 2026-08-18 22:41 WAT (user-confirmed).**
 
 ---
 
