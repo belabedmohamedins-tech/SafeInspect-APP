@@ -3,6 +3,7 @@
 // W39: added AUDIT_LOG_CLEARED to ACTION_LABELS/ICONS/COLORS;
 //      clear() now passes inspector name from settings (falls back to 'مفتش').
 // W52/W53: added INSPECTION_DELETE_BLOCKED + SERVER_SYNC_PENDING to all three maps.
+// W85: added INSPECTION_STATUS_UPDATED to all three maps (TSC exhaustive check).
 import { FontAwesome } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -28,6 +29,7 @@ const ACTION_LABELS: Record<AuditAction, string> = {
   INSPECTION_DELETED:            'حذف تفتيش',
   INSPECTION_BULK_DELETED:       'حذف مجموعة',
   INSPECTION_DELETE_BLOCKED:     'حذف محظور — تقرير معتمد',
+  INSPECTION_STATUS_UPDATED:     'تحديث حالة التفتيش',
   SERVER_SYNC_PENDING:           'مزامنة معلقة — تعذر الاتصال بالخادم',
   AGENDA_ITEM_SAVED:             'حفظ مهمة',
   AGENDA_ITEM_DELETED:           'حذف مهمة',
@@ -41,6 +43,7 @@ const ACTION_ICONS: Record<AuditAction, string> = {
   INSPECTION_DELETED:            'trash',
   INSPECTION_BULK_DELETED:       'trash',
   INSPECTION_DELETE_BLOCKED:     'lock',
+  INSPECTION_STATUS_UPDATED:     'refresh',
   SERVER_SYNC_PENDING:           'cloud-upload',
   AGENDA_ITEM_SAVED:             'calendar',
   AGENDA_ITEM_DELETED:           'calendar-times-o',
@@ -54,6 +57,7 @@ const ACTION_COLORS: Record<AuditAction, string> = {
   INSPECTION_DELETED:            Colors.danger,
   INSPECTION_BULK_DELETED:       Colors.danger,
   INSPECTION_DELETE_BLOCKED:     Colors.warning,
+  INSPECTION_STATUS_UPDATED:     Colors.primary,
   SERVER_SYNC_PENDING:           '#f39c12',
   AGENDA_ITEM_SAVED:             Colors.primary,
   AGENDA_ITEM_DELETED:           Colors.warning,

@@ -6,22 +6,29 @@
 //   3. deleteByInspection() removes rows for the given inspectionId
 //
 // W89 FIX: corrected all relative import paths.
-//   This file lives at src/__tests__/repositories/ so paths need ../../prefix:
-//     ../../db/schema               (was ../db/schema)
-//     ../../services/NotificationService (was ../services/...)
-//     ../../repositories/CorrectiveActionRepository (was ../repositories/...)
+// W89 FIX 2: jest.mock() is hoisted by Babel before const declarations run,
+//   so the factory cannot reference outer const variables (they are undefined
+//   at hoist time). Fix: use a module-scoped 'dbMocks' object initialised
+//   inside the factory with fresh jest.fn() calls. Tests access it via the
+//   object reference which is stable across hoisting.
 
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
 
-const mockRunAsync = jest.fn().mockResolvedValue({ changes: 1 });
-const mockGetFirstAsync = jest.fn();
-const mockGetAllAsync = jest.fn().mockResolvedValue([]);
+// Shared mock container — populated inside the jest.mock factory below.
+// This object is created before hoisting runs, so its reference is stable.
+const dbMocks = {
+  runAsync:      null as unknown as jest.Mock,
+  getFirstAsync: null as unknown as jest.Mock,
+  getAllAsync:    null as unknown as jest.Mock,
+};
 
 jest.mock('../../db/schema', () => ({
   getDb: jest.fn().mockResolvedValue({
-    runAsync: mockRunAsync,
-    getFirstAsync: mockGetFirstAsync,
-    getAllAsync: mockGetAllAsync,
+    // jest.fn() calls here are safe: they execute inside the factory at hoist
+    // time and are stored on the module export. We then capture them below.
+    runAsync:      jest.fn().mockResolvedValue({ changes: 1 }),
+    getFirstAsync: jest.fn(),
+    getAllAsync:    jest.fn().mockResolvedValue([]),
   }),
 }));
 
@@ -29,15 +36,25 @@ jest.mock('../../services/NotificationService', () => ({
   pushInApp: jest.fn().mockResolvedValue(undefined),
 }));
 
+// After jest.mock() hoisting is done, capture the concrete mock functions
+// from the already-registered module so tests can call .mockResolvedValue etc.
+beforeAll(async () => {
+  const schema = await import('../../db/schema');
+  const db = await (schema.getDb as jest.Mock)();
+  dbMocks.runAsync      = db.runAsync      as jest.Mock;
+  dbMocks.getFirstAsync = db.getFirstAsync as jest.Mock;
+  dbMocks.getAllAsync    = db.getAllAsync    as jest.Mock;
+});
+
 describe('CorrectiveActionRepository W85', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    mockGetFirstAsync.mockResolvedValue(null);
+    dbMocks.getFirstAsync.mockResolvedValue(null);
   });
 
   describe('updateStatus — closedAt lifecycle (SPEC 03)', () => {
     it('stamps closedAt when status becomes closed (inspector-verified)', async () => {
-      mockGetFirstAsync.mockResolvedValue({
+      dbMocks.getFirstAsync.mockResolvedValue({
         facility_name: 'Test Facility',
         criteria: 'Criterion A',
       });
@@ -45,7 +62,7 @@ describe('CorrectiveActionRepository W85', () => {
       await CorrectiveActionRepository.updateStatus('cap-1', 'closed');
 
       // The SQL must include SET closed_at = ? with a non-null timestamp.
-      const call = mockRunAsync.mock.calls[0];
+      const call = dbMocks.runAsync.mock.calls[0];
       const sql: string = call[0];
       const params: (string | null)[] = call[1];
       expect(sql).toContain('closed_at');
@@ -57,28 +74,28 @@ describe('CorrectiveActionRepository W85', () => {
     });
 
     it('does NOT stamp closedAt when status is resolved (self-reported only)', async () => {
-      mockGetFirstAsync.mockResolvedValue({
+      dbMocks.getFirstAsync.mockResolvedValue({
         facility_name: 'Test Facility',
         criteria: 'Criterion B',
       });
 
       await CorrectiveActionRepository.updateStatus('cap-2', 'resolved');
 
-      const call = mockRunAsync.mock.calls[0];
+      const call = dbMocks.runAsync.mock.calls[0];
       const params: (string | null)[] = call[1];
       // Third param (closedAt) must be null for 'resolved' status.
       expect(params[2]).toBeNull();
     });
 
     it('does NOT stamp closedAt when status is in-progress', async () => {
-      mockGetFirstAsync.mockResolvedValue({
+      dbMocks.getFirstAsync.mockResolvedValue({
         facility_name: 'Test Facility',
         criteria: 'Criterion C',
       });
 
       await CorrectiveActionRepository.updateStatus('cap-3', 'in-progress');
 
-      const call = mockRunAsync.mock.calls[0];
+      const call = dbMocks.runAsync.mock.calls[0];
       const params: (string | null)[] = call[1];
       expect(params[2]).toBeNull();
     });
@@ -88,7 +105,7 @@ describe('CorrectiveActionRepository W85', () => {
     it('deletes all CAPs for a given inspectionId', async () => {
       await CorrectiveActionRepository.deleteByInspection('insp-abc');
 
-      expect(mockRunAsync).toHaveBeenCalledWith(
+      expect(dbMocks.runAsync).toHaveBeenCalledWith(
         'DELETE FROM corrective_actions WHERE inspection_id = ?',
         ['insp-abc'],
       );
