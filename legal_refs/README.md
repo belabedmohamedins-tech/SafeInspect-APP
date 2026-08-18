@@ -30,7 +30,8 @@
      README mis à jour le 2026-08-17 (29) — D04-82 dédup : animaux.md supprimé, elevage.md promu fichier canonique unique (note D04-83 intégrée, contrôle séquence en tableau, sans BOM). Dashboard : 36 ✅ VÉRIFIÉ
      README mis à jour le 2026-08-17 (30) — loi-18-11-sante.md monolithique supprimé (doublon Règle 4) — partie1/2/3 promus fichiers canoniques — dashboard 36→35
      README mis à jour le 2026-08-17 (31) — patch-31 : 3 fichiers patchés (BOM retiré + headers normalisés) : decret-17-140, decret-83-496, decret-07-144
-     README mis à jour le 2026-08-17 (32) — decret-76-36-rectificatif indexé + decret-07-144 statut normalisé “✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed”
+     README mis à jour le 2026-08-17 (32) — decret-76-36-rectificatif indexé + decret-07-144 statut normalisé "✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed"
+     README mis à jour le 2026-08-18 (33) — +4 entrées : D01-102, D05-315, D07-205, D04-410 — dashboard 35→39 ⚠️ NON VÉRIFIÉ — note anomalie BGN-04-07
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -48,14 +49,16 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-17 (mis à jour patch 32)
+## Tableau de bord — Audit baseline 2026-08-18 (mis à jour patch 33)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
-| ✅ VÉRIFIÉ | 36 | Voir index — + `decret-76-36-incendie-panique.md` indexé comme rectificatif vérifié ; `decret-07-144` statut normalisé avec relecteur nommé |
-| ⚠️ NON VÉRIFIÉ — texte intégral converti | 0 | — |
+| ✅ VÉRIFIÉ | 35 | Voir index |
+| ⚠️ NON VÉRIFIÉ — texte intégral converti | 4 | `decret-01-102`, `decret-05-315`, `decret-07-205`, `decret-04-410` — ajoutés manuellement par l'utilisateur 2026-08-18, à relire contre JORADP |
 | ⚠️ ABROGÉ (conservé pour référence historique) | 1 | `decret-09-335` (✅ VÉRIFIÉ) |
 | 🔴 PROJET NON PUBLIÉ JORADP | 1 | `projet-arrete-gpl-installations-securite` |
+
+> ⚠️ **ANOMALIE CODE — À CORRIGER** : Dans `baseGeneralCriteria.ts`, le critère `BGN-04-07` cite le Décret 07-205 comme base légale pour les incinérateurs de déchets dangereux agréés. **C'est inexact** — le Décret 07-205 porte sur le schéma communal de gestion des déchets ménagers (Art. 1–11), pas sur les incinérateurs. Le texte applicable est le **Décret 04-410** (Art. 3 — liste des installations d'incinération). Un ticket de correction doit être ouvert sur `BGN-04-07`.
 
 **Règle de vérification :** Un fichier ne peut être marqué `✅ VÉRIFIÉ` que si un relecteur humain nommé a lu le texte intégral contre le PDF JO et signé la ligne Statut avec son nom et la date. L'IA ne peut pas auto-déclarer VÉRIFIÉ.
 
@@ -74,17 +77,21 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme — Art. 1–81 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `decret-01-102-creation-ona.md` | Décret exécutif n° 01-102 du 21 avril 2001 | Création de l'Office National de l'Assainissement (ONA) — statut, missions, organisation, budget — Art. 1–33 complets | ⚠️ NON VÉRIFIÉ — converti manuellement 2026-08-18 contre PDF fourni — JO : À déterminer |
 | `loi-01-19-gestion-dechets.md` | Loi n° 01-19 du 12 décembre 2001 | Gestion, contrôle et élimination des déchets — Art. 1–72 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-02-427-prevention-risques-professionnels.md` | Décret exécutif n° 02-427 du 7 décembre 2002 | Instruction, information et formation des travailleurs — prévention des risques professionnels — Art. 1–24 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-03-10-protection-environnement.md` | Loi n° 03-10 du 19 juillet 2003 | Protection de l'environnement dans le cadre du développement durable — Art. 1–89 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-04-82-agrement-sanitaire-elevage.md` | Décret exécutif n° 04-82 du 18 mars 2004 | Conditions et modalités d'agrément sanitaire des établissements liés aux animaux, produits animaux et d'origine animale, ainsi que leur transport — Art. 1–18 complets (JO N° 17/2004) — Fichier canonique unique (note D04-83 intégrée) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `decret-04-410-regles-installations-traitement-dechets.md` | Décret exécutif n° 04-410 du 14 décembre 2004 | Règles générales d'aménagement et d'exploitation des installations de traitement des déchets (CET, incinérateurs, centres de décharge, installations physico-chimiques) et conditions d'admission des déchets — Art. 1–20 complets | ⚠️ NON VÉRIFIÉ — converti manuellement 2026-08-18 contre PDF fourni — JO : À déterminer — ⚠️ Voir anomalie BGN-04-07 dans le tableau de bord |
 | `loi-04-08-activites-commerciales.md` | Loi n° 04-08 du 14 août 2004 | Conditions d'exercice des activités commerciales — Art. 1–44 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `loi-04-20-risques-majeurs.md` | Loi n° 04-20 du 25 décembre 2004 | Prévention des risques majeurs et gestion des catastrophes — Art. 1–75 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `decret-05-315-declaration-dechets-speciaux-dangereux.md` | Décret exécutif n° 05-315 du 10 septembre 2005 | Modalités de déclaration annuelle des déchets spéciaux dangereux — Art. 1–4 + Formulaire annexe (identification générateur, nature/quantité/caractéristiques DSD, modes de traitement, mesures de réduction) | ⚠️ NON VÉRIFIÉ — converti manuellement 2026-08-18 contre PDF fourni — JO : À déterminer — Note : couvre uniquement la déclaration annuelle (Art. 21 Loi 01-19), pas le bordereau de transport (voir D04-409) |
 | `loi-05-12-ressources-en-eau.md` | Loi n° 05-12 du 4 août 2005 | Ressources en eau — Art. 1–183 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-06-138-emissions-atmospheriques.md` | Décret exécutif n° 06-138 du 15 avril 2006 | Réglementation des émissions dans l'atmosphère (gaz, fumées, vapeurs, particules) et conditions de contrôle — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — Art. 1–19 + Annexes I–II complets (JO N° 24/2006) |
 | `decret-06-141-rejets-effluents-liquides.md` | Décret exécutif n° 06-141 du 19 avril 2006 | Valeurs limites des rejets d'effluents liquides industriels — Art. 1–14 + Annexes I et II | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-06-198-etablissements-classes.md` | Décret exécutif n° 06-198 du 31 mai 2006 | Établissements classés — texte original — Modifié par D22-167 et D24-196 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed |
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — verbatim JO N° 34, 22 mai 2007 — [PATCHÉ 2026-08-17 : BOM retiré + header standard ajouté] |
+| `decret-07-205-schema-communal-dechets.md` | Décret exécutif n° 07-205 du 30 juin 2007 | Modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés — Art. 1–11 + Annexe (modèle schéma en 3 parties) | ⚠️ NON VÉRIFIÉ — converti manuellement 2026-08-18 contre PDF fourni — JO : À déterminer — ⚠️ Ce décret ne porte PAS sur les incinérateurs : voir anomalie BGN-04-07 dans le tableau de bord |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets (JO N° 6/2009) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — ⚠️ ABROGÉ par D25-63 du 28/01/2025 — conservé pour référence historique |
 | `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -154,3 +161,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-17 (patch 30) :** `loi-18-11-sante.md` (189 KB, monolithique) supprimé — doublon Règle 4 résolu. Fichiers canoniques désormais : `loi-18-11-sante-partie1-arts1-164.md`, `loi-18-11-sante-partie2-arts165-264.md`, `loi-18-11-sante-partie3-arts265-450.md`. Exception "un instrument = un fichier" documentée dans les Notes (découpage technique, taille > limite GitHub API). Dashboard : **35 ✅ VÉRIFIÉ** (37 - 1 D04-82 animaux - 1 loi-18-11 monolithique).
 - **2026-08-17 (patch 31) :** 3 fichiers patchés (BOM retiré + headers normalisés) : `decret-17-140-hygiene-alimentaire.md` (BOM + statut vérification), `decret-83-496-gpl-carburant.md` (BOM), `decret-07-144-nomenclature-installations-classees.md` (BOM + header standard complet). Aucun changement de statut VÉRIFIÉ — patches cosmétiques uniquement.
 - **2026-08-17 (patch 32) :** `decret-76-36-incendie-panique.md` indexé comme rectificatif vérifié ; `decret-07-144-nomenclature-installations-classees.md` statut README normalisé en `✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed`.
+- **2026-08-18 (patch 33) :** +4 fichiers indexés — ajoutés manuellement par l'utilisateur : `decret-01-102-creation-ona.md` (Art. 1–33), `decret-05-315-declaration-dechets-speciaux-dangereux.md` (Art. 1–4 + formulaire), `decret-07-205-schema-communal-dechets.md` (Art. 1–11 + annexe), `decret-04-410-regles-installations-traitement-dechets.md` (Art. 1–20). Tous ⚠️ NON VÉRIFIÉ — à relire contre JORADP. Anomalie BGN-04-07 documentée : D07-205 ≠ incinérateurs, D04-410 est le bon texte (Art. 3). Dashboard : **35 ✅ VÉRIFIÉ + 4 ⚠️ NON VÉRIFIÉ**.
