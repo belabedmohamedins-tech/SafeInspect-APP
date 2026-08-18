@@ -173,7 +173,7 @@ Les règles applicables en matière de sécurité des produits, sont fixées par
 
 **Art. 11.** — Tout produit mis à la consommation doit satisfaire à l'attente légitime du consommateur en ce qui concerne sa nature, son espèce, son origine, ses qualités substantielles, sa composition, sa teneur en principes utiles, son identité, ses quantités, son aptitude à l'emploi et les risques inhérents à son utilisation.
 
-> WARNING Modifie par Loi 18-09 du 10 juin 2018 -- voir loi-18-09-protection-consommateur.md
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018** — voir `loi-18-09-protection-consommateur.md`
 
 Le produit doit également répondre à l'attente légitime du consommateur quant à sa provenance, aux résultats escomptés, aux spécifications réglementaires de ses emballages, à sa date de fabrication, à sa date limite de consommation, à son mode d'utilisation, aux conditions de sa conservation, aux précautions y afférentes et aux contrôles dont il a fait l'objet.
 
@@ -205,6 +205,8 @@ Les clauses et les conditions d'exécution de ces garanties doivent figurer dans
 
 **Art. 16.** — Dans le cadre du service après vente et après expiration de la période de garantie fixée par voie réglementaire ou dans tous les cas où la garantie ne peut pas jouer, l'intervenant concerné est tenu d'assurer l'entretien et la réparation du produit mis sur le marché.
 
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018** — voir `loi-18-09-protection-consommateur.md`
+
 ### Chapitre V — De l'obligation de l'information du consommateur
 
 **Art. 17.** — Tout intervenant doit porter à la connaissance du consommateur toutes les informations relatives au produit qu'il met à la consommation, par voie d'étiquetage, de marquage ou par tout autre moyen approprié.
@@ -216,6 +218,8 @@ Les conditions et les modalités d'application des dispositions du présent arti
 ### Chapitre VI — Des intérêts matériels et moraux des consommateurs
 
 **Art. 19.** — Tout service offert au consommateur ne doit pas nuire à son intérêt matériel et ne doit pas lui causer de préjudice moral.
+
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018** — voir `loi-18-09-protection-consommateur.md`
 
 **Art. 20.** — Sans préjudice des dispositions législatives en vigueur, les offres de crédits à la consommation doivent répondre à l'attente légitime du consommateur en ce qui concerne la transparence de l'offre préalable, la nature, la portée et la durée de l'engagement ainsi que les échéances de remboursement de l'offre ; un contrat en est établi.
 
@@ -389,9 +393,13 @@ A ce titre, ils peuvent procéder aux refus temporaires ou définitifs d'admissi
 
 Les conditions et les modalités d'application des dispositions du présent article sont fixées par voie réglementaire.
 
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018** — voir `loi-18-09-protection-consommateur.md`
+
 **Art. 54.** — Le refus temporaire d'admission aux frontières d'un produit importé, est prononcé en cas de suspicion de non-conformité du produit concerné, en vue de vérifications approfondies ou pour mise en conformité.
 
 Le refus définitif d'admission aux frontières d'un produit importé est prononcé en cas de confirmation soit par constat direct, soit après vérifications approfondies, de non conformité du produit.
+
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018** — voir `loi-18-09-protection-consommateur.md`
 
 **Art. 55.** — La consignation consiste à suspendre, par décision de l'administration chargée de la protection du consommateur et de la répression des fraudes, la mise à la consommation d'un produit reconnu non conforme par constat direct.
 
@@ -415,11 +423,13 @@ Si la non conformité du produit est établie, il est prononcé sa saisie et le 
 
 **Art. 60.** — Lorsque la non conformité d'un produit a été établie, les frais générés par les opérations de contrôle, d'analyses, de tests ou d'essais sont remboursés par l'intervenant défaillant.
 
-> ABROGE par Loi 18-09 du 10 juin 2018 (Art. 10) -- voir loi-18-09-protection-consommateur.md
+> ⚠️ **Abrogé par Loi n° 18-09 du 10 juin 2018 (Art. 10)** — voir `loi-18-09-protection-consommateur.md`
 
 Lorsque la non conformité n'a pas été confirmée par les analyses, tests ou essais, la valeur de l'échantillon est remboursée à l'intervenant concerné, sur la base de la valeur consignée sur le procès-verbal de prélèvement.
 
 **Art. 61.** — Les saisies ainsi que les retraits temporaires ou définitifs effectués par les agents visés à l'article 25 de la présente loi, donnent lieu à l'établissement de procès-verbaux et les produits incriminés sont mis sous scellés et placés sous la garde de l'intervenant concerné.
+
+> ⚠️ **Inséré par Loi n° 18-09 du 10 juin 2018 (Art. 3)** — voir `loi-18-09-protection-consommateur.md`
 
 **Art. 62.** — Le retrait définitif est exécuté par les agents visés à l'article 25 ci-dessus, sans autorisation préalable de l'autorité judiciaire compétente, dans les cas :
 
@@ -449,7 +459,11 @@ Les conditions et les modalités d'application des dispositions du présent arti
 
 **Art. 65.** — Les services chargés de la protection du consommateur et de la répression des fraudes peuvent procéder, conformément à la législation et à la réglementation en vigueur, à la suspension temporaire de l'activité des établissements dont la non conformité aux règles fixées par la présente loi a été établie, jusqu'à l'élimination totale des causes ayant motivé la mesure considérée, sans préjudice des sanctions pénales prévues par les dispositions de la présente loi.
 
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018 (Art. 4)** — voir `loi-18-09-protection-consommateur.md`
+
 **Art. 66.** — Les frais engendrés par l'application des dispositions relatives à la consignation, à la mise en conformité, au retrait temporaire, au changement de destination, à la réorientation, à la saisie et à la destruction, prévus ci-dessus, sont à la charge de l'intervenant défaillant.
+
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018 (Art. 5)** — voir `loi-18-09-protection-consommateur.md`
 
 **Art. 67.** — Les services chargés de la protection du consommateur et de la répression des fraudes informent par tous moyens, les consommateurs des dangers et des risques que présente tout produit retiré du processus de mise à la consommation.
 
@@ -493,6 +507,8 @@ Les conditions et les modalités d'application des dispositions du présent arti
 
 **Art. 73.** — Est puni d'une amende de deux cent mille dinars (200.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation de sécurité du produit prévue à l'article 10 de la présente loi.
 
+> ⚠️ **Inséré par Loi n° 18-09 du 10 juin 2018 (Art. 6)** — voir `loi-18-09-protection-consommateur.md`
+
 **Art. 74.** — Est puni d'une amende de cinquante mille dinars (50.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation du contrôle préalable de conformité prévue à l'article 12 de la présente loi.
 
 **Art. 75.** — Est puni d'une amende de cent mille dinars (100.000 DA) à cinq cent mille dinars (500.000 DA), quiconque enfreint l'obligation de garantie ou d'exécution de la garantie du produit, prévues à l'article 13 de la présente loi.
@@ -503,7 +519,13 @@ Les conditions et les modalités d'application des dispositions du présent arti
 
 **Art. 78.** — Est puni d'une amende de cent mille dinars (100.000 DA) à un million de dinars (1.000.000 DA), quiconque enfreint l'obligation d'étiquetage du produit prévue aux articles 17 et 18 de la présente loi.
 
+> ⚠️ **Modifié par Loi n° 18-09 du 10 juin 2018 (Art. 7)** — voir `loi-18-09-protection-consommateur.md`
+
+> ⚠️ **Inséré par Loi n° 18-09 du 10 juin 2018 (Art. 8)** — voir `loi-18-09-protection-consommateur.md`
+
 **Art. 79.** — Sans préjudice des dispositions prévues à l'article 155 du code pénal, quiconque vend un produit mis sous scellés, consigné pour mise en conformité, retiré à titre temporaire du processus de mise à la consommation ou enfreint la mesure de suspension temporaire d'activité, est puni d'un emprisonnement de six mois à trois ans et d'une amende de cinq cent mille dinars (500.000 DA) à deux millions de dinars (2.000.000 DA) ou de l'une de ces peines.
+
+> ⚠️ **Complété par Loi n° 18-09 du 10 juin 2018 (Art. 9)** — voir `loi-18-09-protection-consommateur.md`
 
 **Art. 80.** — Outre les sanctions prévues à l'article 79 ci-dessus, le montant de la vente des produits objets de ces infractions, est versé au Trésor public, évalué sur la base du prix de vente pratiqué par le contrevenant ou par référence au prix du marché.
 
@@ -520,6 +542,8 @@ Lorsque cette maladie a causé le décès d'une ou de plusieurs personnes, ces i
 **Art. 84.** — Est puni des peines prévues par l'article 435 du code pénal quiconque commet toute entrave ou tout autre acte de nature à empêcher l'accomplissement des missions de contrôle menées par les agents prévus à l'article 25 de la présente loi.
 
 **Art. 85.** — Conformément aux dispositions de l'article 36 du code pénal, les amendes prévues par les dispositions de la présente loi sont cumulables. Elles sont portées au double en cas de récidive et la juridiction compétente peut prononcer la radiation du registre de commerce de l'intervenant incriminé.
+
+> ⚠️ **Complété par Loi n° 18-09 du 10 juin 2018 (Art. 9)** — voir `loi-18-09-protection-consommateur.md`
 
 ---
 
