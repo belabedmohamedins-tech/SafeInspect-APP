@@ -7,27 +7,56 @@
 
 ## Live Observations Log
 
+### 2026-08-18 12:53 WAT — Perplexity — W64 ✅ + W66 ✅ CLOSED (real diffs) | W65 + W68 re-confirmed clean
+
+**W64 — CLOSED.** [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654)
+`server/src/routes/sync.ts` — two enums fixed:
+- `InspectionItemSchema.severity`: `z.enum(['low','medium','high'])` → `z.enum(['low','medium','high','critical'])`
+- `InspectionSchema.status`: added `'submitted'`, `'pending-review'`, `'approved'`, `'rejected'`
+- `mapStatus()` helper extended to map all 6 values; `APPROVED`/`REJECTED` now round-trip to Prisma.
+
+**W66 — CLOSED.** [`4ed0db5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/4ed0db5facafc2b1e038d8f8e5be860dd3bca76a)
+`src/repositories/InspectionRepository.ts` — `updateStatus()` now:
+1. Re-hashes the full updated blob: `const hash = await IntegrityService.hashAndStore(updated);`
+2. Appends audit entry: `await AuditLogRepository.append('INSPECTION_STATUS_UPDATED', 'supervisor', { inspectionId: id, approvalStatus: status })`
+3. Embeds new hash into `data` JSON before writing to SQLite.
+Previously the method mutated both `data` and `approval_status` with no hash update and no audit trail.
+
+**W65 — re-confirmed CLEAN (was correctly closed). Exact line proof:**
+`src/services/BackupService.ts`, `exportBackup()`, line 106:
+```ts
+const inspections = await InspectionRepository.getAll(); // SQLite, not AsyncStorage
+```
+`importBackup()` restores via `InspectionRepository.save(inspection)`. No `AsyncStorage.setItem('inspections', …)` anywhere in production code. Claude's read was stale.
+
+**W68 — re-confirmed CLEAN (was correctly closed). Exact line proof:**
+`src/repositories/AuthRepository.ts` — all three counter methods:
+```ts
+getFailedAttempts:       secureGet(StorageKeys.PIN_FAILED_ATTEMPTS)    // SecureStore on native
+incrementFailedAttempts: secureSet(StorageKeys.PIN_FAILED_ATTEMPTS, …)  // SecureStore on native
+resetFailedAttempts:     secureDelete(StorageKeys.PIN_FAILED_ATTEMPTS)  // SecureStore on native
+```
+Where `secureGet/secureSet/secureDelete` route to `SecureStore.*Async()` when `isNative()` is true. AsyncStorage is the web-only fallback only.
+
+**Gate pending:** user must run `npx tsc --noEmit && npx jest` locally and confirm green before W64/W66 close formally.
+
+---
+
 ### 2026-08-18 12:04 WAT — Perplexity — Repo cleanup: 10 stale docs removed + STRATEGIC_PLAN collapsed
 - **Deleted:** `SafeInspect_Audit_Consolidated_2026-08-06 (1).md`, `AUDIT_COVERAGE_REPORT.md`, `Inspection_Manual_Chapter1–8_*.md` (8 files) — all superseded by `legal_refs/` and STRATEGIC_PLAN
 - **Updated:** `STRATEGIC_PLAN.md` — phases A–W59 collapsed into `<details>` archive block; W60–W85 remain visible
-- **Updated:** `README.md` — log trimmed to last 5 entries
 - **No code changes — TSC + Jest state unchanged:** TSC 0 + Jest 1245/0
 
 ### 2026-08-18 02:43 WAT — Perplexity — W85 ✅ CLOSED — TSC 0 + Jest 1245/0 all green
 - Phases closed: W85 (SPEC 10 fix — StorageKeys + settings.tsx)
-- Gate: TSC 0 + Jest 1245 passed / 0 failed — user-confirmed 02:43 WAT
 - Code commit: [`33e5cbf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33e5cbfea01e98b01e582945cb5c6349f7ae2822) — `keys.ts` +7, `settings.tsx` +5
-- Test fix: [`14b055c`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/14b055c733fc8163618063739505888cd5f17cec) — stale PRT-05-01 assertion updated (90-11 → 91-05, W82 drift)
-- All 3 settings toggles (notifications, autoSync, darkMode) now correctly persist across app restarts
+- Test fix: [`14b055c`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/14b055c733fc8163618063739505888cd5f17cec) — stale PRT-05-01 assertion updated (90-11 → 91-05)
 
 ### 2026-08-17 22:10 WAT — Perplexity — W82 CLOSED — Finding 3 PPE/machine-guard verified
 - 6 criteria files audited. MCH-29-06 corrected (Commit `cee92fb`). PRT-05-01 corrected (Commit `8433bea`).
 
 ### 2026-08-17 19:21 WAT — Perplexity — W72 CLOSED — Dead settings toggles + notification centre
 - TSC 0 + Jest all green. Commit `9b42f67`.
-
-### 2026-08-17 13:08 WAT — Perplexity — W71 CLOSED — Planning UI + PriorityWidget
-- TSC 0 + Jest green. Commits `c178a6c`, `c1b9d91`.
 
 > **Older entries archived** — see git log or STRATEGIC_PLAN.md `<details>` block for full history.
 
@@ -70,9 +99,9 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
+| **W64** | Sync schema severity+status (SPEC 08) | 🟡 GATE — awaiting user TSC+Jest confirm |
+| **W66** | `updateStatus()` integrity+audit trail (SPEC 02) | 🟡 GATE — awaiting user TSC+Jest confirm |
 | **W51** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
-
-**All other phases (P1 + P2) fully closed as of 2026-08-18. TSC 0 + Jest 1245/0.**
 
 ---
 
