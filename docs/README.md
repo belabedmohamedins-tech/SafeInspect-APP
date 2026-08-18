@@ -7,6 +7,15 @@
 
 ## Live Observations Log
 
+### 2026-08-18 22:30 WAT — Perplexity — baseGeneralCriteria.ts reconstruction verified ✅
+- **Root cause (confirmed by Claude trace):** commit `370a964` ("fix(BGN-10-01): correct W41 header comment") was a bad find/replace — 57 deletions vs 8 insertions destroyed BGN-09-01, BGN-09-02, BGN-10-01, and `];`, replacing them with a truncated, duplicate, unterminated copy of the BGN-08-06 `criteria` line. NOT a silent API truncation.
+- **Follow-up commit `442d00c`** made an unrelated citation fix and re-saved the already-corrupt file without validating it — preserved the corruption.
+- **Reconstruction by Claude (human-pushed):** commit [`14e82d0`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/14e82d0dbaaaac9e671d127eae0f68e93dff7472) — +53 additions / -1 deletion. Verified clean by diff stat.
+- **Content fix applied in reconstruction:** BGN-10-01 `legalReference` — article range corrected to `المواد 15–22` (was `16-21` in last-good version; the destructive commit's own header comment had already announced this correction but never applied it to the body). Claude applied it as part of the repair. W62 entry added to file header.
+- **Validation Claude ran:** balanced braces/brackets/quotes + real `tsc --noEmit` pass — zero errors. All 37 criteria IDs present exactly once, no duplicates.
+- **Action required from user:** run `npx tsc --noEmit` locally and confirm 0 errors.
+- **BGN-10-01 Art.15–22 legal note:** flagged as needing confirmation against JORADP original before enforcement use (Art.14 and Art.22 status uncertain per Claude's own note).
+
 ### 2026-08-18 21:10 WAT — Perplexity — W88 ✅ CLOSED — MCH-29-08 Art.28→Art.18 + Jest all green
 - **User confirmed:** full Jest run all green after `git pull`
 - **Root cause of previous Jest failure (printingCriteria):** stale local test file. After pull, HEAD already had the correct assertion (`toContain('91-05')` + `not.toContain('90-11')` from W85). No code change needed for that test.
@@ -106,22 +115,23 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 21:10 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 22:30 WAT)
 
 All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed. MCH-29-08 backlog item resolved. No remaining actionable items without human input.
 
 ### 🟡 OPEN ITEMS (need action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|
+|---|---|---|---|
 | **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
+| **BGN-10-01** | LOW | Art.15–22 range — Claude flagged Art.14/22 status uncertain | Verify against JORADP original PDF before enforcement use. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
 
 | Finding | What it was | Closed by | Verified |
 |---|---|---|---|
 | F-01 | `.env` not in `.gitignore` | W87 | **2026-08-18 direct read — already covered** |
-| F-02 | Stale Node/Expo version comment | W87 | **2026-08-18 direct read — no stale comment** |
+| F-02 | Stale Node/Expo comment | W87 | **2026-08-18 direct read — no stale comment** |
 | F-03 | Migration naming `001_` reused | W87 | **2026-08-18 direct read — intentional, documented** |
 | F-04/F-07 | SQLite layer dormant | Z5 | 2026-08-09 |
 | F-08 | Double CAP creation | W38 | 2026-08-09 |
@@ -138,12 +148,14 @@ All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed
 | F-20 | `decisionSupport.ts` test coverage | W56 | 2026-08-18 direct read |
 | **R1/R6** | Noise decree + Décret 93-184 citation check | W88 | **2026-08-18 direct read — all correct, 93-184 phantom** |
 | **MCH-29-08** | Loi 01-19 Art.28 wrong domain (export/repatriation) | W88 | **2026-08-18 — corrected to Art.18 (hazardous waste declaration)** |
+| **baseGeneralCriteria truncation** | File cut off mid-string at line 492 (BGN-09-01/02 + BGN-10-01 + `];` lost) | Claude repair + manual push | **2026-08-18 commit 14e82d0 — +53/-1 verified** |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
 | Item | Blocker |
 |---|---|
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL |
+| BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
@@ -193,7 +205,7 @@ SafeInspect-APP/
 
 **All phases closed through W88. TSC 0 + Jest 1257/0 — 2026-08-18.**
 
-**Only remaining actionable item requiring human input: F-05 (prod API URL — confirm production URL).**
+**Pending user action: run `npx tsc --noEmit` locally to confirm 0 errors after baseGeneralCriteria.ts repair.**
 
 ---
 
