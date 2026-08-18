@@ -15,6 +15,12 @@
 //   ABT-AX6-01/02: switched from Annexe I generic mg/L to Annexe II §1a sector-specific g/t.
 //   ABT-AX6-02: added throughput numericField (volume m³/t carcasse ≤6).
 //   ABT-AX6-04: pH range corrected 6.5–8.5 → 5.5–8.5 per Annexe II abattoirs.
+// W50 (2026-08-18): ABT-AX7-01 legalReference corrected.
+//   REMOVED: Décret 07-205 — mauvais domaine (conditions techniques des incinérateurs
+//   agréés, sans rapport avec la classification ou la déclaration des déchets animaux).
+//   ADDED: Décret 05-315 Art.3 (obligation de déclaration des déchets spéciaux dangereux
+//   — couvre les sous-produits animaux non destinés à la consommation humaine).
+//   Closes issue #14.
 
 import { InspectionItem } from '../types';
 
@@ -217,11 +223,17 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
 
   // ===== AX7 — النفايات الصلبة =====
   {
+    // W50 (2026-08-18): legalReference corrected — issue #14.
+    // REMOVED: Décret 07-205 (conditions techniques des incinérateurs agréés —
+    //   mauvais domaine, sans rapport avec la classification/déclaration des déchets animaux).
+    // ADDED: Décret 05-315 Art.3 (obligation de déclaration des déchets spéciaux
+    //   dangereux auprès de l'autorité compétente — couvre les sous-produits animaux
+    //   non destinés à la consommation humaine classés déchets spéciaux).
     id: 'ABT-AX7-01',
     axis: 'النفايات الصلبة والمخلفات',
     category: 'بيئية',
     criteria: 'وجود عقد مع مجزر معتمد أو وحدة تحويل لمعالجة الفضلات الحيوانية (دم، أحشاء غير صالحة، جلود) بطريقة مطابقة للتشريعات.',
-    legalReference: 'القانون 01-19 المتعلق بتسيير النفايات (الفضلات الحيوانية = نفايات خاصة). المرسوم التنفيذي 07-205 (تصنيف النفايات الخاصة الخطرة).',
+    legalReference: 'القانون 01-19 المتعلق بتسيير النفايات (الفضلات الحيوانية = نفايات خاصة — المادة 3 تعريف النفايات الخاصة، المادة 15 وجوب معالجتها في منشآت مرخصة حصراً) + المرسوم التنفيذي 05-315 المادة 3 (إلزامية تصريح منتجي النفايات الخاصة الخطرة بطبيعتها وكمياتها وخصائصها وطرق معالجتها للسلطة المختصة — يشمل الفضلات الحيوانية المصنفة نفايات خاصة).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
