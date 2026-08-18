@@ -33,13 +33,6 @@ export const StorageKeys = {
   OFFICE_NAME:             'OFFICE_NAME',
   INSPECTOR_NAME:          'INSPECTOR_NAME',
   INSPECTION_CAUSE:        'INSPECTION_CAUSE',
-  // UI preference keys (written by settings.tsx, read by SyncService / NotificationService)
-  /** autoSync toggle — stored as 'true'/'false' string */
-  AUTO_SYNC:               'autoSync',
-  /** darkMode toggle — stored as 'true'/'false' string */
-  DARK_MODE:               'darkMode',
-  /** push-notifications UI toggle — stored as 'true'/'false' string */
-  NOTIFICATIONS_UI:        'notifications',
   // Phase-1 additions
   // NOTE: @ prefix replaced with _ prefix — SecureStore only allows alphanumeric, ".", "-", "_"
   SCHEMA_VERSION:          '_schema_version',
@@ -48,6 +41,13 @@ export const StorageKeys = {
   JWT_ACCESS_TOKEN:        'jwt_access_token',
   JWT_REFRESH_TOKEN:       'jwt_refresh_token',
   SERVER_USER_ID:          'server_user_id',
+  // W85: UI preference toggles (settings.tsx writer ↔ SyncService/NotificationService reader)
+  /** Auto-sync toggle — written by settings.tsx, read by SyncService.flush() */
+  AUTO_SYNC:               'autoSync',
+  /** Dark-mode toggle — written and read by settings.tsx */
+  DARK_MODE:               'darkMode',
+  /** Push-notification toggle shown in UI (distinct from NOTIFICATIONS_ENABLED device token) */
+  NOTIFICATIONS_UI:        'notifications',
 } as const;
 
 /** @deprecated use StorageKeys */

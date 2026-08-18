@@ -95,7 +95,7 @@ export default function SettingsScreen() {
 
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
 
-        {/* ── Security ─────────────────────────────────────────────────────── */}
+        {/* ── Security ──────────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>{t('settings.security') || 'الأمان'}</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -120,7 +120,7 @@ export default function SettingsScreen() {
           )}
         </View>
 
-        {/* ── Notifications ────────────────────────────────────────────────── */}
+        {/* ── Notifications ────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>{t('settings.notifications') || 'الإشعارات'}</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -137,7 +137,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* ── Sync ─────────────────────────────────────────────────────────── */}
+        {/* ── Sync ────────────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>{t('settings.sync') || 'المزامنة'}</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -154,7 +154,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* ── Appearance ───────────────────────────────────────────────────── */}
+        {/* ── Appearance ─────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>{t('settings.appearance') || 'المظهر'}</Text>
         <View style={styles.card}>
           <View style={styles.row}>
@@ -171,7 +171,7 @@ export default function SettingsScreen() {
           </View>
         </View>
 
-        {/* ── Language ─────────────────────────────────────────────────────── */}
+        {/* ── Language ─────────────────────────────────────────────────── */}
         <Text style={styles.sectionLabel}>{t('settings.language') || 'اللغة'}</Text>
         <View style={styles.card}>
           <View style={styles.langRow}>
