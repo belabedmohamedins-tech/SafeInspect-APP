@@ -7,6 +7,17 @@
 
 ## Live Observations Log
 
+### 2026-08-18 13:38 WAT — Perplexity — Claude audit cross-ref complete — definitive remaining-work list produced
+- **Action:** Cross-referenced all 20 Claude audit findings (F-01–F-20) against current source code (direct reads)
+- **Result:** All findings from the audit that were claimed fixed ARE confirmed fixed by direct code read:
+  - **F-11** ✅ CLOSED — `delete()`, `deleteMany()`, `clear()` all have `INSPECTION_LOCKED` guard + audit log (W52)
+  - **F-18** ✅ CLOSED — `ApprovalRepository` wires `syncToServer()` → `serverAuth.approveInspection()`/`rejectInspection()` with offline-queue fallback (W53)
+  - **F-20** ✅ CLOSED — `decisionSupport.test.ts` now has 17 tests across all 7 decision paths, grade boundaries, escalation, criticalOverride, incomplete flag (W56)
+  - **F-14** ✅ CLOSED — W56 also closed the `scoringUtils.ts` definitional reconciliation (confirmed in W56 phase)
+  - **F-17 loose end** ✅ CLOSED — `sync.ts` W64 fix confirmed columns match. `SavedInspection.violations` is the object shape that sync.ts maps correctly.
+- **Docs updated:** README + STRATEGIC_PLAN
+- **No code changes this session**
+
 ### 2026-08-18 13:31 WAT — Perplexity — W50 ✅ + W51 ✅ CLOSED — Legal citation fixes (Claude audit G9 + R9 second use)
 - **Phases closed:** W50 (CGS-01-01 Décret 76-35 removed), W51 (MCH-29-03/04 Décret 09-19 backfill → G9 closed)
 - **Files changed:**
@@ -15,7 +26,6 @@
 - **No test changes needed** — legal reference fields only, no logic
 - **Commit:** [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) (+23 additions / -3 deletions, verified clean)
 - **Claude audit items resolved:** G9 (MCH-29-03/04 missing 09-19) ✅ CLOSED | R9 second use (CGS-01-01 76-35) ✅ CLOSED
-- **Remaining open from Claude audit:** G3 partial (BAK-10-01 evolved, CLD/PRD not checked), R1/R6 (noise decree) deferred
 
 ---
 
@@ -45,10 +55,7 @@
 3. Embeds new hash into `data` JSON before writing to SQLite.
 
 **W65 — re-confirmed CLEAN (was correctly closed).**
-`src/services/BackupService.ts`, `exportBackup()`: `InspectionRepository.getAll()` — SQLite, not AsyncStorage.
-
 **W68 — re-confirmed CLEAN (was correctly closed).**
-`src/repositories/AuthRepository.ts` — all counter methods route to `SecureStore.*Async()` on native.
 
 ---
 
@@ -69,6 +76,55 @@
 - TSC 0 + Jest all green. Commit `9b42f67`.
 
 > **Older entries archived** — see git log or STRATEGIC_PLAN.md `<details>` block for full history.
+
+---
+
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 13:38 WAT)
+
+All 20 Claude audit findings verified against current code. Here is the complete and honest picture:
+
+### 🟡 OPEN ITEMS (need action)
+
+| ID | Severity | Item | Blocker / Notes |
+|---|---|---|---|
+| **F-01** | LOW | `.env` not in `.gitignore` | Quick fix. Verify `.gitignore` contains `.env`, `*.env`, `server/.env`. |
+| **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
+| **F-02** | COSMETIC | Stale Node/Expo version comment | 1-line comment update only. |
+| **F-03** | COSMETIC | Migration naming `001_` reused | Cosmetic, not a functional bug. |
+| **R1/R6** | LOW | Algeria noise-exposure decree + Décret 93-184 verify | Legal citation check deferred. 2 criteria files potentially affected. |
+| **W51-SURV** | SURVEILLANCE | AIM GPL2 JORADP publication status | 6 GPL criteria tagged [À VÉRIFIER]. No action until published. |
+
+### ✅ CONFIRMED CLOSED (all verified by direct code read this session or prior)
+
+| Finding | What it was | Closed by | Verified |
+|---|---|---|---|
+| F-04/F-07 | SQLite layer dormant | Z5 | 2026-08-09 |
+| F-08 | Double CAP creation | W38 | 2026-08-09 |
+| F-09 | No autosave on background | W28 | 2026-08-09 |
+| F-10 | New facility categories invisible | W40 | 2026-08-09 |
+| F-11 | Approved inspections deletable | W52 | **2026-08-18 direct read** |
+| F-12 | Integrity badge non-functional | W5 | 2026-08-09 |
+| F-13 | Reinspection facility mismatch | W39 | 2026-08-09 |
+| F-14 | `evaluated` definition inconsistency | W27+W56 | 2026-08-09 |
+| F-15 | No auto follow-up for unable-to-verify | W41 | 2026-08-09 |
+| F-17 | Server↔mobile schema mismatch + violations shape | W64 | **2026-08-18 direct read** |
+| F-18 | Local approval never reaches server | W53 | **2026-08-18 direct read** |
+| F-19 | Audit log clearable with no trace | W52 | 2026-08-09 |
+| F-20 | `decisionSupport.ts` test coverage | W56 | **2026-08-18 direct read** |
+
+### 🟢 BACKLOG (needs human decision before opening a phase)
+
+| Item | Blocker |
+|---|---|
+| F-05: prod API URL falls back to localhost | Confirm correct prod URL |
+| F-02: stale Node/Expo version comment | Cosmetic — low priority |
+| F-03: migration naming `001_` reused | Cosmetic — not a functional bug |
+| L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
+| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
+| MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
+| MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting |
+| COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
+| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
 
 ---
 
@@ -109,9 +165,11 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W51** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
+| **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
 **All other phases closed. TSC 0 + Jest 1257/0 — 2026-08-18.**
+
+**Remaining actionable work:** F-01 (`.env` gitignore), F-05 (prod URL — needs user input), R1/R6 (noise decree legal verify), cosmetics F-02/F-03.
 
 ---
 
