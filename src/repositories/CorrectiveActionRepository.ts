@@ -17,12 +17,14 @@
 //
 // W89: added `delete` as public alias for `deleteById` — tests written before
 //      the rename called .delete(id); both names now work identically.
+//      Added photo_uri, verified_by, verification_note, verification_photo_uri
+//      columns to CapRow, rowToCap, save(), and updateStatus().
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
 import { pushInApp } from '../services/NotificationService';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────────────────
 
 function makeId(): string {
   return `cap-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -34,7 +36,7 @@ function defaultDeadline(): string {
   return d.toISOString().slice(0, 10);
 }
 
-// ─── Row mapper ───────────────────────────────────────────────────────────────
+// ─── Row mapper ──────────────────────────────────────────────────────────────────────────────
 
 type CapRow = {
   id: string;
@@ -51,6 +53,11 @@ type CapRow = {
   created_at: string;
   updated_at: string;
   closed_at: string | null;
+  // W89: verification columns (nullable — pre-existing rows return NULL)
+  photo_uri: string | null;
+  verified_by: string | null;
+  verification_note: string | null;
+  verification_photo_uri: string | null;
 };
 
 function rowToCap(row: CapRow): CorrectiveAction {
@@ -69,6 +76,11 @@ function rowToCap(row: CapRow): CorrectiveAction {
     createdAt: row.created_at,
     updatedAt: row.updated_at,
     closedAt: row.closed_at ?? undefined,
+    // W89
+    photoUri: row.photo_uri ?? undefined,
+    verifiedBy: row.verified_by ?? undefined,
+    verificationNote: row.verification_note ?? undefined,
+    verificationPhotoUri: row.verification_photo_uri ?? undefined,
   };
 }
 
@@ -95,7 +107,7 @@ async function readAll(): Promise<CorrectiveAction[]> {
   return rows.map(rowToCap);
 }
 
-// ─── Public stats type ────────────────────────────────────────────────────────
+// ─── Public stats type ──────────────────────────────────────────────────────────────────
 
 export interface CapStats {
   open:              number;
@@ -106,7 +118,7 @@ export interface CapStats {
   nearDeadlineCount: number;
 }
 
-// ─── Repository ───────────────────────────────────────────────────────────────
+// ─── Repository ──────────────────────────────────────────────────────────────────────────────
 
 export const CorrectiveActionRepository = {
   async getAll(): Promise<CorrectiveAction[]> {
@@ -209,6 +221,7 @@ export const CorrectiveActionRepository = {
    * Upserts a corrective action and returns the full persisted record.
    * W72: fires CAP_DEADLINE notification when a new CAP has a deadline
    * within the next 7 days.
+   * W89: persists photoUri from InspectionItem (copied by capFactory).
    */
   async save(
     action: Omit<CorrectiveAction, 'id' | 'createdAt' | 'updatedAt'> &
@@ -230,21 +243,30 @@ export const CorrectiveActionRepository = {
       `INSERT INTO corrective_actions
          (id, inspection_id, inspection_item_id, facility_id, facility_name,
           criteria, severity, deadline, assigned_to, status, notes,
-          created_at, updated_at, closed_at)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+          created_at, updated_at, closed_at,
+          photo_uri, verified_by, verification_note, verification_photo_uri)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
        ON CONFLICT(id) DO UPDATE SET
          status = excluded.status,
          notes = excluded.notes,
          deadline = excluded.deadline,
          assigned_to = excluded.assigned_to,
          updated_at = excluded.updated_at,
-         closed_at = excluded.closed_at`,
+         closed_at = excluded.closed_at,
+         photo_uri = excluded.photo_uri,
+         verified_by = excluded.verified_by,
+         verification_note = excluded.verification_note,
+         verification_photo_uri = excluded.verification_photo_uri`,
       [
         record.id, record.inspectionId, record.inspectionItemId,
         record.facilityId, record.facilityName, record.criteria,
         record.severity, record.deadline, record.assignedTo,
         record.status, record.notes ?? null,
         record.createdAt, record.updatedAt, record.closedAt ?? null,
+        record.photoUri ?? null,
+        record.verifiedBy ?? null,
+        record.verificationNote ?? null,
+        record.verificationPhotoUri ?? null,
       ],
     );
 
@@ -272,24 +294,48 @@ export const CorrectiveActionRepository = {
    * W85 FIX: closedAt is stamped ONLY when status === 'closed' (inspector-verified).
    *   'resolved' means the facility self-reported; 'closed' means the inspector
    *   confirmed closure. Setting closedAt on 'resolved' collapsed both states into one.
+   * W89: accepts optional verifiedBy, verificationNote, verificationPhotoUri
+   *   and persists them when status === 'closed'.
    */
   async updateStatus(
     id: string,
     status: CorrectiveAction['status'],
     notes?: string,
+    verificationFields?: {
+      verifiedBy?: string;
+      verificationNote?: string;
+      verificationPhotoUri?: string;
+    },
   ): Promise<void> {
     const db = await getDb();
     const now = new Date().toISOString();
-    // W85: only stamp closedAt when inspector-verified closure ('closed'),
-    // not when facility self-reports ('resolved').
+    // W85: only stamp closedAt when transitioning to 'closed' (inspector-verified).
     const closedAt = status === 'closed' ? now : null;
+
+    let sql = `UPDATE corrective_actions SET status = ?, updated_at = ?, closed_at = COALESCE(?, closed_at)`;
     const params: (string | null)[] = [status, now, closedAt];
-    let sql = `UPDATE corrective_actions
-       SET status = ?, updated_at = ?, closed_at = ?`;
+
     if (notes !== undefined) {
       sql += ', notes = ?';
       params.push(notes);
     }
+
+    // W89: persist verification evidence when closing.
+    if (status === 'closed' && verificationFields) {
+      if (verificationFields.verifiedBy !== undefined) {
+        sql += ', verified_by = ?';
+        params.push(verificationFields.verifiedBy);
+      }
+      if (verificationFields.verificationNote !== undefined) {
+        sql += ', verification_note = ?';
+        params.push(verificationFields.verificationNote);
+      }
+      if (verificationFields.verificationPhotoUri !== undefined) {
+        sql += ', verification_photo_uri = ?';
+        params.push(verificationFields.verificationPhotoUri);
+      }
+    }
+
     sql += ' WHERE id = ?';
     params.push(id);
     await db.runAsync(sql, params);
@@ -303,24 +349,12 @@ export const CorrectiveActionRepository = {
       if (row) {
         void pushInApp({
           type: 'FOLLOW_UP',
-          title: `🔄 إجراء تصحيحي قيد التنفيذ — ${row.facility_name}`,
-          body: row.criteria,
+          title: `📌 متابعة إجراء تصحيحي — ${row.facility_name}`,
+          body: `تم تفعيل الإجراء التصحيحي: ${row.criteria}`,
           link: { screen: '/screens/cap' },
         });
       }
     }
-  },
-
-  /**
-   * Delete all corrective actions for a given inspection.
-   * Called by InspectionRepository.delete() to prevent orphaned CAPs.
-   */
-  async deleteByInspection(inspectionId: string): Promise<void> {
-    const db = await getDb();
-    await db.runAsync(
-      'DELETE FROM corrective_actions WHERE inspection_id = ?',
-      [inspectionId],
-    );
   },
 
   async deleteById(id: string): Promise<void> {
@@ -328,17 +362,16 @@ export const CorrectiveActionRepository = {
     await db.runAsync('DELETE FROM corrective_actions WHERE id = ?', [id]);
   },
 
-  /**
-   * W89: public alias for deleteById — older tests call .delete(id).
-   * Both names are functionally identical.
-   */
+  // W89: alias so tests written before rename still work.
   async delete(id: string): Promise<void> {
-    const db = await getDb();
-    await db.runAsync('DELETE FROM corrective_actions WHERE id = ?', [id]);
+    return CorrectiveActionRepository.deleteById(id);
   },
 
-  async clear(): Promise<void> {
+  async deleteByInspection(inspectionId: string): Promise<void> {
     const db = await getDb();
-    await db.runAsync('DELETE FROM corrective_actions');
+    await db.runAsync(
+      'DELETE FROM corrective_actions WHERE inspection_id = ?',
+      [inspectionId],
+    );
   },
 };
