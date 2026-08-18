@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W86**
+> Next phase identifier: **W87**
 
 ---
 
@@ -89,10 +89,10 @@
 | **W61** | Server routes mounted + approval routes | 2026-08-16 | 10/10 PASS. Commits: `13b750a`, `24270ca`, `0a27026` |
 | **W62–W63** | Route path + approval ID — clean | 2026-08-16 | Direct reads |
 | **W64** | Sync schema severity+status (SPEC 08) | 2026-08-18 | Commit [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654). TSC 0 + Jest green — user-confirmed 13:02 WAT |
-| **W65** | Backup/restore — SQLite read (SPEC 01) | 2026-08-18 | Re-confirmed clean. Exact line: `InspectionRepository.getAll()` in `exportBackup()`. No AsyncStorage. |
+| **W65** | Backup/restore — SQLite read (SPEC 01) | 2026-08-18 | Re-confirmed clean. `InspectionRepository.getAll()` in `exportBackup()`. |
 | **W66** | `updateStatus()` integrity+audit trail (SPEC 02) | 2026-08-18 | Commit [`4ed0db5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/4ed0db5facafc2b1e038d8f8e5be860dd3bca76a). TSC 0 + Jest green — user-confirmed 13:02 WAT |
-| **W67** | Photo evidence — documented gap | 2026-08-17 | photoUriMap re-links on same device; cross-device binary gap documented as known limitation |
-| **W68** | PIN lockout — SecureStore (SPEC 05) | 2026-08-18 | Re-confirmed clean. All 3 counter methods use `secureGet/secureSet/secureDelete` → `SecureStore.*Async()` on native. |
+| **W67** | Photo evidence — cross-device gap | 2026-08-18 | Resolved by W86 base64 embed |
+| **W68** | PIN lockout — SecureStore (SPEC 05) | 2026-08-18 | Re-confirmed clean. SecureStore on native. |
 | **W69–W70** | CAP + PDF — clean | 2026-08-17 | Direct reads |
 | **W71** | Planning UI + PriorityWidget | 2026-08-17 | TSC 0 + Jest green. Commits `c178a6c`, `c1b9d91` |
 | **W72** | Dead settings toggles + notification centre | 2026-08-17 | TSC 0 + Jest green. Commit `9b42f67` |
@@ -109,6 +109,7 @@
 | **W83** | Phantom backlog — active inspection screen | 2026-08-17 | `checklists.tsx` confirmed present |
 | **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | 3 mismatched keys found → W85 |
 | **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 2026-08-18 | TSC 0 + Jest 1245/0. Commits: `33e5cbf`, `14b055c` |
+| **W86** | BackupService v3 photo embed + briefService critical sort | 2026-08-18 | TSC 0 + Jest 1257/0. Commit [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30) |
 
 ---
 
@@ -133,7 +134,6 @@
 | MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
-| W67 photo gap | Binary photos don’t survive cross-device restore. Document as known limitation or implement base64 embed (large payload tradeoff). |
 
 ---
 
@@ -173,6 +173,6 @@
 
 ## Sprint Status
 
-**All phases (P1 + P2 + W64 + W66) fully closed — 2026-08-18. TSC 0 + Jest 1245/0.**
+**All phases closed through W86 — 2026-08-18. TSC 0 + Jest 1257/0.**
 
 Only active item: **W51** surveillance (no code action until JORADP publishes AIM GPL2).

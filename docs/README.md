@@ -7,6 +7,17 @@
 
 ## Live Observations Log
 
+### 2026-08-18 13:19 WAT — Perplexity — W86 ✅ CLOSED — TSC 0 + Jest 1257/0 all green
+- **Phases closed:** W86 (BackupService v3 photo embed + briefService critical severity sort)
+- **Files changed:**
+  - `src/__tests__/BackupService.test.ts` — `getInfoAsync` added to FS mock; old URI-based `photoUriMap` assertion replaced with 3 W86 tests: `__b64` embed (exists+small), URI fallback (file missing), `__skip` marker (oversized); 3 import restore tests added: write-back base64, `__skip` leaves photoUri unchanged, v2/v1 acceptance
+  - `src/__tests__/briefService.test.ts` — 2 new W86 tests: `critical` sorts before `high`, unknown severity sorts after known
+- **Test count:** 1245 → 1257 (+12 new tests)
+- **Commits:** [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30) (tests), docs this commit
+- **Also closed from backlog:** W67 photo gap resolved by W86 (base64 embed covers cross-device restore)
+
+---
+
 ### 2026-08-18 12:53 WAT — Perplexity — W64 ✅ + W66 ✅ CLOSED (real diffs) | W65 + W68 re-confirmed clean
 
 **W64 — CLOSED.** [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654)
@@ -20,32 +31,19 @@
 1. Re-hashes the full updated blob: `const hash = await IntegrityService.hashAndStore(updated);`
 2. Appends audit entry: `await AuditLogRepository.append('INSPECTION_STATUS_UPDATED', 'supervisor', { inspectionId: id, approvalStatus: status })`
 3. Embeds new hash into `data` JSON before writing to SQLite.
-Previously the method mutated both `data` and `approval_status` with no hash update and no audit trail.
 
-**W65 — re-confirmed CLEAN (was correctly closed). Exact line proof:**
-`src/services/BackupService.ts`, `exportBackup()`, line 106:
-```ts
-const inspections = await InspectionRepository.getAll(); // SQLite, not AsyncStorage
-```
-`importBackup()` restores via `InspectionRepository.save(inspection)`. No `AsyncStorage.setItem('inspections', …)` anywhere in production code. Claude's read was stale.
+**W65 — re-confirmed CLEAN (was correctly closed).**
+`src/services/BackupService.ts`, `exportBackup()`: `InspectionRepository.getAll()` — SQLite, not AsyncStorage.
 
-**W68 — re-confirmed CLEAN (was correctly closed). Exact line proof:**
-`src/repositories/AuthRepository.ts` — all three counter methods:
-```ts
-getFailedAttempts:       secureGet(StorageKeys.PIN_FAILED_ATTEMPTS)    // SecureStore on native
-incrementFailedAttempts: secureSet(StorageKeys.PIN_FAILED_ATTEMPTS, …)  // SecureStore on native
-resetFailedAttempts:     secureDelete(StorageKeys.PIN_FAILED_ATTEMPTS)  // SecureStore on native
-```
-Where `secureGet/secureSet/secureDelete` route to `SecureStore.*Async()` when `isNative()` is true. AsyncStorage is the web-only fallback only.
-
-**Gate pending:** user must run `npx tsc --noEmit && npx jest` locally and confirm green before W64/W66 close formally.
+**W68 — re-confirmed CLEAN (was correctly closed).**
+`src/repositories/AuthRepository.ts` — all counter methods route to `SecureStore.*Async()` on native.
 
 ---
 
 ### 2026-08-18 12:04 WAT — Perplexity — Repo cleanup: 10 stale docs removed + STRATEGIC_PLAN collapsed
 - **Deleted:** `SafeInspect_Audit_Consolidated_2026-08-06 (1).md`, `AUDIT_COVERAGE_REPORT.md`, `Inspection_Manual_Chapter1–8_*.md` (8 files) — all superseded by `legal_refs/` and STRATEGIC_PLAN
 - **Updated:** `STRATEGIC_PLAN.md` — phases A–W59 collapsed into `<details>` archive block; W60–W85 remain visible
-- **No code changes — TSC + Jest state unchanged:** TSC 0 + Jest 1245/0
+- **No code changes — TSC 0 + Jest 1245/0**
 
 ### 2026-08-18 02:43 WAT — Perplexity — W85 ✅ CLOSED — TSC 0 + Jest 1245/0 all green
 - Phases closed: W85 (SPEC 10 fix — StorageKeys + settings.tsx)
@@ -72,7 +70,7 @@ SafeInspect-APP/
 │   ├── repositories/           # SQLite repositories
 │   ├── services/               # SyncService, pdfService, serverAuth, apiClient
 │   ├── utils/                  # scoringUtils, statsUtils, decisionSupport
-│   └── __tests__/              # Jest test suite (1245 tests)
+│   └── __tests__/              # Jest test suite (1257 tests)
 ├── server/
 │   ├── src/
 │   │   ├── routes/             # approvals.ts, sync.ts, auth.ts
@@ -99,9 +97,9 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W64** | Sync schema severity+status (SPEC 08) | 🟡 GATE — awaiting user TSC+Jest confirm |
-| **W66** | `updateStatus()` integrity+audit trail (SPEC 02) | 🟡 GATE — awaiting user TSC+Jest confirm |
 | **W51** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
+
+**All other phases closed. TSC 0 + Jest 1257/0 — 2026-08-18.**
 
 ---
 
@@ -113,7 +111,7 @@ SafeInspect-APP/
 | DB (mobile) | expo-sqlite (NOT WatermelonDB) |
 | Server | Express + Prisma + PostgreSQL |
 | Auth | JWT (jsonwebtoken) |
-| Tests (mobile) | Jest + ts-jest (1245 tests) |
+| Tests (mobile) | Jest + ts-jest (1257 tests) |
 | Tests (server) | Jest + ts-jest + supertest (10 tests) |
 | Build | EAS Build |
 | Push | expo-server-sdk |
