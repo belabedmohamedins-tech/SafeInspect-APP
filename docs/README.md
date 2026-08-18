@@ -7,6 +7,17 @@
 
 ## Live Observations Log
 
+### 2026-08-18 19:09 WAT — Perplexity — W88 ✅ CLOSED — TSC 0 + Jest 1257/0 all green | R1/R6 closed
+- **User confirmed:** full Jest run green — 118 suites passed, 1 skipped, 1243 passed, 0 failed
+- **Root cause of previous failure:** local `__tests__/criteria/printingCriteria.test.ts` was stale (pre-W85 commit). After `git pull`, test already correct on HEAD (`toContain('91-05')` + `not.toContain('90-11')`).
+- **R1/R6 closed:** direct read of `printingCriteria.ts` (SHA `8973b348`) + `uabCriteria.ts` confirms:
+  - PRT-05-01: cites `Décret 91-05 Arts.16-17` (correct PPE obligation) — `90-11` absent ✅
+  - PRT-05-02: cites `Loi 90-11 Art.6` (fire safety — correct, retained intentionally) ✅
+  - UAB-AX7-07: cites `Loi 18-11 + Loi 90-11` with `[INTL]` flag, `93-120` explicitly excluded ✅
+  - No Décret 93-184 found anywhere in codebase — backlog item was stale/phantom ✅
+- **No code changes this session. Docs only.**
+- **Sprint: fully clean. Only remaining human-input item: F-05 (prod API URL).**
+
 ### 2026-08-18 18:27 WAT — Perplexity — W87 ✅ CLOSED — F-01/F-02/F-03 confirmed clean by direct source read
 - **Action:** Direct read of `.gitignore`, `src/db/schema.ts`, `package.json` to verify all three remaining "open" findings
 - **F-01 `.env` gitignore** — CONFIRMED CLEAN. Root `.gitignore` already has `.env` and `.env*.local`. Git root `.gitignore` is recursive — covers `server/.env` too. No code change needed.
@@ -87,17 +98,15 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 18:27 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 19:09 WAT)
 
-All Claude audit findings (F-01–F-20) confirmed closed or moved to backlog. No remaining actionable items without human input.
+All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed. No remaining actionable items without human input.
 
 ### 🟡 OPEN ITEMS (need action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|
+|---|---|---|---|
 | **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
-| **R1/R6** | LOW | Algeria noise-exposure decree + Décret 93-184 verify | Legal citation check deferred. 2 criteria files potentially affected. |
-| **W51-SURV** | SURVEILLANCE | AIM GPL2 JORADP publication status | 6 GPL criteria tagged [À VÉRIFIER]. No action until published. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
 
@@ -119,6 +128,7 @@ All Claude audit findings (F-01–F-20) confirmed closed or moved to backlog. No
 | F-18 | Local approval never reaches server | W53 | 2026-08-18 direct read |
 | F-19 | Audit log clearable with no trace | W52 | 2026-08-09 |
 | F-20 | `decisionSupport.ts` test coverage | W56 | 2026-08-18 direct read |
+| **R1/R6** | Noise decree + Décret 93-184 citation check | W88 | **2026-08-18 direct read — all correct, 93-184 phantom** |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -173,7 +183,7 @@ SafeInspect-APP/
 |---|---|---|
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
-**All phases closed through W87. TSC 0 + Jest 1257/0 — 2026-08-18.**
+**All phases closed through W88. TSC 0 + Jest 1257/0 — 2026-08-18.**
 
 **Only remaining actionable item requiring human input: F-05 (prod API URL — confirm production URL).**
 
