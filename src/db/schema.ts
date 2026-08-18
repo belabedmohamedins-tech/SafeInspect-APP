@@ -250,6 +250,27 @@ const MIGRATIONS: Migration[] = [
     name: '003_facilities_add_rubrique',
     sql: `ALTER TABLE facilities ADD COLUMN rubrique TEXT;`,
   },
+  {
+    // W89: add photo_uri — violation photo URI copied from InspectionItem by capFactory.
+    // One ALTER TABLE per column: SQLite does not support multiple ADD COLUMN in one statement.
+    name: '004_cap_add_photo_uri',
+    sql: `ALTER TABLE corrective_actions ADD COLUMN photo_uri TEXT;`,
+  },
+  {
+    // W89: add verified_by — inspector name/ID who closed the CAP.
+    name: '004_cap_add_verified_by',
+    sql: `ALTER TABLE corrective_actions ADD COLUMN verified_by TEXT;`,
+  },
+  {
+    // W89: add verification_note — inspector's written closure confirmation.
+    name: '004_cap_add_verification_note',
+    sql: `ALTER TABLE corrective_actions ADD COLUMN verification_note TEXT;`,
+  },
+  {
+    // W89: add verification_photo_uri — closure evidence photo taken by inspector.
+    name: '004_cap_add_verification_photo_uri',
+    sql: `ALTER TABLE corrective_actions ADD COLUMN verification_photo_uri TEXT;`,
+  },
 ];
 
 export async function runMigrations(db: SQLite.SQLiteDatabase): Promise<void> {
