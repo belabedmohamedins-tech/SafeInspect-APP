@@ -384,7 +384,7 @@ L'exploitant est tenu de mettre à jour ce dossier et de le conserver sur le lie
 
 — le dossier final approuvé ;
 
-— le listing des équipements de sécurité, leurs caractéristiques techniques et au besoin leurs certificats de taraqe et/ou d'étalonnage ;
+— le listing des équipements de sécurité, leurs caractéristiques techniques et au besoin leurs certificats de tarage et/ou d'étalonnage ;
 
 — le registre d'inspection ;
 
@@ -536,21 +536,13 @@ Les équipements électriques, les systèmes de protection cathodique et les acc
 
 La protection cathodique doit être appliquée sur les parties enterrées ou immergées des installations et ouvrages des hydrocarbures. La protection cathodique doit être assurée conformément aux règles de l'art.
 
-**Art. 56.** — Le maître de l'ouvrage doit transmettre à l'ARH pour approbation, un dossier technique des systèmes de protection cathodique.
+**Art. 56.** — L'étude de dimensionnement des systèmes de protection cathodique des installations et des ouvrages, doit être établie par un service d'inspection pré-qualifié de l'exploitant ou par un organisme tiers habilité et ce, conformément aux normes et aux standards issus des meilleures pratiques internationales applicables dans le domaine industriel.
 
-Ce dossier comporte, notamment :
+Le maître de l'ouvrage doit concevoir et installer des systèmes de protection cathodique provisoires pour protéger les installations, les ouvrages et les bacs de stockage avant leur mise en produit, et ce, conformément aux normes et standards applicables dans le domaine industriel.
 
-— l'étude de dimensionnement des systèmes de protection cathodique ;
+Les interférences dues aux courants alternatifs ou continus générés par des installations et des ouvrages tiers, les lignes de transports électriques et autres sources de courants, doivent être prises en considération dans l'étude de dimensionnement des systèmes de protection cathodique.
 
-— les caractéristiques techniques des équipements intégrés aux systèmes de protection cathodique ;
-
-— les plans d'implantation des systèmes de protection cathodique ;
-
-— le plan de surveillance des systèmes de protection cathodique ;
-
-— les certificats attestant que les équipements des systèmes de protection cathodique peuvent être utilisés dans un environnement à risque d'explosion.
-
-Le contenu de ce dossier est précisé par directive de l'ARH.
+Aussi, le système de mise à la terre doit être compatible avec les systèmes de protection cathodique.
 
 **Art. 57.** — Le maître de l'ouvrage doit transmettre à l'ARH pour approbation, un dossier technique des systèmes de protection cathodique.
 
