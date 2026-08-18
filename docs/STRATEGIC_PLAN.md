@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W88**
+> Next phase identifier: **W89**
 
 ---
 
@@ -81,23 +81,23 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W87)
+### ✅ CLOSED — Recent Phases (W60 → W88)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
 | **W60** | loi-18-11-sante split 3 parties | 2026-08-16 | Commit `698a793` |
 | **W61** | Server routes mounted + approval routes | 2026-08-16 | 10/10 PASS. Commits: `13b750a`, `24270ca`, `0a27026` |
 | **W62–W63** | Route path + approval ID — clean | 2026-08-16 | Direct reads |
-| **W64** | Sync schema severity+status (SPEC 08) | 2026-08-18 | Commit [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654). TSC 0 + Jest green — user-confirmed 13:02 WAT |
-| **W65** | Backup/restore — SQLite read (SPEC 01) | 2026-08-18 | Re-confirmed clean. `InspectionRepository.getAll()` in `exportBackup()`. |
-| **W66** | `updateStatus()` integrity+audit trail (SPEC 02) | 2026-08-18 | Commit [`4ed0db5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/4ed0db5facafc2b1e038d8f8e5be860dd3bca76a). TSC 0 + Jest green — user-confirmed 13:02 WAT |
+| **W64** | Sync schema severity+status (SPEC 08) | 2026-08-18 | Commit [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654) |
+| **W65** | Backup/restore — SQLite read (SPEC 01) | 2026-08-18 | Re-confirmed clean |
+| **W66** | `updateStatus()` integrity+audit trail (SPEC 02) | 2026-08-18 | Commit [`4ed0db5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/4ed0db5facafc2b1e038d8f8e5be860dd3bca76a) |
 | **W67** | Photo evidence — cross-device gap | 2026-08-18 | Resolved by W86 base64 embed |
-| **W68** | PIN lockout — SecureStore (SPEC 05) | 2026-08-18 | Re-confirmed clean. SecureStore on native. |
+| **W68** | PIN lockout — SecureStore (SPEC 05) | 2026-08-18 | Re-confirmed clean |
 | **W69–W70** | CAP + PDF — clean | 2026-08-17 | Direct reads |
-| **W71** | Planning UI + PriorityWidget | 2026-08-17 | TSC 0 + Jest green. Commits `c178a6c`, `c1b9d91` |
-| **W72** | Dead settings toggles + notification centre | 2026-08-17 | TSC 0 + Jest green. Commit `9b42f67` |
+| **W71** | Planning UI + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91` |
+| **W72** | Dead settings toggles + notification centre | 2026-08-17 | Commit `9b42f67` |
 | **W73** | Agenda facility mismatch | 2026-08-17 | PHANTOM — already guarded |
-| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | TSC 0 + Jest 10/10. Commit `33dc3b8` |
+| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | Commit `33dc3b8` |
 | **W75** | EIE article range sweep (13 files) | 2026-08-17 | All clean |
 | **W76** | Loi 01-19 offset re-sweep | 2026-08-17 | Clean |
 | **W77** | Abattoir/SLH wastewater Décret 06-141 | 2026-08-17 | Clean |
@@ -105,16 +105,18 @@
 | **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean |
 | **W80** | 3 false flags corrected | 2026-08-17 | Direct source reads |
 | **W81** | Décret 76-36 MISSING → Present | 2026-08-17 | SHA `2b71182` confirmed |
-| **W82** | Finding 3 — PPE/machine-guard legal refs audit | 2026-08-17 | 6 files. Commit `8433bea` |
+| **W82** | Finding 3 — PPE/machine-guard legal refs audit | 2026-08-17 | Commit `8433bea` |
 | **W83** | Phantom backlog — active inspection screen | 2026-08-17 | `checklists.tsx` confirmed present |
 | **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | 3 mismatched keys found → W85 |
 | **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 2026-08-18 | TSC 0 + Jest 1245/0. Commits: `33e5cbf`, `14b055c` |
 | **W86** | BackupService v3 photo embed + briefService critical sort | 2026-08-18 | TSC 0 + Jest 1257/0. Commit [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30) |
-| **W50** (new) | CGS-01-01: Décret 76-35 removed — wrong domain (IGH) | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Arrêté 16/07/1992 + Décret 06-198 Art.14 + Loi 19-02 Art.4 |
-| **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill — G9 closed | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec). Same pattern as MCH-29-09 |
-| **G3** (Claude audit) | CLD-17-01 + PRD-01-01 duplicate check | 2026-08-18 | CONFIRMED NOT DUPLICATES by direct source read. |
-| **G11** (Claude audit) | BGN-03-06 [حكم مهني] tag | 2026-08-18 | CONFIRMED already tagged in W19-CLOSE. No action. |
-| **W87** | F-01/F-02/F-03 confirmed clean — all false positives | 2026-08-18 | Direct reads: `.gitignore` already covers `.env`; schema.ts comment accurate (SDK 56); `001_` naming intentional+documented. No code change. |
+| **W50** (new) | CGS-01-01: Décret 76-35 removed — wrong domain (IGH) | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) |
+| **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) |
+| **W87** | F-01/F-02/F-03 confirmed clean — all false positives | 2026-08-18 | Direct reads. No code change. |
+| **W88** | MCH-29-08 Art.28→Art.18 + R1/R6 noise decree clean | 2026-08-18 | Commit [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c). TSC 0 + Jest 1233/0 user-confirmed. |
+| **audit-log TSC** | `INSPECTION_STATUS_UPDATED` missing from 3 Record<AuditAction,string> | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). TSC 0 user-confirmed. |
+| **CorrectiveActionRepository.extended W85** | `db.runAsync is not a function` — jest.mock hoisting trap | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). Jest 0 failed user-confirmed. |
+| **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
 
 ---
 
@@ -122,8 +124,7 @@
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W51-SURV** | LEGAL-VERIFY: AIM GPL2 publication status | Surveillance | 6 GPL criteria tagged [À VÉRIFIER — W51]. Monitor JORADP for official publication. No code action until published. |
-| **R1/R6** | Algeria noise-exposure decree + Décret 93-184 verify | Low | Not attempted by Claude this round. Deferred. |
+| **W51-SURV** | LEGAL-VERIFY: AIM GPL2 publication status | Surveillance | Monitor JORADP. No code action until published. |
 
 ---
 
@@ -132,10 +133,10 @@
 | Item | Blocker |
 |---|---|
 | F-05: prod API URL falls back to localhost | Confirm correct prod URL |
+| BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
-| MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
 
@@ -147,7 +148,7 @@
 |---|---|---|
 | Loi 90-29 | Aménagement + territoire | ✅ Present |
 | Loi 03-10 | Environnement | ✅ Present |
-| Loi 09-03 | Protection du consommateur | ✅ Present — Art.1–95 verbatim, VÉRIFIÉ 2026-08-11 |
+| Loi 09-03 | Protection du consommateur | ✅ Present |
 | Loi 01-19 | Gestion des déchets | ✅ Present |
 | Loi 04-20 | Risques majeurs | ✅ Present |
 | Loi 19-02 | Sécurité incendie | ✅ Present |
@@ -168,17 +169,17 @@
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed from criteria (W49 BGN-08-03, W50 CGS-01-01). |
+| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed from criteria. |
 | Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 |
-| Décret 06-138 | Émissions poussières | ✅ Present — VÉRIFIÉ 2026-08-11 |
+| Décret 06-138 | Émissions poussières | ✅ Present |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51-SURV OPEN |
 
 ---
 
 ## Sprint Status
 
-**All phases closed through W87 — 2026-08-18. TSC 0 + Jest 1257/0.**
+**All phases closed through W88 — 2026-08-18. TSC 0 + Jest 1233/0 (user-confirmed 22:41 WAT).**
 
-Active items: **W51-SURV** (no code action until JORADP publishes AIM GPL2) | **R1/R6** (noise decree — deferred, low priority).
+Active: **W51-SURV** (surveillance only) | Next phase identifier: **W89**.
 
-**Only item requiring human input before next phase: F-05 (confirm production API URL).**
+**Only item requiring human input: F-05 (confirm production API URL).**
