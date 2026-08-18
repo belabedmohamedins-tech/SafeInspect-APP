@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-08-18 21:10 WAT — Perplexity — W88 ✅ CLOSED — MCH-29-08 Art.28→Art.18 + Jest all green
+- **User confirmed:** full Jest run all green after `git pull`
+- **Root cause of previous Jest failure (printingCriteria):** stale local test file. After pull, HEAD already had the correct assertion (`toContain('91-05')` + `not.toContain('90-11')` from W85). No code change needed for that test.
+- **MCH-29-08 legalReference corrected:** `Art.28` (illegal export repatriation — completely wrong domain) → `Art.18` (generator obligation to declare hazardous waste nature/quantity/characteristics to minister + periodic treatment reports). Cite confirmed from Loi 01-19 text visible in this session.
+- **Backlog item cleared:** "MCH-29-08 Loi 01-19 Art.28 — Verify against full text before acting" — CLOSED, was wrong, now fixed.
+- **Commit:** [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c) — `src/criteria/mechanicCriteria.ts` (+W88 comment)
+- **TSC 0 + Jest all green (user confirmed)**
+
 ### 2026-08-18 19:09 WAT — Perplexity — W88 ✅ CLOSED — TSC 0 + Jest 1257/0 all green | R1/R6 closed
 - **User confirmed:** full Jest run green — 118 suites passed, 1 skipped, 1243 passed, 0 failed
 - **Root cause of previous failure:** local `__tests__/criteria/printingCriteria.test.ts` was stale (pre-W85 commit). After `git pull`, test already correct on HEAD (`toContain('91-05')` + `not.toContain('90-11')`).
@@ -98,14 +106,14 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-18 19:09 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-18 21:10 WAT)
 
-All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed. No remaining actionable items without human input.
+All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed. MCH-29-08 backlog item resolved. No remaining actionable items without human input.
 
 ### 🟡 OPEN ITEMS (need action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|---|
+|---|---|---|
 | **F-05** | LOW | Prod API URL falls back to `localhost` | Confirm production URL with user, then patch `apiClient.ts` / `.env.production`. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
@@ -129,6 +137,7 @@ All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed
 | F-19 | Audit log clearable with no trace | W52 | 2026-08-09 |
 | F-20 | `decisionSupport.ts` test coverage | W56 | 2026-08-18 direct read |
 | **R1/R6** | Noise decree + Décret 93-184 citation check | W88 | **2026-08-18 direct read — all correct, 93-184 phantom** |
+| **MCH-29-08** | Loi 01-19 Art.28 wrong domain (export/repatriation) | W88 | **2026-08-18 — corrected to Art.18 (hazardous waste declaration)** |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -138,7 +147,6 @@ All Claude audit findings (F-01–F-20) confirmed closed. R1/R6 confirmed closed
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
-| MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
 
