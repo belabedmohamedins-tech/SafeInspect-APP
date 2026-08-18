@@ -14,6 +14,9 @@
 //      The resolved→closed distinction is legally significant:
 //        'resolved' = facility self-reports fix (no evidence yet)
 //        'closed'   = inspector verified and signed off
+//
+// W89: added `delete` as public alias for `deleteById` — tests written before
+//      the rename called .delete(id); both names now work identically.
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
@@ -321,6 +324,15 @@ export const CorrectiveActionRepository = {
   },
 
   async deleteById(id: string): Promise<void> {
+    const db = await getDb();
+    await db.runAsync('DELETE FROM corrective_actions WHERE id = ?', [id]);
+  },
+
+  /**
+   * W89: public alias for deleteById — older tests call .delete(id).
+   * Both names are functionally identical.
+   */
+  async delete(id: string): Promise<void> {
     const db = await getDb();
     await db.runAsync('DELETE FROM corrective_actions WHERE id = ?', [id]);
   },

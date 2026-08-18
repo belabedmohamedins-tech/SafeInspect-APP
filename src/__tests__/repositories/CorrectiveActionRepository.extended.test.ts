@@ -4,14 +4,17 @@
 //   1. updateStatus() stamps closedAt ONLY when status === 'closed'
 //   2. updateStatus() does NOT stamp closedAt when status === 'resolved'
 //   3. deleteByInspection() removes rows for the given inspectionId
+//
+// W89: fixed import path — was '../../repositories/...' (missing src/ prefix
+//      relative to src/__tests__/), corrected to '../repositories/...'.
 
-import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
+import { CorrectiveActionRepository } from '../repositories/CorrectiveActionRepository';
 
 const mockRunAsync = jest.fn().mockResolvedValue({ changes: 1 });
 const mockGetFirstAsync = jest.fn();
 const mockGetAllAsync = jest.fn().mockResolvedValue([]);
 
-jest.mock('../../db/schema', () => ({
+jest.mock('../db/schema', () => ({
   getDb: jest.fn().mockResolvedValue({
     runAsync: mockRunAsync,
     getFirstAsync: mockGetFirstAsync,
@@ -19,7 +22,7 @@ jest.mock('../../db/schema', () => ({
   }),
 }));
 
-jest.mock('../../services/NotificationService', () => ({
+jest.mock('../services/NotificationService', () => ({
   pushInApp: jest.fn().mockResolvedValue(undefined),
 }));
 
