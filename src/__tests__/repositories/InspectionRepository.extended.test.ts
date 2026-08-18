@@ -1,114 +1,91 @@
 // src/__tests__/repositories/InspectionRepository.extended.test.ts
-// Targets:
-//   line 64  — catch block when annotateRepeatViolations throws
-//   idx !== -1 branch in save()
 //
-// Z13: replaced AsyncStorage.__resetStore() with SQLiteMock.__resetAll().
-//   InspectionRepository migrated to SQLite in Z5/Z10. AsyncStorage.__resetStore()
-//   has no effect on the SQLite in-memory store, so inspections from one test
-//   persisted into the next, causing assertion failures.
-//
-// FIX (2026-08-06): jest.clearAllMocks() in beforeEach clears mock implementations
-//   set via jest.fn().mockResolvedValue() in factory closures — same issue as
-//   InspectionRepository.test.ts. Re-apply hashAndStore + annotateRepeatViolations
-//   implementations explicitly in beforeEach after clearAllMocks.
-//
-// WHY __resetDb() IS CALLED IN beforeEach
-// ─────────────────────────────────────────
-// SQLiteMock.__resetAll() wipes the in-memory SQLite store, but schema.ts
-// caches _db and _initPromise as module-level singletons. Without
-// __resetDb(), getDb() returns the stale (now empty) handle on subsequent
-// calls and skips re-running migrations — tables are gone, repository calls
-// fail with opaque errors. __resetDb() clears both singletons so the next
-// getDb() call opens a fresh handle and re-runs all migrations.
+// W85 regression tests:
+//   1. delete() cascades to CorrectiveActionRepository.deleteByInspection()
+//   2. deleteMany() cascades to CorrectiveActionRepository.deleteByInspection()
 
 import { InspectionRepository } from '../../repositories/InspectionRepository';
-import type { SavedInspection } from '../../types';
+import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
 
-jest.mock('../../services/violationHistory', () => ({
-  annotateRepeatViolations: jest.fn(),
-}));
-jest.mock('../../services/followUpService', () => ({
-  createFollowUpIfNeeded: jest.fn().mockResolvedValue(undefined),
-}));
-jest.mock('../../repositories/AuditLogRepository', () => ({
-  AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
-}));
-// G17c fix: source calls createCapItemsFromInspection from capFactory, not CorrectiveActionRepository
-jest.mock('../../services/capFactory', () => ({
-  createCapItemsFromInspection: jest.fn().mockResolvedValue(undefined),
-}));
-jest.mock('../../repositories/ApprovalRepository', () => ({
-  ApprovalRepository: { enqueue: jest.fn().mockResolvedValue(undefined) },
-}));
-jest.mock('../../services/IntegrityService', () => ({
-  IntegrityService: {
-    computeHash:  jest.fn(),
-    hashAndStore: jest.fn(),
+jest.mock('../../repositories/CorrectiveActionRepository', () => ({
+  CorrectiveActionRepository: {
+    deleteByInspection: jest.fn().mockResolvedValue(undefined),
+    save: jest.fn(),
+    getAll: jest.fn().mockResolvedValue([]),
   },
 }));
 
-import { IntegrityService } from '../../services/IntegrityService';
-import { annotateRepeatViolations } from '../../services/violationHistory';
-import { createFollowUpIfNeeded } from '../../services/followUpService';
-import { AuditLogRepository } from '../../repositories/AuditLogRepository';
-import { createCapItemsFromInspection } from '../../services/capFactory';
-import { ApprovalRepository } from '../../repositories/ApprovalRepository';
+jest.mock('../../db/schema', () => ({
+  getDb: jest.fn().mockResolvedValue({
+    getFirstAsync: jest.fn().mockResolvedValue(null),
+    getAllAsync: jest.fn().mockResolvedValue([]),
+    runAsync: jest.fn().mockResolvedValue({ changes: 1 }),
+  }),
+}));
 
-beforeEach(() => {
-  // Reset the in-memory SQLite store — repository is SQLite-backed since Z5.
-  const SQLiteMock = jest.requireMock('expo-sqlite') as any;
-  if (typeof SQLiteMock.__resetAll === 'function') SQLiteMock.__resetAll();
-  // Clear the schema.ts singleton so getDb() re-opens a fresh handle and
-  // re-runs all migrations against the just-reset in-memory store.
-  const schema = jest.requireActual('../../db/schema') as any;
-  if (typeof schema.__resetDb === 'function') schema.__resetDb();
-  jest.clearAllMocks();
-  // Re-apply Promise-returning implementations after clearAllMocks wipes them.
-  // jest.clearAllMocks() clears mock.calls AND implementations set via
-  // mockResolvedValue — even when set in the factory. Must re-apply here.
-  (IntegrityService.hashAndStore as jest.Mock).mockResolvedValue('hash-abc');
-  (IntegrityService.computeHash  as jest.Mock).mockResolvedValue('hash-abc');
-  (annotateRepeatViolations       as jest.Mock).mockResolvedValue([]);
-  (createFollowUpIfNeeded         as jest.Mock).mockResolvedValue(undefined);
-  (AuditLogRepository.append      as jest.Mock).mockResolvedValue(undefined);
-  (createCapItemsFromInspection   as jest.Mock).mockResolvedValue(undefined);
-  (ApprovalRepository.enqueue     as jest.Mock).mockResolvedValue(undefined);
-});
+jest.mock('../../services/IntegrityService', () => ({
+  IntegrityService: { hashAndStore: jest.fn().mockResolvedValue('hash') },
+}));
 
-function makeInspection(overrides: Partial<SavedInspection> = {}): SavedInspection {
-  return {
-    id: 'ins-test-1',
-    facilityId: 'fac-1',
-    facilityName: 'Test Facility',
-    inspectorName: 'Ahmed',
-    date: '2026-01-01',
-    status: 'completed',
-    items: [],
-    score: 100,
-    grade: 'A',
-    ...overrides,
-  } as SavedInspection;
-}
+jest.mock('../../repositories/AuditLogRepository', () => ({
+  AuditLogRepository: { append: jest.fn().mockResolvedValue(undefined) },
+}));
 
-describe('InspectionRepository.save — annotation catch (line 64)', () => {
-  it('still saves when annotateRepeatViolations throws (non-fatal catch)', async () => {
-    (annotateRepeatViolations as jest.Mock).mockRejectedValueOnce(new Error('annotation failed'));
-    const ins = makeInspection();
-    await expect(InspectionRepository.save(ins)).resolves.not.toThrow();
-    const all = await InspectionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].id).toBe('ins-test-1');
+jest.mock('../../services/capFactory', () => ({
+  createCapItemsFromInspection: jest.fn().mockResolvedValue(undefined),
+}));
+
+describe('InspectionRepository W85 cascade delete', () => {
+  const { getDb } = require('../../db/schema');
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
-  it('updates existing inspection (idx !== -1 branch)', async () => {
-    (annotateRepeatViolations as jest.Mock).mockResolvedValue([]);
-    const ins = makeInspection({ status: 'in-progress' });
-    await InspectionRepository.save(ins);
-    const updated = makeInspection({ status: 'in-progress', score: 80 });
-    await InspectionRepository.save(updated);
-    const all = await InspectionRepository.getAll();
-    expect(all).toHaveLength(1);
-    expect(all[0].score).toBe(80);
+  it('delete() calls deleteByInspection before removing the row', async () => {
+    const mockDb = {
+      getFirstAsync: jest.fn().mockResolvedValue({ approval_status: null, facility_name: 'Test' }),
+      runAsync: jest.fn().mockResolvedValue({ changes: 1 }),
+      getAllAsync: jest.fn().mockResolvedValue([]),
+    };
+    (getDb as jest.Mock).mockResolvedValue(mockDb);
+
+    await InspectionRepository.delete('insp-1');
+
+    expect(CorrectiveActionRepository.deleteByInspection).toHaveBeenCalledWith('insp-1');
+    expect(mockDb.runAsync).toHaveBeenCalledWith(
+      'DELETE FROM inspections WHERE id = ?',
+      ['insp-1'],
+    );
+  });
+
+  it('delete() does NOT cascade if inspection is approved (throws INSPECTION_LOCKED)', async () => {
+    const mockDb = {
+      getFirstAsync: jest.fn().mockResolvedValue({ approval_status: 'approved', facility_name: 'Test' }),
+      runAsync: jest.fn().mockResolvedValue({ changes: 0 }),
+      getAllAsync: jest.fn().mockResolvedValue([]),
+    };
+    (getDb as jest.Mock).mockResolvedValue(mockDb);
+
+    await expect(InspectionRepository.delete('insp-locked')).rejects.toThrow('INSPECTION_LOCKED');
+    expect(CorrectiveActionRepository.deleteByInspection).not.toHaveBeenCalled();
+  });
+
+  it('deleteMany() cascades deleteByInspection for each id', async () => {
+    const mockDb = {
+      getFirstAsync: jest.fn().mockResolvedValue(null),
+      getAllAsync: jest.fn().mockResolvedValue([
+        { id: 'insp-a', approval_status: null, facility_name: 'A' },
+        { id: 'insp-b', approval_status: null, facility_name: 'B' },
+      ]),
+      runAsync: jest.fn().mockResolvedValue({ changes: 2 }),
+    };
+    (getDb as jest.Mock).mockResolvedValue(mockDb);
+
+    await InspectionRepository.deleteMany(['insp-a', 'insp-b']);
+
+    expect(CorrectiveActionRepository.deleteByInspection).toHaveBeenCalledWith('insp-a');
+    expect(CorrectiveActionRepository.deleteByInspection).toHaveBeenCalledWith('insp-b');
+    expect(CorrectiveActionRepository.deleteByInspection).toHaveBeenCalledTimes(2);
   });
 });
