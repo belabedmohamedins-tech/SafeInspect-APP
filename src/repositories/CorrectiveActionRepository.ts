@@ -19,12 +19,13 @@
 //      the rename called .delete(id); both names now work identically.
 //      Added photo_uri, verified_by, verification_note, verification_photo_uri
 //      columns to CapRow, rowToCap, save(), and updateStatus().
+//      Added clear() — test-only helper that deletes all rows (used in beforeEach).
 
 import { getDb } from '../db/schema';
 import { CorrectiveAction } from '../types';
 import { pushInApp } from '../services/NotificationService';
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────────────────
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function makeId(): string {
   return `cap-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
@@ -36,7 +37,7 @@ function defaultDeadline(): string {
   return d.toISOString().slice(0, 10);
 }
 
-// ─── Row mapper ──────────────────────────────────────────────────────────────────────────────
+// ─── Row mapper ───────────────────────────────────────────────────────────────
 
 type CapRow = {
   id: string;
@@ -107,7 +108,7 @@ async function readAll(): Promise<CorrectiveAction[]> {
   return rows.map(rowToCap);
 }
 
-// ─── Public stats type ──────────────────────────────────────────────────────────────────
+// ─── Public stats type ────────────────────────────────────────────────────────
 
 export interface CapStats {
   open:              number;
@@ -118,7 +119,7 @@ export interface CapStats {
   nearDeadlineCount: number;
 }
 
-// ─── Repository ──────────────────────────────────────────────────────────────────────────────
+// ─── Repository ───────────────────────────────────────────────────────────────
 
 export const CorrectiveActionRepository = {
   async getAll(): Promise<CorrectiveAction[]> {
@@ -373,5 +374,15 @@ export const CorrectiveActionRepository = {
       'DELETE FROM corrective_actions WHERE inspection_id = ?',
       [inspectionId],
     );
+  },
+
+  /**
+   * clear — TEST HELPER ONLY
+   * Deletes every row from corrective_actions. Used in beforeEach() to
+   * reset state between tests without tearing down the DB connection.
+   */
+  async clear(): Promise<void> {
+    const db = await getDb();
+    await db.runAsync('DELETE FROM corrective_actions', []);
   },
 };
