@@ -12,6 +12,14 @@
 //
 // Strategy: upsert by device-generated UUID.
 // The server never rejects a record — it logs errors and returns them.
+//
+// W64 FIX (SPEC 08):
+//   InspectionItemSchema.severity: added 'critical' — was silently stripping
+//     all criteria with severity='critical' from synced payloads.
+//   InspectionSchema.status: added 'submitted', 'pending-review', 'approved',
+//     'rejected' — previously any inspection in these states was rejected by
+//     Zod validation and never reached the server upsert.
+//   mapStatus: extended to map the four new statuses to their Prisma equivalents.
 
 import { Router } from 'express';
 import { z }      from 'zod';
@@ -31,7 +39,9 @@ const InspectionItemSchema = z.object({
   id:               z.string(),
   criteria:         z.string(),
   legalReference:   z.string(),
-  severity:         z.enum(['low', 'medium', 'high']),
+  // W64: 'critical' added — was missing, causing all critical-severity items
+  // to fail Zod validation and be silently dropped during sync.
+  severity:         z.enum(['low', 'medium', 'high', 'critical']),
   complianceStatus: z.string(),
   comment:          z.string().optional(),
   photoUri:         z.string().optional(),
@@ -53,7 +63,17 @@ const InspectionSchema = z.object({
   facilityAddress:     z.string(),
   date:                z.string(),
   inspectorName:       z.string(),
-  status:              z.enum(['completed', 'in-progress', 'draft']),
+  // W64: full status set — 'submitted', 'pending-review', 'approved', 'rejected'
+  // were missing, blocking those inspections from ever syncing.
+  status:              z.enum([
+    'completed',
+    'in-progress',
+    'draft',
+    'submitted',
+    'pending-review',
+    'approved',
+    'rejected',
+  ]),
   items:               z.array(InspectionItemSchema).default([]),
   inspectionType:      z.string().optional(),
   priorInspectionId:   z.string().optional(),
@@ -121,20 +141,28 @@ const SyncBatchSchema = z.object({
 });
 
 // ── Helper: status mapping ────────────────────────────────────────────────────
+// W64: extended to handle the four approval-workflow statuses.
+// Prisma schema only has COMPLETED / IN_PROGRESS / DRAFT — approval-workflow
+// statuses are stored in the separate approval_status column, so we map them
+// to COMPLETED on the status column (they are already complete inspections).
 function mapStatus(s: string | undefined) {
   const map: Record<string, string> = {
-    'completed': 'COMPLETED',
-    'in-progress': 'IN_PROGRESS',
-    'draft': 'DRAFT',
+    'completed':      'COMPLETED',
+    'in-progress':    'IN_PROGRESS',
+    'draft':          'DRAFT',
+    'submitted':      'COMPLETED',
+    'pending-review': 'COMPLETED',
+    'approved':       'COMPLETED',
+    'rejected':       'COMPLETED',
   };
   return (map[s ?? ''] ?? 'IN_PROGRESS') as 'COMPLETED' | 'IN_PROGRESS' | 'DRAFT';
 }
 
 function mapInspectionType(t: string | undefined) {
   const map: Record<string, string> = {
-    'routine': 'ROUTINE',
-    'follow-up': 'FOLLOW_UP',
-    'complaint': 'COMPLAINT',
+    'routine':       'ROUTINE',
+    'follow-up':     'FOLLOW_UP',
+    'complaint':     'COMPLAINT',
     'extraordinary': 'EXTRAORDINARY',
   };
   return (map[t ?? ''] ?? 'ROUTINE') as 'ROUTINE' | 'FOLLOW_UP' | 'COMPLAINT' | 'EXTRAORDINARY';
