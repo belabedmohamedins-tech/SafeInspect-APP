@@ -10,6 +10,12 @@
 //      mutation if an affected inspection has approvalStatus = 'approved'.
 // W57: added getCompleted(), getDrafts(), updateStatus() — used by screens
 //      and services (approval-detail, stats, map, briefService, loadHomeData).
+// W66 FIX (SPEC 02): updateStatus() now:
+//   1. Re-hashes the patched inspection blob via IntegrityService.hashAndStore
+//      so the integrity hash stays in sync after every approval-status mutation.
+//   2. Appends an INSPECTION_STATUS_UPDATED event to the audit log so every
+//      approve/reject/return action is traceable. Previously updateStatus()
+//      mutated the record with no hash update and no audit trail.
 
 import { getDb } from '../db/schema';
 import { SavedInspection } from '../types';
@@ -17,7 +23,7 @@ import { IntegrityService } from '../services/IntegrityService';
 import { AuditLogRepository } from './AuditLogRepository';
 import { createCapItemsFromInspection } from '../services/capFactory';
 
-// ── Row shape returned by SQLite ──────────────────────────────────────────────
+// ── Row shape returned by SQLite ────────────────────────────────────────────────
 interface InspectionRow {
   id: string;
   data: string;
@@ -28,7 +34,7 @@ interface InspectionRow {
   updated_at: string;
 }
 
-// ── Helpers ───────────────────────────────────────────────────────────────────
+// ── Helpers ────────────────────────────────────────────────────────────────────
 function rowToInspection(row: InspectionRow): SavedInspection {
   return JSON.parse(row.data) as SavedInspection;
 }
@@ -46,10 +52,10 @@ function inspectionToParams(
   ];
 }
 
-// ── Repository ────────────────────────────────────────────────────────────────
+// ── Repository ────────────────────────────────────────────────────────────────────
 export const InspectionRepository = {
 
-  // ── getAll ────────────────────────────────────────────────────────────────
+  // ── getAll ──────────────────────────────────────────────────────────────
   async getAll(): Promise<SavedInspection[]> {
     const db = await getDb();
     const rows = await db.getAllAsync<InspectionRow>(
@@ -58,7 +64,7 @@ export const InspectionRepository = {
     return rows.map(rowToInspection);
   },
 
-  // ── getCompleted ──────────────────────────────────────────────────────────
+  // ── getCompleted ─────────────────────────────────────────────────────────
   // W57: returns all inspections with status = 'completed' | 'approved'.
   async getCompleted(): Promise<SavedInspection[]> {
     const db = await getDb();
@@ -82,7 +88,7 @@ export const InspectionRepository = {
     return rows.map(rowToInspection);
   },
 
-  // ── getById ───────────────────────────────────────────────────────────────
+  // ── getById ──────────────────────────────────────────────────────────────
   async getById(id: string): Promise<SavedInspection | null> {
     const db = await getDb();
     const row = await db.getFirstAsync<InspectionRow>(
@@ -102,7 +108,7 @@ export const InspectionRepository = {
     return rows.map(rowToInspection);
   },
 
-  // ── save ──────────────────────────────────────────────────────────────────
+  // ── save ────────────────────────────────────────────────────────────────────
   // W22: approved inspections are legally immutable — any attempt to overwrite
   //      an approved row throws INSPECTION_LOCKED before any mutation occurs.
   async save(inspection: SavedInspection): Promise<void> {
@@ -143,14 +149,17 @@ export const InspectionRepository = {
     }
   },
 
-  // ── updateStatus ──────────────────────────────────────────────────────────
+  // ── updateStatus ─────────────────────────────────────────────────────────
   // W57: supervisor workflow — approves or rejects an inspection by updating
   //      both the approval_status column and the data JSON blob.
   //      Does NOT throw INSPECTION_LOCKED — status transitions are always
   //      allowed for supervisor actions (approval overwrites are intentional).
+  // W66 FIX: re-hashes the patched blob and appends an audit log entry so
+  //      every approve/reject/return action is traceable and integrity-verified.
   async updateStatus(
     id: string,
     status: SavedInspection['approvalStatus'],
+    actor = 'supervisor',
   ): Promise<void> {
     const db = await getDb();
     const row = await db.getFirstAsync<InspectionRow>(
@@ -160,15 +169,31 @@ export const InspectionRepository = {
     if (!row) return;
     const inspection = rowToInspection(row);
     const updated: SavedInspection = { ...inspection, approvalStatus: status };
+
+    // W66: re-hash after patching approvalStatus so integrity badge stays valid.
+    const newHash = await IntegrityService.hashAndStore(updated);
+    const withHash: SavedInspection = { ...updated, integrityHash: newHash };
+
     await db.runAsync(
       `UPDATE inspections
        SET data = ?, approval_status = ?, updated_at = CURRENT_TIMESTAMP
        WHERE id = ?`,
-      [JSON.stringify(updated), status ?? null, id],
+      [JSON.stringify(withHash), status ?? null, id],
+    );
+
+    // W66: audit trail — every supervisor decision is logged.
+    await AuditLogRepository.append(
+      'INSPECTION_STATUS_UPDATED',
+      actor,
+      {
+        inspectionId: id,
+        facilityName: withHash.facilityName,
+        detail: `approvalStatus → ${status ?? 'null'}`,
+      },
     );
   },
 
-  // ── delete ────────────────────────────────────────────────────────────────
+  // ── delete ──────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED if the inspection is approved.
   async delete(id: string): Promise<void> {
     const db = await getDb();
@@ -193,7 +218,7 @@ export const InspectionRepository = {
     );
   },
 
-  // ── deleteMany ────────────────────────────────────────────────────────────
+  // ── deleteMany ─────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED (atomically — nothing deleted) if any id is approved.
   async deleteMany(ids: string[]): Promise<void> {
     if (ids.length === 0) return;
@@ -225,7 +250,7 @@ export const InspectionRepository = {
     );
   },
 
-  // ── clear ─────────────────────────────────────────────────────────────────
+  // ── clear ──────────────────────────────────────────────────────────────────
   // W52: throws INSPECTION_LOCKED if any approved inspection exists.
   async clear(): Promise<void> {
     const db = await getDb();
