@@ -34,7 +34,12 @@ export default function PriorityWidget({ facilities }: Props) {
         <TouchableOpacity
           key={f.facilityId}
           style={styles.row}
-          onPress={() => router.push('/screens/facilities')}
+          onPress={() =>
+            router.push({
+              pathname: '/screens/facilities/profile',
+              params: { id: f.facilityId },
+            })
+          }
           activeOpacity={0.7}
         >
           <View style={[styles.gradeBadge, { backgroundColor: GRADE_COLOR[f.grade] ?? '#9ca3af' }]}>
