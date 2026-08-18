@@ -90,19 +90,19 @@
 | **W69–W70** | CAP + PDF — clean | 2026-08-17 | Direct reads. |
 | **W71** | Planning UI + PriorityWidget | 2026-08-17 | TSC 0 + Jest green. Commits `c178a6c`, `c1b9d91`. |
 | **W72** | Dead settings toggles + notification centre | 2026-08-17 | TSC 0 + Jest green 19:21 WAT. Commit `9b42f67`. |
-| **W73** | Agenda facility mismatch | 2026-08-17 | **PHANTOM** — `add.tsx` + `edit.tsx` already guard `!facilityId`. No code change. |
-| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | ✅ CLOSED — TSC 0 + Jest 10/10 — user-confirmed 20:04 WAT. Commit `33dc3b8`. |
-| **W75** | EIE article range sweep (13 files) | 2026-08-17 | All clean. No code change. |
-| **W76** | Loi 01-19 offset re-sweep | 2026-08-17 | Clean. No code change. |
-| **W77** | Abattoir/SLH wastewater Décret 06-141 | 2026-08-17 | Clean. No code change. |
-| **W78** | MCH-29-06 PPE wrong article | 2026-08-17 | Commit `cee92fb`. +1/-1. |
-| **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean. No code change. |
-| **W80** | 3 false flags corrected (06-138 MISSING, 09-03 UNVERIFIÉ, 83-496 Art.4/7/8 PHANTOM) | 2026-08-17 | Confirmed by direct source read this session. No code change. |
-| **W81** | Décret 76-36 ❌ MISSING → ✅ Present (rectificatif J.O. n°67/1976) | 2026-08-17 | `decret-76-36-incendie-panique.md` confirmed present (SHA 2b71182). Rectificatif corrections Art.20/24/27. Texte intégral J.O. n°21/1976 non numérisé. |
-| **W82** | Finding 3 — PPE/machine-guard legal refs full audit (6 criteria files) | 2026-08-17 | blacksmith BSM-04-01/03 patched (commit `8433bea`). painting PNT-04-01 patched prev session. uab/carpentry/marble/printing confirmed clean by direct live read. 0 incorrect Loi 90-11/Décret 93-120 PPE citations remain. |
-| **W83** | Phantom backlog entry removed — active inspection screen | 2026-08-17 | `app/screens/checklists.tsx` confirmed present (9.4 KB). Backlog entry was incorrect speculation — confirmed clean by direct code read. |
-| **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | Direct read of `keys.ts` + `SettingsRepository.ts` + `settings.tsx`. 3 mismatched keys found: `'notifications'`, `'autoSync'`, `'darkMode'` not in StorageKeys — fixes → W85. |
-| **W85** | SPEC 10 fix — add AUTO_SYNC/DARK_MODE/NOTIFICATIONS_UI to StorageKeys + patch settings.tsx | 2026-08-18 | Commit `33e5cbf`. +12/-12 verified. `keys.ts` +7 lines, `settings.tsx` +5 lines. TSC/Jest gate ⏳ PENDING user confirmation. |
+| **W73** | Agenda facility mismatch | 2026-08-17 | PHANTOM — already guarded. |
+| **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | TSC 0 + Jest 10/10. Commit `33dc3b8`. |
+| **W75** | EIE article range sweep (13 files) | 2026-08-17 | All clean. |
+| **W76** | Loi 01-19 offset re-sweep | 2026-08-17 | Clean. |
+| **W77** | Abattoir/SLH wastewater Décret 06-141 | 2026-08-17 | Clean. |
+| **W78** | MCH-29-06 PPE wrong article | 2026-08-17 | Commit `cee92fb`. |
+| **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean. |
+| **W80** | 3 false flags corrected | 2026-08-17 | Direct source reads. |
+| **W81** | Décret 76-36 MISSING → Present | 2026-08-17 | SHA 2b71182 confirmed. |
+| **W82** | Finding 3 — PPE/machine-guard legal refs audit | 2026-08-17 | 6 files. Commit `8433bea`. |
+| **W83** | Phantom backlog — active inspection screen | 2026-08-17 | `checklists.tsx` confirmed present. |
+| **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | 3 mismatched keys found → W85. |
+| **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 2026-08-18 | ✅ CLOSED — TSC 0 + Jest 1245/0. Commits: `33e5cbf` (code), `14b055c` (test fix). All 3 toggles (notifications, autoSync, darkMode) now persist correctly. |
 
 ---
 
@@ -126,7 +126,7 @@
 | MCH-29-05 (heavy-metal params) | Décret 06-141 Annexe II §3 — product decision needed. |
 | MCH-29-08 Loi 01-19 Art.28 | Verify against full text before acting. |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited. |
-| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé — sourcer si critères ERP s'appuient sur articles spécifiques. |
+| Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé. |
 
 ---
 
@@ -147,7 +147,7 @@
 | Loi 18-11 | Santé | ✅ Present — split 3 parties (W60) |
 | Loi 90-11 | Travail | ✅ Present |
 | Loi 05-12 | Eau | ✅ Present |
-| Loi 88-07 | Hygiène/sécurité travail (loi-mère) | ✅ Present — 38 165 B (confirmed W78) |
+| Loi 88-07 | Hygiène/sécurité travail (loi-mère) | ✅ Present |
 | Décret 91-05 | Hygiène/sécurité travail | ✅ Present |
 | Décret 93-120 | Médecine du travail | ✅ Present |
 | Décret 06-198 | Établissements classés | ✅ Present |
@@ -156,21 +156,21 @@
 | Décret 02-427 | Prévention risques pro | ✅ Present |
 | Décret 06-141 | Rejets effluents liquides | ✅ Present |
 | Décret 21-430 | GPL-C modification | ✅ Present |
-| Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present — Art.4/7/8 amendment notices inline (confirmed W80) |
+| Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (high-rise ≥28m only) |
-| Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 (corrections Art.20/24/27). Texte intégral J.O. n°21/1976 non numérisé. |
-| Décret 06-138 | Émissions poussières | ✅ Present — Art.1–19 + Annexes I/II, ✅ VÉRIFIÉ 2026-08-11 (confirmed W80) |
+| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only) |
+| Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 |
+| Décret 06-138 | Émissions poussières | ✅ Present — ✅ VÉRIFIÉ 2026-08-11 |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51 OPEN |
 
 ---
 
 ## Execution Order
 
-### ✅ Sprint P1 + P2 FULLY CLOSED — 2026-08-17
+### ✅ Sprint P1 + P2 FULLY CLOSED — 2026-08-18
 
 All planned phases complete. No gate pending.
 
