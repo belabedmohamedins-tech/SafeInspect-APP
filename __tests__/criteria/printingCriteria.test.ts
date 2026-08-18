@@ -52,13 +52,16 @@ describe('printingCriteria', () => {
     expect(item!.severity).toBe('medium');
   });
 
-  it('PRT-05-01 PPE criterion cites Loi 90-11 not Décret 93-120 alone', () => {
+  // W82: PRT-05-01 PPE citation corrected — Loi 90-11 removed (too generic),
+  // replaced with Décret 91-05 Arts.16-17 (specific PPE obligation for chemical/solvent exposure).
+  it('PRT-05-01 PPE criterion cites Décret 91-05 Arts.16-17 (W82 correction)', () => {
     const item = printingCriteria.find((c: InspectionItem) => c.id === 'PRT-05-01');
     expect(item).toBeDefined();
-    expect(item!.legalReference).toContain('90-11');
+    expect(item!.legalReference).toContain('91-05');
+    expect(item!.legalReference).not.toContain('90-11');
   });
 
-  it('PRT-05-02 machine guard criterion cites Loi 90-11', () => {
+  it('PRT-05-02 fire safety criterion cites Loi 90-11', () => {
     const item = printingCriteria.find((c: InspectionItem) => c.id === 'PRT-05-02');
     expect(item).toBeDefined();
     expect(item!.legalReference).toContain('90-11');
