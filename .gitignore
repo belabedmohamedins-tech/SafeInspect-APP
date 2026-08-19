@@ -42,3 +42,16 @@ app-example
 # generated native folders
 /ios
 /android
+
+# Coverage reports
+coverage/
+
+# Debug scripts
+probe.js
+
+# Backup files
+*.bak
+
+# PDF sources (versionnés dans LOIS/ mais inutiles au suivi Git)
+# Décommentez si vous voulez exclure les PDFs :
+# LOIS/*.pdf

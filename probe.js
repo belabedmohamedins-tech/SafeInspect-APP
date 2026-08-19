@@ -1,1 +1,0 @@
-const m=require('module'),o=m._resolveFilename;m._resolveFilename=function(r,...a){if(r==='expo-modules-core')console.trace('required from');return o.call(this,r,...a)};require('./node_modules/@expo/cli/build/src/index.js'); 
