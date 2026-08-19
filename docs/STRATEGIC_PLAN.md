@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W92**
+> Next phase identifier: **W93**
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W91)
+### ✅ CLOSED — Recent Phases (W60 → W92)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -123,6 +123,39 @@
 | **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed direct read 2026-08-19. |
 | **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. Confirmed direct read 2026-08-19. |
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). PowerShell verify line 539 ✅ |
+| **W92** | Roadmap audit vs codebase — re-verified 2026-08-19 | 2026-08-19 | See notes below |
+
+---
+
+### W92 — Roadmap Audit Notes (2026-08-19 14:20 WAT)
+
+> Full codebase scan performed against the original 30 June phase plan. Findings:
+
+**Services — all present and beyond original scope:**
+
+| Service | Original plan | Actual status |
+|---|---|---|
+| `scoringUtils.ts` | Phase A | ✅ Present (9.3 KB) |
+| `groupViolations.ts` | Phase 2 | ✅ Present |
+| `violationHistory.ts` | Phase 2 | ✅ Present |
+| `differentialView.ts` | Phase 3 | ✅ Present (7.7 KB) — full service, not stub |
+| `statusUtils.ts` | Phase 4 | ✅ Present — obs/unable statuts implemented |
+| `meetingGateService.ts` | Phase 5 | ✅ Present — intentionally thin (2 idempotent helpers, design is correct) |
+| `decisionSupport.ts` | Phase 6 | ✅ Present (8.1 KB) |
+| `numericUtils.ts` | Not planned | ✅ Present — numeric field scoring added ahead of schedule |
+| `capFactory.ts` + `CapReportService.ts` | Phase 7 | ✅ Present |
+| `pdfService.ts` | Phase 8 | ✅ Present (54 KB — very complete) |
+| `CapNotificationService.ts` | Phase 9 | ✅ Present (16.7 KB) |
+| `BackupService.ts` | Not in roadmap | ✅ Present (13.9 KB) — delivered as W65/W86 |
+| `SyncService.ts` | Not in roadmap | ✅ Present (9.1 KB) — delivered as W64 |
+| `serverAuth.ts` | Not in roadmap | ✅ Present (12 KB) — delivered as W61 |
+| `geofencingService.ts` | Not in roadmap | ✅ Present — bonus feature |
+| `SessionLockService.ts` | Not in roadmap | ✅ Present — delivered as W68 |
+
+**Conclusion:** The 30-June roadmap phases (1–9) are **100% delivered at service layer**. The gap between the original plan and current state is that ~40 additional W-phases have been executed covering UI, legal verification, TypeScript hardening, and infrastructure.
+
+**PowerShell CI note (2026-08-19):**
+`check-bom.ps1` uses bare `exit 0`/`exit 1`. This is correct for CI (`$env:CI` set) but closes the terminal when run interactively. Fix: wrap with `if ($env:CI) { exit $code } else { return }`. No change required to CI pipeline — behaviour is correct in GitHub Actions context.
 
 ---
 
@@ -166,6 +199,7 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
+| UI screens gap audit | `src/screens/` not yet fully mapped — open W93 when ready |
 
 ---
 
@@ -205,8 +239,11 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 
 ## Sprint Status
 
-**All phases closed through W91 + BGN-10-01 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
+**All phases closed through W92 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
 
-Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W92**.
+Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W93**.
 
 **🔴 Only remaining action: F-05 — set `EXPO_PUBLIC_SYNC_API_URL` when server is deployed. No code work needed until then.**
+
+**Next recommended work — W93: UI screens gap audit**
+Read `src/screens/` to map which screens consume the existing services (differentialView, meetingGateService, decisionSupport) and identify any unbranded wiring gaps between service layer and UI.
