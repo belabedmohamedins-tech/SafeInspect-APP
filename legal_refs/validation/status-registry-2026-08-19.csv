@@ -1,0 +1,46 @@
+filename,instrument_type,instrument_number,topic_slug,pages,conversion_quality,critical_errors,minor_errors,status,pdf_present,pdf_text_extractable,audit_date
+arrete-interministeriel-1999-11-21-conservation-aliments.md,arrete-interministeriel,1999-11-21,conservation-aliments,3,PDF TEXT EXTRACTION UNRELIABLE,1,0,UNSAFE FOR LEGAL USE,yes,no,2026-08-19
+arrete-interministeriel-2011-02-06-permis-construire-energie.md,arrete-interministeriel,2011-02-06,permis-construire-energie,5,HIGH MATCH,0,26,VERIFIED WITH MINOR ISSUES,yes,yes,2026-08-19
+arrete-interministeriel-2016-10-04-criteres-microbiologiques.md,arrete-interministeriel,2016-10-04,criteres-microbiologiques,22,SUBSTANTIAL MISMATCH,1,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+arrete-interministeriel-2025-05-07-hygiene-restauration.md,arrete-interministeriel,2025-05-07,hygiene-restauration,5,SUBSTANTIAL MISMATCH,1,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-01-102-creation-ona.md,decret,01-102,creation-ona,6,HIGH MATCH,0,37,VERIFIED WITH MINOR ISSUES,yes,yes,2026-08-19
+decret-02-427-prevention-risques-professionnels.md,decret,02-427,prevention-risques-professionnels,24,SUBSTANTIAL MISMATCH,7,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-04-410-regles-installations-traitement-dechets.md,decret,04-410,regles-installations-traitement-dechets,5,SUBSTANTIAL MISMATCH,6,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-04-82-agrement-sanitaire-elevage.md,decret,04-82,agrement-sanitaire-elevage,30,SUBSTANTIAL MISMATCH,4,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-05-315-declaration-dechets-speciaux-dangereux.md,decret,05-315,declaration-dechets-speciaux-dangereux,4,SUBSTANTIAL MISMATCH,1,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-06-138-emissions-atmospheriques.md,decret,06-138,emissions-atmospheriques,13,PARTIAL MATCH,1,0,REQUIRES CORRECTION,yes,yes,2026-08-19
+decret-06-141-rejets-effluents-liquides.md,decret,06-141,rejets-effluents-liquides,27,SUBSTANTIAL MISMATCH,44,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-06-198-etablissements-classes.md,decret,06-198,etablissements-classes,7,PARTIAL MATCH,1,0,REQUIRES CORRECTION,yes,yes,2026-08-19
+decret-07-144-nomenclature-installations-classees.md,decret,07-144,nomenclature-installations-classees,102,SUBSTANTIAL MISMATCH,1,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-07-205-schema-communal-dechets.md,decret,07-205,schema-communal-dechets,3,SUBSTANTIAL MISMATCH,3,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-09-19.md,decret,09-19,,4,HIGH MATCH,0,11,VERIFIED WITH MINOR ISSUES,yes,yes,2026-08-19
+decret-09-335-plans-internes-intervention.md,decret,09-335,plans-internes-intervention,5,SUBSTANTIAL MISMATCH,2,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-11-125-eau-consommation-humaine.md,decret,11-125,eau-consommation-humaine,4,PARTIAL MATCH,1,0,REQUIRES CORRECTION,yes,yes,2026-08-19
+decret-17-140-hygiene-alimentaire.md,decret,17-140,hygiene-alimentaire,31,SUBSTANTIAL MISMATCH,64,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-21-261-esp-equipements-hydrocarbures.md,decret,21-261,esp-equipements-hydrocarbures,14,HIGH MATCH,0,47,VERIFIED WITH MINOR ISSUES,yes,yes,2026-08-19
+decret-21-319-autorisation-exploitation-hydrocarbures.md,decret,21-319,autorisation-exploitation-hydrocarbures,14,HIGH MATCH,0,60,VERIFIED WITH MINOR ISSUES,yes,yes,2026-08-19
+decret-21-430-gpl-carburant.md,decret,21-430,gpl-carburant,28,SUBSTANTIAL MISMATCH,30,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-22-167-etablissements-classes-modification.md,decret,22-167,etablissements-classes-modification,23,SUBSTANTIAL MISMATCH,4,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-24-196-etablissements-classes-modification.md,decret,24-196,etablissements-classes-modification,2,SUBSTANTIAL MISMATCH,2,0,UNSAFE FOR LEGAL USE,yes,yes,2026-08-19
+decret-25-63-plans-intervention-catastrophes.md,decret,25-63,plans-intervention-catastrophes,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+decret-76-35-igh-incendie.md,decret,76-35,igh-incendie,3,PDF TEXT EXTRACTION UNRELIABLE,1,0,UNSAFE FOR LEGAL USE,yes,no,2026-08-19
+decret-76-36-incendie-panique.md,decret,76-36,incendie-panique,8,PDF TEXT EXTRACTION UNRELIABLE,1,0,UNSAFE FOR LEGAL USE,yes,no,2026-08-19
+decret-83-496-gpl-carburant.md,decret,83-496,gpl-carburant,48,PDF TEXT EXTRACTION UNRELIABLE,1,0,UNSAFE FOR LEGAL USE,yes,no,2026-08-19
+decret-90-245-appareils-pression-gaz.md,decret,90-245,appareils-pression-gaz,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+decret-91-05-hygiene-securite-milieu-travail.md,decret,91-05,hygiene-securite-milieu-travail,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+decret-93-120-medecine-du-travail.md,decret,93-120,medecine-du-travail,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-01-19-gestion-dechets.md,loi,01-19,gestion-dechets,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-03-10-protection-environnement.md,loi,03-10,protection-environnement,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-04-08-activites-commerciales.md,loi,04-08,activites-commerciales,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-04-20-risques-majeurs.md,loi,04-20,risques-majeurs,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-05-12-ressources-en-eau.md,loi,05-12,ressources-en-eau,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-09-03-protection-consommateur.md,loi,09-03,protection-consommateur,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-18-09-protection-consommateur.md,loi,18-09,protection-consommateur,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-18-11-sante-partie1-arts1-164.md,loi,18-11,sante-partie1-arts1-164,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-18-11-sante-partie2-arts165-264.md,loi,18-11,sante-partie2-arts165-264,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-18-11-sante-partie3-arts265-450.md,loi,18-11,sante-partie3-arts265-450,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-19-02-incendie-panique.md,loi,19-02,incendie-panique,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-88-07-hygiene-securite-medecine-travail.md,loi,88-07,hygiene-securite-medecine-travail,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-90-11-relations-travail.md,loi,90-11,relations-travail,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+loi-90-29-urbanisme.md,loi,90-29,urbanisme,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
+projet-arrete-gpl-installations-securite.md,projet-arrete,,gpl-installations-securite,,NO PDF,0,0,UNSAFE FOR LEGAL USE,no,no,2026-08-19
