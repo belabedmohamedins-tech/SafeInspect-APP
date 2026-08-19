@@ -4,10 +4,15 @@
 // once to activate cloud sync, push notifications, and supervisor approval.
 //
 // Flow:
-//   onboarding done + PIN set → /(tabs)/home
+//   onboarding done + PIN set -> /(tabs)/home
 //   server-login is optional; users can skip to use the app offline-only.
 //   After successful login, the JWT is stored in SecureStore and all future
 //   syncs are authenticated automatically.
+//
+// W95 (SPEC12-C): handleSkip() now persists StorageKeys.SERVER_LOGIN_SKIPPED = 'true'
+// so that _layout.tsx's auth guard does not redirect the user back to this screen
+// on every subsequent app launch. The skip is permanent until the user logs in
+// (at which point isLoggedIn() returns true and the guard passes regardless).
 
 import React, { useState } from 'react';
 import {
@@ -20,10 +25,11 @@ import {
   KeyboardAvoidingView,
   Platform,
   ScrollView,
-  Alert,
 } from 'react-native';
 import { useRouter } from 'expo-router';
 import { login } from '../../src/services/serverAuth';
+import { SettingsRepository } from '../../src/repositories/SettingsRepository';
+import { StorageKeys } from '../../src/repositories/keys';
 
 export default function ServerLoginScreen() {
   const router = useRouter();
@@ -39,7 +45,7 @@ export default function ServerLoginScreen() {
     const p = password.trim();
 
     if (!m || !p) {
-      setError('يرجى إدخال رقم التسجيل وكلمة المرور');
+      setError('\u064A\u0631\u062C\u0649 \u0625\u062F\u062E\u0627\u0644 \u0631\u0642\u0645 \u0627\u0644\u062A\u0633\u062C\u064A\u0644 \u0648\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631');
       return;
     }
 
@@ -51,7 +57,7 @@ export default function ServerLoginScreen() {
     setLoading(false);
 
     if (!result.ok) {
-      setError(result.error ?? 'فشل تسجيل الدخول');
+      setError(result.error ?? '\u0641\u0634\u0644 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644');
       return;
     }
 
@@ -59,8 +65,10 @@ export default function ServerLoginScreen() {
     router.replace('/(tabs)/home');
   }
 
-  function handleSkip() {
-    // User chooses offline-only mode for now
+  async function handleSkip() {
+    // W95 (SPEC12-C): persist the skip decision so _layout.tsx does not
+    // redirect back to this screen on the next app launch.
+    await SettingsRepository.set(StorageKeys.SERVER_LOGIN_SKIPPED, 'true');
     router.replace('/(tabs)/home');
   }
 
@@ -75,23 +83,23 @@ export default function ServerLoginScreen() {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.logo}>🛡️</Text>
-          <Text style={styles.title}>ربط الحساب بالخادم</Text>
+          <Text style={styles.logo}>\uD83D\uDEE1\uFE0F</Text>
+          <Text style={styles.title}>\u0631\u0628\u0637 \u0627\u0644\u062D\u0633\u0627\u0628 \u0628\u0627\u0644\u062E\u0627\u062F\u0645</Text>
           <Text style={styles.subtitle}>
-            أدخل رقم تسجيلك الوزاري وكلمة المرور لتفعيل المزامنة
-            وإشعارات الموافقة.
+            \u0623\u062F\u062E\u0644 \u0631\u0642\u0645 \u062A\u0633\u062C\u064A\u0644\u0643 \u0627\u0644\u0648\u0632\u0627\u0631\u064A \u0648\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631 \u0644\u062A\u0641\u0639\u064A\u0644 \u0627\u0644\u0645\u0632\u0627\u0645\u0646\u0629
+            \u0648\u0625\u0634\u0639\u0627\u0631\u0627\u062A \u0627\u0644\u0645\u0648\u0627\u0641\u0642\u0629.
           </Text>
         </View>
 
         {/* Form */}
         <View style={styles.form}>
           {/* Matricule */}
-          <Text style={styles.label}>رقم التسجيل الوزاري</Text>
+          <Text style={styles.label}>\u0631\u0642\u0645 \u0627\u0644\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u0648\u0632\u0627\u0631\u064A</Text>
           <TextInput
             style={styles.input}
             value={matricule}
             onChangeText={setMatricule}
-            placeholder="مثال: INS-001"
+            placeholder="\u0645\u062B\u0627\u0644: INS-001"
             placeholderTextColor="#9CA3AF"
             autoCapitalize="characters"
             autoCorrect={false}
@@ -101,13 +109,13 @@ export default function ServerLoginScreen() {
           />
 
           {/* Password */}
-          <Text style={styles.label}>كلمة المرور</Text>
+          <Text style={styles.label}>\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631</Text>
           <View style={styles.passwordRow}>
             <TextInput
               style={[styles.input, styles.passwordInput]}
               value={password}
               onChangeText={setPassword}
-              placeholder="كلمة المرور"
+              placeholder="\u0643\u0644\u0645\u0629 \u0627\u0644\u0645\u0631\u0648\u0631"
               placeholderTextColor="#9CA3AF"
               secureTextEntry={!showPass}
               returnKeyType="done"
@@ -120,14 +128,14 @@ export default function ServerLoginScreen() {
               onPress={() => setShowPass(v => !v)}
               activeOpacity={0.7}
             >
-              <Text style={styles.eyeIcon}>{showPass ? '🙈' : '👁️'}</Text>
+              <Text style={styles.eyeIcon}>{showPass ? '\uD83D\uDE48' : '\uD83D\uDC41\uFE0F'}</Text>
             </TouchableOpacity>
           </View>
 
           {/* Error */}
           {error ? (
             <View style={styles.errorBox}>
-              <Text style={styles.errorText}>⚠️  {error}</Text>
+              <Text style={styles.errorText}>\u26A0\uFE0F  {error}</Text>
             </View>
           ) : null}
 
@@ -141,7 +149,7 @@ export default function ServerLoginScreen() {
             {loading ? (
               <ActivityIndicator color="#fff" />
             ) : (
-              <Text style={styles.loginBtnText}>تسجيل الدخول</Text>
+              <Text style={styles.loginBtnText}>\u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644</Text>
             )}
           </TouchableOpacity>
 
@@ -152,14 +160,14 @@ export default function ServerLoginScreen() {
             disabled={loading}
             activeOpacity={0.7}
           >
-            <Text style={styles.skipText}>تخطي — الاستخدام بدون إنترنت</Text>
+            <Text style={styles.skipText}>\u062A\u062E\u0637\u064A \u2014 \u0627\u0644\u0627\u0633\u062A\u062E\u062F\u0627\u0645 \u0628\u062F\u0648\u0646 \u0625\u0646\u062A\u0631\u0646\u062A</Text>
           </TouchableOpacity>
         </View>
 
         {/* Footer note */}
         <Text style={styles.footerNote}>
-          يمكنك تسجيل الدخول لاحقاً من الإعدادات.
-          بياناتك المحلية محمية دائماً بالرقم السري.
+          \u064A\u0645\u0643\u0646\u0643 \u062A\u0633\u062C\u064A\u0644 \u0627\u0644\u062F\u062E\u0648\u0644 \u0644\u0627\u062D\u0642\u064B\u0627 \u0645\u0646 \u0627\u0644\u0625\u0639\u062F\u0627\u062F\u0627\u062A.
+          \u0628\u064A\u0627\u0646\u0627\u062A\u0643 \u0627\u0644\u0645\u062D\u0644\u064A\u0629 \u0645\u062D\u0645\u064A\u0629 \u062F\u0627\u0626\u0645\u064B\u0627 \u0628\u0627\u0644\u0631\u0642\u0645 \u0627\u0644\u0633\u0631\u064A.
         </Text>
       </ScrollView>
     </KeyboardAvoidingView>

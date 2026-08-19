@@ -41,13 +41,22 @@ export const StorageKeys = {
   JWT_ACCESS_TOKEN:        'jwt_access_token',
   JWT_REFRESH_TOKEN:       'jwt_refresh_token',
   SERVER_USER_ID:          'server_user_id',
-  // W85: UI preference toggles (settings.tsx writer ↔ SyncService/NotificationService reader)
+  // W85: UI preference toggles (settings.tsx writer <-> SyncService/NotificationService reader)
   /** Auto-sync toggle — written by settings.tsx, read by SyncService.flush() */
   AUTO_SYNC:               'autoSync',
   /** Dark-mode toggle — written and read by settings.tsx */
   DARK_MODE:               'darkMode',
   /** Push-notification toggle shown in UI (distinct from NOTIFICATIONS_ENABLED device token) */
   NOTIFICATIONS_UI:        'notifications',
+  // W95: SPEC12-C — server-login skip persistence
+  /**
+   * Set to 'true' when the inspector taps "Skip" on the server-login screen.
+   * Checked by _layout.tsx's auth guard so that a skipped user is NOT
+   * redirected back to server-login on every subsequent app launch.
+   * Value is permanent until the user successfully logs in, at which point
+   * the flag is irrelevant (isLoggedIn() returns true and the guard passes anyway).
+   */
+  SERVER_LOGIN_SKIPPED:    'serverLoginSkipped',
 } as const;
 
 /** @deprecated use StorageKeys */

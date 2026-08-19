@@ -11,13 +11,14 @@ import { initializeDatabase } from '../src/db/schema';
 import { startSyncScheduler } from '../src/db/syncEngine';
 import { I18nProvider } from '../src/i18n';
 import { SettingsRepository } from '../src/repositories/SettingsRepository';
+import { StorageKeys } from '../src/repositories/keys';
 import { isLoggedIn, registerPushToken } from '../src/services/serverAuth';
 import { SessionLockService } from '../src/services/SessionLockService';
 
 // Keep splash screen visible until fonts + DB are ready
 SplashScreen.preventAutoHideAsync();
 
-// ── Expo Go guard (mirrors CapNotificationService) ──────────────────────────────────────
+// -- Expo Go guard (mirrors CapNotificationService) --
 const IS_EXPO_GO = Constants.appOwnership === 'expo';
 
 let Notifications: typeof import('expo-notifications') | null = null;
@@ -34,7 +35,7 @@ export default function RootLayout() {
   const segments = useSegments();
   const [dbReady, setDbReady] = useState(false);
 
-  // ── Load @expo/vector-icons fonts (FontAwesome, MaterialIcons, etc.) ──────────
+  // -- Load @expo/vector-icons fonts (FontAwesome, MaterialIcons, etc.) --
   // Without this, icon components render as blank squares on first load.
   const [fontsLoaded, fontError] = useFonts({
     ...require('@expo/vector-icons/FontAwesome').font,
@@ -54,7 +55,7 @@ export default function RootLayout() {
     typeof import('expo-notifications')['addNotificationResponseReceivedListener']
   > | null>(null);
 
-  // ── 1. Initialize DB and sync scheduler on app start ────────────────────────────
+  // -- 1. Initialize DB and sync scheduler on app start --
   useEffect(() => {
     let stopSync: (() => void) | undefined;
 
@@ -74,7 +75,7 @@ export default function RootLayout() {
     };
   }, []);
 
-  // ── 2. Single auth guard — runs once after DB is ready ────────────────────────
+  // -- 2. Single auth guard — runs once after DB is ready --
   useEffect(() => {
     if (!dbReady) return;
 
@@ -97,9 +98,12 @@ export default function RootLayout() {
         return;
       }
 
-      // 2c. Server login — prompt once if never logged in to the server
+      // 2c. Server login — prompt once if never logged in AND user has not skipped.
+      // W95 (SPEC12-C): check SERVER_LOGIN_SKIPPED so that a user who tapped
+      // "Skip" is not re-routed to server-login on every subsequent app launch.
       const serverSession = await isLoggedIn();
-      if (!serverSession && !currentPath.includes('server-login')) {
+      const skipped = all[StorageKeys.SERVER_LOGIN_SKIPPED] === 'true';
+      if (!serverSession && !skipped && !currentPath.includes('server-login')) {
         router.replace('/screens/server-login' as Href);
         return;
       }
@@ -112,7 +116,7 @@ export default function RootLayout() {
     })();
   }, [dbReady]);
 
-  // ── 3. Register device push token with the server ───────────────────────────
+  // -- 3. Register device push token with the server --
   useEffect(() => {
     if (!dbReady || IS_EXPO_GO || !Notifications) return;
 
@@ -139,7 +143,7 @@ export default function RootLayout() {
     })();
   }, [dbReady]);
 
-  // ── 4. Notification tap deep-link handler ───────────────────────────────────
+  // -- 4. Notification tap deep-link handler --
   useEffect(() => {
     if (!Notifications) return;
 
@@ -191,7 +195,7 @@ export default function RootLayout() {
     };
   }, []);
 
-  // ── 5. Session auto-lock ────────────────────────────────────────────────────
+  // -- 5. Session auto-lock --
   useEffect(() => {
     if (!dbReady) return;
 
