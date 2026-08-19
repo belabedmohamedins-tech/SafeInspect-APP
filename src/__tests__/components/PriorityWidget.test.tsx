@@ -1,104 +1,118 @@
 // src/__tests__/components/PriorityWidget.test.tsx
-//
-// W92 — SPEC 13 navigation regression tests for PriorityWidget.
-//
-// Verifies that each row navigates to the correct facility profile
-// (params.id === f.facilityId) and NOT to the generic facilities list.
-//
-// Pattern: mock useRouter from expo-router, render with 2+ facilities,
-// fire onPress on a specific row, assert the mock was called correctly.
+// W92 — SPEC 13 coverage
+// Verifies that each PriorityWidget row navigates to the correct facility
+// profile screen using that row's own facilityId, not a shared/generic target.
 
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import PriorityWidget from '../../../components/home/PriorityWidget';
 import { PriorityFacility } from '../../utils/loadHomeData';
 
-// ── Router mock ────────────────────────────────────────────────────────────
+// ── router mock ────────────────────────────────────────────────────────────
 const mockPush = jest.fn();
+jest.mock('expo-router', () => ({ useRouter: () => ({ push: mockPush }) }));
 
-jest.mock('expo-router', () => ({
-  useRouter: () => ({ push: mockPush }),
+// ── icon mock (avoids native module resolution in Jest) ────────────────────
+jest.mock('@expo/vector-icons', () => ({
+  Feather: () => null,
 }));
 
-// ── Fixtures ───────────────────────────────────────────────────────────────
-const FACILITIES: PriorityFacility[] = [
-  {
-    facilityId:     'fac-001',
-    facilityName:   'مخبزة الأمل',
-    grade:          'D',
-    highViolations: 4,
-    lastDate:       '2026-08-01T10:00:00.000Z',
-  },
-  {
-    facilityId:     'fac-002',
-    facilityName:   'مطحنة الوئام',
-    grade:          'C',
-    highViolations: 2,
-    lastDate:       '2026-08-05T10:00:00.000Z',
-  },
-  {
-    facilityId:     'fac-003',
-    facilityName:   'ورشة السلامة',
-    grade:          'C',
-    highViolations: 3,
-    lastDate:       '2026-08-10T10:00:00.000Z',
-  },
-];
+// ── fixtures ───────────────────────────────────────────────────────────────
+const FACILITY_A: PriorityFacility = {
+  facilityId:     'fac-001',
+  facilityName:   'مصنع الأول',
+  grade:          'D',
+  highViolations: 4,
+  lastDate:       '2026-08-01',
+};
 
-// ── Tests ──────────────────────────────────────────────────────────────────
-describe('PriorityWidget — SPEC 13 navigation', () => {
+const FACILITY_B: PriorityFacility = {
+  facilityId:     'fac-002',
+  facilityName:   'مصنع الثاني',
+  grade:          'C',
+  highViolations: 2,
+  lastDate:       '2026-08-05',
+};
+
+const FACILITY_C: PriorityFacility = {
+  facilityId:     'fac-003',
+  facilityName:   'مصنع الثالث',
+  grade:          'C',
+  highViolations: 0,
+  lastDate:       '2026-08-10',
+};
+
+// ── helpers ────────────────────────────────────────────────────────────────
+function expectedNav(facilityId: string) {
+  return {
+    pathname: '/screens/facilities/profile',
+    params: { id: facilityId },
+  };
+}
+
+// ── tests ──────────────────────────────────────────────────────────────────
+describe('PriorityWidget W92', () => {
   beforeEach(() => {
     mockPush.mockClear();
-  });
-
-  it('tapping the first row navigates to its facilityId', () => {
-    const { getByText } = render(<PriorityWidget facilities={FACILITIES} />);
-    fireEvent.press(getByText('مخبزة الأمل'));
-
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: '/screens/facilities/profile',
-      params:   { id: 'fac-001' },
-    });
-  });
-
-  it('tapping the second row navigates to its own facilityId — not the first', () => {
-    const { getByText } = render(<PriorityWidget facilities={FACILITIES} />);
-    fireEvent.press(getByText('مطحنة الوئام'));
-
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: '/screens/facilities/profile',
-      params:   { id: 'fac-002' },
-    });
-    // Explicitly confirm the first row's id is NOT used
-    expect(mockPush).not.toHaveBeenCalledWith({
-      pathname: '/screens/facilities/profile',
-      params:   { id: 'fac-001' },
-    });
-  });
-
-  it('tapping the third row navigates to its own facilityId', () => {
-    const { getByText } = render(<PriorityWidget facilities={FACILITIES} />);
-    fireEvent.press(getByText('ورشة السلامة'));
-
-    expect(mockPush).toHaveBeenCalledTimes(1);
-    expect(mockPush).toHaveBeenCalledWith({
-      pathname: '/screens/facilities/profile',
-      params:   { id: 'fac-003' },
-    });
-  });
-
-  it('does NOT navigate to the generic facility list', () => {
-    const { getByText } = render(<PriorityWidget facilities={FACILITIES} />);
-    fireEvent.press(getByText('مخبزة الأمل'));
-
-    // The old broken behavior: router.push('/screens/facilities')
-    expect(mockPush).not.toHaveBeenCalledWith('/screens/facilities');
   });
 
   it('renders nothing when facilities list is empty', () => {
     const { toJSON } = render(<PriorityWidget facilities={[]} />);
     expect(toJSON()).toBeNull();
+  });
+
+  it('tapping the first row navigates to that row\'s facilityId', () => {
+    const { getAllByRole } = render(
+      <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
+    );
+    const rows = getAllByRole('button');
+    fireEvent.press(rows[0]);
+    expect(mockPush).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-001'));
+  });
+
+  it('tapping the second row navigates to that row\'s facilityId — not the first row\'s', () => {
+    const { getAllByRole } = render(
+      <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
+    );
+    const rows = getAllByRole('button');
+    fireEvent.press(rows[1]);
+    expect(mockPush).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-002'));
+    expect(mockPush).not.toHaveBeenCalledWith(expectedNav('fac-001'));
+    expect(mockPush).not.toHaveBeenCalledWith('/screens/facilities');
+  });
+
+  it('tapping the third row navigates to that row\'s facilityId', () => {
+    const { getAllByRole } = render(
+      <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
+    );
+    const rows = getAllByRole('button');
+    fireEvent.press(rows[2]);
+    expect(mockPush).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-003'));
+  });
+
+  it('each row press calls router.push exactly once (no duplicate fires)', () => {
+    const { getAllByRole } = render(
+      <PriorityWidget facilities={[FACILITY_A, FACILITY_B]} />
+    );
+    const rows = getAllByRole('button');
+    fireEvent.press(rows[0]);
+    fireEvent.press(rows[1]);
+    expect(mockPush).toHaveBeenCalledTimes(2);
+    expect(mockPush).toHaveBeenNthCalledWith(1, expectedNav('fac-001'));
+    expect(mockPush).toHaveBeenNthCalledWith(2, expectedNav('fac-002'));
+  });
+
+  it('never navigates to the generic facilities list', () => {
+    const { getAllByRole } = render(
+      <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
+    );
+    getAllByRole('button').forEach(row => fireEvent.press(row));
+    mockPush.mock.calls.forEach(call => {
+      expect(call[0]).not.toBe('/screens/facilities');
+      expect(call[0]).not.toEqual({ pathname: '/screens/facilities' });
+    });
   });
 });
