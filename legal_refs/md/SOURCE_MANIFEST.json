@@ -11,7 +11,7 @@
   "instruments": [
     {
       "instrument_id": "loi-88-07",
-      "file": "legal_refs/loi-88-07-hygiene-securite-medecine-travail.md",
+      "file": "legal_refs/md/loi-88-07-hygiene-securite-medecine-travail.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 4/1988",
       "pages": null,
@@ -26,7 +26,7 @@
     },
     {
       "instrument_id": "decret-76-35",
-      "file": "legal_refs/decret-76-35-igh-incendie.md",
+      "file": "legal_refs/md/decret-76-35-igh-incendie.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -39,7 +39,7 @@
     },
     {
       "instrument_id": "decret-76-36",
-      "file": "legal_refs/decret-76-36-incendie-panique.md",
+      "file": "legal_refs/md/decret-76-36-incendie-panique.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 67/1976",
       "pages": null,
@@ -54,7 +54,7 @@
     },
     {
       "instrument_id": "decret-83-496",
-      "file": "legal_refs/decret-83-496-gpl-carburant.md",
+      "file": "legal_refs/md/decret-83-496-gpl-carburant.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -69,7 +69,7 @@
     },
     {
       "instrument_id": "decret-90-245",
-      "file": "legal_refs/decret-90-245-appareils-pression-gaz.md",
+      "file": "legal_refs/md/decret-90-245-appareils-pression-gaz.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 36/1990",
       "pages": null,
@@ -82,7 +82,7 @@
     },
     {
       "instrument_id": "decret-91-05",
-      "file": "legal_refs/decret-91-05-hygiene-securite-milieu-travail.md",
+      "file": "legal_refs/md/decret-91-05-hygiene-securite-milieu-travail.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -95,7 +95,7 @@
     },
     {
       "instrument_id": "decret-93-120",
-      "file": "legal_refs/decret-93-120-medecine-du-travail.md",
+      "file": "legal_refs/md/decret-93-120-medecine-du-travail.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -108,7 +108,7 @@
     },
     {
       "instrument_id": "loi-90-11",
-      "file": "legal_refs/loi-90-11-relations-travail.md",
+      "file": "legal_refs/md/loi-90-11-relations-travail.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -121,7 +121,7 @@
     },
     {
       "instrument_id": "loi-90-29",
-      "file": "legal_refs/loi-90-29-urbanisme.md",
+      "file": "legal_refs/md/loi-90-29-urbanisme.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 52/1990",
       "pages": null,
@@ -134,7 +134,7 @@
     },
     {
       "instrument_id": "decret-01-102",
-      "file": "legal_refs/decret-01-102-creation-ona.md",
+      "file": "legal_refs/md/decret-01-102-creation-ona.md",
       "pdf_source": "PDF fourni manuellement",
       "jo_number": "non disponible dans le PDF fourni",
       "pages": null,
@@ -147,7 +147,7 @@
     },
     {
       "instrument_id": "loi-01-19",
-      "file": "legal_refs/loi-01-19-gestion-dechets.md",
+      "file": "legal_refs/md/loi-01-19-gestion-dechets.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 77/2001",
       "pages": null,
@@ -160,7 +160,7 @@
     },
     {
       "instrument_id": "decret-02-427",
-      "file": "legal_refs/decret-02-427-prevention-risques-professionnels.md",
+      "file": "legal_refs/md/decret-02-427-prevention-risques-professionnels.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -173,7 +173,7 @@
     },
     {
       "instrument_id": "loi-03-10",
-      "file": "legal_refs/loi-03-10-protection-environnement.md",
+      "file": "legal_refs/md/loi-03-10-protection-environnement.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 43/2003",
       "pages": null,
@@ -186,7 +186,7 @@
     },
     {
       "instrument_id": "decret-04-82",
-      "file": "legal_refs/decret-04-82-agrement-sanitaire-elevage.md",
+      "file": "legal_refs/md/decret-04-82-agrement-sanitaire-elevage.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 17/2004",
       "pages": null,
@@ -199,7 +199,7 @@
     },
     {
       "instrument_id": "decret-04-410",
-      "file": "legal_refs/decret-04-410-regles-installations-traitement-dechets.md",
+      "file": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
       "pdf_source": "PDF fourni manuellement",
       "jo_number": "non disponible dans le PDF fourni",
       "pages": null,
@@ -213,7 +213,7 @@
     },
     {
       "instrument_id": "loi-04-08",
-      "file": "legal_refs/loi-04-08-activites-commerciales.md",
+      "file": "legal_refs/md/loi-04-08-activites-commerciales.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -226,7 +226,7 @@
     },
     {
       "instrument_id": "loi-04-20",
-      "file": "legal_refs/loi-04-20-risques-majeurs.md",
+      "file": "legal_refs/md/loi-04-20-risques-majeurs.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -239,7 +239,7 @@
     },
     {
       "instrument_id": "decret-05-315",
-      "file": "legal_refs/decret-05-315-declaration-dechets-speciaux-dangereux.md",
+      "file": "legal_refs/md/decret-05-315-declaration-dechets-speciaux-dangereux.md",
       "pdf_source": "PDF fourni manuellement",
       "jo_number": "non disponible dans le PDF fourni",
       "pages": null,
@@ -252,7 +252,7 @@
     },
     {
       "instrument_id": "loi-05-12",
-      "file": "legal_refs/loi-05-12-ressources-en-eau.md",
+      "file": "legal_refs/md/loi-05-12-ressources-en-eau.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -265,7 +265,7 @@
     },
     {
       "instrument_id": "decret-06-138",
-      "file": "legal_refs/decret-06-138-emissions-atmospheriques.md",
+      "file": "legal_refs/md/decret-06-138-emissions-atmospheriques.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 24/2006",
       "pages": null,
@@ -278,7 +278,7 @@
     },
     {
       "instrument_id": "decret-06-141",
-      "file": "legal_refs/decret-06-141-rejets-effluents-liquides.md",
+      "file": "legal_refs/md/decret-06-141-rejets-effluents-liquides.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -291,7 +291,7 @@
     },
     {
       "instrument_id": "decret-06-198",
-      "file": "legal_refs/decret-06-198-etablissements-classes.md",
+      "file": "legal_refs/md/decret-06-198-etablissements-classes.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -307,7 +307,7 @@
     },
     {
       "instrument_id": "decret-07-144",
-      "file": "legal_refs/decret-07-144-nomenclature-installations-classees.md",
+      "file": "legal_refs/md/decret-07-144-nomenclature-installations-classees.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 34/2007",
       "pages": null,
@@ -320,7 +320,7 @@
     },
     {
       "instrument_id": "decret-07-205",
-      "file": "legal_refs/decret-07-205-schema-communal-dechets.md",
+      "file": "legal_refs/md/decret-07-205-schema-communal-dechets.md",
       "pdf_source": "PDF fourni manuellement",
       "jo_number": "non disponible dans le PDF fourni",
       "pages": null,
@@ -334,7 +334,7 @@
     },
     {
       "instrument_id": "decret-09-19",
-      "file": "legal_refs/decret-09-19.md",
+      "file": "legal_refs/md/decret-09-19.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 6/2009",
       "pages": null,
@@ -347,7 +347,7 @@
     },
     {
       "instrument_id": "loi-09-03",
-      "file": "legal_refs/loi-09-03-protection-consommateur.md",
+      "file": "legal_refs/md/loi-09-03-protection-consommateur.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -361,7 +361,7 @@
         {
           "type": "modifié_par",
           "instrument": "loi-18-09",
-          "file": "legal_refs/loi-18-09-protection-consommateur.md",
+          "file": "legal_refs/md/loi-18-09-protection-consommateur.md",
           "details": [
             { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 11 L09-03" },
             { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 16 L09-03" },
@@ -383,7 +383,7 @@
     },
     {
       "instrument_id": "decret-09-335",
-      "file": "legal_refs/decret-09-335-plans-internes-intervention.md",
+      "file": "legal_refs/md/decret-09-335-plans-internes-intervention.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 68/2009",
       "pages": null,
@@ -398,7 +398,7 @@
     },
     {
       "instrument_id": "decret-11-125",
-      "file": "legal_refs/decret-11-125-eau-consommation-humaine.md",
+      "file": "legal_refs/md/decret-11-125-eau-consommation-humaine.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 18/2011",
       "pages": null,
@@ -411,7 +411,7 @@
     },
     {
       "instrument_id": "arrete-2011-02-06",
-      "file": "legal_refs/arrete-interministeriel-2011-02-06-permis-construire-energie.md",
+      "file": "legal_refs/md/arrete-interministeriel-2011-02-06-permis-construire-energie.md",
       "pdf_source": "cntpp.dz",
       "jo_number": "N° 23/2011",
       "pages": null,
@@ -424,7 +424,7 @@
     },
     {
       "instrument_id": "decret-17-140",
-      "file": "legal_refs/decret-17-140-hygiene-alimentaire.md",
+      "file": "legal_refs/md/decret-17-140-hygiene-alimentaire.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -437,7 +437,7 @@
     },
     {
       "instrument_id": "loi-18-09",
-      "file": "legal_refs/loi-18-09-protection-consommateur.md",
+      "file": "legal_refs/md/loi-18-09-protection-consommateur.md",
       "pdf_source": "PDF fourni",
       "jo_number": "N° 35/2018",
       "pages": null,
@@ -450,13 +450,13 @@
         {
           "type": "modifie",
           "instrument": "loi-09-03",
-          "file": "legal_refs/loi-09-03-protection-consommateur.md"
+          "file": "legal_refs/md/loi-09-03-protection-consommateur.md"
         }
       ]
     },
     {
       "instrument_id": "loi-18-11-partie1",
-      "file": "legal_refs/loi-18-11-sante-partie1-arts1-164.md",
+      "file": "legal_refs/md/loi-18-11-sante-partie1-arts1-164.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -472,7 +472,7 @@
     },
     {
       "instrument_id": "loi-18-11-partie2",
-      "file": "legal_refs/loi-18-11-sante-partie2-arts165-264.md",
+      "file": "legal_refs/md/loi-18-11-sante-partie2-arts165-264.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -487,7 +487,7 @@
     },
     {
       "instrument_id": "loi-18-11-partie3",
-      "file": "legal_refs/loi-18-11-sante-partie3-arts265-450.md",
+      "file": "legal_refs/md/loi-18-11-sante-partie3-arts265-450.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -502,7 +502,7 @@
     },
     {
       "instrument_id": "loi-19-02",
-      "file": "legal_refs/loi-19-02-incendie-panique.md",
+      "file": "legal_refs/md/loi-19-02-incendie-panique.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -515,7 +515,7 @@
     },
     {
       "instrument_id": "decret-21-261",
-      "file": "legal_refs/decret-21-261-esp-equipements-hydrocarbures.md",
+      "file": "legal_refs/md/decret-21-261-esp-equipements-hydrocarbures.md",
       "pdf_source": "arh.gov.dz",
       "jo_number": null,
       "pages": null,
@@ -529,7 +529,7 @@
     },
     {
       "instrument_id": "decret-21-319",
-      "file": "legal_refs/decret-21-319-autorisation-exploitation-hydrocarbures.md",
+      "file": "legal_refs/md/decret-21-319-autorisation-exploitation-hydrocarbures.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 64/2021",
       "pages": null,
@@ -542,7 +542,7 @@
     },
     {
       "instrument_id": "decret-21-430",
-      "file": "legal_refs/decret-21-430-gpl-carburant.md",
+      "file": "legal_refs/md/decret-21-430-gpl-carburant.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -557,7 +557,7 @@
     },
     {
       "instrument_id": "decret-22-167",
-      "file": "legal_refs/decret-22-167-etablissements-classes-modification.md",
+      "file": "legal_refs/md/decret-22-167-etablissements-classes-modification.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -572,7 +572,7 @@
     },
     {
       "instrument_id": "decret-24-196",
-      "file": "legal_refs/decret-24-196-etablissements-classes-modification.md",
+      "file": "legal_refs/md/decret-24-196-etablissements-classes-modification.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -587,7 +587,7 @@
     },
     {
       "instrument_id": "decret-25-63",
-      "file": "legal_refs/decret-25-63-plans-intervention-catastrophes.md",
+      "file": "legal_refs/md/decret-25-63-plans-intervention-catastrophes.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 07/2025",
       "pages": null,
@@ -602,7 +602,7 @@
     },
     {
       "instrument_id": "arrete-1999-11-21",
-      "file": "legal_refs/arrete-interministeriel-1999-11-21-conservation-aliments.md",
+      "file": "legal_refs/md/arrete-interministeriel-1999-11-21-conservation-aliments.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 87/1999",
       "pages": null,
@@ -615,7 +615,7 @@
     },
     {
       "instrument_id": "arrete-2016-10-04",
-      "file": "legal_refs/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
+      "file": "legal_refs/md/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
       "pdf_source": "JORADP",
       "jo_number": "N° 39/2017",
       "pages": null,
@@ -628,7 +628,7 @@
     },
     {
       "instrument_id": "arrete-2025-05-07",
-      "file": "legal_refs/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
+      "file": "legal_refs/md/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
       "pdf_source": "JORADP",
       "jo_number": null,
       "pages": null,
@@ -641,7 +641,7 @@
     },
     {
       "instrument_id": "projet-arrete-gpl",
-      "file": "legal_refs/projet-arrete-gpl-installations-securite.md",
+      "file": "legal_refs/md/projet-arrete-gpl-installations-securite.md",
       "pdf_source": "non-JORADP (projet)",
       "jo_number": null,
       "pages": null,
