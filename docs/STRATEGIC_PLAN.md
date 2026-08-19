@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W94)
+### ✅ CLOSED — Recent Phases (W60 → W95)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -120,19 +120,19 @@
 | **W91** | `server/src/routes/notifications.ts` missing | 2026-08-19 | SHA `ce797c2`. |
 | **BGN-10-01** | Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). |
 | **SPEC12-D** | `registerPushToken` no `res.ok` check | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). |
-| **SPEC12-E** | `syncEngine.ts` raw `'autoSync'` string — duplicate reader | 2026-08-19 | **Already clean on HEAD** — `isAutoSyncEnabled()` removed, header documents fix. Confirmed direct read SHA `35605c9`. No code change needed. |
+| **SPEC12-E** | `syncEngine.ts` raw `'autoSync'` string — duplicate reader | 2026-08-19 | Already clean on HEAD. Direct read SHA `35605c9`. |
 | **W92 / SPEC 13** | PriorityWidget navigation test coverage | 2026-08-19 | Commits [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90), [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310). |
 | **W93** | UI screens gap audit — 22 screens, 0 orphans | 2026-08-19 | Direct read. |
 | **W94** | E2E integration test — full inspector lifecycle | 2026-08-19 | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43). User-confirmed green. |
+| **W95** | SPEC12-C: server-login skip persistence | 2026-08-19 | Commits `1e575fc` (test hoisting fix). **5/5 Jest green — user-confirmed.** |
 
 ---
 
-### 🟡 OPEN — Active
+### 🔵 OPEN — Spec Documented
 
 | Phase | Title | Status | Notes |
 |---|---|---|---|
-| **W95** | SPEC12-C: server-login skip persistence | 🟡 PUSHED — awaiting user `npx jest` | Fix + tests pushed. See below for verify command. |
-| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | 🔵 SPEC DOCUMENTED | Full spec below. Implement when ready. |
+| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | 🔵 SPEC DOCUMENTED | Full spec below. Server-only. Implement when ready. |
 
 ---
 
@@ -141,27 +141,6 @@
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
 | **W51-SURV** | LEGAL-VERIFY: AIM GPL2 JORADP publication status | Surveillance | Monitor JORADP. No code action until published. |
-
----
-
-## W95 — SPEC12-C: Server-Login Skip Persistence
-
-**Status:** 🟡 PUSHED — awaiting user verification.
-
-**Problem:** `handleSkip()` in `app/screens/server-login.tsx` navigates to home but writes no persistence flag. The `_layout.tsx` auth guard (step 2c) checks only `isLoggedIn()` — no skip exception. Result: user is redirected back to `server-login` on every app launch, indefinitely, despite the screen's documented "offline-only" intent.
-
-**Fix:**
-- `app/screens/server-login.tsx` — `handleSkip()` calls `await SettingsRepository.set('serverLoginSkipped', 'true')` before `router.replace`.
-- `app/_layout.tsx` step 2c — reads `all['serverLoginSkipped']` (already fetched in step 2a's `SettingsRepository.getAll()`) and short-circuits the redirect when it equals `'true'`.
-
-**Key:** `'serverLoginSkipped'` (string `'true'`). Matches `SettingsRepository.set/get` contract. Resettable by clearing settings or logging in (which sets a real `isLoggedIn()` → guard satisfied by that path instead).
-
-**Test file:** `src/__tests__/screens/serverLoginSkip.test.tsx`
-- Test 1: Tap Skip → `SettingsRepository.set('serverLoginSkipped', 'true')` called.
-- Test 2: Guard runs with `isLoggedIn() = false` + `serverLoginSkipped = 'true'` → NOT redirected to server-login.
-- Test 3: Guard runs with `isLoggedIn() = false` + no skip flag → IS redirected (regression guard).
-
-**Verify:** `npx jest src/__tests__/screens/serverLoginSkip.test.tsx` → expect 3/3 PASS.
 
 ---
 
@@ -283,6 +262,6 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 
 ## Sprint Status
 
-**All phases closed through W94. W95 pushed — awaiting user Jest confirm. W96 spec documented.**
+**All phases closed through W95.** W96 spec documented — not yet implemented. Next: implement W96 when ready, or address backlog items.
 
 Next phase identifier: **W97**. Active surveillance: **W51-SURV**.
