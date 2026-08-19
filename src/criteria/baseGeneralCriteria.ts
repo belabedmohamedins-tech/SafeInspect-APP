@@ -88,6 +88,9 @@
 //   Replaced with Décret exécutif 91-05 Art.17 (safe electrical installations in workplaces)
 //   + Loi 90-11 as general occupational safety basis.
 // W40-CLOSE (2026-08-17): BGN-04-07 legalReference finalized after LEGAL-VERIFY.
+    // BGN-04-07-FIX (2026-08-19): D07-205 (schéma communal déchets ménagers — mauvais domaine)
+    //   remplacé par D04-410 Art.3 (règles installations traitement déchets — incin. Art.3).
+    //   D07-205 retiré de la legalReference. Voir legal_refs/decret-04-410-...md.
 //   Full read of Loi 01-19 (72 articles, no gap) confirmed: word "incinération" absent.
 //   Previous placeholder (Art.11 + Décret 07-205 + [À VÉRIFIER open]) replaced with
 //   Art.15 + Art.19 + Art.63 + Décret 07-205 — strongest available basis confirmed.
