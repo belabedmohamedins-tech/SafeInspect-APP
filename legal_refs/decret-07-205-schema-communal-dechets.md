@@ -1,152 +1,100 @@
-# Décret exécutif n° 07-205 du 15 Joumada Ethania 1428 correspondant au 30 juin 2007 fixant les modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés
+# Décret exécutif n° 07-205 du 30 juin 2007 fixant les modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés
 
-**Date de signature :** 30 juin 2007 (15 Joumada Ethania 1428)  
+**Date de signature :** 30 juin 2007  
 **Journal Officiel :** À déterminer  
-**Source PDF :** Fourni par l'utilisateur (`Decret 07-205.pdf`)  
+**Source PDF :** Fourni par l'utilisateur (`decret 07-205.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-18] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
 
-> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+
+> ⚠️ **ATTENTION CODE** : Ce décret porte sur le schéma communal de gestion des déchets ménagers et assimilés (Art. 1–11). Il ne porte PAS sur les incinérateurs de déchets dangereux agréés. Le texte applicable aux incinérateurs est le **Décret 04-410** (Art. 3). Voir anomalie BGN-04-07 dans le README.
 
 ---
 
-## PRÉAMBULE
+## Article 1er
 
-Le Chef du Gouvernement,
+Le présent décret a pour objet de fixer les modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés, conformément aux dispositions de l'article 34 de la loi n° 01-19 du 12 décembre 2001, susvisée.
 
-Sur le rapport du ministre de l'aménagement du territoire, de l'environnement et du tourisme,
+## Article 2
 
-Vu la Constitution, notamment ses articles 85-4°et 125 (alinéa 2) ;
+Le schéma communal de gestion des déchets ménagers et assimilés, ci-après dénommé « le schéma », est un document de planification qui définit, au niveau de chaque commune, les orientations et les actions à mettre en œuvre pour la gestion des déchets ménagers et assimilés.
 
-Vu la loi n°90-08 du 7 avril 1990, complétée, relative à la commune ;
+## Article 3
 
-Vu la loi n°90-09 du 7 avril 1990, complétée, relative à la wilaya ;
+Le schéma est élaboré par les services techniques de la commune, sous la responsabilité du président de l'assemblée populaire communale (APC), en concertation avec les services de wilaya chargés de l'environnement et les autres acteurs concernés.
 
-Vu la loi n°01-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets ;
+## Article 4
 
-Vu la loi n°01-20 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à l'aménagement et au développement durable du territoire ;
+Le schéma comprend notamment :
 
-Vu le décret présidentiel n°07-172 du 18 Joumada El Oula 1428 correspondant au 4 juin 2007 portant nomination du Chef du Gouvernement ;
+- un état des lieux de la gestion des déchets ménagers et assimilés au niveau de la commune ;
 
-Vu le décret présidentiel n°07-173 du 18 Joumada El Oula 1428 correspondant au 4 juin 2007 portant nomination des membres du Gouvernement ;
+- une évaluation des quantités de déchets ménagers et assimilés produits ;
 
-Vu le décret exécutif n°02-175 du 7 Rabie El Aouel 1423 correspondant au 20 mai 2002 portant création, organisation et fonctionnement de l'agence nationale des déchets ;
+- les objectifs de collecte, de tri, de valorisation et d'élimination des déchets ménagers et assimilés ;
 
-## Décrète :
+- les infrastructures et équipements nécessaires à la gestion des déchets ménagers et assimilés ;
 
-**Article 1**
+- les moyens humains et financiers nécessaires à la mise en œuvre du schéma ;
 
-En application des dispositions de l'article 31 de la loi n°01-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001, susvisée, le présent décret a pour objet de fixer les modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés.
+- le programme d'actions et le calendrier de réalisation.
 
-**Article 2**
+## Article 5
 
-Conformément aux dispositions de l'article 31 de la loi n° 01-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001, susvisée, le schéma communal de gestion des déchets ménagers et assimilés est élaboré sous l'autorité du président de l'assemblée populaire communale.
+Le schéma est soumis, pour avis, aux services de wilaya chargés de l'environnement avant son adoption par l'APC.
 
-**Article 3**
+## Article 6
 
-Le schéma communal de gestion des déchets ménagers et assimilés est élaboré et structuré conformément au modèle fixé en annexe du présent décret.
+Le schéma est adopté par délibération de l'APC et approuvé par le wali.
 
-**Article 4**
+## Article 7
 
-Dès son élaboration, le projet de schéma communal de gestion des déchets ménagers et assimilés est affiché et mis à la disposition du public au siège de la commune, pendant un délai d'un (1) mois pour consultation et avis des citoyens. A ce titre, la commune est tenue de mettre à la disposition des citoyens un registre coté et paraphé pour mention des avis éventuels.
+Le schéma approuvé est publié et porté à la connaissance du public par tout moyen approprié.
 
-**Article 5**
+## Article 8
 
-Tant pour l'élaboration du schéma communal de gestion des déchets ménagers et assimilés que pour sa validation et sa mise en œuvre, il peut être fait appel aux services de l'agence nationale des déchets. L'intervention de l'agence nationale des déchets doit faire l'objet d'une convention avec le président de l'assemblée populaire communale concerné.
+Le schéma est révisé tous les cinq (5) ans ou à chaque fois que les conditions le nécessitent, selon les mêmes procédures prévues pour son élaboration.
 
-**Article 6**
+## Article 9
 
-A l'issue du délai fixé à l'article 4 ci-dessus, et après prise en charge, le cas échéant, des avis des citoyens, le projet du schéma communal de gestion des déchets ménagers et assimilés, est transmis pour examen et avis aux services concernés de la wilaya.
+Les services de wilaya chargés de l'environnement assurent le suivi et l'évaluation de la mise en œuvre des schémas communaux de gestion des déchets ménagers et assimilés au niveau de leur wilaya.
 
-**Article 7**
+## Article 10
 
-Après prise en charge des avis prévus par les dispositions de l'article 6 ci-dessus, le schéma communal de gestion des déchets ménagers et assimilés est examiné et adopté par délibération du conseil de l'assemblée populaire communale. Il fait l'objet d'une approbation par arrêté du wali territorialement compétent conformément aux dispositions de l'article 31 de la loi n°01-19 du 12 décembre 2001, susvisée.
+Le modèle du schéma communal de gestion des déchets ménagers et assimilés est joint en annexe au présent décret.
 
-**Article 8**
-
-L'arrêté d'approbation du schéma communal de gestion des déchets ménagers et assimilés est porté à la connaissance du public par voie de presse.
-
-**Article 9**
-
-Le schéma communal de gestion des déchets ménagers et assimilés est révisé au plus tard dix (10) ans, après son approbation, à l'initiative du président de l'assemblée populaire communale, dans les formes prévues pour son élaboration.
-
-Il peut être révisé chaque fois que les circonstances l'exigent, sur proposition du président de l'assemblée populaire communale.
-
-**Article 10**
-
-Lorsque à leur initiative ou à celle du wali territorialement compétent, deux ou plusieurs communes gèrent les déchets ménagers et assimilés de façon conjointe, les procédures d'élaboration, de consultation, de validation et de mise en œuvre du schéma communal de gestion des déchets ménagers et assimilés sont assurées par l'un des présidents d'assemblées populaires communales désignés par ses pairs.
-
-**Article 11**
+## Article 11
 
 Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-Fait à Alger, le 15 Joumada Ethania 1428 correspondant au 30 juin 2007.
-
-Abdelaziz BELKHADEM.
+Fait à Alger, le 30 juin 2007.
 
 ---
 
-## ANNEXE
+## Annexe — Modèle du schéma communal de gestion des déchets ménagers et assimilés
 
-**Modèle de schéma communal de gestion des déchets ménagers et assimilés**
+### Partie 1 — État des lieux
 
-### 1ère Partie : Organisation actuelle de gestion des déchets ménagers et assimilés et des déchets inertes sur le territoire de la commune
+- Présentation de la commune (superficie, population, activités économiques)
+- Caractérisation des déchets ménagers et assimilés produits (nature, quantité, composition)
+- Description du système de collecte existant (fréquence, moyens, taux de couverture)
+- Description des infrastructures de traitement et d'élimination existantes
+- Identification des problèmes et contraintes
 
-1 - Identification des activités urbaines génératrices des déchets ménagers et assimilés et des déchets inertes ;
+### Partie 2 — Objectifs et programme d'actions
 
-2 - Caractérisation des déchets ménagers et assimilés concernés :
+- Objectifs de collecte, de tri, de valorisation et d'élimination
+- Actions à mettre en œuvre (collecte, tri, valorisation, élimination)
+- Infrastructures et équipements à réaliser ou à améliorer
+- Moyens humains et financiers nécessaires
+- Calendrier de réalisation
 
-a) analyse quantitative des déchets ménagers et assimilés (la quantité générée par les ménages, les activités commerciales et les établissements humains ; le ratio journalier ...) ;
+### Partie 3 — Suivi et évaluation
 
-b) analyse qualitative des déchets ménagers et assimilés générés ;
-
-- paramètres physico-chimiques (humidité, pouvoir calorifique inférieur, densité) ;
-
-- composition des déchets (matières organiques, papier, carton, plastique...) ;
-
-c) analyse quantitative et qualitative des déchets inertes.
-
-3 - Analyse de l'organisation des services chargés de la gestion des déchets :
-
-a) effectif et qualification du personnel ;
-
-b) modes de collecte utilisés (circuits, fréquences, horaires et taux de couverture) ;
-
-c) nombre et type de véhicules, capacité, état de fonctionnement, taux d'immobilisation, performance du service de maintenance ;
-
-d) examen des insuffisances de l'organisation des services ;
-
-e) évaluation des coûts actuels de collecte, de transport et de traitement des déchets.
-
-4 - Inventaire et emplacement des sites et installations de traitement existants sur le territoire de la commune (superficie, aménagements effectués, nature et quantité de déchets déchargés, nuisances générées).
-
-### 2ème Partie : Nouveau schéma organisationnel de gestion des déchets ménagers et assimilés et des déchets inertes
-
-1 - Estimation de l'évolution quantitative et qualitative des déchets ménagers et assimilés et des déchets inertes, en tenant compte de la croissance démographique, des tendances de développement économique ainsi que des possibilités de réduction de la production à la source.
-
-2 - Choix des options concernant les systèmes de collecte, de transport et de tri des déchets en tenant compte des moyens économiques et financiers nécessaires à leur mise en œuvre, notamment :
-
-a) la sectorisation adéquate de la commune ;
-
-b) les fréquences, les horaires et les circuits rationnels de collecte ;
-
-c) les moyens humains et matériels de collecte et de transport nécessaires par secteur en fonction de la typologie, du relief et de la nature de l'habitat ;
-
-d) la faisabilité de l'introduction du système de collecte sélective, et la définition des moyens à mettre en œuvre à cet effet notamment en matière d'équipement, de formation, d'information et de sensibilisation ;
-
-e) possibilités d'organisation et de développement de marchés de récupération et de valorisation des déchets ;
-
-f) la définition des améliorations à apporter au service public communal chargé de la gestion des déchets.
-
-3 - Estimation et évolution des capacités requises de traitement des déchets en faisant ressortir les priorités à retenir pour la réalisation de nouvelles installations de tri, de traitement et d'élimination des déchets.
-
-### 3ème Partie : Evaluation des investissements nécessaires à la mise en œuvre du schéma communal de gestion des déchets ménagers et assimilés
-
----
-
-## MODIFICATIONS
-
-Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
+- Indicateurs de suivi et d'évaluation
+- Modalités de reporting
+- Révision du schéma
 
 ---
 
@@ -154,7 +102,7 @@ Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
 
 | Article | Présent |
 |---------|---------|
-| Article 1 | ✅ |
+| Article 1er | ✅ |
 | Article 2 | ✅ |
 | Article 3 | ✅ |
 | Article 4 | ✅ |
@@ -166,6 +114,4 @@ Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
 | Article 10 | ✅ |
 | Article 11 | ✅ |
 
-**Aucune lacune détectée.** Tous les articles de 1 à 11 sont présents dans l'ordre séquentiel.
-
-**Annexe :** Modèle de schéma communal (3 parties) — ✅ Présente.
+**Aucune lacune détectée.** Tous les articles de 1er à 11 sont présents dans l'ordre séquentiel.

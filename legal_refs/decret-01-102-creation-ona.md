@@ -4,9 +4,9 @@
 **Journal Officiel :** À déterminer  
 **Source PDF :** Fourni par l'utilisateur (`decret 01-102.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-18] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
 
-> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
 

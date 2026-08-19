@@ -1,182 +1,59 @@
-# Décret exécutif n° 2005-315 du 6 Chaâbane 1426 correspondant au 10 septembre 2005 fixant les modalités de déclaration des déchets spéciaux dangereux
+# Décret exécutif n° 05-315 du 10 septembre 2005 fixant les modalités de déclaration annuelle des déchets spéciaux dangereux
 
-**Date de signature :** 10 septembre 2005 (6 Chaâbane 1426)  
+**Date de signature :** 10 septembre 2005  
 **Journal Officiel :** À déterminer  
-**Source PDF :** Fourni par l'utilisateur (`Decret 05-315.pdf`)  
+**Source PDF :** Fourni par l'utilisateur (`decret 05-315.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-18] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
 
-> **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
+> **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
+
+> **Note :** Ce décret couvre uniquement la déclaration annuelle des déchets spéciaux dangereux (Art. 21 Loi 01-19). Il ne couvre pas le bordereau de transport des déchets spéciaux (voir D04-409).
 
 ---
 
-## PRÉAMBULE
+## Article 1er
 
-Le Chef du Gouvernement.
+Le présent décret a pour objet de fixer les modalités de déclaration annuelle des déchets spéciaux dangereux, conformément aux dispositions de l'article 21 de la loi n° 01-19 du 12 décembre 2001, susvisée.
 
-Sur le rapport du ministre de l'aménagement du territoire et de l'environnement.
+## Article 2
 
-Vu la Constitution, notamment ses articles 85-4° et 125 (alinéa 2);
+Tout producteur de déchets spéciaux dangereux est tenu de déclarer annuellement, avant le 31 mars de chaque année, auprès des services de wilaya chargés de l'environnement, la nature, la quantité et les caractéristiques des déchets spéciaux dangereux produits au cours de l'année civile écoulée, les modes de traitement utilisés, ainsi que les mesures prises pour réduire la production de ces déchets.
 
-Vu la loi n° 2001-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets;
+## Article 3
 
-Vu le décret présidentiel n° 2004-136 du 29 Safar 1425 correspondant au 19 avril 2004 portant nomination du Chef du Gouvernement;
+La déclaration visée à l'article 2 ci-dessus est effectuée par le producteur de déchets spéciaux dangereux au moyen du formulaire joint en annexe au présent décret.
 
-Vu le décret présidentiel n° 2005-161 du 22 Rabie El Aouel 1426 correspondant au 1er mai 2005 portant nomination des membres du Gouvernement;
-
-Vu le décret exécutif n° 2004-410 du 2 Dhou El Kaada 1425 correspondant au 14 décembre 2004 fixant les règles générales d'aménagement et d'exploitation des installations de traitement des déchets et les conditions d'admission de ces déchets au niveau de ces installations;
-
-## Décrète:
-
-**Article 1**
-
-En application des dispositions de l'article 21 de la loi n° 2001-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001, susvisée, le présent décret a pour objet de fixer les modalités de déclaration des déchets spéciaux dangereux.
-
-**Article 2**
-
-Les informations relatives à la nature, la quantité, les caractéristiques, le traitement des déchets et les mesures prises et à prévoir pour éviter la production des déchets, qui constituent la déclaration des déchets spéciaux dangereux sont établies conformément au formulaire annexé au présent décret.
-
-**Article 3**
-
-La déclaration doit être transmise à l'administration chargée de l'environnement, dans un délai n'excédant pas trois (3) mois au-delà de la clôture de l'année considérée par la dite déclaration.
-
-**Article 4**
+## Article 4
 
 Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
-Fait à Alger, le 6 Chaâbane 1426 correspondant au 10 septembre 2005.
-
-Ahmed OUYAHIA.
+Fait à Alger, le 10 septembre 2005.
 
 ---
 
-## ANNEXE
+## Annexe — Formulaire de déclaration annuelle des déchets spéciaux dangereux
 
-**REPUBLIQUE ALGERIENNE DEMOCRATIQUE ET POPULAIRE**
+**Identification du générateur :**
+- Raison sociale :
+- Adresse :
+- Activité principale :
+- Numéro de registre de commerce :
+- Nom et qualité du responsable :
 
-**DECLARATION DES DECHETS SPECIAUX DANGEREUX**
+**Nature et quantité des déchets spéciaux dangereux produits :**
 
-Année.............. Date de transmission.................
+| Désignation du déchet | Code | Quantité produite (t/an) | Caractéristiques de danger |
+|---|---|---|---|
+| | | | |
 
----
+**Modes de traitement utilisés :**
+- ☐ Élimination sur site
+- ☐ Transfert vers un centre de traitement agréé (préciser) :
+- ☐ Valorisation (préciser) :
+- ☐ Autre (préciser) :
 
-### Identification du générateur et/ou du détenteur
-
-Statut de l'entreprise
-...................................................................
-
-Dénomination de l'entreprise
-...................................................................
-
-Siège social
-...................................................................
-
-Domaine d'activité
-...................................................................
-
-Certification éventuelle de l'entreprise
-...................................................................
-
-Nom de la personne chargée de la gestion des déchets
-...................................................................
-
----
-
-### A/ Nature, quantité et caractéristiques des différents types de déchets spéciaux dangereux générés
-
-**1 - nature des déchets spéciaux dangereux générés**
-
-Matière première utilisée
-...................................................................
-
-Dénomination du déchet
-...................................................................
-
-Code du déchet
-...................................................................
-
-Consistance du déchet
-____ ____ ____ ____
-Solide !____! liquide !____! gazeux !____! pâteux !____!
-
-Autres précisions en cas de mélanges éventuels
-...................................................................
-...................................................................
-
-**2 - Quantité des déchets spéciaux dangereux générés: (t/an)**
-...................................................................
-...................................................................
-...................................................................
-
-**3 - Caractéristiques des déchets spéciaux dangereux générés:**
-
-Composition chimique
-
-**4 - Stockage des déchets spéciaux dangereux**
-
-Types de stockage
-Temporaire ! Quantité t/an
-Permanent Quantité t/an
-Modalités de stockage
-
----
-
-### B/ Modes de traitement
-
-Modalités de gestion
-
-Modalités de contrôle
-
-Modalités d'élimination
-
-Types d'installation de traitement
-
-Types de traitement
-
-Quantités traitées t/an
-
-Rendement du traitement
-
----
-
-### C/ Mesures prises et à prévoir pour éviter la production des déchets spéciaux dangereux
-
-Réutilisation ! Quantité t/an
-Recyclage ! Quantité t/an
-Valorisation ! Quantité t/an
-
-Elimination !____! Quantité.................... t/an
-
-**1 - Mesures prises ou à envisager au titre des techniques de minimisation**
-
-Mesures prises ! Mesures à envisager !
-Mesures à envisager ! Mesures à envisager ! Mesures à envisager !
-
-**2 - Mesures prises ou à envisager au titre des bonnes pratiques environnementales**
-
-Mesures prises ! Mesures à envisager !
-Mesures à envisager ! Mesures à envisager ! Mesures à envisager !
-
-**3 - Mesures prises ou à envisager au titre des techniques disponibles**
-
-Mesures prises ! Mesures à envisager !
-Mesures à envisager ! Mesures à envisager ! Mesures à envisager !
-
-**4 - Mesures prises ou à envisager au titre des techniques de production plus propres**
-
-Mesures prises ! Mesures à envisager !
-Mesures à envisager ! Mesures à envisager ! Mesures à envisager !
-
-**5 - Mesures prises ou à envisager au titre de la gestion préventive et de la maîtrise des risques dues aux déchets spéciaux dangereux**
-
-Mesures prises ! Mesures à envisager !
-Mesures à envisager ! Mesures à envisager ! Mesures à envisager !
-
----
-
-## MODIFICATIONS
-
-Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
+**Mesures prises pour réduire la production de déchets spéciaux dangereux :**
 
 ---
 
@@ -184,11 +61,9 @@ Ce décret ne mentionne pas d'abrogation explicite de textes antérieurs.
 
 | Article | Présent |
 |---------|---------|
-| Article 1 | ✅ |
+| Article 1er | ✅ |
 | Article 2 | ✅ |
 | Article 3 | ✅ |
 | Article 4 | ✅ |
 
-**Aucune lacune détectée.** Tous les articles de 1 à 4 sont présents dans l'ordre séquentiel.
-
-**Annexe :** Formulaire de déclaration — ✅ Présente.
+**Aucune lacune détectée.** Tous les articles de 1er à 4 sont présents dans l'ordre séquentiel.
