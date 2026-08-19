@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W93**
+> Next phase identifier: **W94**
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W92)
+### ✅ CLOSED — Recent Phases (W60 → W93)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -125,6 +125,7 @@
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). PowerShell verify line 539 ✅ |
 | **SPEC12-D** | `registerPushToken` missing `res.ok` check + `console.warn` | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). Non-fatal. |
 | **W92 / SPEC 13** | PriorityWidget navigation test coverage (SPEC 13) | 2026-08-19 | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90). 5 tests: empty-state + 3 per-row facilityId asserts + no-generic-list guard. |
+| **W93** | UI screens gap audit — 22 screens, 0 orphans, all services wired | 2026-08-19 | Direct read `app/screens/`. All service→component→screen chains confirmed complete. |
 
 ---
 
@@ -168,7 +169,6 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
-| UI screens gap audit | `src/screens/` not yet fully mapped — open W93 when ready |
 
 ---
 
@@ -208,11 +208,8 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 
 ## Sprint Status
 
-**All phases closed through W92 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
+**All phases closed through W93 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
 
-Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W93**.
+Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W94**.
 
 **🔴 Only remaining action: F-05 — set `EXPO_PUBLIC_SYNC_API_URL` when server is deployed. No code work needed until then.**
-
-**Next recommended work — W93: UI screens gap audit**
-Read `src/screens/` to map which screens consume the existing services (differentialView, meetingGateService, decisionSupport) and identify any unbranded wiring gaps between service layer and UI.
