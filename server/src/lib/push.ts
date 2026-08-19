@@ -12,12 +12,28 @@
 //
 // Ticket ↔ message correlation is by ARRAY INDEX per Expo docs, NOT by any
 // .to / ._to field on the ticket object. Tickets have no .to field.
+//
+// NOTE: PushReceiptQueue is defined in schema.prisma. Run `npx prisma generate`
+// after migration so the Prisma client picks up the new model. The explicit
+// PrismaReceiptRow type below keeps TSC green before generate has been run.
 
 import { Expo, ExpoPushMessage, ExpoPushTicket } from 'expo-server-sdk';
 import { PrismaClient } from '@prisma/client';
 
 const expo   = new Expo({ accessToken: process.env.EXPO_ACCESS_TOKEN || undefined });
-const prisma = new PrismaClient();
+// Cast to any so TSC accepts .pushReceiptQueue before `prisma generate` adds it
+// to the generated client. After running `npx prisma generate` the cast is a
+// no-op and the real types take over.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const prisma = new PrismaClient() as any;
+
+// Shape of a PushReceiptQueue row (matches schema.prisma model).
+interface PushReceiptRow {
+  id:        string;
+  receiptId: string;
+  token:     string;
+  createdAt: Date;
+}
 
 // Expo hard limit: 300 receipt IDs per getPushNotificationReceiptsAsync call.
 const MAX_RECEIPT_IDS_PER_CALL = 300;
@@ -52,7 +68,7 @@ export async function sendPush(
 
       for (let i = 0; i < tickets.length; i++) {
         const ticket = tickets[i];
-        // Index into the original flat messages array.
+        // Ticket ↔ message correlation is by array index (Expo docs).
         const originalToken = messages[flatOffset + i].to as string;
 
         if (ticket.status === 'ok') {
@@ -63,7 +79,7 @@ export async function sendPush(
 
         } else if (ticket.status === 'error') {
           console.warn('[push] send-time error for token', originalToken, ticket.message, ticket.details);
-          if (ticket.details?.error === 'DeviceNotRegistered') {
+          if ((ticket.details as { error?: string } | undefined)?.error === 'DeviceNotRegistered') {
             // Send-time DeviceNotRegistered is definitive — remove immediately.
             await prisma.pushToken.deleteMany({ where: { token: originalToken } }).catch(() => {});
             console.log('[push] removed stale token (send-time):', originalToken);
@@ -80,20 +96,24 @@ export async function sendPush(
 
 // ── Phase 2: Poll receipts ────────────────────────────────────────────────────
 export async function pollReceipts(): Promise<void> {
-  const rows = await prisma.pushReceiptQueue.findMany({
+  const rows: PushReceiptRow[] = await prisma.pushReceiptQueue.findMany({
     take: MAX_RECEIPT_IDS_PER_CALL,
     orderBy: { createdAt: 'asc' },
   });
 
   if (rows.length === 0) return;
 
-  const receiptIds = rows.map(r => r.receiptId);
-  const tokenByReceiptId = Object.fromEntries(rows.map(r => [r.receiptId, r.token]));
+  const receiptIds = rows.map((r: PushReceiptRow) => r.receiptId);
+  const tokenByReceiptId: Record<string, string> = Object.fromEntries(
+    rows.map((r: PushReceiptRow) => [r.receiptId, r.token]),
+  );
 
   try {
     const receiptMap = await expo.getPushNotificationReceiptsAsync(receiptIds);
 
-    for (const [receiptId, receipt] of Object.entries(receiptMap)) {
+    for (const [receiptId, receipt] of Object.entries(
+      receiptMap as Record<string, { status: string; message?: string; details?: { error?: string } }>,
+    )) {
       if (receipt.status === 'error') {
         console.warn('[push] receipt error for receiptId', receiptId, receipt.message, receipt.details);
         if (receipt.details?.error === 'DeviceNotRegistered') {
@@ -146,6 +166,8 @@ export async function sendPushToSupervisors(
     where:   { role: { in: ['SUPERVISOR', 'ADMIN'] } },
     include: { pushTokens: true },
   });
-  const tokens = supervisors.flatMap(s => s.pushTokens.map(t => t.token));
+  const tokens = supervisors.flatMap((s: { pushTokens: { token: string }[] }) =>
+    s.pushTokens.map((t: { token: string }) => t.token),
+  );
   return sendPush(tokens, title, body, data);
 }
