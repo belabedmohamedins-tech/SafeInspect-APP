@@ -36,7 +36,6 @@ const ACTION_LABELS: Record<AuditAction, string> = {
   SETTINGS_CHANGED:              'تغيير الإعدادات',
   BACKUP_RESTORED:               'استعادة نسخة احتياطية',
   AUDIT_LOG_CLEARED:             'مسح سجل الأحداث',
-  INSPECTION_STATUS_UPDATED: 'تحديث حالة التفتيش',
 };
 
 const ACTION_ICONS: Record<AuditAction, string> = {
@@ -51,7 +50,6 @@ const ACTION_ICONS: Record<AuditAction, string> = {
   SETTINGS_CHANGED:              'cog',
   BACKUP_RESTORED:               'database',
   AUDIT_LOG_CLEARED:             'eraser',
-  INSPECTION_STATUS_UPDATED: 'refresh-cw',
 };
 
 const ACTION_COLORS: Record<AuditAction, string> = {
@@ -66,7 +64,6 @@ const ACTION_COLORS: Record<AuditAction, string> = {
   SETTINGS_CHANGED:              Colors.textSecondary,
   BACKUP_RESTORED:               '#8e44ad',
   AUDIT_LOG_CLEARED:             Colors.textSecondary,
-  INSPECTION_STATUS_UPDATED: Colors.primary,
 };
 
 const FILTER_OPTIONS: { label: string; value: FilterValue }[] = [
