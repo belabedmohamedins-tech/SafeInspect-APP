@@ -1,0 +1,19 @@
+name: BOM Check
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+    branches: ["**"]
+
+jobs:
+  bom-check:
+    name: Detect UTF-8 BOM
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run BOM check
+        shell: pwsh
+        run: .\check-bom.ps1
