@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W95**
+> Next phase identifier: **W97**
 
 ---
 
@@ -113,20 +113,26 @@
 | **W50** (new) | CGS-01-01: Décret 76-35 removed — wrong domain (IGH) | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) |
 | **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) |
 | **W87** | F-01/F-02/F-03 confirmed clean — all false positives | 2026-08-18 | Direct reads. No code change. |
-| **W88** | MCH-29-08 Art.28→Art.18 + R1/R6 noise decree clean | 2026-08-18 | Commit [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c). TSC 0 + Jest 1233/0 user-confirmed. |
-| **audit-log TSC (initial)** | `INSPECTION_STATUS_UPDATED` missing from 3 `Record<AuditAction,string>` | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). |
-| **audit-log TSC (duplicate)** | TS1117 duplicate key in ACTION_LABELS/ICONS/COLORS | 2026-08-19 | Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66). TSC 0 + Jest 1232/0 user-confirmed. |
-| **CorrectiveActionRepository.extended W85** | `db.runAsync is not a function` — jest.mock hoisting trap | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). Jest 0 failed user-confirmed. |
-| **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
-| **CAP test fixture severity** | `'major'` → `'high'` in BASE fixture | 2026-08-18 | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f). TSC 0 confirmed. |
-| **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`). |
-| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws on missing `EXPO_PUBLIC_SYNC_API_URL`. Confirmed direct read 2026-08-19. |
-| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. |
-| **BGN-10-01** | legalReference Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). PowerShell verify line 539 ✅ |
-| **SPEC12-D** | `registerPushToken` missing `res.ok` check + `console.warn` | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). Non-fatal. |
-| **W92 / SPEC 13** | PriorityWidget navigation test coverage (SPEC 13) | 2026-08-19 | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90). 5 tests: empty-state + 3 per-row facilityId asserts + no-generic-list guard. |
-| **W93** | UI screens gap audit — 22 screens, 0 orphans, all services wired | 2026-08-19 | Direct read `app/screens/`. All service→component→screen chains confirmed complete. |
-| **W94** | E2E integration test — full inspector lifecycle | 2026-08-19 | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43). User-confirmed all green. |
+| **W88** | MCH-29-08 Art.28→Art.18 + R1/R6 noise decree clean | 2026-08-18 | Commit [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c). |
+| **audit-log TSC** | Duplicate keys TS1117 + missing INSPECTION_STATUS_UPDATED | 2026-08-19 | Commits `2c78a16`, [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66). |
+| **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). |
+| **W90** | `apiClient.ts` silent `localhost` fallback | 2026-08-16/19 | Resolved in W61. |
+| **W91** | `server/src/routes/notifications.ts` missing | 2026-08-19 | SHA `ce797c2`. |
+| **BGN-10-01** | Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). |
+| **SPEC12-D** | `registerPushToken` no `res.ok` check | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). |
+| **SPEC12-E** | `syncEngine.ts` raw `'autoSync'` string — duplicate reader | 2026-08-19 | **Already clean on HEAD** — `isAutoSyncEnabled()` removed, header documents fix. Confirmed direct read SHA `35605c9`. No code change needed. |
+| **W92 / SPEC 13** | PriorityWidget navigation test coverage | 2026-08-19 | Commits [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90), [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310). |
+| **W93** | UI screens gap audit — 22 screens, 0 orphans | 2026-08-19 | Direct read. |
+| **W94** | E2E integration test — full inspector lifecycle | 2026-08-19 | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43). User-confirmed green. |
+
+---
+
+### 🟡 OPEN — Active
+
+| Phase | Title | Status | Notes |
+|---|---|---|---|
+| **W95** | SPEC12-C: server-login skip persistence | 🟡 PUSHED — awaiting user `npx jest` | Fix + tests pushed. See below for verify command. |
+| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | 🔵 SPEC DOCUMENTED | Full spec below. Implement when ready. |
 
 ---
 
@@ -138,26 +144,94 @@
 
 ---
 
+## W95 — SPEC12-C: Server-Login Skip Persistence
+
+**Status:** 🟡 PUSHED — awaiting user verification.
+
+**Problem:** `handleSkip()` in `app/screens/server-login.tsx` navigates to home but writes no persistence flag. The `_layout.tsx` auth guard (step 2c) checks only `isLoggedIn()` — no skip exception. Result: user is redirected back to `server-login` on every app launch, indefinitely, despite the screen's documented "offline-only" intent.
+
+**Fix:**
+- `app/screens/server-login.tsx` — `handleSkip()` calls `await SettingsRepository.set('serverLoginSkipped', 'true')` before `router.replace`.
+- `app/_layout.tsx` step 2c — reads `all['serverLoginSkipped']` (already fetched in step 2a's `SettingsRepository.getAll()`) and short-circuits the redirect when it equals `'true'`.
+
+**Key:** `'serverLoginSkipped'` (string `'true'`). Matches `SettingsRepository.set/get` contract. Resettable by clearing settings or logging in (which sets a real `isLoggedIn()` → guard satisfied by that path instead).
+
+**Test file:** `src/__tests__/screens/serverLoginSkip.test.tsx`
+- Test 1: Tap Skip → `SettingsRepository.set('serverLoginSkipped', 'true')` called.
+- Test 2: Guard runs with `isLoggedIn() = false` + `serverLoginSkipped = 'true'` → NOT redirected to server-login.
+- Test 3: Guard runs with `isLoggedIn() = false` + no skip flag → IS redirected (regression guard).
+
+**Verify:** `npx jest src/__tests__/screens/serverLoginSkip.test.tsx` → expect 3/3 PASS.
+
+---
+
+## W96 — SPEC12-B: Push Receipt Two-Phase Stale-Token Cleanup
+
+**Status:** 🔵 SPEC DOCUMENTED — not yet implemented.
+
+**Problem (from SPEC 12 audit):**
+`server/src/lib/push.ts`'s `DeviceNotRegistered` cleanup tries to match a ticket back to its original message via a `._to` / `.to` property accessed through invented type assertions. This approach is fundamentally wrong for two reasons:
+1. **Per Expo documentation:** tickets are matched to their originating messages by **array index** (the nth ticket corresponds to the nth message in the send call), not by any `.to` field.
+2. **`DeviceNotRegistered` is a receipt-level error**, not a ticket-level error. It is only available via the separate `getPushNotificationReceiptsAsync()` call using receipt IDs returned by successful tickets — and only roughly **24 hours after sending**, not at send time.
+
+The current code can therefore **never actually clean up a stale token**. Dead tokens accumulate in the `pushToken` table indefinitely. Now that W91 means tokens actually get registered, this gap matters more than before.
+
+**Desired fix — two-phase flow:**
+
+**Phase 1 (at send time — already partially done):**
+```
+sendPushNotifications(messages) →
+  chunk into batches of 100 →
+  sendPushNotificationsAsync(chunk) →
+  for each ticket with status: 'ok': store ticket.id in a push_receipt_ids table/queue
+  for each ticket with status: 'error' + details.error === 'DeviceNotRegistered': remove token immediately (send-time error, safe to act on now)
+```
+
+**Phase 2 (deferred — run on a schedule, e.g. hourly or on next server start):**
+```
+collect stored receipt IDs (up to 300 per call per Expo limits) →
+call getPushNotificationReceiptsAsync(receiptIds) →
+for each receipt with status: 'error' + details.error === 'DeviceNotRegistered':
+  remove the corresponding token from pushToken table
+clear processed receipt IDs from queue
+```
+
+**Affected files:**
+- `server/src/lib/push.ts` — rewrite stale-token cleanup logic.
+- `server/src/db/` or Prisma schema — add `PushReceiptQueue` model (or use a simple in-memory queue if persistence is not required for receipts).
+- `server/src/index.ts` or a new `server/src/jobs/receiptPoller.ts` — schedule Phase 2 (e.g. `setInterval` every hour, or a startup pass).
+
+**Tests required:**
+- Mock `sendPushNotificationsAsync` returning a ticket with `status: 'error', details.error: 'DeviceNotRegistered'` → assert token removed immediately.
+- Mock `getPushNotificationReceiptsAsync` returning a receipt with `status: 'error', details.error: 'DeviceNotRegistered'` → assert corresponding token removed from DB.
+- Mock receipt with `status: 'ok'` → assert token NOT removed.
+- Mock receipt poller running → assert receipt IDs cleared from queue after processing.
+
+**Decision needed before implementation:**
+- Store receipt IDs in Prisma (durable across server restart) or in memory (simpler, lost on restart)? Recommend Prisma for production correctness.
+- Polling interval: 1 hour is safe and aligns with Expo's ~24h receipt availability window.
+
+**Prerequisite:** W91 is closed (tokens now registered). W96 is purely a server-side change — no mobile code involved.
+
+---
+
 ## 🔴 LAST STEP — Do When Production Server is Ready
 
 > **Do NOT touch until you have deployed the Express server and have a public URL.**
-> This is purely a deployment configuration — no code changes required.
 
 ### F-05 — Set Production API URL
-
-**What:** `apiClient.ts` already throws correctly when `EXPO_PUBLIC_SYNC_API_URL` is missing. You only need to set the URL value once you have a server.
 
 **Step 1 —** Create `E:\DZ_Inspection\.env.production`:
 ```
 EXPO_PUBLIC_SYNC_API_URL=https://your-server-domain.com
 ```
 
-**Step 2 —** Add to EAS secrets (for cloud builds):
+**Step 2 —** Add to EAS secrets:
 ```powershell
 npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "https://your-server-domain.com"
 ```
 
-**Blocker:** No server deployed yet. Park until server URL is available.
+**Blocker:** No server deployed yet.
 
 ---
 
@@ -200,7 +274,7 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 | Décret 24-196 | Établissements classés modif | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
-| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed from criteria. |
+| Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed. |
 | Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 |
 | Décret 06-138 | Émissions poussières | ✅ Present |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51-SURV OPEN |
@@ -209,8 +283,6 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 
 ## Sprint Status
 
-**All phases closed through W94 — 2026-08-19. TSC 0 + Jest green (user-confirmed).**
+**All phases closed through W94. W95 pushed — awaiting user Jest confirm. W96 spec documented.**
 
-Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W95**.
-
-**🔴 Only remaining action: F-05 — set `EXPO_PUBLIC_SYNC_API_URL` when server is deployed. No code work needed until then.**
+Next phase identifier: **W97**. Active surveillance: **W51-SURV**.
