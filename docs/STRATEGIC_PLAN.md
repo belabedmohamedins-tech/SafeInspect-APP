@@ -122,6 +122,7 @@
 | **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`). |
 | **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed direct read 2026-08-19. |
 | **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. Confirmed direct read 2026-08-19. |
+| **BGN-10-01** | legalReference Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). PowerShell verify line 539 ✅ |
 
 ---
 
@@ -133,12 +134,33 @@
 
 ---
 
+## 🔴 LAST STEP — Do When Production Server is Ready
+
+> **Do NOT touch until you have deployed the Express server and have a public URL.**
+> This is purely a deployment configuration — no code changes required.
+
+### F-05 — Set Production API URL
+
+**What:** `apiClient.ts` already throws correctly when `EXPO_PUBLIC_SYNC_API_URL` is missing. You only need to set the URL value once you have a server.
+
+**Step 1 —** Create `E:\DZ_Inspection\.env.production`:
+```
+EXPO_PUBLIC_SYNC_API_URL=https://your-server-domain.com
+```
+
+**Step 2 —** Add to EAS secrets (for cloud builds):
+```powershell
+npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "https://your-server-domain.com"
+```
+
+**Blocker:** No server deployed yet. Park until server URL is available.
+
+---
+
 ## Backlog (needs human decision before opening a phase)
 
 | Item | Blocker |
 |---|---|
-| F-05: set `EXPO_PUBLIC_SYNC_API_URL` in EAS secrets | Provide production URL value |
-| BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
@@ -183,8 +205,8 @@
 
 ## Sprint Status
 
-**All phases closed through W91 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
+**All phases closed through W91 + BGN-10-01 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
 
 Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W92**.
 
-**No open bugs. Only human-input items remain: F-05 (prod URL) + BGN-10-01 (JORADP PDF check).**
+**🔴 Only remaining action: F-05 — set `EXPO_PUBLIC_SYNC_API_URL` when server is deployed. No code work needed until then.**
