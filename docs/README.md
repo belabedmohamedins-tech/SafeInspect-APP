@@ -7,6 +7,12 @@
 
 ## Live Observations Log
 
+### 2026-08-19 12:07 WAT — Perplexity — audit-log.tsx duplicate key fix ✅ — TSC 0 + Jest 1232/0
+- **Root cause:** W85 commit `2c78a16` had correctly added `INSPECTION_STATUS_UPDATED` to ACTION_LABELS, ACTION_ICONS, ACTION_COLORS. A subsequent write accidentally duplicated each key at the bottom of the same literals → TS1117 "duplicate property" errors.
+- **Fix:** Removed the 3 duplicate entries. Each Record now has exactly 11 unique keys. Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66)
+- **User-confirmed:** TSC 0 errors. Jest 1232 passed, 1 skipped, 0 failed.
+- **Docs updated:** README + STRATEGIC_PLAN updated.
+
 ### 2026-08-19 11:29 WAT — Perplexity — W89/W91 confirmed PHANTOM (already resolved) | W90 confirmed REAL
 - **W89 RE-EXAMINED:** `PriorityWidget.tsx` (SHA `93bd5de`) already navigates to `router.push({ pathname: '/screens/facilities/profile', params: { id: f.facilityId } })`. Route `app/screens/facilities/profile.tsx` exists. **W89 was already fixed before this session — the prior README entry referencing commit `d457a6a` was correct. No further action needed.**
 - **W91 RE-EXAMINED:** `server/src/routes/notifications.ts` (SHA `ce797c2`) EXISTS and implements `POST /register` (upsert) + `DELETE /register` (logout). Built with `requireAuth` + `Expo.isExpoPushToken` validation + Prisma upsert on the `PushToken` model. **W91 was already resolved before this session — no missing route.**
@@ -78,7 +84,7 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 11:29 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 12:07 WAT)
 
 All Claude audit findings (F-01–F-20), W89, W90, W91, R1/R6 confirmed closed by direct source reads. No open bugs remain without human input.
 
@@ -113,7 +119,8 @@ All Claude audit findings (F-01–F-20), W89, W90, W91, R1/R6 confirmed closed b
 | R1/R6 | Noise decree + Décret 93-184 citation check | W88 | 2026-08-18 direct read |
 | MCH-29-08 | Loi 01-19 Art.28 wrong domain | W88 | 2026-08-18 corrected to Art.18 |
 | baseGeneralCriteria truncation | BGN-09-01/02 + BGN-10-01 + `];` lost | Claude repair `14e82d0` | 2026-08-18 |
-| audit-log.tsx TSC | `INSPECTION_STATUS_UPDATED` missing from 3 Records | Commit `2c78a16` | 2026-08-18 |
+| audit-log.tsx TSC (initial) | `INSPECTION_STATUS_UPDATED` missing from 3 Records | Commit `2c78a16` | 2026-08-18 |
+| audit-log.tsx TSC (duplicate) | TS1117 duplicate key in ACTION_LABELS/ICONS/COLORS | Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66) | 2026-08-19 user-confirmed |
 | CorrectiveActionRepository.extended Jest | `db.runAsync is not a function` hoisting trap | Commit `2c78a16` | 2026-08-18 |
 | CAP test fixture severity | `'major'` → `'high'` in BASE fixture | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f) | 2026-08-18 |
 | **W89** | PriorityWidget onPress → facility list instead of specific profile | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08) | 2026-08-18/19 — already correct on HEAD |
@@ -143,7 +150,7 @@ SafeInspect-APP/
 │   ├── repositories/           # SQLite repositories
 │   ├── services/               # SyncService, pdfService, serverAuth, apiClient
 │   ├── utils/                  # scoringUtils, statsUtils, decisionSupport
-│   └── __tests__/              # Jest test suite (1233 tests)
+│   └── __tests__/              # Jest test suite (1232 tests)
 ├── server/
 │   ├── src/
 │   │   ├── routes/             # approvals.ts, sync.ts, auth.ts, notifications.ts ✅
@@ -173,9 +180,10 @@ SafeInspect-APP/
 | **W89** | PriorityWidget facilityId nav bug | ✅ CLOSED (already on HEAD) |
 | **W90** | apiClient.ts localhost silent fallback | ✅ CLOSED — already throws on missing env (`EXPO_PUBLIC_SYNC_API_URL`) |
 | **W91** | notifications.ts route missing | ✅ CLOSED — route exists, POST+DELETE /register implemented |
+| **audit-log duplicate key** | TS1117 ACTION_LABELS/ICONS/COLORS duplicate `INSPECTION_STATUS_UPDATED` | ✅ CLOSED — Commit `259f64b` |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
-**All phases closed through W91. TSC 0 + Jest 1233/0 — 2026-08-18 22:41 WAT (user-confirmed).**
+**All phases closed through W91. TSC 0 + Jest 1232/0 — 2026-08-19 12:07 WAT (user-confirmed).**
 
 **Only remaining human-input items: F-05 (set production URL in EAS secrets) + BGN-10-01 (JORADP PDF verify).**
 
@@ -191,7 +199,7 @@ SafeInspect-APP/
 | DB (mobile) | expo-sqlite ≥15 / SDK 56 |
 | Server | Express + Prisma + PostgreSQL |
 | Auth | JWT (jsonwebtoken) |
-| Tests (mobile) | Jest + ts-jest (1233 tests) |
+| Tests (mobile) | Jest + ts-jest (1232 tests) |
 | Tests (server) | Jest + ts-jest + supertest (10 tests) |
 | Build | EAS Build |
 | Push | expo-server-sdk |

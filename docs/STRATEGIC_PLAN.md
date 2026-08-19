@@ -114,13 +114,14 @@
 | **W51** (new) | MCH-29-03+04: Décret 09-19 Art.2+Art.6 backfill | 2026-08-18 | Commit [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec) |
 | **W87** | F-01/F-02/F-03 confirmed clean — all false positives | 2026-08-18 | Direct reads. No code change. |
 | **W88** | MCH-29-08 Art.28→Art.18 + R1/R6 noise decree clean | 2026-08-18 | Commit [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c). TSC 0 + Jest 1233/0 user-confirmed. |
-| **audit-log TSC** | `INSPECTION_STATUS_UPDATED` missing from 3 Record<AuditAction,string> | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). TSC 0 user-confirmed. |
+| **audit-log TSC (initial)** | `INSPECTION_STATUS_UPDATED` missing from 3 `Record<AuditAction,string>` | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). |
+| **audit-log TSC (duplicate)** | TS1117 duplicate key in ACTION_LABELS/ICONS/COLORS | 2026-08-19 | Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66). TSC 0 + Jest 1232/0 user-confirmed. |
 | **CorrectiveActionRepository.extended W85** | `db.runAsync is not a function` — jest.mock hoisting trap | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). Jest 0 failed user-confirmed. |
 | **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
 | **CAP test fixture severity** | `'major'` → `'high'` in BASE fixture | 2026-08-18 | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f). TSC 0 confirmed. |
-| **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`) — already navigates correctly to `/screens/facilities/profile`. |
-| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — `apiClient.ts` (SHA `a7a3886`) throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed by direct read 2026-08-19. |
-| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` (upsert) + `DELETE /register` implemented with `requireAuth` + `Expo.isExpoPushToken` validation. Confirmed by direct read 2026-08-19. |
+| **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`). |
+| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed direct read 2026-08-19. |
+| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. Confirmed direct read 2026-08-19. |
 
 ---
 
@@ -182,7 +183,7 @@
 
 ## Sprint Status
 
-**All phases closed through W91 — 2026-08-19. TSC 0 + Jest 1233/0 (user-confirmed 2026-08-18 22:41 WAT).**
+**All phases closed through W91 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
 
 Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W92**.
 
