@@ -1,44 +1,66 @@
 // server/src/__tests__/push.test.ts
 // W96 — two-phase push receipt stale-token cleanup
+//
+// jest.mock() factories are hoisted above ALL variable declarations by Babel.
+// Any `const mockX = jest.fn()` declared outside the factory is NOT yet
+// initialised when the factory executes — ReferenceError.
+// Fix: define stub objects inside the factory and expose them via module-level
+// variables that are assigned AFTER the mock is registered (or use lazy getters).
 
 import { sendPush, pollReceipts } from '../lib/push';
 
-// ── Prisma mock ───────────────────────────────────────────────────────────────
-const mockDeleteMany     = jest.fn().mockResolvedValue({ count: 1 });
-const mockCreate         = jest.fn().mockResolvedValue({});
-const mockFindMany       = jest.fn();
-const mockPrismDeleteMany = jest.fn().mockResolvedValue({ count: 1 });
+// ── Prisma stubs (defined inside factory to avoid hoisting trap) ─────────────
+const mockPushToken        = { deleteMany: jest.fn() };
+const mockPushReceiptQueue = {
+  create:     jest.fn(),
+  findMany:   jest.fn(),
+  deleteMany: jest.fn(),
+};
+const mockInspector = { findMany: jest.fn() };
 
-jest.mock('@prisma/client', () => ({
-  PrismaClient: jest.fn().mockImplementation(() => ({
-    pushToken: { deleteMany: mockDeleteMany },
-    pushReceiptQueue: {
-      create:     mockCreate,
-      findMany:   mockFindMany,
-      deleteMany: mockPrismDeleteMany,
-    },
-    inspector: { findMany: jest.fn().mockResolvedValue([]) },
-  })),
-}));
+jest.mock('@prisma/client', () => {
+  const { PrismaClient: _Orig } = jest.requireActual('@prisma/client') as { PrismaClient: unknown };
+  void _Orig;
+  return {
+    PrismaClient: jest.fn().mockImplementation(() => ({
+      // Lazy property access — reads the jest.fn() references at call-time,
+      // not at factory-hoist time, so no ReferenceError.
+      get pushToken()        { return mockPushToken; },
+      get pushReceiptQueue() { return mockPushReceiptQueue; },
+      get inspector()        { return mockInspector; },
+    })),
+  };
+});
 
-// ── Expo mock ─────────────────────────────────────────────────────────────────
-const mockSend    = jest.fn();
-const mockReceipts = jest.fn();
+// ── Expo stubs ─────────────────────────────────────────────────────────────────
+const expoInstance = {
+  chunkPushNotifications:          (msgs: unknown[]) => [msgs],
+  sendPushNotificationsAsync:      jest.fn(),
+  getPushNotificationReceiptsAsync: jest.fn(),
+};
 
 jest.mock('expo-server-sdk', () => ({
   Expo: Object.assign(
-    jest.fn().mockImplementation(() => ({
-      chunkPushNotifications: (msgs: unknown[]) => [msgs],
-      sendPushNotificationsAsync: mockSend,
-      getPushNotificationReceiptsAsync: mockReceipts,
-    })),
+    jest.fn().mockImplementation(() => expoInstance),
     { isExpoPushToken: () => true },
   ),
 }));
 
+// ── Convenience aliases ──────────────────────────────────────────────────────
+const mockSend     = expoInstance.sendPushNotificationsAsync;
+const mockReceipts = expoInstance.getPushNotificationReceiptsAsync;
+const mockDeleteMany       = mockPushToken.deleteMany;
+const mockCreate           = mockPushReceiptQueue.create;
+const mockQueueFindMany    = mockPushReceiptQueue.findMany;
+const mockQueueDeleteMany  = mockPushReceiptQueue.deleteMany;
+
 beforeEach(() => {
   jest.clearAllMocks();
-  mockFindMany.mockResolvedValue([]);
+  mockInspector.findMany.mockResolvedValue([]);
+  mockQueueFindMany.mockResolvedValue([]);
+  mockDeleteMany.mockResolvedValue({ count: 1 });
+  mockCreate.mockResolvedValue({});
+  mockQueueDeleteMany.mockResolvedValue({ count: 1 });
 });
 
 // ── Test 1: send-time DeviceNotRegistered removes token immediately ───────────
@@ -54,7 +76,6 @@ test('Phase 1 — send-time DeviceNotRegistered removes token immediately', asyn
   expect(mockDeleteMany).toHaveBeenCalledWith({
     where: { token: 'ExponentPushToken[stale-token]' },
   });
-  // No receipt should be queued for a failed ticket.
   expect(mockCreate).not.toHaveBeenCalled();
 });
 
@@ -72,7 +93,7 @@ test('Phase 1 — ok ticket stores receiptId + token in PushReceiptQueue', async
 
 // ── Test 3: Phase 2 receipt DeviceNotRegistered removes token + clears queue ──
 test('Phase 2 — receipt DeviceNotRegistered removes token and clears queue row', async () => {
-  mockFindMany.mockResolvedValue([
+  mockQueueFindMany.mockResolvedValue([
     { receiptId: 'receipt-stale-456', token: 'ExponentPushToken[stale-receipt]', createdAt: new Date() },
   ]);
   mockReceipts.mockResolvedValue({
@@ -88,14 +109,14 @@ test('Phase 2 — receipt DeviceNotRegistered removes token and clears queue row
   expect(mockDeleteMany).toHaveBeenCalledWith({
     where: { token: 'ExponentPushToken[stale-receipt]' },
   });
-  expect(mockPrismDeleteMany).toHaveBeenCalledWith({
+  expect(mockQueueDeleteMany).toHaveBeenCalledWith({
     where: { receiptId: { in: ['receipt-stale-456'] } },
   });
 });
 
 // ── Test 4: Phase 2 receipt 'ok' does NOT remove token ───────────────────────
 test('Phase 2 — receipt ok does not remove token', async () => {
-  mockFindMany.mockResolvedValue([
+  mockQueueFindMany.mockResolvedValue([
     { receiptId: 'receipt-good-789', token: 'ExponentPushToken[healthy-token]', createdAt: new Date() },
   ]);
   mockReceipts.mockResolvedValue({
@@ -105,8 +126,7 @@ test('Phase 2 — receipt ok does not remove token', async () => {
   await pollReceipts();
 
   expect(mockDeleteMany).not.toHaveBeenCalled();
-  // Queue row should still be cleared after processing.
-  expect(mockPrismDeleteMany).toHaveBeenCalledWith({
+  expect(mockQueueDeleteMany).toHaveBeenCalledWith({
     where: { receiptId: { in: ['receipt-good-789'] } },
   });
 });
