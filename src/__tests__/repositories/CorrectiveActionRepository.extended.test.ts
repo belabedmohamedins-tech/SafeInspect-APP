@@ -11,8 +11,9 @@
 //     - jest.fn() calls are made INSIDE the factory (always safe).
 //     - jest.requireMock() is called SYNCHRONOUSLY after jest.mock() to capture
 //       the concrete mock functions into module-level variables.
-//     - beforeEach re-wires getDb() so the repository always gets the same
-//       stable db object with the (now non-cleared) mock functions.
+//     - A single STABLE db object is created once and returned by getDb() in
+//       every call — escalateOverdue() and the main method call both hit the
+//       same object, so runAsync.mock.calls is never split across two instances.
 
 import { CorrectiveActionRepository } from '../../repositories/CorrectiveActionRepository';
 
@@ -29,7 +30,7 @@ jest.mock('../../services/NotificationService', () => ({
   pushInApp: jest.fn().mockResolvedValue(undefined),
 }));
 
-// Step 2: capture mock functions synchronously via requireMock.
+// Step 2: capture the mock module synchronously.
 const schemaMock = jest.requireMock('../../db/schema') as {
   getDb: jest.Mock;
 };
@@ -38,26 +39,31 @@ let mockRunAsync: jest.Mock;
 let mockGetFirstAsync: jest.Mock;
 let mockGetAllAsync: jest.Mock;
 
-beforeAll(async () => {
-  const db = await schemaMock.getDb();
-  mockRunAsync      = db.runAsync      as jest.Mock;
-  mockGetFirstAsync = db.getFirstAsync as jest.Mock;
-  mockGetAllAsync   = db.getAllAsync   as jest.Mock;
+// Stable db object — same reference for every getDb() call in every test.
+// escalateOverdue() calls getDb() internally before the main method call;
+// both must receive the SAME object or runAsync.mock.calls gets split.
+const stableDb = {
+  runAsync:      jest.fn().mockResolvedValue({ changes: 1 }),
+  getFirstAsync: jest.fn().mockResolvedValue(null),
+  getAllAsync:    jest.fn().mockResolvedValue([]),
+};
+
+beforeAll(() => {
+  mockRunAsync      = stableDb.runAsync;
+  mockGetFirstAsync = stableDb.getFirstAsync;
+  mockGetAllAsync   = stableDb.getAllAsync;
+  schemaMock.getDb.mockResolvedValue(stableDb);
 });
 
 describe('CorrectiveActionRepository W85', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Restore defaults after clearAllMocks.
+    // Restore defaults after clearAllMocks wipes all mock state.
     mockRunAsync.mockResolvedValue({ changes: 1 });
     mockGetFirstAsync.mockResolvedValue(null);
     mockGetAllAsync.mockResolvedValue([]);
-    // Re-wire getDb so the repository gets the same db object in every test.
-    schemaMock.getDb.mockResolvedValue({
-      runAsync:      mockRunAsync,
-      getFirstAsync: mockGetFirstAsync,
-      getAllAsync:    mockGetAllAsync,
-    });
+    // Re-wire getDb after clearAllMocks clears its implementation.
+    schemaMock.getDb.mockResolvedValue(stableDb);
   });
 
   describe('updateStatus — closedAt lifecycle (SPEC 03)', () => {
@@ -69,10 +75,12 @@ describe('CorrectiveActionRepository W85', () => {
 
       await CorrectiveActionRepository.updateStatus('cap-1', 'closed');
 
-      const call = mockRunAsync.mock.calls[0];
-      const sql: string = call[0];
-      const params: (string | null)[] = call[1];
-      expect(sql).toContain('closed_at');
+      // escalateOverdue() fires runAsync first; the UPDATE call is call[1].
+      const updateCall = mockRunAsync.mock.calls.find((c: unknown[]) =>
+        (c[0] as string).includes('closed_at'),
+      );
+      expect(updateCall).toBeDefined();
+      const params: (string | null)[] = updateCall![1];
       const closedAt = params[2];
       expect(closedAt).not.toBeNull();
       expect(typeof closedAt).toBe('string');
@@ -87,8 +95,11 @@ describe('CorrectiveActionRepository W85', () => {
 
       await CorrectiveActionRepository.updateStatus('cap-2', 'resolved');
 
-      const call = mockRunAsync.mock.calls[0];
-      const params: (string | null)[] = call[1];
+      const updateCall = mockRunAsync.mock.calls.find((c: unknown[]) =>
+        (c[0] as string).includes('closed_at'),
+      );
+      expect(updateCall).toBeDefined();
+      const params: (string | null)[] = updateCall![1];
       expect(params[2]).toBeNull();
     });
 
@@ -100,8 +111,11 @@ describe('CorrectiveActionRepository W85', () => {
 
       await CorrectiveActionRepository.updateStatus('cap-3', 'in-progress');
 
-      const call = mockRunAsync.mock.calls[0];
-      const params: (string | null)[] = call[1];
+      const updateCall = mockRunAsync.mock.calls.find((c: unknown[]) =>
+        (c[0] as string).includes('closed_at'),
+      );
+      expect(updateCall).toBeDefined();
+      const params: (string | null)[] = updateCall![1];
       expect(params[2]).toBeNull();
     });
   });
