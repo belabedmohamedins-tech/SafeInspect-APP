@@ -7,6 +7,21 @@
 
 ## Live Observations Log
 
+### 2026-08-19 15:00 WAT — Perplexity — W94 ✅ OPEN → PENDING USER VERIFICATION — E2E integration test
+- **File added:** `src/__tests__/e2e/inspectorLifecycle.e2e.test.ts`
+- **Commit:** [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43)
+- **8 tests covering full inspector lifecycle:**
+  1. `save()` — hash computed, `INSPECTION_SAVED` audit entry appended.
+  2. `save(status=completed)` — `createCapItemsFromInspection` fires.
+  3. `updateStatus('approved')` — integrity rehash + `INSPECTION_STATUS_UPDATED` audit entry.
+  4. `delete()` on approved row — `INSPECTION_LOCKED` thrown, no cascade, `INSPECTION_DELETE_BLOCKED` logged.
+  5. `delete()` on non-approved row — `deleteByInspection` cascade + `INSPECTION_DELETED` audit.
+  6. `save()` on approved row — `INSPECTION_LOCKED` thrown before hash or runAsync (W22).
+  7. `deleteMany()` with one approved id — `INSPECTION_LOCKED` thrown, no `DELETE` SQL fired.
+  8. `clear()` when approved row exists — `INSPECTION_LOCKED` thrown (W52).
+- **Mock pattern:** stable-db object (hoisting-safe) — same pattern as `CorrectiveActionRepository.extended.test.ts`.
+- **Verify:** `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` → expect 8/8 PASS.
+
 ### 2026-08-19 14:50 WAT — Perplexity — W92 ✅ CLOSED — PriorityWidget navigation test green after RN query fix
 - **User-confirmed:** `npx jest src/__tests__/components/PriorityWidget.test.tsx` all green.
 - **Root cause:** RNTL `getAllByRole('button')` does not match bare `TouchableOpacity` without explicit `accessibilityRole`. Test was patched to use `UNSAFE_getAllByType(TouchableOpacity)`.
@@ -75,14 +90,15 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 14:50 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 15:00 WAT)
 
-All phases closed through W92. PriorityWidget test green confirmed by user.
+All phases closed through W93. W94 E2E test pending user verification.
 
 ### 🟡 OPEN ITEMS (need human action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|
+|---|---|---|---|
+| **W94** | — | Run `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` → expect 8/8 PASS | User must run locally |
 | **F-05** | LOW | Confirm production API URL value | `apiClient.ts` already throws on missing env — only need to set `EXPO_PUBLIC_SYNC_API_URL=https://your-prod-host` in `.env.production` / EAS secrets. Provide the URL. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
@@ -118,6 +134,7 @@ All phases closed through W92. PriorityWidget test green confirmed by user.
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73) | 2026-08-19 PowerShell verify |
 | **SPEC12-D** | `registerPushToken` no `res.ok` check | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd) | 2026-08-19 |
 | **W92 / SPEC 13** | PriorityWidget nav test coverage missing | Commits [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90), [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310) | 2026-08-19 user-confirmed green |
+| **W93** | UI screens gap audit — 22 screens, 0 orphans | Direct read | 2026-08-19 |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -144,6 +161,7 @@ SafeInspect-APP/
 │   ├── utils/                  # scoringUtils, statsUtils, decisionSupport
 │   └── __tests__/
 │       ├── components/         # PriorityWidget.test.tsx ✅ (W92)
+│       ├── e2e/                # inspectorLifecycle.e2e.test.ts ✅ (W94)
 │       └── repositories/       # Jest test suite (1232+ tests)
 ├── server/
 │   ├── src/
@@ -176,13 +194,15 @@ SafeInspect-APP/
 | **W91** | notifications.ts route missing | ✅ CLOSED |
 | **SPEC12-D** | registerPushToken res.ok check | ✅ CLOSED |
 | **W92** | PriorityWidget navigation test (SPEC 13 coverage) | ✅ CLOSED — green verified |
+| **W93** | UI screens gap audit | ✅ CLOSED |
+| **W94** | E2E integration test — full inspector lifecycle | 🟡 PENDING user verification |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**All phases closed through W92. PriorityWidget test is green on user verification.**
+**All phases closed through W93. W94 E2E test pushed — awaiting `npx jest` confirmation.**
 
-**Only remaining human-input item: F-05 (set production URL in EAS secrets).**
+**Only remaining human-input item after W94: F-05 (set production URL in EAS secrets).**
 
-**Next phase identifier: W94.**
+**Next phase identifier: W95.**
 
 ---
 
