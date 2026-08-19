@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-08-19 12:34 WAT — Perplexity — W41 ✅ CLOSED — BGN-10-01 Art.15–22 → Art.14–21 confirmed + committed
+- **Fix:** PowerShell replace `المواد 15–22` → `المواد 14–21` in `src/criteria/baseGeneralCriteria.ts` line 539.
+- **Verified:** `Select-String` on BGN-10-01 block — line 539 reads `المواد 14–21 (الفصل` ✅
+- **Commit:** [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73)
+- **BGN-10-01 JORADP-verify backlog item:** Closed — correction already applied. JORADP confirmation is a legal-assurance step; no further code action needed.
+- **No TSC/Jest impact** — legalReference is a string field, no type change.
+- **Open items remaining:** F-05 (EAS production URL) only.
+
 ### 2026-08-19 12:07 WAT — Perplexity — audit-log.tsx duplicate key fix ✅ — TSC 0 + Jest 1232/0
 - **Root cause:** W85 commit `2c78a16` had correctly added `INSPECTION_STATUS_UPDATED` to ACTION_LABELS, ACTION_ICONS, ACTION_COLORS. A subsequent write accidentally duplicated each key at the bottom of the same literals → TS1117 "duplicate property" errors.
 - **Fix:** Removed the 3 duplicate entries. Each Record now has exactly 11 unique keys. Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66)
@@ -84,16 +92,15 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 12:07 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 12:34 WAT)
 
-All Claude audit findings (F-01–F-20), W89, W90, W91, R1/R6 confirmed closed by direct source reads. No open bugs remain without human input.
+All phases closed through W91 + BGN-10-01 legal correction applied. TSC 0 + Jest 1232/0.
 
 ### 🟡 OPEN ITEMS (need human action)
 
 | ID | Severity | Item | Blocker / Notes |
-|---|---|---|---|
+|---|---|---|
 | **F-05** | LOW | Confirm production API URL value | `apiClient.ts` already throws on missing env — only need to set `EXPO_PUBLIC_SYNC_API_URL=https://your-prod-host` in `.env.production` / EAS secrets. Provide the URL. |
-| **BGN-10-01** | LOW | Art.15–22 range — uncertain against JORADP original | Verify against JORADP PDF before enforcement use. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
 
@@ -125,6 +132,7 @@ All Claude audit findings (F-01–F-20), W89, W90, W91, R1/R6 confirmed closed b
 | CAP test fixture severity | `'major'` → `'high'` in BASE fixture | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f) | 2026-08-18 |
 | **W89** | PriorityWidget onPress → facility list instead of specific profile | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08) | 2026-08-18/19 — already correct on HEAD |
 | **W91** | notifications.ts missing — push token never registered | Already present SHA `ce797c2` — POST+DELETE /register implemented | 2026-08-19 direct read |
+| **BGN-10-01** | legalReference Art range 15–22 → 14–21 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73) | 2026-08-19 PowerShell verify |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -136,7 +144,6 @@ All Claude audit findings (F-01–F-20), W89, W90, W91, R1/R6 confirmed closed b
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
-| BGN-10-01 Art.15–22 range | Verify against JORADP original PDF |
 
 ---
 
@@ -181,11 +188,12 @@ SafeInspect-APP/
 | **W90** | apiClient.ts localhost silent fallback | ✅ CLOSED — already throws on missing env (`EXPO_PUBLIC_SYNC_API_URL`) |
 | **W91** | notifications.ts route missing | ✅ CLOSED — route exists, POST+DELETE /register implemented |
 | **audit-log duplicate key** | TS1117 ACTION_LABELS/ICONS/COLORS duplicate `INSPECTION_STATUS_UPDATED` | ✅ CLOSED — Commit `259f64b` |
+| **W41 BGN-10-01** | legalReference Art.15–22 → Art.14–21 | ✅ CLOSED — Commit `a71438b` |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
 
-**All phases closed through W91. TSC 0 + Jest 1232/0 — 2026-08-19 12:07 WAT (user-confirmed).**
+**All phases closed through W91 + BGN-10-01. TSC 0 + Jest 1232/0 — 2026-08-19 12:34 WAT.**
 
-**Only remaining human-input items: F-05 (set production URL in EAS secrets) + BGN-10-01 (JORADP PDF verify).**
+**Only remaining human-input item: F-05 (set production URL in EAS secrets).**
 
 **Next phase identifier: W92.**
 
