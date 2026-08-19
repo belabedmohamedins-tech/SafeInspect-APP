@@ -1,0 +1,657 @@
+{
+  "schema_version": "1.0",
+  "generated": "2026-08-19",
+  "description": "Machine-readable index of all legal reference instruments in legal_refs/. Required by Manus audit P1. One entry per file. Fields: instrument_id, file, pdf_source, jo_number, pages, extraction_method, articles_verified, status, review_date, reviewer, relations.",
+  "status_values": {
+    "VERIFIE": "Full text read against official JORADP PDF by named human reviewer",
+    "NON_VERIFIE": "Text converted but not yet verified against JORADP original",
+    "ABROGE": "Instrument abrogated — kept for historical reference",
+    "PROJET": "Draft instrument — not published in JORADP"
+  },
+  "instruments": [
+    {
+      "instrument_id": "loi-88-07",
+      "file": "legal_refs/loi-88-07-hygiene-securite-medecine-travail.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 4/1988",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–47",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "modifié_par", "instrument": "loi-17-13", "articles_affected": [37, 38, 39] }
+      ]
+    },
+    {
+      "instrument_id": "decret-76-35",
+      "file": "legal_refs/decret-76-35-igh-incendie.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–26",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-76-36",
+      "file": "legal_refs/decret-76-36-incendie-panique.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 67/1976",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "rectificatif Art. 20, 24, 27",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "rectifie", "instrument": "decret-76-35" }
+      ]
+    },
+    {
+      "instrument_id": "decret-83-496",
+      "file": "legal_refs/decret-83-496-gpl-carburant.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–21",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "modifié_par", "instrument": "decret-21-430", "articles_affected": [4, 7, 8] }
+      ]
+    },
+    {
+      "instrument_id": "decret-90-245",
+      "file": "legal_refs/decret-90-245-appareils-pression-gaz.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 36/1990",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–24",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-91-05",
+      "file": "legal_refs/decret-91-05-hygiene-securite-milieu-travail.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-93-120",
+      "file": "legal_refs/decret-93-120-medecine-du-travail.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-90-11",
+      "file": "legal_refs/loi-90-11-relations-travail.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-90-29",
+      "file": "legal_refs/loi-90-29-urbanisme.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 52/1990",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–81",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-01-102",
+      "file": "legal_refs/decret-01-102-creation-ona.md",
+      "pdf_source": "PDF fourni manuellement",
+      "jo_number": "non disponible dans le PDF fourni",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–33",
+      "status": "NON_VERIFIE",
+      "review_date": null,
+      "reviewer": null,
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-01-19",
+      "file": "legal_refs/loi-01-19-gestion-dechets.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 77/2001",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–72",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-02-427",
+      "file": "legal_refs/decret-02-427-prevention-risques-professionnels.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–24",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-03-10",
+      "file": "legal_refs/loi-03-10-protection-environnement.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 43/2003",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–89",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-04-82",
+      "file": "legal_refs/decret-04-82-agrement-sanitaire-elevage.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 17/2004",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–18",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-04-410",
+      "file": "legal_refs/decret-04-410-regles-installations-traitement-dechets.md",
+      "pdf_source": "PDF fourni manuellement",
+      "jo_number": "non disponible dans le PDF fourni",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–20",
+      "status": "NON_VERIFIE",
+      "review_date": null,
+      "reviewer": null,
+      "notes": "BGN-04-07 anomaly: criterion incorrectly cites D07-205 for incinerators. Correct text is D04-410 Art. 3.",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-04-08",
+      "file": "legal_refs/loi-04-08-activites-commerciales.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–44",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-04-20",
+      "file": "legal_refs/loi-04-20-risques-majeurs.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–75",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-05-315",
+      "file": "legal_refs/decret-05-315-declaration-dechets-speciaux-dangereux.md",
+      "pdf_source": "PDF fourni manuellement",
+      "jo_number": "non disponible dans le PDF fourni",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–4 + formulaire annexe",
+      "status": "NON_VERIFIE",
+      "review_date": null,
+      "reviewer": null,
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-05-12",
+      "file": "legal_refs/loi-05-12-ressources-en-eau.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–183",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-06-138",
+      "file": "legal_refs/decret-06-138-emissions-atmospheriques.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 24/2006",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–19 + Annexes I–II",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-06-141",
+      "file": "legal_refs/decret-06-141-rejets-effluents-liquides.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–14 + Annexes I–II",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-06-198",
+      "file": "legal_refs/decret-06-198-etablissements-classes.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "modifié_par", "instrument": "decret-22-167" },
+        { "type": "modifié_par", "instrument": "decret-24-196" }
+      ]
+    },
+    {
+      "instrument_id": "decret-07-144",
+      "file": "legal_refs/decret-07-144-nomenclature-installations-classees.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 34/2007",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-07-205",
+      "file": "legal_refs/decret-07-205-schema-communal-dechets.md",
+      "pdf_source": "PDF fourni manuellement",
+      "jo_number": "non disponible dans le PDF fourni",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–11 + annexe",
+      "status": "NON_VERIFIE",
+      "review_date": null,
+      "reviewer": null,
+      "notes": "This decree covers communal waste management schema (Art. 1–11). It does NOT cover incinerators — see D04-410 Art. 3 for incinerators. BGN-04-07 anomaly.",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-09-19",
+      "file": "legal_refs/decret-09-19.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 6/2009",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–17",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-09-03",
+      "file": "legal_refs/loi-09-03-protection-consommateur.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–95",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "notes": "14 amendment annotations added 2026-08-19 per Loi 18-09. Art. 60 abrogated. Art. 61bis, 73bis, 78bis inserted. Art. 11, 16, 19, 53, 54, 65, 66, 78, 79, 85 modified/completed.",
+      "relations": [
+        {
+          "type": "modifié_par",
+          "instrument": "loi-18-09",
+          "file": "legal_refs/loi-18-09-protection-consommateur.md",
+          "details": [
+            { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 11 L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 16 L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 19 L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 53 L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 2 L18-09", "target_article": "Art. 54 L09-03" },
+            { "relation": "abrogé",   "source_article": "Art. 10 L18-09", "target_article": "Art. 60 L09-03" },
+            { "relation": "inséré",   "source_article": "Art. 3 L18-09",  "target_article": "Art. 61bis L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 4 L18-09",  "target_article": "Art. 65 L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 5 L18-09",  "target_article": "Art. 66 L09-03" },
+            { "relation": "inséré",   "source_article": "Art. 6 L18-09",  "target_article": "Art. 73bis L09-03" },
+            { "relation": "modifié",  "source_article": "Art. 7 L18-09",  "target_article": "Art. 78 L09-03" },
+            { "relation": "inséré",   "source_article": "Art. 8 L18-09",  "target_article": "Art. 78bis L09-03" },
+            { "relation": "complété", "source_article": "Art. 9 L18-09",  "target_article": "Art. 79 L09-03" },
+            { "relation": "complété", "source_article": "Art. 9 L18-09",  "target_article": "Art. 85 L09-03" }
+          ]
+        }
+      ]
+    },
+    {
+      "instrument_id": "decret-09-335",
+      "file": "legal_refs/decret-09-335-plans-internes-intervention.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 68/2009",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–21",
+      "status": "ABROGE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "abrogé_par", "instrument": "decret-25-63", "date": "2025-01-28" }
+      ]
+    },
+    {
+      "instrument_id": "decret-11-125",
+      "file": "legal_refs/decret-11-125-eau-consommation-humaine.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 18/2011",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–9 + Annexe",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "arrete-2011-02-06",
+      "file": "legal_refs/arrete-interministeriel-2011-02-06-permis-construire-energie.md",
+      "pdf_source": "cntpp.dz",
+      "jo_number": "N° 23/2011",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–22",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-17-140",
+      "file": "legal_refs/decret-17-140-hygiene-alimentaire.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–64",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "loi-18-09",
+      "file": "legal_refs/loi-18-09-protection-consommateur.md",
+      "pdf_source": "PDF fourni",
+      "jo_number": "N° 35/2018",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–11",
+      "status": "VERIFIE",
+      "review_date": "2026-08-18",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        {
+          "type": "modifie",
+          "instrument": "loi-09-03",
+          "file": "legal_refs/loi-09-03-protection-consommateur.md"
+        }
+      ]
+    },
+    {
+      "instrument_id": "loi-18-11-partie1",
+      "file": "legal_refs/loi-18-11-sante-partie1-arts1-164.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–164",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "notes": "Instrument split into 3 files for technical reasons (size > GitHub API limit). Canonical files: partie1, partie2, partie3.",
+      "relations": [
+        { "type": "partie_de", "instrument": "loi-18-11", "part": "1/3" }
+      ]
+    },
+    {
+      "instrument_id": "loi-18-11-partie2",
+      "file": "legal_refs/loi-18-11-sante-partie2-arts165-264.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 165–264",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "partie_de", "instrument": "loi-18-11", "part": "2/3" }
+      ]
+    },
+    {
+      "instrument_id": "loi-18-11-partie3",
+      "file": "legal_refs/loi-18-11-sante-partie3-arts265-450.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 265–450",
+      "status": "VERIFIE",
+      "review_date": "2026-08-17",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "partie_de", "instrument": "loi-18-11", "part": "3/3" }
+      ]
+    },
+    {
+      "instrument_id": "loi-19-02",
+      "file": "legal_refs/loi-19-02-incendie-panique.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-21-261",
+      "file": "legal_refs/decret-21-261-esp-equipements-hydrocarbures.md",
+      "pdf_source": "arh.gov.dz",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–104",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "notes": "Manus audit: article_sequence_equal=false, similarity=0.9131 on global comparator. Targeted test Art. 50–55 / Art. 56 / Art. 57 against PDF pp.11–12 required (P1 action pending).",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-21-319",
+      "file": "legal_refs/decret-21-319-autorisation-exploitation-hydrocarbures.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 64/2021",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–98 + 4 annexes",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "decret-21-430",
+      "file": "legal_refs/decret-21-430-gpl-carburant.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 4, 7, 8 (amending articles only)",
+      "status": "VERIFIE",
+      "review_date": "2026-08-10",
+      "reviewer": "Mohamed Ins Belabèd",
+      "relations": [
+        { "type": "modifie", "instrument": "decret-83-496", "articles_affected": [4, 7, 8] }
+      ]
+    },
+    {
+      "instrument_id": "decret-22-167",
+      "file": "legal_refs/decret-22-167-etablissements-classes-modification.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "full",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "modifie", "instrument": "decret-06-198" }
+      ]
+    },
+    {
+      "instrument_id": "decret-24-196",
+      "file": "legal_refs/decret-24-196-etablissements-classes-modification.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 14, 24, 25, 26, 29, 44",
+      "status": "VERIFIE",
+      "review_date": "2026-08-10",
+      "reviewer": "Mohamed Ins Belabèd",
+      "relations": [
+        { "type": "modifie", "instrument": "decret-06-198" }
+      ]
+    },
+    {
+      "instrument_id": "decret-25-63",
+      "file": "legal_refs/decret-25-63-plans-intervention-catastrophes.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 07/2025",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–30",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": [
+        { "type": "abroge", "instrument": "decret-09-335", "date": "2025-01-28" }
+      ]
+    },
+    {
+      "instrument_id": "arrete-1999-11-21",
+      "file": "legal_refs/arrete-interministeriel-1999-11-21-conservation-aliments.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 87/1999",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–10 + tableau",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "arrete-2016-10-04",
+      "file": "legal_refs/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
+      "pdf_source": "JORADP",
+      "jo_number": "N° 39/2017",
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–14 + Annexes I–II",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "arrete-2025-05-07",
+      "file": "legal_refs/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
+      "pdf_source": "JORADP",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–48",
+      "status": "VERIFIE",
+      "review_date": "2026-08-11",
+      "reviewer": "Belabed Mohamed",
+      "relations": []
+    },
+    {
+      "instrument_id": "projet-arrete-gpl",
+      "file": "legal_refs/projet-arrete-gpl-installations-securite.md",
+      "pdf_source": "non-JORADP (projet)",
+      "jo_number": null,
+      "pages": null,
+      "extraction_method": "manual",
+      "articles_verified": "Art. 1–24 (Art. 13 incomplet, Art. 14 manquant, Annexes 3–5 non fournies)",
+      "status": "PROJET",
+      "review_date": null,
+      "reviewer": null,
+      "notes": "NOT published in JORADP. Do not use for binding legal/enforcement decisions.",
+      "relations": []
+    }
+  ]
+}
