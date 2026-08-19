@@ -1,4 +1,4 @@
-﻿# Décret exécutif n° 25-63 du 28 Rajab 1446 correspondant au 28 janvier 2025 fixant les conditions et les modalités d'élaboration, de mise en œuvre et de gestion des plans d'intervention en matière de risques de catastrophes
+# Décret exécutif n° 25-63 du 28 Rajab 1446 correspondant au 28 janvier 2025 fixant les conditions et les modalités d'élaboration, de mise en œuvre et de gestion des plans d'intervention en matière de risques de catastrophes
 
 **Date de signature :** 28 janvier 2025 (28 Rajab 1446)  
 **Journal Officiel :** N° 07, 6 Chaâbane 1446 (5 février 2025) — pages 10 à 15  

@@ -1,4 +1,4 @@
-﻿# Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
+# Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail
 
 **Date de signature :** 15 mai 1993  
 **Journal Officiel :** N° 33, 19 mai 1993 — pages 7 à 11  

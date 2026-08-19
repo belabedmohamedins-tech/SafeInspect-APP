@@ -1,4 +1,4 @@
-﻿// src/baseGeneralCriteria.ts
+// src/baseGeneralCriteria.ts
 // W8 (2026-08-08): BGN-03-01 legalReference corrected.
 //   Previous ref: Décret 88-164 — unfindable in JORADP, likely superseded.
 //   Correct instrument: Décret exécutif 11-125 du 22/03/2011 fixant les

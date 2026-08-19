@@ -1,4 +1,4 @@
-﻿# Loi n° 04-08 du 27 Joumada Ethania 1425 correspondant au 14 août 2004 relative aux conditions d'exercice des activités commerciales
+# Loi n° 04-08 du 27 Joumada Ethania 1425 correspondant au 14 août 2004 relative aux conditions d'exercice des activités commerciales
 
 **Date de signature :** 14 août 2004 (27 Joumada Ethania 1425)  
 **Journal Officiel :** N° 52, 2 Rajab 1425 (18 août 2004) — pages 4 à 8  

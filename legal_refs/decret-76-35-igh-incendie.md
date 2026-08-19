@@ -1,4 +1,4 @@
-﻿# Décret n° 76-35 du 20 février 1976 portant règlement de sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur
+# Décret n° 76-35 du 20 février 1976 portant règlement de sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur
 
 **Date de signature :** 20 février 1976  
 **Journal Officiel :** Publié le 12 mars 1976 — pages 242 à 243  

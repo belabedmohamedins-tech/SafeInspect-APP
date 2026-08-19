@@ -1,4 +1,4 @@
-﻿# Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme
+# Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme
 
 **Date de signature :** 1er décembre 1990  
 **Journal Officiel :** N° 52, 2 décembre 1990 — pages 1408 à 1415  

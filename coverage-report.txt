@@ -1,0 +1,189 @@
+
+> dz-inspection@1.0.0 test:coverage
+> node --experimental-vm-modules node_modules/jest/bin/jest.js --coverage --passWithNoTests
+
+PASS __tests__/criteria/marbleCriteria.test.ts
+PASS __tests__/criteria/paintShopCriteria.test.ts
+PASS src/__tests__/marbleCriteria.test.ts
+PASS __tests__/criteria/carpenteryCriteria.test.ts
+PASS src/__tests__/carpenteryCriteria.test.ts
+PASS src/__tests__/paintShopCriteria.test.ts
+PASS src/__tests__/PhotoService.test.ts
+PASS src/__tests__/BackupService.test.ts (5.12 s)
+PASS src/__tests__/repositories/AuditLogRepository.test.ts
+PASS __tests__/criteriaData.test.ts (5.684 s)
+PASS __tests__/facilitiesData.test.ts
+PASS src/__tests__/criteriaData.test.ts (5.884 s)
+(node:20376) ExperimentalWarning: VM Modules is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS src/__tests__/schema.test.ts
+PASS __tests__/utils.test.ts
+PASS __tests__/hooks/useSignature.test.ts
+PASS __tests__/hooks/useCollapsibleSections.test.ts
+PASS src/__tests__/components/RepeatViolationBadge.test.tsx
+PASS __tests__/hooks/useInspectionList.test.ts
+PASS src/__tests__/components/DiffStatusIndicator.test.tsx
+PASS __tests__/hooks/useHomeData.test.ts
+PASS src/__tests__/components/DifferentialBanner.test.tsx
+PASS src/__tests__/IntegrityService.test.ts
+PASS src/__tests__/loadHomeData.test.ts
+PASS src/__tests__/CapNotificationService.test.ts
+PASS src/__tests__/repositories/ApprovalRepository.test.ts
+PASS __tests__/utils/dateUtils.test.ts
+PASS src/__tests__/utils.test.ts
+PASS src/__tests__/SyncService.test.ts
+PASS src/__tests__/baseGeneralCriteria.test.ts
+PASS __tests__/criteria/gplCriteria.test.ts
+PASS src/__tests__/useSignature.test.ts
+PASS src/__tests__/useInspectionList.test.ts (10.31 s)
+PASS src/__tests__/useChecklistData.test.ts (10.323 s)
+PASS src/__tests__/utils/dateUtils.test.ts
+PASS __tests__/repositories/ApprovalRepository.test.ts
+PASS __tests__/criteria/baseGeneralCriteria.test.ts
+PASS src/__tests__/NotificationService.test.ts
+PASS src/__tests__/useHomeData.test.ts (10.475 s)
+PASS __tests__/criteria/uabCriteria.test.ts
+PASS __tests__/repositories/CorrectiveActionRepository.test.ts
+PASS src/__tests__/repositories/InspectionRepository.extended.test.ts
+PASS src/__tests__/abattoirCriteria.test.ts
+PASS __tests__/repositories/AuditLogRepository.test.ts
+PASS src/__tests__/repositories/NotificationRepository.test.ts
+PASS __tests__/repositories/SettingsRepository.test.ts
+PASS __tests__/repositories/NotificationRepository.test.ts
+PASS src/__tests__/useCollapsibleSections.test.ts
+PASS src/__tests__/repositories/FacilityRepository.test.ts
+PASS src/__tests__/repositories/AuthRepository.test.ts
+PASS src/__tests__/facilitiesService.test.ts
+PASS src/__tests__/repositories/CorrectiveActionRepository.test.ts
+PASS src/__tests__/coldRoomCriteria.test.ts
+PASS src/__tests__/differentialView.test.ts
+PASS src/__tests__/CorrectiveActionRepository.test.ts
+PASS src/__tests__/serverAuth.test.ts
+PASS __tests__/repositories/FacilityRepository.test.ts
+PASS __tests__/criteria/abattoirCriteria.test.ts
+PASS __tests__/utils/loadHomeData.test.ts
+PASS __tests__/criteria/coldRoomCriteria.test.ts
+PASS __tests__/repositories/InspectionRepository.test.ts
+PASS src/__tests__/capFactory.test.ts
+PASS __tests__/criteria/carWashCriteria.test.ts
+PASS src/__tests__/apiClient.test.ts
+PASS __tests__/criteria/couvoirCriteria.test.ts
+PASS src/__tests__/CapReportService.test.ts
+PASS src/__tests__/scoringUtils.test.ts
+PASS src/__tests__/briefService.test.ts
+PASS __tests__/criteria/printingCriteria.test.ts
+PASS __tests__/criteria/updCriteria.test.ts
+PASS src/__tests__/repositories/AgendaRepository.test.ts
+PASS __tests__/criteria/baseFoodCriteria.test.ts
+PASS __tests__/repositories/AuthRepository.test.ts
+PASS src/__tests__/repositories/InspectionRepository.test.ts
+PASS src/__tests__/facilitiesService.extended.test.ts
+PASS src/__tests__/repositories/CorrectiveActionRepository.extended.test.ts
+PASS src/__tests__/numericUtils.test.ts
+PASS __tests__/utils/inspectionUtils.test.ts
+PASS __tests__/criteria/mechanicCriteria.test.ts
+PASS __tests__/utils/groupViolations.test.ts
+PASS __tests__/criteria/semiPharmaCriteria.test.ts
+PASS src/__tests__/fileUtils.test.ts
+PASS src/__tests__/semiPharmaCriteria.test.ts
+PASS __tests__/facilitiesService.test.ts
+PASS src/__tests__/gplCriteria.test.ts
+PASS src/__tests__/syncEngine.test.ts
+PASS src/__tests__/mechanicCriteria.test.ts
+PASS __tests__/criteria/produceStorageCriteria.test.ts
+PASS src/__tests__/utils/statsUtils.test.ts
+PASS src/__tests__/repositories/SettingsRepository.test.ts
+PASS src/__tests__/repositories/SettingsRepository.extended.test.ts
+PASS src/__tests__/meetingGateService.test.ts
+PASS __tests__/utils/statsUtils.test.ts
+PASS __tests__/utils/scoringUtils.test.ts
+PASS src/__tests__/carWashCriteria.test.ts
+PASS src/__tests__/SessionLockService.test.ts
+PASS src/__tests__/utils/inspectionUtils.test.ts
+PASS src/__tests__/printingCriteria.test.ts
+PASS src/__tests__/statusUtils.test.ts
+PASS src/__tests__/produceStorageCriteria.test.ts
+PASS src/__tests__/inspectionUtils.test.ts
+PASS src/__tests__/blacksmithCriteria.test.ts
+PASS __tests__/criteria/blacksmithCriteria.test.ts
+PASS __tests__/utils/fileUtils.test.ts
+PASS __tests__/utils/numericUtils.test.ts
+PASS __tests__/repositories/AgendaRepository.test.ts
+PASS src/__tests__/statsUtils.test.ts
+PASS src/__tests__/violationHistory.test.ts
+PASS __tests__/criteria/slaughterhouseSmallCriteria.test.ts
+PASS src/__tests__/decisionSupport.test.ts
+PASS __tests__/criteria/bakeryCriteria.test.ts
+PASS src/__tests__/dateUtils.test.ts
+PASS src/__tests__/utils/fileUtils.test.ts
+PASS src/__tests__/followUpService.test.ts
+PASS src/__tests__/groupViolations.test.ts
+PASS src/__tests__/geofencingService.test.ts
+PASS __tests__/utils/statusUtils.test.ts
+PASS __tests__/stores/CriteriaPreviewStore.test.ts
+PASS src/__tests__/CriteriaPreviewStore.test.ts
+PASS src/__tests__/pdfService.test.ts (8.696 s)
+--------------------------------|---------|----------|---------|---------|-------------------------------------
+File                            | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s                   
+--------------------------------|---------|----------|---------|---------|-------------------------------------
+All files                       |   98.72 |     94.2 |   99.26 |   99.47 |                                     
+ src                            |     100 |    92.85 |     100 |     100 |                                     
+  facilitiesService.ts          |     100 |    92.85 |     100 |     100 | 95                                  
+ src/db                         |   98.36 |    85.71 |     100 |     100 |                                     
+  schema.ts                     |     100 |    85.57 |     100 |     100 | 297-298,300,303,313-314,332-334,355 
+  syncEngine.ts                 |   95.83 |    86.66 |     100 |     100 | 38-42                               
+ src/hooks                      |     100 |    96.62 |     100 |     100 |                                     
+  useChecklistData.ts           |     100 |    97.18 |     100 |     100 | 195,227                             
+  useCollapsibleSections.ts     |     100 |      100 |     100 |     100 |                                     
+  useHomeData.ts                |     100 |      100 |     100 |     100 |                                     
+  useInspectionList.ts          |     100 |     87.5 |     100 |     100 | 19                                  
+  useSignature.ts               |     100 |      100 |     100 |     100 |                                     
+ src/repositories               |   99.52 |      100 |   98.44 |   99.44 |                                     
+  AgendaRepository.ts           |     100 |      100 |     100 |     100 |                                     
+  ApprovalRepository.ts         |     100 |      100 |     100 |     100 |                                     
+  AuditLogRepository.ts         |     100 |      100 |     100 |     100 |                                     
+  AuthRepository.ts             |     100 |      100 |     100 |     100 |                                     
+  CorrectiveActionRepository.ts |     100 |      100 |     100 |     100 |                                     
+  FacilityRepository.ts         |     100 |      100 |     100 |     100 |                                     
+  InspectionRepository.ts       |   96.49 |      100 |   88.88 |   95.91 | 59-60                               
+  NotificationRepository.ts     |     100 |      100 |     100 |     100 |                                     
+  SettingsRepository.ts         |     100 |      100 |     100 |     100 |                                     
+  keys.ts                       |     100 |      100 |     100 |     100 |                                     
+ src/services                   |   97.48 |    92.78 |   99.25 |   99.11 |                                     
+  BackupService.ts              |     100 |    91.17 |     100 |     100 | 254-259                             
+  CapNotificationService.ts     |   92.69 |    85.18 |     100 |   98.67 | 39,360                              
+  CapReportService.ts           |   97.77 |    78.57 |     100 |   97.56 | 57                                  
+  IntegrityService.ts           |   96.77 |      100 |     100 |   96.55 | 40                                  
+  NotificationService.ts        |   95.71 |    97.36 |   88.88 |   96.66 | 43,96                               
+  PhotoService.ts               |     100 |      100 |     100 |     100 |                                     
+  SessionLockService.ts         |     100 |      100 |     100 |     100 |                                     
+  SyncService.ts                |     100 |      100 |     100 |     100 |                                     
+  apiClient.ts                  |     100 |      100 |     100 |     100 |                                     
+  briefService.ts               |     100 |    91.66 |     100 |     100 | 36                                  
+  capFactory.ts                 |     100 |       90 |     100 |     100 | 63                                  
+  decisionSupport.ts            |     100 |      100 |     100 |     100 |                                     
+  differentialView.ts           |     100 |      100 |     100 |     100 |                                     
+  followUpService.ts            |     100 |      100 |     100 |     100 |                                     
+  geofencingService.ts          |     100 |      100 |     100 |     100 |                                     
+  meetingGateService.ts         |     100 |      100 |     100 |     100 |                                     
+  serverAuth.ts                 |   98.21 |    86.66 |     100 |     100 | 35-57                               
+  violationHistory.ts           |     100 |      100 |     100 |     100 |                                     
+ src/stores                     |     100 |      100 |     100 |     100 |                                     
+  CriteriaPreviewStore.ts       |     100 |      100 |     100 |     100 |                                     
+ src/utils                      |     100 |    99.03 |     100 |     100 |                                     
+  dateUtils.ts                  |     100 |      100 |     100 |     100 |                                     
+  fileUtils.ts                  |     100 |      100 |     100 |     100 |                                     
+  groupViolations.ts            |     100 |      100 |     100 |     100 |                                     
+  inspectionUtils.ts            |     100 |      100 |     100 |     100 |                                     
+  loadHomeData.ts               |     100 |      100 |     100 |     100 |                                     
+  numericUtils.ts               |     100 |      100 |     100 |     100 |                                     
+  scoringUtils.ts               |     100 |    96.42 |     100 |     100 | 119                                 
+  statsUtils.ts                 |     100 |      100 |     100 |     100 |                                     
+  statusUtils.ts                |     100 |      100 |     100 |     100 |                                     
+--------------------------------|---------|----------|---------|---------|-------------------------------------
+
+Test Suites: 1 skipped, 119 passed, 119 of 120 total
+Tests:       1 skipped, 1941 passed, 1942 total
+Snapshots:   0 total
+Time:        20.827 s
+Ran all test suites.

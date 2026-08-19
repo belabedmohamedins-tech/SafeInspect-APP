@@ -1,4 +1,4 @@
-﻿# Loi n° 19-02 du 14 Dhou El Kaâda 1440 correspondant au 17 juillet 2019 relative aux règles générales de prévention des risques d'incendie et de panique
+# Loi n° 19-02 du 14 Dhou El Kaâda 1440 correspondant au 17 juillet 2019 relative aux règles générales de prévention des risques d'incendie et de panique
 
 **Date de signature :** 17 juillet 2019 (14 Dhou El Kaâda 1440)  
 **Journal Officiel :** N° 46, 18 Dhou El Kaâda 1440 (21 juillet 2019) — pages 5 à 10  

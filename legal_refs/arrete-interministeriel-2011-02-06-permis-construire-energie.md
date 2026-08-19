@@ -1,4 +1,4 @@
-﻿# Arrêté interministériel du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 relatif aux procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière
+# Arrêté interministériel du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 relatif aux procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière
 
 **Date de signature :** 6 février 2011 (3 Rabie El Aouel 1432)  
 **Journal Officiel :** N° 23, 13 Joumada El Oula 1432 (17 avril 2011) — pages 17 à 21  

@@ -1,4 +1,4 @@
-﻿# Loi n° 90-11 du 21 avril 1990 relative aux relations de travail
+# Loi n° 90-11 du 21 avril 1990 relative aux relations de travail
 
 **Date de signature :** 21 avril 1990  
 **Journal Officiel :** N° 25, 6 mai 1990 — pages 1 à 29 (extrait)  

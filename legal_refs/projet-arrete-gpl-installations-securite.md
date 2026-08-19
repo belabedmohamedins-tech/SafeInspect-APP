@@ -1,4 +1,4 @@
-﻿# Projet d'arrêté interministériel du … 1443 correspondant au … 2021, fixant les règles techniques et de sécurité applicables aux installations et points de vente GPL, dont la capacité globale est inférieure ou égale à six tonnes, ainsi que les modalités de leur contrôle
+# Projet d'arrêté interministériel du … 1443 correspondant au … 2021, fixant les règles techniques et de sécurité applicables aux installations et points de vente GPL, dont la capacité globale est inférieure ou égale à six tonnes, ainsi que les modalités de leur contrôle
 
 **Date estimée :** 2021 (1443) — Projet non encore publié au Journal Officiel  
 **Source PDF :** Fourni par l'utilisateur (`Règles de sécurité pour installations GPL.pdf`)  

@@ -1,4 +1,4 @@
-﻿# Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail
+# Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d'hygiène et de sécurité en milieu de travail
 
 **Date de signature :** 19 janvier 1991  
 **Journal Officiel :** N° 4, 23 janvier 1991 — pages 63 à 68  

@@ -1,4 +1,4 @@
-﻿# Loi n° 09-03 du 29 Safar 1430 correspondant au 25 février 2009 relative à la protection du consommateur et à la répression des fraudes
+# Loi n° 09-03 du 29 Safar 1430 correspondant au 25 février 2009 relative à la protection du consommateur et à la répression des fraudes
 
 **Date de signature :** 25 février 2009 (29 Safar 1430)  
 **Journal Officiel :** N° 15, 11 Rabie El Aouel 1430 (8 mars 2009) — pages 10 à 20  
