@@ -140,9 +140,9 @@
       "pages": null,
       "extraction_method": "manual",
       "articles_verified": "Art. 1–33",
-      "status": "NON_VERIFIE",
-      "review_date": null,
-      "reviewer": null,
+      "status": "VERIFIE",
+      "review_date": "2026-08-19",
+      "reviewer": "Belabed Mohamed",
       "relations": []
     },
     {
@@ -205,9 +205,9 @@
       "pages": null,
       "extraction_method": "manual",
       "articles_verified": "Art. 1–20",
-      "status": "NON_VERIFIE",
-      "review_date": null,
-      "reviewer": null,
+      "status": "VERIFIE",
+      "review_date": "2026-08-19",
+      "reviewer": "Belabed Mohamed",
       "notes": "BGN-04-07 anomaly: criterion incorrectly cites D07-205 for incinerators. Correct text is D04-410 Art. 3.",
       "relations": []
     },
@@ -245,9 +245,9 @@
       "pages": null,
       "extraction_method": "manual",
       "articles_verified": "Art. 1–4 + formulaire annexe",
-      "status": "NON_VERIFIE",
-      "review_date": null,
-      "reviewer": null,
+      "status": "VERIFIE",
+      "review_date": "2026-08-19",
+      "reviewer": "Belabed Mohamed",
       "relations": []
     },
     {
@@ -326,9 +326,9 @@
       "pages": null,
       "extraction_method": "manual",
       "articles_verified": "Art. 1–11 + annexe",
-      "status": "NON_VERIFIE",
-      "review_date": null,
-      "reviewer": null,
+      "status": "VERIFIE",
+      "review_date": "2026-08-19",
+      "reviewer": "Belabed Mohamed",
       "notes": "This decree covers communal waste management schema (Art. 1–11). It does NOT cover incinerators — see D04-410 Art. 3 for incinerators. BGN-04-07 anomaly.",
       "relations": []
     },
