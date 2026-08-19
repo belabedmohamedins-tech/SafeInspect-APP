@@ -33,6 +33,7 @@
      README mis à jour le 2026-08-17 (32) — decret-76-36-rectificatif indexé + decret-07-144 statut normalisé "✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed"
      README mis à jour le 2026-08-18 (33) — +4 entrées : D01-102, D05-315, D07-205, D04-410 — dashboard 35→39 ⚠️ NON VÉRIFIÉ — note anomalie BGN-04-07
      README mis à jour le 2026-08-18 (34) — loi-18-09 indexée + statut VÉRIFIÉ — dashboard 39→40 — loi-09-03 annotée comme modifiée par L18-09
+     README mis à jour le 2026-08-19 (35) — loi-09-03 : 14 annotations ⚠️ Modifié/Inséré/Abrogé L18-09 posées dans le fichier — [ANNOTÉ 2026-08-19]
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -50,7 +51,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-18 (mis à jour patch 34)
+## Tableau de bord — Audit baseline 2026-08-19 (mis à jour patch 35)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
@@ -94,7 +95,7 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 | `decret-07-144-nomenclature-installations-classees.md` | Décret exécutif n° 07-144 du 19 mai 2007 | Nomenclature des installations classées pour la protection de l'environnement | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — verbatim JO N° 34, 22 mai 2007 — [PATCHÉ 2026-08-17 : BOM retiré + header standard ajouté] |
 | `decret-07-205-schema-communal-dechets.md` | Décret exécutif n° 07-205 du 30 juin 2007 | Modalités et procédures d'élaboration, de publication et de révision du schéma communal de gestion des déchets ménagers et assimilés — Art. 1–11 + Annexe (modèle schéma en 3 parties) | ⚠️ NON VÉRIFIÉ — converti manuellement 2026-08-18 contre PDF fourni — JO : À déterminer — ⚠️ Ce décret ne porte PAS sur les incinérateurs : voir anomalie BGN-04-07 dans le tableau de bord |
 | `decret-09-19.md` | Décret exécutif n° 09-19 du 20 janvier 2009 | Réglementation de l'activité de collecte des déchets spéciaux — Art. 1er–17 complets (JO N° 6/2009) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 — ⚠️ Modifiée par Loi n° 18-09 du 10 juin 2018 (Art. 11, 16, 19, 53, 54, 65, 66, 78, 79, 85 modifiés ; Art. 61bis, 73bis, 78bis insérés ; Art. 60 abrogé) — voir `loi-18-09-protection-consommateur.md` | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `loi-09-03-protection-consommateur.md` | Loi n° 09-03 du 25 février 2009 | Protection du consommateur et répression des fraudes — Art. 1–95 — ⚠️ Modifiée par Loi n° 18-09 du 10 juin 2018 (Art. 11, 16, 19, 53, 54, 65, 66, 78, 79, 85 modifiés ; Art. 61bis, 73bis, 78bis insérés ; Art. 60 abrogé) — voir `loi-18-09-protection-consommateur.md` — [ANNOTÉ 2026-08-19 : 14 annotations ⚠️ Modifié/Inséré/Abrogé L18-09 posées dans le fichier] | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `decret-09-335-plans-internes-intervention.md` | Décret exécutif n° 09-335 du 20 octobre 2009 | Modalités d'élaboration et de mise en œuvre des plans internes d'intervention par les exploitants d'installations industrielles — Art. 1–21 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — ⚠️ ABROGÉ par D25-63 du 28/01/2025 — conservé pour référence historique |
 | `decret-11-125-eau-consommation-humaine.md` | Décret exécutif n° 11-125 du 22 mars 2011 | Qualité de l'eau de consommation humaine — Art. 1–9 + Annexe (valeurs limites et indicatives) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | Arrêté intermin. du 3 Rabie El Aouel 1432 correspondant au 6 février 2011 | Procédures applicables en matière d'instruction et de délivrance du permis de construire des ouvrages d'énergie électrique et gazière — Art. 1–22 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
@@ -165,3 +166,4 @@ Statut par défaut : ⚠️ NON VÉRIFIÉ — à vérifier contre le JORADP orig
 - **2026-08-17 (patch 32) :** `decret-76-36-incendie-panique.md` indexé comme rectificatif vérifié ; `decret-07-144-nomenclature-installations-classees.md` statut README normalisé en `✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed`.
 - **2026-08-18 (patch 33) :** +4 fichiers indexés — ajoutés manuellement par l'utilisateur : `decret-01-102-creation-ona.md` (Art. 1–33), `decret-05-315-declaration-dechets-speciaux-dangereux.md` (Art. 1–4 + formulaire), `decret-07-205-schema-communal-dechets.md` (Art. 1–11 + annexe), `decret-04-410-regles-installations-traitement-dechets.md` (Art. 1–20). Tous ⚠️ NON VÉRIFIÉ — à relire contre JORADP. Anomalie BGN-04-07 documentée : D07-205 ≠ incinérateurs, D04-410 est le bon texte (Art. 3). Dashboard : **35 ✅ VÉRIFIÉ + 4 ⚠️ NON VÉRIFIÉ**.
 - **2026-08-18 (patch 34) :** `loi-18-09-protection-consommateur.md` indexée — ✅ VÉRIFIÉ 2026-08-18 par Belabed Mohamed — relu contre PDF fourni. Statut dans le fichier corrigé (auto-déclaration IA → VÉRIFIÉ par l'utilisateur). Row `loi-09-03` mise à jour avec note de modification par L18-09. Dashboard : **36 ✅ VÉRIFIÉ**.
+- **2026-08-19 (patch 35) :** `loi-09-03-protection-consommateur.md` — 14 annotations ⚠️ Modifié/Inséré/Abrogé par Loi n° 18-09 posées dans le fichier aux articles concernés (Art. 11, 16, 19, 53, 54, 60, 61bis, 65, 66, 73bis, 78, 78bis, 79, 85). Row README mise à jour avec [ANNOTÉ 2026-08-19]. Aucun texte légal verbatim modifié — ajouts de métadonnées uniquement.
