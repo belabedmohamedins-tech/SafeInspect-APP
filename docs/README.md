@@ -7,6 +7,13 @@
 
 ## Live Observations Log
 
+### 2026-08-19 14:50 WAT — Perplexity — W92 ✅ CLOSED — PriorityWidget navigation test green after RN query fix
+- **User-confirmed:** `npx jest src/__tests__/components/PriorityWidget.test.tsx` all green.
+- **Root cause:** RNTL `getAllByRole('button')` does not match bare `TouchableOpacity` without explicit `accessibilityRole`. Test was patched to use `UNSAFE_getAllByType(TouchableOpacity)`.
+- **Files changed:** `src/__tests__/components/PriorityWidget.test.tsx`
+- **Fix commit:** [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310)
+- **Phase result:** W92 closed with green verification.
+
 ### 2026-08-19 14:30 WAT — Perplexity — W92 ✅ CLOSED — PriorityWidget navigation test (SPEC 13 coverage)
 - **Background:** SPEC 13 nav bug (W89) was already fixed on HEAD (SHA `93bd5de`). The only gap was missing test coverage.
 - **Added:** `src/__tests__/components/PriorityWidget.test.tsx` — 5 tests:
@@ -68,9 +75,9 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 14:30 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 14:50 WAT)
 
-All phases closed through W92. TSC 0 + Jest 1232/0.
+All phases closed through W92. PriorityWidget test green confirmed by user.
 
 ### 🟡 OPEN ITEMS (need human action)
 
@@ -110,7 +117,7 @@ All phases closed through W92. TSC 0 + Jest 1232/0.
 | **W91** | notifications.ts missing — push token never registered | Already present SHA `ce797c2` — POST+DELETE /register implemented | 2026-08-19 direct read |
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73) | 2026-08-19 PowerShell verify |
 | **SPEC12-D** | `registerPushToken` no `res.ok` check | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd) | 2026-08-19 |
-| **W92 / SPEC 13** | PriorityWidget nav test coverage missing | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90) | 2026-08-19 |
+| **W92 / SPEC 13** | PriorityWidget nav test coverage missing | Commits [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90), [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310) | 2026-08-19 user-confirmed green |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -168,14 +175,14 @@ SafeInspect-APP/
 | **W90** | apiClient.ts localhost silent fallback | ✅ CLOSED |
 | **W91** | notifications.ts route missing | ✅ CLOSED |
 | **SPEC12-D** | registerPushToken res.ok check | ✅ CLOSED |
-| **W92** | PriorityWidget navigation test (SPEC 13 coverage) | ✅ CLOSED — Commit `a29675a` |
+| **W92** | PriorityWidget navigation test (SPEC 13 coverage) | ✅ CLOSED — green verified |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**All phases closed through W92. TSC 0 + Jest 1232/0 (confirmed 2026-08-19 12:07 WAT).**
+**All phases closed through W92. PriorityWidget test is green on user verification.**
 
 **Only remaining human-input item: F-05 (set production URL in EAS secrets).**
 
-**Next phase identifier: W93.**
+**Next phase identifier: W94.**
 
 ---
 
