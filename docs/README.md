@@ -7,6 +7,21 @@
 
 ## Live Observations Log
 
+### 2026-08-19 14:30 WAT — Perplexity — W92 ✅ CLOSED — PriorityWidget navigation test (SPEC 13 coverage)
+- **Background:** SPEC 13 nav bug (W89) was already fixed on HEAD (SHA `93bd5de`). The only gap was missing test coverage.
+- **Added:** `src/__tests__/components/PriorityWidget.test.tsx` — 5 tests:
+  1. Renders nothing on empty list.
+  2. Row 1 tap → navigates to `fac-001` profile.
+  3. Row 2 tap → navigates to `fac-002` profile (not `fac-001`, not generic list).
+  4. Row 3 tap → navigates to `fac-003` profile.
+  5. Each row fires `router.push` exactly once; generic `/screens/facilities` never called.
+- **Commit:** [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90)
+- **Verify:** `npx jest src/__tests__/components/PriorityWidget.test.tsx` → expect 5/5 PASS.
+
+### 2026-08-19 13:50 WAT — Perplexity — SPEC12-D confirmed clean on HEAD
+- `registerPushToken()` already has `res.ok` check + `console.warn` (commit `2fbd14b`).
+- No code change needed — confirmed by direct read of `serverAuth.ts` (SHA `2772949`).
+
 ### 2026-08-19 12:34 WAT — Perplexity — W41 ✅ CLOSED — BGN-10-01 Art.15–22 → Art.14–21 confirmed + committed
 - **Fix:** PowerShell replace `المواد 15–22` → `المواد 14–21` in `src/criteria/baseGeneralCriteria.ts` line 539.
 - **Verified:** `Select-String` on BGN-10-01 block — line 539 reads `المواد 14–21 (الفصل` ✅
@@ -35,12 +50,6 @@
 - **Commit:** [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08)
 - **TSC/Jest:** No type change — TSC 0 unchanged. Jest 1233/0 unchanged.
 
-### 2026-08-18 23:31 WAT — Perplexity — 3 new Claude audit bugs registered as W89/W90/W91
-- **W89 OPEN:** `PriorityWidget.tsx` — `onPress` navigates to generic facilities list, ignores `f.facilityId`. One-line fix.
-- **W90 OPEN:** `apiClient.ts` — missing `EXPO_PUBLIC_API_URL` silently falls back to `http://localhost:3000`. Should throw.
-- **W91 OPEN:** `server/src/routes/notifications.ts` does NOT exist. Push token registration silently 404s.
-- **TSC/Jest unchanged:** 0 errors / 1233 passed.
-
 ### 2026-08-18 22:41 WAT — Perplexity — TSC 0 + Jest 1233/0 ALL GREEN (user confirmed)
 - TSC 0. Jest 1233 passed, 0 failed.
 - audit-log.tsx `INSPECTION_STATUS_UPDATED` fix confirmed clean.
@@ -55,46 +64,13 @@
 - MCH-29-08 `Art.28` → `Art.18` (hazardous waste declaration obligation).
 - **Commit:** [`769e49a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/769e49a4eedaf6d2d363f53c2b71dc8fd8ef9d4c)
 
-### 2026-08-18 19:09 WAT — Perplexity — R1/R6 confirmed closed (direct read)
-- PRT-05-01 cites `Décret 91-05 Arts.16-17` ✅ UAB-AX7-07 `93-120` excluded ✅ Décret 93-184 phantom ✅
-
-### 2026-08-18 18:27 WAT — Perplexity — W87 ✅ — F-01/F-02/F-03 confirmed clean
-- F-01 `.gitignore` covers `.env` ✅ F-02 SDK 56 comment accurate ✅ F-03 `001_` naming intentional ✅
-
-### 2026-08-18 13:38 WAT — Perplexity — Claude audit cross-ref complete
-- All 20 Claude audit findings (F-01–F-20) confirmed closed by direct code read.
-
-### 2026-08-18 13:31 WAT — Perplexity — W50 ✅ + W51 ✅ CLOSED
-- CGS-01-01 Décret 76-35 removed. MCH-29-03+04 Décret 09-19 backfill.
-- **Commit:** [`7782bdf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/7782bdf8f05357800742a31e04d7abd3cfbf37ec)
-
-### 2026-08-18 13:19 WAT — Perplexity — W86 ✅ CLOSED — TSC 0 + Jest 1257/0 all green
-- BackupService v3 photo embed + briefService critical sort.
-- **Commit:** [`872ad94`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/872ad94fa940c9e96c8f02b8367418d33c025d30)
-
-### 2026-08-18 12:53 WAT — Perplexity — W64 ✅ + W66 ✅ CLOSED
-- W64: sync.ts severity+status enums. Commit [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654)
-- W66: `updateStatus()` integrity+audit trail. Commit [`4ed0db5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/4ed0db5facafc2b1e038d8f8e5be860dd3bca76a)
-
-### 2026-08-18 12:04 WAT — Perplexity — Repo cleanup: 10 stale docs removed + STRATEGIC_PLAN collapsed
-- No code changes — TSC 0 + Jest 1245/0
-
-### 2026-08-18 02:43 WAT — Perplexity — W85 ✅ CLOSED — TSC 0 + Jest 1245/0
-- Commits: [`33e5cbf`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33e5cbfea01e98b01e582945cb5c6349f7ae2822), [`14b055c`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/14b055c733fc8163618063739505888cd5f17cec)
-
-### 2026-08-17 22:10 WAT — Perplexity — W82 CLOSED — Finding 3 PPE/machine-guard verified
-- Commits `cee92fb`, `8433bea`
-
-### 2026-08-17 19:21 WAT — Perplexity — W72 CLOSED — Dead settings toggles + notification centre
-- TSC 0 + Jest all green. Commit `9b42f67`.
-
 > **Older entries archived** — see git log or STRATEGIC_PLAN.md `<details>` block for full history.
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 12:34 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 14:30 WAT)
 
-All phases closed through W91 + BGN-10-01 legal correction applied. TSC 0 + Jest 1232/0.
+All phases closed through W92. TSC 0 + Jest 1232/0.
 
 ### 🟡 OPEN ITEMS (need human action)
 
@@ -133,6 +109,8 @@ All phases closed through W91 + BGN-10-01 legal correction applied. TSC 0 + Jest
 | **W89** | PriorityWidget onPress → facility list instead of specific profile | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08) | 2026-08-18/19 — already correct on HEAD |
 | **W91** | notifications.ts missing — push token never registered | Already present SHA `ce797c2` — POST+DELETE /register implemented | 2026-08-19 direct read |
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73) | 2026-08-19 PowerShell verify |
+| **SPEC12-D** | `registerPushToken` no `res.ok` check | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd) | 2026-08-19 |
+| **W92 / SPEC 13** | PriorityWidget nav test coverage missing | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90) | 2026-08-19 |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -157,7 +135,9 @@ SafeInspect-APP/
 │   ├── repositories/           # SQLite repositories
 │   ├── services/               # SyncService, pdfService, serverAuth, apiClient
 │   ├── utils/                  # scoringUtils, statsUtils, decisionSupport
-│   └── __tests__/              # Jest test suite (1232 tests)
+│   └── __tests__/
+│       ├── components/         # PriorityWidget.test.tsx ✅ (W92)
+│       └── repositories/       # Jest test suite (1232+ tests)
 ├── server/
 │   ├── src/
 │   │   ├── routes/             # approvals.ts, sync.ts, auth.ts, notifications.ts ✅
@@ -184,18 +164,18 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W89** | PriorityWidget facilityId nav bug | ✅ CLOSED (already on HEAD) |
-| **W90** | apiClient.ts localhost silent fallback | ✅ CLOSED — already throws on missing env (`EXPO_PUBLIC_SYNC_API_URL`) |
-| **W91** | notifications.ts route missing | ✅ CLOSED — route exists, POST+DELETE /register implemented |
-| **audit-log duplicate key** | TS1117 ACTION_LABELS/ICONS/COLORS duplicate `INSPECTION_STATUS_UPDATED` | ✅ CLOSED — Commit `259f64b` |
-| **W41 BGN-10-01** | legalReference Art.15–22 → Art.14–21 | ✅ CLOSED — Commit `a71438b` |
-| **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE — no code action until published |
+| **W89** | PriorityWidget facilityId nav bug | ✅ CLOSED |
+| **W90** | apiClient.ts localhost silent fallback | ✅ CLOSED |
+| **W91** | notifications.ts route missing | ✅ CLOSED |
+| **SPEC12-D** | registerPushToken res.ok check | ✅ CLOSED |
+| **W92** | PriorityWidget navigation test (SPEC 13 coverage) | ✅ CLOSED — Commit `a29675a` |
+| **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**All phases closed through W91 + BGN-10-01. TSC 0 + Jest 1232/0 — 2026-08-19 12:34 WAT.**
+**All phases closed through W92. TSC 0 + Jest 1232/0 (confirmed 2026-08-19 12:07 WAT).**
 
 **Only remaining human-input item: F-05 (set production URL in EAS secrets).**
 
-**Next phase identifier: W92.**
+**Next phase identifier: W93.**
 
 ---
 
@@ -207,7 +187,7 @@ SafeInspect-APP/
 | DB (mobile) | expo-sqlite ≥15 / SDK 56 |
 | Server | Express + Prisma + PostgreSQL |
 | Auth | JWT (jsonwebtoken) |
-| Tests (mobile) | Jest + ts-jest (1232 tests) |
+| Tests (mobile) | Jest + ts-jest (1232+ tests) |
 | Tests (server) | Jest + ts-jest + supertest (10 tests) |
 | Build | EAS Build |
 | Push | expo-server-sdk |

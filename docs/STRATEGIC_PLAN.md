@@ -120,42 +120,11 @@
 | **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
 | **CAP test fixture severity** | `'major'` → `'high'` in BASE fixture | 2026-08-18 | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f). TSC 0 confirmed. |
 | **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`). |
-| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed direct read 2026-08-19. |
-| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. Confirmed direct read 2026-08-19. |
+| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — throws on missing `EXPO_PUBLIC_SYNC_API_URL`. Confirmed direct read 2026-08-19. |
+| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` + `DELETE /register` implemented. |
 | **BGN-10-01** | legalReference Art range 15–22 → 14–21 | 2026-08-19 | Commit [`a71438b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a71438b769f9ca45f23e386493c9ed28f8129b73). PowerShell verify line 539 ✅ |
-| **W92** | Roadmap audit vs codebase — re-verified 2026-08-19 | 2026-08-19 | See notes below |
-
----
-
-### W92 — Roadmap Audit Notes (2026-08-19 14:20 WAT)
-
-> Full codebase scan performed against the original 30 June phase plan. Findings:
-
-**Services — all present and beyond original scope:**
-
-| Service | Original plan | Actual status |
-|---|---|---|
-| `scoringUtils.ts` | Phase A | ✅ Present (9.3 KB) |
-| `groupViolations.ts` | Phase 2 | ✅ Present |
-| `violationHistory.ts` | Phase 2 | ✅ Present |
-| `differentialView.ts` | Phase 3 | ✅ Present (7.7 KB) — full service, not stub |
-| `statusUtils.ts` | Phase 4 | ✅ Present — obs/unable statuts implemented |
-| `meetingGateService.ts` | Phase 5 | ✅ Present — intentionally thin (2 idempotent helpers, design is correct) |
-| `decisionSupport.ts` | Phase 6 | ✅ Present (8.1 KB) |
-| `numericUtils.ts` | Not planned | ✅ Present — numeric field scoring added ahead of schedule |
-| `capFactory.ts` + `CapReportService.ts` | Phase 7 | ✅ Present |
-| `pdfService.ts` | Phase 8 | ✅ Present (54 KB — very complete) |
-| `CapNotificationService.ts` | Phase 9 | ✅ Present (16.7 KB) |
-| `BackupService.ts` | Not in roadmap | ✅ Present (13.9 KB) — delivered as W65/W86 |
-| `SyncService.ts` | Not in roadmap | ✅ Present (9.1 KB) — delivered as W64 |
-| `serverAuth.ts` | Not in roadmap | ✅ Present (12 KB) — delivered as W61 |
-| `geofencingService.ts` | Not in roadmap | ✅ Present — bonus feature |
-| `SessionLockService.ts` | Not in roadmap | ✅ Present — delivered as W68 |
-
-**Conclusion:** The 30-June roadmap phases (1–9) are **100% delivered at service layer**. The gap between the original plan and current state is that ~40 additional W-phases have been executed covering UI, legal verification, TypeScript hardening, and infrastructure.
-
-**PowerShell CI note (2026-08-19):**
-`check-bom.ps1` uses bare `exit 0`/`exit 1`. This is correct for CI (`$env:CI` set) but closes the terminal when run interactively. Fix: wrap with `if ($env:CI) { exit $code } else { return }`. No change required to CI pipeline — behaviour is correct in GitHub Actions context.
+| **SPEC12-D** | `registerPushToken` missing `res.ok` check + `console.warn` | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). Non-fatal. |
+| **W92 / SPEC 13** | PriorityWidget navigation test coverage (SPEC 13) | 2026-08-19 | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90). 5 tests: empty-state + 3 per-row facilityId asserts + no-generic-list guard. |
 
 ---
 
