@@ -81,12 +81,12 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W88)
+### ✅ CLOSED — Recent Phases (W60 → W91)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
 | **W60** | loi-18-11-sante split 3 parties | 2026-08-16 | Commit `698a793` |
-| **W61** | Server routes mounted + approval routes | 2026-08-16 | 10/10 PASS. Commits: `13b750a`, `24270ca`, `0a27026` |
+| **W61** | Server routes mounted + approval routes + apiClient throw on missing env | 2026-08-16 | Commits: `13b750a`, `24270ca`, `0a27026` |
 | **W62–W63** | Route path + approval ID — clean | 2026-08-16 | Direct reads |
 | **W64** | Sync schema severity+status (SPEC 08) | 2026-08-18 | Commit [`a7f805d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a7f805dd7ce4d255b66518538fcaa29389afa654) |
 | **W65** | Backup/restore — SQLite read (SPEC 01) | 2026-08-18 | Re-confirmed clean |
@@ -105,7 +105,7 @@
 | **W79** | BGN-08-03 bare-wire | 2026-08-17 | Clean |
 | **W80** | 3 false flags corrected | 2026-08-17 | Direct source reads |
 | **W81** | Décret 76-36 MISSING → Present | 2026-08-17 | SHA `2b71182` confirmed |
-| **W82** | Finding 3 — PPE/machine-guard legal refs audit | 2026-08-17 | Commit `8433bea` |
+| **W82** | Finding 3 — PPE/machine-guard legal refs audit | 2026-08-17 | Commits `cee92fb`, `8433bea` |
 | **W83** | Phantom backlog — active inspection screen | 2026-08-17 | `checklists.tsx` confirmed present |
 | **W84** | SPEC 10 — settings key writer/reader symmetry audit | 2026-08-17 | 3 mismatched keys found → W85 |
 | **W85** | SPEC 10 fix — StorageKeys + settings.tsx patch | 2026-08-18 | TSC 0 + Jest 1245/0. Commits: `33e5cbf`, `14b055c` |
@@ -118,22 +118,17 @@
 | **CorrectiveActionRepository.extended W85** | `db.runAsync is not a function` — jest.mock hoisting trap | 2026-08-18 | Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed). Jest 0 failed user-confirmed. |
 | **baseGeneralCriteria repair** | File truncated at line 492 — BGN-09-01/02 + BGN-10-01 + `];` lost | 2026-08-18 | Claude repair + manual push `14e82d0`. All 37 criteria confirmed present. |
 | **CAP test fixture severity** | `'major'` → `'high'` in BASE fixture | 2026-08-18 | Commit [`33888a5`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/33888a598da761d8e66b839a2c7a3d43af24386f). TSC 0 confirmed. |
+| **W89** | PriorityWidget `onPress` → facilities list instead of specific profile | 2026-08-18/19 | Commit [`d457a6a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/d457a6a4d363ebc4d4164eaa8476b82bb5aeae08). Verified on HEAD (SHA `93bd5de`) — already navigates correctly to `/screens/facilities/profile`. |
+| **W90** | `apiClient.ts` silent `localhost` fallback on missing env | 2026-08-16/19 | Resolved in W61 — `apiClient.ts` (SHA `a7a3886`) throws `Error('EXPO_PUBLIC_SYNC_API_URL is not set...')`. Confirmed by direct read 2026-08-19. |
+| **W91** | `server/src/routes/notifications.ts` missing — push token silent 404 | 2026-08-19 | File exists (SHA `ce797c2`). `POST /register` (upsert) + `DELETE /register` implemented with `requireAuth` + `Expo.isExpoPushToken` validation. Confirmed by direct read 2026-08-19. |
 
 ---
-
-### 🔴 OPEN — Claude Audit Bugs (W89 / W90 / W91)
-
-| Phase | Title | Priority | Details |
-|---|---|---|---|
-| **W89** | `PriorityWidget.tsx` — `onPress` navigates to facilities list instead of `f.facilityId` | HIGH | One-line fix: `router.push({ pathname: '/facilities/[id]', params: { id: f.facilityId } })`. Pattern confirmed in `facilities/index.tsx`. Test: tap any row in PriorityWidget → must open that specific facility profile. |
-| **W90** | `apiClient.ts` — `EXPO_PUBLIC_API_URL` missing → silent `localhost` fallback | HIGH | Change: `const base = process.env.EXPO_PUBLIC_API_URL ?? 'http://localhost:3000'` → throw `Error('EXPO_PUBLIC_API_URL is not configured')`. Also closes F-05. Confirm prod URL with user before pushing. |
-| **W91** | `server/src/routes/notifications.ts` does not exist — push tokens never registered | HIGH | `_layout.tsx` calls `registerPushToken()` at startup. `registerPushToken()` → `POST /api/notifications/register` → 404 silently swallowed. Build the route (store token in DB). Extends SPEC 12. |
 
 ### 🟠 OPEN — Surveillance
 
 | Phase | Title | Priority | Notes |
 |---|---|---|---|
-| **W51-SURV** | LEGAL-VERIFY: AIM GPL2 publication status | Surveillance | Monitor JORADP. No code action until published. |
+| **W51-SURV** | LEGAL-VERIFY: AIM GPL2 JORADP publication status | Surveillance | Monitor JORADP. No code action until published. |
 
 ---
 
@@ -141,6 +136,7 @@
 
 | Item | Blocker |
 |---|---|
+| F-05: set `EXPO_PUBLIC_SYNC_API_URL` in EAS secrets | Provide production URL value |
 | BGN-10-01: Art.15–22 range verification | JORADP original PDF check |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
@@ -186,8 +182,8 @@
 
 ## Sprint Status
 
-**All phases closed through W88 — 2026-08-18. TSC 0 + Jest 1233/0 (user-confirmed 22:41 WAT).**
+**All phases closed through W91 — 2026-08-19. TSC 0 + Jest 1233/0 (user-confirmed 2026-08-18 22:41 WAT).**
 
-Active: **W89** / **W90** / **W91** (Claude audit bugs) | **W51-SURV** (surveillance) | Next phase identifier: **W92**.
+Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W92**.
 
-**W90 requires user input: confirm production API URL before fix is pushed.**
+**No open bugs. Only human-input items remain: F-05 (prod URL) + BGN-10-01 (JORADP PDF check).**
