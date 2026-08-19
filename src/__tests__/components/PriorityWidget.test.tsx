@@ -4,6 +4,7 @@
 // profile screen using that row's own facilityId, not a shared/generic target.
 
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
 import PriorityWidget from '../../../components/home/PriorityWidget';
 import { PriorityFacility } from '../../utils/loadHomeData';
@@ -50,6 +51,13 @@ function expectedNav(facilityId: string) {
   };
 }
 
+// TouchableOpacity does not expose role="button" in RNTL's accessibility
+// query layer, so we use UNSAFE_getAllByType which finds elements by their
+// React component type — the correct approach for RN pressable components.
+function getRows(instance: ReturnType<typeof render>) {
+  return instance.UNSAFE_getAllByType(TouchableOpacity);
+}
+
 // ── tests ──────────────────────────────────────────────────────────────────
 describe('PriorityWidget W92', () => {
   beforeEach(() => {
@@ -62,20 +70,20 @@ describe('PriorityWidget W92', () => {
   });
 
   it('tapping the first row navigates to that row\'s facilityId', () => {
-    const { getAllByRole } = render(
+    const instance = render(
       <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
     );
-    const rows = getAllByRole('button');
+    const rows = getRows(instance);
     fireEvent.press(rows[0]);
     expect(mockPush).toHaveBeenCalledTimes(1);
     expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-001'));
   });
 
   it('tapping the second row navigates to that row\'s facilityId — not the first row\'s', () => {
-    const { getAllByRole } = render(
+    const instance = render(
       <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
     );
-    const rows = getAllByRole('button');
+    const rows = getRows(instance);
     fireEvent.press(rows[1]);
     expect(mockPush).toHaveBeenCalledTimes(1);
     expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-002'));
@@ -84,20 +92,20 @@ describe('PriorityWidget W92', () => {
   });
 
   it('tapping the third row navigates to that row\'s facilityId', () => {
-    const { getAllByRole } = render(
+    const instance = render(
       <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
     );
-    const rows = getAllByRole('button');
+    const rows = getRows(instance);
     fireEvent.press(rows[2]);
     expect(mockPush).toHaveBeenCalledTimes(1);
     expect(mockPush).toHaveBeenCalledWith(expectedNav('fac-003'));
   });
 
   it('each row press calls router.push exactly once (no duplicate fires)', () => {
-    const { getAllByRole } = render(
+    const instance = render(
       <PriorityWidget facilities={[FACILITY_A, FACILITY_B]} />
     );
-    const rows = getAllByRole('button');
+    const rows = getRows(instance);
     fireEvent.press(rows[0]);
     fireEvent.press(rows[1]);
     expect(mockPush).toHaveBeenCalledTimes(2);
@@ -106,10 +114,10 @@ describe('PriorityWidget W92', () => {
   });
 
   it('never navigates to the generic facilities list', () => {
-    const { getAllByRole } = render(
+    const instance = render(
       <PriorityWidget facilities={[FACILITY_A, FACILITY_B, FACILITY_C]} />
     );
-    getAllByRole('button').forEach(row => fireEvent.press(row));
+    getRows(instance).forEach(row => fireEvent.press(row));
     mockPush.mock.calls.forEach(call => {
       expect(call[0]).not.toBe('/screens/facilities');
       expect(call[0]).not.toEqual({ pathname: '/screens/facilities' });
