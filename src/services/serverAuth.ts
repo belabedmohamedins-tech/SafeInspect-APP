@@ -23,6 +23,9 @@
 //   /api/approvals/by-inspection/:inspectionId/approve|reject — the previous
 //   /inspections/:id/approve path targeted a route that was never implemented
 //   anywhere in server/src/routes/ (SPEC 09, Problem 3).
+// SPEC12-D (2026-08-19): registerPushToken — added res.ok check + console.warn
+//   on HTTP failure. Non-fatal: failure is logged and swallowed; retry on next
+//   app launch via normal login flow.
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
@@ -215,13 +218,16 @@ export async function getServerUserId(): Promise<string | null> {
  * Registers the device Expo push token with the server so the backend
  * can send push notifications directly to this device.
  * Call after login and after Notifications.getExpoPushTokenAsync().
+ *
+ * SPEC12-D: non-fatal — logs a warning on HTTP failure and swallows it.
+ * The token will be re-registered on the next successful login.
  */
 export async function registerPushToken(pushToken: string): Promise<void> {
   const accessToken = await getAccessToken();
   if (!accessToken) return;
 
   try {
-    await globalThis.fetch(`${getApiUrl()}/api/notifications/register`, {
+    const res = await globalThis.fetch(`${getApiUrl()}/api/notifications/register`, {
       method:  'POST',
       headers: {
         'Content-Type':  'application/json',
@@ -229,8 +235,17 @@ export async function registerPushToken(pushToken: string): Promise<void> {
       },
       body: JSON.stringify({ pushToken }),
     });
+
+    if (!res.ok) {
+      // Non-fatal: push notifications will be unavailable until the next
+      // successful registration (next app launch after login).
+      console.warn(
+        `[SafeInspect] registerPushToken failed — HTTP ${res.status}. ` +
+        'Push notifications may be unavailable until next login.',
+      );
+    }
   } catch {
-    // Non-fatal — retry on next app launch
+    // Network error — also non-fatal, retry on next app launch
   }
 }
 
