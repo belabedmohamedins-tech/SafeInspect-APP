@@ -13,8 +13,11 @@
 // Design constraints:
 //   - Silent no-op when EXPO_PUBLIC_SYNC_API_URL is not set so Expo Go /
 //     development builds are unaffected (same contract as SyncService).
-//   - Also a no-op when the user has disabled auto-sync via Settings
-//     (SettingsRepository.getAll() key 'autoSync' === 'false'). W72 fix.
+//   - autoSync gate is handled exclusively by SyncService.flush() via the
+//     StorageKeys.AUTO_SYNC constant (W85 key symmetry fix). The duplicate
+//     raw-string check that used to live here (isAutoSyncEnabled / 'autoSync')
+//     has been removed — SPEC12-E. This eliminates the silent key-drift risk
+//     where the two readers could diverge if StorageKeys.AUTO_SYNC ever changed.
 //   - The NetInfo listener is defensive: if @react-native-community/netinfo
 //     is not installed the scheduler falls back to interval-only mode.
 //   - All flush() errors are caught and logged — a sync failure must never
@@ -30,8 +33,7 @@
 //    Using a computed key `process.env[KEY]` is opaque to the plugin and
 //    reads the live process.env object at call time.
 //
-// ⚠️  IMPORTS — keep require() (not import) for SyncService, SettingsRepository,
-//    and NetInfo:
+// ⚠️  IMPORTS — keep require() (not import) for SyncService:
 //    Dynamic require() is resolved through moduleNameMapper at call time;
 //    a static import would be hoisted and cached before mocks are wired.
 
@@ -41,34 +43,13 @@ function hasSyncUrl(): boolean {
   return Boolean((process.env[SYNC_API_URL_KEY] ?? '').trim());
 }
 
-/**
- * W72: reads the autoSync setting at call-time (not cached).
- * Uses getAll() to read raw key→value pairs so we avoid the
- * zero-argument get() signature constraint on SettingsRepository.
- */
-async function isAutoSyncEnabled(): Promise<boolean> {
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const { SettingsRepository } = require('../repositories/SettingsRepository') as
-      typeof import('../repositories/SettingsRepository');
-    const all = await SettingsRepository.getAll();
-    const raw = (all as Record<string, string>)['autoSync'];
-    // Default true when unset — preserves behaviour for existing installs.
-    if (raw === undefined) return true;
-    return raw !== 'false' && raw !== '0' && raw !== '';
-  } catch {
-    return true;
-  }
-}
-
 async function safeFlush(): Promise<void> {
   if (!hasSyncUrl()) return;
-  // W72: honour the user's autoSync preference.
-  const enabled = await isAutoSyncEnabled();
-  if (!enabled) return;
   try {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
     const { flush } = require('../services/SyncService') as typeof import('../services/SyncService');
+    // SyncService.flush() checks StorageKeys.AUTO_SYNC internally (W85).
+    // No duplicate gate here — see SPEC12-E note in file header.
     const synced = await flush();
     if (synced > 0) {
       console.info(`[SafeInspect] Sync: ${synced} inspection(s) uploaded.`);
