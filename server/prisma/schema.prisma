@@ -50,6 +50,17 @@ model PushToken {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// PushReceiptQueue — stores Expo receipt IDs returned by successful ticket sends.
+// Phase 2 of the two-phase push cleanup flow polls these and removes stale tokens.
+// ─────────────────────────────────────────────────────────────────────────────
+model PushReceiptQueue {
+  id        String   @id @default(uuid())
+  receiptId String   @unique   // Expo receipt ID (returned in ticket.id when status === 'ok')
+  token     String             // the push token this receipt belongs to (for stale-token cleanup)
+  createdAt DateTime @default(now())
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Facility
 // ─────────────────────────────────────────────────────────────────────────────
 model Facility {
