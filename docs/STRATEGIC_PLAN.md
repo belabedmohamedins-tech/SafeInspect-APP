@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W94**
+> Next phase identifier: **W95**
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W93)
+### ✅ CLOSED — Recent Phases (W60 → W94)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -126,6 +126,7 @@
 | **SPEC12-D** | `registerPushToken` missing `res.ok` check + `console.warn` | 2026-08-19 | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd). Non-fatal. |
 | **W92 / SPEC 13** | PriorityWidget navigation test coverage (SPEC 13) | 2026-08-19 | Commit [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90). 5 tests: empty-state + 3 per-row facilityId asserts + no-generic-list guard. |
 | **W93** | UI screens gap audit — 22 screens, 0 orphans, all services wired | 2026-08-19 | Direct read `app/screens/`. All service→component→screen chains confirmed complete. |
+| **W94** | E2E integration test — full inspector lifecycle | 2026-08-19 | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43). User-confirmed all green. |
 
 ---
 
@@ -208,8 +209,8 @@ npx eas secret:create --scope project --name EXPO_PUBLIC_SYNC_API_URL --value "h
 
 ## Sprint Status
 
-**All phases closed through W93 — 2026-08-19. TSC 0 + Jest 1232/0 (user-confirmed 2026-08-19 12:07 WAT).**
+**All phases closed through W94 — 2026-08-19. TSC 0 + Jest green (user-confirmed).**
 
-Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W94**.
+Active surveillance: **W51-SURV** (AIM GPL2 JORADP watch). Next phase identifier: **W95**.
 
 **🔴 Only remaining action: F-05 — set `EXPO_PUBLIC_SYNC_API_URL` when server is deployed. No code work needed until then.**

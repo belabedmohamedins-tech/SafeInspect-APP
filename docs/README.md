@@ -7,6 +7,13 @@
 
 ## Live Observations Log
 
+### 2026-08-19 15:08 WAT — Perplexity — W94 ✅ CLOSED — E2E integration test all green
+- **User-confirmed:** `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` all green.
+- **Phase result:** W94 closed.
+- **Coverage delivered:** end-to-end inspector lifecycle — save draft, complete, approve, delete-blocked on approved, cascade delete on non-approved, W22 immutability guard, deleteMany partial-lock guard, W52 clear() block.
+- **Files changed this phase:** `src/__tests__/e2e/inspectorLifecycle.e2e.test.ts`, `docs/README.md`, `docs/STRATEGIC_PLAN.md`
+- **Test commit:** [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43)
+
 ### 2026-08-19 15:00 WAT — Perplexity — W94 ✅ OPEN → PENDING USER VERIFICATION — E2E integration test
 - **File added:** `src/__tests__/e2e/inspectorLifecycle.e2e.test.ts`
 - **Commit:** [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43)
@@ -90,15 +97,14 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 15:00 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-19 15:08 WAT)
 
-All phases closed through W93. W94 E2E test pending user verification.
+All phases closed through W94.
 
 ### 🟡 OPEN ITEMS (need human action)
 
 | ID | Severity | Item | Blocker / Notes |
 |---|---|---|---|
-| **W94** | — | Run `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` → expect 8/8 PASS | User must run locally |
 | **F-05** | LOW | Confirm production API URL value | `apiClient.ts` already throws on missing env — only need to set `EXPO_PUBLIC_SYNC_API_URL=https://your-prod-host` in `.env.production` / EAS secrets. Provide the URL. |
 
 ### ✅ CONFIRMED CLOSED (all verified by direct code read)
@@ -135,6 +141,7 @@ All phases closed through W93. W94 E2E test pending user verification.
 | **SPEC12-D** | `registerPushToken` no `res.ok` check | Commit [`2fbd14b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2fbd14bf12523408532df6c2e6a386c39f8a11cd) | 2026-08-19 |
 | **W92 / SPEC 13** | PriorityWidget nav test coverage missing | Commits [`a29675a`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/a29675a4287fe5eb3b79931bac7ffe1ab13a5b90), [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310) | 2026-08-19 user-confirmed green |
 | **W93** | UI screens gap audit — 22 screens, 0 orphans | Direct read | 2026-08-19 |
+| **W94** | E2E integration test — full inspector lifecycle | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43) | 2026-08-19 user-confirmed green |
 
 ### 🟢 BACKLOG (needs human decision before opening a phase)
 
@@ -195,12 +202,12 @@ SafeInspect-APP/
 | **SPEC12-D** | registerPushToken res.ok check | ✅ CLOSED |
 | **W92** | PriorityWidget navigation test (SPEC 13 coverage) | ✅ CLOSED — green verified |
 | **W93** | UI screens gap audit | ✅ CLOSED |
-| **W94** | E2E integration test — full inspector lifecycle | 🟡 PENDING user verification |
+| **W94** | E2E integration test — full inspector lifecycle | ✅ CLOSED — green verified |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**All phases closed through W93. W94 E2E test pushed — awaiting `npx jest` confirmation.**
+**All phases closed through W94.**
 
-**Only remaining human-input item after W94: F-05 (set production URL in EAS secrets).**
+**Only remaining human-input item: F-05 (set production URL in EAS secrets).**
 
 **Next phase identifier: W95.**
 
