@@ -13,24 +13,24 @@
 import { StorageKeys } from '../../repositories/keys';
 
 // ---------------------------------------------------------------------------
-// Stable mock database
+// Stable mock database — prefixed with 'mock' so jest.mock() hoisting allows it
 // ---------------------------------------------------------------------------
-const store: Record<string, string> = {};
+const mockStore: Record<string, string> = {};
 
-const db = {
+const mockDb = {
   getAllAsync: jest.fn(async (_sql: string, _params?: unknown[]) => {
-    return Object.entries(store).map(([key, value]) => ({ key, value }));
+    return Object.entries(mockStore).map(([key, value]) => ({ key, value }));
   }),
   runAsync: jest.fn(async (_sql: string, params?: unknown[]) => {
     if (params && params.length >= 2) {
-      store[params[0] as string] = params[1] as string;
+      mockStore[params[0] as string] = params[1] as string;
     }
   }),
   withTransactionAsync: jest.fn(async (fn: () => Promise<void>) => fn()),
 };
 
 jest.mock('../../db/schema', () => ({
-  getDb: jest.fn().mockResolvedValue(db),
+  getDb: jest.fn(() => Promise.resolve(mockDb)),
   initializeDatabase: jest.fn().mockResolvedValue(undefined),
 }));
 
@@ -60,14 +60,14 @@ async function runGuard(currentPath = 'home'): Promise<string | null> {
 // Tests
 // ---------------------------------------------------------------------------
 beforeEach(() => {
-  Object.keys(store).forEach(k => delete store[k]);
+  Object.keys(mockStore).forEach(k => delete mockStore[k]);
   jest.clearAllMocks();
-  db.getAllAsync.mockImplementation(async () =>
-    Object.entries(store).map(([key, value]) => ({ key, value }))
+  mockDb.getAllAsync.mockImplementation(async () =>
+    Object.entries(mockStore).map(([key, value]) => ({ key, value }))
   );
-  db.runAsync.mockImplementation(async (_sql: string, params?: unknown[]) => {
+  mockDb.runAsync.mockImplementation(async (_sql: string, params?: unknown[]) => {
     if (params && params.length >= 2) {
-      store[params[0] as string] = params[1] as string;
+      mockStore[params[0] as string] = params[1] as string;
     }
   });
 });
@@ -86,7 +86,7 @@ describe('SPEC12-C — server-login skip persistence', () => {
   });
 
   it('guard DOES redirect when no session AND no skip flag (regression for original bug)', async () => {
-    // store is empty — no skip flag, no session
+    // mockStore is empty — no skip flag, no session
     const redirect = await runGuard('home');
     expect(redirect).toBe('/screens/server-login');
   });
