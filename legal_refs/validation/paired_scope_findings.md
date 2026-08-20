@@ -45,3 +45,15 @@ Source: repository PDF `legal_refs/pdf/decret 76-36.pdf` and OCR output under `l
 The pair `decret-07-144-nomenclature-installations-classees.md` / `legal_refs/pdf/Décret 07-144.pdf` has a clean 102-page source scope. The PDF identifies decree 07-144 dated 2 Joumada El Oula 1428, corresponding to 19 May 2007, with Articles 1er–3 and a large nomenclature annex. The Markdown preserves the article section and the annex/rubrique hierarchy, but its Markdown tables and all legal-critical thresholds, units, classifications, and rubric values require visual spot-checking against the PDF table pages before a stronger trust classification. No legal table value is changed automatically.
 
 Source: repository PDF `legal_refs/pdf/Décret 07-144.pdf`.
+
+## Decree 22-167
+
+The pair `decret-22-167-etablissements-classes-modification.md` / `legal_refs/pdf/Décret 22-167.pdf` is not safe to upgrade from the current 23-page source. The PDF extraction contains multiple unrelated 2022 arrêtés and administrative texts; article markers from the whole issue cannot establish the exact 22-167 amendment scope. No Markdown correction or reclassification is applied until the exact source pages are isolated.
+
+Source: repository PDF `legal_refs/pdf/Décret 22-167.pdf`.
+
+## Decree 83-496
+
+The pair `decret-83-496-gpl-carburant.md` / `legal_refs/pdf/Décret 83-496.pdf` is a 48-page scanned Journal Officiel source. The Markdown explicitly targets the decree excerpt and Articles 1–21, but the OCR output is predominantly unreadable Arabic and does not reliably isolate or transcribe the relevant pages. The user-supplied vision text for Articles 9–21 cannot be treated as authoritative without direct page-image verification. No legal text is corrected or reclassified; the file remains unsafe for legal use until the exact pages and bilingual transcription are independently checked.
+
+Source: repository PDF `legal_refs/pdf/Décret 83-496.pdf`; OCR output under `legal_refs/validation/ocr_pdf/Décret 83-496/`.
