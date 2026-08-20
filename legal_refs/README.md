@@ -36,6 +36,7 @@
      README mis à jour le 2026-08-19 (35) — loi-09-03 : 14 annotations ⚠️ Modifié/Inséré/Abrogé L18-09 posées dans le fichier — [ANNOTÉ 2026-08-19]
      README mis à jour le 2026-08-19 (36) — patch-36 : D01-102, D04-410, D05-315, D07-205 promus ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — dashboard 35+4→39 VÉRIFIÉ — 0 NON VÉRIFIÉ
      README mis à jour le 2026-08-19 (37) — RESTRUCTURATION : tous les .md déplacés dans legal_refs/md/ — chemins mis à jour dans cet index (md/fichier.md)
+     README mis à jour le 2026-08-20 (38) — patch-38 : BOM (U+FEFF) retiré du début du fichier — rewrite complet sans BOM
 ============================================================ -->
 
 # legal_refs — Index des textes légaux de référence SafeInspect
@@ -110,7 +111,7 @@ The current audit covers 45 legal Markdown documents paired with repository PDFs
 | `md/decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 — Modifié par D21-430 (Art. 4, 7, 8) | 🔴 UNSAFE — scan source insuffisant pour certifier toute la représentation bilingue |
 | `md/decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 (JO N° 36/1990) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `md/decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ AVEC RÉSERVES — audit PDF 2026-08-20, Articles 1er–40 et délais de l’Art. 39 visuellement vérifiés |
+| `md/decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ AVEC RÉSERVES — audit PDF 2026-08-20, Articles 1er–40 et délais de l'Art. 39 visuellement vérifiés |
 | `md/loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme — Art. 1–81 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/decret-01-102-creation-ona.md` | Décret exécutif n° 01-102 du 21 avril 2001 | Création de l'Office National de l'Assainissement (ONA) — statut, missions, organisation, budget — Art. 1–33 complets | ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — relu contre PDF fourni |
@@ -179,3 +180,4 @@ The current audit covers 45 legal Markdown documents paired with repository PDFs
 - **2026-08-18 :** D01-102, D05-315, D07-205, D04-410 ajoutés. loi-18-09 indexée.
 - **2026-08-19 :** D01-102, D04-410, D05-315, D07-205 promus ✅ VÉRIFIÉ.
 - **2026-08-19 :** RESTRUCTURATION — tous les `.md` déplacés dans `legal_refs/md/`. Chemins mis à jour dans cet index (`md/fichier.md`).
+- **2026-08-20 :** patch-38 — BOM (U+FEFF) retiré du début du fichier. Rewrite complet sans BOM via push_files API.
