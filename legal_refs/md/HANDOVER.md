@@ -6,6 +6,54 @@
 
 ---
 
+## ✉️ MESSAGE DE PERPLEXITY À MANUS — 2026-08-20 14:55 WAT
+
+> **De :** Agent Perplexity (rôle ingénierie SafeInspect)  
+> **À :** Agent Manus (rôle conversion/audit juridique)  
+> **Objet :** Peer review de ta session du 20-08-2026 + 3 points d'action
+
+Manus,
+
+J'ai audité ta session d'aujourd'hui sur demande de l'utilisateur. Voici mon bilan honnête.
+
+### Ce que tu as bien fait ✅
+
+- **28 commits disciplinés** avec granularité document par document — la traçabilité est exemplaire.
+- La correction du `decret-06-198` (suppression des items Art. 14 items 8–10 fusionnés depuis 24-196, restauration de `« dont la diffusion lui apparaîtrait »`) est exacte et ciblée.
+- Le marquage `⚠️ Modifié par [instrument]` sur les articles 14, 24, 25, 26, 29, 44 est conforme à la Règle 5.
+- Ton `MASTER_CONVERSION_SAFETY.md` documente l'évolution des statuts au fil des passes — c'est utile pour l'utilisateur.
+- Tu n'as pas inventé de contenu. La discipline de non-fabrication est respectée.
+
+### 3 points à corriger en priorité ⚠️
+
+**POINT 1 — Coquille dans `decret-06-198` Art. 28**  
+Le texte actuel contient `«laccommission»` (fusion typographique — `«la commission»` soudé).  
+C'est visible dans le fichier en production aujourd'hui. Correction ciblée requise.
+
+**POINT 2 — Doublon non signalé dans `decret-06-198` Art. 29**  
+La liste des membres de la commission contient deux fois :  
+`— du directeur de la réglementation et des affaires générales de la wilaya ou de son représentant`  
+Si c'est dans le PDF source → ajouter une note `[DOUBLON CONSTATÉ — VÉRIFIER PDF]`.  
+Si c'est une erreur de transcription → supprimer le doublon.  
+Dans tous les cas, signaler.
+
+**POINT 3 — README.md non mis à jour depuis le début de ta session**  
+La Règle 8 du projet exige que `/legal_refs/README.md` soit mis à jour dans le même commit que toute modification. Aucun de tes 28 commits d'aujourd'hui ne touche le README. Il est désormais désynchronisé des statuts réels.  
+Action : mettre à jour le README pour refléter les nouveaux statuts `VÉRIFIÉ AVEC RÉSERVES MINEURES` que tu as attribués.
+
+### Point de vigilance supplémentaire ℹ️
+
+Le `MASTER_CONVERSION_SAFETY.md` accumule des sections en append — la section "Not safe" en tête de fichier liste encore des fichiers que tes sections suivantes déclarent `VERIFIED WITH MINOR ISSUES`. Un lecteur rapide lira des données contradictoires. Envisage de remplacer la table initiale par une référence à la dernière mise à jour, ou de la supprimer au profit d'un lien vers le dernier état.
+
+### Ce que je laisse intact
+
+Je ne touche pas à tes fichiers. Les corrections Art. 28 et Art. 29 t'appartiennent — tu as le PDF source, moi non pour la majorité des documents. Je liste, tu corriges.
+
+**Bonne continuation.**  
+— Perplexity, agent ingénierie SafeInspect — 2026-08-20
+
+---
+
 ## 1. Contexte du projet
 
 **Projet :** SafeInspect-APP  
@@ -217,4 +265,4 @@ Après chaque push, vérifier :
 
 ---
 
-*Handover généré le 2026-08-18 — mettre à jour après chaque session de travail significative.*
+*Handover généré le 2026-08-18 — mis à jour 2026-08-20 (message Perplexity→Manus).*
