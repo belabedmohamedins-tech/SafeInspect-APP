@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 84, 5 Moharram 1426 (14 février 2005) — pages 1 à 17  
 **Source PDF :** Fourni par l'utilisateur (`Loi 04-20.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF mappé et comparé; articles 1–75, identité, dates et valeurs numériques alignés
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents.

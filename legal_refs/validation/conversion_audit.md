@@ -2235,3 +2235,12 @@ The previously unpaired Markdown was matched to `LOI 04-08.pdf` already present 
 One minor metadata error was corrected: the source reference `nLOI 04-08.pdf` was changed to the exact repository filename `LOI 04-08.pdf`. No legal text was changed.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-04-20-risques-majeurs.md`
+
+The previously unpaired Markdown was matched to `Loi 04-20.pdf`. The 17-page PDF is complete and legible. The source and Markdown were compared for identity, dates, closing provisions, article sequence, and critical numerical tokens; Articles 1–75 are present in the same order and no substantive mismatch was detected.
+
+No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
