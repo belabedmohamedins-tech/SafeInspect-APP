@@ -2289,3 +2289,12 @@ The previously unpaired Markdown was matched to `LOI 90-11.pdf`. The 29-page sou
 No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-88-07-hygiene-securite-medecine-travail.md`
+
+The previously unpaired Markdown was matched to `Loi 88-07-Hygiene-securite-et-medecine-du-travail.pdf`. The 10-page source is complete and legible and contains Articles 1–47. The source and Markdown were compared for identity, dates, article sequence, closing provisions, and critical numerical tokens; the article sequence and legal body align.
+
+No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
