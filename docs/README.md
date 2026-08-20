@@ -7,17 +7,22 @@
 
 ## Live Observations Log
 
+### 2026-08-20 13:08 WAT — Perplexity — W96 ✅ CLOSED — SPEC12-B push receipt two-phase stale-token cleanup
+- **User-confirmed:** `npx jest src/__tests__/push.test.ts` → 4/4 PASS.
+- **Fix:** Rewrote `server/src/lib/push.ts` with correct two-phase Expo receipt flow. Phase 1: index-based ticket→token mapping, immediate removal on send-time `DeviceNotRegistered`, receipt IDs queued in `PushReceiptQueue`. Phase 2: `pollReceipts()` fetches receipts via `getPushNotificationReceiptsAsync`, removes stale tokens, clears queue. `startReceiptPoller()` wired into `index.ts`.
+- **Schema:** `PushReceiptQueue` model added to `server/prisma/schema.prisma`.
+- **Hoisting fix (test):** `var stubs` + lazy `get` accessors in both `jest.mock()` factories eliminates TDZ ReferenceError.
+- **Files changed:** `server/prisma/schema.prisma`, `server/src/lib/push.ts`, `server/src/index.ts`, `server/src/__tests__/push.test.ts`
+- **Commits:** `83cf78b`, `e049b08`, `0f38a05`, `7f2965c`
+- **Pending (production):** `npx prisma migrate dev --name add-push-receipt-queue` when production DB is ready.
+- **Board clear:** All phases W60–W96 closed. Only W51-SURV surveillance remains.
+
 ### 2026-08-19 17:27 WAT — Perplexity — W95 ✅ CLOSED — SPEC12-C server-login skip persistence
 - **User-confirmed:** `npx jest src/__tests__/screens/serverLoginSkip.test.tsx` → 5/5 PASS.
 - **Fix:** `handleSkip()` now persists `StorageKeys.SERVER_LOGIN_SKIPPED = 'true'` before navigating. `_layout.tsx` guard reads flag and short-circuits redirect. Bug: user was redirected back to server-login on every launch after skipping.
-- **Hoisting fix:** `db` → `mockDb`, `store` → `mockStore` + lazy getter `() => Promise.resolve(mockDb)` to satisfy Jest’s mock-factory hoisting rule.
+- **Hoisting fix:** `db` → `mockDb`, `store` → `mockStore` + lazy getter `() => Promise.resolve(mockDb)` to satisfy Jest's mock-factory hoisting rule.
 - **Files changed:** `app/screens/server-login.tsx`, `app/_layout.tsx`, `src/__tests__/screens/serverLoginSkip.test.tsx`
 - **Commits:** `1e575fc` (test fix), prior session commits for source fix.
-- **SPEC12-E** confirmed clean same session — `syncEngine.ts` SHA `35605c9` already correct, no code change.
-- **W96 OPEN** — SPEC12-B push receipt two-phase spec documented in STRATEGIC_PLAN.md.
-
-### 2026-08-19 17:15 WAT — Perplexity — W95 🟡 PUSHED / PENDING USER VERIFICATION — SPEC12-C server-login skip persistence
-- Fix applied (2 source files + test). Extension bug (`.test.ts` → `.test.tsx`) and jest.mock hoisting trap fixed before green.
 
 ### 2026-08-19 15:08 WAT — Perplexity — W94 ✅ CLOSED — E2E integration test all green
 - **User-confirmed:** `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` all green.
@@ -36,55 +41,24 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-19 17:27 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-08-20 13:08 WAT)
 
-### 🔵 OPEN PHASE — Spec documented, not yet implemented
+### ✅ ALL IMPLEMENTATION PHASES CLOSED (W60–W96)
 
-| ID | Severity | Item | Notes |
-|---|---|---|---|
-| **W96** | P2 | SPEC12-B: push receipt two-phase stale-token cleanup | Full spec in STRATEGIC_PLAN.md under W96. Server-only. Implement when ready. |
+No open implementation phases remain.
 
-### ✅ CONFIRMED CLOSED
+### 🟠 SURVEILLANCE
 
-| Finding | Closed by | Verified |
+| ID | Item | Blocker |
 |---|---|---|
-| SPEC12-A — login rate-limit | W74 | Commit `33dc3b8` |
-| SPEC12-B — push receipt two-phase (stale token cleanup) | W96 OPEN | Spec documented; code not yet written |
-| SPEC12-C — server-login skip persistence | W95 | **5/5 Jest green — 2026-08-19 user-confirmed** |
-| SPEC12-D server-side — notifications.ts route | W91 | SHA `ce797c2` |
-| SPEC12-D client-side — registerPushToken res.ok | SPEC12-D commit | Commit `2fbd14b` |
-| SPEC12-E — syncEngine.ts raw 'autoSync' string | Already clean | Direct read SHA `35605c9` |
-| SPEC13 — PriorityWidget facilityId nav bug | W89 + W92 | Commits `d457a6a`, `a29675a`, `c1040f2` |
-| F-01 | W87 | 2026-08-18 |
-| F-02 | W87 | 2026-08-18 |
-| F-03 | W87 | 2026-08-18 |
-| F-04/F-07 | Z5 | 2026-08-09 |
-| F-05/W90 | W61 | 2026-08-19 |
-| F-08 | W38 | 2026-08-09 |
-| F-09 | W28 | 2026-08-09 |
-| F-10 | W40 | 2026-08-09 |
-| F-11 | W52 | 2026-08-18 |
-| F-12 | W5 | 2026-08-09 |
-| F-13 | W39 | 2026-08-09 |
-| F-14 | W27+W56 | 2026-08-09 |
-| F-15 | W41 | 2026-08-09 |
-| F-17 | W64 | 2026-08-18 |
-| F-18 | W53 | 2026-08-18 |
-| F-19 | W52 | 2026-08-09 |
-| F-20 | W56 | 2026-08-18 |
-| W89 PriorityWidget nav | W89 | 2026-08-18 |
-| W91 notifications.ts | W91 | 2026-08-19 |
-| BGN-10-01 art range | W41 commit `a71438b` | 2026-08-19 |
-| W92 SPEC 13 test | W92 | 2026-08-19 |
-| W93 UI gap audit | W93 | 2026-08-19 |
-| W94 E2E lifecycle test | W94 | 2026-08-19 user-confirmed |
-| W95 SPEC12-C skip persistence | W95 | 2026-08-19 user-confirmed |
+| **W51-SURV** | AIM GPL2 JORADP publication watch | Monitor JORADP. No code action until published. |
 
 ### 🟢 BACKLOG (needs human decision)
 
 | Item | Blocker |
 |---|---|
 | F-05: set `EXPO_PUBLIC_SYNC_API_URL` | Provide production URL |
+| Run `npx prisma migrate dev --name add-push-receipt-queue` | Production DB ready |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
 | L-01: Décret 06-141 Annexe I/II conflict | Expert confirmation |
 | MCH-29-05 heavy-metal params | Product decision |
@@ -109,11 +83,13 @@ SafeInspect-APP/
 │       ├── screens/            # serverLoginSkip.test.tsx ✅ (W95)
 │       └── repositories/       # Jest test suite (1232+ tests)
 ├── server/
+│   ├── prisma/
+│   │   └── schema.prisma       # PushReceiptQueue model added (W96)
 │   ├── src/
 │   │   ├── routes/             # approvals.ts, sync.ts, auth.ts, notifications.ts ✅
 │   │   ├── middleware/         # auth.ts (JWT)
-│   │   ├── lib/                # push.ts (⚠️ W96 OPEN — stale-token cleanup needs two-phase receipt flow)
-│   │   └── __tests__/          # 10 server tests
+│   │   ├── lib/                # push.ts ✅ two-phase receipt cleanup (W96)
+│   │   └── __tests__/          # push.test.ts ✅ 4/4 (W96)
 │   └── package.json
 ├── docs/
 │   ├── README.md               # ← this file
@@ -134,11 +110,10 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W95** | SPEC12-C: server-login skip persistence | ✅ CLOSED — 2026-08-19 |
-| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | 🔵 SPEC DOCUMENTED — not yet implemented |
+| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | ✅ CLOSED — 2026-08-20 |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**Next phase identifier: W97.**
+**All implementation phases closed. Next phase identifier: W97.**
 
 ---
 
@@ -150,7 +125,7 @@ SafeInspect-APP/
 | DB (mobile) | expo-sqlite ≥15 / SDK 56 |
 | Server | Express + Prisma + PostgreSQL |
 | Auth | JWT (jsonwebtoken) |
-| Tests (mobile) | Jest + ts-jest (1232+ tests + 5 W95 screens tests) |
-| Tests (server) | Jest + ts-jest + supertest (10 tests) |
+| Tests (mobile) | Jest + ts-jest (1232+ tests) |
+| Tests (server) | Jest + ts-jest + supertest (14 tests) |
 | Build | EAS Build |
-| Push | expo-server-sdk |
+| Push | expo-server-sdk (two-phase receipt cleanup ✅ W96) |
