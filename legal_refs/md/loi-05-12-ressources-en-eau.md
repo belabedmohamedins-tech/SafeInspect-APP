@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 60, 30 Rajab 1426 (4 septembre 2005) — pages 1 à 27  
 **Source PDF :** Fourni par l'utilisateur (`loi 05-12.pdf`)  
 **Date de conversion :** 2026-08-11  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF mappé et comparé; articles 1–183, identité, dates et valeurs numériques alignés
 
 > **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 

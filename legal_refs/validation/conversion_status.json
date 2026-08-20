@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 30,
+    "verified_with_minor_issues": 31,
     "requires_correction": 0,
-    "unsafe": 15,
+    "unsafe": 14,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1940,24 +1940,24 @@
     },
     {
       "document": "loi-05-12-ressources-en-eau.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 16,
+      "conversion_quality": "TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi 05-12.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Final visual spot-check reservation",
+          "markdown_location": "Whole document",
+          "pdf_content": "The 16-page source extraction is complete and legible; Articles 1–183 are present.",
+          "markdown_content": "Articles 1–183 are represented in sequence.",
+          "problem": "No substantive mismatch detected by text/article comparison; final visual spot-check remains advisable for legal-critical values.",
+          "correction_required": "No text correction; retain human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The mapped 16-page PDF and Markdown were compared. Articles 1–183, identity, dates, closing provisions, and critical numerical tokens align."
     },
     {
       "document": "loi-09-03-protection-consommateur.md",
