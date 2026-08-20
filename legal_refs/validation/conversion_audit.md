@@ -2158,3 +2158,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Clean technical-decree review update — 2026-08-20
 
 `decret-21-261-esp-equipements-hydrocarbures.md` was checked against the clean 14-page PDF `dec 21-261.pdf`. The source identifies decree 21-261 dated 2 Dhou El Kaada 1442, corresponding to 13 June 2021, and the Markdown contains Articles 1er–104 across four chapters. The existing technical structure, definitions, and sequence controls were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Clean article-and-annex review update — 2026-08-20
+
+`decret-21-319-autorisation-exploitation-hydrocarbures.md` was checked against its clean 14-page PDF. The source identifies decree 21-319 dated 5 Moharram 1443, corresponding to 14 August 2021, and the Markdown contains Articles 1er–98, nine chapters, and Annexes 1–4. The existing technical tables and Markdown structure were preserved. The file is classified **VERIFIED WITH MINOR ISSUES**.

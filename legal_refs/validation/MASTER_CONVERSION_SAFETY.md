@@ -128,3 +128,7 @@ The 01-102 Markdown was compared with its six-page PDF. Its source identity and 
 ## Clean technical-decree review update — 2026-08-20
 
 The 21-261 Markdown was compared with its clean 14-page PDF. Its identity, four chapters, and Articles 1er–104 match; the technical Markdown structure was preserved. It is now **VERIFIED WITH MINOR ISSUES**.
+
+## Clean article-and-annex review update — 2026-08-20
+
+The 21-319 Markdown was compared with its clean 14-page PDF. Its identity, Articles 1er–98, nine chapters, and four annexes match; the existing structure was preserved. It is **VERIFIED WITH MINOR ISSUES**.

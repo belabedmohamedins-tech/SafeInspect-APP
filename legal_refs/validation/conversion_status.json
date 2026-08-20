@@ -1041,9 +1041,9 @@
     {
       "document": "decret-21-319-autorisation-exploitation-hydrocarbures.md",
       "pages": 14,
-      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-98, NINE CHAPTERS, AND FOUR ANNEXES MATCH THE SOURCE",
       "critical_errors": 0,
-      "minor_errors": 60,
+      "minor_errors": 1,
       "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 21-319.pdf",
       "errors": [
@@ -1057,7 +1057,7 @@
           "severity": "MINOR"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Fourteen-page PDF identity, Articles 1-98, nine chapters, and four annexes compared; final visual check of tables, thresholds, and units advised."
     },
     {
       "document": "decret-21-430-gpl-carburant.md",
