@@ -1020,9 +1020,9 @@
     {
       "document": "decret-21-261-esp-equipements-hydrocarbures.md",
       "pages": 14,
-      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-104 AND FOUR CHAPTERS MATCH THE SOURCE",
       "critical_errors": 0,
-      "minor_errors": 47,
+      "minor_errors": 1,
       "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "dec 21-261.pdf",
       "errors": [
@@ -1036,7 +1036,7 @@
           "severity": "MINOR"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Fourteen-page PDF identity, Articles 1-104, and four chapters compared; final visual check of technical definitions, values, and units advised."
     },
     {
       "document": "decret-21-319-autorisation-exploitation-hydrocarbures.md",

@@ -124,3 +124,7 @@ The 07-205 Markdown was compared with its three-page PDF. Its source identity an
 ## Direct-PDF scope review update — 2026-08-20
 
 The 01-102 Markdown was compared with its six-page PDF. Its source identity and Articles 1–33 match, and the existing Markdown structure was preserved. It is now **VERIFIED WITH MINOR ISSUES**.
+
+## Clean technical-decree review update — 2026-08-20
+
+The 21-261 Markdown was compared with its clean 14-page PDF. Its identity, four chapters, and Articles 1er–104 match; the technical Markdown structure was preserved. It is now **VERIFIED WITH MINOR ISSUES**.

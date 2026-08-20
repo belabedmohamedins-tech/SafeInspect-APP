@@ -3,7 +3,7 @@
 **Date de signature :** 13 juin 2021 (2 Dhou El Kaâda 1442)  
 **Journal Officiel :** Source PDF fournie par l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — source PDF de 14 pages identifiée ; articles 1er à 104 et quatre chapitres comparés ; contrôle visuel final des définitions, valeurs techniques et unités recommandé  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
