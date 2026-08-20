@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 15,
+    "verified_with_minor_issues": 16,
     "requires_correction": 0,
-    "unsafe": 30,
+    "unsafe": 29,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -371,10 +371,10 @@
     {
       "document": "decret-05-315-declaration-dechets-speciaux-dangereux.md",
       "pages": 4,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-4 AND DECLARATION FORM MATCH THE SOURCE",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Decret 05-315.pdf",
       "errors": [
         {
@@ -387,7 +387,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Articles 1er-4 and attached annual declaration form compared with the four-page PDF; final visual check of fields and units advised."
     },
     {
       "document": "decret-06-138-emissions-atmospheriques.md",

@@ -4,7 +4,7 @@
 **Journal Officiel :** À déterminer  
 **Source PDF :** Fourni par l'utilisateur (`decret 05-315.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — articles 1er à 4 et formulaire de déclaration comparés au PDF ; contrôle visuel final des champs et unités recommandé  
 
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 

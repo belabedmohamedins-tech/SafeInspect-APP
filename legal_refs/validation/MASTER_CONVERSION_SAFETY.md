@@ -112,3 +112,7 @@ The 09-335 Markdown was compared with its direct five-page PDF. Articles 1er–2
 ## Direct-PDF article-scope review update — 2026-08-20
 
 The 04-410 Markdown was compared with its five-page PDF. Its source identity and Articles 1er–16 match, and the existing structure and SafeInspect note were preserved. It is now **VERIFIED WITH MINOR ISSUES**.
+
+## Decree-and-form review update — 2026-08-20
+
+The 05-315 Markdown was compared with its four-page PDF. Articles 1er–4 and the attached annual declaration form match the source, and the existing scope note and Markdown structure were preserved. It is now **VERIFIED WITH MINOR ISSUES**.

@@ -2142,3 +2142,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Direct-PDF article-scope review update — 2026-08-20
 
 `decret-04-410-regles-installations-traitement-dechets.md` was checked against its five-page PDF. The source identifies the decree as 04-410 dated 2 Dhou El Kaada 1425, corresponding to 14 December 2004, and the Markdown contains Articles 1er–16 in order. The existing SafeInspect note, headings, sequence table, and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Decree-and-form review update — 2026-08-20
+
+`decret-05-315-declaration-dechets-speciaux-dangereux.md` was checked against the four-page PDF. The Markdown contains Articles 1er–4 and the attached annual declaration form represented in the source, including the waste description, storage, treatment, and minimisation sections. Its legal scope note and existing Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
