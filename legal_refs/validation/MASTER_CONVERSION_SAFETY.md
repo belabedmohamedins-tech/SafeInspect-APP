@@ -1,5 +1,8 @@
 # SafeInspect Master Conversion Safety Report
 
+
+> **Historical snapshot notice — 2026-08-20:** This report preserves the 2026-08-19 first-pass results for traceability. It is not the current classification. Use `conversion_status.json`, `conversion_audit.md`, and `TRUSTABLE_MD_INDEX.md` for the current PDF-authoritative status.
+
 **Audit date:** 2026-08-19
 
 The PDF is the legal source of truth. This report classifies Markdown files only after comparison with the PDFs available in this repository. No Markdown file was automatically altered because no uncertain replacement text was permitted.

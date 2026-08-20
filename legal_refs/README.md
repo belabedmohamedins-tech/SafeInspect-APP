@@ -73,7 +73,19 @@ legal_refs/
 
 ---
 
-## Tableau de bord — Audit baseline 2026-08-19 (mis à jour patch 36)
+## Current PDF-authoritative audit status — 2026-08-20
+
+The historical dashboard below records earlier human-review labels and must not be confused with the current PDF-authoritative audit. The **current machine-readable source of truth** is [`validation/conversion_status.json`](validation/conversion_status.json), with the detailed evidence in [`validation/conversion_audit.md`](validation/conversion_audit.md) and the concise trust list in [`validation/TRUSTABLE_MD_INDEX.md`](validation/TRUSTABLE_MD_INDEX.md).
+
+| Current PDF-audit status | Count | Legal/AI use |
+|---|---:|---|
+| **VERIFIED WITH MINOR ISSUES** | 43 | Usable for AI/legal research with source-page spot-checks for critical values. |
+| **REQUIRES CORRECTION** | 0 | None currently classified in this category. |
+| **UNSAFE FOR LEGAL USE** | 2 | `decret-83-496-gpl-carburant.md` and the unpublished `projet-arrete-gpl-installations-securite.md`; do not use as binding legal text. |
+
+The current audit covers 45 legal Markdown documents paired with repository PDFs. `CLEANUP_LOG.md` and `HANDOVER.md` are internal notes and are not legal documents. The project draft is intentionally excluded from the legal trust index.
+
+## Tableau de bord — Audit baseline 2026-08-19 (historical human-review snapshot; not the current PDF-audit status)
 
 | Statut | Nombre | Fichiers |
 |---|---|---|
@@ -95,10 +107,10 @@ legal_refs/
 | `md/loi-88-07-hygiene-securite-medecine-travail.md` | Loi n° 88-07 du 26 janvier 1988 | Hygiène, sécurité et médecine du travail — Art. 1–47 complets (JO N° 4/1988) — Modifiée par Loi 17-13 (Arts. 37–39) | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — converti et relu contre PDF officiel [CONVERTI 2026-08-17] |
 | `md/decret-76-35-igh-incendie.md` | Décret n° 76-35 du 20 février 1976 | Sécurité contre les risques d'incendie et de panique dans les immeubles de grande hauteur (IGH) — Art. 1–26 | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/decret-76-36-incendie-panique.md` | Décret n° 76-36 du 20 février 1976 (rectificatif) | Rectificatif relatif à la protection contre les risques d'incendie et de panique dans les établissements recevant du public — corrections des articles 20, 24 et 27 — JO N° 67/1976 | ✅ VÉRIFIÉ 2026-08-17 par Belabed Mohamed — rectificatif verbatim relu contre PDF officiel |
-| `md/decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 — Modifié par D21-430 (Art. 4, 7, 8) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel — [PATCHÉ 2026-08-17 : BOM retiré] |
+| `md/decret-83-496-gpl-carburant.md` | Décret n° 83-496 du 13 août 1983 | Conditions d'utilisation et de distribution du GPL comme carburant sur véhicules automobiles — Art. 1–21 — Modifié par D21-430 (Art. 4, 7, 8) | 🔴 UNSAFE — scan source insuffisant pour certifier toute la représentation bilingue |
 | `md/decret-90-245-appareils-pression-gaz.md` | Décret exécutif n° 90-245 du 18 août 1990 | Réglementation des appareils à pression de gaz — construction, installation, exploitation — Art. 1–24 (JO N° 36/1990) | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/decret-91-05-hygiene-securite-milieu-travail.md` | Décret exécutif n° 91-05 du 19 janvier 1991 | Prescriptions générales de protection en matière d'hygiène et de sécurité en milieu de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
-| `md/decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
+| `md/decret-93-120-medecine-du-travail.md` | Décret exécutif n° 93-120 du 15 mai 1993 | Organisation de la médecine du travail | ✅ VÉRIFIÉ AVEC RÉSERVES — audit PDF 2026-08-20, Articles 1er–40 et délais de l’Art. 39 visuellement vérifiés |
 | `md/loi-90-11-relations-travail.md` | Loi n° 90-11 du 21 avril 1990 | Relations individuelles et collectives de travail | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/loi-90-29-urbanisme.md` | Loi n° 90-29 du 1er décembre 1990 | Aménagement et urbanisme — Art. 1–81 complets | ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel |
 | `md/decret-01-102-creation-ona.md` | Décret exécutif n° 01-102 du 21 avril 2001 | Création de l'Office National de l'Assainissement (ONA) — statut, missions, organisation, budget — Art. 1–33 complets | ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — relu contre PDF fourni |
