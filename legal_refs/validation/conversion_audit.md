@@ -48,7 +48,7 @@
 | `loi-18-11-sante-partie1-arts1-164.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-18-11-sante-partie2-arts165-264.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-18-11-sante-partie3-arts265-450.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-19-02-incendie-panique.md` | 24 | SOURCE AVAILABLE; MARKDOWN SUBSTANTIALLY INCOMPLETE | 1 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-19-02-incendie-panique.md` | 24 | MIXED ISSUE; TARGET DOCUMENT ISOLATED TO PDF PAGES 5–10; ARTICLE COMPARISON | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-88-07-hygiene-securite-medecine-travail.md` | 10 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-90-11-relations-travail.md` | 29 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-90-29-urbanisme.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
@@ -1998,18 +1998,18 @@
 
 ### `loi-19-02-incendie-panique.md`
 
-**Source PDF:** `loi 19-02.pdf` (24 pages)
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `loi 19-02.pdf` (target law isolated to pages 5–10 of the 24-page mixed issue)
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** Source PDF, Articles 1–148; 24-page source
-- **Markdown location:** Entire document / article body
-- **Original PDF content:** The authoritative PDF contains the complete law through Article 148 and approximately 151,942 extracted characters.
-- **Markdown content:** The Markdown contains approximately 27,127 characters and does not represent the complete source article body.
-- **Problem:** The Markdown is substantially truncated relative to the available authoritative PDF; article and source coverage cannot be certified.
-- **Correction required:** Reconstruct the missing legal provisions directly from the PDF, preserving the existing metadata and article structure; do not promote until a second comparison is complete.
-- **Severity:** **HIGH**
+- **PDF location/page:** Mixed Journal Officiel PDF, target law pages 5–10
+- **Markdown location:** Source-scope metadata and audit boundary
+- **Original PDF content:** Law n° 19-02 contains Articles 1–47 and ends before the neighboring Law n° 19-03 begins.
+- **Markdown content:** Articles 1–47 are represented, with the source scope identified as Journal Officiel pages 5–10.
+- **Problem:** The source PDF is a mixed Journal Officiel issue, so the target-document page boundary requires explicit isolation.
+- **Correction required:** No legal text correction; preserve the isolated-page scope note and final human spot-check reservation.
+- **Severity:** **MINOR**
 
 ### `loi-88-07-hygiene-securite-medecine-travail.md`
 

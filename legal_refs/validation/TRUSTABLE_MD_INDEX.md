@@ -7,9 +7,9 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 34 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **VERIFIED WITH MINOR ISSUES** | 35 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
 | **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
-| **UNSAFE FOR LEGAL USE** | 11 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
+| **UNSAFE FOR LEGAL USE** | 10 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
 
@@ -38,6 +38,7 @@ The following files have an authoritative PDF available and have passed a strong
 - `loi-18-09-protection-consommateur.md`
 - `loi-90-11-relations-travail.md`
 - `loi-88-07-hygiene-securite-medecine-travail.md`
+- `loi-19-02-incendie-panique.md`
 - `decret-04-410-regles-installations-traitement-dechets.md`
 - `decret-05-315-declaration-dechets-speciaux-dangereux.md`
 - `decret-22-167-etablissements-classes-modification.md`
@@ -67,8 +68,8 @@ Markdown files with no corresponding PDF in the repository cannot be validated a
 
 ## 22-167 status note — 2026-08-20
 
-`decret-22-167-etablissements-classes-modification.md` is included among the 34 files usable with reservations. The target decree was isolated to PDF pages 5–10 of the mixed Journal Officiel issue, and Articles 1–12, inserted Articles 44 bis through 44 bis 10, deadlines, quantities, and the annex were visually compared. Three minor “compagnes” transcription errors were corrected to the source-visible “campagnes”.
+`decret-22-167-etablissements-classes-modification.md` is included among the 35 files usable with reservations. The target decree was isolated to PDF pages 5–10 of the mixed Journal Officiel issue, and Articles 1–12, inserted Articles 44 bis through 44 bis 10, deadlines, quantities, and the annex were visually compared. Three minor “compagnes” transcription errors were corrected to the source-visible “campagnes”.
 
 ## 83-496 status note — 2026-08-20
 
-`decret-83-496-gpl-carburant.md` remains in the **UNSAFE FOR LEGAL USE** group. A scanned-page review corrected the omission of the Article 9 **80% tank-volume condition** and the Article 12 **2,500 kg loaded-weight condition**. The full bilingual representation remains unvalidated, so the file is still not included among the 34 Markdown files usable with reservations.
+`decret-83-496-gpl-carburant.md` remains in the **UNSAFE FOR LEGAL USE** group. A scanned-page review corrected the omission of the Article 9 **80% tank-volume condition** and the Article 12 **2,500 kg loaded-weight condition**. The full bilingual representation remains unvalidated, so the file is still not included among the 35 Markdown files usable with reservations.

@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 34,
+    "verified_with_minor_issues": 35,
     "requires_correction": 0,
-    "unsafe": 11,
+    "unsafe": 10,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -2067,23 +2067,23 @@
     {
       "document": "loi-19-02-incendie-panique.md",
       "pages": 24,
-      "conversion_quality": "SOURCE AVAILABLE; MARKDOWN SUBSTANTIALLY INCOMPLETE",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "MIXED ISSUE; TARGET DOCUMENT ISOLATED TO PDF PAGES 5–10; ARTICLE COMPARISON",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "loi 19-02.pdf",
       "errors": [
         {
-          "pdf_location": "Source PDF, Articles 1–148; 24-page source",
-          "markdown_location": "Entire document / article body",
-          "pdf_content": "The authoritative PDF contains the complete law through Article 148 and approximately 151,942 extracted characters.",
-          "markdown_content": "The Markdown contains only approximately 27,127 characters and does not represent the complete source article body.",
-          "problem": "The Markdown is substantially truncated relative to the available authoritative PDF; article and source coverage cannot be certified.",
-          "correction_required": "Reconstruct the missing legal provisions directly from the PDF, preserving the existing metadata and article structure; do not promote until a second comparison is complete.",
-          "severity": "HIGH"
+          "pdf_location": "Mixed Journal Officiel PDF, target law isolated to pages 5–10",
+          "markdown_location": "Whole document / metadata scope note",
+          "pdf_content": "The target Law n° 19-02 occupies pages 5–10 of the mixed issue and contains Articles 1–47. Neighboring instruments begin after Article 47.",
+          "markdown_content": "The Markdown represents Articles 1–47 and identifies the source scope as pages 5–10.",
+          "problem": "No substantive mismatch detected in the isolated comparison; the mixed-issue boundary remains a minor scope reservation.",
+          "correction_required": "No legal text correction; retain the isolated-page scope note and final human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "The repository contains `loi 19-02.pdf`, but comparison shows a major scope gap: the 24-page PDF is complete through Article 148 while the Markdown is substantially shorter. The file remains excluded from the trustable index."
+      "second_pass": "The target law was isolated to PDF pages 5–10. Articles 1–47, dates, critical monetary values, final provisions, and neighboring-instrument boundary were compared against the Markdown. The prior full-issue truncation finding was false and has been removed."
     },
     {
       "document": "loi-88-07-hygiene-securite-medecine-travail.md",
