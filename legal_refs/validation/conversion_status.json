@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 31,
+    "verified_with_minor_issues": 32,
     "requires_correction": 0,
-    "unsafe": 14,
+    "unsafe": 13,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1982,24 +1982,24 @@
     },
     {
       "document": "loi-18-09-protection-consommateur.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 2,
+      "conversion_quality": "TEXT/ARTICLE COMPARISON; OFFICIAL JORADP DUPLICATE LOCATED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi 18-09fr.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Final visual spot-check reservation",
+          "markdown_location": "Whole document",
+          "pdf_content": "The local two-page source and official JORADP issue F2018035 contain the same Law n° 18-09 provisions, including Articles 1–11 and monetary thresholds.",
+          "markdown_content": "Articles 1–11 and the corresponding inserted/modified provisions are represented.",
+          "problem": "No substantive mismatch detected by text/article comparison; final visual spot-check remains advisable.",
+          "correction_required": "No text correction; retain human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The mapped two-page PDF and official JORADP duplicate were compared with the Markdown. Articles 1–11, inserted/modified article references, dates, monetary thresholds, and closing provisions align."
     },
     {
       "document": "loi-18-11-sante-partie1-arts1-164.md",

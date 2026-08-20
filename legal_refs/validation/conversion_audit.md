@@ -2271,3 +2271,12 @@ The previously unpaired Markdown was matched to `loi 05-12.pdf`. The 16-page sou
 No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF and official-duplicate recovery update — 2026-08-20 — `loi-18-09-protection-consommateur.md`
+
+The previously unpaired Markdown was matched to `loi 18-09fr.pdf`. The official JORADP duplicate `F2018035.pdf` was also located at `https://www.joradp.dz/FTP/jo-francais/2018/F2018035.pdf`, corresponding to Journal Officiel n° 35 dated 13 June 2018. The local source, official duplicate, and Markdown were compared for Articles 1–11, inserted and modified article references, dates, monetary thresholds, penalties, and closing provisions.
+
+No legal text correction was required. The file’s verification metadata was updated to reflect the completed comparison.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.

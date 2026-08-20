@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 35, 28 Ramadhan 1439 (13 juin 2018) — pages 5-6  
 **Source PDF :** Fourni par l'utilisateur (`loi 18-09fr.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-18 par Belabed Mohamed — relu contre PDF fourni
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF local et duplicata officiel JORADP comparés; articles 1–11, seuils monétaires et dates alignés
 
 > ⚠️ Vérifier par rapport au texte original JORADP avant toute décision juridique ou de contrôle.
 
