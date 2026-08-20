@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 21,
+    "verified_with_minor_issues": 22,
     "requires_correction": 0,
-    "unsafe": 24,
+    "unsafe": 23,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -413,10 +413,10 @@
     {
       "document": "decret-06-141-rejets-effluents-liquides.md",
       "pages": 27,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 44,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "SOURCE PAGES 4-9 ISOLATED; ARTICLES 1-14 AND ANNEXES I-II MATCH THE PDF; PARAMETER TABLES NEED VISUAL SPOT-CHECK",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 06-141.pdf",
       "errors": [
         {
@@ -645,7 +645,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Journal Officiel pages 4-9 isolated from mixed PDF; identity, Articles 1-14, Annex I and Annex II compared; visual review of limit values, tolerances, parameters, and units remains required."
     },
     {
       "document": "decret-06-198-etablissements-classes.md",

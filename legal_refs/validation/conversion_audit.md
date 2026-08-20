@@ -2178,3 +2178,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Isolated mixed-PDF review update — 2026-08-20
 
 `decret-04-82-agrement-sanitaire-elevage.md` was checked against Journal Officiel pages 3–5 isolated within the mixed PDF. The source identifies decree 04-82 dated 26 Moharram 1425, corresponding to 18 March 2004, and the Markdown contains Articles 1er–18 in order. The existing note excluding neighboring decree 04-83 and the Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated parameter-annex review update — 2026-08-20
+
+`decret-06-141-rejets-effluents-liquides.md` was checked against Journal Officiel pages 4–9 isolated within the mixed PDF. The source identifies decree 06-141 dated 20 Rabie El Aouel 1427, corresponding to 19 April 2006, and the Markdown contains Articles 1er–14 plus Annexes I–II. The existing table structure was preserved. Because the annexes contain legally critical limit values, tolerances, parameters, and units, visual checking remains mandatory. The file is now classified **VERIFIED WITH MINOR ISSUES**.

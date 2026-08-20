@@ -148,3 +148,7 @@ The 02-427 Markdown was compared with isolated Journal Officiel pages 15–17. I
 ## Isolated mixed-PDF review update — 2026-08-20
 
 The 04-82 Markdown was compared with isolated Journal Officiel pages 3–5. Its identity and Articles 1er–18 match; neighboring decree 04-83 was excluded from scope. It is **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated parameter-annex review update — 2026-08-20
+
+The 06-141 Markdown was compared with isolated Journal Officiel pages 4–9. Its identity, Articles 1er–14, and Annexes I–II match; the existing parameter tables were preserved. Visual checking of limit values, tolerances, parameters, and units remains mandatory. It is **VERIFIED WITH MINOR ISSUES**.

@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 26, 24 Rabie El Aouel 1427 (23 avril 2006) — pages 4 à 9  
 **Source PDF :** Fourni par l'utilisateur (`decret 06-141.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — pages JORADP 4 à 9 isolées dans le PDF ; articles 1er à 14 et annexes I–II comparés ; contrôle visuel final obligatoire pour les valeurs limites, tolérances, paramètres et unités  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
