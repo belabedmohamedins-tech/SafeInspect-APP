@@ -35,79 +35,79 @@ Vu larrêté interministériel du 22 Dhou El Hidja 1426 correspondant au 22 ja
 
 ## ARRÊTENT
 
-**Article 1er.**  En application des dispositions de l'article 8 du décret exécutif n° 15-172 du 8 Ramadhan 1436 correspondant au 25 juin 2015, susvisé, le présent arrêté a pour objet de fixer les critères microbiologiques des denrées alimentaires.
+**Article 1er.** — En application des dispositions de l'article 8 du décret exécutif n° 15-172 du 8 Ramadhan 1436 correspondant au 25 juin 2015, susvisé, le présent arrêté a pour objet de fixer les critères microbiologiques des denrées alimentaires.
 
-**Art. 2.**  Au sens des dispositions du présent arrêté, il est entendu par :
+**Art. 2.** — Au sens des dispositions du présent arrêté, il est entendu par :
 
- **respect des critères microbiologiques** : obtention des résultats satisfaisants ou acceptables visés aux annexes du présent arrêté, lors des analyses microbiologiques fondées sur les valeurs fixées pour ces critères, en tenant compte de la réglementation en vigueur relative aux modalités de prélèvement d'échantillons et de la conduite d'analyse ;
+— **respect des critères microbiologiques** : obtention des résultats satisfaisants ou acceptables visés aux annexes du présent arrêté, lors des analyses microbiologiques fondées sur les valeurs fixées pour ces critères, en tenant compte de la réglementation en vigueur relative aux modalités de prélèvement d'échantillons et de la conduite d'analyse ;
 
- **plan déchantillonnage** : procédure planifiée permettant de choisir, ou de prélever des échantillons distincts d'un lot, en vue d'obtenir les informations recherchées, telle qu'une décision sur la conformité du lot. Un plan d'échantillonnage définit le nombre d'individus dans l'échantillon et la règle de décision pour évaluer la conformité ou non du lot à la spécification ;
+— **plan déchantillonnage** : procédure planifiée permettant de choisir, ou de prélever des échantillons distincts d'un lot, en vue d'obtenir les informations recherchées, telle qu'une décision sur la conformité du lot. Un plan d'échantillonnage définit le nombre d'individus dans l'échantillon et la règle de décision pour évaluer la conformité ou non du lot à la spécification ;
 
- **interprétation des résultats danalyse** : conclusion sur la qualité des denrées alimentaires, quant à leur acceptabilité pour la santé des consommateurs, conformément aux critères définis aux annexes du présent arrêté ;
+— **interprétation des résultats danalyse** : conclusion sur la qualité des denrées alimentaires, quant à leur acceptabilité pour la santé des consommateurs, conformément aux critères définis aux annexes du présent arrêté ;
 
- **germe** : produit obtenu par germination et développement dune graine dans leau ou dans un autre milieu, récolté avant que les premières feuilles ne se développent et destiné à être consommé entier, avec la graine.
+— **germe** : produit obtenu par germination et développement dune graine dans leau ou dans un autre milieu, récolté avant que les premières feuilles ne se développent et destiné à être consommé entier, avec la graine.
 
-**Art. 3.**  Les catégories des denrées alimentaires auxquelles s'appliquent les dispositions du présent arrêté sont :
+**Art. 3.** — Les catégories des denrées alimentaires auxquelles s'appliquent les dispositions du présent arrêté sont :
 
- les laits et les produits laitiers ;
+— les laits et les produits laitiers ;
 
- les viandes rouges et blanches ainsi que leurs dérivés ;
+— les viandes rouges et blanches ainsi que leurs dérivés ;
 
- les produits de la pêche et de l'aquaculture ;
+— les produits de la pêche et de l'aquaculture ;
 
- les graisses animales et végétales ;
+— les graisses animales et végétales ;
 
- les conserves et les semi-conserves ;
+— les conserves et les semi-conserves ;
 
- les aliments pour nourrissons et enfants en bas âge ;
+— les aliments pour nourrissons et enfants en bas âge ;
 
- les céréales et les produits dérivés ;
+— les céréales et les produits dérivés ;
 
- les plats préparés ;
+— les plats préparés ;
 
- les eaux, les jus de fruits et de légumes et les boissons non alcoolisées ;
+— les eaux, les jus de fruits et de légumes et les boissons non alcoolisées ;
 
- les fruits, les légumes et les produits à base de végétaux ;
+— les fruits, les légumes et les produits à base de végétaux ;
 
- les ufs, les ovoproduits, les pâtisseries et les crèmes pâtissières ;
+— les ufs, les ovoproduits, les pâtisseries et les crèmes pâtissières ;
 
- les confiseries ;
+— les confiseries ;
 
- les autres denrées alimentaires prévues au point 15 de l'annexe I du présent arrêté.
+— les autres denrées alimentaires prévues au point 15 de l'annexe I du présent arrêté.
 
-**Art. 4.**  Les denrées alimentaires, citées à larticle 3 ci-dessus, ne doivent pas contenir de micro-organismes ni leurs toxines ou métabolites dans des quantités qui présentent un risque inacceptable pour la santé du consommateur.
+**Art. 4.** — Les denrées alimentaires, citées à larticle 3 ci-dessus, ne doivent pas contenir de micro-organismes ni leurs toxines ou métabolites dans des quantités qui présentent un risque inacceptable pour la santé du consommateur.
 
-**Art. 5.**  Les intervenants responsables de la mise à la consommation des denrées alimentaires doivent veiller au respect des critères microbiologiques fixés aux annexes I et II du présent arrêté.
+**Art. 5.** — Les intervenants responsables de la mise à la consommation des denrées alimentaires doivent veiller au respect des critères microbiologiques fixés aux annexes I et II du présent arrêté.
 
-**Art. 6.**  Les critères microbiologiques relatifs aux denrées alimentaires énumérées à l'article 3 ci-dessus, sont fixés à lannexe I du présent arrêté.
+**Art. 6.** — Les critères microbiologiques relatifs aux denrées alimentaires énumérées à l'article 3 ci-dessus, sont fixés à lannexe I du présent arrêté.
 
-**Art. 7.**  Les techniques de prise dessai et dinterprétation des résultats danalyses microbiologiques des denrées alimentaires sont fixées à lannexe II du présent arrêté.
+**Art. 7.** — Les techniques de prise dessai et dinterprétation des résultats danalyses microbiologiques des denrées alimentaires sont fixées à lannexe II du présent arrêté.
 
-**Art. 8.**  Les paramètres n, c, m et M utilisés dans les annexes du présent arrêté représentent :
+**Art. 8.** — Les paramètres n, c, m et M utilisés dans les annexes du présent arrêté représentent :
 
- **n** : nombre dunité constituant léchantillon ;
+— **n** : nombre dunité constituant léchantillon ;
 
- **m** : nombre de germes présents dans un gramme ou un millilitre de produit analysé, qui correspond à la valeur en dessous de laquelle la qualité du produit est considérée comme satisfaisante ;
+— **m** : nombre de germes présents dans un gramme ou un millilitre de produit analysé, qui correspond à la valeur en dessous de laquelle la qualité du produit est considérée comme satisfaisante ;
 
- **M** : nombre de germes présents dans un gramme ou un millilitre de produit analysé, qui correspond à la valeur au dessus de laquelle la qualité du produit est considérée comme inacceptable ;
+— **M** : nombre de germes présents dans un gramme ou un millilitre de produit analysé, qui correspond à la valeur au dessus de laquelle la qualité du produit est considérée comme inacceptable ;
 
- **c** : nombre maximal dunités déchantillonnage de produit analysé qui peut dépasser « m » tout en étant inférieur à « M » sans que le lot ne soit rejeté.
+— **c** : nombre maximal dunités déchantillonnage de produit analysé qui peut dépasser « m » tout en étant inférieur à « M » sans que le lot ne soit rejeté.
 
-**Art. 9.**  Les conserves alimentaires, quelle que soit la nature de lemballage employé, doivent satisfaire, avant leur mise à la consommation, aux épreuves de stabilité prévues par la réglementation en vigueur.
+**Art. 9.** — Les conserves alimentaires, quelle que soit la nature de lemballage employé, doivent satisfaire, avant leur mise à la consommation, aux épreuves de stabilité prévues par la réglementation en vigueur.
 
-**Art. 10.**  Les épreuves de stabilité sont exclues pour les conserves alimentaires conditionnées dans des emballages métalliques, en verre, en plastique, en complexes métalloplastiques ou en complexes carton-métal-plastique présentant des défauts majeurs tels que, le bombement, le flochage et le fuitage.
+**Art. 10.** — Les épreuves de stabilité sont exclues pour les conserves alimentaires conditionnées dans des emballages métalliques, en verre, en plastique, en complexes métalloplastiques ou en complexes carton-métal-plastique présentant des défauts majeurs tels que, le bombement, le flochage et le fuitage.
 
-**Art. 11.**  A lissue des différentes épreuves effectuées sur les conserves alimentaires :
+**Art. 11.** — A lissue des différentes épreuves effectuées sur les conserves alimentaires :
 
- aucun défaut apparent, notamment, le bombement ou le fuitage, ne doit être constaté ;
+— aucun défaut apparent, notamment, le bombement ou le fuitage, ne doit être constaté ;
 
- la variation de pH entre les unités déchantillonnage étuvées et l'unité déchantillonnage témoin mises à la température ambiante pendant les périodes retenues, ne doit pas dépasser 0,5 unité.
+— la variation de pH entre les unités déchantillonnage étuvées et l'unité déchantillonnage témoin mises à la température ambiante pendant les périodes retenues, ne doit pas dépasser 0,5 unité.
 
-**Art. 12.**  Toute disposition contraire au présent arrêté, notamment les dispositions de larrêté du 14 Safar 1415 correspondant au 23 juillet 1994, modifié et complété, relatif aux spécifications microbiologiques de certaines denrées alimentaires, sont abrogées.
+**Art. 12.** — Toute disposition contraire au présent arrêté, notamment les dispositions de larrêté du 14 Safar 1415 correspondant au 23 juillet 1994, modifié et complété, relatif aux spécifications microbiologiques de certaines denrées alimentaires, sont abrogées.
 
-**Art. 13.**  Les dispositions du présent arrêté entrent en vigueur une année après sa date de publication au Journal officiel.
+**Art. 13.** — Les dispositions du présent arrêté entrent en vigueur une année après sa date de publication au Journal officiel.
 
-**Art. 14.**  Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
+**Art. 14.** — Le présent arrêté sera publié au Journal officiel de la République algérienne démocratique et populaire.
 
 Fait à Alger, le 2 Moharram 1438 correspondant au 4 octobre 2016.
 
@@ -125,7 +125,7 @@ Abdelmalek BOUDIAF
 
 ---
 
-## ANNEXE I  CRITERES MICROBIOLOGIQUES APPLICABLES AUX DENREES ALIMENTAIRES
+## ANNEXE I — CRITERES MICROBIOLOGIQUES APPLICABLES AUX DENREES ALIMENTAIRES
 
 ### 1- Laits et produits laitiers
 
@@ -135,7 +135,7 @@ Abdelmalek BOUDIAF
 | | Staphylocoques à coagulase + | 5 | 2 | 10<sup>2</sup> | 10<sup>3</sup> |
 | | Coliformes thermotolérants | 5 | 2 | 5.10<sup>2</sup> | 5.10<sup>3</sup> |
 | | Salmonella | 5 | 0 | Absence dans 25 ml | |
-| | Antibiotiques | 1 |  | Absence dans 1 ml | |
+| | Antibiotiques | 1 | — | Absence dans 1 ml | |
 | | Listeria monocytogenes | 5 | 0 | 100 | |
 | **Lait pasteurisé et autres produits laitiers liquides pasteurisés** | Germes aérobies à 30 °C | 5 | 2 | 10<sup>4</sup> | 10<sup>5</sup> |
 | | Enterobacteriaceae | 5 | 0 | 10 | |
@@ -288,7 +288,7 @@ Abdelmalek BOUDIAF
 |:---|:---|:---:|:---:|:---:|:---:|
 | **Produits de la pêche et de l'aquaculture fabriqués à partir d'espèces de poissons associés à une grande quantité d'histidine (1) (2)** | Histamine | 9 | 2 | 100 mg/kg | 200 mg/kg |
 | **Produits de la pêche et de l'aquaculture ayant subi un traitement de maturation aux enzymes dans la saumure, fabriqués à partir d'espèces de poissons associés à une grande quantité d'histidine à l'exception de sauce de poisson (1)** | Histamine | 9 | 2 | 200 mg/kg | 400 mg/kg |
-| **Sauce de poisson produite par fermentation de produits de la pêche et de l'aquaculture** | Histamine | 1 |  | 400 mg/kg | |
+| **Sauce de poisson produite par fermentation de produits de la pêche et de l'aquaculture** | Histamine | 1 | — | 400 mg/kg | |
 | **Poissons, céphalopodes et mollusques crus (sauf mollusques bivalves vivants) (3)** | Germes aérobies à 30 °C | 5 | 2 | 10<sup>6</sup> | 10<sup>7</sup> |
 | | Coliformes thermotolérants | 5 | 2 | 10 | 10<sup>2</sup> |
 | | Staphylocoques à coagulase + | 5 | 2 | 10<sup>2</sup> | 10<sup>3</sup> |
@@ -604,10 +604,10 @@ Abdelmalek BOUDIAF
 
 | Catégories des denrées alimentaires | Micro-organismes/métabolites | n | c | m | M |
 |:---|:---|:---:|:---:|:---:|:---:|
-| **Arômes et additifs en poudre** | Germes aérobies à 30 °C | 1 |  | 10<sup>4</sup> | |
-| | Coliformes totaux | 1 |  | 10<sup>2</sup> | |
-| | Escherichia coli | 1 |  | 10 | |
-| | Levures et moisissures | 1 |  | 10<sup>3</sup> | |
+| **Arômes et additifs en poudre** | Germes aérobies à 30 °C | 1 | — | 10<sup>4</sup> | |
+| | Coliformes totaux | 1 | — | 10<sup>2</sup> | |
+| | Escherichia coli | 1 | — | 10 | |
+| | Levures et moisissures | 1 | — | 10<sup>3</sup> | |
 | | Staphylocoques à coagulase + | 5 | 2 | 10 | 10<sup>2</sup> |
 | | Salmonella | 5 | 0 | Absence dans 25 g | |
 | **Glaces aromatisées et sorbets** | Germes aérobies à 30 °C | 5 | 2 | 10<sup>3</sup> | 10<sup>4</sup> |
@@ -647,7 +647,7 @@ Abdelmalek BOUDIAF
 
 ---
 
-## ANNEXE II  TECHNIQUE DE PRISE D'ESSAI ET D'INTERPRETATION DES RESULTATS D'ANALYSES MICROBIOLOGIQUES
+## ANNEXE II — TECHNIQUE DE PRISE D'ESSAI ET D'INTERPRETATION DES RESULTATS D'ANALYSES MICROBIOLOGIQUES
 
 ### I. Technique de prise d'essai
 
@@ -659,11 +659,11 @@ Abdelmalek BOUDIAF
 
 - La prise d'essai destinée à la préparation de la suspension mère et des dilutions décimales porte :
 
-   Sur les parties superficielles et profondes, notamment pour les produits en tranches, hachés et les plats cuisinés à l'avance ;
+  — Sur les parties superficielles et profondes, notamment pour les produits en tranches, hachés et les plats cuisinés à l'avance ;
 
-   Sur la partie profonde après cautérisation de la surface du produit, notamment pour les viandes (pièces), les volailles (pièces), les produits carnés (pièces) et les poissons entiers ;
+  — Sur la partie profonde après cautérisation de la surface du produit, notamment pour les viandes (pièces), les volailles (pièces), les produits carnés (pièces) et les poissons entiers ;
 
-   Sur le produit homogénéisé ou sur les parties superficielles et profondes, selon la nature du produit liquide ou semi-liquide, notamment les produits laitiers.
+  — Sur le produit homogénéisé ou sur les parties superficielles et profondes, selon la nature du produit liquide ou semi-liquide, notamment les produits laitiers.
 
 - Dans le cas des examens microbiologiques effectués à la suite de taxi-infections alimentaires, il est nécessaire de pratiquer la recherche des germes pathogènes, toxinogènes et/ou de leurs toxines, aussi bien en surface qu'en profondeur.
 
@@ -703,15 +703,15 @@ Les résultats s'expriment de la façon suivante :
 
 - Pour l'expression **"absence dans"** :
 
-   le résultat du critère microbiologique est **satisfaisant** lorsqu'il y a absence du micro-organisme dans toutes les unités de l'échantillon ;
+  — le résultat du critère microbiologique est **satisfaisant** lorsqu'il y a absence du micro-organisme dans toutes les unités de l'échantillon ;
 
-   le résultat du critère microbiologique est **non satisfaisant**, lorsque la présence du micro-organisme est détectée dans, au moins, une unité de l'échantillon. Dans le cas des micro-organismes suivants : Listeria monocytogenes, Salmonella, Campylobacter spp (thermotolérants), le résultat révèle que le lot contrôlé est impropre à la consommation.
+  — le résultat du critère microbiologique est **non satisfaisant**, lorsque la présence du micro-organisme est détectée dans, au moins, une unité de l'échantillon. Dans le cas des micro-organismes suivants : Listeria monocytogenes, Salmonella, Campylobacter spp (thermotolérants), le résultat révèle que le lot contrôlé est impropre à la consommation.
 
 - Pour la valeur limite **"m=M"** :
 
-   Si le résultat de l'analyse est inférieur ou égal à « m », le résultat du critère microbiologique est **satisfaisant** ;
+  — Si le résultat de l'analyse est inférieur ou égal à « m », le résultat du critère microbiologique est **satisfaisant** ;
 
-   Si le résultat de l'analyse excède « m », le résultat du critère microbiologique est **non satisfaisant**. Dans le cas de Listeria monocytogenes, le résultat révèle que le lot contrôlé est impropre à la consommation.
+  — Si le résultat de l'analyse excède « m », le résultat du critère microbiologique est **non satisfaisant**. Dans le cas de Listeria monocytogenes, le résultat révèle que le lot contrôlé est impropre à la consommation.
 
 #### 3. Cas particulier
 

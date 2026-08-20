@@ -2130,3 +2130,7 @@ Current machine-readable classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR
 ## Encoding-repair review update — 2026-08-20
 
 The 2016 microbiological-criteria and 2025 restaurant-hygiene Markdown files were stored in legacy ISO-8859-1 encoding, which caused French accents and punctuation to appear corrupted in UTF-8 readers. Both files were converted losslessly to UTF-8. Their existing headings, articles, tables, annexes, and sequence-control sections were preserved. The 2016 file was compared for article and microbiological-table coverage; the 2025 file was compared for Articles 1er–48 and restaurant-hygiene provisions. Both are now classified **VERIFIED WITH MINOR ISSUES**, with visual checks of thresholds, units, conditions, and tables still recommended.
+
+## Control-punctuation repair update — 2026-08-20
+
+A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte `U+0097` was preserved as a control character rather than rendered as punctuation. The authoritative PDF uses an em dash in these positions. All 52 occurrences in the 2016 Markdown and all 105 occurrences in the 2025 Markdown were replaced with the source-faithful em dash. No article text, number, unit, table value, or legal condition was changed.
