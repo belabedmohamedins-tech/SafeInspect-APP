@@ -156,3 +156,7 @@ The 06-141 Markdown was compared with isolated Journal Officiel pages 4–9. Its
 ## Isolated amendment review update — 2026-08-20
 
 The 21-430 Markdown was compared with isolated Journal Officiel pages 11–12. Its identity, Articles 1er–3, and modified Articles 4, 7, and 8 match; unrelated 2021 material elsewhere in the PDF was excluded. It is **VERIFIED WITH MINOR ISSUES**.
+
+## OCR rectificatif correction update — 2026-08-20
+
+The 76-36 rectificatif was rechecked with stronger Arabic/French OCR and page-image evidence. Its correction wording matches the source, and the Article 27 line reference was corrected from 5th to 6th line. It is **VERIFIED WITH MINOR ISSUES**, with a final visual check still recommended.

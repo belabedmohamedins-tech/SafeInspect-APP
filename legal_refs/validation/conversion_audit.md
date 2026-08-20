@@ -2186,3 +2186,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Isolated amendment review update — 2026-08-20
 
 `decret-21-430-gpl-carburant.md` was checked against Journal Officiel pages 11–12 isolated within the mixed PDF. The source identifies decree 21-430 dated 28 Rabie El Aouel 1443, corresponding to 4 November 2021, and the Markdown contains Articles 1er–3 plus the modified Articles 4, 7, and 8 of decree 83-496. The existing amendment quotations and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## OCR rectificatif correction update — 2026-08-20
+
+`decret-76-36-incendie-panique.md` was checked against the stronger Arabic/French OCR and the rendered source page. The rectificatif wording matches the source. A source-established reference error was corrected: the PDF specifies the **4ème et 6ème lignes de l'article 27**, not the 4ème et 5ème lines. The existing rectificatif-only Markdown structure was preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

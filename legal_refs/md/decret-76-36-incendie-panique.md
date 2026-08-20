@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 67, 20 août 1976 — page 812 (rectificatif)  
 **Source PDF :** Fourni par l'utilisateur (`decret 76-36.pdf`)  
 **Date de conversion :** 2026-08-17  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-17] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — OCR Arabic/French and page image confirm the rectificatif; final visual check of the corrected line references remains recommended  
 
 > **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 
@@ -26,7 +26,7 @@ Page 245, 2ème colonne, 5ème et 6ème lignes de l'article 20 :
 
 > le directeur de la protection civile
 
-Page 246, 1ère colonne, 4ème et 5ème lignes de l'article 24, 4ème et 5ème lignes de l'article 27 :
+Page 246, 1ère colonne, 4ème et 5ème lignes de l'article 24, 4ème et 6ème lignes de l'article 27 :
 
 **Au lieu de :**
 
@@ -51,7 +51,7 @@ Ce décret n'abroge pas de textes antérieurs ; il s'agit d'un rectificatif appo
 Ce décret est un rectificatif composé de corrections ponctuelles. Il ne contient pas d'articles numérotés. Les modifications apportées sont :
 
 - Correction de l'intitulé de la fonction "directeur du service de la protection civile" en "directeur de la protection civile" à l'article 20.
-- Correction de l'intitulé de la fonction "chef du service de la protection civile" en "directeur de la protection civile" aux articles 24 et 27.
+- Correction de l'intitulé de la fonction "chef du service de la protection civile" en "directeur de la protection civile" aux articles 24 et 27 ; la référence PDF précise les 4ème et 6ème lignes de l'article 27.
 
 Aucune lacune détectée dans le texte du rectificatif.
 

@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 23,
+    "verified_with_minor_issues": 24,
     "requires_correction": 0,
-    "unsafe": 22,
+    "unsafe": 21,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1473,10 +1473,10 @@
     {
       "document": "decret-76-36-incendie-panique.md",
       "pages": 8,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 14,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "OCR/PAGE-IMAGE VERIFIED; RECTIFICATIF REFERENCES AND CORRECTIONS MATCH THE SOURCE",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 76-36.pdf",
       "errors": [
         {
@@ -1606,7 +1606,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Arabic/French OCR and page image confirm the rectificatif on source page 2; the Article 27 reference was corrected to the PDF wording: 4th and 6th lines."
     },
     {
       "document": "decret-83-496-gpl-carburant.md",
