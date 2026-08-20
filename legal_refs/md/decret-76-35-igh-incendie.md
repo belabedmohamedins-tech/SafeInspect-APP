@@ -4,7 +4,7 @@
 **Journal Officiel :** Publié le 12 mars 1976 — pages 242 à 243  
 **Source PDF :** Fourni par l'utilisateur (`Décret 76-35.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — Articles 1er à 26 comparés au segment PDF du décret 76-35 ; les articles 36 et 87 détectés précédemment appartiennent au décret 76-36 présent dans le même PDF source  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 10,
+    "verified_with_minor_issues": 11,
     "requires_correction": 0,
-    "unsafe": 35,
+    "unsafe": 34,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1398,10 +1398,10 @@
     {
       "document": "decret-76-35-igh-incendie.md",
       "pages": 3,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 7,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-26 MATCH THE 76-35 SEGMENT",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 76-35.pdf",
       "errors": [
         {
@@ -1468,7 +1468,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Articles 1er-26 compared with the 76-35 segment; parser detections for Articles 36 and 87 belong to decree 76-36 in the mixed source PDF."
     },
     {
       "document": "decret-76-36-incendie-panique.md",

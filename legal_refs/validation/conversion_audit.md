@@ -2122,3 +2122,7 @@ Current machine-readable classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR
 ## Amendment review update — 2026-08-20
 
 `decret-24-196-etablissements-classes-modification.md` was reviewed against the supplied PDF while preserving its existing amendment format. The PDF and Markdown agree on the identity, Articles 1er–3, and the quoted modifications to Articles 14, 24, 25, 26, 29, and 44 of decree 06-198. The earlier article-gap findings were parser artefacts caused by quoted amended article headings. The file is now classified **VERIFIED WITH MINOR ISSUES**, with a final visual check recommended for conditions and deadlines.
+
+## Mixed-source scope review update — 2026-08-20
+
+`decret-76-35-igh-incendie.md` was reviewed against the 76-35 segment of the mixed source PDF. Articles 1er–26 are present in the Markdown and match the 76-35 segment. The earlier detections of Articles 36 and 87 were false positives caused by the same PDF containing the following decree 76-36. The Markdown structure and scope note were preserved; the file is now classified **VERIFIED WITH MINOR ISSUES**.

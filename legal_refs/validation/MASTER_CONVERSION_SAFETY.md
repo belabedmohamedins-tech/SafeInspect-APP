@@ -96,3 +96,7 @@ Current classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR ISSUES**, **0 RE
 ## Amendment review update — 2026-08-20
 
 The 24-196 amendment Markdown was reviewed against its PDF without changing its existing quoted-article structure. Its identity, Articles 1er–3, and modified Articles 14, 24, 25, 26, 29, and 44 align with the source. It is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Mixed-source scope review update — 2026-08-20
+
+The 76-35 Markdown was checked against the correct segment of its mixed source PDF. Articles 1er–26 match; article detections from decree 76-36 were excluded as out-of-scope. The existing Markdown structure and explicit scope note were preserved. The file is now **VERIFIED WITH MINOR ISSUES**.
