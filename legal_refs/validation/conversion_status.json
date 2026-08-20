@@ -1299,50 +1299,23 @@
     {
       "document": "decret-22-167-etablissements-classes-modification.md",
       "pages": 23,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 4,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "ISOLATED SOURCE PAGES 5–10; ARTICLES 1–12 AND ANNEX VISUALLY MATCH; THREE MINOR SPELLING TRANSCRIPTIONS CORRECTED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "22-167.pdf",
       "errors": [
         {
-          "pdf_location": "Article 15 (page to be confirmed by human review)",
-          "markdown_location": "Article-number sequence",
-          "pdf_content": "Article 15 appears in the extracted PDF article sequence.",
-          "markdown_content": "Article 15 is absent from the Markdown article sequence.",
-          "problem": "Potential missing or malformed article heading/content.",
-          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
-          "severity": "HIGH"
-        },
-        {
-          "pdf_location": "Article 36 (page to be confirmed by human review)",
-          "markdown_location": "Article-number sequence",
-          "pdf_content": "Article 36 appears in the extracted PDF article sequence.",
-          "markdown_content": "Article 36 is absent from the Markdown article sequence.",
-          "problem": "Potential missing or malformed article heading/content.",
-          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
-          "severity": "HIGH"
-        },
-        {
-          "pdf_location": "Article 38 (page to be confirmed by human review)",
-          "markdown_location": "Article-number sequence",
-          "pdf_content": "Article 38 appears in the extracted PDF article sequence.",
-          "markdown_content": "Article 38 is absent from the Markdown article sequence.",
-          "problem": "Potential missing or malformed article heading/content.",
-          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
-          "severity": "HIGH"
-        },
-        {
-          "pdf_location": "Article 828 (page to be confirmed by human review)",
-          "markdown_location": "Article-number sequence",
-          "pdf_content": "Article 828 appears in the extracted PDF article sequence.",
-          "markdown_content": "Article 828 is absent from the Markdown article sequence.",
-          "problem": "Potential missing or malformed article heading/content.",
-          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
-          "severity": "HIGH"
+          "pdf_location": "Printed page 10, annex analysis requirements",
+          "markdown_location": "Annex lines 358, 376, 382",
+          "pdf_content": "The source visibly reads “campagnes” in the three analysis references.",
+          "markdown_content": "The prior Markdown used “compagnes” in those three occurrences.",
+          "problem": "Minor French transcription/spelling error; no legal number, unit, condition, or scope was changed.",
+          "correction_required": "Replace “compagnes” with “campagnes”.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Printed pages 5–10 were isolated from the mixed Journal Officiel issue and visually compared. Identity, Articles 1–12, inserted Articles 44 bis through 44 bis 10, all deadlines and quantities, and the annex structure were checked. Three “campagnes” transcription corrections were re-read after editing."
     },
     {
       "document": "decret-24-196-etablissements-classes-modification.md",

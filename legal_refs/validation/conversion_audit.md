@@ -2201,3 +2201,12 @@ The Markdown was corrected conservatively: the readable **80%** value and monito
 **Severity:** **HIGH** because a numerical legal condition was omitted. The Article 12 bilingual transcription remains ambiguous, and the full French/Arabic document has not been checked line by line. The file therefore remains **UNSAFE FOR LEGAL USE**.
 
 **Second comparison:** The corrected file was re-read after editing; the 80% condition is present, the [ILLISIBLE] marker is preserved, and no unrelated Markdown structure was changed.
+
+
+## Isolated mixed-issue correction update — 2026-08-20 — `decret-22-167-etablissements-classes-modification.md`
+
+The mixed Journal Officiel PDF was isolated to printed pages **5–10** using the page-2 contents page and page-image inspection. Page 11 begins the next decree, n° 22-168. The target decree identity, date, title, preamble, Articles 1–12, inserted Articles 44 bis through 44 bis 10, all legally meaningful deadlines and quantities, and the complete environmental-audit annex were compared against the Markdown.
+
+One minor source-established transcription error was corrected in the annex: three occurrences of **« compagnes »** were changed to the source-visible **« campagnes »**. No legal number, unit, deadline, authority, exception, or article condition was changed. A second read after correction confirmed the corrected occurrences and preserved the existing Markdown structure.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for legal-critical values and tables.

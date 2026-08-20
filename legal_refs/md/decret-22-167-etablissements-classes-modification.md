@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 29, 23 Ramadhan 1443 (24 avril 2022) — pages 5 à 11  
 **Source PDF :** Fourni par l'utilisateur (`22-167.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — pages PDF 5–10 isolées et comparées visuellement; correction de trois occurrences de « campagnes »
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
@@ -355,7 +355,7 @@ c.2. Bilan quantitatif et qualitatif des outputs :
 
 * autres paramètres, (selon l’activité).
 
-Deux compagnes d’analyses, au moins, seront nécessaires.
+Deux campagnes d’analyses, au moins, seront nécessaires.
 
 5. Emissions gazeuses :
 
@@ -373,13 +373,13 @@ Deux compagnes d’analyses, au moins, seront nécessaires.
 
 — faire une enquête de gêne du voisinage ;
 
-— une compagne d’analyse d’au moins six (6) mesures par semestre ;
+— une campagne d’analyse d’au moins six (6) mesures par semestre ;
 
 — source de bruit dans l’établissement ;
 
 — préconiser des mesures de bruit dans l’enceinte de l’établissement.
 
-Une compagne d’analyse d’au moins, six (6) mesures en différents points dans et en dehors de l’établissement classé, étalées sur une durée de vingt-quatre (24) heures seront nécessaires.
+Une campagne d’analyse d’au moins, six (6) mesures en différents points dans et en dehors de l’établissement classé, étalées sur une durée de vingt-quatre (24) heures seront nécessaires.
 
 7. Site contaminé :
 

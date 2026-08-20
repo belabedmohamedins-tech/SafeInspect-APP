@@ -23,3 +23,21 @@ The existing French Markdown includes Articles 1–21 and a French translation p
 The four-tile review of source page 42 confirms the upper-left continuation of Article 9: the vehicle owner must use fuel gas at **80%** according to the conditions in a joint ministerial decision. The same page clearly shows Arabic Articles 10, 11, and 12. Article 12 visibly includes the requirement that collective-transport vehicles and vehicles whose loaded weight exceeds **2,500 kg** display a prominent GPL plate on both lateral faces. These values and article headings are readable in the source image.
 
 The current Markdown’s Article 9 Arabic/French text omits the visible 80% condition, and its Article 12 French translation is incomplete/unclear for the second vehicle-weight condition. This is a legally meaningful omission. The exact French wording cannot be reconstructed from the Arabic image without a reliable bilingual source, so the Markdown is not silently rewritten; the file remains unsafe for legal use and the omission is recorded for human bilingual correction.
+
+## Decree 22-167 visual source-scope findings — 2026-08-20
+
+PDF page 2 is the Journal Officiel N° 29 table of contents dated 24 April 2022; it identifies decree exécutif n° 22-167 dated 18 Ramadhan 1443 corresponding to 19 April 2022 and points to printed page 5. PDF page 5 begins the target decree after an unrelated presidential decree and visibly confirms the title, the 19 April 2022 date, the 06-198 reference, and the opening Article 1. The Markdown metadata and identity match these source details. Page 5 also visibly contains the target preamble and beginning of Article 1; no correction is justified from these two pages.
+
+The target decree continues on printed pages 6–10, while page 11 begins the next decree (22-168) according to the contents. The exact target scope is therefore PDF pages 5–10, not the whole 23-page mixed issue.
+
+## Decree 22-167 pages 6–7 visual comparison — 2026-08-20
+
+Pages 6–7 visibly confirm the source wording and legal values in Articles 2–8. The source contains the **15-day** deadline for the prior-creation agreement, the **3-month** deadline for issuing the operating authorization after the promoter’s request at the end of works, and the **8-day** transmission deadline in Article 40. The Markdown reproduces these values and the category/authority assignments in the corresponding sections. The commission composition and Article 27/29/30/40 provisions also appear structurally aligned. No source-established correction is justified from pages 6–7.
+
+## Decree 22-167 pages 8–9 visual comparison — 2026-08-20
+
+Pages 8–9 visibly establish the legally significant content of Articles 9–12 and Articles 44 bis through 44 bis 10. The source confirms the one-year regularization period, the ten-day site-visit and response periods, the eight-day transmission/notification periods, the two-month preliminary/examination periods, the one-month information and technical-opinion periods, and the requirement for two paper copies plus fourteen electronic supports in Articles 44 bis 1 and 44 bis 3. The Markdown reproduces these numerical conditions and the article sequence in the corresponding sections. No source-established correction is justified from pages 8–9.
+
+## Decree 22-167 page 10 annex comparison — 2026-08-20
+
+The source annex on printed page 10 is the “Termes de référence de l’audit environnemental” associated with Article 44 bis 3. Its visible legal/technical values include the 1/200ème and 1/2.500ème plan scales, the listed effluent parameters (débit, PH, T°, MES, DBO5, DCO), at least two analysis campaigns, and the six-measurements-per-semester and 24-hour noise-monitoring requirements. The Markdown contains these same annex headings, values, parameters, and sections through V. The Markdown uses “compagnes” where the source visibly reads “campagnes” in the analysis sentences; this is a minor transcription error and should be corrected without changing the source meaning.

@@ -7,9 +7,9 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 24 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **VERIFIED WITH MINOR ISSUES** | 25 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
 | **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
-| **UNSAFE FOR LEGAL USE** | 21 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
+| **UNSAFE FOR LEGAL USE** | 20 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
 
@@ -31,6 +31,7 @@ The following files have an authoritative PDF available and have passed a strong
 - `decret-09-335-plans-internes-intervention.md`
 - `decret-04-410-regles-installations-traitement-dechets.md`
 - `decret-05-315-declaration-dechets-speciaux-dangereux.md`
+- `decret-22-167-etablissements-classes-modification.md`
 - `decret-07-205-schema-communal-dechets.md`
 
 ## Structure preservation
@@ -55,6 +56,10 @@ Markdown files with no corresponding PDF in the repository cannot be validated a
 [4]: conversion_status.json "Machine-readable status registry"
 
 
+## 22-167 status note — 2026-08-20
+
+`decret-22-167-etablissements-classes-modification.md` is included among the 25 files usable with reservations. The target decree was isolated to PDF pages 5–10 of the mixed Journal Officiel issue, and Articles 1–12, inserted Articles 44 bis through 44 bis 10, deadlines, quantities, and the annex were visually compared. Three minor “compagnes” transcription errors were corrected to the source-visible “campagnes”.
+
 ## 83-496 status note — 2026-08-20
 
-`decret-83-496-gpl-carburant.md` remains in the **UNSAFE FOR LEGAL USE** group. A scanned-page review corrected the omission of the Article 9 **80% tank-volume condition**, but the full bilingual representation and Article 12 transcription/translation remain unvalidated. The file is therefore not included among the 24 Markdown files usable with reservations.
+`decret-83-496-gpl-carburant.md` remains in the **UNSAFE FOR LEGAL USE** group. A scanned-page review corrected the omission of the Article 9 **80% tank-volume condition**, but the full bilingual representation and Article 12 transcription/translation remain unvalidated. The file is therefore not included among the 25 Markdown files usable with reservations.
