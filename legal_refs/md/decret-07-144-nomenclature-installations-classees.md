@@ -8,7 +8,7 @@
 
 **Date de conversion :** 2026-08-09
 
-**Statut de vérification :** ⚠️ NON VÉRIFIÉ — texte extrait verbatim du PDF fourni, non relu contre JORADP original
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — PDF de 102 pages identifié ; articles 1er à 4 et annexe de nomenclature comparés ; contrôle visuel final obligatoire pour les rubriques, classifications, seuils, unités et tableaux
 
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 

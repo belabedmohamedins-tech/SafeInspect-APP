@@ -2166,3 +2166,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Arabic-source review update — 2026-08-20
 
 `decret-17-140-hygiene-alimentaire.md` was checked against the 31-page Arabic JORADP PDF. The source identity matches and the French retranscription contains Articles 1–64 in order. Its explicit Arabic-source translation note and existing Markdown structure were preserved. Because the authoritative publication is Arabic, translation of legal-critical conditions and values still requires human review. The file is classified **VERIFIED WITH MINOR ISSUES**.
+
+## Large nomenclature-annex review update — 2026-08-20
+
+`decret-07-144-nomenclature-installations-classees.md` was checked against the clean 102-page PDF. The source identifies decree 07-144 dated 2 Joumada El Oula 1428, corresponding to 19 May 2007, with Articles 1er–4 and a large nomenclature annex. The Markdown preserves the article and rubric hierarchy. Because the annex contains legally critical classifications, thresholds, units, and table values, visual review of those tables remains mandatory. The file is classified **VERIFIED WITH MINOR ISSUES**.

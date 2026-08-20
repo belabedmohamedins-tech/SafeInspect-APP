@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 18,
+    "verified_with_minor_issues": 19,
     "requires_correction": 0,
-    "unsafe": 27,
+    "unsafe": 26,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -671,13 +671,13 @@
     {
       "document": "decret-07-144-nomenclature-installations-classees.md",
       "pages": 102,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-4 AND NOMENCLATURE ANNEX MATCH THE SOURCE; TABLE VALUES NEED VISUAL SPOT-CHECK",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 07-144.pdf",
       "errors": [],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "One-hundred-two-page PDF identity, Articles 1-4, and nomenclature annex structure compared; visual review of classifications, thresholds, units, and tables remains required."
     },
     {
       "document": "decret-07-205-schema-communal-dechets.md",

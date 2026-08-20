@@ -39,3 +39,9 @@ Source: repository PDF `legal_refs/pdf/Décret 21-430.pdf`.
 The pair `decret-76-36-incendie-panique.md` / `legal_refs/pdf/decret 76-36.pdf` is not safe to upgrade from the current eight-page OCR source. The OCR text contains many unrelated 1976 appointments, education arrêtés, and other Journal Officiel provisions; article markers do not isolate the 76-36 decree. No Markdown correction or reclassification is applied until the exact source pages are isolated and visually checked.
 
 Source: repository PDF `legal_refs/pdf/decret 76-36.pdf` and OCR output under `legal_refs/validation/ocr_pdf/`.
+
+## Decree 07-144
+
+The pair `decret-07-144-nomenclature-installations-classees.md` / `legal_refs/pdf/Décret 07-144.pdf` has a clean 102-page source scope. The PDF identifies decree 07-144 dated 2 Joumada El Oula 1428, corresponding to 19 May 2007, with Articles 1er–3 and a large nomenclature annex. The Markdown preserves the article section and the annex/rubrique hierarchy, but its Markdown tables and all legal-critical thresholds, units, classifications, and rubric values require visual spot-checking against the PDF table pages before a stronger trust classification. No legal table value is changed automatically.
+
+Source: repository PDF `legal_refs/pdf/Décret 07-144.pdf`.
