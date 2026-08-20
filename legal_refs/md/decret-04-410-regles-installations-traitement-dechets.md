@@ -4,7 +4,7 @@
 **Journal Officiel :** À déterminer  
 **Source PDF :** Fourni par l'utilisateur (`decret 04-410.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — décret identifié au PDF comme 04-410 du 2 Dhou El Kaada 1425 correspondant au 14 décembre 2004 ; articles 1er à 16 et structure du texte comparés ; contrôle final des seuils, unités et annexes recommandé  
 
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 

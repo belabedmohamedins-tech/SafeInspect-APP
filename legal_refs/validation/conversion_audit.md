@@ -2138,3 +2138,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Direct-PDF scope review update — 2026-08-20
 
 `decret-09-335-plans-internes-intervention.md` was checked against its five-page PDF. Articles 1er–21 and all six chapters are present in the Markdown. The earlier detections of Articles 54 and 62 were parser artefacts outside the decree’s actual scope. The existing abrogation warning and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF article-scope review update — 2026-08-20
+
+`decret-04-410-regles-installations-traitement-dechets.md` was checked against its five-page PDF. The source identifies the decree as 04-410 dated 2 Dhou El Kaada 1425, corresponding to 14 December 2004, and the Markdown contains Articles 1er–16 in order. The existing SafeInspect note, headings, sequence table, and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

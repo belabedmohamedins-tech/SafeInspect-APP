@@ -108,3 +108,7 @@ The 2016 and 2025 paired Markdown files were repaired from legacy ISO-8859-1 to 
 ## Direct-PDF scope review update — 2026-08-20
 
 The 09-335 Markdown was compared with its direct five-page PDF. Articles 1er–21 and six chapters match; parser detections outside that range were excluded. The abrogation warning and existing Markdown structure were preserved. The file is now **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF article-scope review update — 2026-08-20
+
+The 04-410 Markdown was compared with its five-page PDF. Its source identity and Articles 1er–16 match, and the existing structure and SafeInspect note were preserved. It is now **VERIFIED WITH MINOR ISSUES**.

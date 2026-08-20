@@ -7,9 +7,9 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 14 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **VERIFIED WITH MINOR ISSUES** | 15 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
 | **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
-| **UNSAFE FOR LEGAL USE** | 31 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
+| **UNSAFE FOR LEGAL USE** | 30 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
 
@@ -29,6 +29,7 @@ The following files have an authoritative PDF available and have passed a strong
 - `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md`
 - `arrete-interministeriel-2025-05-07-hygiene-restauration.md`
 - `decret-09-335-plans-internes-intervention.md`
+- `decret-04-410-regles-installations-traitement-dechets.md`
 
 ## Structure preservation
 

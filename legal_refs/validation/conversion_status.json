@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 14,
+    "verified_with_minor_issues": 15,
     "requires_correction": 0,
-    "unsafe": 31,
+    "unsafe": 30,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -257,10 +257,10 @@
     {
       "document": "decret-04-410-regles-installations-traitement-dechets.md",
       "pages": 5,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 6,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-16 MATCH THE SOURCE",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 04-410.pdf",
       "errors": [
         {
@@ -318,7 +318,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity and Articles 1er-16 compared with the five-page PDF; final visual check of thresholds, units, and annex references advised."
     },
     {
       "document": "decret-04-82-agrement-sanitaire-elevage.md",
