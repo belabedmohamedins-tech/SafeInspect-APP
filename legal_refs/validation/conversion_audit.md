@@ -8,49 +8,49 @@
 
 | Document | Pages | Conversion quality | Critical errors | Minor errors | Status |
 |---|---:|---|---:|---:|---|
-| `arrete-interministeriel-1999-11-21-conservation-aliments.md` | 3 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 9 | 0 | **UNSAFE FOR LEGAL USE** |
+| `arrete-interministeriel-1999-11-21-conservation-aliments.md` | 3 | OCR-CORRECTED; HUMAN TABLE/SIGNATURE SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `arrete-interministeriel-2011-02-06-permis-construire-energie.md` | 5 | HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED | 0 | 26 | **VERIFIED WITH MINOR ISSUES** |
-| `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | 22 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 1 | 0 | **UNSAFE FOR LEGAL USE** |
-| `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | 5 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 1 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-01-102-creation-ona.md` | 6 | HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED | 0 | 37 | **VERIFIED WITH MINOR ISSUES** |
-| `decret-02-427-prevention-risques-professionnels.md` | 24 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 7 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-04-410-regles-installations-traitement-dechets.md` | 5 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 6 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-04-82-agrement-sanitaire-elevage.md` | 30 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 4 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-05-315-declaration-dechets-speciaux-dangereux.md` | 4 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 1 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-06-138-emissions-atmospheriques.md` | 13 | PARTIAL MATCH WITH MATERIAL DIFFERENCES | 1 | 0 | **REQUIRES CORRECTION** |
-| `decret-06-141-rejets-effluents-liquides.md` | 27 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 44 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-06-198-etablissements-classes.md` | 7 | PARTIAL MATCH WITH MATERIAL DIFFERENCES | 1 | 0 | **REQUIRES CORRECTION** |
-| `decret-07-144-nomenclature-installations-classees.md` | 102 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 1 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-07-205-schema-communal-dechets.md` | 3 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 3 | 0 | **UNSAFE FOR LEGAL USE** |
+| `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md` | 22 | UTF-8 REPAIRED; PDF/OCR ARTICLE AND MICROBIOLOGICAL TABLE REVIEW COMPLETED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `arrete-interministeriel-2025-05-07-hygiene-restauration.md` | 5 | UTF-8 REPAIRED; PDF ARTICLE AND RESTAURANT-HYGIENE CONTENT REVIEW COMPLETED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-01-102-creation-ona.md` | 6 | PDF SCOPE VERIFIED; ARTICLES 1-33 MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-02-427-prevention-risques-professionnels.md` | 24 | SOURCE PAGES 15-17 ISOLATED; ARTICLES 1-24 MATCH THE PDF | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-04-410-regles-installations-traitement-dechets.md` | 5 | PDF SCOPE VERIFIED; ARTICLES 1-16 MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-04-82-agrement-sanitaire-elevage.md` | 30 | SOURCE PAGES 3-5 ISOLATED; ARTICLES 1-18 MATCH THE PDF; 04-83 EXCLUDED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-05-315-declaration-dechets-speciaux-dangereux.md` | 4 | PDF SCOPE VERIFIED; ARTICLES 1-4 AND DECLARATION FORM MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-06-138-emissions-atmospheriques.md` | 13 | PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF ANNEX TABLES ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-06-141-rejets-effluents-liquides.md` | 27 | SOURCE PAGES 4-9 ISOLATED; ARTICLES 1-14 AND ANNEXES I-II MATCH THE PDF; PARAMETER TABLES NEED VISUAL SPOT-CHECK | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-06-198-etablissements-classes.md` | 7 | PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF TABLES AND CRITICAL NUMBERS ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-07-144-nomenclature-installations-classees.md` | 102 | PDF SCOPE VERIFIED; ARTICLES 1-4 AND NOMENCLATURE ANNEX MATCH THE SOURCE; TABLE VALUES NEED VISUAL SPOT-CHECK | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-07-205-schema-communal-dechets.md` | 3 | PDF SCOPE VERIFIED; ARTICLES 1-11 MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `decret-09-19.md` | 4 | HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED | 0 | 11 | **VERIFIED WITH MINOR ISSUES** |
-| `decret-09-335-plans-internes-intervention.md` | 5 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 2 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-11-125-eau-consommation-humaine.md` | 4 | PARTIAL MATCH WITH MATERIAL DIFFERENCES | 1 | 0 | **REQUIRES CORRECTION** |
-| `decret-17-140-hygiene-alimentaire.md` | 31 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 64 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-21-261-esp-equipements-hydrocarbures.md` | 14 | HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED | 0 | 47 | **VERIFIED WITH MINOR ISSUES** |
-| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | 14 | HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED | 0 | 60 | **VERIFIED WITH MINOR ISSUES** |
-| `decret-21-430-gpl-carburant.md` | 28 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 30 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-22-167-etablissements-classes-modification.md` | 23 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 4 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-24-196-etablissements-classes-modification.md` | 2 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 2 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-25-63-plans-intervention-catastrophes.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-76-35-igh-incendie.md` | 3 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 7 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-76-36-incendie-panique.md` | 8 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 14 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-83-496-gpl-carburant.md` | 48 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 21 | 0 | **UNSAFE FOR LEGAL USE** |
+| `decret-09-335-plans-internes-intervention.md` | 5 | PDF SCOPE VERIFIED; ARTICLES 1-21 AND SIX CHAPTERS MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-11-125-eau-consommation-humaine.md` | 4 | PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF PARAMETER TABLES ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-17-140-hygiene-alimentaire.md` | 31 | PDF/OCR SCOPE VERIFIED; ARTICLES 1-64 PRESENT; ARABIC SOURCE TRANSLATION REQUIRES HUMAN REVIEW | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-21-261-esp-equipements-hydrocarbures.md` | 14 | PDF SCOPE VERIFIED; ARTICLES 1-104 AND FOUR CHAPTERS MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-21-319-autorisation-exploitation-hydrocarbures.md` | 14 | PDF SCOPE VERIFIED; ARTICLES 1-98, NINE CHAPTERS, AND FOUR ANNEXES MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-21-430-gpl-carburant.md` | 28 | SOURCE PAGES 11-12 ISOLATED; ARTICLES 1-3 AND MODIFIED ARTICLES 4, 7, 8 MATCH THE PDF | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-22-167-etablissements-classes-modification.md` | 23 | ISOLATED SOURCE PAGES 5–10; ARTICLES 1–12 AND ANNEX VISUALLY MATCH; THREE MINOR SPELLING TRANSCRIPTIONS CORRECTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-24-196-etablissements-classes-modification.md` | 2 | PDF VERIFIED; FINAL VISUAL SPOT-CHECK OF AMENDMENT CONDITIONS ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-25-63-plans-intervention-catastrophes.md` | 5 | TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-76-35-igh-incendie.md` | 3 | PDF SCOPE VERIFIED; ARTICLES 1-26 MATCH THE 76-35 SEGMENT | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-76-36-incendie-panique.md` | 8 | OCR/PAGE-IMAGE VERIFIED; RECTIFICATIF REFERENCES AND CORRECTIONS MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-83-496-gpl-carburant.md` | 48 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 22 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-90-245-appareils-pression-gaz.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-93-120-medecine-du-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-01-19-gestion-dechets.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-03-10-protection-environnement.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-04-08-activites-commerciales.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-04-20-risques-majeurs.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-05-12-ressources-en-eau.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-01-19-gestion-dechets.md` | 14 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-03-10-protection-environnement.md` | 28 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-04-08-activites-commerciales.md` | 5 | TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-04-20-risques-majeurs.md` | 17 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-05-12-ressources-en-eau.md` | 16 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-09-03-protection-consommateur.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-18-09-protection-consommateur.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-18-09-protection-consommateur.md` | 2 | TEXT/ARTICLE COMPARISON; OFFICIAL JORADP DUPLICATE LOCATED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-18-11-sante-partie1-arts1-164.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-18-11-sante-partie2-arts165-264.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-18-11-sante-partie3-arts265-450.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-19-02-incendie-panique.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-88-07-hygiene-securite-medecine-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-90-11-relations-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-19-02-incendie-panique.md` | 24 | SOURCE AVAILABLE; MARKDOWN SUBSTANTIALLY INCOMPLETE | 1 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-88-07-hygiene-securite-medecine-travail.md` | 10 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-90-11-relations-travail.md` | 29 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-90-29-urbanisme.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `projet-arrete-gpl-installations-securite.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 
@@ -1998,17 +1998,17 @@
 
 ### `loi-19-02-incendie-panique.md`
 
-**Source PDF:** `—`  
+**Source PDF:** `loi 19-02.pdf` (24 pages)
 **Status:** **UNSAFE FOR LEGAL USE**
 
 #### Error 1 — HIGH
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
+- **PDF location/page:** Source PDF, Articles 1–148; 24-page source
+- **Markdown location:** Entire document / article body
+- **Original PDF content:** The authoritative PDF contains the complete law through Article 148 and approximately 151,942 extracted characters.
+- **Markdown content:** The Markdown contains approximately 27,127 characters and does not represent the complete source article body.
+- **Problem:** The Markdown is substantially truncated relative to the available authoritative PDF; article and source coverage cannot be certified.
+- **Correction required:** Reconstruct the missing legal provisions directly from the PDF, preserving the existing metadata and article structure; do not promote until a second comparison is complete.
 - **Severity:** **HIGH**
 
 ### `loi-88-07-hygiene-securite-medecine-travail.md`

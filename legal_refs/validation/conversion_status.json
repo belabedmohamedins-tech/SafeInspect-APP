@@ -2066,24 +2066,24 @@
     },
     {
       "document": "loi-19-02-incendie-panique.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
-      "critical_errors": 0,
+      "pages": 24,
+      "conversion_quality": "SOURCE AVAILABLE; MARKDOWN SUBSTANTIALLY INCOMPLETE",
+      "critical_errors": 1,
       "minor_errors": 0,
       "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "pdf": "loi 19-02.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
+          "pdf_location": "Source PDF, Articles 1–148; 24-page source",
+          "markdown_location": "Entire document / article body",
+          "pdf_content": "The authoritative PDF contains the complete law through Article 148 and approximately 151,942 extracted characters.",
+          "markdown_content": "The Markdown contains only approximately 27,127 characters and does not represent the complete source article body.",
+          "problem": "The Markdown is substantially truncated relative to the available authoritative PDF; article and source coverage cannot be certified.",
+          "correction_required": "Reconstruct the missing legal provisions directly from the PDF, preserving the existing metadata and article structure; do not promote until a second comparison is complete.",
           "severity": "HIGH"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The repository contains `loi 19-02.pdf`, but comparison shows a major scope gap: the 24-page PDF is complete through Article 148 while the Markdown is substantially shorter. The file remains excluded from the trustable index."
     },
     {
       "document": "loi-88-07-hygiene-securite-medecine-travail.md",
