@@ -161,9 +161,9 @@
     {
       "document": "decret-01-102-creation-ona.md",
       "pages": 6,
-      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-33 MATCH THE SOURCE",
       "critical_errors": 0,
-      "minor_errors": 37,
+      "minor_errors": 1,
       "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 01-102.pdf",
       "errors": [
@@ -177,7 +177,7 @@
           "severity": "MINOR"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity and Articles 1-33 compared with the six-page PDF; final visual check of administrative provisions advised."
     },
     {
       "document": "decret-02-427-prevention-risques-professionnels.md",

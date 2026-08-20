@@ -4,7 +4,7 @@
 **Journal Officiel :** À déterminer  
 **Source PDF :** Fourni par l'utilisateur (`decret 01-102.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — décret identifié au PDF comme 01-102 du 27 Moharram 1422 correspondant au 21 avril 2001 ; articles 1 à 33 comparés ; contrôle visuel final des dispositions administratives recommandé  
 
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 

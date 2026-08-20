@@ -2150,3 +2150,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Direct-PDF scope review update — 2026-08-20
 
 `decret-07-205-schema-communal-dechets.md` was checked against its three-page PDF. The source identifies decree 07-205 dated 15 Joumada Ethania 1428, corresponding to 30 June 2007, and the Markdown contains Articles 1er–11 in order. Its code-warning note distinguishing 07-205 from 04-410 and its Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF scope review update — 2026-08-20
+
+`decret-01-102-creation-ona.md` was checked against its six-page PDF. The source identifies decree 01-102 dated 27 Moharram 1422, corresponding to 21 April 2001, and the Markdown contains Articles 1–33 in order. The existing headings and sequence-control structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

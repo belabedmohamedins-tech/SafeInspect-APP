@@ -120,3 +120,7 @@ The 05-315 Markdown was compared with its four-page PDF. Articles 1er–4 and th
 ## Direct-PDF scope review update — 2026-08-20
 
 The 07-205 Markdown was compared with its three-page PDF. Its source identity and Articles 1er–11 match; the existing code-warning note and Markdown structure were preserved. It is now **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF scope review update — 2026-08-20
+
+The 01-102 Markdown was compared with its six-page PDF. Its source identity and Articles 1–33 match, and the existing Markdown structure was preserved. It is now **VERIFIED WITH MINOR ISSUES**.
