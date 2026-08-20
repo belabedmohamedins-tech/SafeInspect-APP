@@ -140,3 +140,7 @@ The 17-140 Markdown was compared with its 31-page Arabic JORADP PDF. Identity an
 ## Large nomenclature-annex review update — 2026-08-20
 
 The 07-144 Markdown was compared with its clean 102-page PDF. Its identity, Articles 1er–4, and nomenclature-annex structure match; the existing tables and hierarchy were preserved. Visual checking of table values remains mandatory. It is **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated mixed-PDF review update — 2026-08-20
+
+The 02-427 Markdown was compared with isolated Journal Officiel pages 15–17. Its identity and Articles 1er–24 match; unrelated material elsewhere in the PDF was excluded. It is **VERIFIED WITH MINOR ISSUES**.

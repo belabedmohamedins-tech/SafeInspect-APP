@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 19,
+    "verified_with_minor_issues": 20,
     "requires_correction": 0,
-    "unsafe": 26,
+    "unsafe": 25,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -182,10 +182,10 @@
     {
       "document": "decret-02-427-prevention-risques-professionnels.md",
       "pages": 24,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 7,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "SOURCE PAGES 15-17 ISOLATED; ARTICLES 1-24 MATCH THE PDF",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 02-427.pdf",
       "errors": [
         {
@@ -252,7 +252,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Journal Officiel pages 15-17 isolated from mixed 24-page PDF; identity and Articles 1-24 compared; final visual check of durations, deadlines, and training conditions advised."
     },
     {
       "document": "decret-04-410-regles-installations-traitement-dechets.md",

@@ -2170,3 +2170,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Large nomenclature-annex review update — 2026-08-20
 
 `decret-07-144-nomenclature-installations-classees.md` was checked against the clean 102-page PDF. The source identifies decree 07-144 dated 2 Joumada El Oula 1428, corresponding to 19 May 2007, with Articles 1er–4 and a large nomenclature annex. The Markdown preserves the article and rubric hierarchy. Because the annex contains legally critical classifications, thresholds, units, and table values, visual review of those tables remains mandatory. The file is classified **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated mixed-PDF review update — 2026-08-20
+
+`decret-02-427-prevention-risques-professionnels.md` was checked against Journal Officiel pages 15–17 isolated within the mixed 24-page PDF. The source identifies decree 02-427 dated 3 Chaoual 1423, corresponding to 7 December 2002, and the Markdown contains Articles 1er–24 in order. The existing page-scope metadata and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

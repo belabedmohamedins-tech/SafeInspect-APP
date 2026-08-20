@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 82, 7 Chaoual 1423 (11 décembre 2002) — pages 15 à 17  
 **Source PDF :** Fourni par l'utilisateur (`Décret 02-427.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — pages JORADP 15 à 17 isolées dans le PDF ; articles 1er à 24 comparés ; contrôle visuel final recommandé pour les délais, durées et conditions de formation  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---

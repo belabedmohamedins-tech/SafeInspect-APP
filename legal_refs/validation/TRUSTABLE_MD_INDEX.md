@@ -7,9 +7,9 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 19 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **VERIFIED WITH MINOR ISSUES** | 20 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
 | **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
-| **UNSAFE FOR LEGAL USE** | 26 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
+| **UNSAFE FOR LEGAL USE** | 25 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
 
