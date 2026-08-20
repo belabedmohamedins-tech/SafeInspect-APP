@@ -7,7 +7,7 @@
 **Statut de vérification :** ⚠️ UNSAFE FOR LEGAL USE — correction partielle vérifiée sur pages scannées 41–42 le 2026-08-20; revue bilingue complète non achevée
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur l'extraction :** Les articles 9 à 21 ont été extraits par l'utilisateur via un système de vision. La revue visuelle des pages 41–42 a établi une omission dans l'article 9 (condition de 80 % du volume du réservoir), ajoutée dans le bloc arabe ci-dessous. La traduction française de ce complément n'est pas certifiée; l'article 12 conserve également une ambiguïté de transcription/traduction. Le fichier n'est pas certifié pour l'usage juridique.
+**Note sur l'extraction :** Les articles 9 à 21 ont été extraits par l'utilisateur via un système de vision. La revue visuelle des pages 41–42 a établi une omission dans l'article 9 (condition de 80 % du volume du réservoir), ajoutée dans le bloc arabe ci-dessous. La traduction française de ce complément n'est pas certifiée; l'article 12 a toutefois été corrigé sur la base d'une lecture visuelle ciblée du PDF, notamment pour la condition de 2 500 kg. Le fichier n'est pas certifié pour l'usage juridique.
 
 ---
 
@@ -86,9 +86,9 @@ Le ministre chargé des hydrocarbures délivre, après vérification de la confo
 **Traduction :** Toute modification ou réparation apportée aux installations destinées au GPL utilisé comme carburant, non prévue dans les autorisations permises par les textes réglementaires du ministre chargé des mines, doit faire l'objet d'une approbation dans les conditions prévues à l'article 8 précité.
 
 **Art. 12.** —  
-**Texte original (arabe) :** يجب وضع إشارة على كل سيارة مجهزة لاستعمال غاز البترول المبيع كوقود بواسطة لوحة معدنية يسلمها ويثبتها المركب في الواجهة الخلفية للسيارة بكيفية تجعلها من يثبت كتب عليها G.P.L مثلما حدد ذلك في القرار الوزاري المشترك بين الوزير المكلف بالمناجم والوزير المكلف بالنقل. ويجب أن تحمل سيارة النقل المشترك وكغ 2500 والسيارات التي يفوق وزنها مع الحمولة G.P.L على واجهتها الجانبيتين لوحة بارزة.
+**Texte original (arabe) — transcription corrigée sur le PDF :** يجب وضع إشارة على كل سيارة مجهزة لاستعمال غاز البترول المميع المستعمل كوقود بواسطة لوحة معدنية يسلمها ويثبتها المركب في الواجهة الخلفية للسيارة بكيفية تجعلها مميزة يكتب عليها (G.P.L.) مثلما حدد ذلك في القرار الوزاري المشترك بين الوزير المكلف بالمناجم والوزير المكلف بالنقل. ويجب أن تحمل سيارة النقل المشترك والسيارات التي يفوق وزنها مع الحمولة 2500 كغ، على واجهتها الجانبيتين لوحة بارزة.
 
-**Traduction :** Un signe distinctif doit être apposé sur chaque véhicule équipé pour le GPL, au moyen d'une plaque métallique délivrée et fixée par l'installateur à l'arrière du véhicule, portant la mention "G.P.L.", comme prévu par l'arrêté conjoint du ministre chargé des mines et du ministre chargé des transports. Les véhicules de transport collectif, les véhicules de plus de 2500 kg et les véhicules dont le poids total en charge dépasse doivent porter une plaque apparente sur chacune de leurs faces latérales.
+**Traduction française vérifiée sur le PDF :** Un signe distinctif doit être apposé sur chaque véhicule équipé pour utiliser le GPL, au moyen d'une plaque métallique délivrée et fixée par l'installateur à l'arrière du véhicule, de manière à être distinctive et à porter la mention « G.P.L. », comme prévu par l'arrêté ministériel conjoint du ministre chargé des mines et du ministre chargé des transports. Les véhicules de transport collectif et les véhicules dont le poids avec chargement dépasse **2 500 kg** doivent porter une plaque apparente sur chacune de leurs faces latérales.
 
 **Art. 13.** —  
 **Texte original (arabe) :** يجب على المركب أن يسلم لصاحب السيارة مذكرة أعدها الوزير المكلف بالمناجم والوزير المكلف بالوقود، تبين الشروط الخاصة المتعلقة باستعمال غاز البترول المبيع كوقود.

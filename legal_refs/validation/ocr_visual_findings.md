@@ -41,3 +41,7 @@ Pages 8–9 visibly establish the legally significant content of Articles 9–12
 ## Decree 22-167 page 10 annex comparison — 2026-08-20
 
 The source annex on printed page 10 is the “Termes de référence de l’audit environnemental” associated with Article 44 bis 3. Its visible legal/technical values include the 1/200ème and 1/2.500ème plan scales, the listed effluent parameters (débit, PH, T°, MES, DBO5, DCO), at least two analysis campaigns, and the six-measurements-per-semester and 24-hour noise-monitoring requirements. The Markdown contains these same annex headings, values, parameters, and sections through V. The Markdown uses “compagnes” where the source visibly reads “campagnes” in the analysis sentences; this is a minor transcription error and should be corrected without changing the source meaning.
+
+## Decree 83-496 Article 12 focused visual comparison — 2026-08-20
+
+A high-resolution crop of source page 42 makes Article 12 readable. The Arabic source states that collective-transport vehicles and vehicles whose **weight with their load exceeds 2,500 kg** must display a prominent GPL plate on both lateral faces. The prior Markdown transcription was corrupted and its French translation omitted the threshold after “dépasse”. Both the Arabic transcription and French representation were corrected to preserve the source-established condition. The full decree remains unsafe because other Arabic/French passages have not been independently validated line by line.

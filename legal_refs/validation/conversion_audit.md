@@ -2210,3 +2210,10 @@ The mixed Journal Officiel PDF was isolated to printed pages **5–10** using th
 One minor source-established transcription error was corrected in the annex: three occurrences of **« compagnes »** were changed to the source-visible **« campagnes »**. No legal number, unit, deadline, authority, exception, or article condition was changed. A second read after correction confirmed the corrected occurrences and preserved the existing Markdown structure.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for legal-critical values and tables.
+
+
+## Focused Article 12 correction update — 2026-08-20 — `decret-83-496-gpl-carburant.md`
+
+A high-resolution crop of scanned PDF page 42 was reviewed. Article 12 visibly requires collective-transport vehicles and vehicles whose **weight with their load exceeds 2,500 kg** to display a prominent GPL plate on both lateral faces. The prior Markdown contained a corrupted Arabic transcription and an incomplete French condition ending after “dépasse”.
+
+The Arabic Article 12 block and its French representation were corrected without changing the existing bilingual structure. The correction is source-established from the focused page image. The full decree remains **UNSAFE FOR LEGAL USE** because the complete Arabic/French representation has not been independently compared line by line and Article 9’s French rendering remains explicitly uncertified.
