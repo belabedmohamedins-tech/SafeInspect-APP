@@ -57,3 +57,15 @@ Source: repository PDF `legal_refs/pdf/Décret 22-167.pdf`.
 The pair `decret-83-496-gpl-carburant.md` / `legal_refs/pdf/Décret 83-496.pdf` is a 48-page scanned Journal Officiel source. The Markdown explicitly targets the decree excerpt and Articles 1–21, but the OCR output is predominantly unreadable Arabic and does not reliably isolate or transcribe the relevant pages. The user-supplied vision text for Articles 9–21 cannot be treated as authoritative without direct page-image verification. No legal text is corrected or reclassified; the file remains unsafe for legal use until the exact pages and bilingual transcription are independently checked.
 
 Source: repository PDF `legal_refs/pdf/Décret 83-496.pdf`; OCR output under `legal_refs/validation/ocr_pdf/Décret 83-496/`.
+
+## Isolated source ranges added in the current pass
+
+- **02-427:** Journal Officiel pages 15–17 in `Décret 02-427.pdf`; Articles 1er–24 match the Markdown. Unrelated issue content was excluded.
+- **04-82:** Journal Officiel pages 3–5 in `Décret 04-82.pdf`; Articles 1er–18 match the Markdown. Neighboring decree 04-83 was excluded.
+- **06-141:** Journal Officiel pages 4–9 in `decret 06-141.pdf`; Articles 1er–14 and Annexes I–II match the Markdown. Limit-value tables remain visually sensitive.
+- **21-430:** Journal Officiel pages 11–12 in `21-430.pdf`; Articles 1er–3 and modified Articles 4, 7, and 8 match the Markdown.
+- **07-144:** Clean 102-page PDF; Articles 1er–4 and the nomenclature annex hierarchy match. All table values, classifications, thresholds, and units remain subject to visual checking.
+- **76-36:** Stronger Arabic/French OCR identified the rectificatif title at OCR page 2, but the source is a mixed 1976 issue and the exact amended decree pages are not isolated sufficiently for certification.
+- **83-496:** Stronger Arabic/French OCR completed all 48 pages, but the scan remains predominantly unreadable for reliable bilingual article-level verification; no legal text was altered.
+
+All source references are repository PDFs under `legal_refs/pdf/`; OCR outputs are under `legal_refs/validation/ocr_pdf_ara_fra/` where applicable.
