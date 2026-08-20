@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 16,
+    "verified_with_minor_issues": 17,
     "requires_correction": 0,
-    "unsafe": 29,
+    "unsafe": 28,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -682,10 +682,10 @@
     {
       "document": "decret-07-205-schema-communal-dechets.md",
       "pages": 3,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 3,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-11 MATCH THE SOURCE",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Decret 07-205.pdf",
       "errors": [
         {
@@ -716,7 +716,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity and Articles 1er-11 compared with the three-page PDF; final visual check of conditions and implementation schedule advised."
     },
     {
       "document": "decret-09-19.md",

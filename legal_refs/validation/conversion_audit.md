@@ -2146,3 +2146,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Decree-and-form review update — 2026-08-20
 
 `decret-05-315-declaration-dechets-speciaux-dangereux.md` was checked against the four-page PDF. The Markdown contains Articles 1er–4 and the attached annual declaration form represented in the source, including the waste description, storage, treatment, and minimisation sections. Its legal scope note and existing Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF scope review update — 2026-08-20
+
+`decret-07-205-schema-communal-dechets.md` was checked against its three-page PDF. The source identifies decree 07-205 dated 15 Joumada Ethania 1428, corresponding to 30 June 2007, and the Markdown contains Articles 1er–11 in order. Its code-warning note distinguishing 07-205 from 04-410 and its Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

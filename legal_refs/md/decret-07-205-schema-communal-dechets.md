@@ -4,7 +4,7 @@
 **Journal Officiel :** À déterminer  
 **Source PDF :** Fourni par l'utilisateur (`decret 07-205.pdf`)  
 **Date de conversion :** 2026-08-18  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-19 par Belabed Mohamed — converti et relu contre PDF fourni  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — décret identifié au PDF comme 07-205 du 15 Joumada Ethania 1428 correspondant au 30 juin 2007 ; articles 1er à 11 comparés ; contrôle visuel final des conditions et calendrier recommandé  
 
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
