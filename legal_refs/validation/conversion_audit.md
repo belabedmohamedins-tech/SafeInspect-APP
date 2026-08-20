@@ -2253,3 +2253,12 @@ The previously unpaired Markdown was matched to `Loi-03-10.pdf`. The 28-page sou
 One minor metadata correction was made. The Markdown’s unsupported estimate “probablement JO N° 43 de 2003” was replaced with an explicit unresolved marker because the supplied PDF excerpt does not clearly establish the Journal Officiel issue number. No legal provision was changed and no issue number was invented.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-01-19-gestion-dechets.md`
+
+The previously unpaired Markdown was matched to `Loi 01-19.pdf`. The 14-page source establishes Law n° 01-19 dated 12 December 2001 and contains Articles 1–72, including the final promulgation provision. The source and Markdown were compared for identity, dates, article sequence, closing provisions, and critical numerical tokens; the article sequence and legal body align.
+
+One minor metadata correction was made. The Markdown’s unsupported estimate “probablement JO N° 86 de 2001” was replaced with an explicit unresolved marker because the supplied PDF excerpt does not clearly establish the Journal Officiel issue number. No legal provision was changed and no issue number was invented.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.

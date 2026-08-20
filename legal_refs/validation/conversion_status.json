@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 29,
+    "verified_with_minor_issues": 30,
     "requires_correction": 0,
-    "unsafe": 16,
+    "unsafe": 15,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1856,24 +1856,24 @@
     },
     {
       "document": "loi-01-19-gestion-dechets.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 14,
+      "conversion_quality": "TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "Loi 01-19.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Metadata/source excerpt header",
+          "markdown_location": "Metadata line 4",
+          "pdf_content": "The supplied PDF establishes Law n° 01-19 and its date, but does not clearly establish the Journal Officiel issue number.",
+          "markdown_content": "The prior Markdown stated “probablement JO N° 86 de 2001”.",
+          "problem": "The issue number was an unsupported estimate rather than a source-established value.",
+          "correction_required": "Retain an explicit unresolved marker and do not guess the issue number.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The mapped 14-page PDF and Markdown were compared. Articles 1–72, identity, dates, closing provisions, and critical numerical tokens align. The Journal Officiel issue number remains explicitly unresolved because the supplied excerpt does not establish it clearly."
     },
     {
       "document": "loi-03-10-protection-environnement.md",

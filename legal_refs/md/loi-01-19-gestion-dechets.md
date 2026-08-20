@@ -1,10 +1,10 @@
 # Loi n° 01-19 du 27 Ramadhan 1422 correspondant au 12 décembre 2001 relative à la gestion, au contrôle et à l'élimination des déchets
 
 **Date de signature :** 12 décembre 2001 (27 Ramadhan 1422)  
-**Journal Officiel :** À déterminer (probablement JO N° 86 de 2001)  
+**Journal Officiel :** À déterminer — le PDF fourni n'établit pas lisiblement le numéro d'issue; aucune estimation n'est retenue
 **Source PDF :** Fourni par l'utilisateur (`Loi 01-19.pdf`)  
 **Date de conversion :** 2026-08-11  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF mappé et comparé; articles 1–72, identité, dates et valeurs numériques alignés
 
 > **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 
