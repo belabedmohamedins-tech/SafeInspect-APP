@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 26,
+    "verified_with_minor_issues": 27,
     "requires_correction": 0,
-    "unsafe": 19,
+    "unsafe": 18,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1898,24 +1898,24 @@
     },
     {
       "document": "loi-04-08-activites-commerciales.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 5,
+      "conversion_quality": "TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "LOI 04-08.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Metadata/source filename",
+          "markdown_location": "Metadata line 5",
+          "pdf_content": "The repository source filename is `LOI 04-08.pdf`.",
+          "markdown_content": "The prior metadata named `nLOI 04-08.pdf`.",
+          "problem": "The source-PDF metadata filename contained an extra leading character.",
+          "correction_required": "Use the exact repository filename `LOI 04-08.pdf`.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The mapped five-page PDF and Markdown were compared. Articles 1–44 are present in the same sequence; identity, dates, closing provisions, and critical numerical tokens align. The neighboring Law n° 04-09 in the source PDF is explicitly excluded from the Markdown."
     },
     {
       "document": "loi-04-20-risques-majeurs.md",

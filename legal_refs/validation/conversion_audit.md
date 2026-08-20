@@ -2226,3 +2226,12 @@ The previously unpaired Markdown was matched to the repository PDF `decret-25-63
 No legal text correction was required. The registry now records the actual PDF mapping, the five-page scope, and a minor source-scope issue because the supplied PDF is an excerpt containing adjacent decree material. The Markdown’s existing note correctly limits the representation to decree n° 25-63.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-04-08-activites-commerciales.md`
+
+The previously unpaired Markdown was matched to `LOI 04-08.pdf` already present in the repository. The five-page source also contains neighboring Law n° 04-09 material; the target Law n° 04-08 was isolated by its identity and complete Article 1–44 sequence. The standardized comparison found the same article sequence, aligned identity and dates, matching closing provisions, and aligned critical numerical tokens.
+
+One minor metadata error was corrected: the source reference `nLOI 04-08.pdf` was changed to the exact repository filename `LOI 04-08.pdf`. No legal text was changed.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
