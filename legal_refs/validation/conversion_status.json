@@ -4,12 +4,12 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 38,
+    "verified_with_minor_issues": 42,
     "requires_correction": 0,
-    "unsafe": 7,
-    "second_comparison": "completed; unchanged files",
+    "unsafe": 3,
+    "second_comparison": "completed for all currently paired documents; four uploaded source pairs re-audited in this batch",
     "corrections_applied": 2,
-    "ocr_reaudit": "completed for scanned PDFs identified in first pass"
+    "ocr_reaudit": "completed for scanned PDFs identified in first pass; four uploaded source pairs added"
   },
   "documents": [
     {
@@ -1793,45 +1793,45 @@
     },
     {
       "document": "decret-90-245-appareils-pression-gaz.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 6,
+      "conversion_quality": "SCANNED PDF; IDENTITY, ARTICLES 1–24, AND CRITICAL FINAL DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret-90-245-appareils-pression-gaz.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Uploaded six-page Journal Officiel scan; target decree is the complete six-page source segment.",
+          "markdown_location": "Document identity, article sequence, and source-scope metadata",
+          "pdf_content": "The source visibly confirms the decree identity and Articles 22–24. Article 23 preserves the three-year maximum modification period and the declaration deadline not exceeding one year. Article sequence 1–24 is complete in Markdown; OCR heading misses are scan/OCR artifacts, not established legal omissions.",
+          "markdown_content": "Markdown preserves the target document structure and article sequence without adding unrelated issue material.",
+          "problem": "The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.",
+          "correction_required": "No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "Completed after page-aware OCR and visual source review; no Markdown text rewrite was justified because no source-established legal omission or incorrect number was found."
     },
     {
       "document": "decret-91-05-hygiene-securite-milieu-travail.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 8,
+      "conversion_quality": "SCANNED PDF; IDENTITY, ARTICLES 1–68, AND ARTICLE 67 DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret-91-05-hygiene-securite-milieu-travail.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Uploaded eight-page Journal Officiel scan; target decree is the complete eight-page source segment.",
+          "markdown_location": "Document identity, article sequence, and source-scope metadata",
+          "pdf_content": "The source visibly confirms the decree identity and final Articles 60–68. Article 67 preserves the one-month, fifteen-day, and five-day minimum execution periods and their article lists. Markdown contains Articles 1–68 in sequence.",
+          "markdown_content": "Markdown preserves the target document structure and article sequence without adding unrelated issue material.",
+          "problem": "The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.",
+          "correction_required": "No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "Completed after page-aware OCR and visual source review; no Markdown text rewrite was justified because no source-established legal omission or incorrect number was found."
     },
     {
       "document": "decret-93-120-medecine-du-travail.md",
@@ -1961,24 +1961,24 @@
     },
     {
       "document": "loi-09-03-protection-consommateur.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 11,
+      "conversion_quality": "SOURCE SCOPE ISOLATED; ARTICLES 1–95 AND LEGAL-CRITICAL VALUES COMPARED; VISUAL SPOT-CHECK ADVISED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi-09-03-protection-consommateur.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Uploaded eleven-page source; target Law 09-03 isolated from neighboring Journal Officiel material before comparison.",
+          "markdown_location": "Document identity, article sequence, and source-scope metadata",
+          "pdf_content": "The isolated source and Markdown agree on the target law identity and Articles 1–95. OCR-only Article 156 occurrences refer to cited provisions of the Code of Penal Procedure or Constitution, not a missing Article 156 of Law 09-03. No source-established legal-text correction is justified.",
+          "markdown_content": "Markdown preserves the target document structure and article sequence without adding unrelated issue material.",
+          "problem": "The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.",
+          "correction_required": "No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "Completed after page-aware OCR and visual source review; no Markdown text rewrite was justified because no source-established legal omission or incorrect number was found."
     },
     {
       "document": "loi-18-09-protection-consommateur.md",
@@ -2129,24 +2129,24 @@
     },
     {
       "document": "loi-90-29-urbanisme.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 30,
+      "conversion_quality": "MIXED JOURNAL OFFICIEL ISSUE; TARGET LAW ISOLATED TO PRINTED PAGES 1408–1415; ARTICLES 1–81 COMPARED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi-90-29-urbanisme.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Mixed 30-page Journal Officiel n° 52 scan. The first page identifies Law 90-29 at printed page 1408; the next law begins at printed page 1416. The final page is unrelated table-of-contents material listing Articles 80–140 of the domain law.",
+          "markdown_location": "Document identity, article sequence, and source-scope metadata",
+          "pdf_content": "The Markdown contains the complete target Law 90-29 sequence Articles 1er–81. Articles 82–140 visible in later issue material belong to the neighboring domain-law text and must not be added to the urbanism Markdown.",
+          "markdown_content": "Markdown preserves the target document structure and article sequence without adding unrelated issue material.",
+          "problem": "The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.",
+          "correction_required": "No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "Completed after page-aware OCR and visual source review; no Markdown text rewrite was justified because no source-established legal omission or incorrect number was found."
     },
     {
       "document": "projet-arrete-gpl-installations-securite.md",

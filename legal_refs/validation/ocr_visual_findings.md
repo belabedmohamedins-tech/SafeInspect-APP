@@ -45,3 +45,18 @@ The source annex on printed page 10 is the “Termes de référence de l’audit
 ## Decree 83-496 Article 12 focused visual comparison — 2026-08-20
 
 A high-resolution crop of source page 42 makes Article 12 readable. The Arabic source states that collective-transport vehicles and vehicles whose **weight with their load exceeds 2,500 kg** must display a prominent GPL plate on both lateral faces. The prior Markdown transcription was corrupted and its French translation omitted the threshold after “dépasse”. Both the Arabic transcription and French representation were corrected to preserve the source-established condition. The full decree remains unsafe because other Arabic/French passages have not been independently validated line by line.
+
+
+## Uploaded-source visual findings — Decree 90-245 — 2026-08-20
+
+The uploaded six-page PDF is a scanned Journal Officiel source. Page 1 visually confirms `Décret exécutif n° 90-245 du 18 août 1990 portant réglementation des appareils à pression de gaz`, with the source issue dated 22 août 1990 and Journal Officiel n° 36. The final page is legible and visibly contains Articles 22, 23, and 24, followed by the signature `Fait à Alger, le 18 août 1990. Mouloud HAMROUCHE.` Article 23 visibly includes the three-year modification period, and the declaration paragraph visibly includes a deadline not exceeding one year. Article 24 is the publication clause. The source is visually readable enough for page-by-page audit, but OCR must not be trusted for critical numbers without visual confirmation.
+
+
+## Uploaded-source visual findings — Decree 91-05 — 2026-08-20
+
+The uploaded eight-page PDF is a scanned Journal Officiel source. Page 1 visually confirms `Décret exécutif n° 91-05 du 19 janvier 1991 relatif aux prescriptions générales de protection applicables en matière d’hygiène et de sécurité en milieu de travail`, published in Journal Officiel n° 04 dated 23 janvier 1991. The final page is legible and visibly contains Articles 60–68. Article 67 visibly specifies minimum execution periods of one month, fifteen (15) days, and five (5) days for the listed provisions; Article 68 is the publication clause, followed by the signature dated 19 janvier 1991. The source is visually readable enough for page-by-page comparison, but the critical deadlines must be checked against the Markdown article by article rather than inferred from OCR alone.
+
+
+## Uploaded-source visual findings — Law 90-29 — 2026-08-20
+
+The first page of the uploaded 30-page scan is Journal Officiel n° 52 dated 2 December 1990 and visibly identifies `Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme`, beginning at printed page 1408. The final uploaded page is printed page 1436 and is a table of contents for the subsequent domain-law material, listing Articles 80–140. Therefore the PDF is a mixed Journal Officiel issue: the target urbanism law occupies an initial scope ending at its Article 81 and is followed by unrelated material. The repository Markdown contains Articles 1er–81, consistent with the target law; the source must be isolated by printed/page scope before comparing OCR article ranges. No Article 82–140 content should be added to the urbanism Markdown.

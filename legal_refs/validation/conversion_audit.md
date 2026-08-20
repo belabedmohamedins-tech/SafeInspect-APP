@@ -1,6 +1,6 @@
 # SafeInspect PDF → Markdown Conversion Audit
 
-**Audit date:** 2026-08-19  
+**Audit date:** 2026-08-20  
 **Authority:** PDFs in `legal_refs/pdf/` are authoritative. Markdown was not treated as authoritative.  
 **Method:** PDF text was extracted page-wise from the repository copies; Markdown was compared for identity, article sequences, normalized content, and legal-critical token presence. Documents with unavailable or unusable PDF text were not certified. No uncertain content was silently corrected.
 
@@ -35,15 +35,15 @@
 | `decret-76-35-igh-incendie.md` | 3 | PDF SCOPE VERIFIED; ARTICLES 1-26 MATCH THE 76-35 SEGMENT | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `decret-76-36-incendie-panique.md` | 8 | OCR/PAGE-IMAGE VERIFIED; RECTIFICATIF REFERENCES AND CORRECTIONS MATCH THE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `decret-83-496-gpl-carburant.md` | 48 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 22 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-90-245-appareils-pression-gaz.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-91-05-hygiene-securite-milieu-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `decret-90-245-appareils-pression-gaz.md` | 6 | SCANNED PDF; IDENTITY, ARTICLES 1–24, AND CRITICAL FINAL DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `decret-91-05-hygiene-securite-milieu-travail.md` | 8 | SCANNED PDF; IDENTITY, ARTICLES 1–68, AND ARTICLE 67 DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `decret-93-120-medecine-du-travail.md` | 5 | SCANNED PDF; FRENCH OCR PARTIAL; VISUAL VERIFICATION REQUIRED | 1 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-01-19-gestion-dechets.md` | 14 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-03-10-protection-environnement.md` | 28 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-04-08-activites-commerciales.md` | 5 | TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-04-20-risques-majeurs.md` | 17 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-05-12-ressources-en-eau.md` | 16 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
-| `loi-09-03-protection-consommateur.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-09-03-protection-consommateur.md` | 11 | SOURCE SCOPE ISOLATED; ARTICLES 1–95 AND LEGAL-CRITICAL VALUES COMPARED; VISUAL SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-18-09-protection-consommateur.md` | 2 | TEXT/ARTICLE COMPARISON; OFFICIAL JORADP DUPLICATE LOCATED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-18-11-sante-partie1-arts1-164.md` | 40 | PDF pages 3–15; Articles 1–164; 98.06% normalized source-token coverage; no numeric omissions | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-18-11-sante-partie2-arts165-264.md` | 40 | PDF pages 16–24; Articles 165–264; 96.47% normalized source-token coverage; no substantive article omission | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
@@ -51,7 +51,7 @@
 | `loi-19-02-incendie-panique.md` | 24 | MIXED ISSUE; TARGET DOCUMENT ISOLATED TO PDF PAGES 5–10; ARTICLE COMPARISON | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-88-07-hygiene-securite-medecine-travail.md` | 10 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-90-11-relations-travail.md` | 29 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
-| `loi-90-29-urbanisme.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-90-29-urbanisme.md` | 30 | MIXED JOURNAL OFFICIEL ISSUE; TARGET LAW ISOLATED TO PRINTED PAGES 1408–1415; ARTICLES 1–81 COMPARED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `projet-arrete-gpl-installations-securite.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 
 ## Error register
@@ -1803,33 +1803,33 @@
 
 ### `decret-90-245-appareils-pression-gaz.md`
 
-**Source PDF:** `—`  
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `decret-90-245-appareils-pression-gaz.pdf`  
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
-- **Severity:** **HIGH**
+- **PDF location/page:** Uploaded six-page Journal Officiel scan; target decree is the complete six-page source segment.
+- **Markdown location:** Document identity, article sequence, and source-scope metadata
+- **Original PDF content:** The source visibly confirms the decree identity and Articles 22–24. Article 23 preserves the three-year maximum modification period and the declaration deadline not exceeding one year. Article sequence 1–24 is complete in Markdown; OCR heading misses are scan/OCR artifacts, not established legal omissions.
+- **Markdown content:** Markdown preserves the target document structure and article sequence without adding unrelated issue material.
+- **Problem:** The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.
+- **Correction required:** No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.
+- **Severity:** **MINOR**
 
 ### `decret-91-05-hygiene-securite-milieu-travail.md`
 
-**Source PDF:** `—`  
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `decret-91-05-hygiene-securite-milieu-travail.pdf`  
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
-- **Severity:** **HIGH**
+- **PDF location/page:** Uploaded eight-page Journal Officiel scan; target decree is the complete eight-page source segment.
+- **Markdown location:** Document identity, article sequence, and source-scope metadata
+- **Original PDF content:** The source visibly confirms the decree identity and final Articles 60–68. Article 67 preserves the one-month, fifteen-day, and five-day minimum execution periods and their article lists. Markdown contains Articles 1–68 in sequence.
+- **Markdown content:** Markdown preserves the target document structure and article sequence without adding unrelated issue material.
+- **Problem:** The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.
+- **Correction required:** No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.
+- **Severity:** **MINOR**
 
 ### `decret-93-120-medecine-du-travail.md`
 
@@ -1923,18 +1923,18 @@
 
 ### `loi-09-03-protection-consommateur.md`
 
-**Source PDF:** `—`  
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `loi-09-03-protection-consommateur.pdf`  
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
-- **Severity:** **HIGH**
+- **PDF location/page:** Uploaded eleven-page source; target Law 09-03 isolated from neighboring Journal Officiel material before comparison.
+- **Markdown location:** Document identity, article sequence, and source-scope metadata
+- **Original PDF content:** The isolated source and Markdown agree on the target law identity and Articles 1–95. OCR-only Article 156 occurrences refer to cited provisions of the Code of Penal Procedure or Constitution, not a missing Article 156 of Law 09-03. No source-established legal-text correction is justified.
+- **Markdown content:** Markdown preserves the target document structure and article sequence without adding unrelated issue material.
+- **Problem:** The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.
+- **Correction required:** No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.
+- **Severity:** **MINOR**
 
 ### `loi-18-09-protection-consommateur.md`
 
@@ -2043,18 +2043,18 @@
 
 ### `loi-90-29-urbanisme.md`
 
-**Source PDF:** `—`  
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `loi-90-29-urbanisme.pdf`  
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
-- **Severity:** **HIGH**
+- **PDF location/page:** Mixed 30-page Journal Officiel n° 52 scan. The first page identifies Law 90-29 at printed page 1408; the next law begins at printed page 1416. The final page is unrelated table-of-contents material listing Articles 80–140 of the domain law.
+- **Markdown location:** Document identity, article sequence, and source-scope metadata
+- **Original PDF content:** The Markdown contains the complete target Law 90-29 sequence Articles 1er–81. Articles 82–140 visible in later issue material belong to the neighboring domain-law text and must not be added to the urbanism Markdown.
+- **Markdown content:** Markdown preserves the target document structure and article sequence without adding unrelated issue material.
+- **Problem:** The uploaded source is scanned or mixed Journal Officiel material and therefore retains a final visual spot-check reservation.
+- **Correction required:** No automatic legal-text correction is justified; retain the source-scope note and verify legal-critical values against the page image when relied upon.
+- **Severity:** **MINOR**
 
 ### `projet-arrete-gpl-installations-securite.md`
 
@@ -2100,6 +2100,10 @@ Only documents marked **VERIFIED WITH MINOR ISSUES** are candidates for AI/legal
 | Verification state | Corrected text is source-aligned for the readable OCR/visual content. The file remains not fully certified until all table cells and low-confidence OCR characters receive human page-image review. |
 
 No other Markdown file was rewritten automatically in this pass because OCR or the supplied PDF did not establish an unambiguous replacement text. In particular, the scanned `76-35`, `76-36`, and `83-496` files contain source-scope or OCR-quality issues that make wholesale replacement unsafe.
+
+## Uploaded-source batch update — 2026-08-20
+
+The four newly uploaded PDFs were audited and reclassified as **VERIFIED WITH MINOR ISSUES**. No Markdown legal text was rewritten in this batch because the PDFs did not establish an unambiguous correction. Law 90-29 was handled as a mixed Journal Officiel issue: only the target law’s printed pages 1408–1415 and Articles 1er–81 belong in its Markdown; later Articles 80–140 are unrelated domain-law material.
 
 ## Full-corpus trust update — 2026-08-20
 
