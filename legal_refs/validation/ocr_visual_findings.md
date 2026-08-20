@@ -60,3 +60,14 @@ The uploaded eight-page PDF is a scanned Journal Officiel source. Page 1 visuall
 ## Uploaded-source visual findings — Law 90-29 — 2026-08-20
 
 The first page of the uploaded 30-page scan is Journal Officiel n° 52 dated 2 December 1990 and visibly identifies `Loi n° 90-29 du 1er décembre 1990 relative à l'aménagement et l'urbanisme`, beginning at printed page 1408. The final uploaded page is printed page 1436 and is a table of contents for the subsequent domain-law material, listing Articles 80–140. Therefore the PDF is a mixed Journal Officiel issue: the target urbanism law occupies an initial scope ending at its Article 81 and is followed by unrelated material. The repository Markdown contains Articles 1er–81, consistent with the target law; the source must be isolated by printed/page scope before comparing OCR article ranges. No Article 82–140 content should be added to the urbanism Markdown.
+
+
+## Remaining-source visual findings — Decree 93-120 — 2026-08-20
+
+The five-page scan is visually legible and identifies `Décret exécutif n° 93-120 du 15 mai 1993 relatif à l'organisation de la médecine du travail`, published in Journal Officiel n° 33 dated 19 mai 1993, printed pages 7–11. The first page visibly contains Article 1er and the decree title. The final page visibly contains Articles 33–40, including Article 39’s minimum periods of three months, one month, eight days, and one day, and Article 40’s publication clause, followed by `Fait à Alger, le 15 mai 1993. Bélaïd ABDESSELAM.` The French source is sufficiently legible for a complete page-aware comparison; OCR misses in article headings are scan artifacts, while the Markdown contains Articles 1er–40.
+
+
+The middle-page visual review of Decree 93-120 pages 2–3 confirms readable Articles 3–22, including Article 3’s one-hour-per-month staffing calculations, Article 4’s three alternative organizational cases and maximum four-month response period, Article 15’s annual and twice-yearly examination frequencies, Article 16’s protected worker categories, and Article 17’s 20/21-day absence thresholds. These provisions are represented in the Markdown; no source-established numeric correction was identified from these pages.
+
+
+The visual review of Decree 93-120 pages 4–5 confirms Articles 23–40 in readable form. Article 30 requires full-time auxiliary medical assistance in the stated organization case; Article 31 requires first-aid kits and trained first-aiders; Articles 32–38 set inspection, reporting, and medical-advice duties. Article 39 visually confirms the four minimum periods: three months for Articles 2, 4, 9, 11; one month for Articles 3, 7, 10, 15, 16, 20, 27, 30(1), 31(2); eight days for Articles 14, 17, 18, 19, 21, 24, 25, 30(2), 31(1), 36, 37; and one day for Articles 26 and 36. The Markdown matches these conditions and the final signature/date. No legal-text correction is justified.

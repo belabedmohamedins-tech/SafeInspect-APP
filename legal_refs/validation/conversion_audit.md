@@ -37,7 +37,7 @@
 | `decret-83-496-gpl-carburant.md` | 48 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 22 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-90-245-appareils-pression-gaz.md` | 6 | SCANNED PDF; IDENTITY, ARTICLES 1–24, AND CRITICAL FINAL DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | 8 | SCANNED PDF; IDENTITY, ARTICLES 1–68, AND ARTICLE 67 DEADLINES COMPARED; VISUAL SPOT-CHECK ADVISED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
-| `decret-93-120-medecine-du-travail.md` | 5 | SCANNED PDF; FRENCH OCR PARTIAL; VISUAL VERIFICATION REQUIRED | 1 | 0 | **UNSAFE FOR LEGAL USE** |
+| `decret-93-120-medecine-du-travail.md` | 5 | SCANNED PDF; ARTICLES 1–40 AND LEGAL-CRITICAL DEADLINES VISUALLY VERIFIED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-01-19-gestion-dechets.md` | 14 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-03-10-protection-environnement.md` | 28 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-04-08-activites-commerciales.md` | 5 | TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
@@ -1833,18 +1833,18 @@
 
 ### `decret-93-120-medecine-du-travail.md`
 
-**Source PDF:** `—`  
-**Status:** **UNSAFE FOR LEGAL USE**
+**Source PDF:** `decret 93-120.pdf`  
+**Status:** **VERIFIED WITH MINOR ISSUES**
 
-#### Error 1 — HIGH
+#### Error 1 — MINOR
 
-- **PDF location/page:** —
-- **Markdown location:** Entire document
-- **Original PDF content:** No corresponding PDF is present in legal_refs/pdf.
-- **Markdown content:** Markdown exists but cannot be validated.
-- **Problem:** Authoritative source unavailable.
-- **Correction required:** Provide the original PDF and repeat the audit.
-- **Severity:** **HIGH**
+- **PDF location/page:** Scanned Journal Officiel n° 33, printed pages 7–11; Articles 1er–40
+- **Markdown location:** Article sequence, Article 39 deadlines, and closing signature/date
+- **Original PDF content:** Visual page review confirms the decree identity, Articles 1er–40, Article 39 minimum periods of three months, one month, eight days, and one day, and the closing date/signature.
+- **Markdown content:** Markdown contains Articles 1er–40 and reproduces the Article 39 deadline categories and closing formula.
+- **Problem:** The PDF is image-only and retains a final spot-check reservation for low-confidence OCR characters.
+- **Correction required:** No legal-text correction is justified. Preserve the Markdown structure and verify the page image when relying on an individual low-confidence character.
+- **Severity:** **MINOR**
 
 ### `loi-01-19-gestion-dechets.md`
 
@@ -2104,6 +2104,10 @@ No other Markdown file was rewritten automatically in this pass because OCR or t
 ## Uploaded-source batch update — 2026-08-20
 
 The four newly uploaded PDFs were audited and reclassified as **VERIFIED WITH MINOR ISSUES**. No Markdown legal text was rewritten in this batch because the PDFs did not establish an unambiguous correction. Law 90-29 was handled as a mixed Journal Officiel issue: only the target law’s printed pages 1408–1415 and Articles 1er–81 belong in its Markdown; later Articles 80–140 are unrelated domain-law material.
+
+## Remaining unsafe-document update — 2026-08-20
+
+Decree 93-120 was promoted to **VERIFIED WITH MINOR ISSUES** after complete five-page visual review. Decree 83-496 remains **UNSAFE FOR LEGAL USE**: the source segment is readable for selected Arabic numerical conditions, but the Markdown’s full French/Arabic bilingual representation has not been validated line by line and its Article 9 French rendering remains uncertified.
 
 ## Full-corpus trust update — 2026-08-20
 
