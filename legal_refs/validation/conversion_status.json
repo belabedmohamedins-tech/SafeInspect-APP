@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 20,
+    "verified_with_minor_issues": 21,
     "requires_correction": 0,
-    "unsafe": 25,
+    "unsafe": 24,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -323,10 +323,10 @@
     {
       "document": "decret-04-82-agrement-sanitaire-elevage.md",
       "pages": 30,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 4,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "SOURCE PAGES 3-5 ISOLATED; ARTICLES 1-18 MATCH THE PDF; 04-83 EXCLUDED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 04-82.pdf",
       "errors": [
         {
@@ -366,7 +366,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Journal Officiel pages 3-5 isolated from mixed PDF; identity and Articles 1-18 compared; final visual check of sanitary conditions, deadlines, and sanctions advised."
     },
     {
       "document": "decret-05-315-declaration-dechets-speciaux-dangereux.md",

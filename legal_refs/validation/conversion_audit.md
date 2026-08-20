@@ -2174,3 +2174,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Isolated mixed-PDF review update — 2026-08-20
 
 `decret-02-427-prevention-risques-professionnels.md` was checked against Journal Officiel pages 15–17 isolated within the mixed 24-page PDF. The source identifies decree 02-427 dated 3 Chaoual 1423, corresponding to 7 December 2002, and the Markdown contains Articles 1er–24 in order. The existing page-scope metadata and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated mixed-PDF review update — 2026-08-20
+
+`decret-04-82-agrement-sanitaire-elevage.md` was checked against Journal Officiel pages 3–5 isolated within the mixed PDF. The source identifies decree 04-82 dated 26 Moharram 1425, corresponding to 18 March 2004, and the Markdown contains Articles 1er–18 in order. The existing note excluding neighboring decree 04-83 and the Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
