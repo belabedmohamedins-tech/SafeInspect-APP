@@ -37,7 +37,7 @@
 | `decret-83-496-gpl-carburant.md` | 48 | SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION | 22 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-90-245-appareils-pression-gaz.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `decret-91-05-hygiene-securite-milieu-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `decret-93-120-medecine-du-travail.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `decret-93-120-medecine-du-travail.md` | 5 | SCANNED PDF; FRENCH OCR PARTIAL; VISUAL VERIFICATION REQUIRED | 1 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-01-19-gestion-dechets.md` | 14 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-03-10-protection-environnement.md` | 28 | TEXT/ARTICLE COMPARISON; SOURCE ISSUE NUMBER NOT ESTABLISHED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-04-08-activites-commerciales.md` | 5 | TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
@@ -2298,3 +2298,12 @@ The previously unpaired Markdown was matched to `Loi 88-07-Hygiene-securite-et-m
 No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Scanned-source recovery update — 2026-08-20 — `decret-93-120-medecine-du-travail.md`
+
+The previously unpaired Markdown was matched to `decret 93-120.pdf`. The PDF is image-only and contains no embedded text. French OCR recovers approximately 20,216 characters against approximately 20,585 Markdown characters and recovers the decree identity, Articles 1–40, and most provisions, but some article headings are missed or corrupted by OCR, including Articles 5 and 36. The source has not yet been checked page by page visually for all legal-critical values.
+
+No legal text was changed. The registry was corrected to identify the actual scanned PDF and the remaining verification boundary.
+
+**Final status:** **UNSAFE FOR LEGAL USE**. A clearer text PDF or complete page-level visual verification is required before promotion. Any unreadable source region must remain `[ILLISIBLE]` rather than being reconstructed by inference.

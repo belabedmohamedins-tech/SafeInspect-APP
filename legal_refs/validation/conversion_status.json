@@ -1835,24 +1835,24 @@
     },
     {
       "document": "decret-93-120-medecine-du-travail.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
-      "critical_errors": 0,
+      "pages": 5,
+      "conversion_quality": "SCANNED PDF; FRENCH OCR PARTIAL; VISUAL VERIFICATION REQUIRED",
+      "critical_errors": 1,
       "minor_errors": 0,
       "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "pdf": "decret 93-120.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
+          "pdf_location": "Image-only source PDF, all pages; French OCR transcript",
+          "markdown_location": "Article sequence and legally critical values",
+          "pdf_content": "The source PDF has no embedded text. OCR recovers most body text but misses or corrupts some article headings, including Articles 5 and 36, and has not been independently checked page by page.",
+          "markdown_content": "The Markdown contains a complete-looking Articles 1–40 structure.",
+          "problem": "The scanned source cannot yet establish the complete Markdown text and numerical conditions without visual page verification; OCR alone is not sufficient for legal certification.",
+          "correction_required": "Perform page-level visual verification or obtain a clearer text PDF before promotion. Preserve [ILLISIBLE] for any unreadable region.",
           "severity": "HIGH"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The exact repository PDF was located and French OCR was generated. OCR character coverage is close to the Markdown, but the image-only source still requires page-level visual verification; the file remains excluded from the trustable index."
     },
     {
       "document": "loi-01-19-gestion-dechets.md",
