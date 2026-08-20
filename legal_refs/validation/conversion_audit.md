@@ -2244,3 +2244,12 @@ The previously unpaired Markdown was matched to `Loi 04-20.pdf`. The 17-page PDF
 No legal text correction was required. The file’s verification metadata was updated to reflect the completed mapped-PDF audit.
 
 **Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-03-10-protection-environnement.md`
+
+The previously unpaired Markdown was matched to `Loi-03-10.pdf`. The 28-page source establishes Law n° 03-10 dated 19 July 2003 and contains Articles 1–114. The source and Markdown were compared for identity, dates, article sequence, closing provisions, and critical numerical tokens; the article sequence and legal body align.
+
+One minor metadata correction was made. The Markdown’s unsupported estimate “probablement JO N° 43 de 2003” was replaced with an explicit unresolved marker because the supplied PDF excerpt does not clearly establish the Journal Officiel issue number. No legal provision was changed and no issue number was invented.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
