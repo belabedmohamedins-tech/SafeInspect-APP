@@ -1,4 +1,4 @@
-﻿<!-- ============================================================
+<!-- ============================================================
      README mis à jour le 2026-08-09 — Audit grep corpus complet
      README mis à jour le 2026-08-09 (2) — D22-167 + D24-196 ajoutés, D06-198 row corrigée
      README mis à jour le 2026-08-09 (3) — decret-06-141 indexé (bon fichier : rejets-effluents-liquides)

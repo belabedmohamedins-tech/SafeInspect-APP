@@ -2326,3 +2326,10 @@ The source contains Articles 1–450. Part 1 contains Articles 1–164, Part 2 c
 No legal text correction was required. Verification metadata for all three parts was updated to record the actual page ranges and comparison scope.
 
 **Final status:** all three parts are **VERIFIED WITH MINOR ISSUES**, suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.
+
+
+## Repository compliance and consistency scan — 2026-08-20
+
+A final repository-wide consistency scan covered the 47 PDFs and 47 Markdown files present under `legal_refs`, with 45 legal documents represented in `conversion_status.json`; `CLEANUP_LOG.md` and `HANDOVER.md` are internal notes, and the unpublished GPL project is intentionally non-paired and excluded from the legal trust index. No missing paired PDF, registry page-count mismatch, or usable document carrying critical errors was detected.
+
+The scan found and corrected two non-legal-content encoding issues: the UTF-8 BOM at the beginning of `legal_refs/README.md` was removed, and `decret-90-245-appareils-pression-gaz.md` was losslessly normalized from Windows-1252 to UTF-8. Generated `Contrôle de séquence` sections remain in many Markdown files as repository audit annotations; they are not source-law text and must not be treated as authoritative legal provisions. The current trust classification remains 43 **VERIFIED WITH MINOR ISSUES** and 2 **UNSAFE FOR LEGAL USE**.
