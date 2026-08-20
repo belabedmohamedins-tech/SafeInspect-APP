@@ -104,3 +104,7 @@ The 76-35 Markdown was checked against the correct segment of its mixed source P
 ## Encoding-repair review update — 2026-08-20
 
 The 2016 and 2025 paired Markdown files were repaired from legacy ISO-8859-1 to UTF-8 without changing their established Markdown structure or legal content. Their PDF identity, article coverage, and key tables/provisions were reviewed, and both are now **VERIFIED WITH MINOR ISSUES**.
+
+## Direct-PDF scope review update — 2026-08-20
+
+The 09-335 Markdown was compared with its direct five-page PDF. Articles 1er–21 and six chapters match; parser detections outside that range were excluded. The abrogation warning and existing Markdown structure were preserved. The file is now **VERIFIED WITH MINOR ISSUES**.

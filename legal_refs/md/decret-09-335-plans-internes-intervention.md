@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 68, 25 octobre 2009  
 **Source PDF :** Fourni par l'utilisateur  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — Articles 1er à 21 et six chapitres comparés au PDF ; les détections d’articles 54 et 62 provenaient du parseur et ne font pas partie du décret 09-335  
 ⚠️ **ABROGÉ** par le Décret exécutif n° 25-63 du 28 janvier 2025 (JO N° 07/2025). Conservé pour référence historique uniquement. Voir `decret-25-63-plans-intervention-catastrophes.md`.
 > **AVERTISSEMENT :** Ce texte est abrogé et ne doit pas être utilisé comme base légale contraignante. Consulter D25-63.
 

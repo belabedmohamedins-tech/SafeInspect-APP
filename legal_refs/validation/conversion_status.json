@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 13,
+    "verified_with_minor_issues": 14,
     "requires_correction": 0,
-    "unsafe": 32,
+    "unsafe": 31,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -742,10 +742,10 @@
     {
       "document": "decret-09-335-plans-internes-intervention.md",
       "pages": 5,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 2,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF SCOPE VERIFIED; ARTICLES 1-21 AND SIX CHAPTERS MATCH THE SOURCE",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 09-335.pdf",
       "errors": [
         {
@@ -767,7 +767,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Articles 1er-21 and six chapters compared with the PDF; parser detections for Articles 54 and 62 are out-of-scope artefacts."
     },
     {
       "document": "decret-11-125-eau-consommation-humaine.md",

@@ -2134,3 +2134,7 @@ The 2016 microbiological-criteria and 2025 restaurant-hygiene Markdown files wer
 ## Control-punctuation repair update — 2026-08-20
 
 A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte `U+0097` was preserved as a control character rather than rendered as punctuation. The authoritative PDF uses an em dash in these positions. All 52 occurrences in the 2016 Markdown and all 105 occurrences in the 2025 Markdown were replaced with the source-faithful em dash. No article text, number, unit, table value, or legal condition was changed.
+
+## Direct-PDF scope review update — 2026-08-20
+
+`decret-09-335-plans-internes-intervention.md` was checked against its five-page PDF. Articles 1er–21 and all six chapters are present in the Markdown. The earlier detections of Articles 54 and 62 were parser artefacts outside the decree’s actual scope. The existing abrogation warning and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
