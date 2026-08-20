@@ -2182,3 +2182,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Isolated parameter-annex review update — 2026-08-20
 
 `decret-06-141-rejets-effluents-liquides.md` was checked against Journal Officiel pages 4–9 isolated within the mixed PDF. The source identifies decree 06-141 dated 20 Rabie El Aouel 1427, corresponding to 19 April 2006, and the Markdown contains Articles 1er–14 plus Annexes I–II. The existing table structure was preserved. Because the annexes contain legally critical limit values, tolerances, parameters, and units, visual checking remains mandatory. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Isolated amendment review update — 2026-08-20
+
+`decret-21-430-gpl-carburant.md` was checked against Journal Officiel pages 11–12 isolated within the mixed PDF. The source identifies decree 21-430 dated 28 Rabie El Aouel 1443, corresponding to 4 November 2021, and the Markdown contains Articles 1er–3 plus the modified Articles 4, 7, and 8 of decree 83-496. The existing amendment quotations and Markdown structure were preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.

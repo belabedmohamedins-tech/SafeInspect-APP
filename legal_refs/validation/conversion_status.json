@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 22,
+    "verified_with_minor_issues": 23,
     "requires_correction": 0,
-    "unsafe": 23,
+    "unsafe": 22,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1062,10 +1062,10 @@
     {
       "document": "decret-21-430-gpl-carburant.md",
       "pages": 28,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 30,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "SOURCE PAGES 11-12 ISOLATED; ARTICLES 1-3 AND MODIFIED ARTICLES 4, 7, 8 MATCH THE PDF",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "21-430.pdf",
       "errors": [
         {
@@ -1294,7 +1294,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Journal Officiel pages 11-12 isolated from mixed PDF; identity, Articles 1-3, and modified Articles 4, 7, 8 compared; visual check of approval, dimensions, and authorization conditions advised."
     },
     {
       "document": "decret-22-167-etablissements-classes-modification.md",

@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 85, 2 Rabie Ethani 1443 (7 novembre 2021) — pages 11  
 **Source PDF :** Fourni par l'utilisateur (`21-430.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — pages JORADP 11 à 12 isolées dans le PDF ; articles 1er à 3 et modifications des articles 4, 7 et 8 comparées ; contrôle visuel final recommandé pour les exigences d'agrément, dimensions et autorisations  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 ---
