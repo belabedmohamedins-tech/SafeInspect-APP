@@ -4,7 +4,7 @@
 **Journal Officiel :** N° 25, 6 mai 1990 — pages 1 à 29 (extrait)  
 **Source PDF :** Fourni par l'utilisateur (`LOI 90-11.pdf`)  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF mappé et comparé; articles 1–158, identité, dates et valeurs numériques alignés
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** L'extraction du PDF est complète et lisible. Tous les articles sont présents. La loi a été modifiée par plusieurs textes ultérieurs (notamment en 1991, 1994, 1996, 1997, 2015, 2017, 2022). Les modifications sont indiquées en note dans le corps du texte.
