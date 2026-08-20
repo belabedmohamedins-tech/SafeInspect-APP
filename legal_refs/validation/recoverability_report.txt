@@ -1,0 +1,14 @@
+PAIR	decret-25-63-plans-intervention-catastrophes.md	decret-25-63-plans-intervention-catastrophes.pdf	pages=5	pdf_chars=32779	md_chars=21913
+PAIR	decret-93-120-medecine-du-travail.md	decret 93-120.pdf	pages=5	pdf_chars=5	md_chars=21538
+PAIR	loi-01-19-gestion-dechets.md	Loi 01-19.pdf	pages=14	pdf_chars=43560	md_chars=34693
+PAIR	loi-03-10-protection-environnement.md	Loi-03-10.pdf	pages=28	pdf_chars=90662	md_chars=71388
+PAIR	loi-04-08-activites-commerciales.md	LOI 04-08.pdf	pages=5	pdf_chars=31986	md_chars=23530
+PAIR	loi-04-20-risques-majeurs.md	Loi 04-20.pdf	pages=17	pdf_chars=52197	md_chars=40721
+PAIR	loi-05-12-ressources-en-eau.md	loi 05-12.pdf	pages=16	pdf_chars=107737	md_chars=81197
+PAIR	loi-18-09-protection-consommateur.md	loi 18-09fr.pdf	pages=2	pdf_chars=12259	md_chars=10177
+PAIR	loi-18-11-sante-partie1-arts1-164.md	loi 18-11.pdf	pages=40	pdf_chars=262654	md_chars=63931
+PAIR	loi-18-11-sante-partie2-arts165-264.md	loi 18-11.pdf	pages=40	pdf_chars=262654	md_chars=44803
+PAIR	loi-18-11-sante-partie3-arts265-450.md	loi 18-11.pdf	pages=40	pdf_chars=262654	md_chars=71235
+PAIR	loi-19-02-incendie-panique.md	loi 19-02.pdf	pages=24	pdf_chars=146762	md_chars=25988
+PAIR	loi-88-07-hygiene-securite-medecine-travail.md	Loi 88-07-Hygiene-securite-et-medecine-du-travail.pdf	pages=10	pdf_chars=25449	md_chars=27529
+PAIR	loi-90-11-relations-travail.md	LOI 90-11.pdf	pages=29	pdf_chars=70067	md_chars=73149

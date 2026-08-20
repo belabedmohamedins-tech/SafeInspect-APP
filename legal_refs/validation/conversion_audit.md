@@ -2217,3 +2217,12 @@ One minor source-established transcription error was corrected in the annex: thr
 A high-resolution crop of scanned PDF page 42 was reviewed. Article 12 visibly requires collective-transport vehicles and vehicles whose **weight with their load exceeds 2,500 kg** to display a prominent GPL plate on both lateral faces. The prior Markdown contained a corrupted Arabic transcription and an incomplete French condition ending after “dépasse”.
 
 The Arabic Article 12 block and its French representation were corrected without changing the existing bilingual structure. The correction is source-established from the focused page image. The full decree remains **UNSAFE FOR LEGAL USE** because the complete Arabic/French representation has not been independently compared line by line and Article 9’s French rendering remains explicitly uncertified.
+
+
+## Local-PDF recovery update — 2026-08-20 — `decret-25-63-plans-intervention-catastrophes.md`
+
+The previously unpaired Markdown was matched to the repository PDF `decret-25-63-plans-intervention-catastrophes.pdf`. The source contains five pages and includes neighboring Journal Officiel material from decree n° 25-62; the target decree n° 25-63 was isolated by its title and article sequence. The Markdown contains Articles 1–30 in the same order as the source, and the identity, signature date, closing provisions, and critical numerical tokens align in the standardized comparison.
+
+No legal text correction was required. The registry now records the actual PDF mapping, the five-page scope, and a minor source-scope issue because the supplied PDF is an excerpt containing adjacent decree material. The Markdown’s existing note correctly limits the representation to decree n° 25-63.
+
+**Final status:** **VERIFIED WITH MINOR ISSUES**. The file is suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.

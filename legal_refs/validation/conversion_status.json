@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 24,
+    "verified_with_minor_issues": 26,
     "requires_correction": 0,
-    "unsafe": 21,
+    "unsafe": 19,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1349,24 +1349,24 @@
     },
     {
       "document": "decret-25-63-plans-intervention-catastrophes.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 5,
+      "conversion_quality": "TEXT/ARTICLE COMPARISON; MIXED SOURCE SCOPE DOCUMENTED",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret-25-63-plans-intervention-catastrophes.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "PDF pages 1–5; adjacent decree text is present in the source excerpt",
+          "markdown_location": "Source-scope metadata and verification record",
+          "pdf_content": "The five-page source contains decree n° 25-63 together with neighboring Journal Officiel material from decree n° 25-62.",
+          "markdown_content": "Only decree n° 25-63 is represented in the Markdown.",
+          "problem": "The target decree is correctly isolated, but the source excerpt is not a standalone issue PDF.",
+          "correction_required": "Retain the explicit source-scope note and perform a final visual spot-check of legal-critical values.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "Pages 1–5 were compared against the Markdown. Articles 1–30 are present in the same sequence; identity, dates, closing provisions, and critical numerical tokens align. The neighboring decree text in the PDF is excluded from the Markdown and documented."
     },
     {
       "document": "decret-76-35-igh-incendie.md",
