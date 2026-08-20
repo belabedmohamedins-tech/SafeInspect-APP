@@ -2118,3 +2118,7 @@ The remaining directly paired candidates were reviewed without changing their es
 `decret-06-138-emissions-atmospheriques.md` was checked against Articles 1–19 and Annexes I–II. `decret-11-125-eau-consommation-humaine.md` was checked against Articles 1–9 and Tables 1–2. Both remain structurally complete and are now classified **VERIFIED WITH MINOR ISSUES**, with final visual spot-checks recommended for table values, units, and thresholds. The corrected 1999 arrêté is also now classified **VERIFIED WITH MINOR ISSUES** after OCR and visual review, with only low-confidence table/signature details remaining.
 
 Current machine-readable classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR ISSUES**, **0 REQUIRES CORRECTION**, and **36 UNSAFE FOR LEGAL USE**.
+
+## Amendment review update — 2026-08-20
+
+`decret-24-196-etablissements-classes-modification.md` was reviewed against the supplied PDF while preserving its existing amendment format. The PDF and Markdown agree on the identity, Articles 1er–3, and the quoted modifications to Articles 14, 24, 25, 26, 29, and 44 of decree 06-198. The earlier article-gap findings were parser artefacts caused by quoted amended article headings. The file is now classified **VERIFIED WITH MINOR ISSUES**, with a final visual check recommended for conditions and deadlines.

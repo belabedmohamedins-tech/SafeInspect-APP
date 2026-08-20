@@ -92,3 +92,7 @@ The base 06-198 Markdown had incorrectly merged Article 14 items 8–10 from the
 The ongoing review preserves the Markdown structure already used in the repository. It does not replace documents with a new template: metadata, source references, headings, article numbering, section hierarchy, lists, tables, annexes, amendment references, and sequence checks remain in place. The 06-138 and 11-125 documents were added to the usable-with-reservations set after article/annex/table comparison. The corrected 1999 arrêté was reclassified after OCR review.
 
 Current classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR ISSUES**, **0 REQUIRES CORRECTION**, **36 UNSAFE FOR LEGAL USE**.
+
+## Amendment review update — 2026-08-20
+
+The 24-196 amendment Markdown was reviewed against its PDF without changing its existing quoted-article structure. Its identity, Articles 1er–3, and modified Articles 14, 24, 25, 26, 29, and 44 align with the source. It is now classified **VERIFIED WITH MINOR ISSUES**.

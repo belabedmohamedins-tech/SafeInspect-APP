@@ -3,7 +3,7 @@
 **Date de signature :** 11 juin 2024 (5 Dhou El Hidja 1445)  
 **Journal Officiel :** Publié le 19 juin 2024 (13 Dhou El Hidja 1445) — Source PDF fournie par l'utilisateur  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-10 par Mohamed Ins Belabèd  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — identité, Articles 1er–3, articles modifiés 14, 24, 25, 26, 29 et 44 comparés au PDF ; contrôle visuel final des conditions et délais recommandé  
 
 **Note sur l'extraction :** L'intégralité du texte de ce décret est présente dans l'extraction fournie.
 

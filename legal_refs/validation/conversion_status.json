@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 9,
+    "verified_with_minor_issues": 10,
     "requires_correction": 0,
-    "unsafe": 36,
+    "unsafe": 35,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -1347,10 +1347,10 @@
     {
       "document": "decret-24-196-etablissements-classes-modification.md",
       "pages": 2,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 2,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "PDF VERIFIED; FINAL VISUAL SPOT-CHECK OF AMENDMENT CONDITIONS ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 24-196.pdf",
       "errors": [
         {
@@ -1372,7 +1372,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity, Articles 1er-3, and modified Articles 14, 24, 25, 26, 29 and 44 compared with the PDF; final visual check of conditions and deadlines advised."
     },
     {
       "document": "decret-25-63-plans-intervention-catastrophes.md",
