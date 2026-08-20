@@ -100,3 +100,7 @@ The 24-196 amendment Markdown was reviewed against its PDF without changing its 
 ## Mixed-source scope review update — 2026-08-20
 
 The 76-35 Markdown was checked against the correct segment of its mixed source PDF. Articles 1er–26 match; article detections from decree 76-36 were excluded as out-of-scope. The existing Markdown structure and explicit scope note were preserved. The file is now **VERIFIED WITH MINOR ISSUES**.
+
+## Encoding-repair review update — 2026-08-20
+
+The 2016 and 2025 paired Markdown files were repaired from legacy ISO-8859-1 to UTF-8 without changing their established Markdown structure or legal content. Their PDF identity, article coverage, and key tables/provisions were reviewed, and both are now **VERIFIED WITH MINOR ISSUES**.

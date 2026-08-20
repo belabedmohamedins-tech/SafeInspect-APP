@@ -2126,3 +2126,7 @@ Current machine-readable classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR
 ## Mixed-source scope review update — 2026-08-20
 
 `decret-76-35-igh-incendie.md` was reviewed against the 76-35 segment of the mixed source PDF. Articles 1er–26 are present in the Markdown and match the 76-35 segment. The earlier detections of Articles 36 and 87 were false positives caused by the same PDF containing the following decree 76-36. The Markdown structure and scope note were preserved; the file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+## Encoding-repair review update — 2026-08-20
+
+The 2016 microbiological-criteria and 2025 restaurant-hygiene Markdown files were stored in legacy ISO-8859-1 encoding, which caused French accents and punctuation to appear corrupted in UTF-8 readers. Both files were converted losslessly to UTF-8. Their existing headings, articles, tables, annexes, and sequence-control sections were preserved. The 2016 file was compared for article and microbiological-table coverage; the 2025 file was compared for Articles 1er–48 and restaurant-hygiene provisions. Both are now classified **VERIFIED WITH MINOR ISSUES**, with visual checks of thresholds, units, conditions, and tables still recommended.

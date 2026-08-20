@@ -1,0 +1,213 @@
+{
+  "total_pairs": 26,
+  "pairs": [
+    {
+      "md": "arrete-interministeriel-1999-11-21-conservation-aliments.md",
+      "pdf": "Arrêté interministériel du 21 novembre 1999.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 3
+    },
+    {
+      "md": "arrete-interministeriel-2011-02-06-permis-construire-energie.md",
+      "pdf": "arrete-interministeriel-2011-02-06-permis-construire-energie.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 26,
+      "pages": 5
+    },
+    {
+      "md": "arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
+      "pdf": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "pages": 22
+    },
+    {
+      "md": "arrete-interministeriel-2025-05-07-hygiene-restauration.md",
+      "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d’hygiène et de salubrité applicables dans les établissements de restauration.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "pages": 5
+    },
+    {
+      "md": "decret-01-102-creation-ona.md",
+      "pdf": "decret 01-102.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 37,
+      "pages": 6
+    },
+    {
+      "md": "decret-02-427-prevention-risques-professionnels.md",
+      "pdf": "Décret 02-427.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 7,
+      "minor_errors": 0,
+      "pages": 24
+    },
+    {
+      "md": "decret-04-410-regles-installations-traitement-dechets.md",
+      "pdf": "Décret 04-410.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 6,
+      "minor_errors": 0,
+      "pages": 5
+    },
+    {
+      "md": "decret-04-82-agrement-sanitaire-elevage.md",
+      "pdf": "Décret 04-82.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 4,
+      "minor_errors": 0,
+      "pages": 30
+    },
+    {
+      "md": "decret-05-315-declaration-dechets-speciaux-dangereux.md",
+      "pdf": "Decret 05-315.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "pages": 4
+    },
+    {
+      "md": "decret-06-138-emissions-atmospheriques.md",
+      "pdf": "Décret 06-138.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 13
+    },
+    {
+      "md": "decret-06-141-rejets-effluents-liquides.md",
+      "pdf": "decret 06-141.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 44,
+      "minor_errors": 0,
+      "pages": 27
+    },
+    {
+      "md": "decret-06-198-etablissements-classes.md",
+      "pdf": "Decret 06-198.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 7
+    },
+    {
+      "md": "decret-07-144-nomenclature-installations-classees.md",
+      "pdf": "Décret 07-144.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "pages": 102
+    },
+    {
+      "md": "decret-07-205-schema-communal-dechets.md",
+      "pdf": "Decret 07-205.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 3,
+      "minor_errors": 0,
+      "pages": 3
+    },
+    {
+      "md": "decret-09-19.md",
+      "pdf": "decret 09-19.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 11,
+      "pages": 4
+    },
+    {
+      "md": "decret-09-335-plans-internes-intervention.md",
+      "pdf": "Décret 09-335.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 2,
+      "minor_errors": 0,
+      "pages": 5
+    },
+    {
+      "md": "decret-11-125-eau-consommation-humaine.md",
+      "pdf": "decret 11-125.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 4
+    },
+    {
+      "md": "decret-17-140-hygiene-alimentaire.md",
+      "pdf": "Decret 17-140.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 64,
+      "minor_errors": 0,
+      "pages": 31
+    },
+    {
+      "md": "decret-21-261-esp-equipements-hydrocarbures.md",
+      "pdf": "dec 21-261.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 47,
+      "pages": 14
+    },
+    {
+      "md": "decret-21-319-autorisation-exploitation-hydrocarbures.md",
+      "pdf": "decret 21-319.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 60,
+      "pages": 14
+    },
+    {
+      "md": "decret-21-430-gpl-carburant.md",
+      "pdf": "21-430.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 30,
+      "minor_errors": 0,
+      "pages": 28
+    },
+    {
+      "md": "decret-22-167-etablissements-classes-modification.md",
+      "pdf": "22-167.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 4,
+      "minor_errors": 0,
+      "pages": 23
+    },
+    {
+      "md": "decret-24-196-etablissements-classes-modification.md",
+      "pdf": "decret 24-196.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 2
+    },
+    {
+      "md": "decret-76-35-igh-incendie.md",
+      "pdf": "Décret 76-35.pdf",
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "pages": 3
+    },
+    {
+      "md": "decret-76-36-incendie-panique.md",
+      "pdf": "decret 76-36.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 14,
+      "minor_errors": 0,
+      "pages": 8
+    },
+    {
+      "md": "decret-83-496-gpl-carburant.md",
+      "pdf": "Décret 83-496.pdf",
+      "status": "UNSAFE FOR LEGAL USE",
+      "critical_errors": 21,
+      "minor_errors": 0,
+      "pages": 48
+    }
+  ]
+}

@@ -7,9 +7,9 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 11 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **VERIFIED WITH MINOR ISSUES** | 13 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
 | **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
-| **UNSAFE FOR LEGAL USE** | 34 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
+| **UNSAFE FOR LEGAL USE** | 32 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
 
@@ -26,6 +26,8 @@ The following files have an authoritative PDF available and have passed a strong
 - `arrete-interministeriel-1999-11-21-conservation-aliments.md`
 - `decret-24-196-etablissements-classes-modification.md`
 - `decret-76-35-igh-incendie.md`
+- `arrete-interministeriel-2016-10-04-criteres-microbiologiques.md`
+- `arrete-interministeriel-2025-05-07-hygiene-restauration.md`
 
 ## Structure preservation
 

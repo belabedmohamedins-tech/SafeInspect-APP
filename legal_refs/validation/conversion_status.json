@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 11,
+    "verified_with_minor_issues": 13,
     "requires_correction": 0,
-    "unsafe": 34,
+    "unsafe": 32,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -139,24 +139,24 @@
     {
       "document": "arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
       "pages": 22,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "UTF-8 REPAIRED; PDF/OCR ARTICLE AND MICROBIOLOGICAL TABLE REVIEW COMPLETED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf",
       "errors": [],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Legacy Latin-1 encoding converted losslessly to UTF-8; identity, article coverage, and microbiological tables compared; final visual check of thresholds and units advised."
     },
     {
       "document": "arrete-interministeriel-2025-05-07-hygiene-restauration.md",
       "pages": 5,
-      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
+      "conversion_quality": "UTF-8 REPAIRED; PDF ARTICLE AND RESTAURANT-HYGIENE CONTENT REVIEW COMPLETED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d’hygiène et de salubrité applicables dans les établissements de restauration.pdf",
       "errors": [],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Legacy Latin-1 encoding converted losslessly to UTF-8; identity, Articles 1er-48, and restaurant-hygiene provisions compared; final visual check advised."
     },
     {
       "document": "decret-01-102-creation-ona.md",
