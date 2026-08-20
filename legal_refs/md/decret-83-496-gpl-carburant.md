@@ -4,10 +4,10 @@
 **Journal Officiel :** N° 42, 7 Dhou El Kaâda 1403 (16 août 1983) — pages 256 à 258 (extrait)  
 **Source PDF :** Fourni par l'utilisateur (`Décret 83-496.pdf`)  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ UNSAFE FOR LEGAL USE — correction partielle vérifiée sur pages scannées 41–42 le 2026-08-20; revue bilingue complète non achevée
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
-**Note sur l'extraction :** Les articles 9 à 21 ont été extraits par l'utilisateur via un système de vision, avec le texte arabe original et la traduction française. Ce fichier est désormais complet.
+**Note sur l'extraction :** Les articles 9 à 21 ont été extraits par l'utilisateur via un système de vision. La revue visuelle des pages 41–42 a établi une omission dans l'article 9 (condition de 80 % du volume du réservoir), ajoutée dans le bloc arabe ci-dessous. La traduction française de ce complément n'est pas certifiée; l'article 12 conserve également une ambiguïté de transcription/traduction. Le fichier n'est pas certifié pour l'usage juridique.
 
 ---
 
@@ -69,9 +69,11 @@ Le ministre chargé des hydrocarbures délivre, après vérification de la confo
 > Voir le texte de remplacement complet dans `decret-21-430-gpl-carburant.md`.
 
 **Art. 9.** —  
-**Texte original (arabe) :** لا يمكن للمركب المعتمد أن يسلم سيارة مجهزة بغاز البترول المبيع كوقود إلا إذا كان في وسعه التقديم لصاحب السيارة (الترخيص باستعمال غاز الوقود المبيع كوقود) مثلما حدد ذلك في المادة ٨ وتحدد كيفيات تسليم هذا الترخيص في النص التنظيمي المنصوص عليه في المادة ٧ من هذا المرسوم.
+**Texte original (arabe) — complément vérifié sur le PDF :** لا يمكن للمركب المعتمد أن يسلم سيارة مجهزة بغاز البترول المبيع كوقود إلا إذا كان في وسعه التقديم لصاحب السيارة (الترخيص باستعمال غاز الوقود المبيع كوقود) مثلما حدد ذلك في المادة ٨ وتحدد كيفيات تسليم هذا الترخيص في النص التنظيمي المنصوص عليه في المادة ٧ من هذا المرسوم. [ILLISIBLE] بثمانين بالمئة (80%) من حجمه، وتتم مراقبة ذلك ضمن شروط ترد في قرار وزاري مشترك بين الوزير المكلف بالمناجم والوزير المكلف بالنقل.
 
 **Traduction :** L'installateur agréé ne peut livrer un véhicule équipé pour le GPL que s'il est en mesure de fournir au propriétaire du véhicule l'autorisation d'utilisation du GPL comme carburant, comme prévu à l'article 8. Les modalités de délivrance de cette autorisation sont fixées par le texte réglementaire prévu à l'article 7 du présent décret.
+
+**Complément de l'article 9 — traduction française non validée :** Le PDF arabe ajoute une condition relative à **80 % du volume du réservoir**, contrôlée selon les conditions d'un arrêté ministériel conjoint des ministres chargés des mines et des transports. Cette formulation française est fournie comme repère de recherche et ne doit pas être considérée comme une traduction juridique certifiée.
 
 **Art. 10.** —  
 **Texte original (arabe) :** يخضع التجهيز بغاز البترول المبيع المستعمل كوقود إلى المراقبة التقنية من الوزير المكلف بالمناجم، طبقا للتنظيم المعمول به.

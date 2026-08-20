@@ -1612,7 +1612,7 @@
       "document": "decret-83-496-gpl-carburant.md",
       "pages": 48,
       "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
-      "critical_errors": 21,
+      "critical_errors": 22,
       "minor_errors": 0,
       "status": "UNSAFE FOR LEGAL USE",
       "pdf": "Décret 83-496.pdf",
@@ -1805,9 +1805,18 @@
           "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
           "correction_required": "Human verification against the PDF page image.",
           "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Scanned source page 42, upper-left continuation of Article 9",
+          "markdown_location": "Article 9 — omitted 80% tank-volume condition",
+          "pdf_content": "The Arabic source visibly states a condition of 80% of the tank volume and specifies monitoring under a joint ministerial decision of the ministers responsible for mines and transport; the preceding phrase is not fully legible in the scan.",
+          "markdown_content": "The prior Markdown Article 9 stopped before the 80% condition.",
+          "problem": "Legally meaningful numerical condition omitted from the Arabic transcription and French representation.",
+          "correction_required": "The Markdown now preserves the readable 80% value and monitoring condition and marks the unclear preceding phrase as [ILLISIBLE]. The French rendering remains explicitly unvalidated.",
+          "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Pages 41–42 visually reviewed with Arabic OCR and overlapping tiles. Article 9 80% condition is now recorded; the file remains unsafe because the full bilingual text and Article 12 transcription/translation are not fully validated."
     },
     {
       "document": "decret-90-245-appareils-pression-gaz.md",

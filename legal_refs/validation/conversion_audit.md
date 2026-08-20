@@ -2190,3 +2190,14 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## OCR rectificatif correction update — 2026-08-20
 
 `decret-76-36-incendie-panique.md` was checked against the stronger Arabic/French OCR and the rendered source page. The rectificatif wording matches the source. A source-established reference error was corrected: the PDF specifies the **4ème et 6ème lignes de l'article 27**, not the 4ème et 5ème lines. The existing rectificatif-only Markdown structure was preserved. The file is now classified **VERIFIED WITH MINOR ISSUES**.
+
+
+## OCR visual correction update — 2026-08-20 — `decret-83-496-gpl-carburant.md`
+
+The scanned PDF pages 41–42 were isolated and reviewed with Arabic OCR, page images, and overlapping tiles. The source page 42 visibly continues Article 9 with a condition requiring **80% of the tank volume**, monitored under conditions set by a joint ministerial decision of the ministers responsible for mines and transport. The previous Markdown stopped before this numerical condition.
+
+The Markdown was corrected conservatively: the readable **80%** value and monitoring condition were added, while the preceding low-confidence phrase was marked **[ILLISIBLE]** rather than reconstructed. A non-certified French research note records the same source-established numerical condition; it is explicitly not presented as a legal translation.
+
+**Severity:** **HIGH** because a numerical legal condition was omitted. The Article 12 bilingual transcription remains ambiguous, and the full French/Arabic document has not been checked line by line. The file therefore remains **UNSAFE FOR LEGAL USE**.
+
+**Second comparison:** The corrected file was re-read after editing; the 80% condition is present, the [ILLISIBLE] marker is preserved, and no unrelated Markdown structure was changed.

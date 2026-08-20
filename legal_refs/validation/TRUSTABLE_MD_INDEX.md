@@ -53,3 +53,8 @@ Markdown files with no corresponding PDF in the repository cannot be validated a
 [2]: ../md/ "Markdown corpus"
 [3]: conversion_audit.md "Detailed conversion audit"
 [4]: conversion_status.json "Machine-readable status registry"
+
+
+## 83-496 status note — 2026-08-20
+
+`decret-83-496-gpl-carburant.md` remains in the **UNSAFE FOR LEGAL USE** group. A scanned-page review corrected the omission of the Article 9 **80% tank-volume condition**, but the full bilingual representation and Article 12 transcription/translation remain unvalidated. The file is therefore not included among the 24 Markdown files usable with reservations.
