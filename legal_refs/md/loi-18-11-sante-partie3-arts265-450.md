@@ -1,6 +1,6 @@
 # Loi n° 18-11 — PARTIE 3/3 : Organisation du système de santé + Finales (Arts. 265–450)
 > Fichier source : loi-18-11-sante.md (189KB) — Découpé le 2026-08-16 pour lisibilité API.
-> Statut : ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed
+> Statut : ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF pages 25–38 compared; Articles 265–450 present and numeric coverage aligned
 
 ## TITRE VI — ORGANISATION ET FINANCEMENT DU SYSTEME NATIONAL DE SANTE
 

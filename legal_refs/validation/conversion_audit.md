@@ -45,9 +45,9 @@
 | `loi-05-12-ressources-en-eau.md` | 16 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-09-03-protection-consommateur.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
 | `loi-18-09-protection-consommateur.md` | 2 | TEXT/ARTICLE COMPARISON; OFFICIAL JORADP DUPLICATE LOCATED | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
-| `loi-18-11-sante-partie1-arts1-164.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-18-11-sante-partie2-arts165-264.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
-| `loi-18-11-sante-partie3-arts265-450.md` | — | NO AUTHORITATIVE PDF PRESENT IN REPOSITORY | 0 | 0 | **UNSAFE FOR LEGAL USE** |
+| `loi-18-11-sante-partie1-arts1-164.md` | 40 | PDF pages 3–15; Articles 1–164; 98.06% normalized source-token coverage; no numeric omissions | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-18-11-sante-partie2-arts165-264.md` | 40 | PDF pages 16–24; Articles 165–264; 96.47% normalized source-token coverage; no substantive article omission | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
+| `loi-18-11-sante-partie3-arts265-450.md` | 40 | PDF pages 25–38; Articles 265–450; 95.78% normalized source-token coverage; article range complete | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-19-02-incendie-panique.md` | 24 | MIXED ISSUE; TARGET DOCUMENT ISOLATED TO PDF PAGES 5–10; ARTICLE COMPARISON | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-88-07-hygiene-securite-medecine-travail.md` | 10 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
 | `loi-90-11-relations-travail.md` | 29 | TEXT/ARTICLE COMPARISON; COMPLETE AND LEGIBLE SOURCE | 0 | 1 | **VERIFIED WITH MINOR ISSUES** |
@@ -2307,3 +2307,14 @@ The previously unpaired Markdown was matched to `decret 93-120.pdf`. The PDF is 
 No legal text was changed. The registry was corrected to identify the actual scanned PDF and the remaining verification boundary.
 
 **Final status:** **UNSAFE FOR LEGAL USE**. A clearer text PDF or complete page-level visual verification is required before promotion. Any unreadable source region must remain `[ILLISIBLE]` rather than being reconstructed by inference.
+
+
+## Local-PDF recovery update — 2026-08-20 — `loi-18-11-sante-partie1-arts1-164.md`, `partie2-arts165-264.md`, `partie3-arts265-450.md`
+
+The three Markdown parts were matched to the single 40-page source `loi 18-11.pdf`. The target law was isolated to the relevant source pages: Part 1 to pages 3–15, Part 2 to pages 16–24, and Part 3 to pages 25–38. Neighboring issue material and boundary pages were excluded from the comparison.
+
+The source contains Articles 1–450. Part 1 contains Articles 1–164, Part 2 contains Articles 165–264, and Part 3 contains Articles 265–450, each in complete numeric sequence. Refined raw-text comparisons produced normalized source-token coverage of approximately 98.06%, 96.47%, and 95.78%, respectively; no critical numeric omission was identified in the isolated ranges.
+
+No legal text correction was required. Verification metadata for all three parts was updated to record the actual page ranges and comparison scope.
+
+**Final status:** all three parts are **VERIFIED WITH MINOR ISSUES**, suitable for AI/legal research with the repository’s standard final human spot-check reservation for tables, numbers, units, and exceptions.

@@ -1,6 +1,6 @@
 # Loi n° 18-11 — PARTIE 1/3 : Dispositions fondamentales + Prévention + Malades mentaux (Arts. 1–164)
 > Fichier source : loi-18-11-sante.md (189KB) — Découpé le 2026-08-16 pour lisibilité API.
-> Statut : ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed
+> Statut : ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF pages 3–15 compared; Articles 1–164 present and numeric coverage aligned
 
 # Loi n° 18-11 du 18 Chaoual 1439 correspondant au 2 juillet 2018 relative à la santé
 
@@ -8,7 +8,7 @@
 **Journal Officiel :** N° 46, 16 Dhou El Kaâda 1439 (29 juillet 2018) — pages 3 à 38  
 **Source PDF :** Fourni par l'utilisateur (`loi 18-11.pdf`) — version complète avec tous les articles  
 **Date de conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF pages 3–15 compared; Articles 1–164 present and numeric coverage aligned
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Cette version du PDF contient l'intégralité des articles 1er à 450, dans l'ordre séquentiel légal. Les articles 12 à 16, précédemment manquants dans la première extraction, sont désormais présents.

@@ -1,6 +1,6 @@
 # Loi n° 18-11 — PARTIE 2/3 : Professionnels de santé + Produits pharmaceutiques (Arts. 165–264)
 > Fichier source : loi-18-11-sante.md (189KB) — Découpé le 2026-08-16 pour lisibilité API.
-> Statut : ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed
+> Statut : ✅ VÉRIFIÉ AVEC PROBLÈMES MINEURS 2026-08-20 — PDF pages 16–24 compared; Articles 165–264 present and numeric coverage aligned
 
 ## TITRE IV — PROFESSIONNELS DE SANTE
 

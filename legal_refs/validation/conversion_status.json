@@ -4,9 +4,9 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 35,
+    "verified_with_minor_issues": 38,
     "requires_correction": 0,
-    "unsafe": 10,
+    "unsafe": 7,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
     "ocr_reaudit": "completed for scanned PDFs identified in first pass"
@@ -2003,66 +2003,66 @@
     },
     {
       "document": "loi-18-11-sante-partie1-arts1-164.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 40,
+      "conversion_quality": "PDF pages 3–15; Articles 1–164; 98.06% normalized source-token coverage; no numeric omissions",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi 18-11.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Mixed Journal Officiel PDF, isolated pages 3–15",
+          "markdown_location": "Whole part / article sequence",
+          "pdf_content": "The authoritative source contains Articles 1–164 in the isolated page range.",
+          "markdown_content": "The Markdown part contains Articles 1–164 in complete numeric sequence.",
+          "problem": "No substantive omission or critical numeric mismatch detected; mixed-source page scope and normalized extraction differences remain a minor reservation.",
+          "correction_required": "No legal text correction; retain page-range scope and final human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The target part was isolated to PDF pages 3–15. Its expected article range 1–164 is complete; normalized token and numeric comparisons found no substantive legal omission."
     },
     {
       "document": "loi-18-11-sante-partie2-arts165-264.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 40,
+      "conversion_quality": "PDF pages 16–24; Articles 165–264; 96.47% normalized source-token coverage; no substantive article omission",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi 18-11.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Mixed Journal Officiel PDF, isolated pages 16–24",
+          "markdown_location": "Whole part / article sequence",
+          "pdf_content": "The authoritative source contains Articles 165–264 in the isolated page range.",
+          "markdown_content": "The Markdown part contains Articles 165–264 in complete numeric sequence.",
+          "problem": "No substantive omission or critical numeric mismatch detected; mixed-source page scope and normalized extraction differences remain a minor reservation.",
+          "correction_required": "No legal text correction; retain page-range scope and final human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The target part was isolated to PDF pages 16–24. Its expected article range 165–264 is complete; normalized token and numeric comparisons found no substantive legal omission."
     },
     {
       "document": "loi-18-11-sante-partie3-arts265-450.md",
-      "pages": "—",
-      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "pages": 40,
+      "conversion_quality": "PDF pages 25–38; Articles 265–450; 95.78% normalized source-token coverage; article range complete",
       "critical_errors": 0,
-      "minor_errors": 0,
-      "status": "UNSAFE FOR LEGAL USE",
-      "pdf": "—",
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "loi 18-11.pdf",
       "errors": [
         {
-          "pdf_location": "—",
-          "markdown_location": "Entire document",
-          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
-          "markdown_content": "Markdown exists but cannot be validated.",
-          "problem": "Authoritative source unavailable.",
-          "correction_required": "Provide the original PDF and repeat the audit.",
-          "severity": "HIGH"
+          "pdf_location": "Mixed Journal Officiel PDF, isolated pages 25–38",
+          "markdown_location": "Whole part / article sequence",
+          "pdf_content": "The authoritative source contains Articles 265–450 in the isolated page range.",
+          "markdown_content": "The Markdown part contains Articles 265–450 in complete numeric sequence.",
+          "problem": "No substantive omission or critical numeric mismatch detected; mixed-source page scope and normalized extraction differences remain a minor reservation.",
+          "correction_required": "No legal text correction; retain page-range scope and final human spot-check reservation.",
+          "severity": "MINOR"
         }
       ],
-      "second_pass": "NOT APPLICABLE"
+      "second_pass": "The target part was isolated to PDF pages 25–38. Its expected article range 265–450 is complete; normalized token and numeric comparisons found no substantive legal omission."
     },
     {
       "document": "loi-19-02-incendie-panique.md",
