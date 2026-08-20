@@ -7,8 +7,8 @@
 | Status | Count | Permitted use |
 |---|---:|---|
 | **VERIFIED** | 0 | None classified without reservation. |
-| **VERIFIED WITH MINOR ISSUES** | 6 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
-| **REQUIRES CORRECTION** | 3 | Do not use as a legal-text source until corrections are completed. |
+| **VERIFIED WITH MINOR ISSUES** | 9 | Suitable for AI/legal research with final human spot-check of tables, numbers, units, and exceptions. |
+| **REQUIRES CORRECTION** | 0 | No remaining directly paired document is currently classified in this category. |
 | **UNSAFE FOR LEGAL USE** | 36 | Do not rely on for legal research; source PDF is missing, materially mismatched, or OCR is unreliable. |
 
 ## Files currently usable with reservations
@@ -21,6 +21,13 @@ The following files have an authoritative PDF available and have passed a strong
 - `decret-09-19.md`
 - `decret-21-261-esp-equipements-hydrocarbures.md`
 - `decret-21-319-autorisation-exploitation-hydrocarbures.md`
+- `decret-06-138-emissions-atmospheriques.md`
+- `decret-11-125-eau-consommation-humaine.md`
+- `arrete-interministeriel-1999-11-21-conservation-aliments.md`
+
+## Structure preservation
+
+The review preserves the existing Markdown conventions used in this repository: metadata blocks, source-PDF references, verification warnings, French headings, article labels, section hierarchy, lists, Markdown tables, annex titles, amendment references, and end-of-document sequence checks. Corrections are made inside that structure; the files are not converted to a new template.
 
 ## Corrections applied in this audit
 

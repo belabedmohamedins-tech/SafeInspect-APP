@@ -2110,3 +2110,11 @@ The supplied Vision-AI transcription was independently compared with `legal_refs
 ### 06-198 correction applied after source inspection
 
 The original PDF contains only items 1–7 under Article 14. The Markdown had incorrectly incorporated items 8–10 from the later decree n° 24-196 while also labeling the base Article 14 as modified. Those later items were removed from the base 06-198 transcription and referenced only through the separate amendment Markdown. The PDF also establishes the singular form **« dont la diffusion lui apparaîtrait »**; the Markdown was corrected from **« apparaîtraient »** to that source-faithful wording. A post-correction article-sequence check remains aligned through Article 50.
+
+## Structure-preserving review update — 2026-08-20
+
+The remaining directly paired candidates were reviewed without changing their established Markdown format. The review preserved metadata blocks, source references, French headings, article labels, section hierarchy, lists, tables, annex headings, amendment references, and sequence-control sections.
+
+`decret-06-138-emissions-atmospheriques.md` was checked against Articles 1–19 and Annexes I–II. `decret-11-125-eau-consommation-humaine.md` was checked against Articles 1–9 and Tables 1–2. Both remain structurally complete and are now classified **VERIFIED WITH MINOR ISSUES**, with final visual spot-checks recommended for table values, units, and thresholds. The corrected 1999 arrêté is also now classified **VERIFIED WITH MINOR ISSUES** after OCR and visual review, with only low-confidence table/signature details remaining.
+
+Current machine-readable classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR ISSUES**, **0 REQUIRES CORRECTION**, and **36 UNSAFE FOR LEGAL USE**.

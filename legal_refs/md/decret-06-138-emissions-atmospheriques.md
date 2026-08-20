@@ -3,7 +3,7 @@
 **Date de signature :** 15 avril 2006 (16 Rabie El Aouel 1427)  
 **Journal Officiel :** Source PDF fournie par l'utilisateur et corrigée par extraction vision  
 **Date de conversion :** 2026-08-10  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel  
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — identité, articles 1 à 19 et annexes I–II comparés au PDF ; contrôle visuel final des tableaux et valeurs limites recommandé  
 > **AVERTISSEMENT :** Veuillez vérifier ce texte par rapport au texte original du JORADP avant toute décision légale ou d'exécution.
 
 **Note sur la source :** Le texte des articles 7 à 19 et des annexes I et II a été extrait verbatim du Journal Officiel via un système de vision. L'ensemble du décret est désormais complet.

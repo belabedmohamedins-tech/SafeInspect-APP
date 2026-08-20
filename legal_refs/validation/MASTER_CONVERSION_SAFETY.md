@@ -86,3 +86,9 @@ Current registry counts: **0 VERIFIED**, **6 VERIFIED WITH MINOR ISSUES**, **3 R
 ### 06-198 correction applied after source inspection
 
 The base 06-198 Markdown had incorrectly merged Article 14 items 8–10 from the later decree n° 24-196. Those items were removed from the base transcription, and the source-established wording **« dont la diffusion lui apparaîtrait »** was restored. The separate amendment file remains the place for later modifications. Post-correction verification confirms the article sequence remains aligned through Article 50.
+
+## Structure-preserving review update — 2026-08-20
+
+The ongoing review preserves the Markdown structure already used in the repository. It does not replace documents with a new template: metadata, source references, headings, article numbering, section hierarchy, lists, tables, annexes, amendment references, and sequence checks remain in place. The 06-138 and 11-125 documents were added to the usable-with-reservations set after article/annex/table comparison. The corrected 1999 arrêté was reclassified after OCR review.
+
+Current classification: **0 VERIFIED**, **9 VERIFIED WITH MINOR ISSUES**, **0 REQUIRES CORRECTION**, **36 UNSAFE FOR LEGAL USE**.

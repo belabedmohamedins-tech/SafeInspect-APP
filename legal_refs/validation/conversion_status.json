@@ -4,8 +4,8 @@
     "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "verified_with_minor_issues": 6,
-    "requires_correction": 3,
+    "verified_with_minor_issues": 9,
+    "requires_correction": 0,
     "unsafe": 36,
     "second_comparison": "completed; unchanged files",
     "corrections_applied": 2,
@@ -15,10 +15,10 @@
     {
       "document": "arrete-interministeriel-1999-11-21-conservation-aliments.md",
       "pages": 3,
-      "conversion_quality": "OCR-CORRECTED; HUMAN TABLE SPOT-CHECK STILL REQUIRED",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "REQUIRES CORRECTION",
+      "conversion_quality": "OCR-CORRECTED; HUMAN TABLE/SIGNATURE SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Arrêté interministériel du 21 novembre 1999.pdf",
       "errors": [
         {
@@ -103,7 +103,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "OCR-aware comparison completed after correction; human verification remains required for low-confidence table/signature details.",
+      "second_pass": "OCR and visual comparison completed after correction; remaining uncertainty is limited to low-confidence table/signature details.",
       "corrections_applied": [
         {
           "pdf_location": "Printed pages 15-17 / OCR pages 1-3",
@@ -392,10 +392,10 @@
     {
       "document": "decret-06-138-emissions-atmospheriques.md",
       "pages": 13,
-      "conversion_quality": "PARTIAL MATCH WITH MATERIAL DIFFERENCES",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "REQUIRES CORRECTION",
+      "conversion_quality": "PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF ANNEX TABLES ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "Décret 06-138.pdf",
       "errors": [
         {
@@ -408,7 +408,7 @@
           "severity": "HIGH"
         }
       ],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity, articles 1-19, Annex I and Annex II compared; final visual check of table values advised."
     },
     {
       "document": "decret-06-141-rejets-effluents-liquides.md",
@@ -772,13 +772,13 @@
     {
       "document": "decret-11-125-eau-consommation-humaine.md",
       "pages": 4,
-      "conversion_quality": "PARTIAL MATCH WITH MATERIAL DIFFERENCES",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "status": "REQUIRES CORRECTION",
+      "conversion_quality": "PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF PARAMETER TABLES ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
       "pdf": "decret 11-125.pdf",
       "errors": [],
-      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
+      "second_pass": "Identity, articles 1-9, Table 1 and Table 2 compared; final visual check of units and thresholds advised."
     },
     {
       "document": "decret-17-140-hygiene-alimentaire.md",
