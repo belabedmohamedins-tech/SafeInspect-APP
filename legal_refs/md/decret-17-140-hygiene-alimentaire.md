@@ -13,7 +13,7 @@
 
 **Date de conversion :** 2026-08-10
 
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — PDF JORADP de 31 pages et texte arabe comparés ; articles 1 à 64 présents dans la retranscription française ; contrôle humain de la traduction et des valeurs juridiquement critiques recommandé
 
 **Note de langue :** Le texte officiel publié dans ce JORADP est en arabe. La traduction française ci-dessous est une retranscription fidèle du texte arabe original. Vérifier contre le texte arabe original en cas de doute.
 

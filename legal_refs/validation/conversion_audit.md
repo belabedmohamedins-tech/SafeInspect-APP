@@ -2162,3 +2162,7 @@ A second encoding artefact remained after the Latin-1-to-UTF-8 conversion: byte 
 ## Clean article-and-annex review update — 2026-08-20
 
 `decret-21-319-autorisation-exploitation-hydrocarbures.md` was checked against its clean 14-page PDF. The source identifies decree 21-319 dated 5 Moharram 1443, corresponding to 14 August 2021, and the Markdown contains Articles 1er–98, nine chapters, and Annexes 1–4. The existing technical tables and Markdown structure were preserved. The file is classified **VERIFIED WITH MINOR ISSUES**.
+
+## Arabic-source review update — 2026-08-20
+
+`decret-17-140-hygiene-alimentaire.md` was checked against the 31-page Arabic JORADP PDF. The source identity matches and the French retranscription contains Articles 1–64 in order. Its explicit Arabic-source translation note and existing Markdown structure were preserved. Because the authoritative publication is Arabic, translation of legal-critical conditions and values still requires human review. The file is classified **VERIFIED WITH MINOR ISSUES**.

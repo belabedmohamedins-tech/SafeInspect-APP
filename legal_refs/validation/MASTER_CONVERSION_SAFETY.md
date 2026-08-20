@@ -132,3 +132,7 @@ The 21-261 Markdown was compared with its clean 14-page PDF. Its identity, four 
 ## Clean article-and-annex review update — 2026-08-20
 
 The 21-319 Markdown was compared with its clean 14-page PDF. Its identity, Articles 1er–98, nine chapters, and four annexes match; the existing structure was preserved. It is **VERIFIED WITH MINOR ISSUES**.
+
+## Arabic-source review update — 2026-08-20
+
+The 17-140 Markdown was compared with its 31-page Arabic JORADP PDF. Identity and Articles 1–64 match the retranscription; the Arabic-source warning was preserved. Translation-level legal-critical review remains required. It is **VERIFIED WITH MINOR ISSUES**.
