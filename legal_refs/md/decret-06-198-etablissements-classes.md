@@ -2,19 +2,19 @@
 
 ---
 
-> ⚠️ **NON VÉRIFIÉ** — Transcription verbatim depuis le PDF source ci-dessous.  
-> **Vérifier contre le texte original JORADP avant tout usage juridique ou décisionnel.**
+> ⚠️ **AUDITÉ CONTRE LE PDF/OCR — VÉRIFIÉ AVEC RÉSERVES MINEURES**. La validation couvre l’identité, la séquence des articles et le contenu textuel disponible ; les tableaux et valeurs juridiquement critiques doivent encore faire l’objet d’un contrôle visuel final.  
+> **Le PDF JORADP reste la source juridique de référence.**
 
 **Titre officiel :** Décret exécutif n° 06-198 du 4 Joumada El Oula 1427 correspondant au 31 mai 2006 définissant la réglementation applicable aux établissements classés pour la protection de l'environnement  
 **Date de signature :** 31 mai 2006 (4 Joumada El Oula 1427)  
 **Journal Officiel :** JORADP n° 37 du 8 Joumada El Oula 1427 / 4 juin 2006, pages 8–14  
-**Source PDF :** `Decret-06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
+**Source PDF :** `Decret 06-198.pdf` (fourni par l'utilisateur, issu du JORADP)  
 **Modifié par :**
 - Décret exécutif n° 22-167 — voir `decret-22-167-etablissements-classes-modification.md`
 - Décret exécutif n° 24-196 du 11 juin 2024 (JORADP n° 42 du 19 juin 2024) — Art. 14, 24, 25, 26, 29 et 44 modifiés — voir `decret-24-196-etablissements-classes-modification.md`
 
 **Date de cette conversion :** 2026-08-09  
-**Statut de vérification :** ✅ VÉRIFIÉ 2026-08-11 par Belabed Mohamed — converti et relu contre PDF officiel
+**Statut de vérification :** ⚠️ VÉRIFIÉ AVEC RÉSERVES MINEURES 2026-08-20 — comparaison PDF/OCR : identité et séquence des articles confirmées ; contrôle visuel final des tableaux et nombres critiques restant requis
 
 ---
 
@@ -142,7 +142,7 @@ Outre les documents prévus par les dispositions de l'article 5 ci-dessus, le do
 
 — les procédés de fabrication que le promoteur mettra en œuvre, les matières qu'il utilisera, les produits qu'il fabriquera.
 
-Le cas échéant, le promoteur pourra adresser, en exemplaire unique et sous pli séparé, les informations dont la diffusion lui apparaîtraient de nature à entraîner la divulgation de secrets de fabrication ;
+Le cas échéant, le promoteur pourra adresser, en exemplaire unique et sous pli séparé, les informations dont la diffusion lui apparaîtrait de nature à entraîner la divulgation de secrets de fabrication ;
 
 — l'emplacement de l'établissement classé projeté sera indiqué sur une carte à l'échelle comprise entre 1/25.000ème et 1/50.000ème ;
 
@@ -198,15 +198,9 @@ b) les données socio-économiques et culturelles : population, habitat, points 
 
 6) l'analyse des impacts potentiels en cas d'accidents sur les populations (y compris les travailleurs au sein de l'établissement), l'environnement ainsi que les impacts économiques et financiers prévisibles ;
 
-7) Les modalités d'organisation de la sécurité du site, les modalités de prévention des accidents majeurs et du système de gestion de la sécurité et des moyens de secours ;
+7) Les modalités d'organisation de la sécurité du site, les modalités de prévention des accidents majeurs et du système de gestion de la sécurité et des moyens de secours.
 
-8) l'emplacement de l'établissement classé projeté est indiqué sur une carte à l'échelle comprise entre 1/25.000ème et 1/50.000ème lisible ;
-
-9) un plan de situation à l'échelle de 1/2.500ème, au minimum, du voisinage de l'établissement, lisible, jusqu'à une distance qui est, au moins, égale au dixième du rayon d'affichage fixé dans la nomenclature des installations classées sans pouvoir être inférieure à cent (100) mètres.
-
-Sur ce plan, sont indiqués tous les bâtiments avec leur affectation, les voies de chemin de fer, les voies publiques, les points d'eau, canaux et cours d'eau ;
-
-10) un plan d'ensemble, à l'échelle de 1/200ème, au minimum, lisible, indiquant les dispositions projetées de l'établissement classé jusqu'à trente-cinq (35) mètres, au moins, de celui-ci, l'affectation des constructions et terrains avoisinants ainsi que le tracé des voiries et réseaux divers (VRD) existants.
+> **Note de version:** Les éléments supplémentaires introduits ou modifiés ultérieurement par le décret n° 24-196 ne sont pas incorporés dans le texte original du décret n° 06-198. Ils sont conservés dans `decret-24-196-etablissements-classes-modification.md`.
 
 ### Article 15
 

@@ -1,608 +1,2191 @@
 {
   "_meta": {
-    "description": "Registre machine-readable du statut d'audit de conversion PDF→MD pour SafeInspect",
-    "created": "2026-08-19",
-    "updated": "2026-08-19",
-    "schema_version": "2.0",
-    "md_base_path": "legal_refs/md/",
-    "pdf_base_path": "legal_refs/pdf/",
+    "description": "PDF-authoritative conversion audit",
+    "updated": "2026-08-20",
     "total_documents": 45,
     "verified": 0,
-    "pending": 45,
-    "unsafe": 0,
-    "no_pdf": 45,
-    "protocol": "legal_refs/validation/AUDIT_PROTOCOL.md",
-    "audit_prompt": "legal_refs/validation/AUDIT_PROMPT.md"
+    "verified_with_minor_issues": 6,
+    "requires_correction": 3,
+    "unsafe": 36,
+    "second_comparison": "completed; unchanged files",
+    "corrections_applied": 2,
+    "ocr_reaudit": "completed for scanned PDFs identified in first pass"
   },
   "documents": [
     {
-      "slug": "arrete-interministeriel-1999-11-21-conservation-aliments",
-      "md_path": "legal_refs/md/arrete-interministeriel-1999-11-21-conservation-aliments.md",
-      "pdf_path": "legal_refs/pdf/arrete-interministeriel-1999-11-21-conservation-aliments.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "arrete-interministeriel-1999-11-21-conservation-aliments.md",
+      "pages": 3,
+      "conversion_quality": "OCR-CORRECTED; HUMAN TABLE SPOT-CHECK STILL REQUIRED",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "REQUIRES CORRECTION",
+      "pdf": "Arrêté interministériel du 21 novembre 1999.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 2 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 2 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 2 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 3 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 3 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 3 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 4 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 4 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 4 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 5 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 5 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 5 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 6 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 6 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 6 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 7 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 7 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 7 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 8 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 8 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 8 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 9 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 9 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 10 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 10 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "OCR-aware comparison completed after correction; human verification remains required for low-confidence table/signature details.",
+      "corrections_applied": [
+        {
+          "pdf_location": "Printed pages 15-17 / OCR pages 1-3",
+          "markdown_location": "Entire document",
+          "original_pdf_content": "Annexe 5 cacao/beurre de cacao plus arrêté Articles 1-10 and refrigeration/freezing tables",
+          "previous_markdown_content": "Generic unsupported Annex/Table N°1 and mismatched full-text representation",
+          "correction": "Rewritten from OCR and visual PDF evidence; unreadable signatures explicitly marked",
+          "severity": "HIGH"
+        }
+      ]
     },
     {
-      "slug": "arrete-interministeriel-2011-02-06-permis-construire-energie",
-      "md_path": "legal_refs/md/arrete-interministeriel-2011-02-06-permis-construire-energie.md",
-      "pdf_path": "legal_refs/pdf/arrete-interministeriel-2011-02-06-permis-construire-energie.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "arrete-interministeriel-2011-02-06-permis-construire-energie.md",
+      "pages": 5,
+      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 26,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "arrete-interministeriel-2011-02-06-permis-construire-energie.pdf",
+      "errors": [
+        {
+          "pdf_location": "Multiple pages",
+          "markdown_location": "Multiple locations",
+          "pdf_content": "PDF and Markdown content are highly similar after normalization.",
+          "markdown_content": "Markdown preserves the apparent legal text but differs in layout/normalization.",
+          "problem": "Non-semantic conversion differences or numeric-token formatting require spot checking.",
+          "correction_required": "No automatic correction; verify legal-critical numbers, units, tables, and footnotes manually.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "arrete-interministeriel-2016-10-04-criteres-microbiologiques",
-      "md_path": "legal_refs/md/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
-      "pdf_path": "legal_refs/pdf/arrete-interministeriel-2016-10-04-criteres-microbiologiques.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
+      "pages": 22,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf",
+      "errors": [],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "arrete-interministeriel-2025-05-07-hygiene-restauration",
-      "md_path": "legal_refs/md/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
-      "pdf_path": "legal_refs/pdf/arrete-interministeriel-2025-05-07-hygiene-restauration.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "arrete-interministeriel-2025-05-07-hygiene-restauration.md",
+      "pages": 5,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d’hygiène et de salubrité applicables dans les établissements de restauration.pdf",
+      "errors": [],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-01-102-creation-ona",
-      "md_path": "legal_refs/md/decret-01-102-creation-ona.md",
-      "pdf_path": "legal_refs/pdf/decret-01-102-creation-ona.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-01-102-creation-ona.md",
+      "pages": 6,
+      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 37,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret 01-102.pdf",
+      "errors": [
+        {
+          "pdf_location": "Multiple pages",
+          "markdown_location": "Multiple locations",
+          "pdf_content": "PDF and Markdown content are highly similar after normalization.",
+          "markdown_content": "Markdown preserves the apparent legal text but differs in layout/normalization.",
+          "problem": "Non-semantic conversion differences or numeric-token formatting require spot checking.",
+          "correction_required": "No automatic correction; verify legal-critical numbers, units, tables, and footnotes manually.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-02-427-prevention-risques-professionnels",
-      "md_path": "legal_refs/md/decret-02-427-prevention-risques-professionnels.md",
-      "pdf_path": "legal_refs/pdf/decret-02-427-prevention-risques-professionnels.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-02-427-prevention-risques-professionnels.md",
+      "pages": 24,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 7,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 02-427.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 25 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 25 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 25 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 26 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 26 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 26 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 27 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 27 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 27 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 28 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 28 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 28 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 29 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 29 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 29 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 30 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 30 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 30 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 77 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 77 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 77 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-04-410-regles-installations-traitement-dechets",
-      "md_path": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
-      "pdf_path": "legal_refs/pdf/decret-04-410-regles-installations-traitement-dechets.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-04-410-regles-installations-traitement-dechets.md",
+      "pages": 5,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 6,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 04-410.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 1 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 1 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 17 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 17 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 18 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 18 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 19 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 19 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 20 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 20 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 20 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 44 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 44 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 44 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-04-82-agrement-sanitaire-elevage",
-      "md_path": "legal_refs/md/decret-04-82-agrement-sanitaire-elevage.md",
-      "pdf_path": "legal_refs/pdf/decret-04-82-agrement-sanitaire-elevage.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-04-82-agrement-sanitaire-elevage.md",
+      "pages": 30,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 4,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 04-82.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 23 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 23 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 23 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 31 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 31 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 31 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 225 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 225 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 225 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 234 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 234 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 234 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-05-315-declaration-dechets-speciaux-dangereux",
-      "md_path": "legal_refs/md/decret-05-315-declaration-dechets-speciaux-dangereux.md",
-      "pdf_path": "legal_refs/pdf/decret-05-315-declaration-dechets-speciaux-dangereux.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-05-315-declaration-dechets-speciaux-dangereux.md",
+      "pages": 4,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Decret 05-315.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 1 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 1 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-06-138-emissions-atmospheriques",
-      "md_path": "legal_refs/md/decret-06-138-emissions-atmospheriques.md",
-      "pdf_path": "legal_refs/pdf/decret-06-138-emissions-atmospheriques.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-06-138-emissions-atmospheriques.md",
+      "pages": 13,
+      "conversion_quality": "PARTIAL MATCH WITH MATERIAL DIFFERENCES",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "REQUIRES CORRECTION",
+      "pdf": "Décret 06-138.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 1 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 1 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-06-141-rejets-effluents-liquides",
-      "md_path": "legal_refs/md/decret-06-141-rejets-effluents-liquides.md",
-      "pdf_path": "legal_refs/pdf/decret-06-141-rejets-effluents-liquides.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-06-141-rejets-effluents-liquides.md",
+      "pages": 27,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 44,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "decret 06-141.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 15 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 15 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 15 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 16 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 16 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 16 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 17 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 17 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 18 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 18 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 19 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 19 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 20 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 20 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 20 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 21 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 21 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 21 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 22 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 22 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 22 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 23 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 23 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 23 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 24 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 24 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 24 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 25 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 25 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 25 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 26 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 26 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 26 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 27 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 27 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 27 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 28 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 28 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 28 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 29 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 29 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 29 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 30 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 30 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 30 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 31 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 31 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 31 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 32 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 32 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 32 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 33 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 33 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 33 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 34 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 34 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 34 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 35 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 35 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 35 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 36 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 36 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 36 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 37 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 37 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 37 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 38 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 38 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 38 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 39 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 39 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 39 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-06-198-etablissements-classes",
-      "md_path": "legal_refs/md/decret-06-198-etablissements-classes.md",
-      "pdf_path": "legal_refs/pdf/decret-06-198-etablissements-classes.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-06-198-etablissements-classes.md",
+      "pages": 7,
+      "conversion_quality": "PDF/OCR VERIFIED; FINAL VISUAL SPOT-CHECK OF TABLES AND CRITICAL NUMBERS ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 1,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "Decret 06-198.pdf",
+      "errors": [
+        {
+          "pdf_location": "Pages 8-14 of the JORADP issue; repository PDF pages 1-7",
+          "markdown_location": "Identity metadata and full article sequence",
+          "original_pdf_content": "Decree 06-198 dated 31 May 2006; articles detected through Article 50",
+          "markdown_content": "Matching decree identity and articles through Article 50",
+          "problem": "Normalized comparison is strong but tables and legal-critical numeric formatting still merit final visual review.",
+          "correction_required": "Spot-check tables, scales, deadlines, units, and exceptions against rendered PDF pages.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "PDF/OCR sample verification completed: identity and article sequence aligned; final visual spot-check advised."
     },
     {
-      "slug": "decret-07-144-nomenclature-installations-classees",
-      "md_path": "legal_refs/md/decret-07-144-nomenclature-installations-classees.md",
-      "pdf_path": "legal_refs/pdf/decret-07-144-nomenclature-installations-classees.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-07-144-nomenclature-installations-classees.md",
+      "pages": 102,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 07-144.pdf",
+      "errors": [],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-07-205-schema-communal-dechets",
-      "md_path": "legal_refs/md/decret-07-205-schema-communal-dechets.md",
-      "pdf_path": "legal_refs/pdf/decret-07-205-schema-communal-dechets.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-07-205-schema-communal-dechets.md",
+      "pages": 3,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 3,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Decret 07-205.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 1 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 1 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 31 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 31 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 31 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 34",
+          "pdf_content": "Article 34 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 34 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-09-19",
-      "md_path": "legal_refs/md/decret-09-19.md",
-      "pdf_path": "legal_refs/pdf/decret-09-19.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-09-19.md",
+      "pages": 4,
+      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 11,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret 09-19.pdf",
+      "errors": [
+        {
+          "pdf_location": "Multiple pages",
+          "markdown_location": "Multiple locations",
+          "pdf_content": "PDF and Markdown content are highly similar after normalization.",
+          "markdown_content": "Markdown preserves the apparent legal text but differs in layout/normalization.",
+          "problem": "Non-semantic conversion differences or numeric-token formatting require spot checking.",
+          "correction_required": "No automatic correction; verify legal-critical numbers, units, tables, and footnotes manually.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-09-335-plans-internes-intervention",
-      "md_path": "legal_refs/md/decret-09-335-plans-internes-intervention.md",
-      "pdf_path": "legal_refs/pdf/decret-09-335-plans-internes-intervention.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-09-335-plans-internes-intervention.md",
+      "pages": 5,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 2,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 09-335.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 62 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 62 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 62 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 54",
+          "pdf_content": "Article 54 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 54 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-11-125-eau-consommation-humaine",
-      "md_path": "legal_refs/md/decret-11-125-eau-consommation-humaine.md",
-      "pdf_path": "legal_refs/pdf/decret-11-125-eau-consommation-humaine.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-11-125-eau-consommation-humaine.md",
+      "pages": 4,
+      "conversion_quality": "PARTIAL MATCH WITH MATERIAL DIFFERENCES",
+      "critical_errors": 1,
+      "minor_errors": 0,
+      "status": "REQUIRES CORRECTION",
+      "pdf": "decret 11-125.pdf",
+      "errors": [],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-17-140-hygiene-alimentaire",
-      "md_path": "legal_refs/md/decret-17-140-hygiene-alimentaire.md",
-      "pdf_path": "legal_refs/pdf/decret-17-140-hygiene-alimentaire.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-17-140-hygiene-alimentaire.md",
+      "pages": 31,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 64,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Decret 17-140.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 1",
+          "pdf_content": "Article 1 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 2",
+          "pdf_content": "Article 2 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 2 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 3",
+          "pdf_content": "Article 3 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 3 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 4",
+          "pdf_content": "Article 4 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 4 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 5",
+          "pdf_content": "Article 5 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 5 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 6",
+          "pdf_content": "Article 6 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 6 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 7",
+          "pdf_content": "Article 7 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 7 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 8",
+          "pdf_content": "Article 8 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 8 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 9",
+          "pdf_content": "Article 9 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 10",
+          "pdf_content": "Article 10 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 11",
+          "pdf_content": "Article 11 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 11 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 12",
+          "pdf_content": "Article 12 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 12 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 13",
+          "pdf_content": "Article 13 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 13 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 14",
+          "pdf_content": "Article 14 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 14 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 15",
+          "pdf_content": "Article 15 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 15 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 16",
+          "pdf_content": "Article 16 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 16 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 17",
+          "pdf_content": "Article 17 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 18",
+          "pdf_content": "Article 18 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 19",
+          "pdf_content": "Article 19 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 20",
+          "pdf_content": "Article 20 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 20 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 21",
+          "pdf_content": "Article 21 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 21 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 22",
+          "pdf_content": "Article 22 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 22 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 23",
+          "pdf_content": "Article 23 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 23 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 24",
+          "pdf_content": "Article 24 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 24 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 25",
+          "pdf_content": "Article 25 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 25 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-21-261-esp-equipements-hydrocarbures",
-      "md_path": "legal_refs/md/decret-21-261-esp-equipements-hydrocarbures.md",
-      "pdf_path": "legal_refs/pdf/decret-21-261-esp-equipements-hydrocarbures.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "audit_priority": "P1",
-      "notes": "Version PDF partiellement soumise dans chat (Chapitre 2 seulement, num\u00e9rotation divergente). V\u00e9rification compl\u00e8te requise."
+      "document": "decret-21-261-esp-equipements-hydrocarbures.md",
+      "pages": 14,
+      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 47,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "dec 21-261.pdf",
+      "errors": [
+        {
+          "pdf_location": "Multiple pages",
+          "markdown_location": "Multiple locations",
+          "pdf_content": "PDF and Markdown content are highly similar after normalization.",
+          "markdown_content": "Markdown preserves the apparent legal text but differs in layout/normalization.",
+          "problem": "Non-semantic conversion differences or numeric-token formatting require spot checking.",
+          "correction_required": "No automatic correction; verify legal-critical numbers, units, tables, and footnotes manually.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-21-319-autorisation-exploitation-hydrocarbures",
-      "md_path": "legal_refs/md/decret-21-319-autorisation-exploitation-hydrocarbures.md",
-      "pdf_path": "legal_refs/pdf/decret-21-319-autorisation-exploitation-hydrocarbures.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "audit_priority": "P1",
-      "notes": ""
+      "document": "decret-21-319-autorisation-exploitation-hydrocarbures.md",
+      "pages": 14,
+      "conversion_quality": "HIGH MATCH; MANUAL LEGAL SPOT-CHECK ADVISED",
+      "critical_errors": 0,
+      "minor_errors": 60,
+      "status": "VERIFIED WITH MINOR ISSUES",
+      "pdf": "decret 21-319.pdf",
+      "errors": [
+        {
+          "pdf_location": "Multiple pages",
+          "markdown_location": "Multiple locations",
+          "pdf_content": "PDF and Markdown content are highly similar after normalization.",
+          "markdown_content": "Markdown preserves the apparent legal text but differs in layout/normalization.",
+          "problem": "Non-semantic conversion differences or numeric-token formatting require spot checking.",
+          "correction_required": "No automatic correction; verify legal-critical numbers, units, tables, and footnotes manually.",
+          "severity": "MINOR"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-21-430-gpl-carburant",
-      "md_path": "legal_refs/md/decret-21-430-gpl-carburant.md",
-      "pdf_path": "legal_refs/pdf/decret-21-430-gpl-carburant.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-21-430-gpl-carburant.md",
+      "pages": 28,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 30,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "21-430.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 5 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 5 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 5 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 6 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 6 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 6 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 9 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 9 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 10 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 10 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 11 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 11 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 11 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 12 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 12 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 12 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 13 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 13 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 13 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 14 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 14 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 14 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 15 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 15 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 15 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 16 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 16 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 16 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 17 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 17 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 18 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 18 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 19 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 19 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 20 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 20 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 20 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 21 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 21 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 21 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 22 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 22 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 22 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 23 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 23 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 23 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 24 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 24 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 24 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 25 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 25 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 25 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 26 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 26 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 26 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 27 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 27 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 27 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 28 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 28 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 28 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 29 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 29 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 29 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 30 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 30 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 30 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 31 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 31 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 31 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-22-167-etablissements-classes-modification",
-      "md_path": "legal_refs/md/decret-22-167-etablissements-classes-modification.md",
-      "pdf_path": "legal_refs/pdf/decret-22-167-etablissements-classes-modification.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "audit_priority": "P2",
-      "notes": ""
+      "document": "decret-22-167-etablissements-classes-modification.md",
+      "pages": 23,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 4,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "22-167.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 15 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 15 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 15 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 36 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 36 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 36 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 38 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 38 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 38 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 828 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 828 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 828 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-24-196-etablissements-classes-modification",
-      "md_path": "legal_refs/md/decret-24-196-etablissements-classes-modification.md",
-      "pdf_path": "legal_refs/pdf/decret-24-196-etablissements-classes-modification.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "audit_priority": "P2",
-      "notes": ""
+      "document": "decret-24-196-etablissements-classes-modification.md",
+      "pages": 2,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 2,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "decret 24-196.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 7 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 7 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 7 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 9 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 9 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-25-63-plans-intervention-catastrophes",
-      "md_path": "legal_refs/md/decret-25-63-plans-intervention-catastrophes.md",
-      "pdf_path": "legal_refs/pdf/decret-25-63-plans-intervention-catastrophes.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-25-63-plans-intervention-catastrophes.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "decret-76-35-igh-incendie",
-      "md_path": "legal_refs/md/decret-76-35-igh-incendie.md",
-      "pdf_path": "legal_refs/pdf/decret-76-35-igh-incendie.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-76-35-igh-incendie.md",
+      "pages": 3,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 7,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 76-35.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 36 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 36 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 36 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 87 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 87 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 87 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 10",
+          "pdf_content": "Article 10 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 14",
+          "pdf_content": "Article 14 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 14 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 17",
+          "pdf_content": "Article 17 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 18",
+          "pdf_content": "Article 18 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 19",
+          "pdf_content": "Article 19 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-76-36-incendie-panique",
-      "md_path": "legal_refs/md/decret-76-36-incendie-panique.md",
-      "pdf_path": "legal_refs/pdf/decret-76-36-incendie-panique.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-76-36-incendie-panique.md",
+      "pages": 8,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 14,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "decret 76-36.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article 1 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 1 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 1 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 2 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 2 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 2 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 3 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 3 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 3 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 4 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 4 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 4 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 5 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 5 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 5 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 6 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 6 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 6 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 7 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 7 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 7 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 8 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 8 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 8 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 9 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 9 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 10 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 10 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 11 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 11 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 11 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 12 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 12 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 12 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 13 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 13 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 13 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article 14 (page to be confirmed by human review)",
+          "markdown_location": "Article-number sequence",
+          "pdf_content": "Article 14 appears in the extracted PDF article sequence.",
+          "markdown_content": "Article 14 is absent from the Markdown article sequence.",
+          "problem": "Potential missing or malformed article heading/content.",
+          "correction_required": "Locate and restore the exact PDF text; do not infer content.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-83-496-gpl-carburant",
-      "md_path": "legal_refs/md/decret-83-496-gpl-carburant.md",
-      "pdf_path": "legal_refs/pdf/decret-83-496-gpl-carburant.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-83-496-gpl-carburant.md",
+      "pages": 48,
+      "conversion_quality": "SUBSTANTIAL MISMATCH OR INCOMPLETE CONVERSION",
+      "critical_errors": 21,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "Décret 83-496.pdf",
+      "errors": [
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 2",
+          "pdf_content": "Article 2 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 2 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 3",
+          "pdf_content": "Article 3 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 3 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 4",
+          "pdf_content": "Article 4 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 4 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 5",
+          "pdf_content": "Article 5 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 5 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 6",
+          "pdf_content": "Article 6 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 6 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 7",
+          "pdf_content": "Article 7 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 7 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 8",
+          "pdf_content": "Article 8 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 8 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 9",
+          "pdf_content": "Article 9 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 9 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 10",
+          "pdf_content": "Article 10 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 10 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 11",
+          "pdf_content": "Article 11 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 11 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 12",
+          "pdf_content": "Article 12 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 12 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 13",
+          "pdf_content": "Article 13 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 13 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 14",
+          "pdf_content": "Article 14 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 14 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 15",
+          "pdf_content": "Article 15 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 15 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 16",
+          "pdf_content": "Article 16 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 16 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 17",
+          "pdf_content": "Article 17 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 17 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 18",
+          "pdf_content": "Article 18 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 18 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 19",
+          "pdf_content": "Article 19 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 19 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 20",
+          "pdf_content": "Article 20 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 20 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 21",
+          "pdf_content": "Article 21 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 21 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        },
+        {
+          "pdf_location": "Article sequence / page to be confirmed",
+          "markdown_location": "Article 34",
+          "pdf_content": "Article 34 was not detected in the extracted PDF article sequence.",
+          "markdown_content": "Article 34 appears in Markdown.",
+          "problem": "Potential inserted, misnumbered, or false article heading; extraction false positives remain possible.",
+          "correction_required": "Human verification against the PDF page image.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "UNCHANGED; no automatic edits made where source text did not unambiguously establish a correction."
     },
     {
-      "slug": "decret-90-245-appareils-pression-gaz",
-      "md_path": "legal_refs/md/decret-90-245-appareils-pression-gaz.md",
-      "pdf_path": "legal_refs/pdf/decret-90-245-appareils-pression-gaz.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-90-245-appareils-pression-gaz.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "decret-91-05-hygiene-securite-milieu-travail",
-      "md_path": "legal_refs/md/decret-91-05-hygiene-securite-milieu-travail.md",
-      "pdf_path": "legal_refs/pdf/decret-91-05-hygiene-securite-milieu-travail.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-91-05-hygiene-securite-milieu-travail.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "decret-93-120-medecine-du-travail",
-      "md_path": "legal_refs/md/decret-93-120-medecine-du-travail.md",
-      "pdf_path": "legal_refs/pdf/decret-93-120-medecine-du-travail.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "decret-93-120-medecine-du-travail.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-01-19-gestion-dechets",
-      "md_path": "legal_refs/md/loi-01-19-gestion-dechets.md",
-      "pdf_path": "legal_refs/pdf/loi-01-19-gestion-dechets.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-01-19-gestion-dechets.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-03-10-protection-environnement",
-      "md_path": "legal_refs/md/loi-03-10-protection-environnement.md",
-      "pdf_path": "legal_refs/pdf/loi-03-10-protection-environnement.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-03-10-protection-environnement.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-04-08-activites-commerciales",
-      "md_path": "legal_refs/md/loi-04-08-activites-commerciales.md",
-      "pdf_path": "legal_refs/pdf/loi-04-08-activites-commerciales.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-04-08-activites-commerciales.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-04-20-risques-majeurs",
-      "md_path": "legal_refs/md/loi-04-20-risques-majeurs.md",
-      "pdf_path": "legal_refs/pdf/loi-04-20-risques-majeurs.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-04-20-risques-majeurs.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-05-12-ressources-en-eau",
-      "md_path": "legal_refs/md/loi-05-12-ressources-en-eau.md",
-      "pdf_path": "legal_refs/pdf/loi-05-12-ressources-en-eau.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-05-12-ressources-en-eau.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-09-03-protection-consommateur",
-      "md_path": "legal_refs/md/loi-09-03-protection-consommateur.md",
-      "pdf_path": "legal_refs/pdf/loi-09-03-protection-consommateur.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-09-03-protection-consommateur.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-18-09-protection-consommateur",
-      "md_path": "legal_refs/md/loi-18-09-protection-consommateur.md",
-      "pdf_path": "legal_refs/pdf/loi-18-09-protection-consommateur.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-18-09-protection-consommateur.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-18-11-sante-partie1-arts1-164",
-      "md_path": "legal_refs/md/loi-18-11-sante-partie1-arts1-164.md",
-      "pdf_path": "legal_refs/pdf/loi-18-11-sante.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": "Fichier MD d\u00e9coup\u00e9 en 3 parties \u2014 un seul PDF source attendu"
+      "document": "loi-18-11-sante-partie1-arts1-164.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-18-11-sante-partie2-arts165-264",
-      "md_path": "legal_refs/md/loi-18-11-sante-partie2-arts165-264.md",
-      "pdf_path": "legal_refs/pdf/loi-18-11-sante.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": "Fichier MD d\u00e9coup\u00e9 en 3 parties \u2014 un seul PDF source attendu"
+      "document": "loi-18-11-sante-partie2-arts165-264.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-18-11-sante-partie3-arts265-450",
-      "md_path": "legal_refs/md/loi-18-11-sante-partie3-arts265-450.md",
-      "pdf_path": "legal_refs/pdf/loi-18-11-sante.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": "Fichier MD d\u00e9coup\u00e9 en 3 parties \u2014 un seul PDF source attendu"
+      "document": "loi-18-11-sante-partie3-arts265-450.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-19-02-incendie-panique",
-      "md_path": "legal_refs/md/loi-19-02-incendie-panique.md",
-      "pdf_path": "legal_refs/pdf/loi-19-02-incendie-panique.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-19-02-incendie-panique.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-88-07-hygiene-securite-medecine-travail",
-      "md_path": "legal_refs/md/loi-88-07-hygiene-securite-medecine-travail.md",
-      "pdf_path": "legal_refs/pdf/loi-88-07-hygiene-securite-medecine-travail.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-88-07-hygiene-securite-medecine-travail.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-90-11-relations-travail",
-      "md_path": "legal_refs/md/loi-90-11-relations-travail.md",
-      "pdf_path": "legal_refs/pdf/loi-90-11-relations-travail.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-90-11-relations-travail.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "loi-90-29-urbanisme",
-      "md_path": "legal_refs/md/loi-90-29-urbanisme.md",
-      "pdf_path": "legal_refs/pdf/loi-90-29-urbanisme.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": ""
+      "document": "loi-90-29-urbanisme.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     },
     {
-      "slug": "projet-arrete-gpl-installations-securite",
-      "md_path": "legal_refs/md/projet-arrete-gpl-installations-securite.md",
-      "pdf_path": "legal_refs/pdf/projet-arrete-gpl-installations-securite.pdf",
-      "pdf_available": false,
-      "status": "NO_PDF_AVAILABLE",
-      "safe_for_ai_use": false,
-      "verified_date": null,
-      "verified_by": null,
-      "critical_errors": null,
-      "minor_errors": null,
-      "notes": "Projet d'arr\u00eat\u00e9 \u2014 statut officiel \u00e0 confirmer"
+      "document": "projet-arrete-gpl-installations-securite.md",
+      "pages": "—",
+      "conversion_quality": "NO AUTHORITATIVE PDF PRESENT IN REPOSITORY",
+      "critical_errors": 0,
+      "minor_errors": 0,
+      "status": "UNSAFE FOR LEGAL USE",
+      "pdf": "—",
+      "errors": [
+        {
+          "pdf_location": "—",
+          "markdown_location": "Entire document",
+          "pdf_content": "No corresponding PDF is present in legal_refs/pdf.",
+          "markdown_content": "Markdown exists but cannot be validated.",
+          "problem": "Authoritative source unavailable.",
+          "correction_required": "Provide the original PDF and repeat the audit.",
+          "severity": "HIGH"
+        }
+      ],
+      "second_pass": "NOT APPLICABLE"
     }
   ]
 }
