@@ -1,8 +1,8 @@
 // src/criteria/slaughterhouseSmallCriteria.ts
-// W42 (2026-08-10): SLH-08-01 legalReference corrected — Loi 03-10 "المواد 15–22" → "المواد 14–21".
-//   Same W41 fix applied to abattoirCriteria.ts now applied here.
-//   Art.14 is the root EIE obligation article (missed by the old range).
-//   Art.22 = fiscal instruments — completely unrelated to EIE. Confirmed by direct read.
+    // W90 (2026-08-23): SLH-08-01 EIE citation corrected against Loi 03-10.
+    //   Art.14 concerns the five-year national environmental-action plan.
+    //   EIE begins at Art.15; Art.16 sets study content; Arts.18–23 address
+    //   classified installations, authorization, prerequisites, and control.
 //   Décret 04-82 Arts.6 (SLH-05-02) + Arts.9 (SLH-05-03) confirmed correct by direct read.
 // F7-fix (2026-08-17): Décret 06-141 Annexe II §1a confirmed — switched Annexe I mg/L values
 //   to sector-specific Annexe II g/t (abattoirs et transformation de la viande).
@@ -215,11 +215,11 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (DBO5، روائح، ضجيج، مخلفات ذبح)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في الطاقة التذبيحية.',
-    // W42 (2026-08-10): CORRECTED — "المواد 15–22" → "المواد 14–21".
+    // W90 (2026-08-23): corrected from the false Art.14–21 range against Loi 03-10.
     // Session 12 (2026-08-17): RETAINED — not a duplicate of BGN-10-01.
     // Adds abattoir-specific scope: named pollutant thresholds, renewal-at-extension trigger,
     // Décret 06-198 ref tying EIE to classified-establishment permit regime.
-    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و٢٤-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
+    legalReference: 'القانون 03-10 المواد 15–16 و18–23 (المادة 15: الإخضاع المسبق لدراسة التأثير أو موجز التأثير؛ المادة 16: محتوى الدراسة؛ المواد 18–23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و٢٤-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

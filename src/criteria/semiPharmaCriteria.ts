@@ -94,15 +94,15 @@ export const semiPharmaCriteria: InspectionItem[] = [
   },
   {
     // Phase 10.2: EIA trigger criterion — modelled on UPD-AX10-01
-    // W42-parity (2026-08-16): Loi 03-10 EIE range corrected 15–22 → 14–21.
-    // Art.14 = root EIE obligation article (missed by old range).
-    // Art.22 = fiscal instruments — completely unrelated to EIE.
-    // Confirmed by W42 direct read on abattoirCriteria.ts and slaughterhouseSmallCriteria.ts.
+    // W90 (2026-08-23): corrected against the audited Law 03-10 text.
+    //   Art.14 concerns the five-year national environmental-action plan;
+    //   EIE begins at Art.15, with Art.16 on study content and Arts.18–23 on
+    //   classified installations, authorization, prerequisites, and control.
     id: 'SPH-06-01',
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
-    criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآدت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (مذيبات، عبوات، انبعاثات)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في طبيعة المنتجات أو الطاقة الإنتاجية.',
-    legalReference: 'القانون 03-10 المواد 14–21 (إلزامية دراسة التأثير على البيئة للمنشآدت المصنفة — المادة 14 هي الأساس الجذري لإلزامية دراسة EIE). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و 24-196.',
+    criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (مذيبات، عبوات، انبعاثات)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في طبيعة المنتجات أو الطاقة الإنتاجية.',
+    legalReference: 'القانون 03-10 المواد 15–16 و18–23 (المادة 15: الإخضاع المسبق لدراسة التأثير أو موجز التأثير؛ المادة 16: محتوى الدراسة؛ المواد 18–23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

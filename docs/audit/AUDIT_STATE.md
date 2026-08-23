@@ -139,15 +139,15 @@ Full 72-article text verified. All 4 wrong citations corrected:
 | SLH-05-04 (blood/entrails separation) | Art. 34 | Loi 03-10 Art.30 retained; Loi 01-19 ref removed ✅ |
 | SLH-05-05 (closed containers + handler) | Art. 17 | Art. 15/16 ✅ |
 
-### F5 — Loi 03-10 spot-checks — ✅ ALL PATCHED
-- BGN-10-01: Art. 15–22 → Art. 14–21 ✅ (W41 2026-08-10)
+### F5 — Loi 03-10 spot-checks — ✅ ALL PATCHED (EIE basis corrected 2026-08-23)
+- BGN-10-01: obsolete Art. 14–21 citation replaced with Articles 15–16 and 18–23; Article 14 is the five-year PNAEDD-duration provision, not the EIE obligation.
 - BGN-08-06: Art. 18 → Art. 63 + Art. 77 ✅ (W41 2026-08-10)
 - BGN-02-01: Art. 37 → Art. 4 + [حكم مهني] ✅ (W45 2026-08-10)
 - BGN-02-02: Art. 8 added as primary ✅ (W48 2026-08-10)
 
 ### F6 — Redundancy: SLH-08-01 vs BGN-10-01 — ✅ CLOSED (2026-08-17, Session 12)
 **Direct read of `slaughterhouseSmallCriteria.ts` confirms SLH-08-01 is NOT a duplicate.**
-BGN-10-01 = generic EIE obligation (Loi 03-10 Art.14–21 + Décret 07-145).
+BGN-10-01 = generic EIE obligation (Loi 03-10 Arts.15–16 and classified-installation provisions Arts.18–23 + Décret 07-145).
 SLH-08-01 adds abattoir-specific scope absent from BGN-10-01:
 - Named pollutant thresholds (DBO5, odours, noise, slaughter waste) in criteria text
 - Renewal obligation upon capacity extension or material change
@@ -178,10 +178,9 @@ All phantom article numbers were already corrected in W43:
 - 21-430 Art.3/4/5/6/10/15/16 phantom refs → replaced with correct 83-496 Art.7/8/10/11/16
   (as amended by 21-430 Art.2) across GPL-01-01, GPL-01-02, GPL-02-02, GPL-03-01, GPL-04-01,
   GPL-04-02.
-- GPL-05-01: Loi 03-10 Art.15–22 → Art.15–21 corrected in W60 (2026-08-17).
-  *(Note: Art.15 = root EIE obligation; Art.14 = définition only — distinct from BGN-10-01
-  which correctly starts at Art.14 as its obligation root because that file's range was
-  Art.14–21. Both are now internally consistent.)*
+- GPL-05-01: Loi 03-10 Art.15–22 → criterion-specific Art.15–21 mapping retained in W60 (2026-08-17).
+  *(Note: Art.15 is the EIE obligation. Article 14 concerns the five-year PNAEDD duration;
+  it must not be described as an EIE definition or obligation root.)*
 
 **Remaining open in gplCriteria.ts:** AIM GPL2 `[À VÉRIFIER — W51]` tag on GPL-02-01/02/03,
 GPL-03-01/02, GPL-04-01 — source has no confirmed JORADP publication trace (Scribd draft only).

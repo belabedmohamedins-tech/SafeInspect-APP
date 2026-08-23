@@ -50,14 +50,10 @@
 //              [حكم مهني — W40 مغلق]: no explicit "self-incineration ban" article exists
 //              in Loi 01-19; the combination of Art.15+19+63 is the strongest available
 //              legal foundation after exhaustive reading.
-// W41 (2026-08-10): 2 wrong article citations corrected after direct read of
-//   legal_refs/loi-03-10-protection-environnement.md (all 89 articles confirmed).
-//   BGN-10-01: Loi 03-10 "Art.15–22" → "Art.14–21".
-//     Art.14 is the primary EIE obligation article (projects susceptible to harm
-//     the environment are subject to a prior EIE). It was excluded from the old
-//     range, making the citation miss the root obligation entirely.
-//     Art.22 = fiscal/economic instruments (completely unrelated to EIE).
-//     Confirmed: Arts.14–21 form the complete EIE chapter (Chapitre II, Titre II).
+// Historical W41 note superseded by W90 (2026-08-23): the earlier Art.14–21
+//   EIE correction was itself incorrect. In the audited text, Art.14 concerns
+//   the five-year PNAEDD duration; EIE begins at Art.15. Current BGN-10-01 uses
+//   Arts.15–16 and 18–23, which match the primary text and criterion scope.
 //   BGN-08-06: Loi 03-10 Art.18 (who may prepare EIE — accredited orgs) → Art.63
 //     (installations classées subject to prior authorization OR declaration) +
 //     Art.77 (penal article: 50,000–500,000 DA fine + 2 months–2 years prison
@@ -147,9 +143,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'عدم عرقلة المفتش أو منعه من أداء مهامه أو التدخل في مسار الرقابة، وتوفير جميع الوثائق والسجلات المطلوبة فوراً عند الطلب.',
-    // W19 FINAL (2026-08-08): CONFIRMED by direct read of Loi 03-10 Arts.81-87.
-    //   Art.82: right of entry. Art.84: suspension power. [À VÉRIFIER] CLOSED.
-    legalReference: 'القانون 03-10 المادة 82 (حق المفتشين المؤهلين في الدخول إلى المنشآت والأماكن لأداء مهام البحث والتحقق من المخالفات) + المادة 84 (صلاحية المفتش في إصدار قرار تعليق النشاط فوراً عند ثبوت المخالفة حتى التسوية). ملاحظة: لا توجد مادة صريحة في القانون 03-10 تُجرِّم العرقلة جزائياً — الحالة تخضع لأحكام القانون العام في قانون العقوبات (عرقلة موظف عمومي في أداء مهامه).',
+    // W90 (2026-08-23): corrected against the audited 114-article text of Loi 03-10.
+    //   Arts.82 and 84 concern sanctions for wildlife and air pollution, not
+    //   inspector access or suspension. Art.106 addresses obstruction of control;
+    //   Art.25 supports suspension after formal notice; Art.111 identifies
+    //   authorised inspectors. No explicit entry right was found in this text.
+    legalReference: 'القانون 03-10 المادة 106 (تجريم عرقلة ممارسة مهام المراقبة أو الرقابة أو الخبرة الخاصة بالمنشآت المصنفة) + المادة 25 (تعليق تشغيل المنشأة عند عدم امتثال المستغل للإعذار) + المادة 111 (تحديد الأعوان المؤهلين للبحث ومعاينة المخالفات، ومنهم مفتشو البيئة). [تحفظ المصدر]: لم يُثبت في النص الحالي حق دخول صريح للمفتش؛ لا يجوز إضافة هذا الحق دون نص تطبيقي أو مصدر قانوني مستقل.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -535,8 +534,12 @@ export const baseGeneralCriteria: InspectionItem[] = [
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من السلطة المختصة، وذلك للمنشآت المصنفة من الفئة الأولى والثانية وفق قائمة التصنيف المحددة بالمرسوم 07-144. تشمل المراجعة: (أ) وجود وثيقة الدراسة المعتمدة في الملف؛ (ب) عدم تجاوز الحدود البيئية المحددة فيها (ضجيج، روائح، غازات، مياه)؛ (ج) إعادة إجراء الدراسة عند إجراء توسعات أو تغييرات جوهرية في طبيعة النشاط أو طاقته.',
-    // W41 (2026-08-10): CORRECTED — range "Art.15–22" → "Art.14–21".
-    legalReference: 'القانون 03-10 المواد 14–21 (الفصل الثاني — دراسات التأثير على البيئة: المادة 14 تُرسي الالتزام الأساسي بإجراء دراسة تأثير مسبقة للمشاريع والمنشآت المرشحة للإضرار بالبيئة؛ المواد 15–21 تُحدد محتوى الدراسة والمشاريع الخاضعة لها وإجراءات التحقيق العمومي والتنظيم). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة وإجراءاتها). المرسوم التنفيذي 07-144 (قائمة المنشآت المصنفة وتصنيفها إلى فئات). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196 (ربط رخصة الاستغلال بنتائج دراسة التأثير أو الموجز البيئي).',
+    // W90 (2026-08-23): corrected against Loi 03-10 Arts.15–16 and 18–23.
+    //   Art.14 concerns the five-year national environmental-action plan,
+    //   not the EIE obligation. Art.15 establishes the prior EIE/notice duty;
+    //   Art.16 sets minimum content; Arts.18–23 cover classified installations,
+    //   authorization, prerequisites, accredited studies, and implementing rules.
+    legalReference: 'القانون 03-10 المواد 15–16 و18–23 (المادة 15: إخضاع المشاريع والمنشآت، حسب الحالة، لدراسة تأثير أو موجز تأثير مسبق؛ المادة 16: الحد الأدنى لمحتوى دراسة التأثير؛ المواد 18–23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة وإجراءاتها). المرسوم التنفيذي 07-144 (قائمة المنشآت المصنفة وتصنيفها إلى فئات). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196.',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

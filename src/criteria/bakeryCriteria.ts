@@ -12,14 +12,11 @@
 // W58 fix 2026-08-11: BAK-10-12 — Décret 76-04 + 2009 ministerial order (no JORADP trace)
 //   replaced with Loi 19-02 Art.5 + Art.13. Consistent with BGN-08-01/02 (W18, 2026-08-08).
 //   Loi 19-02 is the current framework law for fire/panic prevention, superseding 76-04.
-// W42-parity fix 2026-08-16: BAK-10-13 EIE range 15–18 → 14–21.
-//   Previous range 15–18 was doubly wrong: missed Art.14 (root EIE obligation) and
-//   truncated at Art.18, omitting Art.19–21 (EIE procedure and follow-up articles).
-//   Correct full EIE range: Art.14–21.
-// W62 fix 2026-08-18: BAK-10-13 EIE range 14–21 → 15–22.
-//   Art.14 = PNAEDD duration (5 ans, modalités réglementaires) — hors sujet EIE.
-//   Art.22 = réalisation EIE par bureaux agréés à la charge du promoteur — pertinent.
-//   Confirmed by direct read of loi-03-10-protection-environnement.md this turn.
+// W90 (2026-08-23): BAK-10-13 EIE citation corrected against the audited Law 03-10 text.
+//   Art.14 concerns the five-year national environmental-action plan, not EIE.
+//   Art.15 establishes the prior EIE/notice duty; Art.16 sets study content;
+//   Arts.18–23 cover classified installations, authorization, prerequisites,
+//   accredited studies, and implementing/control rules.
 
 import { InspectionItem } from '../types';
 
@@ -154,7 +151,7 @@ export const bakerySpecificCriteria: InspectionItem[] = [
     axis: 'هوية المنشأة والوثائق',
     category: 'بيئية',
     criteria: 'توفر دراسة التأثير البيئي أو كشف الأثر البيئي (EIA/EIE) وفق الفئة المنطبقة على المنشأة، معتمدة من السلطة المختصة.',
-    legalReference: 'القانون 03-10 المواد 15–22 (المادة 15: إلزامية EIE أو كشف الأثر البيئي؛ المادة 16: محتوى الدراسة؛ المواد 17–21: نظام المنشآت المصنفة وEIE شرط مسبق للترخيص؛ المادة 22: إنجاز الدراسة بمكتب دراسات معتمد على نفقة صاحب المشروع). المرسوم التنفيذي 06-198 كما عُدِّل.',
+    legalReference: 'القانون 03-10 المواد 15–16 و18–23 (المادة 15: الإخضاع المسبق لدراسة التأثير أو موجز التأثير؛ المادة 16: محتوى الدراسة؛ المواد 18–23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة، بما فيها إنجاز الدراسة من مكاتب معتمدة على نفقة صاحب المشروع). المرسوم التنفيذي 06-198 كما عُدِّل.',
     severity: 'medium',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',

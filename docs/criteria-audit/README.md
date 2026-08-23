@@ -27,13 +27,13 @@ Ce dossier contient les **fichiers d'audit des citations légales** pour les fic
 
 ## 🗺️ Roadmap des corrections — état au 2026-08-16
 
-### ✅ Sprint A — CLÔTURÉ — Parité W42 : correction plage EIE Loi 03-10
+### ✅ Sprint A — CLÔTURÉ — Correction de la base EIE Loi 03-10 (révisée 2026-08-23)
 
 > **Contexte :** L'audit W42 a révélé que toutes les références à la Loi 03-10 (EIE) citant `المواد 15–22` sont incorrectes.
-> L'Art.14 est l'article racine de l'obligation EIE (manquant), et l'Art.22 traite des instruments fiscaux (hors sujet).
-> La plage correcte est **Art.14–21**. Confirmé par lecture directe de chaque fichier criteria.
+> La version W42 de cette roadmap était juridiquement erronée : l'Article 14 concerne la durée de cinq ans du plan national d'action environnementale et de développement durable, et non l'obligation EIE.
+> La base source correcte est **Articles 15–16** pour l'obligation préalable et le contenu de l'étude, complétés selon le critère par **Articles 18–23** pour les établissements classés, l'autorisation, les conditions préalables, les bureaux agréés et le contrôle.
 >
-> **Note BAK-10-13 :** Cas distinct — plage `15–18` doublement erronée (manquait Art.14 ET Art.19–21). Corrigée vers `14–21`.
+> **Note BAK-10-13 :** la référence a été corrigée vers Articles 15–16 et 18–23.
 > **Note PRD-01-01 :** Aucune référence EIE dans `produceStorageCriteria.ts` — entrée backlog retirée.
 > **Note `baseFoodCriteria.ts` :** Aucune référence Loi 03-10 EIE — rien à corriger.
 

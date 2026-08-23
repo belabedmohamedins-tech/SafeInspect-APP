@@ -15,9 +15,9 @@ Verified against the complete, current 114-article text of `legal_refs/loi-03-10
 - **Chapitre 5** ("Régimes juridiques particuliers", Art. 17–28) = classified-installations authorization regime, of which EIE (Art. 21) is one requirement among several.
 
 **Canonical citation to use everywhere going forward:**
-> "القانون 03-10 المواد 15–16 (الالتزام الأساسي بدراسة/موجز التأثير البيئي) والمواد 17–23 (نظام ترخيص المنشآت المصنفة الذي تندرج فيه الدراسة كشرط مسبق — المادة 21: شرط مسبق للترخيص، المادة 22: اعتماد مكاتب الدراسات)."
+> "القانون 03-10 المواد 15–16 (الإخضاع المسبق لدراسة/موجز التأثير البيئي ومحتوى الدراسة) والمواد 18–23 (نظام المنشآت المصنفة والترخيص والدراسة السابقة والرقابة، مع مراعاة المادة 17 عند وصف إنشاء النظام القانوني الخاص)."
 
-**Never cite Art. 14 as part of the EIE basis.**
+**Never cite Art. 14 as the EIE obligation:** Article 14 concerns the five-year national environmental-action plan; the EIE obligation begins at Article 15.
 
 **Criteria requiring this fix:**
 | Criterion | File | Current (wrong) range |
@@ -33,18 +33,16 @@ Verified against the complete, current 114-article text of `legal_refs/loi-03-10
 
 ---
 
-## FINDING 2 — Changelog confidence is not evidence
+## FINDING 2 — Changelog confidence is not evidence (corrected 2026-08-23)
 
 `slaughterhouseSmallCriteria.ts`'s own "W42 (2026-08-10)" changelog comment claims:
 *"SLH-08-01 legalReference corrected — Loi 03-10 'المواد 15–22' → 'المواد 14–21'... Confirmed by direct read: Arts.14–21 form the complete EIE chapter."*
 
-This is factually wrong (see Finding 1) — and it *reverted* a citation from a
-better range (15–22) to a worse one (14–21), believing it was a fix. Same
-comment states this same "W41" logic was applied to `abattoirCriteria.ts` —
-worth independently re-checking that file for the same reversion (its current
-export list has no explicit EIE-axis criterion visible as of this audit; may
-be present under a different ID or may not exist in that file at all — verify
-before assuming either way).
+This historical changelog was incorrect (see Finding 1). The affected source
+criteria have now been corrected to the primary-text-supported Article 15–16
+and 18–23 mapping in the 2026-08-23 remediation pass. Any remaining historical
+mentions of the old range are retained only for traceability and must not be
+used as current legal guidance.
 
 **Action:** When applying Finding 1's fix, treat this specific W42 changelog
 claim as disproven, not as a prior correction to preserve.

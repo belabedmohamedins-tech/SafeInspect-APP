@@ -6,37 +6,34 @@ this file.
 
 ---
 
-### BGN-01-03 — wrong articles entirely
+### BGN-01-03 — wrong articles entirely — CORRECTED 2026-08-23
 **Current:** يستند إلى المادتين 82 و84 من القانون 03-10 (حق الدخول / تعليق النشاط)
 **Problem:** Art.82 (current text) = penalty for biodiversity/wildlife
 violations. Art.84 = penalty for air-pollution violations. Neither is about
 inspector entry or suspension power. (Article numbering shifted after
 loi-03-10 was expanded from 89 to 114 articles; this citation was verified
 against the old, shorter version.)
-**New:**
-> القانون 03-10 المادة 106 (تجريم عرقلة ممارسة مهام المراقبة والمعاينة
-> والخبرة الخاصة بالمنشآت المصنفة) + المادة 25 (صلاحية الوالي في تعليق نشاط
-> المنشأة عند عدم الامتثال للإعذار) + المادة 111 (قائمة الأعوان المؤهلين، بما
-> فيهم مفتشو البيئة). **[À VÉRIFIER]**: لا توجد مادة صريحة تمنح "حق الدخول"
-> في النص الحالي (114 مادة) — قد يكون هذا الحق مؤسَّساً بنص تنظيمي تطبيقي أو
-> بقانون الإجراءات الجزائية العام. يُفتح فصل LEGAL-VERIFY.
+**Applied:**
+> القانون 03-10 المادة 106 (تجريم عرقلة ممارسة مهام المراقبة أو الرقابة أو
+> الخبرة الخاصة بالمنشآت المصنفة) + المادة 25 (تعليق تشغيل المنشأة عند عدم
+> امتثال المستغل للإعذار) + المادة 111 (الأعوان المؤهلون، ومنهم مفتشو البيئة).
+> **[تحفظ المصدر]**: لم يثبت في النص الحالي حق دخول صريح للمفتش؛ لا يضاف دون
+> نص تطبيقي أو مصدر قانوني مستقل.
 
 ---
 
-### BGN-10-01 — EIE citation
-Apply cross-cutting Finding 1. Replace current "Art.14–21" range with the
-canonical Art.15–16 + Art.17–23 citation.
+### BGN-10-01 — EIE citation — CORRECTED 2026-08-23
+The source correction has been applied. Use the primary-text-supported
+Articles 15–16 and, where the criterion concerns classified installations,
+Articles 18–23. Do not describe Article 14 as an EIE obligation.
 
 ---
 
-### BGN-08-03 — wrong instrument entirely
+### BGN-08-03 — wrong instrument entirely — CORRECTED 2026-08-17
 **Current:** يستند إلى المرسوم التنفيذي 76-35 (سلامة التركيبات الكهربائية)
 **Problem:** Décret 76-35 is exclusively about IGH (high-rise ≥28–50m)
 fire/panic safety. Zero content on electrical installations of any kind.
-**New:** [À VÉRIFIER] — needs the correct Décret 91-05 article for general
-electrical-installation safety. Check Titre II (Art.25–44, "Mesures
-générales de sécurité") for the specific article before replacing — do not
-guess a number.
+**Applied:** Décret exécutif 91-05 Article 17 + Loi 90-11 Article 6, as recorded in the current criteria source after direct reading of the repository PDF transcription.
 
 ---
 
