@@ -8,10 +8,10 @@
 //   BGN-08-01: added Art. 5 (fire-fighting equipment technical requirements).
 //   BGN-08-02: added Art. 13 (evacuation routes and emergency exits).
 //   Both article numbers confirmed correct from AUDIT_STATE.md Session 5.
-// W19 (2026-08-08): 8 wrong article citations corrected after direct source-read
-//   of legal_refs/loi-03-10-protection-environnement.md and loi-01-19-gestion-dechets.md.
+// W19 (2026-08-08): historical article-citation pass. BGN-01-03's
+//   Art.71+73→Art.82+84 change was later disproven by the current 114-article
+//   text and replaced by W90 (2026-08-23) with Arts.25, 106 and 111.
 //   BGN-01-02: Art.65→Art.62 + [À VÉRIFIER — still open, needs Décret 06-198 check]
-//   BGN-01-03: Art.71+73→Art.82+84 CONFIRMED by direct read Arts.81-87 Loi 03-10
 //   BGN-02-03: Art.45(biodiversity)→Art.41+44(soil)
 //   BGN-03-02/03, BGN-04-01/02/04: Art.14(national plan)→Art.8+11(generator obligations)
 //   BGN-04-05: Art.29(municipal plan)→Art.11+36 — no dedicated open-air burning article
