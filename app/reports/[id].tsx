@@ -319,6 +319,9 @@ export default function ReportDetailScreen() {
               </View>
             </View>
             <Text style={styles.criteria}>{item.criteria}</Text>
+            {item.legalVerificationRequired && (
+              <Text style={[styles.referenceText, { color: Colors.danger, fontWeight: '700' }]}>⚠️ تحقق قانوني مطلوب: {item.legalVerificationReason}</Text>
+            )}
             <Text style={styles.referenceText}>{item.legalReference}</Text>
             {item.comment && <Text style={styles.comment}>📝 {item.comment}</Text>}
             {item.photoUri && <Image source={{ uri: item.photoUri }} style={styles.thumbnail} />}

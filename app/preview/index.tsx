@@ -131,6 +131,9 @@ function ItemCard({ item }: { item: InspectionItem }) {
           <Text style={s.categoryText}>{item.category}</Text>
         </View>
       )}
+      {item.legalVerificationRequired ? (
+        <Text style={[s.legalRef, { color: Colors.danger, fontWeight: '700' }]}>⚠️ تحقق قانوني مطلوب: {item.legalVerificationReason}</Text>
+      ) : null}
       {item.legalReference ? <Text style={s.legalRef}>{item.legalReference}</Text> : null}
       {item.comment ? (
         <View style={s.commentBox}>

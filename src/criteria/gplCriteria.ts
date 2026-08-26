@@ -1,7 +1,7 @@
 import { InspectionItem } from '../types';
 
 // Covers: "تركيب GPL/C" — Liquefied Petroleum Gas installation & service
-export const gplCriteria: InspectionItem[] = [
+export const gplCriteria: InspectionItem[] = ([
   {
     id: 'GPL-01-01',
     axis: 'هوية المنشأة والوثائق',
@@ -162,4 +162,18 @@ export const gplCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-];
+] as InspectionItem[]).map((item): InspectionItem => {
+  const requiresVerification =
+    item.legalReference.includes('83-496') ||
+    item.legalReference.includes('AIM GPL2') ||
+    item.legalReference.includes('القرار الوزاري المشترك');
+
+  return requiresVerification
+    ? {
+        ...item,
+        legalVerificationRequired: true,
+        legalVerificationReason:
+          'مصدر قانوني غير قابل للتحقق الكامل أو مسودة غير منشورة؛ لا يُستعمل كأساس إلزامي دون الرجوع إلى ملف PDF الرسمي.',
+      }
+    : item;
+});

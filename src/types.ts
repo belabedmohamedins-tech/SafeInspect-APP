@@ -229,6 +229,11 @@ export interface InspectionItem {
    * marking non-compliant.
    */
   sanctionTier?: SanctionTier;
+
+  /** True when the cited source requires verification before use as an obligation. */
+  legalVerificationRequired?: boolean;
+  /** Human-readable reason for the legal-reference warning. */
+  legalVerificationReason?: string;
 }
 
 /** Counts of non-compliant items by severity level. */

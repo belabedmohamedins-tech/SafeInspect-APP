@@ -15,6 +15,7 @@ import { useLocalSearchParams, useRouter, useFocusEffect } from 'expo-router';
 import { InspectionRepository } from '../../src/repositories/InspectionRepository';
 import { ApprovalRepository } from '../../src/repositories/ApprovalRepository';
 import { SavedInspection, InspectionItem } from '../../src/types';
+import { Colors } from '../../constants';
 
 // ── Helpers ────────────────────────────────────────────────────────────────
 function gradeColor(grade?: string) {
@@ -310,6 +311,9 @@ export default function ApprovalDetailScreen() {
                     </View>
                   </View>
                   <Text style={styles.itemCriteria}>{item.criteria}</Text>
+                  {item.legalVerificationRequired ? (
+                    <Text style={[styles.itemRef, { color: Colors.danger, fontWeight: '700' }]}>⚠️ تحقق قانوني مطلوب: {item.legalVerificationReason}</Text>
+                  ) : null}
                   {item.comment ? (
                     <Text style={styles.itemComment}>💬 {item.comment}</Text>
                   ) : null}

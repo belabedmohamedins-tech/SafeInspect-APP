@@ -30,6 +30,11 @@ export default function LegalReferencesScreen() {
       {items.map(item => (
         <View key={item.id} style={styles.itemCard}>
           <Text style={styles.criteria}>{item.criteria}</Text>
+          {item.legalVerificationRequired && (
+            <Text style={styles.legalWarning}>
+              ⚠️ تحقق قانوني مطلوب: {item.legalVerificationReason}
+            </Text>
+          )}
           <Text style={styles.reference}>📜 {item.legalReference}</Text>
           {item.category && (
             <View style={styles.categoryBadge}>
@@ -43,6 +48,11 @@ export default function LegalReferencesScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
+      <View style={styles.disclaimer}>
+        <Text style={styles.disclaimerText}>
+          تنبيه قانوني: هذه المعايير للمساعدة في التفتيش والبحث فقط. ملف الجريدة الرسمية PDF هو المصدر الملزم. المعايير الموسومة «تحقق قانوني مطلوب» لا تُستعمل كأساس إلزامي دون الرجوع إلى المصدر الرسمي.
+        </Text>
+      </View>
       <View style={styles.pickerContainer}>
         <Picker
           selectedValue={selectedActivity}
@@ -73,6 +83,21 @@ export default function LegalReferencesScreen() {
 
 const styles = StyleSheet.create({
   safeArea:        { flex: 1, backgroundColor: Colors.background },
+  disclaimer: {
+    backgroundColor: `${Colors.warning}22`,
+    borderColor: Colors.warning,
+    borderWidth: 1,
+    borderRadius: Radius.md,
+    margin: Spacing.sm,
+    marginBottom: 0,
+    padding: Spacing.sm,
+  },
+  disclaimerText: {
+    color: Colors.dark,
+    fontSize: FontSize.sm,
+    lineHeight: 20,
+    textAlign: 'right',
+  },
   pickerContainer: {
     backgroundColor: Colors.white,
     margin: Spacing.sm,
@@ -114,6 +139,13 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     lineHeight: 18,
     textAlign: 'right',
+  },
+  legalWarning: {
+    fontSize: FontSize.sm,
+    color: Colors.danger,
+    lineHeight: 18,
+    textAlign: 'right',
+    marginBottom: Spacing.xs,
   },
   categoryBadge: {
     alignSelf: 'flex-start',

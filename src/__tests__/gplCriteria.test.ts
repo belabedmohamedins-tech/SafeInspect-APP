@@ -61,4 +61,15 @@ describe('gplCriteria', () => {
     );
     expect(fireItems.length).toBeGreaterThanOrEqual(3);
   });
+
+  it('flags unsafe or unpublished GPL sources for legal verification', () => {
+    const flagged = gplCriteria.filter((c: InspectionItem) =>
+      c.legalReference.includes('83-496') || c.legalReference.includes('AIM GPL2')
+    );
+    expect(flagged.length).toBeGreaterThan(0);
+    flagged.forEach(item => {
+      expect(item.legalVerificationRequired).toBe(true);
+      expect(item.legalVerificationReason).toBeTruthy();
+    });
+  });
 });
