@@ -140,11 +140,19 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 # Article extractor for plain PDF-extracted text
 # ---------------------------------------------------------------------------
 
-_PDF_ART_RE = re.compile(
-    r"(?mi)^[Aa]rticle[r]?\s+(\d+\w*)\s*[.:\u2013\u2014\u2012 \t-][^\n]*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
+# Pattern 1: Article N followed by separator char(s) then optional title on same line
+_PDF_ART_SEP_RE = re.compile(
+    r"(?mi)^[Aa]rt(?:icle[r]?)?\s*[.\s]?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*[.\s]?\s*\d|\Z)",
     re.DOTALL,
 )
 
+# Pattern 2: Article N alone on its own line (bare header — common in pdfminer output)
+_PDF_ART_BARE_RE = re.compile(
+    r"(?mi)^[Aa]rticle[r]?\s+(\d+\w*)\s*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
+    re.DOTALL,
+)
+
+# Pattern 3: Art. N short form
 _PDF_ART_SHORT_RE = re.compile(
     r"(?mi)^[Aa]rt\.\s*(\d+\w*)\s*[.:\u2013\u2014 \t-][^\n]*\n(.*?)(?=^[Aa]rt\.\s*\d|\Z)",
     re.DOTALL,
@@ -154,7 +162,7 @@ _PDF_ART_SHORT_RE = re.compile(
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from plain PDF-extracted text."""
     articles: dict[str, str] = {}
-    for pattern in (_PDF_ART_RE, _PDF_ART_SHORT_RE):
+    for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
             num = m.group(1).lower().lstrip("0") or "0"
             if num not in articles:
@@ -254,6 +262,23 @@ def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
 
 
 # ---------------------------------------------------------------------------
+# Diagnostic helper — print article extraction counts
+# ---------------------------------------------------------------------------
+
+def diagnose(md_path: Path, pdf_txt_path: Path) -> None:
+    """Print extraction counts for both sides — useful for debugging 0% matches."""
+    md_text = md_path.read_text(encoding="utf-8", errors="replace")
+    pdf_text = pdf_txt_path.read_text(encoding="utf-8", errors="replace")
+    md_arts = extract_md_articles(md_text)
+    pdf_arts = extract_pdf_articles(pdf_text)
+    print(f"MD  articles found: {len(md_arts)}  — keys: {sorted(md_arts)[:10]}")
+    print(f"PDF articles found: {len(pdf_arts)} — keys: {sorted(pdf_arts)[:10]}")
+    # Show first 3 PDF article snippets for header format inspection
+    for i, (k, v) in enumerate(list(pdf_arts.items())[:3]):
+        print(f"  PDF Art.{k}: {v[:80]!r}")
+
+
+# ---------------------------------------------------------------------------
 # Report writers
 # ---------------------------------------------------------------------------
 
@@ -321,10 +346,17 @@ def parse_args() -> argparse.Namespace:
         default=".",
         help="Output directory for reports (default: current dir)",
     )
+    p.add_argument(
+        "--diagnose",
+        action="store_true",
+        help="Print article extraction counts for debugging 0%% matches (single mode only)",
+    )
     return p.parse_args()
 
 
-def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path) -> dict:
+def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path, diagnose_mode: bool = False) -> dict:
+    if diagnose_mode:
+        diagnose(md_path, pdf_text_path)
     result = diff_document(md_path, pdf_text_path)
     json_out = write_json(result, out_dir)
     md_out = write_md_report(result, out_dir)
@@ -339,7 +371,6 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     pairs = queue if isinstance(queue, list) else queue.get("pairs", [])
 
     # Search roots for MD and PDF txt files
-    repo_root = queue_path.parent.parent.parent  # legal_refs/validation -> repo root
     legal_refs = queue_path.parent.parent         # legal_refs/
     md_roots = [legal_refs / "md", legal_refs, queue_path.parent]
     txt_roots = [legal_refs / "pdf", legal_refs, queue_path.parent]
@@ -400,15 +431,13 @@ def main() -> None:
             sys.exit(1)
         md_path = Path(args.md)
         if not md_path.exists():
-            # Try legal_refs/md/ relative to CWD
             candidate = Path("legal_refs") / "md" / md_path.name
             if candidate.exists():
                 md_path = candidate
             else:
                 print(f"ERROR: MD file not found: {args.md}", file=sys.stderr)
-                print(f"  Tried: {args.md}, legal_refs/md/{md_path.name}", file=sys.stderr)
                 sys.exit(1)
-        run_single(md_path, Path(args.pdf_text), out_dir)
+        run_single(md_path, Path(args.pdf_text), out_dir, diagnose_mode=args.diagnose)
     else:
         run_batch(Path(args.batch), out_dir)
 
