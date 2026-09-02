@@ -101,6 +101,17 @@
 //   legal foundation. [À VÉRIFIER] tag removed — verified exhaustively, no better
 //   source exists. [حكم مهني] tag added for specific register types (temperature
 //   logs, disinfection records) which have no explicit Algerian legal mandate.
+// W-ANNEX-NOTE (2026-09-02): BGN-03-01 cites Decret 11-125 for the general
+//   potable-water obligation. The criterion text (controlled source, periodic
+//   monitoring) does NOT require specific threshold values and is unaffected.
+//   WARNING — LATENT GAP: The MD conversion of Decret 11-125 in legal_refs/ is
+//   missing the Annex parameter table values (Fer, Fluorures, Manganèse, Nitrates,
+//   Nitrites mg/l limits — OCR gap, blanks where numbers should be).
+//   DO NOT cite specific numeric thresholds from legal_refs/decret-11-125-*.md
+//   until the Annex tables are recovered from the original PDF.
+//   See STRATEGIC_PLAN.md backlog for the Annex recovery phase.
+//   Finding confirmed by Claude direct repo read + Perplexity source verification
+//   (2026-09-02). BGN-03-01 itself is correct as-is.
 import { InspectionItem } from '../types';
 
 export const baseGeneralCriteria: InspectionItem[] = [
@@ -240,6 +251,18 @@ export const baseGeneralCriteria: InspectionItem[] = [
   // المحور 3: المياه والصرف الصحي (عام)
   {
     id: 'BGN-03-01',
+    // W-ANNEX-NOTE (2026-09-02 — Perplexity + Claude cross-verified):
+    // BGN-03-01 cites Decret 11-125 for the GENERAL potable-water obligation only.
+    // The criterion text (controlled source, periodic monitoring) does NOT require
+    // any specific threshold value and is UNAFFECTED by the gap below.
+    //
+    // LATENT GAP — DO NOT IGNORE:
+    // The MD conversion of Decret 11-125 in legal_refs/ is MISSING the Annex
+    // parameter table values: Fer, Fluorures, Manganèse, Nitrates, Nitrites mg/l
+    // limits (OCR produced blanks where the numbers should be).
+    // DO NOT cite specific numeric thresholds from legal_refs/decret-11-125-*.md
+    // until the Annex tables are recovered from the original PDF source.
+    // See STRATEGIC_PLAN.md backlog for the Annex recovery phase.
     axis: 'المياه والصرف الصحي',
     category: 'بيئية',
     criteria: 'توفر ماء صالح للشرب من شبكة عمومية أو خزان مراقَب في كل الأوقات وبضغط كافٍ.',
