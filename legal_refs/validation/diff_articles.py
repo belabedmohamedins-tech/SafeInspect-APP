@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W97 Phase 3
+diff_articles.py — W97 Phase 3 (path-resolution fix W98-prep)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
   python diff_articles.py --md <file.md> --pdf-text <file.txt> [--out-dir <dir>]
   python diff_articles.py --batch <paired_audit_queue.json> [--out-dir <dir>]
+
+Path resolution (batch mode):
+  MD files  — searched in order: bare path → legal_refs/md/ → legal_refs/ → queue dir
+  PDF texts — searched as <stem>.txt in: bare path → legal_refs/pdf/ → queue dir
+              If no .txt found, entry is SKIPPED with "[NO-TXT]" — extract PDF first.
 
 Outputs (per document):
   <stem>_diff.json   — machine-readable per-article scores
@@ -19,7 +24,6 @@ Scoring thresholds:
   PDF_ONLY          article detected in PDF extract, absent from MD
 
 Depends only on stdlib: difflib, re, json, pathlib, argparse.
-Call index_articles.py logic inline (no subprocess) to keep portable.
 """
 
 import argparse
@@ -28,6 +32,43 @@ import re
 import sys
 from difflib import SequenceMatcher
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Path resolver
+# ---------------------------------------------------------------------------
+
+def resolve_md(filename: str, search_roots: list[Path]) -> Path | None:
+    """Find an MD file by searching multiple root directories."""
+    p = Path(filename)
+    if p.exists():
+        return p
+    name = p.name
+    for root in search_roots:
+        candidate = root / name
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
+    """
+    Find a plain-text extract for a PDF.
+    Looks for <stem>.txt alongside expected PDF locations.
+    Returns None if not found — caller should print [NO-TXT] and skip.
+    """
+    stem = Path(pdf_filename).stem
+    txt_name = stem + ".txt"
+    # 1. bare path with .txt extension
+    p = Path(pdf_filename).with_suffix(".txt")
+    if p.exists():
+        return p
+    # 2. search roots
+    for root in search_roots:
+        candidate = root / txt_name
+        if candidate.exists():
+            return candidate
+    return None
+
 
 # ---------------------------------------------------------------------------
 # Shared normaliser (mirrors normalize.py logic, kept self-contained)
@@ -58,11 +99,8 @@ def _normalise(text: str) -> str:
     """Lowercase, strip diacritics/ligatures, collapse whitespace."""
     text = text.translate(_LIGATURES)
     text = text.lower()
-    # Remove markdown formatting artefacts
     text = re.sub(r"[#*_`~>|\\]", " ", text)
-    # Remove article heading itself from body for comparison
     text = re.sub(r"^article\s+\d+\w*[\s.:–-]*", "", text, flags=re.IGNORECASE)
-    # Collapse whitespace
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
@@ -76,13 +114,11 @@ _MD_ART_RE = re.compile(
     re.MULTILINE | re.DOTALL,
 )
 
-# Alternate: bold/italic heading style  **Article 3** or *Article 3*
 _MD_ART_BOLD_RE = re.compile(
     r"(?m)^\*{1,2}[Aa]rticle[r]?\s*(\d+\w*)\b\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rticle|\Z)",
     re.DOTALL,
 )
 
-# Plain "Article X —" style (no heading marker)
 _MD_ART_PLAIN_RE = re.compile(
     r"(?m)^[Aa]rticle[r]?\s+(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
     re.DOTALL,
@@ -92,13 +128,11 @@ _MD_ART_PLAIN_RE = re.compile(
 def extract_md_articles(md_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from a Markdown file."""
     articles: dict[str, str] = {}
-
     for pattern in (_MD_ART_RE, _MD_ART_BOLD_RE, _MD_ART_PLAIN_RE):
         for m in pattern.finditer(md_text):
             num = m.group(1).lower().lstrip("0") or "0"
             if num not in articles:
                 articles[num] = m.group(2).strip()
-
     return articles
 
 
@@ -111,7 +145,6 @@ _PDF_ART_RE = re.compile(
     re.DOTALL,
 )
 
-# Some PDFs use "Art. X" shorthand
 _PDF_ART_SHORT_RE = re.compile(
     r"(?mi)^[Aa]rt\.\s*(\d+\w*)\s*[.:\u2013\u2014 \t-][^\n]*\n(.*?)(?=^[Aa]rt\.\s*\d|\Z)",
     re.DOTALL,
@@ -296,32 +329,47 @@ def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path) -> dict:
     json_out = write_json(result, out_dir)
     md_out = write_md_report(result, out_dir)
     print(f"[{result['overall_status']}] {md_path.name}  match={result['match_rate']*100:.1f}%")
-    print(f"  JSON  → {json_out}")
-    print(f"  MD    → {md_out}")
+    print(f"  JSON  -> {json_out}")
+    print(f"  MD    -> {md_out}")
     return result
 
 
 def run_batch(queue_path: Path, out_dir: Path) -> None:
     queue = json.loads(queue_path.read_text(encoding="utf-8"))
-    # Support both list-of-dicts and {"pairs": [...]} shapes
     pairs = queue if isinstance(queue, list) else queue.get("pairs", [])
 
+    # Search roots for MD and PDF txt files
+    repo_root = queue_path.parent.parent.parent  # legal_refs/validation -> repo root
+    legal_refs = queue_path.parent.parent         # legal_refs/
+    md_roots = [legal_refs / "md", legal_refs, queue_path.parent]
+    txt_roots = [legal_refs / "pdf", legal_refs, queue_path.parent]
+
     summary = []
+    no_txt_count = 0
+
     for entry in pairs:
         md_file = entry.get("md") or entry.get("markdown")
         pdf_file = entry.get("pdf_text") or entry.get("pdf")
-        if not md_file or not pdf_file:
-            print(f"[SKIP] Incomplete entry: {entry}", file=sys.stderr)
+        if not md_file:
+            print(f"[SKIP] Missing md field: {entry}", file=sys.stderr)
             continue
-        md_path = Path(md_file)
-        pdf_path = Path(pdf_file)
-        if not md_path.exists():
-            print(f"[SKIP] MD not found: {md_path}", file=sys.stderr)
+
+        # Resolve MD path
+        md_path = resolve_md(md_file, md_roots)
+        if not md_path:
+            print(f"[SKIP] MD not found in legal_refs/md/ or legal_refs/: {md_file}", file=sys.stderr)
             continue
-        if not pdf_path.exists():
-            print(f"[SKIP] PDF text not found: {pdf_path}", file=sys.stderr)
+
+        # Resolve PDF txt path — skip gracefully if not extracted yet
+        pdf_txt_path = None
+        if pdf_file:
+            pdf_txt_path = resolve_pdf_txt(pdf_file, txt_roots)
+        if not pdf_txt_path:
+            print(f"[NO-TXT] No .txt extract for: {pdf_file or '(none)'}  — run PDF extraction first (W98)")
+            no_txt_count += 1
             continue
-        result = run_single(md_path, pdf_path, out_dir)
+
+        result = run_single(md_path, pdf_txt_path, out_dir)
         summary.append({
             "md": md_file,
             "overall_status": result["overall_status"],
@@ -332,9 +380,13 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     # Write batch summary
     summary_path = out_dir / "diff_batch_summary.json"
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(f"\nBatch complete. Summary → {summary_path}")
+    print(f"\nBatch complete. Summary -> {summary_path}")
     pass_count = sum(1 for r in summary if r["overall_status"] == "PASS")
     print(f"PASS: {pass_count}/{len(summary)}")
+    if no_txt_count:
+        print(f"[NO-TXT]: {no_txt_count} entries skipped — PDF plain-text extracts missing.")
+        print("  To generate: use pdfminer / pypdf / pdfplumber to extract each PDF to .txt")
+        print("  Place .txt files alongside PDFs in legal_refs/pdf/ then rerun.")
 
 
 def main() -> None:
@@ -346,7 +398,17 @@ def main() -> None:
         if not args.pdf_text:
             print("ERROR: --pdf-text is required with --md", file=sys.stderr)
             sys.exit(1)
-        run_single(Path(args.md), Path(args.pdf_text), out_dir)
+        md_path = Path(args.md)
+        if not md_path.exists():
+            # Try legal_refs/md/ relative to CWD
+            candidate = Path("legal_refs") / "md" / md_path.name
+            if candidate.exists():
+                md_path = candidate
+            else:
+                print(f"ERROR: MD file not found: {args.md}", file=sys.stderr)
+                print(f"  Tried: {args.md}, legal_refs/md/{md_path.name}", file=sys.stderr)
+                sys.exit(1)
+        run_single(md_path, Path(args.pdf_text), out_dir)
     else:
         run_batch(Path(args.batch), out_dir)
 
