@@ -7,6 +7,14 @@
 
 ## Live Observations Log
 
+### 2026-09-02 22:52 WAT — Perplexity — W97 ✅ CLOSED — Legal validation pipeline Phase 3: diff_articles.py
+- **Phases closed this session:** W97-P3 diff engine
+- **Files changed:** `legal_refs/validation/diff_articles.py` (created)
+- **Commit:** [`2a7167f`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2a7167fe9169b1bf31485b68feb504bff27007e8)
+- **What was built:** Fuzzy diff engine — compares MD article index vs PDF plain-text extract per article. Scores via `difflib.SequenceMatcher` on normalised text. Flags: `MATCH` (≥85%), `PARTIAL` (50–84%), `MISMATCH` (<50%), `MD_ONLY`, `PDF_ONLY`. Outputs `<stem>_diff.json` + `<stem>_diff.md` per document. Batch mode reads `paired_audit_queue.json`. Zero external deps (stdlib only).
+- **CLI usage:** `python diff_articles.py --md <file.md> --pdf-text <file.txt>` or `--batch paired_audit_queue.json`
+- **Next phase identifier: W98**
+
 ### 2026-09-02 21:30 WAT — Perplexity — W97 🟡 OPEN — Legal validation pipeline: article boundary extractor Phase 2
 - **Phases closed this session:** regex trailing-group fix + orphan-prefix strip (both files pushed, warnings fixed)
 - **Files changed:** `legal_refs/validation/index_articles.py`, `legal_refs/validation/normalize.py`
@@ -51,13 +59,11 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-09-02 21:30 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-02 22:52 WAT)
 
-### 🟡 OPEN
+### ✅ ALL PHASES CLOSED
 
-| Phase | Title | Status |
-|---|---|---|
-| **W97** | Legal validation pipeline — diff engine + fuzzy scoring (Phase 3) | 🟡 OPEN |
+W97 (all 3 phases) closed. Board clear.
 
 ### 🟠 SURVEILLANCE
 
@@ -113,7 +119,8 @@ SafeInspect-APP/
     ├── md/                     # 48 MD law/decree files
     ├── validation/
     │   ├── index_articles.py   # ✅ boundary extractor — regex fix W97
-    │   └── normalize.py        # ✅ MD/PDF dual normaliser + orphan-strip W97
+    │   ├── normalize.py        # ✅ MD/PDF dual normaliser + orphan-strip W97
+    │   └── diff_articles.py    # ✅ fuzzy diff engine — W97-P3
     └── ...
 ```
 
@@ -121,9 +128,10 @@ SafeInspect-APP/
 
 ## Current Sprint Status
 
+**Board clear. All phases closed.**
+
 | Phase | Title | Status |
 |---|---|---|
-| **W97** | Legal validation pipeline — Phase 3 diff engine | 🟡 OPEN |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
 **Next phase identifier: W98.**
