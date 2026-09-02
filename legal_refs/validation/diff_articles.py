@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W97 Phase 3 (path-resolution fix W98-prep)
+diff_articles.py — W98
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -38,7 +38,6 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 def resolve_md(filename: str, search_roots: list[Path]) -> Path | None:
-    """Find an MD file by searching multiple root directories."""
     p = Path(filename)
     if p.exists():
         return p
@@ -51,18 +50,11 @@ def resolve_md(filename: str, search_roots: list[Path]) -> Path | None:
 
 
 def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
-    """
-    Find a plain-text extract for a PDF.
-    Looks for <stem>.txt alongside expected PDF locations.
-    Returns None if not found — caller should print [NO-TXT] and skip.
-    """
     stem = Path(pdf_filename).stem
     txt_name = stem + ".txt"
-    # 1. bare path with .txt extension
     p = Path(pdf_filename).with_suffix(".txt")
     if p.exists():
         return p
-    # 2. search roots
     for root in search_roots:
         candidate = root / txt_name
         if candidate.exists():
@@ -71,7 +63,7 @@ def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Shared normaliser (mirrors normalize.py logic, kept self-contained)
+# Normaliser
 # ---------------------------------------------------------------------------
 
 _LIGATURES = str.maketrans({
@@ -94,33 +86,68 @@ _LIGATURES = str.maketrans({
     "\u00c7": "C",
 })
 
+# mojibake sequences produced when UTF-8 é à etc. is misread as latin-1/cp1252
+# Map the resulting multi-char sequences back to the original char for normalisation
+_MOJIBAKE = [
+    ("\u00c3\u00a9", "e"),   # é
+    ("\u00c3\u00a8", "e"),   # è
+    ("\u00c3\u00aa", "e"),   # ê
+    ("\u00c3\u00a0", "a"),   # à
+    ("\u00c3\u00a2", "a"),   # â
+    ("\u00c3\u00ae", "i"),   # î
+    ("\u00c3\u00b4", "o"),   # ô
+    ("\u00c3\u00b9", "u"),   # ù
+    ("\u00c3\u00bb", "u"),   # û
+    ("\u00c3\u00a7", "c"),   # ç
+    ("\u00c3\u0089", "E"),   # É
+    ("\u00c3\u0088", "E"),   # È
+    ("\u00c2\u00b0", ""),    # ° (degree sign — drop)
+    ("\u00e2\u0080\u0093", "-"),  # –
+    ("\u00e2\u0080\u0094", "-"),  # —
+    ("\u00e2\u0080\u0099", "'"),  # ’
+]
+
 
 def _normalise(text: str) -> str:
-    """Lowercase, strip diacritics/ligatures, collapse whitespace."""
+    """Lowercase, strip diacritics/ligatures/mojibake, collapse whitespace."""
+    # Fix mojibake before anything else
+    for bad, good in _MOJIBAKE:
+        text = text.replace(bad, good)
     text = text.translate(_LIGATURES)
     text = text.lower()
+    # Strip markdown symbols
     text = re.sub(r"[#*_`~>|\\]", " ", text)
-    text = re.sub(r"^article\s+\d+\w*[\s.:–-]*", "", text, flags=re.IGNORECASE)
+    # Strip article header prefix
+    text = re.sub(r"^art(?:icle[r]?)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
 
 # ---------------------------------------------------------------------------
-# Article extractor for MD files
+# MD article extractor
+# Four formats observed in legal_refs/md/ files:
+#   1. ## Article 1er — heading
+#   2. **Article 1er.** — text on same line or next line (most common)
+#   3. **Art. 2.** — short form bold inline
+#   4. Article 1er. plain line
 # ---------------------------------------------------------------------------
 
-_MD_ART_RE = re.compile(
-    r"^#{1,4}\s*[Aa]rticle[r]?\s*(\d+\w*)\b[^\n]*\n(.*?)(?=^#{1,4}\s*[Aa]rticle|\Z)",
+# Format 1: heading  ## Article N
+_MD_ART_HEADING_RE = re.compile(
+    r"^#{1,4}\s*[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\b[^\n]*\n(.*?)(?=^#{1,4}\s*[Aa]rt|\Z)",
     re.MULTILINE | re.DOTALL,
 )
 
-_MD_ART_BOLD_RE = re.compile(
-    r"(?m)^\*{1,2}[Aa]rticle[r]?\s*(\d+\w*)\b\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rticle|\Z)",
+# Format 2 & 3: **Article 1er.** or **Art. 2.** — bold inline, rest of line is article title/text
+# Captures: number, then everything on the rest of that line + following lines until next article
+_MD_ART_BOLD_INLINE_RE = re.compile(
+    r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
     re.DOTALL,
 )
 
+# Format 4: plain line  Article 1er. — text
 _MD_ART_PLAIN_RE = re.compile(
-    r"(?m)^[Aa]rticle[r]?\s+(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
+    r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
     re.DOTALL,
 )
 
@@ -128,25 +155,28 @@ _MD_ART_PLAIN_RE = re.compile(
 def extract_md_articles(md_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from a Markdown file."""
     articles: dict[str, str] = {}
-    for pattern in (_MD_ART_RE, _MD_ART_BOLD_RE, _MD_ART_PLAIN_RE):
+    for pattern in (_MD_ART_HEADING_RE, _MD_ART_BOLD_INLINE_RE, _MD_ART_PLAIN_RE):
         for m in pattern.finditer(md_text):
             num = m.group(1).lower().lstrip("0") or "0"
+            # Normalise '1er' -> '1er', pure digits strip leading zeros
+            if re.fullmatch(r"\d+", num):
+                num = str(int(num))
             if num not in articles:
                 articles[num] = m.group(2).strip()
     return articles
 
 
 # ---------------------------------------------------------------------------
-# Article extractor for plain PDF-extracted text
+# PDF article extractor
 # ---------------------------------------------------------------------------
 
-# Pattern 1: Article N followed by separator char(s) then optional title on same line
+# Pattern 1: Article N [sep] text on same line
 _PDF_ART_SEP_RE = re.compile(
-    r"(?mi)^[Aa]rt(?:icle[r]?)?\s*[.\s]?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*[.\s]?\s*\d|\Z)",
+    r"(?mi)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
     re.DOTALL,
 )
 
-# Pattern 2: Article N alone on its own line (bare header — common in pdfminer output)
+# Pattern 2: Article N bare (nothing else on line)
 _PDF_ART_BARE_RE = re.compile(
     r"(?mi)^[Aa]rticle[r]?\s+(\d+\w*)\s*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
     re.DOTALL,
@@ -165,6 +195,8 @@ def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
             num = m.group(1).lower().lstrip("0") or "0"
+            if re.fullmatch(r"\d+", num):
+                num = str(int(num))
             if num not in articles:
                 articles[num] = m.group(2).strip()
     return articles
@@ -179,7 +211,6 @@ THRESHOLD_PARTIAL = 0.50
 
 
 def score_pair(md_body: str, pdf_body: str) -> float:
-    """Return SequenceMatcher ratio on normalised texts."""
     a = _normalise(md_body)
     b = _normalise(pdf_body)
     if not a and not b:
@@ -202,7 +233,6 @@ def classify(score: float) -> str:
 # ---------------------------------------------------------------------------
 
 def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
-    """Compare one MD file against its PDF text extract. Return result dict."""
     md_text = md_path.read_text(encoding="utf-8", errors="replace")
     pdf_text = pdf_text_path.read_text(encoding="utf-8", errors="replace")
 
@@ -262,19 +292,19 @@ def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
 
 
 # ---------------------------------------------------------------------------
-# Diagnostic helper — print article extraction counts
+# Diagnostic
 # ---------------------------------------------------------------------------
 
 def diagnose(md_path: Path, pdf_txt_path: Path) -> None:
-    """Print extraction counts for both sides — useful for debugging 0% matches."""
     md_text = md_path.read_text(encoding="utf-8", errors="replace")
     pdf_text = pdf_txt_path.read_text(encoding="utf-8", errors="replace")
     md_arts = extract_md_articles(md_text)
     pdf_arts = extract_pdf_articles(pdf_text)
-    print(f"MD  articles found: {len(md_arts)}  — keys: {sorted(md_arts)[:10]}")
-    print(f"PDF articles found: {len(pdf_arts)} — keys: {sorted(pdf_arts)[:10]}")
-    # Show first 3 PDF article snippets for header format inspection
-    for i, (k, v) in enumerate(list(pdf_arts.items())[:3]):
+    print(f"MD  articles found: {len(md_arts)}  \u2014 keys: {sorted(md_arts)[:10]}")
+    print(f"PDF articles found: {len(pdf_arts)} \u2014 keys: {sorted(pdf_arts)[:10]}")
+    for k, v in list(md_arts.items())[:3]:
+        print(f"  MD  Art.{k}: {v[:80]!r}")
+    for k, v in list(pdf_arts.items())[:3]:
         print(f"  PDF Art.{k}: {v[:80]!r}")
 
 
@@ -292,7 +322,6 @@ def write_json(result: dict, out_dir: Path) -> Path:
 def write_md_report(result: dict, out_dir: Path) -> Path:
     stem = Path(result["md_file"]).stem
     out = out_dir / f"{stem}_diff.md"
-
     lines = [
         f"# Diff Report: {result['md_file']}",
         "",
@@ -308,16 +337,14 @@ def write_md_report(result: dict, out_dir: Path) -> Path:
     ]
     for k, v in result["counts"].items():
         lines.append(f"| {k} | {v} |")
-
     lines += ["", "## Per-Article Results", ""]
-
     for art in result["articles"]:
-        score_str = f"{art['score']*100:.1f}%" if art["score"] is not None else "—"
-        flag = "✅" if art["status"] == "MATCH" else (
-            "⚠️" if art["status"] == "PARTIAL" else (
-            "❌" if art["status"] == "MISMATCH" else "🔵"
+        score_str = f"{art['score']*100:.1f}%" if art["score"] is not None else "\u2014"
+        flag = "\u2705" if art["status"] == "MATCH" else (
+            "\u26a0\ufe0f" if art["status"] == "PARTIAL" else (
+            "\u274c" if art["status"] == "MISMATCH" else "\U0001f535"
         ))
-        lines.append(f"### {flag} Article {art['article']} — `{art['status']}` ({score_str})")
+        lines.append(f"### {flag} Article {art['article']} \u2014 `{art['status']}` ({score_str})")
         if art["status"] in ("PARTIAL", "MISMATCH"):
             lines += [
                 "",
@@ -326,7 +353,6 @@ def write_md_report(result: dict, out_dir: Path) -> Path:
                 f"**PDF snippet:** {art.get('pdf_snippet', '')}",
                 "",
             ]
-
     out.write_text("\n".join(lines), encoding="utf-8")
     return out
 
@@ -341,16 +367,9 @@ def parse_args() -> argparse.Namespace:
     mode.add_argument("--md", help="Path to Markdown file")
     mode.add_argument("--batch", help="Path to paired_audit_queue.json (batch mode)")
     p.add_argument("--pdf-text", help="Path to PDF plain-text extract (single mode)")
-    p.add_argument(
-        "--out-dir",
-        default=".",
-        help="Output directory for reports (default: current dir)",
-    )
-    p.add_argument(
-        "--diagnose",
-        action="store_true",
-        help="Print article extraction counts for debugging 0%% matches (single mode only)",
-    )
+    p.add_argument("--out-dir", default=".", help="Output directory for reports")
+    p.add_argument("--diagnose", action="store_true",
+                   help="Print extraction counts + snippets (single mode only)")
     return p.parse_args()
 
 
@@ -370,8 +389,7 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     queue = json.loads(queue_path.read_text(encoding="utf-8"))
     pairs = queue if isinstance(queue, list) else queue.get("pairs", [])
 
-    # Search roots for MD and PDF txt files
-    legal_refs = queue_path.parent.parent         # legal_refs/
+    legal_refs = queue_path.parent.parent
     md_roots = [legal_refs / "md", legal_refs, queue_path.parent]
     txt_roots = [legal_refs / "pdf", legal_refs, queue_path.parent]
 
@@ -385,18 +403,14 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
             print(f"[SKIP] Missing md field: {entry}", file=sys.stderr)
             continue
 
-        # Resolve MD path
         md_path = resolve_md(md_file, md_roots)
         if not md_path:
-            print(f"[SKIP] MD not found in legal_refs/md/ or legal_refs/: {md_file}", file=sys.stderr)
+            print(f"[SKIP] MD not found: {md_file}", file=sys.stderr)
             continue
 
-        # Resolve PDF txt path — skip gracefully if not extracted yet
-        pdf_txt_path = None
-        if pdf_file:
-            pdf_txt_path = resolve_pdf_txt(pdf_file, txt_roots)
+        pdf_txt_path = resolve_pdf_txt(pdf_file, txt_roots) if pdf_file else None
         if not pdf_txt_path:
-            print(f"[NO-TXT] No .txt extract for: {pdf_file or '(none)'}  — run PDF extraction first (W98)")
+            print(f"[NO-TXT] No .txt extract for: {pdf_file or '(none)'}  \u2014 run PDF extraction first (W98)")
             no_txt_count += 1
             continue
 
@@ -408,16 +422,13 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
             "counts": result["counts"],
         })
 
-    # Write batch summary
     summary_path = out_dir / "diff_batch_summary.json"
     summary_path.write_text(json.dumps(summary, ensure_ascii=False, indent=2), encoding="utf-8")
     print(f"\nBatch complete. Summary -> {summary_path}")
     pass_count = sum(1 for r in summary if r["overall_status"] == "PASS")
     print(f"PASS: {pass_count}/{len(summary)}")
     if no_txt_count:
-        print(f"[NO-TXT]: {no_txt_count} entries skipped — PDF plain-text extracts missing.")
-        print("  To generate: use pdfminer / pypdf / pdfplumber to extract each PDF to .txt")
-        print("  Place .txt files alongside PDFs in legal_refs/pdf/ then rerun.")
+        print(f"[NO-TXT]: {no_txt_count} entries skipped \u2014 PDF plain-text extracts missing.")
 
 
 def main() -> None:
@@ -427,7 +438,7 @@ def main() -> None:
 
     if args.md:
         if not args.pdf_text:
-            print("ERROR: --pdf-text is required with --md", file=sys.stderr)
+            print("ERROR: --pdf-text required with --md", file=sys.stderr)
             sys.exit(1)
         md_path = Path(args.md)
         if not md_path.exists():
