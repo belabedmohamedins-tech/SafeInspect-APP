@@ -7,6 +7,15 @@
 
 ## Live Observations Log
 
+### 2026-09-02 23:14 WAT — Perplexity — Décret 11-125 OCR pipeline ✅
+- **Phases closed:** N/A (legal file add, not a code phase)
+- **Files changed:** `legal_refs/decret-11-125-eau-consommation-humaine.md` (323 lines, OCR + encoding fixed)
+- **Commit:** [`3664053`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/3664053)
+- **Pipeline:** Poppler pdftoppm (300 DPI) → Tesseract OCR `-l fra` → mojibake fix (latin-1 decode table) → UTF-8 MD
+- **Content verified:** Arts. 1–3 preview clean. Décret exécutif n° 11-125 du 22 mars 2011 relatif à la qualité de l'eau de consommation humaine. 4 pages.
+- **Tool cleanup:** `tools/fix_encoding.py` to be deleted (one-off script).
+- **Next phase identifier: W98**
+
 ### 2026-09-02 22:52 WAT — Perplexity — W97 ✅ CLOSED — Legal validation pipeline Phase 3: diff_articles.py
 - **Phases closed this session:** W97-P3 diff engine
 - **Files changed:** `legal_refs/validation/diff_articles.py` (created)
@@ -59,7 +68,7 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-09-02 22:52 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-02 23:14 WAT)
 
 ### ✅ ALL PHASES CLOSED
 
@@ -82,6 +91,7 @@ W97 (all 3 phases) closed. Board clear.
 | MCH-29-05 heavy-metal params | Product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Audit couvoirCriteria.ts first |
 | Décret 76-36 texte intégral | J.O. n°21/1976 non numérisé |
+| Delete `tools/fix_encoding.py` | One-off script, no longer needed |
 
 ---
 
@@ -115,8 +125,11 @@ SafeInspect-APP/
 │   ├── archive/
 │   ├── audit/
 │   └── criteria-audit/
+├── tools/
+│   └── fix_encoding.py         # ⚠️ one-off OCR fix — delete when convenient
 └── legal_refs/                 # Algerian legislation
     ├── md/                     # 48 MD law/decree files
+    ├── pdf/                    # Source PDFs + extracted .txt
     ├── validation/
     │   ├── index_articles.py   # ✅ boundary extractor — regex fix W97
     │   ├── normalize.py        # ✅ MD/PDF dual normaliser + orphan-strip W97
