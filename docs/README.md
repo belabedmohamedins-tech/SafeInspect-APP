@@ -7,6 +7,15 @@
 
 ## Live Observations Log
 
+### 2026-09-03 00:47 WAT — Perplexity — W98 ✅ CLOSED — index_articles.py UTF-8 + décret 11-125 9 articles confirmed
+- **Phases closed:** W98
+- **Files changed:** `tools/index_articles.py` (stdout UTF-8 reconfigure + ensure_ascii=True for console)
+- **Commits:** [`89cee93`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/89cee93c4876854ac5cf307d89f590a38031734a)
+- **Root cause:** Windows PowerShell `charmap` codec choked on `≥` (U+2265) in décret-11-125 pH row during stdout pipe. Fixed with `sys.stdout.reconfigure(encoding='utf-8')` + `ensure_ascii=True` on console output path.
+- **Gate result:** `# 9 articles indexed from decret-11-125-eau-consommation-humaine.md` — user-confirmed ✅
+- **Agent note:** Claude offline this session. Perplexity sole agent.
+- **Next phase identifier: W99**
+
 ### 2026-09-02 23:14 WAT — Perplexity — Décret 11-125 OCR pipeline ✅
 - **Phases closed:** N/A (legal file add, not a code phase)
 - **Files changed:** `legal_refs/decret-11-125-eau-consommation-humaine.md` (323 lines, OCR + encoding fixed)
@@ -14,7 +23,6 @@
 - **Pipeline:** Poppler pdftoppm (300 DPI) → Tesseract OCR `-l fra` → mojibake fix (latin-1 decode table) → UTF-8 MD
 - **Content verified:** Arts. 1–3 preview clean. Décret exécutif n° 11-125 du 22 mars 2011 relatif à la qualité de l'eau de consommation humaine. 4 pages.
 - **Tool cleanup:** `tools/fix_encoding.py` to be deleted (one-off script).
-- **Next phase identifier: W98**
 
 ### 2026-09-02 22:52 WAT — Perplexity — W97 ✅ CLOSED — Legal validation pipeline Phase 3: diff_articles.py
 - **Phases closed this session:** W97-P3 diff engine
@@ -22,7 +30,6 @@
 - **Commit:** [`2a7167f`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2a7167fe9169b1bf31485b68feb504bff27007e8)
 - **What was built:** Fuzzy diff engine — compares MD article index vs PDF plain-text extract per article. Scores via `difflib.SequenceMatcher` on normalised text. Flags: `MATCH` (≥85%), `PARTIAL` (50–84%), `MISMATCH` (<50%), `MD_ONLY`, `PDF_ONLY`. Outputs `<stem>_diff.json` + `<stem>_diff.md` per document. Batch mode reads `paired_audit_queue.json`. Zero external deps (stdlib only).
 - **CLI usage:** `python diff_articles.py --md <file.md> --pdf-text <file.txt>` or `--batch paired_audit_queue.json`
-- **Next phase identifier: W98**
 
 ### 2026-09-02 21:30 WAT — Perplexity — W97 🟡 OPEN — Legal validation pipeline: article boundary extractor Phase 2
 - **Phases closed this session:** regex trailing-group fix + orphan-prefix strip (both files pushed, warnings fixed)
@@ -32,12 +39,11 @@
   - Format A (`loi-18-11-sante-partie1-arts1-164.md`): 164 articles. Art.1 NORM `Article 1er. — La présente loi…` ✅ Art.2 NORM `Art. 2. — La protection…` ✅
   - Format B (`arrete-interministeriel-1999-11-21-conservation-aliments.md`): 10 articles. Art.1 NORM `Article 1er↵↵En application de…` ✅ Art.2 NORM `Art. 2↵↵Au sens du présent arrêté…` ✅
   - No leading `**`, `##`, or stray `.` in any NORM preview. Orphan-strip confirmed harmless on Format B.
-- **Root cause fixed:** `(?:[\. \*]|$)` → `(?:[.\s]*\*{0,3}\s*)` — greedily consumes full closing bold/italic sequence. `\*{0,3}` covers `**`, `***`, and no-asterisk cases per Claude preemptive widening.
-- **Next:** W97 continues with diff pipeline (Phase 3) — fuzzy similarity scoring against PDF-extracted text.
+- **Root cause fixed:** `(?:[\. \*]|$)` → `(?:[.\s]*\*{0,3}\s*)` — greedily consumes full closing bold/italic sequence.
 
 ### 2026-08-20 13:08 WAT — Perplexity — W96 ✅ CLOSED — SPEC12-B push receipt two-phase stale-token cleanup
 - **User-confirmed:** `npx jest server/src/__tests__/push.test.ts` → 4/4 PASS.
-- **Fix:** Rewrote `server/src/lib/push.ts` with correct two-phase Expo receipt flow. Phase 1: index-based ticket→token mapping, immediate removal on send-time `DeviceNotRegistered`, receipt IDs queued in `PushReceiptQueue`. Phase 2: `pollReceipts()` fetches receipts via `getPushNotificationReceiptsAsync`, removes stale tokens, clears queue. `startReceiptPoller()` wired into `index.ts`.
+- **Fix:** Rewrote `server/src/lib/push.ts` with correct two-phase Expo receipt flow.
 - **Schema:** `PushReceiptQueue` model added to `server/prisma/schema.prisma`.
 - **Hoisting fix (test):** `var stubs` + lazy `get` accessors in both `jest.mock()` factories eliminates TDZ ReferenceError.
 - **Files changed:** `server/prisma/schema.prisma`, `server/src/lib/push.ts`, `server/src/index.ts`, `server/src/__tests__/push.test.ts`
@@ -68,11 +74,11 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-09-02 23:14 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-03 00:47 WAT)
 
 ### ✅ ALL PHASES CLOSED
 
-W97 (all 3 phases) closed. Board clear.
+W98 closed. Board clear.
 
 ### 🟠 SURVEILLANCE
 
@@ -126,6 +132,7 @@ SafeInspect-APP/
 │   ├── audit/
 │   └── criteria-audit/
 ├── tools/
+│   ├── index_articles.py       # ✅ UTF-8 fix W98 — 9 articles from décret 11-125 confirmed
 │   └── fix_encoding.py         # ⚠️ one-off OCR fix — delete when convenient
 └── legal_refs/                 # Algerian legislation
     ├── md/                     # 48 MD law/decree files
@@ -147,7 +154,7 @@ SafeInspect-APP/
 |---|---|---|
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**Next phase identifier: W98.**
+**Next phase identifier: W99.**
 
 ---
 

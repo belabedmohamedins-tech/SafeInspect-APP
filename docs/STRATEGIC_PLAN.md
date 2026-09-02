@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W98**
+> Next phase identifier: **W99**
 
 ---
 
@@ -81,7 +81,7 @@
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W97)
+### ✅ CLOSED — Recent Phases (W60 → W98)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -129,6 +129,7 @@
 | **W97-P1** | Legal validation pipeline Phase 1+2: index_articles.py + normalize.py | 2026-09-02 | Commits `89c961f`, `c65b994`. **Both format families green — user-confirmed.** |
 | **W97-P3** | Legal validation pipeline Phase 3: diff_articles.py fuzzy diff engine | 2026-09-02 | Commit `2a7167f`. |
 | **LEGAL-OCR-11-125** | Décret 11-125 eau consommation humaine — OCR + encoding fix | 2026-09-02 | Commit [`3664053`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/3664053). 323 lines. |
+| **W98** | index_articles.py Windows UTF-8 fix — décret 11-125 9 articles confirmed | 2026-09-03 | Commit [`89cee93`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/89cee93c4876854ac5cf307d89f590a38031734a). **9 articles — user-confirmed ✅** |
 
 ---
 
@@ -208,7 +209,7 @@ npx prisma migrate dev --name add-push-receipt-queue
 | Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed. |
 | Décret 76-36 | ERP sécurité incendie/panique | ✅ Present — rectificatif J.O. n°67/1976 |
 | Décret 06-138 | Émissions poussières | ✅ Present |
-| **Décret 11-125** | **Qualité eau consommation humaine** | ✅ **Present — OCR 2026-09-02 (323 lines)** |
+| **Décret 11-125** | **Qualité eau consommation humaine** | ✅ **Present — 9 articles indexed (W98 2026-09-03)** |
 | AIM GPL2 v14.03.2022 | GPL station rules | ⚠️ UNPUBLISHED — W51-SURV OPEN |
 
 ---
@@ -216,4 +217,4 @@ npx prisma migrate dev --name add-push-receipt-queue
 ## Sprint Status
 
 **Board clear. All phases closed.**
-Next phase identifier: **W98**. Active surveillance: **W51-SURV**.
+Next phase identifier: **W99**. Active surveillance: **W51-SURV**.
