@@ -15,11 +15,18 @@ Usage:
   python tools/index_articles.py legal_refs/some-law.md --out index.json
 """
 
+import io
 import re
 import sys
 import json
 import argparse
 from pathlib import Path
+
+# Force UTF-8 stdout/stderr on Windows (avoids charmap errors with µ, ≥, — etc.)
+if hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+if hasattr(sys.stderr, 'reconfigure'):
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
 
 # ── Patterns ────────────────────────────────────────────────────────────────
 
@@ -114,10 +121,15 @@ def main():
         sys.exit(1)
 
     articles = parse(path)
-    output = json.dumps(articles, ensure_ascii=False, indent=2)
+    # ensure_ascii=True so PowerShell console never sees raw non-ASCII in stdout
+    output = json.dumps(articles, ensure_ascii=True, indent=2)
 
     if args.out:
-        Path(args.out).write_text(output, encoding='utf-8')
+        # write file as UTF-8 regardless of console
+        Path(args.out).write_text(
+            json.dumps(articles, ensure_ascii=False, indent=2),
+            encoding='utf-8'
+        )
         print(f'Written {len(articles)} articles -> {args.out}')
     else:
         print(output)
