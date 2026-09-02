@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""
+r"""
 index_articles.py — Article boundary extractor for SafeInspect legal_refs MD files.
 
 Formats handled:
@@ -45,7 +45,7 @@ ARTICLE_BOUNDARY_RE = re.compile(
     r"(?:^|\n)\s*"
     r"(?:\*{1,3}|#{2,3}\s*)?"   # optional bold/bold+italic OR heading ## / ###
     r"\s*"
-    r"(?:المادة|Article|Art\.)"
+    r"(?:\u0627\u0644\u0645\u0627\u062f\u0629|Article|Art\.)"
     r"\s*[:\-]?\s*"
     r"([\d\u0660-\u0669]+)"      # western digits OR Arabic-Indic ٠-٩
     r"(?:er|\u00e8re|re)?"       # optional ordinal suffix (1er, 1ère)
@@ -106,15 +106,12 @@ if __name__ == '__main__':
     print(f'Found {len(result)} articles.')
     print()
 
-    # Visual confirmation check: print raw + normalised first 80 chars
-    # for articles 1 and 2. Both must be free of leading **, ##, or stray .
-    # before Phase 2 is declared open.
     for check_num in ['1', '2']:
         if check_num in result:
             raw_slice = result[check_num]
             norm_slice = normalize_text(raw_slice, source='md')
-            raw_preview  = raw_slice[:80].replace('\n', '↵')
-            norm_preview = norm_slice[:80].replace('\n', '↵')
+            raw_preview  = raw_slice[:80].replace('\n', '\u21b5')
+            norm_preview = norm_slice[:80].replace('\n', '\u21b5')
             print(f'Art.{check_num} RAW  [{len(raw_slice):>6} chars]: {raw_preview!r}')
             print(f'Art.{check_num} NORM [{len(norm_slice):>6} chars]: {norm_preview!r}')
             print()
