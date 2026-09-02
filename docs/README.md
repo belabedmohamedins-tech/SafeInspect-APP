@@ -7,8 +7,19 @@
 
 ## Live Observations Log
 
+### 2026-09-02 21:30 WAT — Perplexity — W97 🟡 OPEN — Legal validation pipeline: article boundary extractor Phase 2
+- **Phases closed this session:** regex trailing-group fix + orphan-prefix strip (both files pushed, warnings fixed)
+- **Files changed:** `legal_refs/validation/index_articles.py`, `legal_refs/validation/normalize.py`
+- **Commits:** `89c961f` (primary fix), `c65b994` (SyntaxWarning docstring)
+- **Phase 2 gate result — BOTH FORMAT FAMILIES GREEN:**
+  - Format A (`loi-18-11-sante-partie1-arts1-164.md`): 164 articles. Art.1 NORM `Article 1er. — La présente loi…` ✅ Art.2 NORM `Art. 2. — La protection…` ✅
+  - Format B (`arrete-interministeriel-1999-11-21-conservation-aliments.md`): 10 articles. Art.1 NORM `Article 1er↵↵En application de…` ✅ Art.2 NORM `Art. 2↵↵Au sens du présent arrêté…` ✅
+  - No leading `**`, `##`, or stray `.` in any NORM preview. Orphan-strip confirmed harmless on Format B.
+- **Root cause fixed:** `(?:[\. \*]|$)` → `(?:[.\s]*\*{0,3}\s*)` — greedily consumes full closing bold/italic sequence. `\*{0,3}` covers `**`, `***`, and no-asterisk cases per Claude preemptive widening.
+- **Next:** W97 continues with diff pipeline (Phase 3) — fuzzy similarity scoring against PDF-extracted text.
+
 ### 2026-08-20 13:08 WAT — Perplexity — W96 ✅ CLOSED — SPEC12-B push receipt two-phase stale-token cleanup
-- **User-confirmed:** `npx jest src/__tests__/push.test.ts` → 4/4 PASS.
+- **User-confirmed:** `npx jest server/src/__tests__/push.test.ts` → 4/4 PASS.
 - **Fix:** Rewrote `server/src/lib/push.ts` with correct two-phase Expo receipt flow. Phase 1: index-based ticket→token mapping, immediate removal on send-time `DeviceNotRegistered`, receipt IDs queued in `PushReceiptQueue`. Phase 2: `pollReceipts()` fetches receipts via `getPushNotificationReceiptsAsync`, removes stale tokens, clears queue. `startReceiptPoller()` wired into `index.ts`.
 - **Schema:** `PushReceiptQueue` model added to `server/prisma/schema.prisma`.
 - **Hoisting fix (test):** `var stubs` + lazy `get` accessors in both `jest.mock()` factories eliminates TDZ ReferenceError.
@@ -19,8 +30,7 @@
 
 ### 2026-08-19 17:27 WAT — Perplexity — W95 ✅ CLOSED — SPEC12-C server-login skip persistence
 - **User-confirmed:** `npx jest src/__tests__/screens/serverLoginSkip.test.tsx` → 5/5 PASS.
-- **Fix:** `handleSkip()` now persists `StorageKeys.SERVER_LOGIN_SKIPPED = 'true'` before navigating. `_layout.tsx` guard reads flag and short-circuits redirect. Bug: user was redirected back to server-login on every launch after skipping.
-- **Hoisting fix:** `db` → `mockDb`, `store` → `mockStore` + lazy getter `() => Promise.resolve(mockDb)` to satisfy Jest's mock-factory hoisting rule.
+- **Fix:** `handleSkip()` now persists `StorageKeys.SERVER_LOGIN_SKIPPED = 'true'` before navigating. `_layout.tsx` guard reads flag and short-circuits redirect.
 - **Files changed:** `app/screens/server-login.tsx`, `app/_layout.tsx`, `src/__tests__/screens/serverLoginSkip.test.tsx`
 - **Commits:** `1e575fc` (test fix), prior session commits for source fix.
 
@@ -41,11 +51,13 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-08-20 13:08 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-02 21:30 WAT)
 
-### ✅ ALL IMPLEMENTATION PHASES CLOSED (W60–W96)
+### 🟡 OPEN
 
-No open implementation phases remain.
+| Phase | Title | Status |
+|---|---|---|
+| **W97** | Legal validation pipeline — diff engine + fuzzy scoring (Phase 3) | 🟡 OPEN |
 
 ### 🟠 SURVEILLANCE
 
@@ -98,10 +110,11 @@ SafeInspect-APP/
 │   ├── audit/
 │   └── criteria-audit/
 └── legal_refs/                 # Algerian legislation
-    ├── loi-18-11-sante-partie1-arts1-164.md
-    ├── loi-18-11-sante-partie2-arts165-264.md
-    ├── loi-18-11-sante-partie3-arts265-450.md
-    └── ... (28 additional law/decree files)
+    ├── md/                     # 48 MD law/decree files
+    ├── validation/
+    │   ├── index_articles.py   # ✅ boundary extractor — regex fix W97
+    │   └── normalize.py        # ✅ MD/PDF dual normaliser + orphan-strip W97
+    └── ...
 ```
 
 ---
@@ -110,10 +123,10 @@ SafeInspect-APP/
 
 | Phase | Title | Status |
 |---|---|---|
-| **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | ✅ CLOSED — 2026-08-20 |
+| **W97** | Legal validation pipeline — Phase 3 diff engine | 🟡 OPEN |
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**All implementation phases closed. Next phase identifier: W97.**
+**Next phase identifier: W98.**
 
 ---
 

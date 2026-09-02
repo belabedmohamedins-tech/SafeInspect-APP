@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W97**
+> Next phase identifier: **W98**
 
 ---
 
@@ -126,8 +126,15 @@
 | **W94** | E2E integration test — full inspector lifecycle | 2026-08-19 | Commit [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43). User-confirmed green. |
 | **W95** | SPEC12-C: server-login skip persistence | 2026-08-19 | Commits `1e575fc`. **5/5 Jest green — user-confirmed.** |
 | **W96** | SPEC12-B: push receipt two-phase stale-token cleanup | 2026-08-20 | Commits `83cf78b`, `e049b08`, `0f38a05`, `7f2965c`. **4/4 Jest green — user-confirmed.** |
+| **W97-P1** | Legal validation pipeline Phase 1+2: index_articles.py + normalize.py | 2026-09-02 | Commits `89c961f`, `c65b994`. **Both format families green — user-confirmed.** |
 
 ---
+
+### 🟡 OPEN
+
+| Phase | Title | Priority | Notes |
+|---|---|---|---|
+| **W97** | Legal validation pipeline Phase 3: diff engine + fuzzy scoring | High | index_articles.py + normalize.py complete. Next: build diff_articles.py comparing MD vs PDF extracts. |
 
 ### 🟠 OPEN — Surveillance Only
 
@@ -211,5 +218,5 @@ npx prisma migrate dev --name add-push-receipt-queue
 
 ## Sprint Status
 
-**🎉 All implementation phases closed through W96.**
-Next phase identifier: **W97**. Active surveillance: **W51-SURV**.
+**W97-P1 closed (2026-09-02). W97 Phase 3 (diff engine) open.**
+Next phase identifier: **W98**. Active surveillance: **W51-SURV**.
