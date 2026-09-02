@@ -3,9 +3,11 @@
 index_articles.py — W97-P1
 Parse a legal_refs/*.md file and emit a JSON index of articles.
 
-Supports two format families:
+Supports format families:
   Family A: "## Article N" or "## Art. N"
-  Family B: "**Article N**" or "**Art. N**" (inline bold, no heading)
+  Family B: "**Article N**" or "**Art. N**" (inline bold)
+  Family C: "Art. N. —" / "Art. N —" (JORADP plain-text, most common in repo)
+             Also handles "Article ler" / "Art. 1er" / "Aït." OCR artefact.
 
 Output (stdout): JSON array of {"article": "N", "title": "...", "text": "..."}
 Usage:
@@ -20,33 +22,63 @@ import argparse
 from pathlib import Path
 
 # ── Patterns ────────────────────────────────────────────────────────────────
-# Family A: heading-level articles  (## Article 1 — Title)
+
+# Family A: heading-level  (## Article 1 — Title)
 HEADING_ART = re.compile(
-    r'^#{1,4}\s+(?:Article|Art\.?)\s+(\d+(?:\s*(?:bis|ter|quater))?)',
+    r'^#{1,4}\s+(?:Article|Art\.?)\s+(\d+(?:\s*(?:bis|ter|quater|ler|er))?)',
     re.IGNORECASE
 )
 
-# Family B: bold-inline articles  (**Article 1** — Title)
+# Family B: bold-inline  (**Article 1** — Title)
 INLINE_ART = re.compile(
-    r'^\*{1,2}(?:Article|Art\.?)\s+(\d+(?:\s*(?:bis|ter|quater))?)\*{1,2}',
+    r'^\*{1,2}(?:Article|Art\.?)\s+(\d+(?:\s*(?:bis|ter|quater|ler|er))?)\*{1,2}',
+    re.IGNORECASE
+)
+
+# Family C: JORADP plain-text  "Art. 2. —"  "Art 3 —"  "Article ler. —"
+# Also catches OCR artefact "Aït." as alias for "Art."
+PLAIN_ART = re.compile(
+    r'^(?:Article|Art(?:icle)?\.?|A[i\xef]t\.?)\s+'
+    r'(\d+(?:\s*(?:bis|ter|quater))?|ler|1er)'
+    r'(?:\s*\.)?'
+    r'\s*(?:\u2014|-{1,2}|:)',
     re.IGNORECASE
 )
 
 
-def _title_from_line(line: str, num: str) -> str:
-    """Extract optional title fragment after the article number."""
-    # Strip leading hashes, stars, article keyword + number
+def _norm_num(n: str) -> str:
+    n = n.strip()
+    if n.lower() in ('ler', '1er'):
+        return '1'
+    return n
+
+
+def _title_from_line(line: str, raw_num: str) -> str:
     cleaned = re.sub(
-        r'^[#*\s]*(?:Article|Art\.?)\s+' + re.escape(num) + r'\s*[:\-–—]?\s*',
+        r'^[#*\s]*(?:Article|Art(?:icle)?\.?|A[i\xef]t\.?)\s+'
+        + re.escape(raw_num)
+        + r'(?:\s*\.)?\s*(?:\u2014|-{1,2}|:)?\s*',
         '', line, flags=re.IGNORECASE
     ).strip('* \t')
     return cleaned or ''
 
 
+def _match_article(line: str):
+    """Return (normalised_num, title) if line starts an article, else None."""
+    for pat in (HEADING_ART, INLINE_ART, PLAIN_ART):
+        m = pat.match(line)
+        if m:
+            raw = m.group(1).strip()
+            num = _norm_num(raw)
+            title = _title_from_line(line, raw)
+            return num, title
+    return None
+
+
 def parse(path: Path) -> list[dict]:
     lines = path.read_text(encoding='utf-8').splitlines()
 
-    articles = []
+    articles: list[dict] = []
     current: dict | None = None
     body_lines: list[str] = []
 
@@ -56,11 +88,10 @@ def parse(path: Path) -> list[dict]:
             articles.append(current)
 
     for line in lines:
-        m = HEADING_ART.match(line) or INLINE_ART.match(line)
-        if m:
+        result = _match_article(line)
+        if result:
             flush()
-            num = m.group(1).strip()
-            title = _title_from_line(line, num)
+            num, title = result
             current = {'article': num, 'title': title}
             body_lines = []
         else:
@@ -87,7 +118,7 @@ def main():
 
     if args.out:
         Path(args.out).write_text(output, encoding='utf-8')
-        print(f'Written {len(articles)} articles → {args.out}')
+        print(f'Written {len(articles)} articles -> {args.out}')
     else:
         print(output)
         print(f'\n# {len(articles)} articles indexed from {path.name}', file=sys.stderr)
