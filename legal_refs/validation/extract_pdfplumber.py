@@ -7,32 +7,20 @@ Algerian Journal Officiel (JO) pages use a 2-column snake-flow layout:
   RIGHT column → fills top-to-bottom second
 
 pdfplumber default extraction reads by y-position (horizontal bands),
-merging both columns into a single stream — producing text like:
-  "La présente loi a pour objet de fixer les  artisanales et autres..."
-where the end of Art.1 (left col) is merged with mid-body of Art.3 (right col).
+merging both columns into a single stream. Fix: two-pass per page —
+extract LEFT column first, then RIGHT column, concatenate.
 
-Fix: two-pass per page — extract LEFT column first, then RIGHT column,
-concatenate with newline. This gives correct snake-flow reading order.
-Column midpoint auto-detected from word x-centre gap analysis.
-
-Preamble handling:
-  Laws like loi-18-11 have a long preamble that references other laws by
-  article number ("notamment ses articles 2 et 3"). The diff script's
-  article boundary regex fires on these mid-preamble references, creating
-  false article slices. Solution: hard-slice everything before the FIRST
-  standalone "Article 1er" line at line start.
+Preamble strip:
+  Hard-slice everything before the first STANDALONE 'Article 1er' header.
+  A standalone header is:
+    - Short line (≤ 60 chars)
+    - Starts with 'Article 1er' / 'Article 1ier' / 'Article Premier'
+    - NOT followed by citation markers ('de la loi', 'du décret', etc.)
 
 Usage (PowerShell):
     python legal_refs/validation/extract_pdfplumber.py
-        -> re-extracts the two default targets:
-           legal_refs/pdf/Loi 01-19.pdf
-           legal_refs/pdf/loi 18-11.pdf
-
     python legal_refs/validation/extract_pdfplumber.py --pdf "Loi 04-20.pdf"
-        -> single file
-
     python legal_refs/validation/extract_pdfplumber.py --all
-        -> re-extracts every PDF in legal_refs/pdf/
 
 Dependencies: pip install pdfplumber  (already satisfied)
 Output:       legal_refs/pdf/<stem>.txt  (always overwrites)
@@ -50,20 +38,39 @@ DEFAULT_TARGETS = [
     "loi 18-11.pdf",
 ]
 
-# Matches a standalone Article 1er / Article 1 / Article Premier header at line start.
-# Does NOT match mid-sentence "ses articles 2 et 3" references.
-_ART1ER_LINE_RE = re.compile(
+# Matches the START of a standalone Article-1er header line.
+_ART1ER_START_RE = re.compile(
     r"^\s*Article\s+(?:1(?:er|ier)?|[Pp]remier)\b",
     re.IGNORECASE,
 )
 
+# Citation markers that appear immediately after '1er' in preamble references:
+# e.g. 'Article 1er de la loi n° ...', 'Article 1er du décret ...'
+_CITATION_AFTER_RE = re.compile(
+    r"\b1(?:er|ier)?\s+(?:de\s+la|du|de\s+l['’]|de\s+l’|al-)",
+    re.IGNORECASE,
+)
+
+MAX_HEADER_LINE_LEN = 60  # standalone headers are short
+
+
+def _is_standalone_art1er(line: str) -> bool:
+    """
+    Return True only if this line is a standalone Article-1er section header,
+    not a mid-sentence citation to another law's article 1er.
+    """
+    stripped = line.strip()
+    if not _ART1ER_START_RE.match(stripped):
+        return False
+    if len(stripped) > MAX_HEADER_LINE_LEN:
+        return False
+    if _CITATION_AFTER_RE.search(stripped):
+        return False
+    return True
+
 
 def _detect_column_midpoint(page) -> float:
-    """
-    Detect the column divider x-coordinate by finding the largest gap
-    in the distribution of word x-centres across the middle 20-80% of page width.
-    Falls back to page.width / 2.
-    """
+    """Detect column divider x by finding largest word-centre gap in middle 20-80% of page."""
     try:
         words = page.extract_words(x_tolerance=3, y_tolerance=3)
     except Exception:
@@ -92,12 +99,11 @@ def _detect_column_midpoint(page) -> float:
 
     if not (w * 0.30 < mid < w * 0.70):
         return page.width / 2
-
     return mid
 
 
 def _extract_page_two_pass(page, mid: float) -> str:
-    """Extract page text in correct snake-flow order: left column then right column."""
+    """Extract page in snake-flow order: left column then right column."""
     h = page.height
     left = page.crop((0, 0, mid, h))
     right = page.crop((mid, 0, page.width, h))
@@ -109,32 +115,26 @@ def _extract_page_two_pass(page, mid: float) -> str:
 
 def _strip_preamble(text: str) -> str:
     """
-    Hard-slice everything before the first standalone 'Article 1er' line.
+    Hard-slice everything before the first STANDALONE 'Article 1er' header.
 
-    The Algerian JO preamble for laws cites other laws by article number
-    (e.g. 'notamment ses articles 2, 3 et 4'), which triggers false article
-    boundaries in the diff script. Discarding everything before the first
-    Article-1er line start is safe: that marker is always the beginning of
-    the published law itself.
-
-    If no Article-1er line is found (e.g. a decree that starts with Article 1),
-    fall back to discarding lines starting with 'Vu ' before the first
-    'Article \d' line start.
+    Falls back to first '^Article [digit]' at line start if no Article-1er
+    standalone header is found (handles decrees that start with Article 1).
     """
     lines = text.splitlines()
 
-    # Pass 1: look for 'Article 1er' / 'Article Premier' at line start
+    # Pass 1: standalone Article 1er header
     for i, line in enumerate(lines):
-        if _ART1ER_LINE_RE.match(line):
+        if _is_standalone_art1er(line):
             return "\n".join(lines[i:])
 
-    # Pass 2: fallback — first 'Article \d' at line start
+    # Pass 2: fallback — any short Article-N header at line start
     _any_art = re.compile(r"^\s*Article\s+\d", re.IGNORECASE)
     for i, line in enumerate(lines):
-        if _any_art.match(line):
+        stripped = line.strip()
+        if _any_art.match(stripped) and len(stripped) <= MAX_HEADER_LINE_LEN:
             return "\n".join(lines[i:])
 
-    # No article found — return as-is (don't discard content)
+    # No article found — return as-is
     return text
 
 
@@ -157,7 +157,6 @@ def extract_one(pdf_path: Path) -> str:
                         mid = _detect_column_midpoint(page)
                     else:
                         continue
-
                 t = _extract_page_two_pass(page, mid)
                 if t.strip():
                     text_parts.append(t)
@@ -171,8 +170,7 @@ def extract_one(pdf_path: Path) -> str:
     if not raw.strip():
         return f"[SCANNED: {pdf_path.name} — OCR required]\n"
 
-    text = _strip_preamble(raw)
-    return text
+    return _strip_preamble(raw)
 
 
 def process(pdf_name: str) -> None:
