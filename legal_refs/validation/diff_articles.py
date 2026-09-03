@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W100 (3-mode patch over W99)
+diff_articles.py — W101 (article_range support over W100)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -36,6 +36,14 @@ W100 patches (2026-09-03):
            Fix: _normalise() now maps all Unicode whitespace variants to ' ' explicitly
            before the regex collapse, including \\u00a0, \\u202f, \\u2009, \\u2002, \\u2003.
   MODE C — decret-11-125 77.8%: same \\u00a0 issue, same fix as MODE B.
+
+W101 patches (2026-09-03):
+  article_range — queue entries may carry {"article_range": [start, end]} (inclusive).
+                  diff_document() and run_batch() now filter PDF-extracted articles
+                  to the given numeric range before comparison, eliminating PDF_ONLY
+                  noise from articles belonging to other split-file parties.
+                  MD articles outside the range are not filtered (they would surface
+                  as MD_ONLY and signal an authoring error in the MD file itself).
 """
 
 import argparse
@@ -253,6 +261,34 @@ def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
+# W101: article_range filter
+# ---------------------------------------------------------------------------
+
+def _filter_by_range(articles: dict[str, str], article_range: list | None) -> dict[str, str]:
+    """
+    W101: If article_range=[start, end] is provided (inclusive), drop all PDF
+    articles whose numeric key falls outside [start, end]. Non-numeric keys
+    (e.g. '12bis') are kept regardless — they cannot be range-checked reliably.
+    Only applied to PDF-extracted articles, never to MD articles.
+    """
+    if not article_range or len(article_range) != 2:
+        return articles
+    start, end = int(article_range[0]), int(article_range[1])
+    filtered = {}
+    for k, v in articles.items():
+        # Try to extract a leading integer from the key
+        m = re.match(r"^(\d+)", k)
+        if m:
+            n = int(m.group(1))
+            if start <= n <= end:
+                filtered[k] = v
+        else:
+            # Non-numeric key — keep unconditionally
+            filtered[k] = v
+    return filtered
+
+
+# ---------------------------------------------------------------------------
 # Fuzzy scorer
 # ---------------------------------------------------------------------------
 
@@ -282,12 +318,17 @@ def classify(score: float) -> str:
 # Diff engine
 # ---------------------------------------------------------------------------
 
-def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
+def diff_document(md_path: Path, pdf_text_path: Path,
+                  article_range: list | None = None) -> dict:
     md_text = md_path.read_text(encoding="utf-8", errors="replace")
     pdf_text = pdf_text_path.read_text(encoding="utf-8", errors="replace")
 
     md_arts = extract_md_articles(md_text)
     pdf_arts = extract_pdf_articles(pdf_text)
+
+    # W101: filter PDF articles to declared range (split-file support)
+    if article_range:
+        pdf_arts = _filter_by_range(pdf_arts, article_range)
 
     all_nums = sorted(
         set(md_arts) | set(pdf_arts),
@@ -327,7 +368,7 @@ def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
     total = len(all_nums)
     match_rate = round(counts["MATCH"] / total, 4) if total else 0.0
 
-    return {
+    result = {
         "md_file": md_path.name,
         "pdf_text_file": pdf_text_path.name,
         "total_articles": total,
@@ -339,6 +380,9 @@ def diff_document(md_path: Path, pdf_text_path: Path) -> dict:
         ),
         "articles": results,
     }
+    if article_range:
+        result["article_range"] = article_range
+    return result
 
 
 # ---------------------------------------------------------------------------
@@ -372,11 +416,15 @@ def write_json(result: dict, out_dir: Path) -> Path:
 def write_md_report(result: dict, out_dir: Path) -> Path:
     stem = Path(result["md_file"]).stem
     out = out_dir / f"{stem}_diff.md"
+    range_note = ""
+    if result.get("article_range"):
+        r = result["article_range"]
+        range_note = f"  \n**Article range filter:** Arts.{r[0]}–{r[1]}"
     lines = [
         f"# Diff Report: {result['md_file']}",
         "",
         f"**PDF text source:** `{result['pdf_text_file']}`  ",
-        f"**Total articles compared:** {result['total_articles']}  ",
+        f"**Total articles compared:** {result['total_articles']}{range_note}  ",
         f"**Match rate:** {result['match_rate']*100:.1f}%  ",
         f"**Overall status:** `{result['overall_status']}`",
         "",
@@ -420,16 +468,21 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--out-dir", default=".", help="Output directory for reports")
     p.add_argument("--diagnose", action="store_true",
                    help="Print extraction counts + snippets (single mode only)")
+    p.add_argument("--article-range", nargs=2, type=int, metavar=("START", "END"),
+                   help="Filter PDF articles to this inclusive range (single mode only)")
     return p.parse_args()
 
 
-def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path, diagnose_mode: bool = False) -> dict:
+def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path,
+               diagnose_mode: bool = False,
+               article_range: list | None = None) -> dict:
     if diagnose_mode:
         diagnose(md_path, pdf_text_path)
-    result = diff_document(md_path, pdf_text_path)
+    result = diff_document(md_path, pdf_text_path, article_range=article_range)
     json_out = write_json(result, out_dir)
     md_out = write_md_report(result, out_dir)
-    print(f"[{result['overall_status']}] {md_path.name}  match={result['match_rate']*100:.1f}%")
+    range_tag = f" [Arts.{article_range[0]}-{article_range[1]}]" if article_range else ""
+    print(f"[{result['overall_status']}] {md_path.name}{range_tag}  match={result['match_rate']*100:.1f}%")
     print(f"  JSON  -> {json_out}")
     print(f"  MD    -> {md_out}")
     return result
@@ -449,6 +502,8 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     for entry in pairs:
         md_file = entry.get("md") or entry.get("markdown")
         pdf_file = entry.get("pdf_text") or entry.get("pdf")
+        # W101: read article_range from queue entry if present
+        article_range = entry.get("article_range")  # e.g. [1, 164] or None
         if not md_file:
             print(f"[SKIP] Missing md field: {entry}", file=sys.stderr)
             continue
@@ -464,7 +519,7 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
             no_txt_count += 1
             continue
 
-        result = run_single(md_path, pdf_txt_path, out_dir)
+        result = run_single(md_path, pdf_txt_path, out_dir, article_range=article_range)
         summary.append({
             "md": md_file,
             "overall_status": result["overall_status"],
@@ -498,7 +553,10 @@ def main() -> None:
             else:
                 print(f"ERROR: MD file not found: {args.md}", file=sys.stderr)
                 sys.exit(1)
-        run_single(md_path, Path(args.pdf_text), out_dir, diagnose_mode=args.diagnose)
+        article_range = args.article_range  # None or [start, end]
+        run_single(md_path, Path(args.pdf_text), out_dir,
+                   diagnose_mode=args.diagnose,
+                   article_range=article_range)
     else:
         run_batch(Path(args.batch), out_dir)
 

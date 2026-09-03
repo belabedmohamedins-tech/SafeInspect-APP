@@ -231,20 +231,23 @@
     {
       "md": "legal_refs/md/loi-18-11-sante-partie1-arts1-164.md",
       "pdf": "loi 18-11.pdf",
+      "article_range": [1, 164],
       "diff_status": "UNVERIFIED",
-      "note": "SPLIT FILE — partie1 covers Arts.1-164. Run with page range covering partie1 only."
+      "note": "SPLIT FILE — partie1 covers Arts.1-164. article_range filters PDF extract to Arts 1–164 only."
     },
     {
       "md": "legal_refs/md/loi-18-11-sante-partie2-arts165-264.md",
       "pdf": "loi 18-11.pdf",
+      "article_range": [165, 264],
       "diff_status": "UNVERIFIED",
-      "note": "SPLIT FILE — partie2 covers Arts.165-264."
+      "note": "SPLIT FILE — partie2 covers Arts.165-264. article_range filters PDF extract to Arts 165–264 only."
     },
     {
       "md": "legal_refs/md/loi-18-11-sante-partie3-arts265-450.md",
       "pdf": "loi 18-11.pdf",
+      "article_range": [265, 450],
       "diff_status": "UNVERIFIED",
-      "note": "SPLIT FILE — partie3 covers Arts.265-450."
+      "note": "SPLIT FILE — partie3 covers Arts.265-450. article_range filters PDF extract to Arts 265–450 only."
     },
     {
       "md": "legal_refs/md/loi-19-02-incendie-panique.md",
