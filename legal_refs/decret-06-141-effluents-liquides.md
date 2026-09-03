@@ -109,4 +109,210 @@ Fait à Alger, le 20 Rabie El Aouel 1427 correspondant au 19 avril 2006.
 | 20 | Étain total | mg/l | 2 | 2,5 |
 | 21 | Manganèse | mg/l | 1 | 1,5 |
 | 22 | Nickel total | mg/l | 0,5 | 0,75 |
-| 23 | Zinc total | mg/l |
+| 23 | Zinc total | mg/l | 3 | 5 |
+| 24 | Fer | mg/l | 3 | 5 |
+| 25 | Composés organiques chlorés | mg/l | 5 | 7 |
+
+**Abréviations :**
+- pH : Potentiel d'hydrogène
+- DBO5 : Demande biologique en oxygène pour une période de cinq (5) jours
+- DCO : Demande chimique en oxygène
+- MES : Matière en suspension
+
+---
+
+## ANNEXE II — Tolérance à certaines valeurs limites selon les catégories d'installations
+
+### 1 — Industrie agro-alimentaire
+
+#### a) Abattoirs et transformation de la viande
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Volume / quantité | m³/t carcasse traitée | 6 | 8 |
+| pH | — | 5,5 – 8,5 | 6 – 9 |
+| DBO5 | g/t | 250 | 300 |
+| DCO | g/t | 800 | 1 000 |
+| Matière décantable | g/t | 200 | 250 |
+
+#### b) Sucrerie
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 6 – 9 | 6 – 9 |
+| DBO5 | mg/l | 200 | 400 |
+| DCO | mg/l | 200 | 250 |
+| MES | mg/l | 300 | 350 |
+| Huiles et graisses | mg/l | 5 | 10 |
+
+#### c) Levurerie
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 35 |
+| pH | — | 5,5 – 8,5 | 6,5 – 8,5 |
+| DBO5 | mg/l | 100 | 120 |
+| DCO | mg/l | 7 000 | 8 000 |
+| MES | mg/l | 30 | 50 |
+
+#### d) Brasserie
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 9 – 10,5 |
+| DBO5 | g/t de malt produit | 250 | 300 |
+| DCO | g/t de malt produit | 700 | 750 |
+| MES | g/t de malt produit | 250 | 300 |
+
+#### e) Corps gras
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 6 – 9 |
+| DBO5 | g/t | 200 | 250 |
+| DCO | g/t | 700 | 800 |
+| MES | g/t | 150 | 200 |
+
+---
+
+### 2 — Industrie de l'énergie
+
+#### a) Raffinage de pétrole
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Débit d'eau | m³/t | 1 | 1,2 |
+| Température | °C | 30 | 35 |
+| pH | — | 5,5 – 8,5 | 5,5 – 8,5 |
+| DBO5 | g/t | 25 | 30 |
+| DCO | g/t | 100 | 120 |
+| MES | g/t | 25 | 30 |
+| Azote total | g/t | 20 | 25 |
+| Huiles et graisses | mg/l | 15 | 20 |
+| Phénol | g/t | 0,25 | 0,5 |
+| Hydrocarbures | g/t | 5 | 10 |
+| Plomb | mg/l | 0,5 | 1 |
+| Chrome 3+ | mg/l | 0,05 | 0,3 |
+| Chrome 6+ | mg/l | 0,1 | 0,5 |
+
+#### b) Cokéfaction
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| DBO5 | mg/l | 30 | 40 |
+| DCO | mg/l | 120 | 200 |
+| Phosphores | mg/l | 2 | 2 |
+| Cyanures | mg/l | 0,1 | 0,1 |
+| Composés d'azote | mg/l | 35 | 40 |
+| Indice phénols | mg/l | 0,3 | 0,5 |
+| Benzène, Toluène, Xylène | mg/l | 0,08 | 0,1 |
+| Hydrocarbures aromatiques polycycliques | mg/l | 0,08 | 0,1 |
+| Sulfure | mg/l | 0,08 | 0,1 |
+| Substances filtrables | mg/l | 40 | 50 |
+
+---
+
+### 3 — Industrie mécanique
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 5,5 – 8,5 |
+| DCO | mg/l | 300 | 350 |
+| Cyanure | mg/l | 0,1 | 0,15 |
+| Cuivre | mg/l | 0,7 | 1 |
+| Nickel | mg/l | 0,7 | 1 |
+| Zinc | mg/l | 2,5 | 3 |
+| Plomb | mg/l | 0,7 | 1 |
+| Cadmium | mg/l | 0,5 | 1 |
+| Hydrocarbures | mg/l | 15 | 20 |
+| Phénol | mg/l | 0,5 | 1 |
+| Métaux totaux | mg/l | 20 | 25 |
+
+---
+
+### 4 — Industrie de transformation des métaux
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Cuivre | mg/l | 1,5 | 2 |
+| Nickel | mg/l | 2 | 2,5 |
+| Chrome | mg/l | 1,5 | 2 |
+| Fer | mg/l | 5 | 7,5 |
+| Aluminium | mg/l | 5 | 7,5 |
+
+---
+
+### 5 — Industrie de minerais non métallique
+
+#### a) Céramique
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 5,5 – 8,5 |
+| DCO | mg/l | 80 | 120 |
+| Matière décantable | mg/l | 0,5 | 1 |
+| Plomb | mg/l | 0,5 | 1 |
+| Cadmium | mg/l | 0,07 | 0,2 |
+
+#### b) Verre
+
+| Paramètre | Unité | Valeur limite | Tolérance industries anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 5,5 – 8,5 |
+| DCO | mg/l | 80 | 120 |
+| MES | mg/l | 0,3 | 0,5 |
+| Plomb | mg/l | 0,5 | 1 |
+| Cadmium | mg/l | 0,07 | 0,2 |
+| Chrome | mg/l | 0,1 | 0,1 |
+| Cobalt | mg/l | 0,1 | 0,1 |
+| Cuivre | mg/l | 0,1 | 0,3 |
+| Nickel | mg/l | 0,1 | 0,5 |
+| Zinc | mg/l | 2 | 5 |
+
+#### c) Ciment, plâtre et chaux
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 30 |
+| pH | — | 5,5 – 8,5 | 5,5 – 8,5 |
+| DCO | mg/l | 80 | 120 |
+| Matière décantable | mg/l | 0,5 | 1 |
+| Plomb | mg/l | 0,5 | 1 |
+| Cadmium | mg/l | 0,07 | 0,2 |
+| Chrome | mg/l | 0,1 | 0,1 |
+| Cobalt | mg/l | 0,1 | 0,1 |
+| Cuivre | mg/l | 0,1 | 0,3 |
+| Nickel | mg/l | 0,1 | 0,5 |
+| Zinc | mg/l | 2 | 5 |
+
+---
+
+### 6 — Industrie de textile
+
+| Paramètre | Unité | Valeur limite | Tolérance installations anciennes |
+|---|---|---|---|
+| Température | °C | 30 | 35 |
+| pH | — | 6,5 – 8,5 | 6 – 9 |
+| DBO5 | mg/l | 150 | 200 |
+| DCO | mg/l | 250 | 300 |
+| Matière décantable | mg/l | 0,4 | 0,5 |
+| Matière non dissoute | mg/l | 30 | 40 |
+| Oxydabilité permanganate | mg/l | 100 | 120 |
+| — | mg/l | 20 | 25 |
+
+---
+
+### 7 — Industrie de tannerie et mégisserie
+
+| Paramètre | Unité | Valeur limite | Tolérance industries anciennes |
+|---|---|---|---|
+| DBO5 | mg/l | 350 | 400 |
+| DCO | mg/l | 850 | 1 000 |
+| MES | mg/l | 400 | 500 |
+| Chrome total | mg/l | 3 | 4 |
