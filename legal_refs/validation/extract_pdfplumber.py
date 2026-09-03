@@ -6,24 +6,27 @@ Algerian Journal Officiel (JO) pages use a 2-column snake-flow layout:
   LEFT column  → fills top-to-bottom first
   RIGHT column → fills top-to-bottom second
 
-pdfplumber default extraction reads by y-position (horizontal bands),
-merging both columns into a single stream. Fix: two-pass per page —
-extract LEFT column first, then RIGHT column, concatenate.
+pdfplumber default reads by y-position (horizontal bands), merging both
+columns. Fix: two-pass per page (left then right).
 
-Preamble strip:
-  Hard-slice everything before the first STANDALONE 'Article 1er' header.
-  A standalone header is:
-    - Short line (≤ 60 chars)
-    - Starts with 'Article 1er' / 'Article 1ier' / 'Article Premier'
-    - NOT followed by citation markers ('de la loi', 'du décret', etc.)
+Gazette context:
+  JO issues often contain multiple laws. A PDF named 'loi 18-11.pdf' may
+  be a full gazette issue where loi 18-11 starts after other laws.
+  The preamble strip must find loi 18-11's OWN Article 1er, not the first
+  Article 1er in the gazette. Strategy:
+    1. Find the law-title anchor line (e.g. 'Loi n° 18-11 du ...')
+       by extracting the numeric identifier from the filename
+    2. Starting from that anchor, find the next standalone Article 1er header
+    3. Slice from Article 1er onward
+  Falls back to first-Article-1er if no anchor found.
 
 Usage (PowerShell):
     python legal_refs/validation/extract_pdfplumber.py
     python legal_refs/validation/extract_pdfplumber.py --pdf "Loi 04-20.pdf"
     python legal_refs/validation/extract_pdfplumber.py --all
 
-Dependencies: pip install pdfplumber  (already satisfied)
-Output:       legal_refs/pdf/<stem>.txt  (always overwrites)
+Dependencies: pip install pdfplumber
+Output: legal_refs/pdf/<stem>.txt  (always overwrites)
 """
 
 import argparse
@@ -38,72 +41,135 @@ DEFAULT_TARGETS = [
     "loi 18-11.pdf",
 ]
 
-# Matches the START of a standalone Article-1er header line.
+MAX_HEADER_LINE_LEN = 60
+
+# Article-1er header: starts with 'Article 1er/1ier/Premier', short, no citation marker
 _ART1ER_START_RE = re.compile(
     r"^\s*Article\s+(?:1(?:er|ier)?|[Pp]remier)\b",
     re.IGNORECASE,
 )
-
-# Citation markers that appear immediately after '1er' in preamble references:
-# e.g. 'Article 1er de la loi n° ...', 'Article 1er du décret ...'
 _CITATION_AFTER_RE = re.compile(
-    r"\b1(?:er|ier)?\s+(?:de\s+la|du|de\s+l['’]|de\s+l’|al-)",
+    r"\b1(?:er|ier)?\s+(?:de\s+la|du|de\s+l['’‘]|al-)",
     re.IGNORECASE,
 )
 
-MAX_HEADER_LINE_LEN = 60  # standalone headers are short
+# Any standalone Article-N header (short line starting with Article + digit)
+_ANY_ART_HDR_RE = re.compile(r"^\s*Article\s+\d", re.IGNORECASE)
 
 
 def _is_standalone_art1er(line: str) -> bool:
-    """
-    Return True only if this line is a standalone Article-1er section header,
-    not a mid-sentence citation to another law's article 1er.
-    """
-    stripped = line.strip()
-    if not _ART1ER_START_RE.match(stripped):
+    s = line.strip()
+    if not _ART1ER_START_RE.match(s):
         return False
-    if len(stripped) > MAX_HEADER_LINE_LEN:
+    if len(s) > MAX_HEADER_LINE_LEN:
         return False
-    if _CITATION_AFTER_RE.search(stripped):
+    if _CITATION_AFTER_RE.search(s):
         return False
     return True
 
 
+def _law_anchor_re(stem: str) -> "re.Pattern | None":
+    """
+    Build a regex that matches the law-title line in the gazette text.
+    Extracts the numeric identifier from the filename stem.
+    'loi 18-11' -> r'(?:loi|LOI|Loi)\s+n[o°]\.?\s*18.?11'
+    'Loi 01-19'  -> r'(?:loi|LOI|Loi)\s+n[o°]\.?\s*01.?19'
+    Returns None if no numeric id found.
+    """
+    # Find a pattern like '18-11' or '01-19' or '90-11' in the stem
+    m = re.search(r"(\d{2,4})[-\s](\d{2,3})", stem)
+    if not m:
+        return None
+    year, num = m.group(1), m.group(2)
+    # Build pattern: matches 'Loi n° 18-11' or 'loi no 18 11' etc.
+    pat = (
+        r"(?:[Ll][Oo][Ii]|[Oo]rdonnance|[Dd]écret)\s+"
+        r"n[o°º]\.?\s*"
+        + re.escape(year)
+        + r"[-\s]"
+        + re.escape(num)
+        + r"\b"
+    )
+    return re.compile(pat, re.IGNORECASE)
+
+
+def _strip_preamble(text: str, pdf_stem: str) -> str:
+    """
+    Find the law's own Article 1er and slice from there.
+
+    Strategy:
+    1. Build a law-anchor regex from the filename (e.g. '18-11').
+    2. Search for the anchor in the full text to find the law-title position.
+    3. From that position, search for the next standalone Article 1er header.
+    4. Slice from that Article 1er line onward.
+    Falls back to plain first-Article-1er if anchor not found.
+    """
+    lines = text.splitlines()
+    anchor_re = _law_anchor_re(pdf_stem)
+
+    # Determine the search start line (after law-title anchor if found)
+    search_from = 0
+    if anchor_re:
+        for i, line in enumerate(lines):
+            if anchor_re.search(line):
+                search_from = i
+                break  # use LAST anchor occurrence for safety? No, first is fine.
+                # For multi-law gazettes, we want the title of THIS law.
+                # If the law is cited in an earlier law's preamble too, we might
+                # hit that citation first. Use LAST match to be safe.
+        # Actually: use LAST match in case law is cited in its own preamble
+        last_anchor = 0
+        for i, line in enumerate(lines):
+            if anchor_re.search(line):
+                last_anchor = i
+        search_from = last_anchor
+
+    # From search_from, find the next standalone Article 1er header
+    for i in range(search_from, len(lines)):
+        if _is_standalone_art1er(lines[i]):
+            return "\n".join(lines[i:])
+
+    # Fallback: any short Article-N header after anchor
+    for i in range(search_from, len(lines)):
+        s = lines[i].strip()
+        if _ANY_ART_HDR_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
+            return "\n".join(lines[i:])
+
+    # No article found from anchor: try from beginning
+    for i, line in enumerate(lines):
+        if _is_standalone_art1er(line):
+            return "\n".join(lines[i:])
+
+    return text  # give up, return as-is
+
+
 def _detect_column_midpoint(page) -> float:
-    """Detect column divider x by finding largest word-centre gap in middle 20-80% of page."""
     try:
         words = page.extract_words(x_tolerance=3, y_tolerance=3)
     except Exception:
         return page.width / 2
-
     if not words:
         return page.width / 2
-
     centres = sorted((w["x0"] + w["x1"]) / 2 for w in words)
     if len(centres) < 10:
         return page.width / 2
-
     w = page.width
     lo, hi = w * 0.20, w * 0.80
     candidates = [c for c in centres if lo < c < hi]
     if not candidates or len(candidates) < 4:
         return page.width / 2
-
-    max_gap = 0.0
-    mid = page.width / 2
+    max_gap, mid = 0.0, page.width / 2
     for i in range(1, len(candidates)):
         gap = candidates[i] - candidates[i - 1]
         if gap > max_gap:
             max_gap = gap
             mid = (candidates[i] + candidates[i - 1]) / 2
-
     if not (w * 0.30 < mid < w * 0.70):
         return page.width / 2
     return mid
 
 
 def _extract_page_two_pass(page, mid: float) -> str:
-    """Extract page in snake-flow order: left column then right column."""
     h = page.height
     left = page.crop((0, 0, mid, h))
     right = page.crop((mid, 0, page.width, h))
@@ -113,36 +179,11 @@ def _extract_page_two_pass(page, mid: float) -> str:
     return "\n".join(parts)
 
 
-def _strip_preamble(text: str) -> str:
-    """
-    Hard-slice everything before the first STANDALONE 'Article 1er' header.
-
-    Falls back to first '^Article [digit]' at line start if no Article-1er
-    standalone header is found (handles decrees that start with Article 1).
-    """
-    lines = text.splitlines()
-
-    # Pass 1: standalone Article 1er header
-    for i, line in enumerate(lines):
-        if _is_standalone_art1er(line):
-            return "\n".join(lines[i:])
-
-    # Pass 2: fallback — any short Article-N header at line start
-    _any_art = re.compile(r"^\s*Article\s+\d", re.IGNORECASE)
-    for i, line in enumerate(lines):
-        stripped = line.strip()
-        if _any_art.match(stripped) and len(stripped) <= MAX_HEADER_LINE_LEN:
-            return "\n".join(lines[i:])
-
-    # No article found — return as-is
-    return text
-
-
 def extract_one(pdf_path: Path) -> str:
     try:
         import pdfplumber
     except ImportError:
-        print("ERROR: pdfplumber not installed. Run: pip install pdfplumber", file=sys.stderr)
+        print("ERROR: pdfplumber not installed.", file=sys.stderr)
         sys.exit(1)
 
     text_parts: list[str] = []
@@ -161,16 +202,16 @@ def extract_one(pdf_path: Path) -> str:
                 if t.strip():
                     text_parts.append(t)
     except Exception as e:
-        return f"[EXTRACT-ERROR: {pdf_path.name} — {e}]\n"
+        return f"[EXTRACT-ERROR: {pdf_path.name} \u2014 {e}]\n"
 
     if mid is None:
-        return f"[EXTRACT-ERROR: {pdf_path.name} — could not detect column midpoint]\n"
+        return f"[EXTRACT-ERROR: {pdf_path.name} \u2014 could not detect column midpoint]\n"
 
     raw = "\n".join(text_parts)
     if not raw.strip():
-        return f"[SCANNED: {pdf_path.name} — OCR required]\n"
+        return f"[SCANNED: {pdf_path.name} \u2014 OCR required]\n"
 
-    return _strip_preamble(raw)
+    return _strip_preamble(raw, pdf_path.stem)
 
 
 def process(pdf_name: str) -> None:
@@ -179,43 +220,30 @@ def process(pdf_name: str) -> None:
         name_lower = pdf_name.lower()
         matches = [f for f in PDF_DIR.iterdir() if f.name.lower() == name_lower]
         if not matches:
-            print(f"[NO-PDF]  {pdf_name} — not found in {PDF_DIR}")
+            print(f"[NO-PDF]  {pdf_name} \u2014 not found in {PDF_DIR}")
             return
         p = matches[0]
-
     text = extract_one(p)
     out = p.with_suffix(".txt")
     out.write_text(text, encoding="utf-8")
-
     if text.startswith("["):
-        print(f"[WARN]    {out.name} — {text[:80].strip()}")
+        print(f"[WARN]    {out.name} \u2014 {text[:80].strip()}")
     else:
         print(f"[OK]      {out.name}  ({len(text):,} chars)")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(
-        description="Tier 2 two-pass column extractor for JO gazette PDFs."
-    )
+    parser = argparse.ArgumentParser()
     parser.add_argument("--pdf", help="Single PDF filename in legal_refs/pdf/")
-    parser.add_argument(
-        "--all",
-        action="store_true",
-        help="Re-extract every PDF in legal_refs/pdf/ using pdfplumber",
-    )
+    parser.add_argument("--all", action="store_true")
     args = parser.parse_args()
-
     if args.pdf:
         process(args.pdf)
     elif args.all:
-        pdfs = sorted(PDF_DIR.glob("*.pdf"))
-        if not pdfs:
-            print(f"No PDFs found in {PDF_DIR}")
-            return
-        for pdf in pdfs:
+        for pdf in sorted(PDF_DIR.glob("*.pdf")):
             process(pdf.name)
     else:
-        print("Tier 2 re-extraction — default targets (use --all for full corpus):")
+        print("Tier 2 re-extraction \u2014 default targets (use --all for full corpus):")
         for name in DEFAULT_TARGETS:
             process(name)
 
