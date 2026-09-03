@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-extract_pdf_text.py — W99 (updated: page-range support)
+extract_pdf_text.py — W99 (updated: page-range support, seek-closed-file fix)
 Batch PDF → plain-text extractor for the diff_articles.py pipeline.
 
 Reads legal_refs/validation/paired_audit_queue.json, finds each PDF in
@@ -52,6 +52,10 @@ def extract_text_pages(pdf_path: Path, page_range: tuple[int, int] | None = None
     """
     Extract plain text from a PDF using pdfminer.six.
     page_range: (start, end) 1-based inclusive. None = full document.
+
+    IMPORTANT: The file must remain open while process_page() runs because
+    PDFPage objects hold references to the file handle for lazy parsing.
+    Do NOT close the file before processing is complete.
     """
     try:
         from pdfminer.pdfpage import PDFPage
@@ -65,22 +69,26 @@ def extract_text_pages(pdf_path: Path, page_range: tuple[int, int] | None = None
         device = TextConverter(rsrcmgr, output, laparams=LAParams())
         interpreter = PDFPageInterpreter(rsrcmgr, device)
 
+        # Keep file open for the entire processing loop — page objects reference
+        # the file handle and will raise "seek of closed file" if it closes early.
         with open(pdf_path, "rb") as f:
-            pages = list(PDFPage.get_pages(f))
+            all_pages = list(PDFPage.get_pages(f))
 
-        if page_range is not None:
-            start, end = page_range
-            start = max(1, start)
-            end = min(len(pages), end)
-            selected = pages[start - 1:end]
-        else:
-            selected = pages
+            if page_range is not None:
+                start, end = page_range
+                start = max(1, start)
+                end = min(len(all_pages), end)
+                selected = all_pages[start - 1:end]
+            else:
+                selected = all_pages
 
-        if not selected:
-            return f"[EMPTY-RANGE: {pdf_path.name} — no pages in range {page_range}]\n"
+            if not selected:
+                device.close()
+                output.close()
+                return f"[EMPTY-RANGE: {pdf_path.name} — no pages in range {page_range}]\n"
 
-        for page in selected:
-            interpreter.process_page(page)
+            for page in selected:
+                interpreter.process_page(page)
 
         text = output.getvalue()
         device.close()
