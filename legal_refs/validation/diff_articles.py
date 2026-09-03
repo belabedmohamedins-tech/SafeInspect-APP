@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W98
+diff_articles.py — W98 (updated W99: ordinal key normalisation 1er→1)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -87,7 +87,6 @@ _LIGATURES = str.maketrans({
 })
 
 # mojibake sequences produced when UTF-8 é à etc. is misread as latin-1/cp1252
-# Map the resulting multi-char sequences back to the original char for normalisation
 _MOJIBAKE = [
     ("\u00c3\u00a9", "e"),   # é
     ("\u00c3\u00a8", "e"),   # è
@@ -110,42 +109,50 @@ _MOJIBAKE = [
 
 def _normalise(text: str) -> str:
     """Lowercase, strip diacritics/ligatures/mojibake, collapse whitespace."""
-    # Fix mojibake before anything else
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
     text = text.translate(_LIGATURES)
     text = text.lower()
-    # Strip markdown symbols
     text = re.sub(r"[#*_`~>|\\]", " ", text)
-    # Strip article header prefix
-    text = re.sub(r"^art(?:icle[r]?)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"^art(?:icle)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
 
 # ---------------------------------------------------------------------------
-# MD article extractor
-# Four formats observed in legal_refs/md/ files:
-#   1. ## Article 1er — heading
-#   2. **Article 1er.** — text on same line or next line (most common)
-#   3. **Art. 2.** — short form bold inline
-#   4. Article 1er. plain line
+# Ordinal key normalisation: 1er / 1ère / 2e → bare digit
 # ---------------------------------------------------------------------------
 
-# Format 1: heading  ## Article N
+def _normalise_article_key(raw: str) -> str:
+    """
+    Normalise article number keys so ordinal suffixes don't create duplicates.
+    Examples: '1er' -> '1', '1ere' -> '1', '2e' -> '2', '3eme' -> '3'
+    Pure digits are stripped of leading zeros: '01' -> '1'.
+    Mixed alphanumeric like '12bis' are kept as-is (lowercased).
+    """
+    num = raw.lower().lstrip("0") or "0"
+    # Strip French ordinal suffixes: er, re, ère, ere, ème, eme, e
+    # Only when the suffix follows pure digits (not '12bis' etc.)
+    cleaned = re.sub(r"^(\d+)(?:è?re?|è?me?|e)$", r"\1", num)
+    if re.fullmatch(r"\d+", cleaned):
+        return str(int(cleaned))
+    return cleaned
+
+
+# ---------------------------------------------------------------------------
+# MD article extractor
+# ---------------------------------------------------------------------------
+
 _MD_ART_HEADING_RE = re.compile(
     r"^#{1,4}\s*[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\b[^\n]*\n(.*?)(?=^#{1,4}\s*[Aa]rt|\Z)",
     re.MULTILINE | re.DOTALL,
 )
 
-# Format 2 & 3: **Article 1er.** or **Art. 2.** — bold inline, rest of line is article title/text
-# Captures: number, then everything on the rest of that line + following lines until next article
 _MD_ART_BOLD_INLINE_RE = re.compile(
     r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
     re.DOTALL,
 )
 
-# Format 4: plain line  Article 1er. — text
 _MD_ART_PLAIN_RE = re.compile(
     r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
     re.DOTALL,
@@ -157,10 +164,7 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
     articles: dict[str, str] = {}
     for pattern in (_MD_ART_HEADING_RE, _MD_ART_BOLD_INLINE_RE, _MD_ART_PLAIN_RE):
         for m in pattern.finditer(md_text):
-            num = m.group(1).lower().lstrip("0") or "0"
-            # Normalise '1er' -> '1er', pure digits strip leading zeros
-            if re.fullmatch(r"\d+", num):
-                num = str(int(num))
+            num = _normalise_article_key(m.group(1))
             if num not in articles:
                 articles[num] = m.group(2).strip()
     return articles
@@ -170,19 +174,16 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 # PDF article extractor
 # ---------------------------------------------------------------------------
 
-# Pattern 1: Article N [sep] text on same line
 _PDF_ART_SEP_RE = re.compile(
     r"(?mi)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
     re.DOTALL,
 )
 
-# Pattern 2: Article N bare (nothing else on line)
 _PDF_ART_BARE_RE = re.compile(
     r"(?mi)^[Aa]rticle[r]?\s+(\d+\w*)\s*\n(.*?)(?=^[Aa]rticle[r]?\s+\d|\Z)",
     re.DOTALL,
 )
 
-# Pattern 3: Art. N short form
 _PDF_ART_SHORT_RE = re.compile(
     r"(?mi)^[Aa]rt\.\s*(\d+\w*)\s*[.:\u2013\u2014 \t-][^\n]*\n(.*?)(?=^[Aa]rt\.\s*\d|\Z)",
     re.DOTALL,
@@ -194,9 +195,7 @@ def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     articles: dict[str, str] = {}
     for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
-            num = m.group(1).lower().lstrip("0") or "0"
-            if re.fullmatch(r"\d+", num):
-                num = str(int(num))
+            num = _normalise_article_key(m.group(1))
             if num not in articles:
                 articles[num] = m.group(2).strip()
     return articles

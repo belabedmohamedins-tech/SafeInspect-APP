@@ -74,7 +74,7 @@ Le procès-verbal comporte :
 Les méthodes d'échantillonnage, de conservation et de manipulation des échantillons ainsi que les modalités d'analyses sont effectuées selon les normes algériennes en vigueur.
 
 ## Article 13
-Toutes dispositions contraires au présent décret et notamment les dispositions du décret exécutif n° 93-160 du 10 juillet 1993 sont abrogées.
+Toutes dispositions contraires au présent décret et notamment les dispositions du décret exécutif n° 93-160 du 10 juillet 1993, susvisé, sont abrogées.
 
 ## Article 14
 Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
