@@ -30,12 +30,12 @@ W100 patches (2026-09-03):
            so "Article N" appears mid-line after a long whitespace run, not at ^.
            Fix: _PDF_ART_SEP_RE / _PDF_ART_BARE_RE / _PDF_ART_SHORT_RE now also match
            after 4+ whitespace chars on the same line (gazette column separator).
-           The pre-processor inserts \n before these markers so ^ fires on them.
+           The pre-processor inserts \\n before these markers so ^ fires on them.
   MODE B — content scramble (loi-18-11 3.6%): pdfminer double-space column padding
-           and \u00a0 (non-breaking space) survive \s+ collapse in some builds.
+           and \\u00a0 (non-breaking space) survive \\s+ collapse in some builds.
            Fix: _normalise() now maps all Unicode whitespace variants to ' ' explicitly
-           before the regex collapse, including \u00a0, \u202f, \u2009, \u2002, \u2003.
-  MODE C — decret-11-125 77.8%: same \u00a0 issue, same fix as MODE B.
+           before the regex collapse, including \\u00a0, \\u202f, \\u2009, \\u2002, \\u2003.
+  MODE C — decret-11-125 77.8%: same \\u00a0 issue, same fix as MODE B.
 
 W101 patches (2026-09-03):
   article_range — queue entries may carry {"article_range": [start, end]} (inclusive).
@@ -47,11 +47,11 @@ W101 patches (2026-09-03):
 
 W102 patches (2026-09-03):
   MODE D — Art.3 PARTIAL (0.53): gazette two-column layout produces intra-sentence
-           newlines inside article body text (e.g. "radionucléi\net\nchimiques").
-           These survive the \s+ collapse because \s+ treats \n as whitespace but
+           newlines inside article body text (e.g. "radionucléi\\net\\nchimiques").
+           These survive the \\s+ collapse because \\s+ treats \\n as whitespace but
            the surrounding letters are not whitespace so the word boundary breaks.
-           Fix: _normalise() now replaces \n (and \r\n / \r) with a single space
-           BEFORE the \s+ collapse step. This re-joins hyphenated column breaks too.
+           Fix: _normalise() now replaces \\n (and \\r\\n / \\r) with a single space
+           BEFORE the \\s+ collapse step. This re-joins hyphenated column breaks too.
   MODE E — Art.9 MISMATCH (0.29): PDF body of last article runs past the decree text
            into the gazette publication footer ("18 Rabie Ethani 1432 / 23 mars 2011 /
            JOURNAL OFFICIEL..."). The article regex has no sentinel to stop at because
@@ -76,11 +76,11 @@ W104 patches (2026-09-03):
            mapping and whitespace normalisation these survive as "traitement ," which
            scores very low against the clean MD "traitement,".
            Fix: _normalise() now strips space-before-punctuation ( ,  ;  :  . ) after
-           the \s+ collapse step, mapping "word ," → "word,". Applied to both MD and
+           the \\s+ collapse step, mapping "word ," → "word,". Applied to both MD and
            PDF snippets so scoring is symmetric.
 
 W105 patches (2026-09-03):
-  MODE H — decret-17-140 Art.9 MISMATCH (0.02): _PDF_ART_SEP_RE captured [^\n]* on
+  MODE H — decret-17-140 Art.9 MISMATCH (0.02): _PDF_ART_SEP_RE captured [^\\n]* on
            the header separator line and discarded it entirely, so when the article
            body starts inline on the same line as "Art. 9. —" the opening sentence
            was lost. PDF snippet started at "nécessaires aux opérations" (mid-sentence)
@@ -131,6 +131,34 @@ W108 patches (2026-09-03):
            The output tag changes to [txt_override] for traceability.
            This flag coexists with pdf_pages (still used as metadata) but suppresses
            the live pymupdf call.
+
+W109 patches (2026-09-03):
+  MODE L — OCR article-number misread (decret-02-427 4.2% persisting after W108):
+           Tesseract OCR misreads specific article number tokens in JORADP gazette
+           typography. Three confirmed misread classes:
+             (a) "Article ler" / "Art. ler" — OCR reads ordinal "1er" as "ler"
+                 (digit 1 → lowercase l). _PDF_ART_SEP_RE requires \\d+ so "ler"
+                 never matches → Art.1 silently dropped (PDF_ONLY or MD_ONLY).
+             (b) "Art. Il." — OCR reads "11" as "Il" (digit 1 twice → I + l).
+                 Same \\d+ failure → Art.11 dropped.
+             (c) "AÃ¯t." / "Aït." — OCR/mojibake of "Art." in some gazette fonts.
+                 → Art.4 dropped.
+           Fix: new _ocr_normalise_article_markers(text) pre-processor applied to
+           raw .txt content BEFORE _inject_article_newlines() and regex extraction:
+             • r'\\bArt(?:icle)?\\s*\\.?\\s*ler\\b' → 'Art. 1er'  (l→1 ordinal)
+             • r'\\bArt\\.\\s*Il\\b'                → 'Art. 11'   (Il→11)
+             • r'\\bA[iï]t\\.'                      → 'Art.'      (Aït→Art mojibake)
+           Applied to PDF/OCR text only. MD text is not affected.
+  MODE M — MD bold-inline Art.1er body empty (decret-02-427): the MD file uses
+           "**Article 1er.** — body text on same line" format. The existing
+           _MD_ART_BOLD_INLINE_RE captured group(2) as only subsequent lines
+           (after the header line newline), discarding the inline body fragment
+           "— body text on same line". Result: Art.1er body = '' → MD_ONLY.
+           Fix: _MD_ART_BOLD_INLINE_RE now uses a single-line header pattern that
+           captures (a) the inline remainder after the article number token on the
+           header line, and (b) all subsequent lines up to the next **Art marker.
+           extract_md_articles() prepends the inline fragment to the body for
+           bold-inline matches, mirroring the W105 fix for PDF extraction.
 """
 
 import argparse
@@ -283,16 +311,16 @@ _SPACE_BEFORE_PUNCT_RE = re.compile(r'\s+([,;:.])')
 
 def _normalise(text: str) -> str:
     """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace.
-    W102: replace newlines with space before \s+ collapse so intra-sentence
+    W102: replace newlines with space before \\s+ collapse so intra-sentence
     column-break newlines (gazette two-column artefact) are treated as spaces.
-    W104: strip spurious space before punctuation (, ; : .) after \s+ collapse.
+    W104: strip spurious space before punctuation (, ; : .) after \\s+ collapse.
     """
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
     text = text.translate(_LIGATURES)   # includes \u00a0 → ' ' (W100)
     text = text.lower()
     text = re.sub(r"[#*_`~>|\\]", " ", text)
-    text = re.sub(r"^art(?:icle[r]?)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"^art(?:icle[r]?)?\\s*\\.?\\s*\\d+\\w*[\\s.:\\u2013\\u2014-]*", "", text, flags=re.IGNORECASE)
     # W102 MODE D: replace all newline variants with space BEFORE whitespace collapse
     text = text.replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
     text = re.sub(r"\s+", " ", text).strip()
@@ -317,6 +345,56 @@ def _normalise_article_key(raw: str) -> str:
     if re.fullmatch(r"\d+", cleaned):
         return str(int(cleaned))
     return cleaned
+
+
+# ---------------------------------------------------------------------------
+# W109 MODE L: OCR article-marker normaliser (applied to .txt before extraction)
+# ---------------------------------------------------------------------------
+
+# Pattern (a): "Article ler" / "Art. ler" — OCR reads "1er" as "ler"
+_OCR_LER_RE = re.compile(
+    r'\b(Art(?:icle)?\s*\.?\s*)ler\b',
+    re.IGNORECASE,
+)
+
+# Pattern (b): "Art. Il." — OCR reads "11" as "Il"
+_OCR_IL_RE = re.compile(
+    r'\bArt\.\s*Il\b',
+    re.IGNORECASE,
+)
+
+# Pattern (c): "Aït." / "AÃ¯t." — OCR/mojibake of "Art."
+# Covers: Aït, Aïl, AÃ¯t (two-byte mojibake of ï)
+_OCR_AIT_RE = re.compile(
+    r'\bA(?:[\xef\u00ef]|\u00c3\u00af)t\.',
+    re.IGNORECASE,
+)
+# Also catch ASCII-range OCR variant "Aît." where î is present
+_OCR_AIT2_RE = re.compile(
+    r'\bA[iî]t\.',
+    re.IGNORECASE,
+)
+
+
+def _ocr_normalise_article_markers(text: str) -> str:
+    """
+    W109 MODE L: normalise known OCR misreads of article number tokens
+    before regex extraction fires. Applied to raw OCR .txt only.
+
+    Transformations (in order):
+      (c) Aït. / AÃ¯t.  → Art.   (must run before pattern (a) to avoid
+                                   re-introducing 'Art. ler' from 'Aït. ler')
+      (b) Art. Il        → Art. 11
+      (a) Art[icle] ler  → Art. 1er
+    """
+    # (c) Aït-variants → Art
+    text = _OCR_AIT_RE.sub('Art.', text)
+    text = _OCR_AIT2_RE.sub('Art.', text)
+    # (b) Art. Il → Art. 11
+    text = _OCR_IL_RE.sub('Art. 11', text)
+    # (a) Art[icle] ler → Art. 1er
+    text = _OCR_LER_RE.sub(r'\g<1>1er', text)
+    return text
 
 
 # ---------------------------------------------------------------------------
@@ -365,7 +443,7 @@ def _strip_pdf_trailer(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# MD article extractor  (W103: re.IGNORECASE added to all three patterns)
+# MD article extractor  (W103: re.IGNORECASE; W109 MODE M: bold-inline body fix)
 # ---------------------------------------------------------------------------
 
 _MD_ART_HEADING_RE = re.compile(
@@ -373,8 +451,14 @@ _MD_ART_HEADING_RE = re.compile(
     re.MULTILINE | re.DOTALL | re.IGNORECASE,
 )
 
+# W109 MODE M: three capture groups:
+#   group(1) = article number token
+#   group(2) = inline remainder on header line after the number+separator (may be empty)
+#   group(3) = subsequent lines body up to next **Art marker
 _MD_ART_BOLD_INLINE_RE = re.compile(
-    r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
+    r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}"
+    r"[^\n]*?(?:[-\u2013\u2014]\s*)([^\n]*)\n"
+    r"(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
     re.DOTALL | re.IGNORECASE,
 )
 
@@ -387,16 +471,33 @@ _MD_ART_PLAIN_RE = re.compile(
 def extract_md_articles(md_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from a Markdown file."""
     articles: dict[str, str] = {}
-    for pattern in (_MD_ART_HEADING_RE, _MD_ART_BOLD_INLINE_RE, _MD_ART_PLAIN_RE):
-        for m in pattern.finditer(md_text):
-            num = _normalise_article_key(m.group(1))
-            if num not in articles:
-                articles[num] = m.group(2).strip()
+
+    # Heading pattern (unchanged)
+    for m in _MD_ART_HEADING_RE.finditer(md_text):
+        num = _normalise_article_key(m.group(1))
+        if num not in articles:
+            articles[num] = m.group(2).strip()
+
+    # W109 MODE M: bold-inline — prepend inline fragment to body
+    for m in _MD_ART_BOLD_INLINE_RE.finditer(md_text):
+        num = _normalise_article_key(m.group(1))
+        if num not in articles:
+            inline = m.group(2).strip()   # text on header line after "—"
+            rest = m.group(3).strip()     # subsequent lines
+            body = (inline + "\n" + rest).strip() if inline else rest
+            articles[num] = body
+
+    # Plain pattern (unchanged)
+    for m in _MD_ART_PLAIN_RE.finditer(md_text):
+        num = _normalise_article_key(m.group(1))
+        if num not in articles:
+            articles[num] = m.group(2).strip()
+
     return articles
 
 
 # ---------------------------------------------------------------------------
-# PDF article extractor  (W100/W105)
+# PDF article extractor  (W100/W105/W109)
 # ---------------------------------------------------------------------------
 
 _MIDLINE_ARTICLE_RE = re.compile(
@@ -430,6 +531,8 @@ _PDF_ART_SHORT_RE = re.compile(
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from plain PDF-extracted text."""
     pdf_text = _strip_pdf_trailer(pdf_text)
+    # W109 MODE L: normalise OCR article-number misreads before any regex fires
+    pdf_text = _ocr_normalise_article_markers(pdf_text)
     pdf_text = _inject_article_newlines(pdf_text)
     articles: dict[str, str] = {}
 
