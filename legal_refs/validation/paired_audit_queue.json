@@ -1,215 +1,312 @@
 {
-  "total_pairs": 26,
+  "schema_version": "2.0",
+  "generated": "2026-09-03",
+  "description": "Corpus-wide PDF→MD pairing map. diff_status: UNVERIFIED = batch diff not yet run; MATCH = tool-verified; VERIFIED_W98 = verified in session W98; NO_MD = no MD counterpart exists.",
+  "total_pairs": 44,
+  "total_unpaired_pdfs": 5,
   "pairs": [
     {
-      "md": "arrete-interministeriel-1999-11-21-conservation-aliments.md",
+      "md": "legal_refs/md/arrete-interministeriel-1999-11-21-conservation-aliments.md",
       "pdf": "Arrêté interministériel du 21 novembre 1999.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 3
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "arrete-interministeriel-2011-02-06-permis-construire-energie.md",
+      "md": "legal_refs/md/arrete-interministeriel-2011-02-06-permis-construire-energie.md",
       "pdf": "arrete-interministeriel-2011-02-06-permis-construire-energie.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 26,
-      "pages": 5
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
+      "md": "legal_refs/md/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
       "pdf": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "pages": 22
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "arrete-interministeriel-2025-05-07-hygiene-restauration.md",
+      "md": "legal_refs/md/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
       "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "pages": 5
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-01-102-creation-ona.md",
+      "md": "legal_refs/md/decret-01-102-creation-ona.md",
       "pdf": "decret 01-102.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 37,
-      "pages": 6
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-02-427-prevention-risques-professionnels.md",
+      "md": "legal_refs/md/decret-02-427-prevention-risques-professionnels.md",
       "pdf": "Décret 02-427.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 7,
-      "minor_errors": 0,
-      "pages": 24
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-04-410-regles-installations-traitement-dechets.md",
+      "md": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
       "pdf": "Décret 04-410.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 6,
-      "minor_errors": 0,
-      "pages": 5
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-04-82-agrement-sanitaire-elevage.md",
+      "md": "legal_refs/md/decret-04-82-agrement-sanitaire-elevage.md",
       "pdf": "Décret 04-82.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 4,
-      "minor_errors": 0,
-      "pages": 30
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-05-315-declaration-dechets-speciaux-dangereux.md",
+      "md": "legal_refs/md/decret-05-315-declaration-dechets-speciaux-dangereux.md",
       "pdf": "Decret 05-315.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "pages": 4
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-06-138-emissions-atmospheriques.md",
+      "md": "legal_refs/md/decret-06-198-etablissements-classes.md",
+      "pdf": "Decret 06-198.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-07-144-nomenclature-installations-classees.md",
+      "pdf": "Décret 07-144.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-07-205-schema-communal-dechets.md",
+      "pdf": "Decret 07-205.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-09-19.md",
+      "pdf": "decret 09-19.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-09-335-plans-internes-intervention.md",
+      "pdf": "Décret 09-335.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-17-140-hygiene-alimentaire.md",
+      "pdf": "Decret 17-140.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-21-261-esp-equipements-hydrocarbures.md",
+      "pdf": "dec 21-261.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-21-319-autorisation-exploitation-hydrocarbures.md",
+      "pdf": "decret 21-319.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-21-430-gpl-carburant.md",
+      "pdf": "21-430.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-22-167-etablissements-classes-modification.md",
+      "pdf": "22-167.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-24-196-etablissements-classes-modification.md",
+      "pdf": "decret 24-196.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-25-63-plans-intervention-catastrophes.md",
+      "pdf": "decret-25-63-plans-intervention-catastrophes.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-76-35-igh-incendie.md",
+      "pdf": "Décret 76-35.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-76-36-incendie-panique.md",
+      "pdf": "decret 76-36.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-83-496-gpl-carburant.md",
+      "pdf": "Décret 83-496.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-90-245-appareils-pression-gaz.md",
+      "pdf": "decret-90-245-appareils-pression-gaz.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-91-05-hygiene-securite-milieu-travail.md",
+      "pdf": "decret-91-05-hygiene-securite-milieu-travail.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/decret-93-120-medecine-du-travail.md",
+      "pdf": "decret 93-120.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/decret-06-138-emissions-atmospheriques.md",
       "pdf": "Décret 06-138.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 13
+      "diff_status": "UNVERIFIED",
+      "note": "MD at legal_refs/ root (not in md/ subdir)"
     },
     {
-      "md": "decret-06-141-effluents-liquides.md",
+      "md": "legal_refs/decret-06-141-effluents-liquides.md",
       "pdf": "decret 06-141.pdf",
       "pdf_pages": [4, 7],
-      "note": "Gazette J.O. n°26 (27 pages). Décret 06-141 on pages 4–7 only. pdf_pages scopes extraction.",
-      "status": "PENDING DIFF — re-run after page-range fix",
-      "critical_errors": 0,
-      "minor_errors": 0,
-      "pages": 4
+      "diff_status": "MATCH",
+      "note": "W100 MATCH confirmed 2026-09-03. Gazette J.O. n°26 (27 pages). Décret 06-141 on pages 4–7 only."
     },
     {
-      "md": "decret-06-198-etablissements-classes.md",
-      "pdf": "Decret 06-198.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 7
-    },
-    {
-      "md": "decret-07-144-nomenclature-installations-classees.md",
-      "pdf": "Décret 07-144.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 1,
-      "minor_errors": 0,
-      "pages": 102
-    },
-    {
-      "md": "decret-07-205-schema-communal-dechets.md",
-      "pdf": "Decret 07-205.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 3,
-      "minor_errors": 0,
-      "pages": 3
-    },
-    {
-      "md": "decret-09-19.md",
-      "pdf": "decret 09-19.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 11,
-      "pages": 4
-    },
-    {
-      "md": "decret-09-335-plans-internes-intervention.md",
-      "pdf": "Décret 09-335.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 2,
-      "minor_errors": 0,
-      "pages": 5
-    },
-    {
-      "md": "decret-11-125-eau-consommation-humaine.md",
+      "md": "legal_refs/decret-11-125-eau-consommation-humaine.md",
       "pdf": "decret 11-125.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 4
+      "diff_status": "VERIFIED_W98",
+      "note": "W98 diff-verified 2026-09-03. MD at legal_refs/ root."
     },
     {
-      "md": "decret-17-140-hygiene-alimentaire.md",
-      "pdf": "Decret 17-140.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 64,
-      "minor_errors": 0,
-      "pages": 31
+      "md": "legal_refs/md/loi-01-19-gestion-dechets.md",
+      "pdf": "Loi 01-19.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-21-261-esp-equipements-hydrocarbures.md",
-      "pdf": "dec 21-261.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 47,
-      "pages": 14
+      "md": "legal_refs/md/loi-03-10-protection-environnement.md",
+      "pdf": "Loi-03-10.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-21-319-autorisation-exploitation-hydrocarbures.md",
-      "pdf": "decret 21-319.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 60,
-      "pages": 14
+      "md": "legal_refs/md/loi-04-08-activites-commerciales.md",
+      "pdf": "LOI 04-08.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-21-430-gpl-carburant.md",
-      "pdf": "21-430.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 30,
-      "minor_errors": 0,
-      "pages": 28
+      "md": "legal_refs/md/loi-04-20-risques-majeurs.md",
+      "pdf": "Loi 04-20.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-22-167-etablissements-classes-modification.md",
-      "pdf": "22-167.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 6
+      "md": "legal_refs/md/loi-05-12-ressources-en-eau.md",
+      "pdf": "loi 05-12.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-24-196-etablissements-classes-modification.md",
-      "pdf": "decret 24-196.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 2
+      "md": "legal_refs/md/loi-09-03-protection-consommateur.md",
+      "pdf": "loi-09-03-protection-consommateur.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-76-35-igh-incendie.md",
-      "pdf": "Décret 76-35.pdf",
-      "status": "VERIFIED WITH MINOR ISSUES",
-      "critical_errors": 0,
-      "minor_errors": 1,
-      "pages": 3
+      "md": "legal_refs/md/loi-18-09-protection-consommateur.md",
+      "pdf": "loi 18-09fr.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
     },
     {
-      "md": "decret-76-36-incendie-panique.md",
-      "pdf": "decret 76-36.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 14,
-      "minor_errors": 0,
-      "pages": 8
+      "md": "legal_refs/md/loi-18-11-sante-partie1-arts1-164.md",
+      "pdf": "loi 18-11.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "SPLIT FILE — partie1 covers Arts.1-164. Run with page range covering partie1 only."
     },
     {
-      "md": "decret-83-496-gpl-carburant.md",
-      "pdf": "Décret 83-496.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 22,
-      "minor_errors": 0,
-      "pages": 48
+      "md": "legal_refs/md/loi-18-11-sante-partie2-arts165-264.md",
+      "pdf": "loi 18-11.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "SPLIT FILE — partie2 covers Arts.165-264."
+    },
+    {
+      "md": "legal_refs/md/loi-18-11-sante-partie3-arts265-450.md",
+      "pdf": "loi 18-11.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "SPLIT FILE — partie3 covers Arts.265-450."
+    },
+    {
+      "md": "legal_refs/md/loi-19-02-incendie-panique.md",
+      "pdf": "loi 19-02.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/loi-88-07-hygiene-securite-medecine-travail.md",
+      "pdf": "Loi 88-07-Hygiene-securite-et-medecine-du-travail.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/loi-90-11-relations-travail.md",
+      "pdf": "LOI 90-11.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    },
+    {
+      "md": "legal_refs/md/loi-90-29-urbanisme.md",
+      "pdf": "loi-90-29-urbanisme.pdf",
+      "diff_status": "UNVERIFIED",
+      "note": "diff_tool_status: UNVERIFIED"
+    }
+  ],
+  "unpaired_pdfs": [
+    {
+      "pdf": "06-138 JO.pdf",
+      "md": null,
+      "diff_status": "NO_MD",
+      "note": "Duplicate JO gazette — Décret 06-138 already covered by 'Décret 06-138.pdf' → decret-06-138-emissions-atmospheriques.md"
+    },
+    {
+      "pdf": "20 sep 83 1.pdf",
+      "md": null,
+      "diff_status": "NO_MD",
+      "note": "Arrêté 1983 GPL stations part 1 — candidate: projet-arrete-gpl-installations-securite.md or decret-83-496-gpl-carburant.md. Needs manual mapping."
+    },
+    {
+      "pdf": "20 sep 83 2.pdf",
+      "md": null,
+      "diff_status": "NO_MD",
+      "note": "Arrêté 1983 GPL stations part 2 — same as above."
+    },
+    {
+      "pdf": "Arrêté intermin. du 31 août 1983 (équipement véhicules GPL C).pdf",
+      "md": null,
+      "diff_status": "NO_MD",
+      "note": "No MD counterpart found in repo."
+    },
+    {
+      "pdf": "Arrêté interministériel du 20 septembre 1983 (stations distribution GPL).pdf",
+      "md": null,
+      "diff_status": "NO_MD",
+      "note": "Likely same content as '20 sep 83 1.pdf' — verify before creating MD."
+    }
+  ],
+  "md_without_pdf": [
+    {
+      "md": "legal_refs/md/projet-arrete-gpl-installations-securite.md",
+      "note": "Project/draft document — no official published PDF in pdf/ directory."
     }
   ]
 }
