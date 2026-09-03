@@ -12,6 +12,96 @@ This rule exists because two things almost happened on 2026-09-03: fabricated WH
 
 ---
 
+## SCRIPT DOWNLOAD AND PATCH SAFETY (mandatory — never skip)
+
+Added 2026-09-03 after a multi-hour loop caused by a single unsafe download command.
+
+### Root causes of the loop
+
+1. **`Invoke-WebRequest` writes HTML, not raw Python.** The command `(Invoke-WebRequest -Uri "...").Content | Set-Content ... -Encoding UTF8` fetches GitHub's *web-rendered HTML page*, not the raw file. The `.Content` property contains HTML entities (`&lt;`, `&gt;`) and Unicode escape sequences stored as literal text (`\u2014` = 6 chars, not the em-dash character). Every subsequent patch was fighting a file that was corrupted at the source.
+
+2. **No verification gate before executing.** After every download or patch, the extractor was run immediately against real data. Failures were only diagnosed by observing wrong output — not by checking the file itself first. A 30-second gate would have caught each issue immediately.
+
+### Rule 1 — Only one safe download method
+
+Never use `Invoke-WebRequest` to download Python scripts from GitHub.
+
+**Correct method — always:**
+```powershell
+@"
+import urllib.request
+url = "https://raw.githubusercontent.com/OWNER/REPO/main/path/to/script.py"
+content = urllib.request.urlopen(url).read().decode('utf-8')
+open('path/to/script.py', 'w', encoding='utf-8').write(content)
+print('Downloaded', len(content), 'chars')
+"@ | Out-File -FilePath _dl.py -Encoding utf8
+python _dl.py
+```
+
+Key requirements:
+- URL must be `raw.githubusercontent.com/...` — never `github.com/blob/...`
+- Write with `encoding='utf-8'` (no BOM)
+- Decode with `.decode('utf-8')` (not `latin-1`, not default)
+
+### Rule 2 — Mandatory verification gate after every download or patch
+
+Run all three checks before executing the script against corpus data:
+
+```powershell
+@"
+import re, sys
+path = 'legal_refs/validation/extract_pdfplumber.py'  # adjust as needed
+
+# Gate 1: no BOM
+content = open(path, encoding='utf-8').read()
+if content.startswith('\ufeff'):
+    print('FAIL: BOM present — re-download with utf-8-sig decode')
+    sys.exit(1)
+print('Gate 1 PASS: no BOM')
+
+# Gate 2: critical line repr check
+lines = content.splitlines()
+for i, line in enumerate(lines):
+    if 'LAW_START_RE' in line and 'compile' in line:
+        print('Gate 2 line', i+1, ':', repr(lines[i+1] if i+1 < len(lines) else line))
+        break
+
+# Gate 3: regex self-test against known good string
+exec(content, {})
+import importlib.util, types
+ns = {}
+exec(content, ns)
+LAW_START_RE = ns.get('_LAW_START_RE')
+if LAW_START_RE is None:
+    print('FAIL: _LAW_START_RE not found in file')
+    sys.exit(1)
+test = 'Article 1er. \u2014 La pr\u00e9sente loi'
+if LAW_START_RE.match(test):
+    print('Gate 3 PASS: regex matches test string')
+else:
+    print('FAIL: regex does not match \"' + test + '\"')
+    sys.exit(1)
+print('All gates passed — safe to run')
+"@ | Out-File -FilePath _verify.py -Encoding utf8
+python _verify.py
+```
+
+Only proceed if all three gates print PASS.
+
+### Rule 3 — After any `git pull` conflict
+
+If `git pull` is rejected with `Your local changes would be overwritten`, do not force-push local patches. The correct sequence:
+
+```powershell
+git fetch origin
+git reset --hard origin/main
+# Then re-download the specific file via Rule 1 if needed
+```
+
+This prevents local patch commits diverging from MCP-pushed commits, which causes non-fast-forward push failures.
+
+---
+
 ## Mandatory Extraction Order — Never Skip Ahead
 
 Run in this order, per page, for every PDF, before any human decides "this looks like a scan":
@@ -118,6 +208,7 @@ python legal_refs/validation/diff_articles.py --batch legal_refs/validation/pair
 - Deleting extraction tooling (e.g. `tools/fix_encoding.py`) before the content it produced has passed the diff gate.
 - Treating "the file reads correctly" or "looks right in context" as a substitute for a stated extraction method plus a diff result.
 - Reporting any article as confirmed when it did not appear in the current session's tool output (see CANNOT-SEE = CANNOT-CONFIRM rule in space instructions).
+- Using `Invoke-WebRequest` to download Python scripts (see SCRIPT DOWNLOAD AND PATCH SAFETY above).
 
 ---
 
@@ -128,7 +219,8 @@ python legal_refs/validation/diff_articles.py --batch legal_refs/validation/pair
 | Décret 11-125: WHO values fabricated | 2026-09-02 | AI filled missing Annexe from memory. Values were plausible but wrong origin. Caught by user challenge. |
 | Décret 06-141: values from training knowledge | 2026-09-03 | Values correct (diff MATCH), but origin was training knowledge not extraction. Declared "verified" before diff ran. |
 | Both resolved by | 2026-09-03 | pymupdf Tier 1 extraction + `diff_articles.py` line-by-line diff. |
-| Core lesson | — | "Confident" ≠ verified. Extraction method must be stated before citation. Diff is a gate, not a rescue. |
+| extract_pdfplumber.py: 4-hour debug loop | 2026-09-03 | `Invoke-WebRequest` wrote HTML-escaped file. `\u2014` stored as 6 chars. No verification gate ran between patches. Fixed by urllib.request download + 3-gate verification protocol. |
+| Core lesson | — | "Confident" ≠ verified. Extraction method must be stated before citation. Diff is a gate, not a rescue. Script download method matters — always verify before running. |
 
 ---
 
@@ -139,7 +231,8 @@ python legal_refs/validation/diff_articles.py --batch legal_refs/validation/pair
 | `legal_refs/validation/index_articles.py` | Article boundary extraction, ordinal normalisation | ✅ W97 + W99 |
 | `legal_refs/validation/normalize.py` | MD/PDF dual normaliser + orphan-strip | ✅ W97 |
 | `legal_refs/validation/diff_articles.py` | Fuzzy diff engine, MATCH/PARTIAL/MISMATCH | ✅ W97-P3 + W99 |
+| `legal_refs/validation/extract_pdfplumber.py` | Tier 2 two-column JO gazette extractor | ✅ v10 2026-09-03 |
 
 ---
 
-*Protocol v2 — established 2026-09-03. v1 drafted by Perplexity post-W100. Full text by Claude audit of epistemological risk. Supersedes v1 committed at [25384cb](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/25384cba41bbaf60e64ea79960425ea5c524eb2b).*
+*Protocol v3 — updated 2026-09-03. Added SCRIPT_DOWNLOAD_SAFETY section after extract_pdfplumber.py debug loop. v2 established 2026-09-03. v1 drafted by Perplexity post-W100. Full text by Claude audit of epistemological risk. Supersedes v1 committed at [25384cb](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/25384cba41bbaf60e64ea79960425ea5c524eb2b).*
