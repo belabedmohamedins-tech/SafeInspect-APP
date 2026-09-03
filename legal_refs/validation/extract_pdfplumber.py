@@ -8,18 +8,18 @@ Algerian Journal Officiel (JO) pages use a 2-column snake-flow layout:
 
 Standard pages: LEFT then RIGHT.
 
-Exception — preamble/transition page:
-  Some gazette pages have the preamble (Vu la loi n°...) in the LEFT column
-  and the law body (Article 1er) starting in the RIGHT column.
-  For these pages, RIGHT must be emitted before LEFT so the article text
-  comes first in the output and the preamble strip works correctly.
-  Detection: if the right column contains a law-start marker (Article 1er /
-  Art. 1er) and the left column does not, swap the order for that page only.
+Exception — preamble/transition page (e.g. loi 18-11.pdf page 4):
+  LEFT  = presidential preamble (Vu la loi n°...)
+  RIGHT = law body starting with Article 1er. — ...
 
-Article notation in loi 18-11 (and similar laws):
-  First article: 'Article 1er. —'
-  All others:    'Art. 2. —', 'Art. 8. —' etc.
-  The preamble strip must match both forms.
+For these pages RIGHT must be emitted before LEFT.
+Detection: right column contains a line matching:
+  ^(Article|Art[.]) 1er[.]? \u2014  (em-dash U+2014, mandatory in JO format)
+  and the line does NOT start with 'Chapitre'.
+
+Article notation confirmed from loi 18-11 hex dump:
+  'Article 1er. \u2014 La présente loi...'
+  chars: 0x41 0x72 0x74 0x69 0x63 0x6c 0x65 0x20 0x31 0x65 0x72 0x2e 0x20 0x2014
 
 Usage (PowerShell):
     python legal_refs/validation/extract_pdfplumber.py
@@ -42,59 +42,43 @@ DEFAULT_TARGETS = [
     "loi 18-11.pdf",
 ]
 
-MAX_HEADER_LINE_LEN = 60
+MAX_HEADER_LINE_LEN = 80
 
-# Matches standalone Article-1er header in either notation:
-#   'Article 1er'  (no period, or with period: 'Article 1er.')
-#   'Art. 1er'     (abbreviated, with period after Art)
-_ART1ER_RE = re.compile(
-    r"^\s*(?:Article|Art\.)\s+1(?:er|ier)?\b",
+# Matches the FIRST article header of a law in JO gazette format:
+#   'Article 1er. — '  or  'Art. 1er. — '  or  'Article 1er — '
+# The em-dash (U+2014) is the mandatory JO separator — confirmed by hex dump.
+# Also accepts en-dash (U+2013) and ASCII hyphen as fallback.
+# Line must NOT start with 'Chapitre' (chapter heading also uses '1er').
+_LAW_START_RE = re.compile(
+    r"^(?!Chapitre)(?:Article|Art[.])\s+1(?:er|ier)?[.]?\s+[\u2014\u2013-]",
     re.IGNORECASE,
 )
 
-# Citation guard: 'Art. 1er de la loi' / 'article 1er du décret' etc.
-_CITATION_AFTER_RE = re.compile(
-    r"\b1(?:er|ier)?\s+(?:de\s+la|du|de\s+l['\u2019\u2018]|al-)",
-    re.IGNORECASE,
-)
-
-# Any article header (Article N or Art. N) — short line
-_ANY_ART_HDR_RE = re.compile(r"^\s*(?:Article|Art\.)\s+\d", re.IGNORECASE)
+# Matches any article header: 'Article N' or 'Art. N' — for preamble strip fallback
+_ANY_ART_HDR_RE = re.compile(r"^(?:Article|Art[.])\s+\d", re.IGNORECASE)
 
 
 def _is_law_start(text: str) -> bool:
-    """Return True if text contains a standalone Article 1er / Art. 1er header."""
+    """Return True if text contains a standalone Article 1er — header."""
     for line in text.splitlines():
         s = line.strip()
-        if not _ART1ER_RE.match(s):
-            continue
-        if len(s) > MAX_HEADER_LINE_LEN:
-            continue
-        if _CITATION_AFTER_RE.search(s):
-            continue
-        return True
+        if _LAW_START_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
+            return True
     return False
 
 
 def _strip_preamble(text: str) -> str:
-    """Slice text from the first standalone Article 1er / Art. 1er onward."""
+    """Slice text from the first Article 1er — header onward."""
     lines = text.splitlines()
     for i, line in enumerate(lines):
         s = line.strip()
-        if not _ART1ER_RE.match(s):
-            continue
-        if len(s) > MAX_HEADER_LINE_LEN:
-            continue
-        if _CITATION_AFTER_RE.search(s):
-            continue
-        return "\n".join(lines[i:])
-
+        if _LAW_START_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
+            return "\n".join(lines[i:])
     # Fallback: any short article header
     for i, line in enumerate(lines):
         s = line.strip()
         if _ANY_ART_HDR_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
             return "\n".join(lines[i:])
-
     return text
 
 
@@ -125,7 +109,6 @@ def _detect_column_midpoint(page) -> float:
 
 
 def _extract_page(page, mid: float, right_first: bool = False) -> str:
-    """Extract a two-column page, optionally right column before left."""
     h = page.height
     left  = page.crop((0,   0, mid,        h)).extract_text(x_tolerance=3, y_tolerance=3) or ""
     right = page.crop((mid, 0, page.width, h)).extract_text(x_tolerance=3, y_tolerance=3) or ""
@@ -145,12 +128,11 @@ def extract_one(pdf_path: Path) -> str:
 
     text_parts: list[str] = []
     mid: float | None = None
-    law_started = False  # True once we have passed the Article 1er page
+    law_started = False
 
     try:
         with pdfplumber.open(pdf_path) as pdf:
             for page in pdf.pages:
-                # Detect column midpoint from first content-rich page
                 if mid is None:
                     words = page.extract_words(x_tolerance=3, y_tolerance=3) or []
                     if len(words) >= 10:
@@ -159,22 +141,20 @@ def extract_one(pdf_path: Path) -> str:
                         continue
 
                 if law_started:
-                    # Normal body page: LEFT then RIGHT
                     t = _extract_page(page, mid, right_first=False)
                 else:
-                    # Pre-law page: check if right column contains law start
                     h = page.height
                     right_text = (
                         page.crop((mid, 0, page.width, h))
                             .extract_text(x_tolerance=3, y_tolerance=3) or ""
                     )
                     if _is_law_start(right_text):
-                        # Transition page: RIGHT (law body) before LEFT (preamble)
+                        # Transition page: emit RIGHT (law body) then LEFT (preamble)
                         t = _extract_page(page, mid, right_first=True)
                         law_started = True
                     else:
-                        # Still in gazette header / summary — skip or emit normally
-                        t = _extract_page(page, mid, right_first=False)
+                        # Still in gazette header/summary — skip
+                        continue
 
                 if t.strip():
                     text_parts.append(t)
