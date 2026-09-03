@@ -43,12 +43,11 @@
     {
       "md": "legal_refs/md/decret-02-427-prevention-risques-professionnels.md",
       "pdf": "Décret 02-427.pdf",
-      "pdf_text": "Décret 02-427.txt",
+      "pdf_text": "decret-02-427-prevention-risques-professionnels.txt",
       "pdf_pages": [14, 15],
       "use_txt": true,
-      "article_range": [1, 21],
       "diff_status": "UNVERIFIED",
-      "note": "W108 FIX: use_txt=true — PDF has non-standard Type1 font encoding that corrupts pymupdf get_text() output (garbled lÆarticle, prÚvention). Tier-1 and Tier-2 (pdfplumber) both fail. Clean Tesseract OCR .txt written 2026-09-03. pdf_pages [14,15] kept as metadata but W108 suppresses live extraction. article_range [1,21]: page 14 also contains tail of decree 02-426, range excludes stray articles."
+      "note": "W109 FIX: pdf_text updated to decret-02-427-prevention-risques-professionnels.txt — merged clean OCR from p14 (lines 59–end, decree header onward) + p15. Previous Décret 02-427.txt started mid-gazette at decree 02-426 (Arts.3–6 contamination), causing 14 MISMATCH / 4.2% match. article_range removed — clean txt covers only decret-02-427 Arts.1–21. use_txt=true retained (Type1 font encoding corruption). pdf_pages [14,15] retained as metadata."
     },
     {
       "md": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
@@ -107,7 +106,7 @@
       "note": "diff_tool_status: UNVERIFIED. 21 articles found in txt."
     },
     {
-      "md": "legal_refs/decret-17-140-hygiene-salubrite.md",
+      "md": "legal_refs/md/decret-17-140-hygiene-salubrite.md",
       "pdf": "Decret 17-140.pdf",
       "pdf_text": "Decret 17-140.txt",
       "pdf_pages": [4, 9],
