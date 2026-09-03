@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W105 (preserve inline body on article header line)
+diff_articles.py — W106 (pdf_pages page-range slicing via pymupdf)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -23,7 +23,7 @@ Scoring thresholds:
   MD_ONLY           article present in MD, absent from PDF extract
   PDF_ONLY          article detected in PDF extract, absent from MD
 
-Depends only on stdlib: difflib, re, json, pathlib, argparse.
+Depends only on stdlib + optional pymupdf: difflib, re, json, pathlib, argparse.
 
 W100 patches (2026-09-03):
   MODE A — PDF=0 articles bug: two-column gazette layout from pdfminer merges columns
@@ -94,6 +94,17 @@ W105 patches (2026-09-03):
            inline content is ever discarded. Same three-group split applied to
            _PDF_ART_SHORT_RE for consistency. _PDF_ART_BARE_RE is unaffected
            (its header line is the article number only, body always starts on next line).
+
+W106 patches (2026-09-03):
+  MODE I — gazette contamination (decret-06-141 0.0%, decret-06-138 68.4%, etc.):
+           .txt files are full-gazette extracts containing articles from multiple
+           decrees. When "pdf_pages": [start, end] (0-indexed, inclusive) is present
+           in the queue entry, extract_pdf_text_from_pages() uses pymupdf (fitz)
+           Tier-1 get_text() on the specified page range only, bypassing the .txt file.
+           This eliminates PDF_ONLY noise from other decrees sharing the same gazette.
+           Falls back silently to .txt file if pymupdf is not installed or pdf_pages
+           is absent. PDF resolved from legal_refs/pdf/ relative to queue directory.
+           pdf_pages is 0-indexed (matches pymupdf page indices).
 """
 
 import argparse
@@ -102,6 +113,21 @@ import re
 import sys
 from difflib import SequenceMatcher
 from pathlib import Path
+
+# ---------------------------------------------------------------------------
+# Optional pymupdf import (W106)
+# ---------------------------------------------------------------------------
+
+try:
+    import pymupdf as fitz  # pymupdf >= 1.23
+    _FITZ_AVAILABLE = True
+except ImportError:
+    try:
+        import fitz  # older pymupdf
+        _FITZ_AVAILABLE = True
+    except ImportError:
+        _FITZ_AVAILABLE = False
+
 
 # ---------------------------------------------------------------------------
 # Path resolver
@@ -130,6 +156,44 @@ def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
         if candidate.exists():
             return candidate
     return None
+
+
+def resolve_pdf_bin(pdf_filename: str, search_roots: list[Path]) -> Path | None:
+    """W106: resolve the actual .pdf binary file for pymupdf page slicing."""
+    p = Path(pdf_filename)
+    if p.exists():
+        return p
+    name = p.name
+    for root in search_roots:
+        candidate = root / name
+        if candidate.exists():
+            return candidate
+    return None
+
+
+# ---------------------------------------------------------------------------
+# W106: pymupdf page-range extractor
+# ---------------------------------------------------------------------------
+
+def extract_pdf_text_from_pages(pdf_path: Path, pages: list[int]) -> str | None:
+    """
+    W106 MODE I: extract text from a specific page range using pymupdf Tier-1
+    get_text(). pages = [start, end] 0-indexed inclusive.
+    Returns concatenated page text, or None if extraction fails.
+    """
+    if not _FITZ_AVAILABLE:
+        return None
+    try:
+        doc = fitz.open(str(pdf_path))
+        start = int(pages[0])
+        end = min(int(pages[1]), len(doc) - 1)
+        parts = []
+        for i in range(start, end + 1):
+            parts.append(doc[i].get_text())
+        doc.close()
+        return "\n".join(parts)
+    except Exception:
+        return None
 
 
 # ---------------------------------------------------------------------------
@@ -232,22 +296,6 @@ def _normalise_article_key(raw: str) -> str:
 # ---------------------------------------------------------------------------
 # W102 MODE E: gazette trailer stripper
 # ---------------------------------------------------------------------------
-#
-# The last article in a PDF has no following "Article N" sentinel, so the
-# regex captures everything to \Z — including gazette footer lines printed
-# after the decree text:
-#
-#   Ahmed OUYAHIA.
-#
-#   18 Rabie Ethani 1432          ← Hijri publication date
-#   23 mars 2011                  ← Gregorian publication date
-#   JOURNAL OFFICIEL ...          ← masthead
-#   N° 18                         ← issue number
-#
-# This stripper removes all lines from the first such footer line onward,
-# working from the END of the document so it only affects trailing garbage.
-# It is applied to the full PDF text before article extraction.
-# ---------------------------------------------------------------------------
 
 # Hijri month names (Arabic transliteration variants used in JORADP)
 _HIJRI_MONTHS = (
@@ -256,16 +304,14 @@ _HIJRI_MONTHS = (
     r"ramadhan?|chawwal|dhou\s+el\s+ka[ae]da|dhou\s+el\s+hidja"
 )
 
-# A line that looks like a gazette footer marker (Hijri date, Gregorian date,
-# masthead keyword, or issue marker). Anchored to full line (strip() applied).
 _TRAILER_LINE_RE = re.compile(
     r"^\s*(?:"
-    r"\d+\s+(?:" + _HIJRI_MONTHS + r")\s+\d{4}"   # Hijri date line
+    r"\d+\s+(?:" + _HIJRI_MONTHS + r")\s+\d{4}"
     r"|(?:\d+\s+)?(?:janvier|février|mars|avril|mai|juin|juillet|août|"
-    r"septembre|octobre|novembre|décembre)\s+\d{4}"  # Gregorian date line
-    r"|jour(?:nal)?\s*(?:officiel)?"                  # JOURNAL / JOUR / JOURNAL OFFICIEL
+    r"septembre|octobre|novembre|décembre)\s+\d{4}"
+    r"|jour(?:nal)?\s*(?:officiel)?"
     r"|officiel\b"
-    r"|n[°o]\s*\d+"                                    # N° 18
+    r"|n[°o]\s*\d+"
     r"|page\s+\d+"
     r")\s*$",
     re.IGNORECASE,
@@ -276,46 +322,39 @@ def _strip_pdf_trailer(text: str) -> str:
     """
     W102 MODE E: remove gazette footer lines that appear after the last article.
     Works bottom-up: scan lines from the end, remove matching footer lines,
-    stop at the first non-footer non-blank line.
+    stop at the first non-blank non-footer line.
     """
     lines = text.splitlines()
     cut = len(lines)
     for i in range(len(lines) - 1, -1, -1):
         line = lines[i]
         if line.strip() == "":
-            cut = i  # blank lines at end — keep scanning
+            cut = i
             continue
         if _TRAILER_LINE_RE.match(line):
-            cut = i  # footer line — mark for removal, keep scanning
+            cut = i
             continue
-        break  # first non-blank non-footer line — stop
+        break
     return "\n".join(lines[:cut])
 
 
 # ---------------------------------------------------------------------------
 # MD article extractor  (W103: re.IGNORECASE added to all three patterns)
 # ---------------------------------------------------------------------------
-#
-# W103 MODE F root cause: MD files use ## ARTICLE 1 (all-caps). The patterns
-# below previously used [Aa]rt without re.IGNORECASE. "ARTICLE" has uppercase
-# R-T-I-C-L-E after the A, so [Aa]rt matched 'Art'/'art' but not 'ART'.
-# Fix: add re.IGNORECASE to all three patterns. The [Aa] char class is kept
-# for documentation clarity but is now redundant given IGNORECASE.
-# ---------------------------------------------------------------------------
 
 _MD_ART_HEADING_RE = re.compile(
     r"^#{1,4}\s*[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\b[^\n]*\n(.*?)(?=^#{1,4}\s*[Aa]rt|\Z)",
-    re.MULTILINE | re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
+    re.MULTILINE | re.DOTALL | re.IGNORECASE,
 )
 
 _MD_ART_BOLD_INLINE_RE = re.compile(
     r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
-    re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
+    re.DOTALL | re.IGNORECASE,
 )
 
 _MD_ART_PLAIN_RE = re.compile(
     r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
-    re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
+    re.DOTALL | re.IGNORECASE,
 )
 
 
@@ -331,52 +370,16 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
-# PDF article extractor  (W100: MODE A fix — mid-line Article marker support;
-#                         W105: MODE H fix — preserve inline body on header line)
-# ---------------------------------------------------------------------------
-#
-# W100: Two-column gazette PDFs extracted with pdfminer produce text like:
-#   "...end of col-1 text    Article 5. — Le décret..."
-# There is NO newline before "Article 5". The column separator is a run of
-# 4+ spaces. The W100 fix: a pre-processor step (_inject_article_newlines)
-# inserts \n before any "Article N" that appears mid-line after whitespace,
-# so the ^ anchor in the regexes below fires correctly.
-#
-# W105 MODE H root cause: _PDF_ART_SEP_RE used [^\n]* on the separator line
-# to consume "everything after the dash up to end-of-line". That discarded
-# any article body text starting inline on the same line as the header, e.g.:
-#
-#   Art. 9. — Les équipements, le matériel et les locaux nécessaires aux
-#   opérations de récolte...
-#
-# The regex captured "Les équipements, le matériel et les locaux nécessaires aux"
-# as part of the header match (group(2) in the OLD two-group pattern) and never
-# put it in the body group. The body started at "opérations de récolte...", so
-# the normalised PDF snippet began mid-sentence → near-zero similarity score.
-#
-# Fix: use THREE capture groups in _PDF_ART_SEP_RE and _PDF_ART_SHORT_RE:
-#   group(1) = article number
-#   group(2) = inline content after the separator on the header line (may be "")
-#   group(3) = body on subsequent lines
-# extract_pdf_articles() joins group(2) + "\n" + group(3) so inline content
-# is always prepended to the body, never silently dropped.
-# _PDF_ART_BARE_RE is unaffected: its header line is just the article number,
-# body always begins on the next line.
+# PDF article extractor  (W100/W105)
 # ---------------------------------------------------------------------------
 
-# W103: added re.IGNORECASE so ARTICLE / ART. mid-line markers are caught too.
 _MIDLINE_ARTICLE_RE = re.compile(
     r"([ \t]{4,})([Aa]rt(?:icle[r]?)?\s*\.?\s*\d)",
-    re.IGNORECASE,  # W103: IGNORECASE
+    re.IGNORECASE,
 )
 
 
 def _inject_article_newlines(text: str) -> str:
-    """
-    W100 MODE A fix: insert \\n before any Article marker that appears mid-line
-    after a run of 4+ spaces (pdfminer two-column merge artefact).
-    Safe to run on all PDF texts — only fires when the pattern matches.
-    """
     return _MIDLINE_ARTICLE_RE.sub(r"\n\2", text)
 
 
@@ -399,22 +402,11 @@ _PDF_ART_SHORT_RE = re.compile(
 
 
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
-    """Return {article_number: body_text} from plain PDF-extracted text.
-
-    W105: For _PDF_ART_SEP_RE and _PDF_ART_SHORT_RE the match has 3 groups:
-      group(1) = article number
-      group(2) = inline body text on the header line (after the separator dash/colon)
-      group(3) = body text on subsequent lines
-    The body is group(2).strip() + "\\n" + group(3) so inline content is never lost.
-    _PDF_ART_BARE_RE keeps 2 groups (number + body) — body always starts next line.
-    """
-    # W102 MODE E: strip gazette footer before extraction
+    """Return {article_number: body_text} from plain PDF-extracted text."""
     pdf_text = _strip_pdf_trailer(pdf_text)
-    # W100 MODE A: inject newlines before mid-line Article markers
     pdf_text = _inject_article_newlines(pdf_text)
     articles: dict[str, str] = {}
 
-    # Three-group patterns: _PDF_ART_SEP_RE, _PDF_ART_SHORT_RE
     for pattern in (_PDF_ART_SEP_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
             num = _normalise_article_key(m.group(1))
@@ -424,7 +416,6 @@ def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
                 body = (inline + "\n" + rest).strip() if inline else rest
                 articles[num] = body
 
-    # Two-group pattern: _PDF_ART_BARE_RE
     for m in _PDF_ART_BARE_RE.finditer(pdf_text):
         num = _normalise_article_key(m.group(1))
         if num not in articles:
@@ -438,25 +429,17 @@ def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
 # ---------------------------------------------------------------------------
 
 def _filter_by_range(articles: dict[str, str], article_range: list | None) -> dict[str, str]:
-    """
-    W101: If article_range=[start, end] is provided (inclusive), drop all PDF
-    articles whose numeric key falls outside [start, end]. Non-numeric keys
-    (e.g. '12bis') are kept regardless — they cannot be range-checked reliably.
-    Only applied to PDF-extracted articles, never to MD articles.
-    """
     if not article_range or len(article_range) != 2:
         return articles
     start, end = int(article_range[0]), int(article_range[1])
     filtered = {}
     for k, v in articles.items():
-        # Try to extract a leading integer from the key
         m = re.match(r"^(\d+)", k)
         if m:
             n = int(m.group(1))
             if start <= n <= end:
                 filtered[k] = v
         else:
-            # Non-numeric key — keep unconditionally
             filtered[k] = v
     return filtered
 
@@ -492,14 +475,20 @@ def classify(score: float) -> str:
 # ---------------------------------------------------------------------------
 
 def diff_document(md_path: Path, pdf_text_path: Path,
-                  article_range: list | None = None) -> dict:
+                  article_range: list | None = None,
+                  pdf_pages_text: str | None = None) -> dict:
+    """
+    W106: if pdf_pages_text is provided (pre-sliced via pymupdf), use it
+    instead of reading pdf_text_path. pdf_text_path is still used for the
+    report label (filename shown in output).
+    """
     md_text = md_path.read_text(encoding="utf-8", errors="replace")
-    pdf_text = pdf_text_path.read_text(encoding="utf-8", errors="replace")
+    pdf_text = pdf_pages_text if pdf_pages_text is not None else \
+               pdf_text_path.read_text(encoding="utf-8", errors="replace")
 
     md_arts = extract_md_articles(md_text)
     pdf_arts = extract_pdf_articles(pdf_text)
 
-    # W101: filter PDF articles to declared range (split-file support)
     if article_range:
         pdf_arts = _filter_by_range(pdf_arts, article_range)
 
@@ -648,14 +637,17 @@ def parse_args() -> argparse.Namespace:
 
 def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path,
                diagnose_mode: bool = False,
-               article_range: list | None = None) -> dict:
+               article_range: list | None = None,
+               pdf_pages_text: str | None = None) -> dict:
     if diagnose_mode:
         diagnose(md_path, pdf_text_path)
-    result = diff_document(md_path, pdf_text_path, article_range=article_range)
+    result = diff_document(md_path, pdf_text_path, article_range=article_range,
+                           pdf_pages_text=pdf_pages_text)
     json_out = write_json(result, out_dir)
     md_out = write_md_report(result, out_dir)
     range_tag = f" [Arts.{article_range[0]}-{article_range[1]}]" if article_range else ""
-    print(f"[{result['overall_status']}] {md_path.name}{range_tag}  match={result['match_rate']*100:.1f}%")
+    src_tag = " [pdf_pages]" if pdf_pages_text is not None else ""
+    print(f"[{result['overall_status']}] {md_path.name}{range_tag}{src_tag}  match={result['match_rate']*100:.1f}%")
     print(f"  JSON  -> {json_out}")
     print(f"  MD    -> {md_out}")
     return result
@@ -668,6 +660,8 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     legal_refs = queue_path.parent.parent
     md_roots = [legal_refs / "md", legal_refs, queue_path.parent]
     txt_roots = [legal_refs / "pdf", legal_refs, queue_path.parent]
+    # W106: PDF binary search roots for pymupdf page slicing
+    pdf_bin_roots = [legal_refs / "pdf", legal_refs, queue_path.parent]
 
     summary = []
     no_txt_count = 0
@@ -675,8 +669,11 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
     for entry in pairs:
         md_file = entry.get("md") or entry.get("markdown")
         pdf_file = entry.get("pdf_text") or entry.get("pdf")
-        # W101: read article_range from queue entry if present
-        article_range = entry.get("article_range")  # e.g. [1, 164] or None
+        article_range = entry.get("article_range")
+        # W106: read pdf_pages and original pdf filename for binary resolution
+        pdf_pages = entry.get("pdf_pages")  # e.g. [4, 7] (0-indexed, inclusive)
+        pdf_bin_file = entry.get("pdf")     # original .pdf filename
+
         if not md_file:
             print(f"[SKIP] Missing md field: {entry}", file=sys.stderr)
             continue
@@ -686,13 +683,31 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
             print(f"[SKIP] MD not found: {md_file}", file=sys.stderr)
             continue
 
+        # W106: if pdf_pages present, attempt pymupdf page-range extraction
+        pdf_pages_text = None
+        if pdf_pages and _FITZ_AVAILABLE and pdf_bin_file:
+            pdf_bin_path = resolve_pdf_bin(pdf_bin_file, pdf_bin_roots)
+            if pdf_bin_path:
+                pdf_pages_text = extract_pdf_text_from_pages(pdf_bin_path, pdf_pages)
+
         pdf_txt_path = resolve_pdf_txt(pdf_file, txt_roots) if pdf_file else None
-        if not pdf_txt_path:
+
+        # Need at least one text source
+        if pdf_pages_text is None and not pdf_txt_path:
             print(f"[NO-TXT] No .txt extract for: {pdf_file or '(none)'}  \u2014 run PDF extraction first (W98)")
             no_txt_count += 1
             continue
 
-        result = run_single(md_path, pdf_txt_path, out_dir, article_range=article_range)
+        # If pdf_pages_text available, use a dummy sentinel path for the label
+        # but still require pdf_txt_path to exist for the report filename label.
+        # If .txt is also missing, synthesise a label from the pdf name.
+        if pdf_txt_path is None and pdf_pages_text is not None:
+            # Create a synthetic label path (does not need to exist)
+            pdf_txt_path = Path(pdf_bin_file if pdf_bin_file else (pdf_file or "unknown.pdf"))
+
+        result = run_single(md_path, pdf_txt_path, out_dir,
+                            article_range=article_range,
+                            pdf_pages_text=pdf_pages_text)
         summary.append({
             "md": md_file,
             "overall_status": result["overall_status"],
@@ -726,7 +741,7 @@ def main() -> None:
             else:
                 print(f"ERROR: MD file not found: {args.md}", file=sys.stderr)
                 sys.exit(1)
-        article_range = args.article_range  # None or [start, end]
+        article_range = args.article_range
         run_single(md_path, Path(args.pdf_text), out_dir,
                    diagnose_mode=args.diagnose,
                    article_range=article_range)
