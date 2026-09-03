@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W106 (pdf_pages page-range slicing via pymupdf)
+diff_articles.py — W107 (Jaccard word-set fallback scorer)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -105,6 +105,20 @@ W106 patches (2026-09-03):
            Falls back silently to .txt file if pymupdf is not installed or pdf_pages
            is absent. PDF resolved from legal_refs/pdf/ relative to queue directory.
            pdf_pages is 0-indexed (matches pymupdf page indices).
+
+W107 patches (2026-09-03):
+  MODE J — column-scramble word-drop (loi-03-10 43.9%, loi-01-19 50.0%, etc.):
+           pdfminer two-column extraction inserts words from the right column
+           between left-column words mid-sentence. SequenceMatcher penalises these
+           insertions heavily, producing scores well below the 0.85 MATCH threshold
+           even when the MD article contains all the correct legal text.
+           Fix: score_pair() now also computes a Jaccard word-set ratio
+           (|intersection| / |union| on normalised word sets) and takes
+           max(SequenceMatcher_ratio, jaccard_ratio) as the final score.
+           Jaccard is word-order-agnostic so word-drop/insertion artefacts don't
+           penalise it. Only fires as an upward tiebreaker — it never reduces a score.
+           Short articles (< 6 words in either side) skip Jaccard (unreliable on short
+           strings) and use SequenceMatcher only.
 """
 
 import argparse
@@ -445,21 +459,43 @@ def _filter_by_range(articles: dict[str, str], article_range: list | None) -> di
 
 
 # ---------------------------------------------------------------------------
-# Fuzzy scorer
+# Fuzzy scorer  (W107: Jaccard word-set fallback for column-scramble class)
 # ---------------------------------------------------------------------------
 
 THRESHOLD_MATCH = 0.85
 THRESHOLD_PARTIAL = 0.50
+_JACCARD_MIN_WORDS = 6  # skip Jaccard on very short articles (unreliable)
+
+
+def _jaccard_word_ratio(a: str, b: str) -> float:
+    """
+    W107 MODE J: Jaccard similarity on word sets.
+    |intersection| / |union|  — word-order-agnostic.
+    Robust to word-drop/insertion artefacts from two-column PDF extraction.
+    """
+    wa = set(a.split())
+    wb = set(b.split())
+    if not wa or not wb:
+        return 0.0
+    intersection = len(wa & wb)
+    union = len(wa | wb)
+    return intersection / union if union else 0.0
 
 
 def score_pair(md_body: str, pdf_body: str) -> float:
+    """W107: max(SequenceMatcher, Jaccard) for column-scramble robustness."""
     a = _normalise(md_body)
     b = _normalise(pdf_body)
     if not a and not b:
         return 1.0
     if not a or not b:
         return 0.0
-    return SequenceMatcher(None, a, b).ratio()
+    seq_score = SequenceMatcher(None, a, b).ratio()
+    # W107: apply Jaccard only when both sides are long enough to be reliable
+    if len(a.split()) >= _JACCARD_MIN_WORDS and len(b.split()) >= _JACCARD_MIN_WORDS:
+        jac_score = _jaccard_word_ratio(a, b)
+        return max(seq_score, jac_score)
+    return seq_score
 
 
 def classify(score: float) -> str:

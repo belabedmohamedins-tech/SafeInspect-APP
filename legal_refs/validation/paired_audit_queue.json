@@ -44,8 +44,9 @@
       "md": "legal_refs/md/decret-02-427-prevention-risques-professionnels.md",
       "pdf": "Décret 02-427.pdf",
       "pdf_text": "Décret 02-427.txt",
+      "pdf_pages": [14, 15],
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 30 articles found in txt."
+      "note": "W107 FIX: pdf_pages [14,15] added — Décret exécutif 02-427 starts at gazette page 14 (0-indexed) of 24-page JO N°82 (11 déc 2002). Previously getting 3.3% due to gazette contamination from other decrees."
     },
     {
       "md": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
