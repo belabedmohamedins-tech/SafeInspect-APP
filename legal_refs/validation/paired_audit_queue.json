@@ -45,8 +45,9 @@
       "pdf": "Décret 02-427.pdf",
       "pdf_text": "Décret 02-427.txt",
       "pdf_pages": [14, 15],
+      "article_range": [1, 21],
       "diff_status": "UNVERIFIED",
-      "note": "W107 FIX: pdf_pages [14,15] added — Décret exécutif 02-427 starts at gazette page 14 (0-indexed) of 24-page JO N°82 (11 déc 2002). Previously getting 3.3% due to gazette contamination from other decrees."
+      "note": "W107 FIX: pdf_pages [14,15] added — Décret exécutif 02-427 starts at gazette page 14 (0-indexed) of 24-page JO N°82 (11 déc 2002). W108 FIX: article_range [1,21] added — page 14 also contains the tail of decree 02-426 (Arts. 3–6 of 02-426 appear on lines 0–41 before the 02-427 title at line 43). article_range excludes those stray articles from comparison."
     },
     {
       "md": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
