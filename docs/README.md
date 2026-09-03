@@ -7,6 +7,15 @@
 
 ## Live Observations Log
 
+### 2026-09-03 02:01 WAT — Perplexity — Décret 06-141 legal file complete ✅
+- **Phases closed:** N/A (legal file, not a code phase). Backlog item `L-01` partially resolved — full text now in repo.
+- **Files changed:** `legal_refs/decret-06-141-effluents-liquides.md` (12,728 bytes — Arts. 1–14 + Annexe I (25 params) + Annexe II (7 industry categories, all sub-tables))
+- **Commits:** [`120b201`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/120b20173eaf788dae5a142ad0e775d1bcedc91e) (initial, truncated), [`cd149f9`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/cd149f99a1b4015af1cfb9daf220cf16762e48fa) (truncation fix — 207 insertions confirmed by diff)
+- **Verification:** `git show cd149f99 --stat` → 1 file changed, 207 insertions(+), 1 deletion(-) ✅
+- **Key values for abattoirs (Annexe II §1a):** Volume 6 m³/t carcasse, DBO5 250 g/t, DCO 800 g/t, Matière décantable 200 g/t, pH 5,5–8,5.
+- **Backlog note:** L-01 conflict (criteria file vs. decree values) still needs expert confirmation before closing.
+- **Next phase identifier: W99**
+
 ### 2026-09-03 00:47 WAT — Perplexity — W98 ✅ CLOSED — index_articles.py UTF-8 + décret 11-125 9 articles confirmed
 - **Phases closed:** W98
 - **Files changed:** `tools/index_articles.py` (stdout UTF-8 reconfigure + ensure_ascii=True for console)
@@ -74,7 +83,7 @@
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-09-03 00:47 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-03 02:01 WAT)
 
 ### ✅ ALL PHASES CLOSED
 
@@ -93,7 +102,7 @@ W98 closed. Board clear.
 | F-05: set `EXPO_PUBLIC_SYNC_API_URL` | Provide production URL |
 | Run `npx prisma migrate dev --name add-push-receipt-queue` | Production DB ready |
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
-| L-01: Décret 06-141 Annexe I/II conflict | Expert confirmation |
+| L-01: Décret 06-141 Annexe I/II conflict | Expert confirmation (file now in repo at `legal_refs/decret-06-141-effluents-liquides.md`) |
 | MCH-29-05 heavy-metal params | Product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Audit couvoirCriteria.ts first |
 | Décret 76-36 texte intégral | J.O. n°21/1976 non numérisé |
@@ -135,6 +144,7 @@ SafeInspect-APP/
 │   ├── index_articles.py       # ✅ UTF-8 fix W98 — 9 articles from décret 11-125 confirmed
 │   └── fix_encoding.py         # ⚠️ one-off OCR fix — delete when convenient
 └── legal_refs/                 # Algerian legislation
+    ├── decret-06-141-effluents-liquides.md  # ✅ Arts.1-14 + Annexe I (25 params) + Annexe II (7 categories)
     ├── md/                     # 48 MD law/decree files
     ├── pdf/                    # Source PDFs + extracted .txt
     ├── validation/
