@@ -60,6 +60,7 @@ environnement immédiat.
 Elles visent également à prévenir l'éventualité des
 accidents en milieu de travail.
 
+Art. 3. — L'employeur est tenu d'organiser au profit des travailleurs des actions d'instruction, d'information et
 de formation notamment sur :
 
 — les risques liés aux différentes opérations entrant
@@ -67,7 +68,6 @@ dans le cadre de leur travail, ainsi que les mesures à
 prendre et les moyens à mettre en œuvre pour se protéger ;
 
 — les dispositions à prendre en cas d'accident ou de
-
 sinistre.
 
 Les actions prévues ci-dessus constituent des éléments
@@ -174,7 +174,7 @@ travail ; la partie théorique est assurée dans un local
 réunissant les conditions nécessaires à la conduite d'une
 activité pédagogique.
 
-. — Lorsque la nécessité d'étudier un risque
+Art. 15. — Lorsque la nécessité d'étudier un risque
 spécifique impose la réunion de conditions particulières,
 les cours se déroulent au sein d'une structure de formation
 disposant de locaux et de moyens appropriés et en
@@ -233,3 +233,23 @@ DES COMMISSIONS D'HYGIENE ET SECURITE
 Art. 21. — Les membres de la commission paritaire
 d'hygiène et de sécurité bénéficient d'une formation
 appropriée pendant l'exercice de leur mandat.
+
+Art. 22. — La durée de la formation prévue à l'article 21 ci-dessus est fixée au maximum à cinq (5) jours.
+
+En cas de renouvellement de mandat, la formation est également renouvelée ; elle consiste en une actualisation
+des connaissances et un perfectionnement. Elle doit avoir un caractère plus spécialisé, tenant compte de
+l'expérience acquise au cours du mandat écoulé.
+
+La formation dispensée dans ce cas constitue un complément à celle organisée en application de l'article 21
+ci-dessus : sa durée ne peut être inférieure à cinq (5) jours.
+
+CHAPITRE 5
+DISPOSITIONS FINALES
+
+Art. 23. — Des textes ultérieurs préciseront, en tant que de besoin, les modalités d'application du présent décret.
+
+Art. 24. — Le présent décret sera publié au Journal officiel de la République algérienne démocratique et populaire.
+
+Fait à Alger, le 3 Chaoual 1423 correspondant au 7 décembre 2002.
+
+Ali BENFLIS.
