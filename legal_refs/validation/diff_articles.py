@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W103 (IGNORECASE fix for all-caps ARTICLE headings)
+diff_articles.py — W104 (space-before-punctuation normalisation)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -69,6 +69,15 @@ W103 patches (2026-09-03):
            Fix: add re.IGNORECASE to _MD_ART_HEADING_RE, _MD_ART_BOLD_INLINE_RE,
            _MD_ART_PLAIN_RE, and _MIDLINE_ARTICLE_RE. The [Aa] char classes are
            kept for clarity but IGNORECASE makes them redundant — belt-and-suspenders.
+
+W104 patches (2026-09-03):
+  MODE G — decret-17-140 43.8%: PDF column layout inserts spurious spaces before
+           punctuation (e.g. "traitement ," / "conditionnement ,"). After ligature
+           mapping and whitespace normalisation these survive as "traitement ," which
+           scores very low against the clean MD "traitement,".
+           Fix: _normalise() now strips space-before-punctuation ( ,  ;  :  . ) after
+           the \\s+ collapse step, mapping "word ," → "word,". Applied to both MD and
+           PDF snippets so scoring is symmetric.
 """
 
 import argparse
@@ -108,7 +117,8 @@ def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Normaliser  (W100: Unicode whitespace variants; W102: \n→space before collapse)
+# Normaliser  (W100: Unicode whitespace variants; W102: \n→space before collapse;
+#              W104: strip space-before-punctuation after collapse)
 # ---------------------------------------------------------------------------
 
 _LIGATURES = str.maketrans({
@@ -161,11 +171,15 @@ _MOJIBAKE = [
     ("\u00e2\u0080\u0099", "'"),  # '
 ]
 
+# W104: space-before-punctuation pattern (PDF column artefact)
+_SPACE_BEFORE_PUNCT_RE = re.compile(r'\s+([,;:.])')
+
 
 def _normalise(text: str) -> str:
     """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace.
     W102: replace newlines with space before \\s+ collapse so intra-sentence
     column-break newlines (gazette two-column artefact) are treated as spaces.
+    W104: strip spurious space before punctuation (, ; : .) after \\s+ collapse.
     """
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
@@ -176,6 +190,8 @@ def _normalise(text: str) -> str:
     # W102 MODE D: replace all newline variants with space BEFORE whitespace collapse
     text = text.replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
     text = re.sub(r"\s+", " ", text).strip()
+    # W104 MODE G: remove space inserted before punctuation by PDF column layout
+    text = _SPACE_BEFORE_PUNCT_RE.sub(r'\1', text)
     return text
 
 
