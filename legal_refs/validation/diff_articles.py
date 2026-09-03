@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W98 (updated W99: ordinal key normalisation 1er→1)
+diff_articles.py — W100 (3-mode patch over W99)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -24,6 +24,18 @@ Scoring thresholds:
   PDF_ONLY          article detected in PDF extract, absent from MD
 
 Depends only on stdlib: difflib, re, json, pathlib, argparse.
+
+W100 patches (2026-09-03):
+  MODE A — PDF=0 articles bug: two-column gazette layout from pdfminer merges columns
+           so "Article N" appears mid-line after a long whitespace run, not at ^.
+           Fix: _PDF_ART_SEP_RE / _PDF_ART_BARE_RE / _PDF_ART_SHORT_RE now also match
+           after 4+ whitespace chars on the same line (gazette column separator).
+           The pre-processor inserts \\n before these markers so ^ fires on them.
+  MODE B — content scramble (loi-18-11 3.6%): pdfminer double-space column padding
+           and \\u00a0 (non-breaking space) survive \\s+ collapse in some builds.
+           Fix: _normalise() now maps all Unicode whitespace variants to ' ' explicitly
+           before the regex collapse, including \\u00a0, \\u202f, \\u2009, \\u2002, \\u2003.
+  MODE C — decret-11-125 77.8%: same \\u00a0 issue, same fix as MODE B.
 """
 
 import argparse
@@ -63,7 +75,7 @@ def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Normaliser
+# Normaliser  (W100: Unicode whitespace variants added)
 # ---------------------------------------------------------------------------
 
 _LIGATURES = str.maketrans({
@@ -84,6 +96,16 @@ _LIGATURES = str.maketrans({
     "\u00ce": "I", "\u00d4": "O",
     "\u00d9": "U", "\u00db": "U", "\u00dc": "U",
     "\u00c7": "C",
+    # W100: map all Unicode whitespace variants that \\s+ may miss
+    "\u00a0": " ",   # non-breaking space
+    "\u202f": " ",   # narrow no-break space
+    "\u2009": " ",   # thin space
+    "\u2002": " ",   # en space
+    "\u2003": " ",   # em space
+    "\u2007": " ",   # figure space
+    "\u2008": " ",   # punctuation space
+    "\u200b": "",    # zero-width space — drop entirely
+    "\ufeff": "",    # BOM — drop entirely
 })
 
 # mojibake sequences produced when UTF-8 é à etc. is misread as latin-1/cp1252
@@ -103,18 +125,18 @@ _MOJIBAKE = [
     ("\u00c2\u00b0", ""),    # ° (degree sign — drop)
     ("\u00e2\u0080\u0093", "-"),  # –
     ("\u00e2\u0080\u0094", "-"),  # —
-    ("\u00e2\u0080\u0099", "'"),  # ’
+    ("\u00e2\u0080\u0099", "'"),  # '
 ]
 
 
 def _normalise(text: str) -> str:
-    """Lowercase, strip diacritics/ligatures/mojibake, collapse whitespace."""
+    """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace."""
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
-    text = text.translate(_LIGATURES)
+    text = text.translate(_LIGATURES)   # includes \u00a0 → ' ' (W100)
     text = text.lower()
     text = re.sub(r"[#*_`~>|\\]", " ", text)
-    text = re.sub(r"^art(?:icle)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
+    text = re.sub(r"^art(?:icle[r]?)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
@@ -131,8 +153,6 @@ def _normalise_article_key(raw: str) -> str:
     Mixed alphanumeric like '12bis' are kept as-is (lowercased).
     """
     num = raw.lower().lstrip("0") or "0"
-    # Strip French ordinal suffixes: er, re, ère, ere, ème, eme, e
-    # Only when the suffix follows pure digits (not '12bis' etc.)
     cleaned = re.sub(r"^(\d+)(?:è?re?|è?me?|e)$", r"\1", num)
     if re.fullmatch(r"\d+", cleaned):
         return str(int(cleaned))
@@ -171,8 +191,37 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
-# PDF article extractor
+# PDF article extractor  (W100: MODE A fix — mid-line Article marker support)
 # ---------------------------------------------------------------------------
+#
+# Two-column gazette PDFs extracted with pdfminer produce text like:
+#
+#   "...end of col-1 text    Article 5. — Le décret..."
+#
+# There is NO newline before "Article 5". The column separator is a run of
+# 4+ spaces. The W100 fix: a pre-processor step (_inject_article_newlines)
+# inserts \n before any "Article N" that appears mid-line after whitespace,
+# so the ^ anchor in the regexes below fires correctly.
+#
+# This pre-processor is applied to the PDF text BEFORE extraction.
+# ---------------------------------------------------------------------------
+
+# Matches "Article N" / "Art. N" that appears mid-line after 4+ spaces
+# (gazette two-column layout artefact). Capture group 1 = everything before,
+# group 2 = the Article marker and everything after.
+_MIDLINE_ARTICLE_RE = re.compile(
+    r"([ \t]{4,})([Aa]rt(?:icle[r]?)?\s*\.?\s*\d)",
+)
+
+
+def _inject_article_newlines(text: str) -> str:
+    """
+    W100 MODE A fix: insert \\n before any Article marker that appears mid-line
+    after a run of 4+ spaces (pdfminer two-column merge artefact).
+    Safe to run on all PDF texts — only fires when the pattern matches.
+    """
+    return _MIDLINE_ARTICLE_RE.sub(r"\n\2", text)
+
 
 _PDF_ART_SEP_RE = re.compile(
     r"(?mi)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
@@ -192,6 +241,8 @@ _PDF_ART_SHORT_RE = re.compile(
 
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from plain PDF-extracted text."""
+    # W100 MODE A: inject newlines before mid-line Article markers first
+    pdf_text = _inject_article_newlines(pdf_text)
     articles: dict[str, str] = {}
     for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
