@@ -27,7 +27,7 @@
     },
     {
       "md": "arrete-interministeriel-2025-05-07-hygiene-restauration.md",
-      "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d’hygiène et de salubrité applicables dans les établissements de restauration.pdf",
+      "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.pdf",
       "status": "UNSAFE FOR LEGAL USE",
       "critical_errors": 1,
       "minor_errors": 0,
@@ -82,12 +82,14 @@
       "pages": 13
     },
     {
-      "md": "decret-06-141-rejets-effluents-liquides.md",
+      "md": "decret-06-141-effluents-liquides.md",
       "pdf": "decret 06-141.pdf",
-      "status": "UNSAFE FOR LEGAL USE",
-      "critical_errors": 44,
+      "pdf_pages": [4, 7],
+      "note": "Gazette J.O. n°26 (27 pages). Décret 06-141 on pages 4–7 only. pdf_pages scopes extraction.",
+      "status": "PENDING DIFF — re-run after page-range fix",
+      "critical_errors": 0,
       "minor_errors": 0,
-      "pages": 27
+      "pages": 4
     },
     {
       "md": "decret-06-198-etablissements-classes.md",
