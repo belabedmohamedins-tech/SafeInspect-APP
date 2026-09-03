@@ -54,7 +54,7 @@
       "pdf": "Décret 04-410.pdf",
       "pdf_text": "Décret 04-410.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 20 articles found in txt."
+      "note": "W110 BLOCKED: txt article order is scrambled (multi-column gazette layout — Art.1, Art.4, Art.2, Art.5, Art.3… interleaved). diff engine mismatches all articles. Needs pymupdf direct page extraction bypassing txt. pdf_pages TBD — standalone PDF (5 pages), no gazette contamination on p0."
     },
     {
       "md": "legal_refs/md/decret-04-82-agrement-sanitaire-elevage.md",
@@ -68,14 +68,15 @@
       "pdf": "Decret 05-315.pdf",
       "pdf_text": "Decret 05-315.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 4 articles found in txt."
+      "note": "W110 BLOCKED: article numbering shift in txt — articles misaligned against MD. Standalone PDF (4 pages). Needs pymupdf direct extraction or article-order inspection."
     },
     {
       "md": "legal_refs/md/decret-06-198-etablissements-classes.md",
       "pdf": "Decret 06-198.pdf",
       "pdf_text": "Decret 06-198.txt",
+      "pdf_pages": [1, 6],
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 50 articles found in txt."
+      "note": "W110 FIX 2026-09-03: pdf_pages [1,6] added. Gazette PDF (7 pages). Page 0 contains a different decree (Décret registre du commerce) — caused Arts.2-6 MISMATCH (score ~0.05-0.08) against wrong legal text. Decree 06-198 starts at page 1 (confirmed via pymupdf probe). Re-run diff required."
     },
     {
       "md": "legal_refs/md/decret-07-144-nomenclature-installations-classees.md",
@@ -96,14 +97,14 @@
       "pdf": "decret 09-19.pdf",
       "pdf_text": "decret 09-19.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 17 articles found in txt."
+      "note": "W110 BLOCKED: MD uses **Article N** bold-inline format — diff engine expects ## Article N heading format. 17 PDF_ONLY, 0 MD matches. Two options: (A) patch diff engine to also match **Article N** pattern, or (B) reformat MD headings to ## Article N. Awaiting diff_articles.py regex inspection to decide."
     },
     {
       "md": "legal_refs/md/decret-09-335-plans-internes-intervention.md",
       "pdf": "Décret 09-335.pdf",
       "pdf_text": "Décret 09-335.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 21 articles found in txt."
+      "note": "W110 BLOCKED: 20/21 articles MISMATCH with near-zero scores — article numbering shift in txt (multi-column scramble). Standalone PDF (5 pages). Same class of failure as decret-04-410. Needs pymupdf direct extraction."
     },
     {
       "md": "legal_refs/decret-17-140-hygiene-salubrite.md",
