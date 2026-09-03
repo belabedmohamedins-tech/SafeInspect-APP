@@ -4,7 +4,8 @@
 **Source :** JORADP N° 26 du 23 avril 2006  
 **Signé :** Ahmed OUYAHIA, Chef du Gouvernement  
 **Base légale :** Loi n° 03-10 du 19 juillet 2003, Art. 10  
-**Abroge :** Décret exécutif n° 93-160 du 10 juillet 1993
+**Abroge :** Décret exécutif n° 93-160 du 10 juillet 1993  
+**Extraction :** PDF texte natif — pymupdf `get_text()` (aucun OCR). Diff Annexe I (25 params) + Annexe II (7 catégories) vérifié ligne par ligne le 2026-09-03 par l'utilisateur. Résultat : MATCH total. Seule divergence : notation décimale `1.5` (point anglais) → `1,5` (virgule française) dans §4 Cuivre — correction de forme, aucune erreur de valeur.
 
 ---
 
