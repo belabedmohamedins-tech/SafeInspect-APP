@@ -29,9 +29,9 @@
     {
       "md": "legal_refs/md/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
       "pdf": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.pdf",
-      "pdf_text": "Arrêté interministériel du 9 Dhou El Kaâda 1446 correspondant au 7 mai 2025 fixant les conditions particulières d'hygiène et de salubrité applicables dans les établissements de restauration.txt",
+      "pdf_text": "arrete-interministeriel-2025-05-07-hygiene-restauration.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 48 articles found in txt."
+      "note": "W110 FIX: pdf_text renamed to ASCII stem — original UTF-8 filename caused W98 encoding failure. 48 articles found in txt."
     },
     {
       "md": "legal_refs/md/decret-01-102-creation-ona.md",
