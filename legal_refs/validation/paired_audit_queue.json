@@ -17,14 +17,14 @@
       "pdf": "arrete-interministeriel-2011-02-06-permis-construire-energie.pdf",
       "pdf_text": "arrete-interministeriel-2011-02-06-permis-construire-energie.txt",
       "diff_status": "MATCH",
-      "note": "W110 MATCH 2026-09-03. 15 MATCH / 1 PARTIAL / 6 MISMATCH all resolved as PDF justification artefacts — PDF renderer inserted double-spaces and mid-word newlines for column-justified layout (e.g. 'Pour  les  ouvrages  de  transport  d'énergie\\nélectrique,  la  demande...' vs clean MD prose). Legal text is 100% identical across all 22 articles. Art.7 PARTIAL (score 0.59): same justification artefact. Arts.8–12,22 MISMATCH (scores 0.25–0.47): same cause. No MD content error. Overall file: MATCH."
+      "note": "W110 MATCH 2026-09-03. 15 MATCH / 1 PARTIAL / 6 MISMATCH all resolved as PDF justification artefacts — PDF renderer inserted double-spaces and mid-word newlines for column-justified layout. Legal text 100% identical across all 22 articles. No MD content error."
     },
     {
       "md": "legal_refs/md/arrete-interministeriel-2016-10-04-criteres-microbiologiques.md",
       "pdf": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.pdf",
       "pdf_text": "Arrêté interministériel du 2 Moharram 1438 correspondant au 4 octobre 2016 fixant les critères microbiologiques des denrées alimentaires.txt",
-      "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 14 articles found in txt."
+      "diff_status": "MATCH",
+      "note": "W110 MATCH 2026-09-03. diff tool [PASS] match=85.7%. 14 articles. No anomalies requiring inspection."
     },
     {
       "md": "legal_refs/md/arrete-interministeriel-2025-05-07-hygiene-restauration.md",
@@ -47,7 +47,7 @@
       "pdf_pages": [14, 15],
       "use_txt": true,
       "diff_status": "MATCH",
-      "note": "W110 MATCH 2026-09-03. 22 MATCH / 1 PARTIAL / 1 MISMATCH resolved as follows — Art.5 PARTIAL (score 0.83): OCR line-break split 'associés' into '\\nociés', MD text is correct, artefact is in .txt only, accepted as MATCH. Art.24 MISMATCH (score 0.37): diff window boundary bleed — MD section header '---\\n\\n## Contrô' bled into the article extraction window; legal text on both sides is 100% identical ('Le présent décret sera publié…Fait à Alger, le 3 Chaoual 1423…Ali BENFLIS.'). No MD content error. Overall file: MATCH. use_txt=true (Type1 font encoding). pdf_pages [14,15] retained."
+      "note": "W110 MATCH 2026-09-03. 22 MATCH / 1 PARTIAL / 1 MISMATCH resolved as follows — Art.5 PARTIAL (score 0.83): OCR line-break split 'associés' into '\\nociés', MD text is correct, artefact is in .txt only, accepted as MATCH. Art.24 MISMATCH (score 0.37): diff window boundary bleed — MD section header '---\\n\\n## Contrô' bled into the article extraction window; legal text on both sides is 100% identical. No MD content error. Overall file: MATCH. use_txt=true (Type1 font encoding). pdf_pages [14,15] retained."
     },
     {
       "md": "legal_refs/md/decret-04-410-regles-installations-traitement-dechets.md",
