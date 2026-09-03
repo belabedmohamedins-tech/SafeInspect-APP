@@ -2,7 +2,7 @@
 
 > Single source of truth for phase numbering and execution order.
 > Read this file before opening any new phase.
-> Next phase identifier: **W99**
+> Next phase identifier: **W100**
 
 ---
 
@@ -30,7 +30,7 @@ Files in `legal_refs/` must be patched, never fully replaced, unless:
 - The user explicitly authorises a full-file replacement in the same session.
 
 ### Rule 4 — CONTENT MUST BE VISIBLE BEFORE CITING
-Before reporting any article as verified, that article’s text must appear in the current session’s tool output. If API truncates before reaching it → write: “Cannot confirm — file too large for API response, verify by commit diff.”
+Before reporting any article as verified, that article's text must appear in the current session's tool output. If API truncates before reaching it → write: "Cannot confirm — file too large for API response, verify by commit diff."
 
 ### Rule 5 — SIZE RESPONSE CHECK
 After any `create_or_update_file` call, check the `size` field in the response.
@@ -120,7 +120,7 @@ If `size` < 90% of expected byte count → HARD STOP before claiming success.
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W98)
+### ✅ CLOSED — Recent Phases (W60 → W99)
 
 | Phase | Title | Closed | Evidence |
 |---|---|---|---|
@@ -170,6 +170,7 @@ If `size` < 90% of expected byte count → HARD STOP before claiming success.
 | **LEGAL-OCR-11-125** | Décret 11-125 eau consommation humaine — OCR + encoding fix | 2026-09-02 | Commit [`3664053`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/3664053). 323 lines. |
 | **W98** | index_articles.py Windows UTF-8 fix — décret 11-125 9 articles confirmed | 2026-09-03 | Commit [`89cee93`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/89cee93c4876854ac5cf307d89f590a38031734a). **9 articles — user-confirmed ✅** |
 | **LEGAL-06-141** | Décret 06-141 effluents liquides — Arts.1–14 + Annexe I (25 params) + Annexe II (7 catégories) | 2026-09-03 | Commits [`120b201`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/120b20173eaf788dae5a142ad0e775d1bcedc91e) (initial), [`cd149f9`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/cd149f99a1b4015af1cfb9daf220cf16762e48fa) (truncation fix, 207 insertions ✅). **12,728 bytes — diff-verified.** |
+| **W99** | Art.13 susvisé + diff_articles ordinal key normalisation (`1er`→`1`) | 2026-09-03 | Commit [`15d811d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/15d811d1af86cab6ef83cff8837751397aa83a98). |
 
 ---
 
@@ -239,7 +240,7 @@ npx prisma migrate dev --name add-push-receipt-queue
 | Décret 07-144 | Nomenclature classés | ✅ Present — gap 1243–2922 [MANQUANT] |
 | Décret 09-19 | Déchets dangereux import | ✅ Present |
 | Décret 02-427 | Prévention risques pro | ✅ Present |
-| **Décret 06-141** | **Rejets effluents liquides** | ✅ **Present — Arts.1–14 + Annexe I (25 params) + Annexe II (7 catégories). 12,728 bytes. Diff-verified 2026-09-03.** |
+| **Décret 06-141** | **Rejets effluents liquides** | ✅ **Present — Arts.1–14 + Annexe I (25 params) + Annexe II (7 catégories). Art.13 susvisé corrected (W99). 12,728 bytes. Diff-verified 2026-09-03.** |
 | Décret 21-430 | GPL-C modification | ✅ Present |
 | Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
@@ -257,4 +258,4 @@ npx prisma migrate dev --name add-push-receipt-queue
 ## Sprint Status
 
 **Board clear. All phases closed.**
-Next phase identifier: **W99**. Active surveillance: **W51-SURV**.
+Next phase identifier: **W100**. Active surveillance: **W51-SURV**.

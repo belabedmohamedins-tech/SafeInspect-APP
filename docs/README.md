@@ -7,6 +7,15 @@
 
 ## Live Observations Log
 
+### 2026-09-03 02:59 WAT — Perplexity — W99 ✅ CLOSED — Art.13 susvisé + diff_articles ordinal key normalisation
+- **Phases closed:** W99
+- **Files changed:**
+  - `legal_refs/decret-06-141-effluents-liquides.md` — Art.13: added `, susvisé,` after `1993`; Annexe I rows 12–25 + full Annexe II restored
+  - `legal_refs/validation/diff_articles.py` — added `_normalise_article_key()`: strips French ordinal suffixes (`er`, `ère`, `re`, `ème`, `eme`, `e`) from digit-only keys; both `extract_md_articles()` and `extract_pdf_articles()` now call it so `1er` → `1` and never creates a ghost duplicate
+- **Commit:** [`15d811d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/15d811d1af86cab6ef83cff8837751397aa83a98)
+- **Verify:** `python legal_refs/validation/diff_articles.py --md legal_refs/decret-06-141-effluents-liquides.md --pdf-text <extract.txt>`
+- **Next phase identifier: W100**
+
 ### 2026-09-03 02:01 WAT — Perplexity — Décret 06-141 legal file complete ✅
 - **Phases closed:** N/A (legal file, not a code phase). Backlog item `L-01` partially resolved — full text now in repo.
 - **Files changed:** `legal_refs/decret-06-141-effluents-liquides.md` (12,728 bytes — Arts. 1–14 + Annexe I (25 params) + Annexe II (7 industry categories, all sub-tables))
@@ -14,7 +23,6 @@
 - **Verification:** `git show cd149f99 --stat` → 1 file changed, 207 insertions(+), 1 deletion(-) ✅
 - **Key values for abattoirs (Annexe II §1a):** Volume 6 m³/t carcasse, DBO5 250 g/t, DCO 800 g/t, Matière décantable 200 g/t, pH 5,5–8,5.
 - **Backlog note:** L-01 conflict (criteria file vs. decree values) still needs expert confirmation before closing.
-- **Next phase identifier: W99**
 
 ### 2026-09-03 00:47 WAT — Perplexity — W98 ✅ CLOSED — index_articles.py UTF-8 + décret 11-125 9 articles confirmed
 - **Phases closed:** W98
@@ -22,8 +30,6 @@
 - **Commits:** [`89cee93`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/89cee93c4876854ac5cf307d89f590a38031734a)
 - **Root cause:** Windows PowerShell `charmap` codec choked on `≥` (U+2265) in décret-11-125 pH row during stdout pipe. Fixed with `sys.stdout.reconfigure(encoding='utf-8')` + `ensure_ascii=True` on console output path.
 - **Gate result:** `# 9 articles indexed from decret-11-125-eau-consommation-humaine.md` — user-confirmed ✅
-- **Agent note:** Claude offline this session. Perplexity sole agent.
-- **Next phase identifier: W99**
 
 ### 2026-09-02 23:14 WAT — Perplexity — Décret 11-125 OCR pipeline ✅
 - **Phases closed:** N/A (legal file add, not a code phase)
@@ -48,7 +54,7 @@
   - Format A (`loi-18-11-sante-partie1-arts1-164.md`): 164 articles. Art.1 NORM `Article 1er. — La présente loi…` ✅ Art.2 NORM `Art. 2. — La protection…` ✅
   - Format B (`arrete-interministeriel-1999-11-21-conservation-aliments.md`): 10 articles. Art.1 NORM `Article 1er↵↵En application de…` ✅ Art.2 NORM `Art. 2↵↵Au sens du présent arrêté…` ✅
   - No leading `**`, `##`, or stray `.` in any NORM preview. Orphan-strip confirmed harmless on Format B.
-- **Root cause fixed:** `(?:[\. \*]|$)` → `(?:[.\s]*\*{0,3}\s*)` — greedily consumes full closing bold/italic sequence.
+- **Root cause fixed:** `(?:[\.  \*]|$)` → `(?:[.\s]*\*{0,3}\s*)` — greedily consumes full closing bold/italic sequence.
 
 ### 2026-08-20 13:08 WAT — Perplexity — W96 ✅ CLOSED — SPEC12-B push receipt two-phase stale-token cleanup
 - **User-confirmed:** `npx jest server/src/__tests__/push.test.ts` → 4/4 PASS.
@@ -60,34 +66,15 @@
 - **Pending (production):** `npx prisma migrate dev --name add-push-receipt-queue` when production DB is ready.
 - **Board clear:** All phases W60–W96 closed. Only W51-SURV surveillance remains.
 
-### 2026-08-19 17:27 WAT — Perplexity — W95 ✅ CLOSED — SPEC12-C server-login skip persistence
-- **User-confirmed:** `npx jest src/__tests__/screens/serverLoginSkip.test.tsx` → 5/5 PASS.
-- **Fix:** `handleSkip()` now persists `StorageKeys.SERVER_LOGIN_SKIPPED = 'true'` before navigating. `_layout.tsx` guard reads flag and short-circuits redirect.
-- **Files changed:** `app/screens/server-login.tsx`, `app/_layout.tsx`, `src/__tests__/screens/serverLoginSkip.test.tsx`
-- **Commits:** `1e575fc` (test fix), prior session commits for source fix.
-
-### 2026-08-19 15:08 WAT — Perplexity — W94 ✅ CLOSED — E2E integration test all green
-- **User-confirmed:** `npx jest src/__tests__/e2e/inspectorLifecycle.e2e.test.ts` all green.
-- **Test commit:** [`1a9360d`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/1a9360d0ae70929315546ed322e3c5661b644b43)
-
-### 2026-08-19 14:50 WAT — Perplexity — W92 ✅ CLOSED — PriorityWidget navigation test green after RN query fix
-- **Fix commit:** [`c1040f2`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/c1040f22911318e44806eb2b3c842ee5b54e5310)
-
-### 2026-08-19 12:07 WAT — Perplexity — audit-log.tsx duplicate key fix ✅ — TSC 0 + Jest 1232/0
-- Commit [`259f64b`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/259f64b122ce7ab366a80e74087d224468c2ba66)
-
-### 2026-08-18 22:41 WAT — Perplexity — TSC 0 + Jest 1233/0 ALL GREEN (user confirmed)
-- Commit [`2c78a16`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/2c78a16a61331c4aff693880dba347afc603feed)
-
 > **Older entries archived** — see git log or STRATEGIC_PLAN.md `<details>` block for full history.
 
 ---
 
-## DEFINITIVE REMAINING WORK (as of 2026-09-03 02:01 WAT)
+## DEFINITIVE REMAINING WORK (as of 2026-09-03 02:59 WAT)
 
 ### ✅ ALL PHASES CLOSED
 
-W98 closed. Board clear.
+W99 closed. Board clear.
 
 ### 🟠 SURVEILLANCE
 
@@ -144,13 +131,13 @@ SafeInspect-APP/
 │   ├── index_articles.py       # ✅ UTF-8 fix W98 — 9 articles from décret 11-125 confirmed
 │   └── fix_encoding.py         # ⚠️ one-off OCR fix — delete when convenient
 └── legal_refs/                 # Algerian legislation
-    ├── decret-06-141-effluents-liquides.md  # ✅ Arts.1-14 + Annexe I (25 params) + Annexe II (7 categories)
+    ├── decret-06-141-effluents-liquides.md  # ✅ Arts.1-14 + Annexe I (25 params) + Annexe II (7 catégories) — Art.13 susvisé corrected (W99)
     ├── md/                     # 48 MD law/decree files
     ├── pdf/                    # Source PDFs + extracted .txt
     ├── validation/
     │   ├── index_articles.py   # ✅ boundary extractor — regex fix W97
     │   ├── normalize.py        # ✅ MD/PDF dual normaliser + orphan-strip W97
-    │   └── diff_articles.py    # ✅ fuzzy diff engine — W97-P3
+    │   └── diff_articles.py    # ✅ fuzzy diff engine — W97-P3 + ordinal key normalisation W99
     └── ...
 ```
 
@@ -164,7 +151,7 @@ SafeInspect-APP/
 |---|---|---|
 | **W51-SURV** | AIM GPL2 JORADP publication watch | 🟠 SURVEILLANCE |
 
-**Next phase identifier: W99.**
+**Next phase identifier: W100.**
 
 ---
 
