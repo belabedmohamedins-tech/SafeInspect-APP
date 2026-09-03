@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W101 (article_range support over W100)
+diff_articles.py — W102 (newline collapse + gazette trailer stripper)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -44,6 +44,23 @@ W101 patches (2026-09-03):
                   noise from articles belonging to other split-file parties.
                   MD articles outside the range are not filtered (they would surface
                   as MD_ONLY and signal an authoring error in the MD file itself).
+
+W102 patches (2026-09-03):
+  MODE D — Art.3 PARTIAL (0.53): gazette two-column layout produces intra-sentence
+           newlines inside article body text (e.g. "radionucléi\\net\\nchimiques").
+           These survive the \\s+ collapse because \\s+ treats \\n as whitespace but
+           the surrounding letters are not whitespace so the word boundary breaks.
+           Fix: _normalise() now replaces \\n (and \\r\\n / \\r) with a single space
+           BEFORE the \\s+ collapse step. This re-joins hyphenated column breaks too.
+  MODE E — Art.9 MISMATCH (0.29): PDF body of last article runs past the decree text
+           into the gazette publication footer ("18 Rabie Ethani 1432 / 23 mars 2011 /
+           JOURNAL OFFICIEL..."). The article regex has no sentinel to stop at because
+           there is no next "Article N" after the last article.
+           Fix: new _strip_pdf_trailer() pre-processor removes gazette footer lines
+           before article extraction. Footer pattern: a line that is a bare Hijri date
+           (digits + month name), a bare Gregorian date (digits + month + year), or
+           "JOUR" / "JOURNAL" / "OFFICIEL" / "N°" line at the end of the document.
+           Applied to PDF text only, before extract_pdf_articles().
 """
 
 import argparse
@@ -83,7 +100,7 @@ def resolve_pdf_txt(pdf_filename: str, search_roots: list[Path]) -> Path | None:
 
 
 # ---------------------------------------------------------------------------
-# Normaliser  (W100: Unicode whitespace variants added)
+# Normaliser  (W100: Unicode whitespace variants; W102: \n→space before collapse)
 # ---------------------------------------------------------------------------
 
 _LIGATURES = str.maketrans({
@@ -104,7 +121,7 @@ _LIGATURES = str.maketrans({
     "\u00ce": "I", "\u00d4": "O",
     "\u00d9": "U", "\u00db": "U", "\u00dc": "U",
     "\u00c7": "C",
-    # W100: map all Unicode whitespace variants that \\s+ may miss
+    # W100: map all Unicode whitespace variants that \s+ may miss
     "\u00a0": " ",   # non-breaking space
     "\u202f": " ",   # narrow no-break space
     "\u2009": " ",   # thin space
@@ -138,13 +155,18 @@ _MOJIBAKE = [
 
 
 def _normalise(text: str) -> str:
-    """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace."""
+    """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace.
+    W102: replace newlines with space before \\s+ collapse so intra-sentence
+    column-break newlines (gazette two-column artefact) are treated as spaces.
+    """
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
     text = text.translate(_LIGATURES)   # includes \u00a0 → ' ' (W100)
     text = text.lower()
     text = re.sub(r"[#*_`~>|\\]", " ", text)
     text = re.sub(r"^art(?:icle[r]?)?\s*\.?\s*\d+\w*[\s.:\u2013\u2014-]*", "", text, flags=re.IGNORECASE)
+    # W102 MODE D: replace all newline variants with space BEFORE whitespace collapse
+    text = text.replace("\r\n", " ").replace("\r", " ").replace("\n", " ")
     text = re.sub(r"\s+", " ", text).strip()
     return text
 
@@ -165,6 +187,69 @@ def _normalise_article_key(raw: str) -> str:
     if re.fullmatch(r"\d+", cleaned):
         return str(int(cleaned))
     return cleaned
+
+
+# ---------------------------------------------------------------------------
+# W102 MODE E: gazette trailer stripper
+# ---------------------------------------------------------------------------
+#
+# The last article in a PDF has no following "Article N" sentinel, so the
+# regex captures everything to \Z — including gazette footer lines printed
+# after the decree text:
+#
+#   Ahmed OUYAHIA.
+#
+#   18 Rabie Ethani 1432          ← Hijri publication date
+#   23 mars 2011                  ← Gregorian publication date
+#   JOURNAL OFFICIEL ...          ← masthead
+#   N° 18                         ← issue number
+#
+# This stripper removes all lines from the first such footer line onward,
+# working from the END of the document so it only affects trailing garbage.
+# It is applied to the full PDF text before article extraction.
+# ---------------------------------------------------------------------------
+
+# Hijri month names (Arabic transliteration variants used in JORADP)
+_HIJRI_MONTHS = (
+    r"moharram|safar|rabie?\s+el?\s*awal|rabie?\s+eth?a?ni|"
+    r"joumada\s+el?\s*oula|joumada\s+eth?a?ni|rajeb|chaa?bane?|"
+    r"ramadhan?|chawwal|dhou\s+el\s+ka[ae]da|dhou\s+el\s+hidja"
+)
+
+# A line that looks like a gazette footer marker (Hijri date, Gregorian date,
+# masthead keyword, or issue marker). Anchored to full line (strip() applied).
+_TRAILER_LINE_RE = re.compile(
+    r"^\s*(?:"
+    r"\d+\s+(?:" + _HIJRI_MONTHS + r")\s+\d{4}"   # Hijri date line
+    r"|(?:\d+\s+)?(?:janvier|février|mars|avril|mai|juin|juillet|août|"
+    r"septembre|octobre|novembre|décembre)\s+\d{4}"  # Gregorian date line
+    r"|jour(?:nal)?\s*(?:officiel)?"                  # JOURNAL / JOUR / JOURNAL OFFICIEL
+    r"|officiel\b"
+    r"|n[°o]\s*\d+"                                    # N° 18
+    r"|page\s+\d+"
+    r")\s*$",
+    re.IGNORECASE,
+)
+
+
+def _strip_pdf_trailer(text: str) -> str:
+    """
+    W102 MODE E: remove gazette footer lines that appear after the last article.
+    Works bottom-up: scan lines from the end, remove matching footer lines,
+    stop at the first non-footer non-blank line.
+    """
+    lines = text.splitlines()
+    cut = len(lines)
+    for i in range(len(lines) - 1, -1, -1):
+        line = lines[i]
+        if line.strip() == "":
+            cut = i  # blank lines at end — keep scanning
+            continue
+        if _TRAILER_LINE_RE.match(line):
+            cut = i  # footer line — mark for removal, keep scanning
+            continue
+        break  # first non-blank non-footer line — stop
+    return "\n".join(lines[:cut])
 
 
 # ---------------------------------------------------------------------------
@@ -212,6 +297,7 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 # so the ^ anchor in the regexes below fires correctly.
 #
 # This pre-processor is applied to the PDF text BEFORE extraction.
+# W102: _strip_pdf_trailer() is now also applied before extraction.
 # ---------------------------------------------------------------------------
 
 # Matches "Article N" / "Art. N" that appears mid-line after 4+ spaces
@@ -249,7 +335,9 @@ _PDF_ART_SHORT_RE = re.compile(
 
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
     """Return {article_number: body_text} from plain PDF-extracted text."""
-    # W100 MODE A: inject newlines before mid-line Article markers first
+    # W102 MODE E: strip gazette footer before extraction
+    pdf_text = _strip_pdf_trailer(pdf_text)
+    # W100 MODE A: inject newlines before mid-line Article markers
     pdf_text = _inject_article_newlines(pdf_text)
     articles: dict[str, str] = {}
     for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
