@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W108 (use_txt override for font-corrupted PDFs)
+diff_articles.py — W111 (HR sentinel + Art.5 OCR patch notes)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -159,6 +159,27 @@ W109 patches (2026-09-03):
            header line, and (b) all subsequent lines up to the next **Art marker.
            extract_md_articles() prepends the inline fragment to the body for
            bold-inline matches, mirroring the W105 fix for PDF extraction.
+
+W110 patches (2026-09-03):
+  Tier-4 manual OCR recovery for decret-02-427 .txt:
+    (1) Art.3 header line was completely absent from Tesseract output — inserted.
+    (2) Art.15 article number digit dropped by OCR ('. — Lorsque') — restored.
+    (3) Arts.22-24 missing entirely (last OCR page not captured) — appended.
+  These patches are applied directly to the .txt source file, not to diff_articles.py.
+
+W111 patches (2026-09-03):
+  MODE N — Art.24 MISMATCH (0.37): MD extractor's \\Z lookahead in
+           _MD_ART_BOLD_INLINE_RE and _MD_ART_PLAIN_RE swallows the entire
+           post-decree appendix ("Contrôle de séquence", article list, notes)
+           into the last article's body. This inflates the MD body enormously
+           compared to the clean PDF body → near-zero SequenceMatcher score.
+           Fix: add horizontal rule sentinel (^---+\\s*$) to the lookahead of
+           _MD_ART_BOLD_INLINE_RE and _MD_ART_PLAIN_RE so extraction stops at
+           the first --- divider after the last article. \\Z remains as fallback
+           for MD files with no trailing ---.
+  MODE O — Art.5 OCR word-drop (ociés → associés): Tesseract dropped the 'ass'
+           prefix from 'associés' in the .txt. Score 0.83 — just below MATCH
+           threshold. Patched directly in the .txt source file (W111 .txt patch).
 """
 
 import argparse
@@ -443,7 +464,8 @@ def _strip_pdf_trailer(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# MD article extractor  (W103: re.IGNORECASE; W109 MODE M: bold-inline body fix)
+# MD article extractor  (W103: re.IGNORECASE; W109 MODE M: bold-inline body fix;
+#                        W111 MODE N: --- HR sentinel stops last-article bleed)
 # ---------------------------------------------------------------------------
 
 _MD_ART_HEADING_RE = re.compile(
@@ -451,19 +473,18 @@ _MD_ART_HEADING_RE = re.compile(
     re.MULTILINE | re.DOTALL | re.IGNORECASE,
 )
 
-# W109 MODE M: three capture groups:
-#   group(1) = article number token
-#   group(2) = inline remainder on header line after the number+separator (may be empty)
-#   group(3) = subsequent lines body up to next **Art marker
+# W111 MODE N: lookahead now also stops at a Markdown horizontal rule (--- / *** / ___)
+# so appendix text after the last article is not captured into the last article body.
 _MD_ART_BOLD_INLINE_RE = re.compile(
     r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}"
     r"[^\n]*?(?:[-\u2013\u2014]\s*)([^\n]*)\n"
-    r"(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
+    r"(.*?)(?=^\*{1,2}[Aa]rt|^[-*_]{3,}\s*$|\Z)",
     re.DOTALL | re.IGNORECASE,
 )
 
+# W111 MODE N: same HR sentinel added to plain pattern
 _MD_ART_PLAIN_RE = re.compile(
-    r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
+    r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|^[-*_]{3,}\s*$|\Z)",
     re.DOTALL | re.IGNORECASE,
 )
 
