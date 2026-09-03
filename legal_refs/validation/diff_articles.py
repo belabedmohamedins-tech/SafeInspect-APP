@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W104 (space-before-punctuation normalisation)
+diff_articles.py — W105 (preserve inline body on article header line)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -78,6 +78,22 @@ W104 patches (2026-09-03):
            Fix: _normalise() now strips space-before-punctuation ( ,  ;  :  . ) after
            the \\s+ collapse step, mapping "word ," → "word,". Applied to both MD and
            PDF snippets so scoring is symmetric.
+
+W105 patches (2026-09-03):
+  MODE H — decret-17-140 Art.9 MISMATCH (0.02): _PDF_ART_SEP_RE captured [^\\n]* on
+           the header separator line and discarded it entirely, so when the article
+           body starts inline on the same line as "Art. 9. —" the opening sentence
+           was lost. PDF snippet started at "nécessaires aux opérations" (mid-sentence)
+           while MD snippet started at "Les équipements, le matériel et les locaux
+           nécessaires aux opérations" (full sentence) → near-zero similarity score.
+           Fix: split _PDF_ART_SEP_RE into three capture groups:
+             group(1) = article number
+             group(2) = inline remainder of header line after separator (may be empty)
+             group(3) = subsequent-lines body
+           extract_pdf_articles() prepends group(2).strip() to group(3) so no
+           inline content is ever discarded. Same three-group split applied to
+           _PDF_ART_SHORT_RE for consistency. _PDF_ART_BARE_RE is unaffected
+           (its header line is the article number only, body always starts on next line).
 """
 
 import argparse
@@ -315,20 +331,37 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 
 
 # ---------------------------------------------------------------------------
-# PDF article extractor  (W100: MODE A fix — mid-line Article marker support)
+# PDF article extractor  (W100: MODE A fix — mid-line Article marker support;
+#                         W105: MODE H fix — preserve inline body on header line)
 # ---------------------------------------------------------------------------
 #
-# Two-column gazette PDFs extracted with pdfminer produce text like:
-#
+# W100: Two-column gazette PDFs extracted with pdfminer produce text like:
 #   "...end of col-1 text    Article 5. — Le décret..."
-#
 # There is NO newline before "Article 5". The column separator is a run of
 # 4+ spaces. The W100 fix: a pre-processor step (_inject_article_newlines)
 # inserts \n before any "Article N" that appears mid-line after whitespace,
 # so the ^ anchor in the regexes below fires correctly.
 #
-# This pre-processor is applied to the PDF text BEFORE extraction.
-# W102: _strip_pdf_trailer() is now also applied before extraction.
+# W105 MODE H root cause: _PDF_ART_SEP_RE used [^\n]* on the separator line
+# to consume "everything after the dash up to end-of-line". That discarded
+# any article body text starting inline on the same line as the header, e.g.:
+#
+#   Art. 9. — Les équipements, le matériel et les locaux nécessaires aux
+#   opérations de récolte...
+#
+# The regex captured "Les équipements, le matériel et les locaux nécessaires aux"
+# as part of the header match (group(2) in the OLD two-group pattern) and never
+# put it in the body group. The body started at "opérations de récolte...", so
+# the normalised PDF snippet began mid-sentence → near-zero similarity score.
+#
+# Fix: use THREE capture groups in _PDF_ART_SEP_RE and _PDF_ART_SHORT_RE:
+#   group(1) = article number
+#   group(2) = inline content after the separator on the header line (may be "")
+#   group(3) = body on subsequent lines
+# extract_pdf_articles() joins group(2) + "\n" + group(3) so inline content
+# is always prepended to the body, never silently dropped.
+# _PDF_ART_BARE_RE is unaffected: its header line is just the article number,
+# body always begins on the next line.
 # ---------------------------------------------------------------------------
 
 # W103: added re.IGNORECASE so ARTICLE / ART. mid-line markers are caught too.
@@ -347,8 +380,9 @@ def _inject_article_newlines(text: str) -> str:
     return _MIDLINE_ARTICLE_RE.sub(r"\n\2", text)
 
 
+# W105: THREE capture groups — (number)(inline_header_body)(next_lines_body)
 _PDF_ART_SEP_RE = re.compile(
-    r"(?mi)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+[^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
+    r"(?mi)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014\u2012\u2015 \t-]+([^\n]*)\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
     re.DOTALL,
 )
 
@@ -357,24 +391,45 @@ _PDF_ART_BARE_RE = re.compile(
     re.DOTALL,
 )
 
+# W105: THREE capture groups — (number)(inline_header_body)(next_lines_body)
 _PDF_ART_SHORT_RE = re.compile(
-    r"(?mi)^[Aa]rt\.\s*(\d+\w*)\s*[.:\u2013\u2014 \t-][^\n]*\n(.*?)(?=^[Aa]rt\.\s*\d|\Z)",
+    r"(?mi)^[Aa]rt\.\s*(\d+\w*)\s*[.:\u2013\u2014 \t-]([^\n]*)\n(.*?)(?=^[Aa]rt\.\s*\d|\Z)",
     re.DOTALL,
 )
 
 
 def extract_pdf_articles(pdf_text: str) -> dict[str, str]:
-    """Return {article_number: body_text} from plain PDF-extracted text."""
+    """Return {article_number: body_text} from plain PDF-extracted text.
+
+    W105: For _PDF_ART_SEP_RE and _PDF_ART_SHORT_RE the match has 3 groups:
+      group(1) = article number
+      group(2) = inline body text on the header line (after the separator dash/colon)
+      group(3) = body text on subsequent lines
+    The body is group(2).strip() + "\\n" + group(3) so inline content is never lost.
+    _PDF_ART_BARE_RE keeps 2 groups (number + body) — body always starts next line.
+    """
     # W102 MODE E: strip gazette footer before extraction
     pdf_text = _strip_pdf_trailer(pdf_text)
     # W100 MODE A: inject newlines before mid-line Article markers
     pdf_text = _inject_article_newlines(pdf_text)
     articles: dict[str, str] = {}
-    for pattern in (_PDF_ART_SEP_RE, _PDF_ART_BARE_RE, _PDF_ART_SHORT_RE):
+
+    # Three-group patterns: _PDF_ART_SEP_RE, _PDF_ART_SHORT_RE
+    for pattern in (_PDF_ART_SEP_RE, _PDF_ART_SHORT_RE):
         for m in pattern.finditer(pdf_text):
             num = _normalise_article_key(m.group(1))
             if num not in articles:
-                articles[num] = m.group(2).strip()
+                inline = m.group(2).strip()
+                rest = m.group(3).strip()
+                body = (inline + "\n" + rest).strip() if inline else rest
+                articles[num] = body
+
+    # Two-group pattern: _PDF_ART_BARE_RE
+    for m in _PDF_ART_BARE_RE.finditer(pdf_text):
+        num = _normalise_article_key(m.group(1))
+        if num not in articles:
+            articles[num] = m.group(2).strip()
+
     return articles
 
 
@@ -537,7 +592,7 @@ def write_md_report(result: dict, out_dir: Path) -> Path:
     range_note = ""
     if result.get("article_range"):
         r = result["article_range"]
-        range_note = f"  \n**Article range filter:** Arts.{r[0]}–{r[1]}"
+        range_note = f"  \n**Article range filter:** Arts.{r[0]}\u2013{r[1]}"
     lines = [
         f"# Diff Report: {result['md_file']}",
         "",
