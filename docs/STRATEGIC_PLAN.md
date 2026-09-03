@@ -6,6 +6,45 @@
 
 ---
 
+## 🚨 WRITE GUARD — Anti-Truncation Rules (mandatory before every push)
+
+> These rules exist because `create_or_update_file` silently truncates content when the JSON payload is too large. A truncated legal file is worse than no file — it looks complete but is missing data.
+
+### Rule 1 — SIZE CHECK BEFORE PUSH
+Before calling `create_or_update_file` or `push_files` on any file in `legal_refs/`:
+1. Count the character length of the content string you are about to push.
+2. If > 20,000 chars → use `push_files` instead (handles larger payloads).
+3. If > 40,000 chars → STOP. Split the file first. Update SPLIT FILES REGISTRY in space instructions.
+
+### Rule 2 — VERIFY BY DIFF AFTER EVERY WRITE (no exceptions)
+After every push to `legal_refs/`:
+```powershell
+git fetch origin main; git merge origin/main; git show <commit-sha> --stat
+```
+Expected: `additions` must be ≥ 90% of the line count you pushed.
+If `deletions` > 20 → HARD STOP. Do NOT claim success. Report truncation to user.
+
+### Rule 3 — NEVER FULL-REPLACE A LARGE LEGAL FILE
+Files in `legal_refs/` must be patched, never fully replaced, unless:
+- The file is being created for the first time (no SHA exists), OR
+- The user explicitly authorises a full-file replacement in the same session.
+
+### Rule 4 — CONTENT MUST BE VISIBLE BEFORE CITING
+Before reporting any article as verified, that article’s text must appear in the current session’s tool output. If API truncates before reaching it → write: “Cannot confirm — file too large for API response, verify by commit diff.”
+
+### Rule 5 — SIZE RESPONSE CHECK
+After any `create_or_update_file` call, check the `size` field in the response.
+If `size` < 90% of expected byte count → HARD STOP before claiming success.
+
+### What happened (2026-09-03 01:00 WAT)
+- `decret-06-141-effluents-liquides.md` was pushed with `create_or_update_file`.
+- First commit landed at **6,967 bytes** (112 lines) — content cut mid-Annexe I row 22.
+- Root cause: JSON payload exceeded API limit silently. No error was returned.
+- Fix: second push via `create_or_update_file` with corrected full content → **12,728 bytes** (207 insertions confirmed by diff).
+- Prevention: Rules 1–5 above must be checked before every legal file write.
+
+---
+
 ## Phase Registry
 
 ### ✅ ARCHIVED — Phases A → W59 (closed 2026-07-30 → 2026-08-16)
@@ -130,6 +169,7 @@
 | **W97-P3** | Legal validation pipeline Phase 3: diff_articles.py fuzzy diff engine | 2026-09-02 | Commit `2a7167f`. |
 | **LEGAL-OCR-11-125** | Décret 11-125 eau consommation humaine — OCR + encoding fix | 2026-09-02 | Commit [`3664053`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/3664053). 323 lines. |
 | **W98** | index_articles.py Windows UTF-8 fix — décret 11-125 9 articles confirmed | 2026-09-03 | Commit [`89cee93`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/89cee93c4876854ac5cf307d89f590a38031734a). **9 articles — user-confirmed ✅** |
+| **LEGAL-06-141** | Décret 06-141 effluents liquides — Arts.1–14 + Annexe I (25 params) + Annexe II (7 catégories) | 2026-09-03 | Commits [`120b201`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/120b20173eaf788dae5a142ad0e775d1bcedc91e) (initial), [`cd149f9`](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/cd149f99a1b4015af1cfb9daf220cf16762e48fa) (truncation fix, 207 insertions ✅). **12,728 bytes — diff-verified.** |
 
 ---
 
@@ -172,7 +212,7 @@ npx prisma migrate dev --name add-push-receipt-queue
 | Item | Blocker |
 |---|---|
 | L-06: UPD-AX2-01 buffer vs. notice-radius | Product/domain decision |
-| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation |
+| L-01: Décret 06-141 Annexe I/II slaughterhouse conflict | Expert/regulator confirmation (file now in repo) |
 | MCH-29-05 heavy-metal params | Décret 06-141 Annexe II §3 — product decision |
 | COU-AX7-03 Loi 18-11 worker medical exams | Verify when couvoirCriteria.ts fully audited |
 | Décret 76-36 texte intégral | Rectificatif present. Texte original J.O. n°21/1976 non numérisé |
@@ -199,7 +239,7 @@ npx prisma migrate dev --name add-push-receipt-queue
 | Décret 07-144 | Nomenclature classés | ✅ Present — gap 1243–2922 [MANQUANT] |
 | Décret 09-19 | Déchets dangereux import | ✅ Present |
 | Décret 02-427 | Prévention risques pro | ✅ Present |
-| Décret 06-141 | Rejets effluents liquides | ✅ Present |
+| **Décret 06-141** | **Rejets effluents liquides** | ✅ **Present — Arts.1–14 + Annexe I (25 params) + Annexe II (7 catégories). 12,728 bytes. Diff-verified 2026-09-03.** |
 | Décret 21-430 | GPL-C modification | ✅ Present |
 | Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
