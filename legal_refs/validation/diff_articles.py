@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W111 (HR sentinel + Art.5 OCR patch notes)
+diff_articles.py — W112 (bold-standalone MD article format)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
-  python diff_articles.py --md <file.md> --pdf-text <file.txt> [--out-dir <dir>]
+  python diff_articles.py --md <file.md> --pdf-text <file.txt> [--out-dir
+<dir>]
   python diff_articles.py --batch <paired_audit_queue.json> [--out-dir <dir>]
 
 Path resolution (batch mode):
@@ -180,6 +181,21 @@ W111 patches (2026-09-03):
   MODE O — Art.5 OCR word-drop (ociés → associés): Tesseract dropped the 'ass'
            prefix from 'associés' in the .txt. Score 0.83 — just below MATCH
            threshold. Patched directly in the .txt source file (W111 .txt patch).
+
+W112 patches (2026-09-04):
+  MODE P — MD bold-standalone format (decret-09-19 0% MD match): the MD file uses
+           "**Article 1er**\\n\\nbody text on next paragraph" format — the article
+           number token is bold on its own line with NO inline body text after it
+           (no dash/em-dash separator). Neither _MD_ART_BOLD_INLINE_RE (requires
+           a dash separator on the header line) nor _MD_ART_PLAIN_RE (requires
+           plain text, not bold markers) match this format, so all 17 articles
+           produce PDF_ONLY → 0% MD match.
+           Fix: new _MD_ART_BOLD_STANDALONE_RE — matches **Article N** (or
+           **Article Ner**) on its own line followed by body on subsequent lines,
+           with no inline content requirement. Inserted as Pass 3 in
+           extract_md_articles(), after bold-inline (Pass 2) and before plain
+           (Pass 4), so the more specific inline pattern takes priority when
+           both could match.
 """
 
 import argparse
@@ -465,7 +481,8 @@ def _strip_pdf_trailer(text: str) -> str:
 
 # ---------------------------------------------------------------------------
 # MD article extractor  (W103: re.IGNORECASE; W109 MODE M: bold-inline body fix;
-#                        W111 MODE N: --- HR sentinel stops last-article bleed)
+#                        W111 MODE N: --- HR sentinel stops last-article bleed;
+#                        W112 MODE P: bold-standalone own-line format)
 # ---------------------------------------------------------------------------
 
 _MD_ART_HEADING_RE = re.compile(
@@ -482,6 +499,17 @@ _MD_ART_BOLD_INLINE_RE = re.compile(
     re.DOTALL | re.IGNORECASE,
 )
 
+# W112 MODE P: bold-standalone — **Article N** on its own line, body on next paragraph.
+# Format: **Article 1er**\n\nbody...
+# Differs from bold-inline: no dash separator on the header line; body starts on the
+# NEXT line (possibly after a blank line). Lookahead stops at next bold Article marker,
+# heading Article marker, HR sentinel, or end-of-string.
+_MD_ART_BOLD_STANDALONE_RE = re.compile(
+    r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\*{1,2}\s*\n"
+    r"(.*?)(?=^\*{1,2}[Aa]rt|^#{1,4}\s*[Aa]rt|^[-*_]{3,}\s*$|\Z)",
+    re.DOTALL | re.IGNORECASE,
+)
+
 # W111 MODE N: same HR sentinel added to plain pattern
 _MD_ART_PLAIN_RE = re.compile(
     r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|^[-*_]{3,}\s*$|\Z)",
@@ -490,16 +518,23 @@ _MD_ART_PLAIN_RE = re.compile(
 
 
 def extract_md_articles(md_text: str) -> dict[str, str]:
-    """Return {article_number: body_text} from a Markdown file."""
+    """Return {article_number: body_text} from a Markdown file.
+
+    Pass order (first match wins per article number):
+      1. Heading pattern    — ## Article N
+      2. Bold-inline        — **Article N.** — body on same line  (W109 MODE M)
+      3. Bold-standalone    — **Article N** on own line, body next (W112 MODE P)
+      4. Plain pattern      — Article N. body or Art. N — body
+    """
     articles: dict[str, str] = {}
 
-    # Heading pattern (unchanged)
+    # Pass 1: Heading pattern
     for m in _MD_ART_HEADING_RE.finditer(md_text):
         num = _normalise_article_key(m.group(1))
         if num not in articles:
             articles[num] = m.group(2).strip()
 
-    # W109 MODE M: bold-inline — prepend inline fragment to body
+    # Pass 2: Bold-inline — prepend inline fragment to body (W109 MODE M)
     for m in _MD_ART_BOLD_INLINE_RE.finditer(md_text):
         num = _normalise_article_key(m.group(1))
         if num not in articles:
@@ -508,7 +543,13 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
             body = (inline + "\n" + rest).strip() if inline else rest
             articles[num] = body
 
-    # Plain pattern (unchanged)
+    # Pass 3: Bold-standalone — **Article N** own-line format (W112 MODE P)
+    for m in _MD_ART_BOLD_STANDALONE_RE.finditer(md_text):
+        num = _normalise_article_key(m.group(1))
+        if num not in articles:
+            articles[num] = m.group(2).strip()
+
+    # Pass 4: Plain pattern
     for m in _MD_ART_PLAIN_RE.finditer(md_text):
         num = _normalise_article_key(m.group(1))
         if num not in articles:
