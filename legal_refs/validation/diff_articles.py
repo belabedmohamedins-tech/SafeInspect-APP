@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W107 (Jaccard word-set fallback scorer)
+diff_articles.py — W108 (use_txt override for font-corrupted PDFs)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -30,12 +30,12 @@ W100 patches (2026-09-03):
            so "Article N" appears mid-line after a long whitespace run, not at ^.
            Fix: _PDF_ART_SEP_RE / _PDF_ART_BARE_RE / _PDF_ART_SHORT_RE now also match
            after 4+ whitespace chars on the same line (gazette column separator).
-           The pre-processor inserts \\n before these markers so ^ fires on them.
+           The pre-processor inserts \n before these markers so ^ fires on them.
   MODE B — content scramble (loi-18-11 3.6%): pdfminer double-space column padding
-           and \\u00a0 (non-breaking space) survive \\s+ collapse in some builds.
+           and \u00a0 (non-breaking space) survive \s+ collapse in some builds.
            Fix: _normalise() now maps all Unicode whitespace variants to ' ' explicitly
-           before the regex collapse, including \\u00a0, \\u202f, \\u2009, \\u2002, \\u2003.
-  MODE C — decret-11-125 77.8%: same \\u00a0 issue, same fix as MODE B.
+           before the regex collapse, including \u00a0, \u202f, \u2009, \u2002, \u2003.
+  MODE C — decret-11-125 77.8%: same \u00a0 issue, same fix as MODE B.
 
 W101 patches (2026-09-03):
   article_range — queue entries may carry {"article_range": [start, end]} (inclusive).
@@ -47,11 +47,11 @@ W101 patches (2026-09-03):
 
 W102 patches (2026-09-03):
   MODE D — Art.3 PARTIAL (0.53): gazette two-column layout produces intra-sentence
-           newlines inside article body text (e.g. "radionucléi\\net\\nchimiques").
-           These survive the \\s+ collapse because \\s+ treats \\n as whitespace but
+           newlines inside article body text (e.g. "radionucléi\net\nchimiques").
+           These survive the \s+ collapse because \s+ treats \n as whitespace but
            the surrounding letters are not whitespace so the word boundary breaks.
-           Fix: _normalise() now replaces \\n (and \\r\\n / \\r) with a single space
-           BEFORE the \\s+ collapse step. This re-joins hyphenated column breaks too.
+           Fix: _normalise() now replaces \n (and \r\n / \r) with a single space
+           BEFORE the \s+ collapse step. This re-joins hyphenated column breaks too.
   MODE E — Art.9 MISMATCH (0.29): PDF body of last article runs past the decree text
            into the gazette publication footer ("18 Rabie Ethani 1432 / 23 mars 2011 /
            JOURNAL OFFICIEL..."). The article regex has no sentinel to stop at because
@@ -76,11 +76,11 @@ W104 patches (2026-09-03):
            mapping and whitespace normalisation these survive as "traitement ," which
            scores very low against the clean MD "traitement,".
            Fix: _normalise() now strips space-before-punctuation ( ,  ;  :  . ) after
-           the \\s+ collapse step, mapping "word ," → "word,". Applied to both MD and
+           the \s+ collapse step, mapping "word ," → "word,". Applied to both MD and
            PDF snippets so scoring is symmetric.
 
 W105 patches (2026-09-03):
-  MODE H — decret-17-140 Art.9 MISMATCH (0.02): _PDF_ART_SEP_RE captured [^\\n]* on
+  MODE H — decret-17-140 Art.9 MISMATCH (0.02): _PDF_ART_SEP_RE captured [^\n]* on
            the header separator line and discarded it entirely, so when the article
            body starts inline on the same line as "Art. 9. —" the opening sentence
            was lost. PDF snippet started at "nécessaires aux opérations" (mid-sentence)
@@ -119,6 +119,18 @@ W107 patches (2026-09-03):
            penalise it. Only fires as an upward tiebreaker — it never reduces a score.
            Short articles (< 6 words in either side) skip Jaccard (unreliable on short
            strings) and use SequenceMatcher only.
+
+W108 patches (2026-09-03):
+  MODE K — font-corrupted PDFs (decret-02-427 4.2%): some PDFs use non-standard
+           Type1/Type3 font encoding tables that cause pymupdf get_text() to return
+           garbled codepoints (lÆarticle, prÚvention, Ó). Neither latin-1 re-encoding
+           nor pdfplumber Tier-2 recovers clean text — only Tesseract OCR (Tier-3)
+           produces correct UTF-8. For these PDFs a clean OCR .txt has been written.
+           When "use_txt": true is set in the queue entry, run_batch() skips the
+           W106 pdf_pages live extraction entirely and reads the .txt file instead.
+           The output tag changes to [txt_override] for traceability.
+           This flag coexists with pdf_pages (still used as metadata) but suppresses
+           the live pymupdf call.
 """
 
 import argparse
@@ -271,9 +283,9 @@ _SPACE_BEFORE_PUNCT_RE = re.compile(r'\s+([,;:.])')
 
 def _normalise(text: str) -> str:
     """Lowercase, strip diacritics/ligatures/mojibake/Unicode-WS, collapse whitespace.
-    W102: replace newlines with space before \\s+ collapse so intra-sentence
+    W102: replace newlines with space before \s+ collapse so intra-sentence
     column-break newlines (gazette two-column artefact) are treated as spaces.
-    W104: strip spurious space before punctuation (, ; : .) after \\s+ collapse.
+    W104: strip spurious space before punctuation (, ; : .) after \s+ collapse.
     """
     for bad, good in _MOJIBAKE:
         text = text.replace(bad, good)
@@ -517,6 +529,8 @@ def diff_document(md_path: Path, pdf_text_path: Path,
     W106: if pdf_pages_text is provided (pre-sliced via pymupdf), use it
     instead of reading pdf_text_path. pdf_text_path is still used for the
     report label (filename shown in output).
+    W108: use_txt=true in queue entry suppresses pdf_pages_text — caller
+    passes pdf_pages_text=None so this function always reads pdf_text_path.
     """
     md_text = md_path.read_text(encoding="utf-8", errors="replace")
     pdf_text = pdf_pages_text if pdf_pages_text is not None else \
@@ -674,7 +688,8 @@ def parse_args() -> argparse.Namespace:
 def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path,
                diagnose_mode: bool = False,
                article_range: list | None = None,
-               pdf_pages_text: str | None = None) -> dict:
+               pdf_pages_text: str | None = None,
+               txt_override: bool = False) -> dict:
     if diagnose_mode:
         diagnose(md_path, pdf_text_path)
     result = diff_document(md_path, pdf_text_path, article_range=article_range,
@@ -682,7 +697,12 @@ def run_single(md_path: Path, pdf_text_path: Path, out_dir: Path,
     json_out = write_json(result, out_dir)
     md_out = write_md_report(result, out_dir)
     range_tag = f" [Arts.{article_range[0]}-{article_range[1]}]" if article_range else ""
-    src_tag = " [pdf_pages]" if pdf_pages_text is not None else ""
+    if txt_override:
+        src_tag = " [txt_override]"   # W108: forced .txt path
+    elif pdf_pages_text is not None:
+        src_tag = " [pdf_pages]"      # W106: live pymupdf slice
+    else:
+        src_tag = ""
     print(f"[{result['overall_status']}] {md_path.name}{range_tag}{src_tag}  match={result['match_rate']*100:.1f}%")
     print(f"  JSON  -> {json_out}")
     print(f"  MD    -> {md_out}")
@@ -709,6 +729,8 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
         # W106: read pdf_pages and original pdf filename for binary resolution
         pdf_pages = entry.get("pdf_pages")  # e.g. [4, 7] (0-indexed, inclusive)
         pdf_bin_file = entry.get("pdf")     # original .pdf filename
+        # W108: use_txt=true forces .txt path even when pdf_pages is present
+        use_txt = entry.get("use_txt", False)
 
         if not md_file:
             print(f"[SKIP] Missing md field: {entry}", file=sys.stderr)
@@ -719,9 +741,13 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
             print(f"[SKIP] MD not found: {md_file}", file=sys.stderr)
             continue
 
-        # W106: if pdf_pages present, attempt pymupdf page-range extraction
+        # W106/W108: if pdf_pages present AND use_txt not forced, attempt pymupdf
         pdf_pages_text = None
-        if pdf_pages and _FITZ_AVAILABLE and pdf_bin_file:
+        txt_override = False
+        if use_txt:
+            # W108 MODE K: font-corrupted PDF — skip live extraction, use OCR .txt
+            txt_override = True
+        elif pdf_pages and _FITZ_AVAILABLE and pdf_bin_file:
             pdf_bin_path = resolve_pdf_bin(pdf_bin_file, pdf_bin_roots)
             if pdf_bin_path:
                 pdf_pages_text = extract_pdf_text_from_pages(pdf_bin_path, pdf_pages)
@@ -743,7 +769,8 @@ def run_batch(queue_path: Path, out_dir: Path) -> None:
 
         result = run_single(md_path, pdf_txt_path, out_dir,
                             article_range=article_range,
-                            pdf_pages_text=pdf_pages_text)
+                            pdf_pages_text=pdf_pages_text,
+                            txt_override=txt_override)
         summary.append({
             "md": md_file,
             "overall_status": result["overall_status"],
