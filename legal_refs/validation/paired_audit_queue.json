@@ -107,8 +107,9 @@
       "md": "legal_refs/decret-17-140-hygiene-salubrite.md",
       "pdf": "Decret 17-140.pdf",
       "pdf_text": "Decret 17-140.txt",
+      "pdf_pages": [4, 9],
       "diff_status": "UNVERIFIED",
-      "note": "W104 FIX: redirected from broken legal_refs/md/decret-17-140-hygiene-alimentaire.md (0 articles) to correct root-level MD (64 articles, 33044 chars, Tier 1 fitz verified). PDF txt has 0 articles — gazette multi-decree format; Tier 1 text exists in PDF but .txt extraction failed. Diff must run against root MD."
+      "note": "W106 FIX: MD corrected from broken legal_refs/md/decret-17-140-hygiene-alimentaire.md (0 articles) to legal_refs/decret-17-140-hygiene-salubrite.md (64 articles). pdf_pages [4,9] added — decree spans pages 4-9 (0-indexed) of 30-page gazette N°24 (16 avril 2017). W106 will use pymupdf page slice, bypassing gazette-contaminated .txt."
     },
     {
       "md": "legal_refs/md/decret-21-261-esp-equipements-hydrocarbures.md",
@@ -199,7 +200,7 @@
       "pdf": "Décret 06-138.pdf",
       "pdf_text": "Décret 06-138.txt",
       "diff_status": "UNVERIFIED",
-      "note": "MD at legal_refs/ root (not in md/ subdir). 18 articles found in txt."
+      "note": "MD at legal_refs/ root (not in md/ subdir). 18 articles found in txt. pdf_pages pending — need page probe to confirm gazette contamination."
     },
     {
       "md": "legal_refs/decret-06-141-effluents-liquides.md",
