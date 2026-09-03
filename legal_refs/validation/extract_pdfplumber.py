@@ -11,15 +11,15 @@ Standard pages: LEFT then RIGHT.
 Exception — preamble/transition page (e.g. loi 18-11.pdf page 4):
   LEFT  = presidential preamble (Vu la loi n°...)
   RIGHT = law body starting with Article 1er. — ...
+  These pages must emit RIGHT then LEFT.
 
-For these pages RIGHT must be emitted before LEFT.
 Detection: right column contains a line matching:
-  ^(Article|Art[.]) 1er[.]? \u2014  (em-dash U+2014, mandatory in JO format)
+  ^(Article|Art.) 1er[.]? [em-dash|en-dash|-]  (confirmed by hex dump: U+2014)
   and the line does NOT start with 'Chapitre'.
 
-Article notation confirmed from loi 18-11 hex dump:
-  'Article 1er. \u2014 La présente loi...'
-  chars: 0x41 0x72 0x74 0x69 0x63 0x6c 0x65 0x20 0x31 0x65 0x72 0x2e 0x20 0x2014
+Column midpoint: always page.width/2.
+  JO gazettes are symmetric A4 two-column layouts.
+  The gap-detector approach corrupts on gazette headers that span both columns.
 
 Usage (PowerShell):
     python legal_refs/validation/extract_pdfplumber.py
@@ -44,22 +44,20 @@ DEFAULT_TARGETS = [
 
 MAX_HEADER_LINE_LEN = 80
 
-# Matches the FIRST article header of a law in JO gazette format:
-#   'Article 1er. — '  or  'Art. 1er. — '  or  'Article 1er — '
-# The em-dash (U+2014) is the mandatory JO separator — confirmed by hex dump.
-# Also accepts en-dash (U+2013) and ASCII hyphen as fallback.
-# Line must NOT start with 'Chapitre' (chapter heading also uses '1er').
+# Matches the first article header of a law in JO gazette format.
+# The em-dash (U+2014) after 'Article 1er.' is mandatory in JO format.
+# Confirmed by hex dump: 0x2014. Also accepts en-dash and ASCII hyphen.
+# Negative lookahead excludes 'Chapitre 1er' chapter headings.
 _LAW_START_RE = re.compile(
-    r"^(?!Chapitre)(?:Article|Art[.])\s+1(?:er|ier)?[.]?\s+[\u2014\u2013-]",
+    r"^(?!Chapitre)(?:Article|Art[.])\s+1(?:er|ier)?[.]?\s+[—–-]",
     re.IGNORECASE,
 )
 
-# Matches any article header: 'Article N' or 'Art. N' — for preamble strip fallback
+# Any article header for preamble-strip fallback
 _ANY_ART_HDR_RE = re.compile(r"^(?:Article|Art[.])\s+\d", re.IGNORECASE)
 
 
 def _is_law_start(text: str) -> bool:
-    """Return True if text contains a standalone Article 1er — header."""
     for line in text.splitlines():
         s = line.strip()
         if _LAW_START_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
@@ -68,44 +66,16 @@ def _is_law_start(text: str) -> bool:
 
 
 def _strip_preamble(text: str) -> str:
-    """Slice text from the first Article 1er — header onward."""
     lines = text.splitlines()
     for i, line in enumerate(lines):
         s = line.strip()
         if _LAW_START_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
             return "\n".join(lines[i:])
-    # Fallback: any short article header
     for i, line in enumerate(lines):
         s = line.strip()
         if _ANY_ART_HDR_RE.match(s) and len(s) <= MAX_HEADER_LINE_LEN:
             return "\n".join(lines[i:])
     return text
-
-
-def _detect_column_midpoint(page) -> float:
-    try:
-        words = page.extract_words(x_tolerance=3, y_tolerance=3)
-    except Exception:
-        return page.width / 2
-    if not words:
-        return page.width / 2
-    centres = sorted((w["x0"] + w["x1"]) / 2 for w in words)
-    if len(centres) < 10:
-        return page.width / 2
-    w = page.width
-    lo, hi = w * 0.20, w * 0.80
-    candidates = [c for c in centres if lo < c < hi]
-    if not candidates or len(candidates) < 4:
-        return page.width / 2
-    max_gap, mid = 0.0, page.width / 2
-    for i in range(1, len(candidates)):
-        gap = candidates[i] - candidates[i - 1]
-        if gap > max_gap:
-            max_gap = gap
-            mid = (candidates[i] + candidates[i - 1]) / 2
-    if not (w * 0.30 < mid < w * 0.70):
-        return page.width / 2
-    return mid
 
 
 def _extract_page(page, mid: float, right_first: bool = False) -> str:
@@ -127,19 +97,18 @@ def extract_one(pdf_path: Path) -> str:
         sys.exit(1)
 
     text_parts: list[str] = []
-    mid: float | None = None
     law_started = False
 
     try:
         with pdfplumber.open(pdf_path) as pdf:
-            for page in pdf.pages:
-                if mid is None:
-                    words = page.extract_words(x_tolerance=3, y_tolerance=3) or []
-                    if len(words) >= 10:
-                        mid = _detect_column_midpoint(page)
-                    else:
-                        continue
+            if not pdf.pages:
+                return f"[EXTRACT-ERROR: {pdf_path.name} — no pages]\n"
 
+            # Use page.width/2 — JO gazette is symmetric A4 two-column layout.
+            # The gap-detector corrupts on multi-column gazette headers.
+            mid = pdf.pages[0].width / 2
+
+            for page in pdf.pages:
                 if law_started:
                     t = _extract_page(page, mid, right_first=False)
                 else:
@@ -149,11 +118,11 @@ def extract_one(pdf_path: Path) -> str:
                             .extract_text(x_tolerance=3, y_tolerance=3) or ""
                     )
                     if _is_law_start(right_text):
-                        # Transition page: emit RIGHT (law body) then LEFT (preamble)
+                        # Transition page: RIGHT (law body) before LEFT (preamble)
                         t = _extract_page(page, mid, right_first=True)
                         law_started = True
                     else:
-                        # Still in gazette header/summary — skip
+                        # Gazette header / summary — skip
                         continue
 
                 if t.strip():
@@ -161,9 +130,6 @@ def extract_one(pdf_path: Path) -> str:
 
     except Exception as e:
         return f"[EXTRACT-ERROR: {pdf_path.name} — {e}]\n"
-
-    if mid is None:
-        return f"[EXTRACT-ERROR: {pdf_path.name} — could not detect column midpoint]\n"
 
     raw = "\n".join(text_parts)
     if not raw.strip():
