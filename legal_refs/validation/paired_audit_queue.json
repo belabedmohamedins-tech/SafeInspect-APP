@@ -104,11 +104,11 @@
       "note": "diff_tool_status: UNVERIFIED. 21 articles found in txt."
     },
     {
-      "md": "legal_refs/md/decret-17-140-hygiene-alimentaire.md",
+      "md": "legal_refs/decret-17-140-hygiene-salubrite.md",
       "pdf": "Decret 17-140.pdf",
       "pdf_text": "Decret 17-140.txt",
       "diff_status": "UNVERIFIED",
-      "note": "diff_tool_status: UNVERIFIED. 0 articles found in txt — needs re-extraction or OCR."
+      "note": "W104 FIX: redirected from broken legal_refs/md/decret-17-140-hygiene-alimentaire.md (0 articles) to correct root-level MD (64 articles, 33044 chars, Tier 1 fitz verified). PDF txt has 0 articles — gazette multi-decree format; Tier 1 text exists in PDF but .txt extraction failed. Diff must run against root MD."
     },
     {
       "md": "legal_refs/md/decret-21-261-esp-equipements-hydrocarbures.md",
