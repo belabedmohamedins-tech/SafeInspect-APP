@@ -1,96 +1,123 @@
-# Legal Extraction Protocol — SafeInspect
+# Legal Reference Conversion Protocol — SafeInspect
 
-> **This is a hard gate, not documentation.**
-> No MD file in `legal_refs/` may be cited by any criterion until it passes every step below.
-> No exceptions for "I'm confident about this one."
+**Status:** Adopted 2026-09-03. Applies to every PDF in `legal_refs/pdf/` and every MD file in `legal_refs/`, past and future.
 
 ---
 
-## The Core Rule (non-negotiable)
+## The One Rule That Matters
 
-**No AI agent may fill in legal content from memory.**
+No numeric value or article text in a `legal_refs/*.md` file is trustworthy until it has been produced by a **stated, checkable extraction method** and **diffed against its source PDF**. "Typed from the source text," "I recall this decree," or any other memory-based transcription — by a human or an AI — is not an extraction method. If a value cannot be extracted or verified, the correct content is `[À VÉRIFIER]`, never a plausible guess.
 
-Every article, every limit value, every threshold in every MD file must trace back to one of:
-1. A PDF text layer extracted by a named tool (`pymupdf get_text()`, `pdfplumber`, `pdftotext`)
-2. A scan OCR'd by a named tool (`tesseract -l fra`, `easyocr`)
-
-If neither is true, the file must carry `[MANQUANT — extraction pending]` on every unverified row and must not be cited until the extraction runs.
+This rule exists because two things almost happened on 2026-09-03: fabricated WHO-standard values nearly got committed as if they were JORADP's actual figures, and Décret 06-141 had values with no stated origin at all. Both looked fine until someone asked "where did this come from."
 
 ---
 
-## Gate Checklist — New MD File
+## Mandatory Extraction Order — Never Skip Ahead
 
-Run these steps in order. A file is **not verified** until all boxes are checked and the commit diff confirms them.
+Run in this order, per page, for every PDF, before any human decides "this looks like a scan":
 
-### Step 1 — Extraction (not negotiable)
-- [ ] PDF located in `legal_refs/pdf/`
-- [ ] Extraction method chosen:
-  - Native text layer → `pymupdf get_text()` or `pdftotext`
-  - Scanned PDF → `tesseract -l fra` (300 DPI via `pdftoppm`)
-- [ ] Plain-text extract saved as `legal_refs/pdf/<stem>.txt`
-- [ ] Extraction method + tool version recorded in the MD file header under `**Extraction :**`
+### Tier 1 — fitz (PyMuPDF) text extraction
+Try this **first, unconditionally, on every page**. Most JORADP PDFs are born-digital and this alone is sufficient. The entire OCR detour on Décret 11-125 happened because this step was skipped on a visual assumption — it would have worked immediately.
 
-**Header format (mandatory):**
-```
-**Extraction :** PDF texte natif — pymupdf `get_text()` (aucun OCR). Vérifié le YYYY-MM-DD.
-```
-or
-```
-**Extraction :** Scan OCR — pdftoppm 300 DPI + tesseract 5.x `-l fra`. Vérifié le YYYY-MM-DD.
+```python
+import fitz
+doc = fitz.open("file.pdf")
+for page in doc:
+    text = page.get_text()
+    # If len(text) > 200: use it. Done.
 ```
 
-### Step 2 — Article Index
+### Tier 2 — pdfplumber fallback
+Only if a page's fitz output is under ~200 characters.
+
+```python
+import pdfplumber
+with pdfplumber.open("file.pdf") as pdf:
+    text = pdf.pages[n].extract_text()
+```
+
+### Tier 3 — Tesseract OCR
+Only if **both** Tier 1 and Tier 2 fail on a page.
+Command: `tesseract input.png output -l fra` (or `fra+ara` for mixed text).
+Tag output trust: **"low"** unconditionally.
+
 ```powershell
-python legal_refs/validation/index_articles.py <file.md>
+pdftoppm -r 300 file.pdf page_prefix
+tesseract page_prefix-001.ppm output -l fra
 ```
-- [ ] Output shows expected article count (no ghost duplicates, no `1er` vs `1` collision)
-- [ ] Ordinal normalisation active (`1er` → `1`) — confirmed by W99
 
-### Step 3 — Fuzzy Diff
-```powershell
-python legal_refs/validation/diff_articles.py --md legal_refs/<file.md> --pdf-text legal_refs/pdf/<stem>.txt
+### Tier 4 — Vision fallback / manual transcription
+Only triggered when OCR output on a **table** fails a sparsity check (see `table_sparsity.py`). Never applied preemptively, and never treated as equivalent to Tier 1/2 extraction.
+
+### Header record (mandatory on every MD file)
+
 ```
-- [ ] Output JSON saved as `legal_refs/validation/<stem>_diff.json`
-- [ ] All articles: `MATCH` (≥85%) or `PARTIAL` (50–84%) with human review
-- [ ] Zero `MISMATCH` or `MD_ONLY` / `PDF_ONLY` without explanation
-- [ ] Annexes / tables verified separately (diff engine covers articles; tables need manual spot-check)
+**Extraction :** <tier + tool> — <what was extracted>, session YYYY-MM-DD
+```
 
-### Step 4 — Commit
-- [ ] Commit message includes: `legal: <decree> verified — diff MATCH <date>`
-- [ ] Run `git show <sha> --stat` — confirm `deletions` ≤ 20 (no truncation)
-- [ ] File size in commit response ≥ 90% of expected byte count
+Examples:
+```
+**Extraction :** PDF texte natif — pymupdf `get_text()` (aucun OCR). Vérifié le 2026-09-03.
+**Extraction :** Scan OCR — pdftoppm 300 DPI + tesseract 5.x `-l fra`. Vérifié le 2026-09-03. Confiance : faible.
+```
 
-### Step 5 — Registry Update
-- [ ] `docs/STRATEGIC_PLAN.md` Legal Quick-Reference row updated to `✅ Present — PDF diff-verified YYYY-MM-DD`
-- [ ] `docs/README.md` log entry added
+This is not decorative — the diff gate should eventually refuse to trust a file without it.
 
 ---
 
-## Scale Validation — Corpus-Wide Run (PENDING)
+## Article Boundary Handling
 
-> **Status: NOT YET RUN**
-> The pipeline (index_articles + normalize + diff_articles) has been stress-tested on ~3 files.
-> Before trusting any MATCH result from the rest of the corpus, run a full batch pass.
+`legal_refs/validation/index_articles.py` recognises three confirmed marker formats:
+
+| Family | Pattern | Example file |
+|---|---|---|
+| **A** | Bold inline `**Art. 2.**` | `loi-18-11-sante-partie1-arts1-164.md` |
+| **B** | Markdown heading `### Article 12` | `arrete-interministeriel-1999-11-21-conservation-aliments.md` |
+| **C** | Arabic `المادة N` (Arabic-Indic digit normalisation included) | TBD |
+
+**Known limitation:** validated against 2–3 documents, not the full corpus. Before trusting the indexer against a new file, spot-check that file specifically. A fourth format is plausible and should be expected, not treated as impossible. When found: fix the regex in `index_articles.py`, re-run all previously indexed files, do not claim MATCH on files that ran before the fix.
+
+---
+
+## The Diff Gate — Mandatory Before Any Criterion Cites a File
+
+`legal_refs/validation/diff_articles.py` must run against a legal MD file **before any criterion in `src/criteria/` is allowed to reference it**.
+
+Output tags:
+- `MATCH` — ≥85% similarity, no numeric mismatch
+- `PARTIAL` — 50–84%, requires human review
+- `MISMATCH` — <50%, file must be corrected before citation
+- `MD_ONLY` — article in MD but not in PDF (phantom content)
+- `PDF_ONLY` — article in PDF but missing from MD (gap)
+
+**A file is "ready for citation" only when every article actually referenced by an active criterion is `MATCH`.** Everything else in the file can exist at a lower trust tier, but must stay visibly tagged as `[À VÉRIFIER]` — never silently promoted.
+
+**Diff currency rule:** A passing diff report is current only as of the commit it ran against. If the MD file or its source PDF changes, the diff must re-run. This is a standing check, not a one-time certification.
+
+---
+
+## Rollout — Do Not Extrapolate From Two Successes
+
+Two documents (Décret 11-125, Décret 06-141) do not validate this pipeline project-wide. Before treating this as reliable across the whole legal library:
+
+1. Run the extraction tier logic across **every PDF in `legal_refs/pdf/`** and produce one corpus-wide status report — trust tier and diff result per file.
+2. Expect to find new format variants and new extraction failures. That is the point of running it now rather than discovering them file by file under pressure later.
+3. Any MD file not yet run through this pipeline has **no elevated trust** — it is in the same unverified state as the original AI conversions, regardless of how long it has been sitting in the repo looking fine.
 
 ```powershell
-# Build paired_audit_queue.json first, then:
+# Build paired_audit_queue.json, then:
 python legal_refs/validation/diff_articles.py --batch legal_refs/validation/paired_audit_queue.json
 ```
 
-Expected discovery: at least one new format family (Format C or beyond) that breaks the current regex.
-When found: fix `index_articles.py` regex, re-run, do NOT claim MATCH on files that ran before the fix.
-
-**This corpus-wide run must happen before any new criterion cites a previously-unverified MD file.**
-
 ---
 
-## Known Format Families
+## What This Protocol Explicitly Forbids
 
-| Family | Example file | Article pattern | Status |
-|---|---|---|---|
-| A | `loi-18-11-sante-partie1-arts1-164.md` | `Art. N. —` / `Article Ner. —` | ✅ Tested W97 |
-| B | `arrete-interministeriel-1999-11-21-conservation-aliments.md` | `Article Ner\n\nText` | ✅ Tested W97 |
-| C+ | Unknown | Unknown | ⚠️ Not yet discovered — corpus run pending |
+- Filling a blank value with a plausible number from general or training knowledge, under any framing ("standard value," "typical for this parameter," "close enough").
+- Marking a file "verified" or "closed" based on a status report that does not show the actual extracted text or the actual diff output.
+- Deleting extraction tooling (e.g. `tools/fix_encoding.py`) before the content it produced has passed the diff gate.
+- Treating "the file reads correctly" or "looks right in context" as a substitute for a stated extraction method plus a diff result.
+- Reporting any article as confirmed when it did not appear in the current session's tool output (see CANNOT-SEE = CANNOT-CONFIRM rule in space instructions).
 
 ---
 
@@ -98,21 +125,21 @@ When found: fix `index_articles.py` regex, re-run, do NOT claim MATCH on files t
 
 | Event | Date | Lesson |
 |---|---|---|
-| Décret 11-125: WHO values fabricated | 2026-09-02 | AI filled missing Annexe from memory. Values were plausible but wrong origin. |
+| Décret 11-125: WHO values fabricated | 2026-09-02 | AI filled missing Annexe from memory. Values were plausible but wrong origin. Caught by user challenge. |
 | Décret 06-141: values from training knowledge | 2026-09-03 | Values correct (diff MATCH), but origin was training knowledge not extraction. Declared "verified" before diff ran. |
-| Both resolved by | 2026-09-03 | pymupdf extraction + diff_articles.py line-by-line diff. |
-| Core lesson | — | "Confident" ≠ verified. Extraction method must be stated before citation. |
+| Both resolved by | 2026-09-03 | pymupdf Tier 1 extraction + `diff_articles.py` line-by-line diff. |
+| Core lesson | — | "Confident" ≠ verified. Extraction method must be stated before citation. Diff is a gate, not a rescue. |
 
 ---
 
 ## Files Referenced
 
-| Script | Purpose |
-|---|---|
-| `legal_refs/validation/index_articles.py` | Article boundary extraction (W97) |
-| `legal_refs/validation/normalize.py` | MD/PDF dual normaliser + ordinal strip (W97) |
-| `legal_refs/validation/diff_articles.py` | Fuzzy diff engine, MATCH/PARTIAL/MISMATCH (W97-P3, ordinal fix W99) |
+| Script | Purpose | Status |
+|---|---|---|
+| `legal_refs/validation/index_articles.py` | Article boundary extraction, ordinal normalisation | ✅ W97 + W99 |
+| `legal_refs/validation/normalize.py` | MD/PDF dual normaliser + orphan-strip | ✅ W97 |
+| `legal_refs/validation/diff_articles.py` | Fuzzy diff engine, MATCH/PARTIAL/MISMATCH | ✅ W97-P3 + W99 |
 
 ---
 
-*Protocol established 2026-09-03 following W99/W100 (Décret 06-141 PDF diff) and Claude audit of epistemological risk.*
+*Protocol v2 — established 2026-09-03. v1 drafted by Perplexity post-W100. Full text by Claude audit of epistemological risk. Supersedes v1 committed at [25384cb](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/25384cba41bbaf60e64ea79960425ea5c524eb2b).*
