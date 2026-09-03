@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-diff_articles.py — W102 (newline collapse + gazette trailer stripper)
+diff_articles.py — W103 (IGNORECASE fix for all-caps ARTICLE headings)
 Fuzzy diff engine: compare indexed MD articles vs PDF-extracted text.
 
 Usage:
@@ -61,6 +61,14 @@ W102 patches (2026-09-03):
            (digits + month name), a bare Gregorian date (digits + month + year), or
            "JOUR" / "JOURNAL" / "OFFICIEL" / "N°" line at the end of the document.
            Applied to PDF text only, before extract_pdf_articles().
+
+W103 patches (2026-09-03):
+  MODE F — MD=0 articles bug (all 0.0% files): MD files use ## ARTICLE 1 (all-caps).
+           The three _MD_ART_* regexes and _MIDLINE_ARTICLE_RE used [Aa]rt without
+           re.IGNORECASE, so "ARTICLE" / "ART." never matched the char class.
+           Fix: add re.IGNORECASE to _MD_ART_HEADING_RE, _MD_ART_BOLD_INLINE_RE,
+           _MD_ART_PLAIN_RE, and _MIDLINE_ARTICLE_RE. The [Aa] char classes are
+           kept for clarity but IGNORECASE makes them redundant — belt-and-suspenders.
 """
 
 import argparse
@@ -253,22 +261,29 @@ def _strip_pdf_trailer(text: str) -> str:
 
 
 # ---------------------------------------------------------------------------
-# MD article extractor
+# MD article extractor  (W103: re.IGNORECASE added to all three patterns)
+# ---------------------------------------------------------------------------
+#
+# W103 MODE F root cause: MD files use ## ARTICLE 1 (all-caps). The patterns
+# below previously used [Aa]rt without re.IGNORECASE. "ARTICLE" has uppercase
+# R-T-I-C-L-E after the A, so [Aa]rt matched 'Art'/'art' but not 'ART'.
+# Fix: add re.IGNORECASE to all three patterns. The [Aa] char class is kept
+# for documentation clarity but is now redundant given IGNORECASE.
 # ---------------------------------------------------------------------------
 
 _MD_ART_HEADING_RE = re.compile(
     r"^#{1,4}\s*[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\b[^\n]*\n(.*?)(?=^#{1,4}\s*[Aa]rt|\Z)",
-    re.MULTILINE | re.DOTALL,
+    re.MULTILINE | re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
 )
 
 _MD_ART_BOLD_INLINE_RE = re.compile(
     r"(?m)^\*{1,2}[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)[^*\n]*\*{1,2}[^\n]*\n(.*?)(?=^\*{1,2}[Aa]rt|\Z)",
-    re.DOTALL,
+    re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
 )
 
 _MD_ART_PLAIN_RE = re.compile(
     r"(?m)^[Aa]rt(?:icle[r]?)?\s*\.?\s*(\d+\w*)\s*[.:\u2013\u2014-][^\n]*\n(.*?)(?=^[Aa]rt(?:icle[r]?)?\s*\.?\s*\d|\Z)",
-    re.DOTALL,
+    re.DOTALL | re.IGNORECASE,  # W103: IGNORECASE
 )
 
 
@@ -300,11 +315,10 @@ def extract_md_articles(md_text: str) -> dict[str, str]:
 # W102: _strip_pdf_trailer() is now also applied before extraction.
 # ---------------------------------------------------------------------------
 
-# Matches "Article N" / "Art. N" that appears mid-line after 4+ spaces
-# (gazette two-column layout artefact). Capture group 1 = everything before,
-# group 2 = the Article marker and everything after.
+# W103: added re.IGNORECASE so ARTICLE / ART. mid-line markers are caught too.
 _MIDLINE_ARTICLE_RE = re.compile(
     r"([ \t]{4,})([Aa]rt(?:icle[r]?)?\s*\.?\s*\d)",
+    re.IGNORECASE,  # W103: IGNORECASE
 )
 
 
