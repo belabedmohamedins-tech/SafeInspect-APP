@@ -1,10 +1,10 @@
 # Décret exécutif n° 09-19 du 23 Moharram 1430 correspondant au 20 janvier 2009 portant réglementation de l'activité de collecte des déchets spéciaux
 
-**Date de signature :** 20 janvier 2009 (23 Moharram 1430)  
-**Journal Officiel :** À déterminer  
-**Source PDF :** Fourni par l'utilisateur (`decret 09-19.pdf`)  
-**Date de conversion :** 2026-08-11  
-**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni  
+**Date de signature :** 20 janvier 2009 (23 Moharram 1430)
+**Journal Officiel :** À déterminer
+**Source PDF :** Fourni par l'utilisateur (`decret 09-19.pdf`)
+**Date de conversion :** 2026-08-11
+**Statut de vérification :** ✅ VÉRIFIÉ [2026-08-11] — conversion humaine vérifiée contre le PDF fourni
 
 > **AVERTISSEMENT :** Ce document est une transcription de la version PDF fournie. Veuillez vérifier contre le texte original du JORADP avant toute décision légale ou d'exécution.
 
@@ -95,7 +95,7 @@ L'agrément de la collecte est valable pour une durée de cinq (5) ans. Il peut 
 
 **Article 7**
 
-Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
+Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
 
 **Article 8**
 
@@ -119,7 +119,7 @@ f) la mention de tout accident survenu lors de la collecte et les mesures prises
 
 **Article 10**
 
-Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
+Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
 
 ---
 
