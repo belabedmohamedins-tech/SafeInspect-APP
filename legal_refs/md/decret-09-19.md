@@ -69,9 +69,7 @@ a) s'il s'agit d'une personne physique, de l'identité et l'adresse du demandeur
 b) la description de la nature, la dénomination et le code des déchets à collecter;
 
 c) la description, pour chaque catégorie de déchets spéciaux à collecter, des caractéristiques des moyens techniques et matériels utilisés;
-
 d) la liste du personnel affecté à la collecte et les attestations de leur qualification;
-
 e) le plan de collecte des déchets spéciaux, faisant ressortir les informations :
    - la wilaya ou les wilayas couverte(s) par la collecte;
    - les modalités de collecte;
@@ -95,7 +93,7 @@ L'agrément de la collecte est valable pour une durée de cinq (5) ans. Il peut 
 
 **Article 7**
 
-Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
+Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
 
 **Article 8**
 
@@ -119,7 +117,7 @@ f) la mention de tout accident survenu lors de la collecte et les mesures prises
 
 **Article 10**
 
-Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
+Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
 
 ---
 
