@@ -95,7 +95,7 @@ L'agrément de la collecte est valable pour une durée de cinq (5) ans. Il peut 
 
 **Article 7**
 
-Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
+Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
 
 **Article 8**
 
@@ -119,7 +119,7 @@ f) la mention de tout accident survenu lors de la collecte et les mesures prises
 
 **Article 10**
 
-Le collecteur est tenu de souscrire, pour l'exercice de son activité, une police d'assurance couvrant sa responsabilité pour toutes les conséquences dommageables pour les tiers résultant de son activité.
+Le collecteur est tenu d'adresser annuellement aux services chargés de l'environnement territorialement compétents une déclaration décrivant son activité de collecte.
 
 ---
 
