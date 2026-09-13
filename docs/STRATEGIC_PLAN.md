@@ -6,6 +6,53 @@
 
 ---
 
+## Legal Reference Strategy — Citation First
+
+The canonical legal sources are the PDFs in `legal_refs/pdf/`. Markdown files in `legal_refs/md/` are derived, human-readable reference artifacts; they are not a second legal authority and are not required to be complete before a criterion can be implemented.
+
+The primary trust unit is a verified criterion-level citation excerpt:
+
+```ts
+legalReference: {
+  decree: "09-19",
+  article: "9",
+  pdfPath: "legal_refs/pdf/decret 09-19.pdf",
+  page: 2,
+  extractedText: "Le registre de collecte contient...",
+  extractionMethod: "pymupdf-block",
+  extractionTier: 1,
+  extractionDate: "2026-09-13",
+  sourceHash: "<sha256-of-exact-source-pdf>",
+  verified: true,
+  verificationNote: "Checked against the PDF page image; article marker and continuation confirmed."
+}
+```
+
+A citation is trusted only when its source location, extraction method, extraction tier, source hash, and verification note are recorded. The PDF remains authoritative; `extractedText` is a traceable derived excerpt.
+
+### Citation-first operating rules
+
+- Extract and verify legal text when a criterion needs it, rather than requiring full-corpus Markdown conversion first.
+- Use PyMuPDF Tier 1 first, then pdfplumber Tier 2, Tesseract Tier 3, and manual/vision Tier 4 only as defined by the legal extraction protocol.
+- Never generate legal wording or numeric values from memory.
+- Do not mark a citation `verified: true` without inspectable source-level evidence.
+- Revalidate a citation when the source PDF changes by comparing its stored `sourceHash` with the current hash.
+- Keep existing Markdown files as useful derived reading material; do not delete or mass-rewrite them as part of this strategy.
+- Build a document-specific profile only when repeated citations justify its maintenance; profiles are not a prerequisite for every PDF.
+- Treat column-order and OCR failures as citation-specific review problems unless repeated evidence justifies shared tooling.
+
+### Trust states
+
+- `UNEXTRACTED`: no citation excerpt has been produced.
+- `EXTRACTED`: excerpt exists with source location and extraction metadata, but verification is incomplete.
+- `VERIFIED`: provenance, source hash, source comparison, and verification note are complete.
+- `STALE`: the current PDF hash differs from the citation's stored hash.
+- `REVIEW`: extraction or layout ambiguity remains unresolved.
+
+This policy is deliberately separate from the historical phase registry below. Existing phase records remain historical evidence and are not rewritten.
+
+---
+
 ## 🚨 WRITE GUARD — Anti-Truncation Rules (mandatory before every push)
 
 > These rules exist because `create_or_update_file` silently truncates content when the JSON payload is too large. A truncated legal file is worse than no file — it looks complete but is missing data.
@@ -50,9 +97,7 @@ If `size` < 90% of expected byte count → HARD STOP before claiming success.
 ### ✅ ARCHIVED — Phases A → W59 (closed 2026-07-30 → 2026-08-16)
 
 <details>
-<summary>Click to expand archived phases (A–W59)</summary>
-
-| Phase | Title | Closed |
+<summary>Click to expand archived phases (A–W59)</summary>... | Phase | Title | Closed |
 |---|---|---|
 | A | Scoring engine + types | 2026-07-30 |
 | B–I | Inspection Manual Ch1–Ch8 pushed to docs | 2026-07-30 |
@@ -120,9 +165,7 @@ If `size` < 90% of expected byte count → HARD STOP before claiming success.
 
 ---
 
-### ✅ CLOSED — Recent Phases (W60 → W100)
-
-| Phase | Title | Closed | Evidence |
+### ✅ CLOSED — Recent Phases (W60 → W100)... | Phase | Title | Closed | Evidence |
 |---|---|---|---|
 | **W60** | loi-18-11-sante split 3 parties | 2026-08-16 | Commit `698a793` |
 | **W61** | Server routes mounted + approval routes + apiClient throw on missing env | 2026-08-16 | Commits: `13b750a`, `24270ca`, `0a27026` |
@@ -133,7 +176,7 @@ If `size` < 90% of expected byte count → HARD STOP before claiming success.
 | **W67** | Photo evidence — cross-device gap | 2026-08-18 | Resolved by W86 base64 embed |
 | **W68** | PIN lockout — SecureStore (SPEC 05) | 2026-08-18 | Re-confirmed clean |
 | **W69–W70** | CAP + PDF — clean | 2026-08-17 | Direct reads |
-| **W71** | Planning UI + PriorityWidget | 2026-08-17 | Commits `c178a6c`, `c1b9d91` |
+| **W71** | Planning UI + PriorityWidget | 2026-08-17 |  Commits `c178a6c`, `c1b9d91` |
 | **W72** | Dead settings toggles + notification centre | 2026-08-17 | Commit `9b42f67` |
 | **W73** | Agenda facility mismatch | 2026-08-17 | PHANTOM — already guarded |
 | **W74** | Server hardening: rate-limit login + batch guard | 2026-08-17 | Commit `33dc3b8` |
@@ -245,7 +288,7 @@ npx prisma migrate dev --name add-push-receipt-queue
 | Décret 21-430 | GPL-C modification | ✅ Present |
 | Décret 83-496 | GPL-C (as amended by 21-430) | ✅ Present |
 | Décret 22-167 | Établissements classés modif | ✅ Present |
-| Décret 24-196 | Établissements classés modif | ✅ Present |
+| Décret 24-196 | Établissements classés modification | ✅ Present |
 | Décret 21-319 | GPL-C general framework | ✅ Present |
 | Décret 04-82 | Abattoirs | ✅ Present |
 | Décret 76-35 | IGH incendie | ✅ Present — NOT applicable (≥28m only). All uses removed. |

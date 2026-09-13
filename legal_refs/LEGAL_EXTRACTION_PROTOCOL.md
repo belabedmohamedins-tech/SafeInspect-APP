@@ -2,237 +2,169 @@
 
 **Status:** Adopted 2026-09-03. Applies to every PDF in `legal_refs/pdf/` and every MD file in `legal_refs/`, past and future.
 
----
-
-## The One Rule That Matters
-
-No numeric value or article text in a `legal_refs/*.md` file is trustworthy until it has been produced by a **stated, checkable extraction method** and **diffed against its source PDF**. "Typed from the source text," "I recall this decree," or any other memory-based transcription — by a human or an AI — is not an extraction method. If a value cannot be extracted or verified, the correct content is `[À VÉRIFIER]`, never a plausible guess.
-
-This rule exists because two things almost happened on 2026-09-03: fabricated WHO-standard values nearly got committed as if they were JORADP's actual figures, and Décret 06-141 had values with no stated origin at all. Both looked fine until someone asked "where did this come from."
+> **Strategy update (2026-09-13):** PDFs under `legal_refs/pdf/` are the canonical legal sources. The primary trust unit is a criterion-level verified citation excerpt, not a complete Markdown mirror. Markdown under `legal_refs/md/` is a derived/reference artifact. Full-document Markdown conversion is optional unless a specific product requirement calls for it.
 
 ---
 
-## SCRIPT DOWNLOAD AND PATCH SAFETY (mandatory — never skip)
+## Canonical Source and Citation Trust Unit
 
-Added 2026-09-03 after a multi-hour loop caused by a single unsafe download command.
+A legal citation is trusted only when its source PDF, exact page, extracted text, extraction method, extraction tier, source hash, verification state, and verification note are recorded.
 
-### Root causes of the loop
-
-1. **`Invoke-WebRequest` writes HTML, not raw Python.** The command `(Invoke-WebRequest -Uri "...").Content | Set-Content ... -Encoding UTF8` fetches GitHub's *web-rendered HTML page*, not the raw file. The `.Content` property contains HTML entities (`&lt;`, `&gt;`) and Unicode escape sequences stored as literal text (`\u2014` = 6 chars, not the em-dash character). Every subsequent patch was fighting a file that was corrupted at the source.
-
-2. **No verification gate before executing.** After every download or patch, the extractor was run immediately against real data. Failures were only diagnosed by observing wrong output — not by checking the file itself first. A 30-second gate would have caught each issue immediately.
-
-### Rule 1 — Only one safe download method
-
-Never use `Invoke-WebRequest` to download Python scripts from GitHub.
-
-**Correct method — always:**
-```powershell
-@"
-import urllib.request
-url = "https://raw.githubusercontent.com/OWNER/REPO/main/path/to/script.py"
-content = urllib.request.urlopen(url).read().decode('utf-8')
-open('path/to/script.py', 'w', encoding='utf-8').write(content)
-print('Downloaded', len(content), 'chars')
-"@ | Out-File -FilePath _dl.py -Encoding utf8
-python _dl.py
+```json
+{
+  "decree": "09-19",
+  "article": "9",
+  "pdfPath": "legal_refs/pdf/decret 09-19.pdf",
+  "page": 2,
+  "extractedText": "Le registre de collecte contient notamment les indications suivantes...",
+  "extractionMethod": "pymupdf-block",
+  "extractionTier": 1,
+  "extractionDate": "2026-09-13",
+  "sourceHash": "<sha256-of-exact-source-pdf>",
+  "verified": true,
+  "verificationNote": "Checked against the PDF page image; article marker and continuation confirmed."
+}
 ```
 
-Key requirements:
-- URL must be `raw.githubusercontent.com/...` — never `github.com/blob/...`
-- Write with `encoding='utf-8'` (no BOM)
-- Decode with `.decode('utf-8')` (not `latin-1`, not default)
+`extractedText` is a derived, traceable excerpt. It must never be treated as a replacement legal source.
 
-### Rule 2 — Mandatory verification gate after every download or patch
+### Required citation fields
 
-Run all three checks before executing the script against corpus data:
+- `pdfPath`: canonical source PDF path.
+- `page`: zero-based PDF page index unless the record explicitly states another convention.
+- `extractedText`: exact excerpt used by the criterion; do not paraphrase legal wording.
+- `extractionMethod`: tool or method actually used.
+- `extractionTier`: 1, 2, 3, or 4.
+- `extractionDate`: ISO date of extraction or verification.
+- `sourceHash`: SHA-256 of the exact PDF bytes used.
+- `verified`: `true` only after source comparison and provenance review.
+- `verificationNote`: concise, inspectable explanation of how verification was performed.
 
-```powershell
-@"
-import re, sys
-path = 'legal_refs/validation/extract_pdfplumber.py'  # adjust as needed
+### Trust states
 
-# Gate 1: no BOM
-content = open(path, encoding='utf-8').read()
-if content.startswith('\ufeff'):
-    print('FAIL: BOM present — re-download with utf-8-sig decode')
-    sys.exit(1)
-print('Gate 1 PASS: no BOM')
+- `UNEXTRACTED`: no citation excerpt exists.
+- `EXTRACTED`: excerpt and provenance exist, but verification is incomplete.
+- `VERIFIED`: source comparison, provenance, source hash, and verification note are complete.
+- `STALE`: current PDF hash differs from the stored hash.
+- `REVIEW`: layout, OCR, or source ambiguity remains.
 
-# Gate 2: critical line repr check
-lines = content.splitlines()
-for i, line in enumerate(lines):
-    if 'LAW_START_RE' in line and 'compile' in line:
-        print('Gate 2 line', i+1, ':', repr(lines[i+1] if i+1 < len(lines) else line))
-        break
-
-# Gate 3: regex self-test against known good string
-exec(content, {})
-import importlib.util, types
-ns = {}
-exec(content, ns)
-LAW_START_RE = ns.get('_LAW_START_RE')
-if LAW_START_RE is None:
-    print('FAIL: _LAW_START_RE not found in file')
-    sys.exit(1)
-test = 'Article 1er. \u2014 La pr\u00e9sente loi'
-if LAW_START_RE.match(test):
-    print('Gate 3 PASS: regex matches test string')
-else:
-    print('FAIL: regex does not match \"' + test + '\"')
-    sys.exit(1)
-print('All gates passed — safe to run')
-"@ | Out-File -FilePath _verify.py -Encoding utf8
-python _verify.py
-```
-
-Only proceed if all three gates print PASS.
-
-### Rule 3 — After any `git pull` conflict
-
-If `git pull` is rejected with `Your local changes would be overwritten`, do not force-push local patches. The correct sequence:
-
-```powershell
-git fetch origin
-git reset --hard origin/main
-# Then re-download the specific file via Rule 1 if needed
-```
-
-This prevents local patch commits diverging from MCP-pushed commits, which causes non-fast-forward push failures.
+A boolean `verified: true` without the required fields is invalid.
 
 ---
 
 ## Mandatory Extraction Order — Never Skip Ahead
 
-Run in this order, per page, for every PDF, before any human decides "this looks like a scan":
+Apply this order to the page containing the requested citation:
 
-### Tier 1 — fitz (PyMuPDF) text extraction
-Try this **first, unconditionally, on every page**. Most JORADP PDFs are born-digital and this alone is sufficient. The entire OCR detour on Décret 11-125 happened because this step was skipped on a visual assumption — it would have worked immediately.
+### Tier 1 — PyMuPDF text extraction
 
-```python
-import fitz
-doc = fitz.open("file.pdf")
-for page in doc:
-    text = page.get_text()
-    # If len(text) > 200: use it. Done.
-```
+Run `get_text()` first, unconditionally. If the requested citation is present and structurally coherent, retain it with PyMuPDF provenance.
 
 ### Tier 2 — pdfplumber fallback
-Only if a page's fitz output is under ~200 characters.
 
-```python
-import pdfplumber
-with pdfplumber.open("file.pdf") as pdf:
-    text = pdf.pages[n].extract_text()
-```
+Use only when Tier 1 is insufficient for the requested citation. Record the page and extraction method.
 
 ### Tier 3 — Tesseract OCR
-Only if **both** Tier 1 and Tier 2 fail on a page.
-Command: `tesseract input.png output -l fra` (or `fra+ara` for mixed text).
-Tag output trust: **"low"** unconditionally.
 
-```powershell
-pdftoppm -r 300 file.pdf page_prefix
-tesseract page_prefix-001.ppm output -l fra
-```
+Use only when Tiers 1 and 2 fail. Tag OCR-derived text as low confidence until independently checked.
 
-### Tier 4 — Vision fallback / manual transcription
-Only triggered when OCR output on a **table** fails a sparsity check (see `table_sparsity.py`). Never applied preemptively, and never treated as equivalent to Tier 1/2 extraction.
+### Tier 4 — Vision or manual transcription
 
-### Header record (mandatory on every MD file)
+Use only for unresolved sparse tables, visual layout ambiguity, or citation fragments that remain unreadable after Tiers 1–3. Record the manual/visual method explicitly.
 
-```
-**Extraction :** <tier + tool> — <what was extracted>, session YYYY-MM-DD
-```
-
-Examples:
-```
-**Extraction :** PDF texte natif — pymupdf `get_text()` (aucun OCR). Vérifié le 2026-09-03.
-**Extraction :** Scan OCR — pdftoppm 300 DPI + tesseract 5.x `-l fra`. Vérifié le 2026-09-03. Confiance : faible.
-```
-
-This is not decorative — the diff gate should eventually refuse to trust a file without it.
+No tier may be skipped because a page appears scanned. No AI-generated legal text is permitted at any tier.
 
 ---
 
-## Article Boundary Handling
+## Citation Verification Workflow
 
-`legal_refs/validation/index_articles.py` recognises three confirmed marker formats:
-
-| Family | Pattern | Example file |
-|---|---|---|
-| **A** | Bold inline `**Art. 2.**` | `loi-18-11-sante-partie1-arts1-164.md` |
-| **B** | Markdown heading `### Article 12` | `arrete-interministeriel-1999-11-21-conservation-aliments.md` |
-| **C** | Arabic `المادة N` (Arabic-Indic digit normalisation included) | TBD |
-
-**Known limitation:** validated against 2–3 documents, not the full corpus. Before trusting the indexer against a new file, spot-check that file specifically. A fourth format is plausible and should be expected, not treated as impossible. When found: fix the regex in `index_articles.py`, re-run all previously indexed files, do not claim MATCH on files that ran before the fix.
-
----
-
-## The Diff Gate — Mandatory Before Any Criterion Cites a File
-
-`legal_refs/validation/diff_articles.py` must run against a legal MD file **before any criterion in `src/criteria/` is allowed to reference it**.
-
-Output tags:
-- `MATCH` — ≥85% similarity, no numeric mismatch
-- `PARTIAL` — 50–84%, requires human review
-- `MISMATCH` — <50%, file must be corrected before citation
-- `MD_ONLY` — article in MD but not in PDF (phantom content)
-- `PDF_ONLY` — article in PDF but missing from MD (gap)
-
-**A file is "ready for citation" only when every article actually referenced by an active criterion is `MATCH`.** Everything else in the file can exist at a lower trust tier, but must stay visibly tagged as `[À VÉRIFIER]` — never silently promoted.
-
-**Diff currency rule:** A passing diff report is current only as of the commit it ran against. If the MD file or its source PDF changes, the diff must re-run. This is a standing check, not a one-time certification.
+1. Identify the criterion and exact legal proposition needed.
+2. Locate the relevant PDF and page.
+3. Extract only the needed article or passage, beginning with Tier 1.
+4. Record source path, page, block or region, method, tier, date, and SHA-256 source hash.
+5. Compare the excerpt against the PDF page or image; use a second extraction tier only if Tier 1 is insufficient.
+6. Add a concise verification note describing the check performed.
+7. Mark the citation `VERIFIED` only when provenance, source comparison, and hash checks pass.
+8. Recheck the hash whenever the source PDF is replaced, amended, or regenerated.
 
 ---
 
-## Rollout — Do Not Extrapolate From Two Successes
+## Markdown Policy
 
-Two documents (Décret 11-125, Décret 06-141) do not validate this pipeline project-wide. Before treating this as reliable across the whole legal library:
+Markdown files under `legal_refs/md/` remain useful for human reading and historical work, but they are derived artifacts:
 
-1. Run the extraction tier logic across **every PDF in `legal_refs/pdf/`** and produce one corpus-wide status report — trust tier and diff result per file.
-2. Expect to find new format variants and new extraction failures. That is the point of running it now rather than discovering them file by file under pressure later.
-3. Any MD file not yet run through this pipeline has **no elevated trust** — it is in the same unverified state as the original AI conversions, regardless of how long it has been sitting in the repo looking fine.
-
-```powershell
-# Build paired_audit_queue.json, then:
-python legal_refs/validation/diff_articles.py --batch legal_refs/validation/paired_audit_queue.json
-```
+- They are not the canonical legal source.
+- They are not required to be complete before a criterion can cite a PDF passage.
+- Existing files are retained; do not delete or mass-rewrite them as part of this strategy.
+- A Markdown excerpt must not silently override a PDF citation.
+- Full-document diffing is optional for uncited articles.
+- When a Markdown file is edited, preserve provenance and run the applicable diff; do not claim corpus-wide trust from a local check.
 
 ---
 
-## What This Protocol Explicitly Forbids
+## Profiles and Layout-Specific Handling
 
-- Filling a blank value with a plausible number from general or training knowledge, under any framing ("standard value," "typical for this parameter," "close enough").
-- Marking a file "verified" or "closed" based on a status report that does not show the actual extracted text or the actual diff output.
-- Deleting extraction tooling (e.g. `tools/fix_encoding.py`) before the content it produced has passed the diff gate.
-- Treating "the file reads correctly" or "looks right in context" as a substitute for a stated extraction method plus a diff result.
-- Reporting any article as confirmed when it did not appear in the current session's tool output (see CANNOT-SEE = CANNOT-CONFIRM rule in space instructions).
-- Using `Invoke-WebRequest` to download Python scripts (see SCRIPT DOWNLOAD AND PATCH SAFETY above).
+A per-document profile is optional, not a prerequisite. Build and maintain one only when repeated citations from the same layout justify its cost.
 
----
+For a one-off or rarely cited passage, prefer direct page extraction plus visual/manual confirmation over generalized block-order engineering. A profile must remain separate from citation records and must never silently promote unresolved fragments.
 
-## Epistemological Record
-
-| Event | Date | Lesson |
-|---|---|---|
-| Décret 11-125: WHO values fabricated | 2026-09-02 | AI filled missing Annexe from memory. Values were plausible but wrong origin. Caught by user challenge. |
-| Décret 06-141: values from training knowledge | 2026-09-03 | Values correct (diff MATCH), but origin was training knowledge not extraction. Declared "verified" before diff ran. |
-| Both resolved by | 2026-09-03 | pymupdf Tier 1 extraction + `diff_articles.py` line-by-line diff. |
-| extract_pdfplumber.py: 4-hour debug loop | 2026-09-03 | `Invoke-WebRequest` wrote HTML-escaped file. `\u2014` stored as 6 chars. No verification gate ran between patches. Fixed by urllib.request download + 3-gate verification protocol. |
-| Core lesson | — | "Confident" ≠ verified. Extraction method must be stated before citation. Diff is a gate, not a rescue. Script download method matters — always verify before running. |
+Column-order errors, OCR corruption, and table sparsity are distinct failure classes. Solving one document's layout does not establish a general corpus solution.
 
 ---
 
-## Files Referenced
+## Provenance and Diff Rules
 
-| Script | Purpose | Status |
-|---|---|---|
-| `legal_refs/validation/index_articles.py` | Article boundary extraction, ordinal normalisation | ✅ W97 + W99 |
-| `legal_refs/validation/normalize.py` | MD/PDF dual normaliser + orphan-strip | ✅ W97 |
-| `legal_refs/validation/diff_articles.py` | Fuzzy diff engine, MATCH/PARTIAL/MISMATCH | ✅ W97-P3 + W99 |
-| `legal_refs/validation/extract_pdfplumber.py` | Tier 2 two-column JO gazette extractor | ✅ v10 2026-09-03 |
+Every citation record must preserve enough provenance to reproduce the extraction:
+
+- source PDF path and SHA-256 hash;
+- zero-based page index or explicit page convention;
+- article, block, bounding box, or image region when available;
+- extractor and tier;
+- extraction and verification dates;
+- verification note.
+
+Diff before trust remains mandatory for any citation or Markdown passage that will support an active criterion. Rerun the relevant diff whenever the PDF, citation excerpt, or Markdown passage changes.
+
+A file or citation is not `TRUSTED` merely because it is readable, complete-looking, or previously marked verified.
 
 ---
 
-*Protocol v3 — updated 2026-09-03. Added SCRIPT_DOWNLOAD_SAFETY section after extract_pdfplumber.py debug loop. v2 established 2026-09-03. v1 drafted by Perplexity post-W100. Full text by Claude audit of epistemological risk. Supersedes v1 committed at [25384cb](https://github.com/belabedmohamedins-tech/SafeInspect-APP/commit/25384cba41bbaf60e64ea79960425ea5c524eb2b).*
+## What This Protocol Forbids
+
+- AI-generated legal text or numeric values.
+- Memory-based transcription presented as extraction.
+- `verified: true` without source hash, provenance, source comparison, and verification note.
+- Treating a Markdown mirror as more authoritative than its PDF.
+- Generalizing from one profile or one PDF layout to the entire corpus.
+- Deleting existing legal Markdown as a shortcut.
+- Silently relabeling layout artifacts as `MATCH`.
+- Skipping Tier 1 because a PDF appears scanned.
+
+---
+
+## Existing Tooling
+
+The existing validation scripts remain available for targeted use:
+
+- `legal_refs/validation/index_articles.py` — article boundary extraction.
+- `legal_refs/validation/normalize.py` — normalization for comparison.
+- `legal_refs/validation/diff_articles.py` — article-level comparison.
+- `legal_refs/validation/extract_pdfplumber.py` — Tier 2 extraction where needed.
+
+Use these tools for the relevant citation or Markdown passage; do not assume that a corpus-wide result is necessary for every criterion.
+
+---
+
+## Migration Policy
+
+Existing criteria and Markdown files are not automatically reclassified as `VERIFIED` under this strategy. Migrate citations incrementally:
+
+1. When a criterion is created or edited, attach a complete citation record.
+2. Compute and store the exact source PDF hash.
+3. Verify the cited passage and add the verification note.
+4. Mark the citation state explicitly.
+5. Leave unrelated criteria and derived Markdown unchanged until they are touched.
+
+---
+
+*Protocol v4 — citation-first update, 2026-09-13. Retains the Tier 1→4 extraction order and provenance requirements from v3 while changing the trust unit from full-document Markdown to criterion-level citations.*
