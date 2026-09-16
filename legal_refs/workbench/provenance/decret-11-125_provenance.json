@@ -1,0 +1,13 @@
+﻿{
+    "trust_tier":  "PENDING_FINAL_APPROVAL",
+    "extractor":  "PyMuPDF (pymupdf.open().page.get_text())",
+    "extraction_status":  "COMPLETE",
+    "pdf_sha256":  "873B7D10A39A1C9F96EBFA18F3C21B85C0BD9BFC207959E13C75E8E75C635BEA",
+    "structural_status":  "REVIEWED",
+    "notes":  "Tier-1 extraction complete. Canonical Markdown created. Old _diff.md retained as historical validation artifact. Ready for final approval before moving to legal_refs/.",
+    "timestamp":  "2026-09-16T17:31:05Z",
+    "source_pdf":  "decret 11-125.pdf",
+    "extraction_tier":  1,
+    "diff_status":  "SIGNIFICANT_DIFF",
+    "pages":  4
+}
