@@ -1,4 +1,4 @@
-# Legal Database Roadmap
+﻿# Legal Database Roadmap
 
 ## Phase 1: Single-PDF Validation Pipeline
 1. **Select 1 priority PDF** (e.g. `decret 11-125.pdf` or `Decret 17-140.pdf`).
@@ -43,3 +43,17 @@
 - Provenance is mandatory: **SHA256 + filename + pages**.
 - Never mark `TRUSTED` until provenance + structure + diff all pass.
 - Escalation triggers: empty/near-empty text, scrambled reading order, sparse tables, residual layout issues.
+
+## Reference Implementation: Décret 11-125
+
+As of commit dbc1ac4 on branch legal-database-start:
+
+- legal_refs/decret-11-125-eau-consommation-humaine.md is now the **canonical full-text** legal reference for Décret 11-125.
+- Extraction method: Tier‑1 PyMuPDF (pymupdf.open().page.get_text()), 4 pages, SHA256 873B7D10A39A1C9F96EBFA18F3C21B85C0BD9BFC207959E13C75E8E75C635BEA.
+- Old _diff.md retained in legal_refs/validation/ as a historical validation artifact, not used as canonical text.
+- This document serves as the reference pattern for all subsequent legal texts:
+  - Full-text extraction (not summary or diff report).
+  - Provenance recorded in legal_refs/workbench/provenance/*.json.
+  - Trust tier set to TRUSTED once pipeline completes successfully.
+
+Future documents will follow the same pattern: PDF → Tier‑1 extraction → provenance JSON → canonical MD in legal_refs/.
