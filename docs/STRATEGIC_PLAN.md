@@ -4,6 +4,54 @@
 > Read this file before opening any new phase.
 > Next phase identifier: **X**
 
+## Legal Reference Strategy ? Citation First
+
+The canonical legal sources are the PDFs in `legal_refs/pdf/`. Markdown files in `legal_refs/md/` are derived, human-readable reference artifacts; they are not a second legal authority and are not required to be complete before a criterion can be implemented.
+
+The primary trust unit is a verified criterion-level citation excerpt:
+
+```ts
+legalReference: {
+  decree: "09-19",
+  article: "9",
+  pdfPath: "legal_refs/pdf/decret 09-19.pdf",
+  page: 2,
+  extractedText: "Le registre de collecte contient...",
+  extractionMethod: "pymupdf-block",
+  extractionTier: 1,
+  extractionDate: "2026-09-13",
+  sourceHash: "<sha256-of-exact-source-pdf>",
+  verified: true,
+  verificationNote: "Checked against the PDF page image; article marker and continuation confirmed."
+}
+```
+
+A citation is trusted only when its source location, extraction method, extraction tier, source hash, and verification note are recorded. The PDF remains authoritative; `extractedText` is a traceable derived excerpt.
+
+### Citation-first operating rules
+
+- Extract and verify legal text when a criterion needs it, rather than requiring full-corpus Markdown conversion first.
+- Use PyMuPDF Tier 1 first, then pdfplumber Tier 2, Tesseract Tier 3, and manual/vision Tier 4 as defined by the legal extraction protocol.
+- Never generate legal wording or numeric values from memory.
+- Do not mark a citation `verified: true` without inspectable source-level evidence.
+- Revalidate a citation when the source PDF changes by comparing its stored `sourceHash` with the current hash.
+- Keep existing Markdown files as useful derived reading material; do not delete or mass-rewrite them as part of this strategy.
+- Build a document-specific profile only when repeated citations justify its maintenance; profiles are not a prerequisite for every PDF.
+- Treat column-order and OCR failures as citation-specific review problems unless repeated evidence justifies shared tooling.
+
+### Trust states
+
+- `UNEXTRACTED`: no citation excerpt has been produced.
+- `EXTRACTED`: excerpt exists with source location and extraction metadata, but verification is incomplete.
+- `VERIFIED`: provenance, source hash, source comparison, and verification note are complete.
+- `STALE`: the current PDF hash differs from the citation's stored hash.
+- `REVIEW`: extraction or layout ambiguity remains unresolved.
+
+This policy is separate from the historical phase registry below. Existing phase records remain historical evidence and are not rewritten.
+
+---
+
+
 ---
 
 ## 🚨 WRITE GUARD — Anti-Truncation Rules (mandatory before every push)

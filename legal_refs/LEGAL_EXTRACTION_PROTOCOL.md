@@ -2,6 +2,57 @@
 
 **Status:** Adopted 2026-09-03. Applies to every PDF in `legal_refs/pdf/` and every MD file in `legal_refs/`, past and future.
 
+> **Strategy update (2026-09-13):** PDFs under `legal_refs/pdf/` are the canonical legal sources. The primary trust unit is a criterion-level verified citation excerpt, not a complete Markdown mirror. Markdown under `legal_refs/md/` is a derived/reference artifact. Full-document Markdown conversion is optional unless a specific product requirement calls for it.
+
+---
+
+## Canonical Source and Citation Trust Unit
+
+A legal citation is trusted only when its source PDF, exact page, extracted text, extraction method, extraction tier, source hash, verification state, and verification note are recorded.
+
+```json
+{
+  "decree": "09-19",
+  "article": "9",
+  "pdfPath": "legal_refs/pdf/decret 09-19.pdf",
+  "page": 2,
+  "extractedText": "Le registre de collecte contient notamment les indications suivantes...",
+  "extractionMethod": "pymupdf-block",
+  "extractionTier": 1,
+  "extractionDate": "2026-09-13",
+  "sourceHash": "<sha256-of-exact-source-pdf>",
+  "verified": true,
+  "verificationNote": "Checked against the PDF page image; article marker and continuation confirmed."
+}
+```
+
+`extractedText` is a derived, traceable excerpt and must never replace the canonical PDF.
+
+### Required citation fields
+
+- `pdfPath`: canonical source PDF path.
+- `page`: zero-based PDF page index unless another convention is explicit.
+- `extractedText`: exact excerpt used by the criterion; do not paraphrase.
+- `extractionMethod`: method actually used.
+- `extractionTier`: 1, 2, 3, or 4.
+- `extractionDate`: ISO date of extraction or verification.
+- `sourceHash`: SHA-256 of the exact PDF bytes used.
+- `verified`: `true` only after source comparison and provenance review.
+- `verificationNote`: concise, inspectable explanation of the verification.
+
+### Trust states
+
+- `UNEXTRACTED`: no citation excerpt exists.
+- `EXTRACTED`: excerpt and provenance exist, but verification is incomplete.
+- `VERIFIED`: source comparison, provenance, source hash, and verification note are complete.
+- `STALE`: current PDF hash differs from the stored citation hash.
+- `REVIEW`: layout, OCR, or source ambiguity remains unresolved.
+
+A boolean `verified: true` without the required fields is invalid.
+
+---
+
+
 ---
 
 ## The One Rule That Matters
