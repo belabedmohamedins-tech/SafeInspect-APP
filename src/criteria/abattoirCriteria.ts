@@ -151,7 +151,7 @@ export const abattoirSpecificCriteria: InspectionItem[] = [
       labelAr: 'درجة حرارة غرفة التبريد (°C)',
       unit: '°C',
       min: 0,
-      max: 5,
+      max: 4,
       step: 0.1,
     },
   },

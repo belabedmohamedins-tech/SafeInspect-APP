@@ -99,7 +99,7 @@ export const baseFoodCriteria: InspectionItem[] = [
       labelAr: 'درجة حرارة التبريد المقاسة (°C)',
       unit: '°C',
       min: 0,
-      max: 5,
+      max: 4,
       step: 0.1,
     },
   },
