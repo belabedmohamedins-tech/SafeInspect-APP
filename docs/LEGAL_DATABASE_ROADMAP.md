@@ -57,3 +57,29 @@ As of commit dbc1ac4 on branch legal-database-start:
   - Trust tier set to TRUSTED once pipeline completes successfully.
 
 Future documents will follow the same pattern: PDF → Tier‑1 extraction → provenance JSON → canonical MD in legal_refs/.
+
+## Trust & Validation Rules (v1)
+
+A legal document is considered **TRUSTED** only if all of the following conditions are met:
+
+1. **Provenance recorded**
+   - pdf_sha256, source_pdf, pages, extraction_tier, extractor, and 	imestamp are present in the provenance JSON.
+2. **Extraction complete**
+   - extraction_status = "COMPLETE".
+   - All pages extracted (page count matches PDF).
+3. **Structural review passed**
+   - structural_status = "REVIEWED".
+   - Encoding checks pass (French accents and any Arabic intact).
+   - Article boundaries detectable and consistent with the PDF.
+4. **Article-level diff passed**
+   - An article-level diff (via legal_refs/validation/diff_articles.py or equivalent) has been run between the canonical Markdown and the source PDF.
+   - Results recorded (e.g. in provenance JSON or a companion _diff.json).
+   - Match rate and per-article flags meet agreed thresholds (e.g. ≥ 90% overall MATCH, no MISMATCH on critical articles).
+5. **No unresolved critical issues**
+   - diff_status is not "SIGNIFICANT_DIFF" in a way that indicates missing or corrupted legal text.
+   - Any PARTIAL/MISMATCH flags are understood and documented in 
+otes.
+
+Until these conditions are satisfied, 	rust_tier must remain "PENDING_FINAL_APPROVAL" or "REVIEW_REQUIRED".
+
+Décret 11‑125 (commit dbc1ac4 and later) is the reference implementation for this trust workflow.
