@@ -1,10 +1,10 @@
-﻿# Legal Database Roadmap
+# Legal Database Roadmap
 
 ## Phase 1: Single-PDF Validation Pipeline
 1. **Select 1 priority PDF** (e.g. `decret 11-125.pdf` or `Decret 17-140.pdf`).
 2. **Compute SHA256** of the PDF bytes.
 3. **Tier‑1 extraction** (PyMuPDF `get_text()`) → one `.txt` per page + combined `.txt`.
-4. **Structural checks:** page count match, article boundary sanity, encoding (é··è··à··ç··œ + Arabic if present).
+4. **Structural checks:** page count match, article boundary sanity, encoding (é, è, à, ç, œ + Arabic if present).
 5. **Provenance record** (JSON): filename, SHA256, pages, tier, extractor, timestamp.
 6. **Diff review:** compare to existing `_diff.md` (if any) or create new canonical Markdown.
 7. **Escalate only if needed:** Tier‑2 (pdfplumber) → Tier‑3 (Tesseract) → manual.
@@ -26,13 +26,13 @@
 |---|----------|--------|
 | 1 | `decret 11-125.pdf` | Eau consommation humaine |
 | 2 | `Decret 17-140.pdf` | Hygiene alimentaire |
-| 3 | `Dé··cret 06-198.pdf` | Etablissements classes |
+| 3 | `Décret 06-198.pdf` | Etablissements classes |
 | 4 | `Loi 18-11.pdf` | Sante publique |
-| 5 | `Dé··cret 07-144.pdf` | Nomenclature installations classees |
+| 5 | `Décret 07-144.pdf` | Nomenclature installations classees |
 | 6 | `decret-25-63-plans-intervention-catastrophes.pdf` | Plans intervention catastrophes |
-| 7 | `Dé··cret 91-05.pdf` | Hygiene & securite milieu travail |
+| 7 | `Décret 91-05.pdf` | Hygiene & securite milieu travail |
 | 8 | `Loi 03-10.pdf` | Protection environnement |
-| 9 | `Dé··cret 04-410.pdf` | Dechets |
+| 9 | `Décret 04-410.pdf` | Dechets |
 | 10 | `loi-90-29-urbanisme.pdf` | Urbanisme |
 
 ---
@@ -44,42 +44,27 @@
 - Never mark `TRUSTED` until provenance + structure + diff all pass.
 - Escalation triggers: empty/near-empty text, scrambled reading order, sparse tables, residual layout issues.
 
-## Reference Implementation: Décret 11-125
+## Reference Implementation & Trust Policy
 
-As of commit dbc1ac4 on branch legal-database-start:
+As of branch `legal-database-start`:
 
-- legal_refs/decret-11-125-eau-consommation-humaine.md is now the **canonical full-text** legal reference for Décret 11-125.
-- Extraction method: Tier‑1 PyMuPDF (pymupdf.open().page.get_text()), 4 pages, SHA256 873B7D10A39A1C9F96EBFA18F3C21B85C0BD9BFC207959E13C75E8E75C635BEA.
-- Old _diff.md retained in legal_refs/validation/ as a historical validation artifact, not used as canonical text.
-- This document serves as the reference pattern for all subsequent legal texts:
-  - Full-text extraction (not summary or diff report).
-  - Provenance recorded in legal_refs/workbench/provenance/*.json.
-  - Trust tier set to TRUSTED once pipeline completes successfully.
+- Décret 11‑125 is the **reference implementation** for the extraction and provenance workflow.
+- Canonical full-text for Décret 11‑125 currently lives in `legal_refs/workbench/decret-11-125_canonical.md`, with provenance recorded in `legal_refs/workbench/provenance/decret-11-125_provenance.json` (including SHA256, pages, extraction tier, and status).
+- The old `_diff.md` in `legal_refs/validation/` is retained as a historical validation artifact (article-level diff report), not as canonical text.
+- The provenance JSON for Décret 11‑125 currently has `trust_tier = "PENDING_FINAL_APPROVAL"`, meaning the document is structurally reviewed and extracted but not yet marked `TRUSTED`.
 
-Future documents will follow the same pattern: PDF → Tier‑1 extraction → provenance JSON → canonical MD in legal_refs/.
+All future documents should follow the same pattern: PDF → tiered extraction → provenance JSON → canonical Markdown (initially in `legal_refs/workbench/`), with trust tier only upgraded once all trust conditions are met.
 
-## Trust & Validation Rules (v1)
+### Trust & Validation Rules
 
-A legal document is considered **TRUSTED** only if all of the following conditions are met:
+The authoritative definition of trust tiers and conditions lives in `docs/LEGAL_TRUST_POLICY.md`.
 
-1. **Provenance recorded**
-   - pdf_sha256, source_pdf, pages, extraction_tier, extractor, and 	imestamp are present in the provenance JSON.
-2. **Extraction complete**
-   - extraction_status = "COMPLETE".
-   - All pages extracted (page count matches PDF).
-3. **Structural review passed**
-   - structural_status = "REVIEWED".
-   - Encoding checks pass (French accents and any Arabic intact).
-   - Article boundaries detectable and consistent with the PDF.
-4. **Article-level diff passed**
-   - An article-level diff (via legal_refs/validation/diff_articles.py or equivalent) has been run between the canonical Markdown and the source PDF.
-   - Results recorded (e.g. in provenance JSON or a companion _diff.json).
-   - Match rate and per-article flags meet agreed thresholds (e.g. ≥ 90% overall MATCH, no MISMATCH on critical articles).
-5. **No unresolved critical issues**
-   - diff_status is not "SIGNIFICANT_DIFF" in a way that indicates missing or corrupted legal text.
-   - Any PARTIAL/MISMATCH flags are understood and documented in 
-otes.
+In summary:
 
-Until these conditions are satisfied, 	rust_tier must remain "PENDING_FINAL_APPROVAL" or "REVIEW_REQUIRED".
+- Every legal document must have provenance recorded (source PDF name, SHA256, pages, extraction tier, extractor, timestamp).
+- Extraction must be complete for all pages with no obvious gaps.
+- Structural review must pass (encoding and article boundaries consistent with the PDF).
+- An article-level diff must be run between canonical Markdown and the source PDF using the repo’s validation pipeline.
+- No unresolved critical issues may remain; any PARTIAL or MISMATCH flags must be understood and documented.
 
-Décret 11‑125 (commit dbc1ac4 and later) is the reference implementation for this trust workflow.
+Until these conditions are satisfied, `trust_tier` must remain `"UNTRUSTED"`, `"PENDING_FINAL_APPROVAL"`, or `"REVIEW_REQUIRED"` as per `docs/LEGAL_TRUST_POLICY.md`.
