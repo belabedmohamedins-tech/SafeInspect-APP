@@ -1,4 +1,4 @@
-# Legal Database Roadmap
+﻿# Legal Database Roadmap
 
 ## Phase 1: Single-PDF Validation Pipeline
 1. **Select 1 priority PDF** (e.g. `decret 11-125.pdf` or `Decret 17-140.pdf`).
@@ -68,3 +68,90 @@ In summary:
 - No unresolved critical issues may remain; any PARTIAL or MISMATCH flags must be understood and documented.
 
 Until these conditions are satisfied, `trust_tier` must remain `"UNTRUSTED"`, `"PENDING_FINAL_APPROVAL"`, or `"REVIEW_REQUIRED"` as per `docs/LEGAL_TRUST_POLICY.md`.
+
+
+## Track A: Applied & Pending Citation Fixes (Audit‑00 to Audit‑20)
+
+This track records concrete, criterion‑level fixes identified by manual audit and cross‑file pattern analysis. These are independent of the Phase 3 articles index and verification script; they are mechanical or narrowly interpretive patches that can be applied immediately.
+
+A single source of truth for these fixes is maintained in:
+- legal_refs/workbench/legal_citations_ledger.csv — row per criterion fix, with current vs corrected citation, legal ref, domain, confidence, index status, status, and notes.
+
+### A.1 — Applied fixes (committed and pushed)
+
+The following fixes have been applied, committed, and pushed to legal-database-start. All are recorded in the ledger with status = APPLIED.
+
+| Criterion ID | File | Issue type | Change summary | Legal basis |
+|--------------|------|------------|----------------|-------------|
+| SLH‑05‑01 | src/criteria/slaughterhouseSmallCriteria.ts | Décret 06‑198 mis‑citation | Art.5 → Art.20 for “رخصة الاستغلال للمؤسسات المصنفة”; Art.5 clarified as pre‑auth studies | Décret 06‑198 Art.20 (license), Art.5 (pre‑auth) |
+| GPL‑01‑01 | src/criteria/gplCriteria.ts | Décret 06‑198 mis‑citation | Art.5 → Art.20 for operating license; Art.5 clarified as not the license | Décret 06‑198 Art.20, Art.5 |
+| PRD‑01‑01 | src/criteria/produceStorageCriteria.ts | Décret 06‑198 mis‑citation | Art.5 → Art.20 for operating license; Art.5 clarified as not the license | Décret 06‑198 Art.20, Art.5 |
+| BFD‑04‑01 | src/criteria/baseFoodCriteria.ts | Temperature figure + numericField | Criterion text + legalReference updated 0–5°C → 0–4°C; 
+umericField.max 5 → 4 | Arrêté 2025‑05‑07 (cold storage 0–4°C) |
+| ABT‑AX5‑01 | src/criteria/abattoirCriteria.ts | Temperature figure + numericField | Criterion text + legalReference updated 0–5°C → 0–4°C; 
+umericField.max 5 → 4 | Arrêté 2025‑05‑07 (cold storage 0–4°C) |
+| CLD‑17‑04 | src/criteria/coldRoomCriteria.ts | NumericField bug | 
+umericField.max 5 → 4; warningMax 7 → 5 to match 0–4°C legal limit | Arrêté 2025‑05‑07 + Arrêté 1999‑11‑21 |
+
+> Note: BFD‑04‑01 and ABT‑AX5‑01 were initially applied as full fixes (text + numeric). A later read‑after‑write verification pass (Claude, 2026‑09‑17) found that in the live repo the numericField was correct but the criterion text still said 0–5°C in some files. The ledger will be updated to reflect “partial” vs “full” status and re‑verification dates; the authoritative state is always the current file contents plus the ledger.
+
+### A.2 — Pending / partial fixes (verified 2026‑09‑17)
+
+The following items have been live‑verified against the current repo state but not yet patched. They should be applied as a dedicated batch before starting the Phase 3 articles index and verification script.
+
+| Criterion ID | File | Issue type | Required change | Legal basis | Priority |
+|--------------|------|------------|-----------------|-------------|----------|
+| BFD‑04‑01 (text) | src/criteria/baseFoodCriteria.ts | Partial fix: numericField correct, text outdated | Update criterion text + legalReference description from “0–5°C” to “0–4°C” (numericField already max:4) | Arrêté 2025‑05‑07 | High |
+| ABT‑AX5‑01 (text) | src/criteria/abattoirCriteria.ts | Partial fix: numericField correct, text outdated | Update criterion text from “0°C إلى 5°C” to “0–4°C” (numericField already max:4) | Arrêté 2025‑05‑07 | High |
+| PRD‑02‑01 | src/criteria/produceStorageCriteria.ts | Full temperature fix needed | Update criterion text + legalReference description 0–5°C → 0–4°C; 
+umericField.max 5 → 4 | Arrêté 2025‑05‑07 | High |
+| PRT‑05‑02 | src/criteria/printingCriteria.ts | Mis‑citation (fire/accident prevention) | Remove “Loi 90‑11 Art.6” (worker dignity, not safety); replace with **Loi 88‑07 Art.5** (fire/explosion prevention) + **Décret 91‑05 Art.57** (extinguishers) | Loi 88‑07 Art.5; Décret 91‑05 Art.57 | Medium |
+
+These four patches are purely mechanical once the correct legal basis is accepted; they do not require new legal research beyond what is already documented in the audit notes and Claude’s verification pass.
+
+### A.3 — UTF‑8 encoding cleanup pass (Track C)
+
+A separate, codebase‑wide issue was identified during verification: many criteria files show mojibake / double‑encoded Arabic text in fields such as xis, category, criteria, and 
+umericField labels, while recently edited legalReference fields display clean Arabic. This has been observed in:
+
+- src/criteria/produceStorageCriteria.ts  
+- src/criteria/slaughterhouseSmallCriteria.ts  
+- src/criteria/gplCriteria.ts  
+
+This is a UTF‑8 encoding bug that corrupts the Arabic text shown to inspectors in the app. It should be fixed in a dedicated pass:
+
+- For each src/criteria/*.ts file:
+  - Open in an editor that allows explicit encoding selection.
+  - Re‑save as **UTF‑8 without BOM**.
+  - Verify that Arabic renders correctly in xis, category, criteria, and numericField labels.
+- Commit each file (or small batches) with messages like:
+  - Fix UTF-8 encoding in produceStorageCriteria.ts (mojibake in Arabic fields)
+
+This work is tracked as **Track C** and should be kept separate from citation/legal fixes to avoid mixing concerns.
+
+### A.4 — Open legal research / product decisions (not patches)
+
+The following items are not simple patches; they require legal sourcing or product/design decisions. They will be documented in a separate file (e.g. legal_refs/workbench/open_legal_issues.md) and referenced here.
+
+1. **Missing sources**
+   - **Loi 88‑08** (veterinary medicine) — cited by ABT‑AX2‑01 / ABT‑AX2‑02 in battoirCriteria.ts; not yet present in legal_refs/. These criteria should remain [À VÉRIFIER] until the law is sourced and converted.
+   - **Décret 93‑162** — referenced in audit notes; not yet in legal_refs/.
+
+2. **Coverage gaps / product decisions**
+   - **Abattoir EIE criterion**: battoirCriteria.ts currently has no EIE (étude d’impact environnemental) criterion, while other classified‑installation criteria (e.g. aseGeneralCriteria.ts, slaughterhouseSmallCriteria.ts, gplCriteria.ts) do. Abattoirs are classified installations (rubric 2210) that plausibly require one. This is a product decision for the owner, not something to add unilaterally.
+
+These items should not be mixed with mechanical citation patches; they belong in a research/design backlog.
+
+### A.5 — Relationship to Phase 3 (articles index + verification)
+
+Track A is intentionally decoupled from the Phase 3 articles index and automated verification script:
+
+- Track A fixes are derived from **manual audit and cross‑file pattern analysis**, verified by direct file reads.
+- Phase 3 will provide a **systematic, automated verification pass** over all 287 criteria once the articles index exists.
+- The ledger (legal_citations_ledger.csv) will serve as the ground truth for which fixes have been applied, which are partial, and which are pending, independent of any automated report.
+
+When Phase 3 is implemented, its first run should:
+- Confirm that all Track A “Applied” fixes are reflected in the verification report.
+- Flag any additional mis‑citations or gaps not yet identified by manual audit.
+
+Until then, Track A remains the primary mechanism for incrementally improving legal accuracy in the criteria files.
