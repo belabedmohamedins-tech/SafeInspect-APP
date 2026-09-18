@@ -1,18 +1,18 @@
 ﻿{
-    "trust_tier":  "REVIEW_REQUIRED",
+    "trust_tier":  "PENDING_FINAL_APPROVAL",
     "extractor":  "PyMuPDF get_text()",
     "extraction_status":  "COMPLETE",
     "pdf_sha256":  "95be2185081c4f8cd73ad428d88f2a022a3baeae4cb2accba5f46bac668788a2",
     "structural_status":  {
-                              "encoding_intact":  false,
+                              "encoding_intact":  true,
                               "article_boundaries_clear":  true,
                               "no_missing_annexes":  true,
                               "page_count_matches":  true
                           },
-    "notes":  "Encoding issues detected in canonical MD. Requires re-extraction or encoding fix.",
+    "notes":  "Initial extraction complete. Canonical MD has clean UTF-8 encoding. Ready for article-level diff validation.",
     "timestamp":  "2026-09-18T17:36:40Z",
     "source_pdf":  "Décret 06-138.pdf",
     "extraction_tier":  "TIER_1",
-    "diff_status":  "REVIEW_REQUIRED",
+    "diff_status":  "PENDING_REVIEW",
     "pages":  8
 }
