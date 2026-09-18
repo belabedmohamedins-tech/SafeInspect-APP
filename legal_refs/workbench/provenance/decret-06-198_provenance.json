@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "UNTRUSTED",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "PENDING_EXTRACTION",
+    "pdf_sha256":  "6b647f94c20e569c44868d3b363d1c26ab7496d3bb9f397470e05fbd42949288",
+    "structural_status":  {
+                              "encoding_intact":  null,
+                              "article_boundaries_clear":  null,
+                              "no_missing_annexes":  null,
+                              "page_count_matches":  null
+                          },
+    "notes":  "Phase 2 batch processing - SHA256 computed, extraction pending",
+    "timestamp":  "2026-09-18T17:57:50Z",
+    "source_pdf":  "Decret 06-198.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "NOT_STARTED",
+    "pages":  0
+}

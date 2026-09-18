@@ -1,0 +1,13 @@
+{
+  "source_pdf": "Loi-03-10.pdf",
+  "pdf_sha256": "16715466e3ec05665cb59fe2d76b351db0bab4e98986e549136d9c18a5d553c6",
+  "pages": 28,
+  "extraction_tier": 1,
+  "extractor": "PyMuPDF (pymupdf)",
+  "timestamp": "2026-09-18T18:03:59.896909",
+  "extraction_status": "COMPLETE",
+  "structural_status": "PENDING_REVIEW",
+  "diff_status": "PENDING",
+  "trust_tier": "UNTRUSTED",
+  "notes": "Initial extraction - 28 pages extracted successfully"
+}

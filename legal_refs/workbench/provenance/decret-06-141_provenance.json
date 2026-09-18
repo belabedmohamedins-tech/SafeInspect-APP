@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "PENDING_FINAL_APPROVAL",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "COMPLETE",
+    "pdf_sha256":  "d855449eeb52abc6aa4c1b5b38de2fb767a760d5f4eff210d1f94363bd433c55",
+    "structural_status":  {
+                              "encoding_intact":  true,
+                              "article_boundaries_clear":  true,
+                              "no_missing_annexes":  true,
+                              "page_count_matches":  true
+                          },
+    "notes":  "Initial extraction. Canonical MD created. Article-level diff pending.",
+    "timestamp":  "2026-09-18T17:36:40Z",
+    "source_pdf":  "decret 06-141.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "PENDING_REVIEW",
+    "pages":  12
+}

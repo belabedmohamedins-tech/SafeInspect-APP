@@ -1,0 +1,13 @@
+{
+  "source_pdf": "Loi 18-11.pdf",
+  "pdf_sha256": "791b0d9f29269ee59d67752b68c5ce141974ed2ef49b81e4ec8e5330eb210955",
+  "pages": 40,
+  "extraction_tier": 1,
+  "extractor": "PyMuPDF (pymupdf)",
+  "timestamp": "2026-09-18T18:03:59.896909",
+  "extraction_status": "COMPLETE",
+  "structural_status": "PENDING_REVIEW",
+  "diff_status": "PENDING",
+  "trust_tier": "UNTRUSTED",
+  "notes": "Initial extraction - 40 pages extracted successfully"
+}

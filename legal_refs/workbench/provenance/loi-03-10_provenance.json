@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "UNTRUSTED",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "PENDING_EXTRACTION",
+    "pdf_sha256":  "16715466e3ec05665cb59fe2d76b351db0bab4e98986e549136d9c18a5d553c6",
+    "structural_status":  {
+                              "encoding_intact":  null,
+                              "article_boundaries_clear":  null,
+                              "no_missing_annexes":  null,
+                              "page_count_matches":  null
+                          },
+    "notes":  "Phase 2 batch processing - SHA256 computed, extraction pending",
+    "timestamp":  "2026-09-18T17:57:50Z",
+    "source_pdf":  "Loi-03-10.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "NOT_STARTED",
+    "pages":  0
+}

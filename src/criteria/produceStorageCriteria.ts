@@ -1,13 +1,13 @@
 import { InspectionItem } from '../types';
 
-// Covers: "وحدة تخزين الزيتون والخضر" — olive and vegetable storage unit
+// Covers: "وحدة تخزين الزيتون والخضر" â€” olive and vegetable storage unit
 export const produceStorageCriteria: InspectionItem[] = [
   {
     id: 'PRD-01-01',
     axis: 'هوية المنشأة والوثائق',
     category: 'تنظيمية',
     criteria: 'توفر رخصة استغلال سارية لنشاط تخزين وتسويق الزيتون والخضروات بالجملة، مع تحديد طاقة التخزين والأنواع المخزنة في الملف التقني.',
-    legalReference: 'المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196، المادة 5 (رخصة الاستغلال) والمادة 13 (الملف التقني: الطاقة، التجهيزات، الموقع).',
+    legalReference: 'المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و24-196، المادة 20 (رخصة الاستغلال) والمادة 5 (دراسات أولية وإجراءات ما قبل الترخيص، ليست رخصة الاستغلال) والمادة 13 (الملف التقني: الطاقة، التجهيزات، الموقع).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
@@ -16,14 +16,14 @@ export const produceStorageCriteria: InspectionItem[] = [
     id: 'PRD-02-01',
     axis: 'شروط التخزين',
     category: 'صحية',
-    criteria: 'تخزين الخضروات الطازجة في درجة حرارة تتراوح بين 0 و5°م مع تهوية مناسبة.',
+    criteria: 'تخزين الخضروات الطازجة في درجة حرارة تتراوح بين 0–4°C مع تهوية مناسبة.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (مراقبة درجات الحرارة كنقطة تحكم حرجة) + القرارات الوزارية الخاصة بشروط حفظ المنتجات الفلاحية الطازجة.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
       min: 0,
-      max: 5,
+      max: 4,
       unit: '°C',
       labelAr: 'درجة حرارة تخزين الخضروات',
     },
@@ -32,7 +32,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     id: 'PRD-02-01b',
     axis: 'شروط التخزين',
     category: 'صحية',
-    criteria: 'تخزين الزيتون في درجة حرارة تتراوح بين 7 و15°م مع تهوية مناسبة.',
+    criteria: 'تخزين الزيتون في درجة حرارة تتراوح بين 7 و15°C مع تهوية مناسبة.',
     legalReference: 'المرسوم التنفيذي 17-140 المادة 5 (مراقبة درجات الحرارة كنقطة تحكم حرجة) + القرارات الوزارية الخاصة بشروط حفظ المنتجات الفلاحية الطازجة.',
     severity: 'high',
     controlType: 'measurement',
@@ -84,7 +84,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
   },
-  // PRD-04-01 and PRD-04-02 removed — pest control covered by BGN-07-01/02/04 (S9 pest dedup)
+  // PRD-04-01 and PRD-04-02 removed â€” pest control covered by BGN-07-01/02/04 (S9 pest dedup)
   {
     id: 'PRD-05-01',
     axis: 'المياه والتخلص من النفايات',
@@ -95,5 +95,5 @@ export const produceStorageCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // PRD-05-02 removed — traceability now covered by BFD-08-01 in baseFoodCriteria (Phase 3 dedup)
+  // PRD-05-02 removed â€” traceability now covered by BFD-08-01 in baseFoodCriteria (Phase 3 dedup)
 ];

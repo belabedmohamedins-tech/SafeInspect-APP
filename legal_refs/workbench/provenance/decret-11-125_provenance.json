@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "PENDING_FINAL_APPROVAL",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "COMPLETE",
+    "pdf_sha256":  "873b7d10a39a1c9f96ebfa18f3c21b85c0bd9bfc207959e13c75e8e75c635bea",
+    "structural_status":  {
+                              "encoding_intact":  true,
+                              "article_boundaries_clear":  true,
+                              "no_missing_annexes":  true,
+                              "page_count_matches":  true
+                          },
+    "notes":  "Initial extraction. Canonical MD created. Article-level diff pending.",
+    "timestamp":  "2026-09-18T17:29:17Z",
+    "source_pdf":  "decret 11-125.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "PENDING_REVIEW",
+    "pages":  4
+}
