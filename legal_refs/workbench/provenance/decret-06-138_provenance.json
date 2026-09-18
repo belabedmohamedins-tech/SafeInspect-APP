@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "REVIEW_REQUIRED",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "COMPLETE",
+    "pdf_sha256":  "95be2185081c4f8cd73ad428d88f2a022a3baeae4cb2accba5f46bac668788a2",
+    "structural_status":  {
+                              "encoding_intact":  false,
+                              "article_boundaries_clear":  true,
+                              "no_missing_annexes":  true,
+                              "page_count_matches":  true
+                          },
+    "notes":  "Encoding issues detected in canonical MD. Requires re-extraction or encoding fix.",
+    "timestamp":  "2026-09-18T17:36:40Z",
+    "source_pdf":  "Décret 06-138.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "REVIEW_REQUIRED",
+    "pages":  8
+}
