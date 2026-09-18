@@ -1,0 +1,693 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2026-09-18T18:06:30.362536",
+    "total_criteria": 7,
+    "total_articles": 264
+  },
+  "mappings": [
+    {
+      "criterion_id": "ENV-001",
+      "criterion_name": "Emissions atmospheriques",
+      "category": "Environnement",
+      "expected_references": [
+        "decret-06-138",
+        "loi-03-10"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "decret-06-138",
+          "article_number": "7",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "3",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "4",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "37",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "44",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "49",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "57",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "58",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "62",
+          "matched_keywords": [
+            "air",
+            "pollution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-138",
+          "article_number": "8",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-138",
+          "article_number": "10",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-138",
+          "article_number": "16",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-138",
+          "article_number": "18",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-138",
+          "article_number": "19",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "2",
+          "matched_keywords": [
+            "pollution"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "7",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "7",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "9",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "10",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "11",
+          "matched_keywords": [
+            "air"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "pollution",
+        "air"
+      ]
+    },
+    {
+      "criterion_id": "ENV-002",
+      "criterion_name": "Effluents liquides",
+      "category": "Environnement",
+      "expected_references": [
+        "decret-06-141",
+        "loi-03-10"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "decret-06-141",
+          "article_number": "10",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "3",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "4",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "5",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "6",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "8",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "14",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "50",
+          "matched_keywords": [
+            "effluents",
+            "rejets"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "2",
+          "matched_keywords": [
+            "effluents"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "9",
+          "matched_keywords": [
+            "rejets"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-141",
+          "article_number": "11",
+          "matched_keywords": [
+            "effluents"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "58",
+          "matched_keywords": [
+            "rejets"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "rejets",
+        "effluents"
+      ]
+    },
+    {
+      "criterion_id": "ENV-003",
+      "criterion_name": "Etablissements classes",
+      "category": "Environnement",
+      "expected_references": [
+        "decret-06-198",
+        "loi-03-10"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "decret-06-198",
+          "article_number": "6",
+          "matched_keywords": [
+            "autorisation",
+            "declaration"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "25",
+          "matched_keywords": [
+            "etablissements classes",
+            "autorisation"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "1",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "8",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "5",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "41",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-06-198",
+          "article_number": "3",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "19",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "21",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "18",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "23",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "26",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "28",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "29",
+          "matched_keywords": [
+            "classement"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "32",
+          "matched_keywords": [
+            "classement"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "33",
+          "matched_keywords": [
+            "classement"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "34",
+          "matched_keywords": [
+            "classement"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "43",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "55",
+          "matched_keywords": [
+            "autorisation"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-03-10",
+          "article_number": "65",
+          "matched_keywords": [
+            "classement"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "autorisation",
+        "etablissements classes",
+        "declaration",
+        "classement"
+      ]
+    },
+    {
+      "criterion_id": "EAU-001",
+      "criterion_name": "Eau consommation humaine",
+      "category": "Eau",
+      "expected_references": [
+        "decret-11-125",
+        "loi-03-10"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "decret-11-125",
+          "article_number": "111",
+          "matched_keywords": [
+            "eau potable",
+            "consommation humaine",
+            "distribution"
+          ],
+          "relevance_score": 3
+        },
+        {
+          "document_id": "decret-11-125",
+          "article_number": "6",
+          "matched_keywords": [
+            "eau potable",
+            "distribution"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-11-125",
+          "article_number": "112",
+          "matched_keywords": [
+            "consommation humaine"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "decret-11-125",
+          "article_number": "7",
+          "matched_keywords": [
+            "consommation humaine"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "consommation humaine",
+        "eau potable",
+        "distribution"
+      ]
+    },
+    {
+      "criterion_id": "HYG-001",
+      "criterion_name": "Hygiene et salubrite",
+      "category": "Hygiene",
+      "expected_references": [
+        "decret-17-140",
+        "loi-18-11"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "decret-17-140",
+          "article_number": "6",
+          "matched_keywords": [
+            "nettoyage",
+            "locaux"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-17-140",
+          "article_number": "3",
+          "matched_keywords": [
+            "nettoyage",
+            "locaux"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-17-140",
+          "article_number": "3",
+          "matched_keywords": [
+            "nettoyage",
+            "locaux"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "decret-17-140",
+          "article_number": "10",
+          "matched_keywords": [
+            "nettoyage",
+            "locaux"
+          ],
+          "relevance_score": 2
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "1",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "267",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "94",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "166",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "223",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "316",
+          "matched_keywords": [
+            "locaux"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "locaux",
+        "nettoyage"
+      ]
+    },
+    {
+      "criterion_id": "SAN-001",
+      "criterion_name": "Sante publique - Dispositions generales",
+      "category": "Sante",
+      "expected_references": [
+        "loi-18-11"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "loi-18-11",
+          "article_number": "40",
+          "matched_keywords": [
+            "protection sanitaire"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "protection sanitaire"
+      ]
+    },
+    {
+      "criterion_id": "SAN-002",
+      "criterion_name": "Etablissements recevant du public",
+      "category": "Sante",
+      "expected_references": [
+        "loi-18-11",
+        "decret-17-140"
+      ],
+      "linked_articles": [
+        {
+          "document_id": "loi-18-11",
+          "article_number": "38",
+          "matched_keywords": [
+            "ERP"
+          ],
+          "relevance_score": 1
+        },
+        {
+          "document_id": "loi-18-11",
+          "article_number": "166",
+          "matched_keywords": [
+            "ERP"
+          ],
+          "relevance_score": 1
+        }
+      ],
+      "keywords_matched": [
+        "ERP"
+      ]
+    }
+  ]
+}

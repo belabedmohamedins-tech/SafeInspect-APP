@@ -1,0 +1,13 @@
+{
+  "source_pdf": "Decret 06-198.pdf",
+  "pdf_sha256": "6b647f94c20e569c44868d3b363d1c26ab7496d3bb9f397470e05fbd42949288",
+  "pages": 7,
+  "extraction_tier": 1,
+  "extractor": "PyMuPDF (pymupdf)",
+  "timestamp": "2026-09-18T18:03:59.896283",
+  "extraction_status": "COMPLETE",
+  "structural_status": "PENDING_REVIEW",
+  "diff_status": "PENDING",
+  "trust_tier": "UNTRUSTED",
+  "notes": "Initial extraction - 7 pages extracted successfully"
+}

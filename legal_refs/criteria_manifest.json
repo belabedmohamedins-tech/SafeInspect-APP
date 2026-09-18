@@ -1,0 +1,122 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "created_at": "2026-09-18T18:04:55.566536",
+    "description": "Inspection criteria mapped to Algerian legal references"
+  },
+  "criteria": [
+    {
+      "id": "ENV-001",
+      "name": "Emissions atmospheriques",
+      "category": "Environnement",
+      "keywords": [
+        "emissions",
+        "atmosphere",
+        "air",
+        "pollution",
+        "fumees"
+      ],
+      "expected_references": [
+        "decret-06-138",
+        "loi-03-10"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "id": "ENV-002",
+      "name": "Effluents liquides",
+      "category": "Environnement",
+      "keywords": [
+        "effluents",
+        "eaux usees",
+        "rejets",
+        "assainissement",
+        "wastewater"
+      ],
+      "expected_references": [
+        "decret-06-141",
+        "loi-03-10"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "id": "ENV-003",
+      "name": "Etablissements classes",
+      "category": "Environnement",
+      "keywords": [
+        "etablissements classes",
+        "ICPE",
+        "autorisation",
+        "declaration",
+        "classement"
+      ],
+      "expected_references": [
+        "decret-06-198",
+        "loi-03-10"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "id": "EAU-001",
+      "name": "Eau consommation humaine",
+      "category": "Eau",
+      "keywords": [
+        "eau potable",
+        "consommation humaine",
+        "qualite eau",
+        "distribution"
+      ],
+      "expected_references": [
+        "decret-11-125",
+        "loi-03-10"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "id": "HYG-001",
+      "name": "Hygiene et salubrite",
+      "category": "Hygiene",
+      "keywords": [
+        "hygiene",
+        "salubrite",
+        "nettoyage",
+        "desinfection",
+        "locaux"
+      ],
+      "expected_references": [
+        "decret-17-140",
+        "loi-18-11"
+      ],
+      "priority": "HIGH"
+    },
+    {
+      "id": "SAN-001",
+      "name": "Sante publique - Dispositions generales",
+      "category": "Sante",
+      "keywords": [
+        "sante publique",
+        "protection sanitaire",
+        "risques sanitaires"
+      ],
+      "expected_references": [
+        "loi-18-11"
+      ],
+      "priority": "MEDIUM"
+    },
+    {
+      "id": "SAN-002",
+      "name": "Etablissements recevant du public",
+      "category": "Sante",
+      "keywords": [
+        "ERP",
+        "etablissements recevant public",
+        "acces public"
+      ],
+      "expected_references": [
+        "loi-18-11",
+        "decret-17-140"
+      ],
+      "priority": "MEDIUM"
+    }
+  ]
+}
