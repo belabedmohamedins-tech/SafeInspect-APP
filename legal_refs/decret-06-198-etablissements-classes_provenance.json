@@ -1,13 +1,25 @@
 {
-  "source_pdf": "Decret 06-198.pdf",
-  "pdf_sha256": "6b647f94c20e569c44868d3b363d1c26ab7496d3bb9f397470e05fbd42949288",
-  "pages": 7,
-  "extraction_tier": 1,
-  "extractor": "PyMuPDF (pymupdf)",
-  "timestamp": "2026-09-18T18:03:59.896283",
-  "extraction_status": "COMPLETE",
-  "structural_status": "PENDING_REVIEW",
-  "diff_status": "PENDING",
-  "trust_tier": "UNTRUSTED",
-  "notes": "Initial extraction - 7 pages extracted successfully"
+    "created_at":  "2026-09-19T00:08:50.7386048+01:00",
+    "source_pdf":  "Decret 06-198.pdf",
+    "layout_characteristics":  [
+                                   "JORADP two-column page layout",
+                                   "page 1 contains the end of the preceding instrument in the left column",
+                                   "Décret 06-198 begins in the right column of page 1"
+                               ],
+    "extraction_tier":  1,
+    "pdf_sha256":  "6b647f94c20e569c44868d3b363d1c26ab7496d3bb9f397470e05fbd42949288",
+    "source_identity_status":  "CONFIRMED",
+    "diff_status":  "PENDING_ARTICLE_LEVEL_DIFF",
+    "trust_tier":  "PENDING_FINAL_APPROVAL",
+    "extractor":  "PyMuPDF get_text() with column-order reconstruction",
+    "extraction_status":  "COMPLETE",
+    "structural_status":  "REVIEWED_OK",
+    "derived_from_workbench":  "legal_refs/workbench/decret-06-198/column_order_candidate_v2.md",
+    "notes":  "Canonical Markdown rebuilt from column-order-aware extraction (v2). All 50 articles (1er–50) present and in correct order. Replaces previous extraction that incorrectly included the preceding decree\u0027s content from page 1 left column.",
+    "document_identity":  {
+                              "instrument":  "Décret exécutif n° 06-198",
+                              "title":  "définissant la réglementation applicable aux établissements classés pour la protection de l\u0027environnement",
+                              "date":  "2006-05-31"
+                          },
+    "pages":  7
 }
