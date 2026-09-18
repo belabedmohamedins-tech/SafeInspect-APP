@@ -8,3 +8,6 @@ BFD-04-01,src/criteria/baseFoodCriteria.ts,"0–5°C","0–4°C",Arrêté 2025-0
 ABT-AX5-01,src/criteria/abattoirCriteria.ts,"0°C إلى 5°C","0–4°C",Arrêté 2025-05-07,food_safety,"Cold storage 0–4°C",HIGH,VERIFIED,APPLIED,"Text corrected (numericField already max:4)"
 PRD-02-01,src/criteria/produceStorageCriteria.ts,"0 و5°م","0–4°C",Arrêté 2025-05-07,food_safety,"Vegetable cold storage 0–4°C",HIGH,VERIFIED,APPLIED,"Text + numericField.max corrected"
 PRT-05-02,src/criteria/printingCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5 + Décret 91-05 Art.57",Loi 88-07 + Décret 91-05,fire_safety,"Fire prevention",HIGH,VERIFIED,APPLIED,"Citation swapped"
+BGN-02-07,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Lighting (éclairage)",LOW,VERIFIED,APPLIED,"Citation swapped"
+BGN-08-03,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Electrical safety",HIGH,VERIFIED,APPLIED,"Citation swapped"
+UAB-AX7-07,src/criteria/uabCriteria.ts,"Loi 90-11","Loi 88-07 Art.5",Loi 88-07,occupational_health,"Noise (bruit)",MEDIUM,VERIFIED,APPLIED,"Citation swapped"
