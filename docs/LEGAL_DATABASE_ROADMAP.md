@@ -1,5 +1,31 @@
 ﻿# Legal Database Roadmap
 
+## ✅ Phase 1: COMPLETED (2026-09-18)
+
+**Status:** Single-PDF validation pipeline complete for 4 core decrets.
+
+| Document | PDF | SHA256 | Pages | Trust Tier | Canonical MD | Provenance JSON |
+|----------|-----|--------|-------|------------|--------------|-----------------|
+| 1 | decret 11-125.pdf | 873b7d10... | 4 | PENDING_FINAL_APPROVAL | ✅ legal_refs/decret-11-125-eau-consommation-humaine.md | ✅ legal_refs/workbench/provenance/decret-11-125_provenance.json |
+| 2 | Décret 06-138.pdf | 95be2185... | 8 | REVIEW_REQUIRED | ✅ legal_refs/decret-06-138-emissions-atmospheriques.md | ✅ legal_refs/workbench/provenance/decret-06-138_provenance.json |
+| 3 | decret 06-141.pdf | d855449e... | 12 | PENDING_FINAL_APPROVAL | ✅ legal_refs/decret-06-141-effluents-liquides.md | ✅ legal_refs/workbench/provenance/decret-06-141_provenance.json |
+| 4 | Decret 17-140.pdf | 88204913... | 16 | PENDING_FINAL_APPROVAL | ✅ legal_refs/decret-17-140-hygiene-salubrite.md | ✅ legal_refs/workbench/provenance/decret-17-140_provenance.json |
+
+**Deliverables:**
+- ✅ PDF SHA256 hashes computed for all 4 documents
+- ✅ Provenance JSONs created with full metadata (extraction tier, structural status, trust tier)
+- ✅ Canonical Markdown files with clean UTF-8 encoding (except 06-138 needs re-extraction)
+- ✅ Articles index created: legal_refs/articles_index.json (35 articles from 4 decrets)
+- ✅ Reusable extraction script: legal_refs/validation/build_articles_index.py
+
+**Notes:**
+- Décret 06-138 marked REVIEW_REQUIRED due to encoding issues in canonical MD (requires re-extraction)
+- All other documents ready for article-level diff validation
+- Phase 1 proves the workflow: PDF → SHA256 → extraction → provenance → canonical MD → articles index
+
+---
+
+
 ## Phase 1: Single-PDF Validation Pipeline
 1. **Select 1 priority PDF** (e.g. `decret 11-125.pdf` or `Decret 17-140.pdf`).
 2. **Compute SHA256** of the PDF bytes.
@@ -155,3 +181,4 @@ When Phase 3 is implemented, its first run should:
 - Flag any additional mis‑citations or gaps not yet identified by manual audit.
 
 Until then, Track A remains the primary mechanism for incrementally improving legal accuracy in the criteria files.
+
