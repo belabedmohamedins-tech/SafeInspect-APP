@@ -11,3 +11,6 @@ PRT-05-02,src/criteria/printingCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5 + 
 BGN-02-07,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Lighting (éclairage)",LOW,VERIFIED,APPLIED,"Citation swapped"
 BGN-08-03,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Electrical safety",HIGH,VERIFIED,APPLIED,"Citation swapped"
 UAB-AX7-07,src/criteria/uabCriteria.ts,"Loi 90-11","Loi 88-07 Art.5",Loi 88-07,occupational_health,"Noise (bruit)",MEDIUM,VERIFIED,APPLIED,"Citation swapped"
+BGN-02-07,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Lighting (éclairage)",LOW,VERIFIED,APPLIED,"Citation swapped"
+BGN-08-03,src/criteria/baseGeneralCriteria.ts,"Loi 90-11 Art.6","Loi 88-07 Art.5",Loi 88-07,general_safety,"Electrical safety",HIGH,VERIFIED,APPLIED,"Citation swapped"
+UAB-AX7-07,src/criteria/uabCriteria.ts,"Loi 90-11","Loi 88-07 Art.5",Loi 88-07,occupational_health,"Noise (bruit)",MEDIUM,VERIFIED,APPLIED,"Citation swapped"
