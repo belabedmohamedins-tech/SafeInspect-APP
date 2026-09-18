@@ -1,21 +1,21 @@
 // src/criteria/slaughterhouseSmallCriteria.ts
     // W90 (2026-08-23): SLH-08-01 EIE citation corrected against Loi 03-10.
     //   Art.14 concerns the five-year national environmental-action plan.
-    //   EIE begins at Art.15; Art.16 sets study content; Arts.18â€“23 address
+    //   EIE begins at Art.15; Art.16 sets study content; Arts.18–“23 address
     //   classified installations, authorization, prerequisites, and control.
-//   DÃ©cret 04-82 Arts.6 (SLH-05-02) + Arts.9 (SLH-05-03) confirmed correct by direct read.
-// F7-fix (2026-08-17): DÃ©cret 06-141 Annexe II Â§1a confirmed â€” switched Annexe I mg/L values
+//   Décret 04-82 Arts.6 (SLH-05-02) + Arts.9 (SLH-05-03) confirmed correct by direct read.
+// F7-fix (2026-08-17): Décret 06-141 Annexe II §1a confirmed — switched Annexe I mg/L values
 //   to sector-specific Annexe II g/t (abattoirs et transformation de la viande).
-//   SLH-05-04: critÃ¨re + legalReference updated to g/t Annexe II values.
-//   SLH-05-04B: DCO limit 120 mg/L â†’ 800 g/t, numericField unit corrected.
-//   SLH-05-04C: MES 35 mg/L â†’ matiÃ¨re dÃ©cantable 200 g/t, label + numericField corrected.
-//   SLH-05-04D: pH min 6.5 â†’ 5.5 per Annexe II abattoirs (5.5â€“8.5).
-// W61 (2026-08-17): SLH-05-02 Art.6 â†’ Art.10+11; SLH-05-03 Art.9 â†’ Art.10+11.
-//   Direct read of DÃ©cret 04-82 (18 arts, legal_refs/ 2026-08-17):
-//   Art.6 = Ã©quipement/matÃ©riaux des Ã©levages (bien-Ãªtre animal) â€” NOT ante mortem inspection.
-//   Art.9 = renvoi Ã  arrÃªtÃ© ministÃ©riel pour prÃ©ciser prescriptions physiques â€” NOT post mortem.
-//   Art.10 = visite de lâ€™infrastructure par lâ€™autoritÃ© vÃ©tÃ©rinaire + dÃ©livrance agrÃ©ment sanitaire.
-//   Art.11 = registre cotÃ©/paraphÃ© + rapports de visite dâ€™inspection (obligation de suivi continu).
+//   SLH-05-04: critère + legalReference updated to g/t Annexe II values.
+//   SLH-05-04B: DCO limit 120 mg/L →’ 800 g/t, numericField unit corrected.
+//   SLH-05-04C: MES 35 mg/L →’ matière décantable 200 g/t, label + numericField corrected.
+//   SLH-05-04D: pH min 6.5 →’ 5.5 per Annexe II abattoirs (5.5–“8.5).
+// W61 (2026-08-17): SLH-05-02 Art.6 →’ Art.10+11; SLH-05-03 Art.9 →’ Art.10+11.
+//   Direct read of Décret 04-82 (18 arts, legal_refs/ 2026-08-17):
+//   Art.6 = équipement/matériaux des élevages (bien-être animal) — NOT ante mortem inspection.
+//   Art.9 = renvoi à arrêté ministériel pour préciser prescriptions physiques — NOT post mortem.
+//   Art.10 = visite de l–™infrastructure par l–™autorité vétérinaire + délivrance agrément sanitaire.
+//   Art.11 = registre coté/paraphé + rapports de visite d–™inspection (obligation de suivi continu).
 import { InspectionItem } from '../types';
 
 export const slaughterhouseSmallCriteria: InspectionItem[] = [
@@ -34,9 +34,9 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'الذبح والفحص الصحي',
     category: 'صحية',
     criteria: 'تنظيم فحص صحي قبل الذبح للدواجن (ante mortem) للتأكد من خلوّها من الأمراض الظاهرة واستبعاد الحالات المشتبه فيها قبل الدخول إلى غرفة الذبح.',
-    // W61 (2026-08-17): CORRECTED â€” Art.6 (conception/Ã©quipement Ã©levages) WRONG for ante mortem.
-    // Art.10 = visite de lâ€™autoritÃ© vÃ©tÃ©rinaire avant exploitation + dÃ©livrance agrÃ©ment sanitaire.
-    // Art.11 = registre cotÃ©/paraphÃ© + rapports de visite dâ€™inspection (suivi continu).
+    // W61 (2026-08-17): CORRECTED — Art.6 (conception/équipement élevages) WRONG for ante mortem.
+    // Art.10 = visite de l–™autorité vétérinaire avant exploitation + délivrance agrément sanitaire.
+    // Art.11 = registre coté/paraphé + rapports de visite d–™inspection (suivi continu).
     legalReference: 'المادة 10 من المرسوم التنفيذي 04-82 (تفتيش البنية والتجهيزات من قبل السلطة البيطرية وإصدار الاعتماد الصحي قبل الاستغلال) + المادة 11 (سجل مؤشر ومبصوم من السلطة البيطرية يتضمّن جميع المعلومات الزووتكنية والصحية وتقارير زيارات التفتيش).',
     severity: 'high',
     controlType: 'visual',
@@ -47,10 +47,10 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'الذبح والفحص الصحي',
     category: 'صحية',
     criteria: 'إجراء فحص بعدي للذبائح (post mortem) للتأكد من سلامة الذبائح واستبعاد الأجزاء أو الذبائح غير الصالحة للاستهلاك وتوجيهها لمسار نفايات خاص.',
-    // W61 (2026-08-17): CORRECTED â€” Art.9 (renvoi arrÃªtÃ© ministÃ©riel prescriptions physiques) WRONG.
-    // Art.10 = agrÃ©ment sanitaire aprÃ¨s visite vÃ©tÃ©rinaire (obligation de contrÃ´le avant exploitation).
-    // Art.11 = registre cotÃ©/paraphÃ© + rapports de visite (suivi continu des conditions sanitaires).
-    // DÃ©cret 17-140 Art.3 retained â€” covers food-safety requirements for animal-origin products.
+    // W61 (2026-08-17): CORRECTED — Art.9 (renvoi arrêté ministériel prescriptions physiques) WRONG.
+    // Art.10 = agrément sanitaire après visite vétérinaire (obligation de contrôle avant exploitation).
+    // Art.11 = registre coté/paraphé + rapports de visite (suivi continu des conditions sanitaires).
+    // Décret 17-140 Art.3 retained — covers food-safety requirements for animal-origin products.
     legalReference: 'المادة 10 من المرسوم 04-82 (الاعتماد الصحي وإلزامية تفتيش السلطة البيطرية) + المادة 11 (سجل مؤشر ومبصوم يتضمّن جميع تقارير زيارات التفتيش ونتائجها) + المادة 3 من المرسوم 17-140 المؤرخ في 27 مارس 2017 (اشتراطات سلامة المنتجات الغذائية ذات الأصل الحيواني).',
     severity: 'high',
     controlType: 'visual',
@@ -60,19 +60,19 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    // F7-fix (2026-08-17): switched from Annexe I generic mg/L to Annexe II Â§1a g/t.
-    // DÃ©cret 06-141 Annexe II Â§1a (Abattoirs et transformation de la viande):
-    // DBO5 â‰¤ 250 g/t | DCO â‰¤ 800 g/t | MatiÃ¨re dÃ©cantable â‰¤ 200 g/t
-    // Volume â‰¤ 6 mÂ³/t carcasse | pH 5.5â€“8.5
-    // numericField measures volume (mÂ³/t) as the primary on-site verifiable indicator.
-    criteria: 'فصل الدم والأحشاء والمحتويات الصلبة عن مياه الغسل قبل وصولها إلى الحفرة المتعفنة أو شبكة الصرف. عند التصريف في الشبكة العمومية أو الوسط الطبيعي: قياس المعاملات عند نقطة التصريف والتحقق من عدم تجاوز القيم الخاصة بالمسالخ (الملحق II للمرسوم 06-141): DBO5 â‰¤ 250 غ/ط، DCO â‰¤ 800 غ/ط، مادة قابلة للترسيب â‰¤ 200 غ/ط، حجم الصرف â‰¤ 6 Ù…Â³/طن ذبيحة، pH بين 5.5 و٨.٥.',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق II Â§1أ (قيم خاصة بالمسالخ ومنشآت تحويل اللحوم â€” وحدة: غ/طن ذبيحة). القانون 03-10 المادة 12. القانون 01-19 المادة 12 (منع صرف مخلفات الذبح مباشرة دون معالجة).',
+    // F7-fix (2026-08-17): switched from Annexe I generic mg/L to Annexe II §1a g/t.
+    // Décret 06-141 Annexe II §1a (Abattoirs et transformation de la viande):
+    // DBO5 ≤ 250 g/t | DCO ≤ 800 g/t | Matière décantable ≤ 200 g/t
+    // Volume ≤ 6 m³/t carcasse | pH 5.5–“8.5
+    // numericField measures volume (m³/t) as the primary on-site verifiable indicator.
+    criteria: 'فصل الدم والأحشاء والمحتويات الصلبة عن مياه الغسل قبل وصولها إلى الحفرة المتعفنة أو شبكة الصرف. عند التصريف في الشبكة العمومية أو الوسط الطبيعي: قياس المعاملات عند نقطة التصريف والتحقق من عدم تجاوز القيم الخاصة بالمسالخ (الملحق II للمرسوم 06-141): DBO5 ≤ 250 غ/ط، DCO ≤ 800 غ/ط، مادة قابلة للترسيب ≤ 200 غ/ط، حجم الصرف ≤ 6 Ù…³/طن ذبيحة، pH بين 5.5 و٨.٥.',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ (قيم خاصة بالمسالخ ومنشآت تحويل اللحوم — وحدة: غ/طن ذبيحة). القانون 03-10 المادة 12. القانون 01-19 المادة 12 (منع صرف مخلفات الذبح مباشرة دون معالجة).',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
     numericField: {
-      unit: 'mÂ³/t',
-      labelAr: 'حجم مياه الصرف (Ù…Â³/طن ذبيحة)',
+      unit: 'm³/t',
+      labelAr: 'حجم مياه الصرف (Ù…³/طن ذبيحة)',
       max: 6,
       warningMax: 5,
       step: 0.1,
@@ -83,9 +83,9 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04B',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    // F7-fix (2026-08-17): DCO limit corrected â€” Annexe II Â§1a abattoirs = 800 g/t (not 120 mg/L).
+    // F7-fix (2026-08-17): DCO limit corrected — Annexe II §1a abattoirs = 800 g/t (not 120 mg/L).
     criteria: 'قياس الطلب الكيميائي للأكسجين (DCO) عند نقطة التصريف النهائي والتحقق من عدم تجاوز 800 غ/طن ذبيحة (وفق الملحق II للمرسوم 06-141 الخاص بالمسالخ).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق II Â§1أ â€” القيمة القصوى لـ DCO للمسالخ: 800 غ/طن ذبيحة.',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ — القيمة القصوى لـ DCO للمسالخ: 800 غ/طن ذبيحة.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -102,10 +102,10 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04C',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    // F7-fix (2026-08-17): parameter corrected â€” Annexe II Â§1a abattoirs has no MES row;
-    // the correct parameter is "MatiÃ¨re dÃ©cantable" â‰¤ 200 g/t (not MES â‰¤ 35 mg/L).
-    criteria: 'قياس المواد القابلة للترسيب عند نقطة التصريف النهائي والتحقق من عدم تجاوز 200 غ/طن ذبيحة (وفق الملحق II للمرسوم 06-141 الخاص بالمسالخ â€” المعيار: مادة قابلة للترسيب، لا MES).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق II Â§1أ â€” القيمة القصوى للمادة القابلة للترسيب للمسالخ: 200 غ/طن ذبيحة.',
+    // F7-fix (2026-08-17): parameter corrected — Annexe II §1a abattoirs has no MES row;
+    // the correct parameter is "Matière décantable" ≤ 200 g/t (not MES ≤ 35 mg/L).
+    criteria: 'قياس المواد القابلة للترسيب عند نقطة التصريف النهائي والتحقق من عدم تجاوز 200 غ/طن ذبيحة (وفق الملحق II للمرسوم 06-141 الخاص بالمسالخ — المعيار: مادة قابلة للترسيب، لا MES).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ — القيمة القصوى للمادة القابلة للترسيب للمسالخ: 200 غ/طن ذبيحة.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -122,9 +122,9 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-04D',
     axis: 'مخلفات الذبح',
     category: 'بيئية',
-    // F7-fix (2026-08-17): pH min corrected 6.5 â†’ 5.5 per Annexe II Â§1a abattoirs.
-    criteria: 'قياس درجة الحموضة (pH) لمياه الصرف عند نقطة التصريف النهائي والتحقق من بقائها في النطاق المسموح به للمسالخ (5.5â€“8.5 وفق الملحق II للمرسوم 06-141).',
-    legalReference: 'المرسوم التنفيذي 06-141 الملحق II Â§1أ (المسالخ) â€” نطاق pH المسموح: 5.5â€“8.5.',
+    // F7-fix (2026-08-17): pH min corrected 6.5 →’ 5.5 per Annexe II §1a abattoirs.
+    criteria: 'قياس درجة الحموضة (pH) لمياه الصرف عند نقطة التصريف النهائي والتحقق من بقائها في النطاق المسموح به للمسالخ (5.5–“8.5 وفق الملحق II للمرسوم 06-141).',
+    legalReference: 'المرسوم التنفيذي 06-141 الملحق II §1أ (المسالخ) — نطاق pH المسموح: 5.5–“8.5.',
     severity: 'high',
     controlType: 'measurement',
     complianceStatus: 'not-evaluated',
@@ -163,7 +163,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     id: 'SLH-05-07',
     axis: 'غرف التبريد',
     category: 'صحية',
-    criteria: 'توفر ثلاجات أو غرف تبريد ملائمة لحفظ لحوم الدواجن بدرجة حرارة مناسبة (عادة بين 0 ÙˆÙ¥Â°Ù…) حسب نوع المنتجات، مع ميزان حرارة داخلي.',
+    criteria: 'توفر ثلاجات أو غرف تبريد ملائمة لحفظ لحوم الدواجن بدرجة حرارة مناسبة (عادة بين 0 ÙˆÙ¥°Ù…) حسب نوع المنتجات، مع ميزان حرارة داخلي.',
     legalReference: 'المادة 20 من المرسوم 17-140 التي تنص على وجوب توفير تجهيزات تبريد كافية مزودة بأجهزة قياس الحرارة في المنشآت الغذائية التي تتعامل مع منتجات حيوانية.',
     severity: 'high',
     controlType: 'test',
@@ -189,7 +189,7 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     controlType: 'visual',
     complianceStatus: 'not-evaluated',
   },
-  // SLH-05-10 removed â€” pest control covered by BGN-07-01/02/04 (S9 pest dedup)
+  // SLH-05-10 removed — pest control covered by BGN-07-01/02/04 (S9 pest dedup)
   {
     id: 'SLH-06-01',
     axis: 'نظام HACCP وسلامة الغذاء',
@@ -215,11 +215,11 @@ export const slaughterhouseSmallCriteria: InspectionItem[] = [
     axis: 'دراسة التأثير البيئي',
     category: 'بيئية',
     criteria: 'توفر دراسة تأثير على البيئة (EIE) أو موجز بيئي معتمد من الوالي المختص للمنشآت المصنفة من الفئة الأولى والثانية، وعدم تجاوز حدود التلوث المحددة فيها (DBO5، روائح، ضجيج، مخلفات ذبح)، مع التجديد الدوري لهذه الدراسة عند إجراء توسعات أو تغييرات جوهرية في الطاقة التذبيحية.',
-    // W90 (2026-08-23): corrected from the false Art.14â€“21 range against Loi 03-10.
-    // Session 12 (2026-08-17): RETAINED â€” not a duplicate of BGN-10-01.
+    // W90 (2026-08-23): corrected from the false Art.14–“21 range against Loi 03-10.
+    // Session 12 (2026-08-17): RETAINED — not a duplicate of BGN-10-01.
     // Adds abattoir-specific scope: named pollutant thresholds, renewal-at-extension trigger,
-    // DÃ©cret 06-198 ref tying EIE to classified-establishment permit regime.
-    legalReference: 'القانون 03-10 المواد 15â€“16 و18â€“23 (المادة 15: الإخضاع المسبق لدراسة التأثير أو موجز التأثير؛ المادة 16: محتوى الدراسة؛ المواد 18â€“23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و٢٤-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
+    // Décret 06-198 ref tying EIE to classified-establishment permit regime.
+    legalReference: 'القانون 03-10 المواد 15–“16 و18–“23 (المادة 15: الإخضاع المسبق لدراسة التأثير أو موجز التأثير؛ المادة 16: محتوى الدراسة؛ المواد 18–“23: المنشآت المصنفة وأنظمة الترخيص والدراسة السابقة والرقابة). المرسوم التنفيذي 07-145 (كيفيات تطبيق دراسة التأثير على البيئة). المرسوم التنفيذي 06-198 كما عُدِّل بالمرسومَيْن 22-167 و٢٤-196 (إدراج مذابح الدواجن في قائمة المنشآت المصنفة ذات التأثير البيئي).',
     severity: 'high',
     controlType: 'doc',
     complianceStatus: 'not-evaluated',
