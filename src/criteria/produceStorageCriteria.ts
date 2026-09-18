@@ -24,7 +24,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     numericField: {
       min: 0,
       max: 4,
-      unit: 'Â°C',
+      unit: '°C',
       labelAr: 'درجة حرارة تخزين الخضروات',
     },
   },
@@ -40,7 +40,7 @@ export const produceStorageCriteria: InspectionItem[] = [
     numericField: {
       min: 7,
       max: 15,
-      unit: 'Â°C',
+      unit: '°C',
       labelAr: 'درجة حرارة تخزين الزيتون',
     },
   },
