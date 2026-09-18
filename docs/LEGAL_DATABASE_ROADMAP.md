@@ -26,6 +26,27 @@
 ---
 
 
+## 🔄 Phase 2: IN PROGRESS (2026-09-18)
+
+**Status:** Batch processing started for 6 additional documents.
+
+| Document | PDF | SHA256 | Size | Provenance JSON | Status |
+|----------|-----|--------|------|-----------------|--------|
+| 5 | Decret 06-198.pdf | 6b647f94... | 57 KB | ✅ Created | PENDING_EXTRACTION |
+| 6 | Loi 18-11.pdf | 791b0d9f... | 286 KB | ✅ Created | PENDING_EXTRACTION |
+| 7 | Décret 07-144.pdf | 3afa3c00... | 291 KB | ✅ Created | PENDING_EXTRACTION |
+| 8 | decret-25-63.pdf | c1eb671c... | 242 KB | ✅ Created | PENDING_EXTRACTION |
+| 9 | decret-91-05.pdf | 595c8c92... | 5.7 MB | ✅ Created | PENDING_EXTRACTION |
+| 10 | Loi-03-10.pdf | 16715466... | 172 KB | ✅ Created | PENDING_EXTRACTION |
+
+**Next steps:**
+- Extract text from all 6 PDFs (Tier-1 PyMuPDF)
+- Create canonical Markdown files
+- Update provenance JSONs with page counts and trust tiers
+- Run article-level diff validation
+
+---
+
 ## Phase 1: Single-PDF Validation Pipeline
 1. **Select 1 priority PDF** (e.g. `decret 11-125.pdf` or `Decret 17-140.pdf`).
 2. **Compute SHA256** of the PDF bytes.
@@ -181,4 +202,5 @@ When Phase 3 is implemented, its first run should:
 - Flag any additional mis‑citations or gaps not yet identified by manual audit.
 
 Until then, Track A remains the primary mechanism for incrementally improving legal accuracy in the criteria files.
+
 

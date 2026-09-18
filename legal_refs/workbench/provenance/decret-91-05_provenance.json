@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "UNTRUSTED",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "PENDING_EXTRACTION",
+    "pdf_sha256":  "595c8c9271b08212b0fca007e5356a5be0ea048ed850ed3e9975d2aac7625698",
+    "structural_status":  {
+                              "encoding_intact":  null,
+                              "article_boundaries_clear":  null,
+                              "no_missing_annexes":  null,
+                              "page_count_matches":  null
+                          },
+    "notes":  "Phase 2 batch processing - SHA256 computed, extraction pending",
+    "timestamp":  "2026-09-18T17:57:50Z",
+    "source_pdf":  "decret-91-05-hygiene-securite-milieu-travail.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "NOT_STARTED",
+    "pages":  0
+}

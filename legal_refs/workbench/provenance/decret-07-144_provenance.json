@@ -1,0 +1,18 @@
+﻿{
+    "trust_tier":  "UNTRUSTED",
+    "extractor":  "PyMuPDF get_text()",
+    "extraction_status":  "PENDING_EXTRACTION",
+    "pdf_sha256":  "3afa3c006a6575484a7efa5be2f5fee2b69191338adebb76063583c15e8b1d1d",
+    "structural_status":  {
+                              "encoding_intact":  null,
+                              "article_boundaries_clear":  null,
+                              "no_missing_annexes":  null,
+                              "page_count_matches":  null
+                          },
+    "notes":  "Phase 2 batch processing - SHA256 computed, extraction pending",
+    "timestamp":  "2026-09-18T17:57:50Z",
+    "source_pdf":  "Décret 07-144.pdf",
+    "extraction_tier":  "TIER_1",
+    "diff_status":  "NOT_STARTED",
+    "pages":  0
+}
